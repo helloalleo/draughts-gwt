@@ -1,0 +1,24 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+             version="2.1"
+             xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jsp.org/xml/ns/persistence/persistence_2_1.xsd">
+    <persistence-unit name="shashki64PU" transaction-type="JTA">
+        <description>SP Persistence Unit</description>
+        <jta-data-source>java:jboss/datasources/ShashkiDS</jta-data-source>
+
+        <class>net.rushashki.social.shashki64.shared.model.entity.GameEntity</class>
+        <class>net.rushashki.social.shashki64.shared.model.entity.GameMessageEntity</class>
+        <class>net.rushashki.social.shashki64.shared.model.entity.MoveEntity</class>
+        <class>net.rushashki.social.shashki64.shared.model.entity.ShashistEntity</class>
+        <class>net.rushashki.social.shashki64.shared.model.entity.FriendEntity</class>
+
+        <exclude-unlisted-classes>true</exclude-unlisted-classes>
+        <properties>
+            <property name="hibernate.hbm2ddl.auto" value="update"/>
+            <property name="hibernate.show_sql" value="true"/>
+            <!--<property name="hibernate.format_sql" value="true"/>-->
+            <!--<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>-->
+            <!--<property name="hibernate.transaaction.flush_before_completion" value="true"/>-->
+        </properties>
+    </persistence-unit>
+</persistence>
