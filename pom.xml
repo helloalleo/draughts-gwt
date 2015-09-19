@@ -15,14 +15,14 @@
         <google.oauth.version>1.19.0</google.oauth.version>
 
         <!--JBoss-->
-        <version.jboss.bom>9.0.1.Final</version.jboss.bom>
+        <jboss.bom.version>9.0.1.Final</jboss.bom.version>
         <version.jboss.logging>3.2.1.Final</version.jboss.logging>
 
         <!-- com.google.gwt.websockets.client -->
         <gwt.version>2.7.0</gwt.version>
         <gwtp.version>1.5</gwtp.version>
         <gin.version>2.1.2</gin.version>
-        <gwt.style>OBF</gwt.style>
+        <gwt.style>PRETTY</gwt.style>
 
         <!-- GWT needs at least java 1.6 -->
         <maven.compiler.source>1.7</maven.compiler.source>
@@ -36,7 +36,50 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
+        <lienzo-core.version>2.0.151-RC1</lienzo-core.version>
+        <gwtbootstrap3.version>0.9.1</gwtbootstrap3.version>
+        <hibernate-validator.version>5.1.2.Final</hibernate-validator.version>
+        <commons-codec.version>1.9</commons-codec.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <google-oauth-client.version>1.19.0</google-oauth-client.version>
+        <postgresql.version>9.3-1102-jdbc41</postgresql.version>
     </properties>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>gwt-maven-plugin</artifactId>
+                        <version>${gwt.version}</version>
+                        <configuration>
+                            <logLevel>INFO</logLevel>
+                            <style>OBF</style>
+                            <compileReport>true</compileReport>
+                            <extraJvmArgs>-Xmx1g -Xms64M</extraJvmArgs>
+                            <modules>
+                                <module>com.example.contactmgr.contactmgr</module>
+                            </modules>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>gwtcompile</id>
+                                <phase>prepare-package</phase>
+                                <goals>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+            <properties>
+                <gwt.style>OBFUSCATED</gwt.style>
+            </properties>
+        </profile>
+    </profiles>
 
     <build>
         <outputDirectory>${webappDirectory}/WEB-INF/classes</outputDirectory>
@@ -74,7 +117,10 @@
                     <logLevel>INFO</logLevel>
 
                     <runTarget>index.html</runTarget>
-                    <module>online.shashki.ru.Application</module>
+                    <module>online.shashki.rus.Application-dev</module>
+                    <draftCompile>true</draftCompile>
+                    <sourceLevel>1.7</sourceLevel>
+                    <style>${gwt.style}</style>
                 </configuration>
                 <executions>
                     <execution>
@@ -93,7 +139,7 @@
             <dependency>
                 <groupId>org.wildfly.bom</groupId>
                 <artifactId>jboss-javaee-7.0-wildfly-with-tools</artifactId>
-                <version>${version.jboss.bom}</version>
+                <version>${jboss.bom.version}</version>
                 <type>pom</type>
                 <scope>import</scope>
             </dependency>
@@ -129,7 +175,7 @@
         <dependency>
             <groupId>com.google.oauth-client</groupId>
             <artifactId>google-oauth-client</artifactId>
-            <version>1.19.0</version>
+            <version>${google-oauth-client.version}</version>
             <exclusions>
                 <exclusion>
                     <groupId>commons-codec</groupId>
@@ -168,14 +214,20 @@
         <dependency>
             <groupId>com.ahome-it</groupId>
             <artifactId>lienzo-core</artifactId>
-            <version>2.0.19-SNAPSHOT</version>
+            <version>${lienzo-core.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.gwtbootstrap3</groupId>
+            <artifactId>gwtbootstrap3</artifactId>
+            <version>${gwtbootstrap3.version}</version>
         </dependency>
 
         <!--Postgresql-->
         <dependency>
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
-            <version>9.3-1102-jdbc41</version>
+            <version>${postgresql.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -254,14 +306,14 @@
         <dependency>
             <groupId>commons-lang</groupId>
             <artifactId>commons-lang</artifactId>
-            <version>2.6</version>
+            <version>${commons-lang.version}</version>
             <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>commons-codec</groupId>
             <artifactId>commons-codec</artifactId>
-            <version>1.9</version>
+            <version>${commons-codec.version}</version>
             <scope>provided</scope>
         </dependency>
 
@@ -269,7 +321,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-validator</artifactId>
-            <version>5.1.2.Final</version>
+            <version>${hibernate-validator.version}</version>
             <scope>provided</scope>
         </dependency>
     </dependencies>

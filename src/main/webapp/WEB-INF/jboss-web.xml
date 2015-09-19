@@ -1,4 +1,4 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jboss-web>
-    <context-root>/ru</context-root>
+    <context-root>/rus</context-root>
 </jboss-web>

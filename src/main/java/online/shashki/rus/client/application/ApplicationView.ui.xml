@@ -1,0 +1,14 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+        xmlns:g='urn:import:com.google.gwt.user.client.ui'>
+
+    <ui:with field="res" type="online.shashki.rus.client.resources.AppResources"/>
+
+    <g:HTMLPanel>
+        Menu
+        <g:SimplePanel ui:field="menu"/>
+        --
+        Main
+        <g:SimplePanel ui:field="main"/>
+        --
+    </g:HTMLPanel>
+</ui:UiBinder>
