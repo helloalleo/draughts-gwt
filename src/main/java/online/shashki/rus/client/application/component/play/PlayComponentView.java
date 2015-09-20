@@ -26,11 +26,12 @@ import org.gwtbootstrap3.client.ui.Button;
 
 import java.util.List;
 
-public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandlers> implements PlayComponentPresenter.MyView {
+public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandlers>
+    implements PlayComponentPresenter.MyView {
 
   private final ShashkiConstants constants;
   @UiField
-  SimplePanel main;
+  HTMLPanel main;
   @UiField
   HTMLPanel shashki;
   @UiField
@@ -73,16 +74,16 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
     this.constants = constants;
 
-    bindSlot(PlayComponentPresenter.SLOT_PLAYCOMPONENT, main);
-
     initEmptyDeskPanel();
     initNotationPanel();
     initPlayersCellList();
   }
 
   private void initEmptyDeskPanel() {
-    int shashkiSide = Window.getClientHeight() - RootPanel.get("navigation").getOffsetHeight() -
-        RootPanel.get("footer").getOffsetHeight();
+    String mainContainerStyle = ResourceLoader.INSTANCE.style().mainContainer();
+
+    int shashkiSide = Window.getClientHeight();//RootPanel.get("navigation").getOffsetHeight() -
+//        RootPanel.get("footer").getOffsetHeight();
     shashkiColumn.setWidth(shashkiSide + "px");
 
     lienzoPanel = new LienzoPanel(shashkiSide, shashkiSide);

@@ -1,0 +1,21 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
+        >
+    <g:HTMLPanel ui:field="panel">
+        <b:Navbar position="FIXED_TOP">
+            <b:Container fluid="true">
+                <b:NavbarHeader>
+                    <b:NavbarBrand>
+                        <ui:msg description="Brand">Русские шашки</ui:msg>
+                    </b:NavbarBrand>
+                    <b:NavbarCollapseButton dataTarget="#navbar-collapse"/>
+                </b:NavbarHeader>
+                <b:NavbarCollapse b:id="navbar-collapse">
+                    <b:NavbarNav ui:field="navLeft"/>
+                    <b:NavbarNav ui:field="navRight" pull="RIGHT"/>
+                </b:NavbarCollapse>
+            </b:Container>
+        </b:Navbar>
+    </g:HTMLPanel>
+</ui:UiBinder>

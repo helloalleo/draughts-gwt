@@ -4,7 +4,7 @@
     <ui:with field="res" type="online.shashki.rus.client.resources.AppResources"/>
 
     <g:HTMLPanel>
-        <g:SimplePanel ui:field="main">
+        <g:HTMLPanel ui:field="main">
             <g:HTMLPanel ui:field="shashkiColumn" addStyleNames="{res.style.shashkiColumn}">
                 <g:HTMLPanel ui:field="shashki"/>
             </g:HTMLPanel>
@@ -51,6 +51,6 @@
                     <b:TextBox placeholder="Поиск игроков" autoComplete="true" addStyleNames="{res.style.playerSearch}"/>
                 </b:InputGroup>
             </g:HTMLPanel>
-        </g:SimplePanel>
+        </g:HTMLPanel>
     </g:HTMLPanel>
 </ui:UiBinder>

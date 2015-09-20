@@ -20,16 +20,14 @@ public interface AppResources extends ClientBundle {
   }
 
   interface Style extends CssResource {
-    @ClassName("player-search")
-    String playerSearch();
-
-    @ClassName("shashki-column")
-    String shashkiColumn();
-
-    @ClassName("notation-column")
     String notationColumn();
 
-    @ClassName("player-list")
+    String playerSearch();
+
+    String shashkiColumn();
+
     String playerList();
+
+    String mainContainer();
   }
 }

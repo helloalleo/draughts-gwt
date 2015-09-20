@@ -1,19 +1,23 @@
-.shashki-column {
+.mainContainer {
+    padding-top: 80px;
+}
+
+.shashkiColumn {
     float: left;
 }
 
-.notation-column {
+.notationColumn {
     float: left;
     width: 200px;
     /*margin-left: 10px;*/
 }
 
-.player-list {
+.playerList {
     float: left;
     margin-left: 20px;
     max-width: 200px;
 }
 
-.player-search {
+.playerSearch {
     z-index: 0;
 }
