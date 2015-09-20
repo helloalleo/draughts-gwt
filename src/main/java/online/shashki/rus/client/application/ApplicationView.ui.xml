@@ -8,8 +8,8 @@
     <g:HTMLPanel>
         <g:SimplePanel ui:field="menuPanel"/>
 
-        <b:Container fluid="true" addStyleNames="{res.style.mainContainer}">
-            <g:SimplePanel ui:field="mainContentPanel"/>
+        <b:Container fluid="true">
+            <g:SimplePanel ui:field="mainContentPanel" addStyleNames="{res.style.mainContainer}"/>
         </b:Container>
 
     </g:HTMLPanel>

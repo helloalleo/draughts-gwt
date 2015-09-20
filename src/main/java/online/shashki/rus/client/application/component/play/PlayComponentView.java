@@ -18,8 +18,9 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.client.application.widget.NotationPanel;
 import online.shashki.rus.client.application.widget.dialog.InviteDialogBox;
 import online.shashki.rus.client.resources.ResourceLoader;
+import online.shashki.rus.client.resources.constants.GSSConstants;
 import online.shashki.rus.client.rpc.GameRpcServiceAsync;
-import online.shashki.rus.shared.locale.ShashkiConstants;
+import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Shashist;
 import online.shashki.rus.shashki.Board;
 import org.gwtbootstrap3.client.ui.Button;
@@ -29,7 +30,7 @@ import java.util.List;
 public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandlers>
     implements PlayComponentPresenter.MyView {
 
-  private final ShashkiConstants constants;
+  private final ShashkiMessages messages;
   @UiField
   HTMLPanel main;
   @UiField
@@ -69,10 +70,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private GameRpcServiceAsync gameService;
 
   @Inject
-  PlayComponentView(Binder uiBinder, ShashkiConstants constants) {
+  PlayComponentView(Binder uiBinder, ShashkiMessages messages) {
     initWidget(uiBinder.createAndBindUi(this));
-
-    this.constants = constants;
+    this.messages = messages;
 
     initEmptyDeskPanel();
     initNotationPanel();
@@ -80,10 +80,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   private void initEmptyDeskPanel() {
-    String mainContainerStyle = ResourceLoader.INSTANCE.style().mainContainer();
-
-    int shashkiSide = Window.getClientHeight();//RootPanel.get("navigation").getOffsetHeight() -
-//        RootPanel.get("footer").getOffsetHeight();
+    final String mainContainerMarginTop = GSSConstants.mainContainerMarginTop();
+    final String highStr = mainContainerMarginTop.substring(0, mainContainerMarginTop.length() - 2); // отсекаем строку пикселей
+    int shashkiSide = Window.getClientHeight() - Integer.valueOf(highStr);
     shashkiColumn.setWidth(shashkiSide + "px");
 
     lienzoPanel = new LienzoPanel(shashkiSide, shashkiSide);
@@ -93,7 +92,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     contour.setX(1);
     contour.setY(1);
     initDeskRect.add(contour);
-    String[] descriptions = constants.playStartDescription().split("\n");
+    String[] descriptions = messages.playStartDescription().split("\n");
     int y = 0;
     for (String description : descriptions) {
       Text greeting = new Text(description, "Times New Roman", 14);

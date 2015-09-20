@@ -35,8 +35,6 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
   SimplePanel menuPanel;
   @UiField
   SimplePanel mainContentPanel;
-//    @UiField
-//    Element loadingMessage;
 
   @Inject
   ApplicationView(

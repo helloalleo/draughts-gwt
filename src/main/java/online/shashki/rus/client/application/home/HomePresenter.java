@@ -35,17 +35,28 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
   public static final NestedSlot SLOT_HOME = new NestedSlot();
   public static final PermanentSlot<AtestPresenter> SLOT_PLAY = new PermanentSlot<>();
-  private final PlayComponentPresenter playPresenter;
+  private PlayComponentPresenter playPresenter;
 
   @Inject
   HomePresenter(
       EventBus eventBus,
       MyView view,
       MyProxy proxy,
-      PlayComponentPresenter playPresenter) {
+      PlayComponentPresenter playPresenterFactory) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
-    this.playPresenter = playPresenter;
+    this.playPresenter = playPresenterFactory;
+//    playPresenterFactory.getProvider().get(new AsyncCallback<PlayComponentPresenter>() {
+//      @Override
+//      public void onFailure(Throwable caught) {
+//
+//      }
+//
+//      @Override
+//      public void onSuccess(PlayComponentPresenter result) {
+//        HomePresenter.this.playPresenter = result;
+//      }
+//    });
   }
 
   @Override
