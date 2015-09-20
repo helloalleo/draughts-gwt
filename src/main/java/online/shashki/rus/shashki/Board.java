@@ -568,7 +568,7 @@ public class Board extends Layer {
     move.setFirst(first);
 
     if (!capturedSquares.isEmpty()) {
-      //A jump has been performed, so get the Square that lies between from and to
+      //A jump has been performed, so getProvider the Square that lies between from and to
       Square takenSquare = null;
       for (Square s : capturedSquares) {
         if (to.isOnLine(s) && s.isBetween(from, to)) {

@@ -1,4 +1,4 @@
-package online.shashki.rus.client.util;
+package online.shashki.rus.client.utils;
 
 import java.util.logging.Level;
 import java.util.logging.Logger;

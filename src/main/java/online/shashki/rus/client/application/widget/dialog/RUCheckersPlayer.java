@@ -61,7 +61,7 @@ package online.shashki.rus.client.application.widget.dialog;//package net.rushas
 //    codeNameEndPlay = gameUtil.getEndPlayConstants();
 //
 //    setText("Партия: белыми - " + game.getUserWhiteName() + ", черными - " + game.getUserBlackName()
-//        + ". Результат: " + codeNameEndPlay.get(game.getPlayEndStatus()));
+//        + ". Результат: " + codeNameEndPlay.getProvider(game.getPlayEndStatus()));
 //    side = getSide() - 20;
 //    deskSide = side - 20;
 //    closeButton = new Button(constants.close());

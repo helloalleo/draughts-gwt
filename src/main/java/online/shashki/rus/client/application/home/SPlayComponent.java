@@ -433,8 +433,8 @@
 //  }
 //
 //  private void initEmptyDeskPanel(String playStartDescription) {
-//    int shashkiSide = Window.getClientHeight() - RootPanel.get("navigation").getOffsetHeight() -
-//        RootPanel.get("footer").getOffsetHeight();
+//    int shashkiSide = Window.getClientHeight() - RootPanel.getProvider("navigation").getOffsetHeight() -
+//        RootPanel.getProvider("footer").getOffsetHeight();
 //    shashkiColumn.setWidth(shashkiSide + "px");
 //
 //    lienzoPanel = new LienzoPanel(shashkiSide, shashkiSide);
@@ -473,7 +473,7 @@
 //    notationPanel = new NotationPanel();
 //    notationList.add(notationPanel);
 //
-//    Scheduler.get().scheduleFinally(this::alignNotationPanel);
+//    Scheduler.getProvider().scheduleFinally(this::alignNotationPanel);
 //  }
 //
 //  private void alignNotationPanel() {

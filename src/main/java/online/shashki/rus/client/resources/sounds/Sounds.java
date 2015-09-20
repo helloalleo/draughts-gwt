@@ -11,5 +11,5 @@ import com.google.gwt.resources.client.DataResource;
  */
 public interface Sounds extends ClientBundle {
   @Source("snd/hello.m4a")
-  public DataResource inviteSound();
+  DataResource inviteSound();
 }

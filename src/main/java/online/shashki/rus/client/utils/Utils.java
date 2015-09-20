@@ -1,9 +1,9 @@
-package online.shashki.rus.client.util;
+package online.shashki.rus.client.utils;
 
 import com.google.gwt.core.client.GWT;
 import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
-import online.shashki.rus.shared.locale.ShashkiConstants;
+import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.GameEnds;
 import online.shashki.rus.shared.model.GameMessage;
 import online.shashki.rus.shared.websocket.message.MessageFactory;
@@ -54,7 +54,7 @@ public class Utils {
     return bean.as();
   }
 
-  public static String getGameEnd(GameEnds gameEnd, ShashkiConstants constants) {
+  public static String getGameEnd(GameEnds gameEnd, ShashkiMessages constants) {
     if (gameEnd == null) {
       return "";
     }

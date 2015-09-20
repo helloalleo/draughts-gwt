@@ -8,7 +8,7 @@ import com.google.gwt.i18n.client.Messages;
  * Date: 23.11.14
  * Time: 20:13
  */
-public interface ShashkiConstants extends Messages {
+public interface ShashkiMessages extends Messages {
 
   String home();
 

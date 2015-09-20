@@ -6,7 +6,7 @@ import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DialogBox;
 import com.google.inject.Inject;
-import online.shashki.rus.shared.locale.ShashkiConstants;
+import online.shashki.rus.shared.locale.ShashkiMessages;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +16,7 @@ import online.shashki.rus.shared.locale.ShashkiConstants;
  */
 public class BasicDialogBox extends DialogBox {
   @Inject
-  protected ShashkiConstants constants;
+  protected ShashkiMessages constants;
   protected int WIDTH = 400;
   protected int HEIGHT = 60;
 

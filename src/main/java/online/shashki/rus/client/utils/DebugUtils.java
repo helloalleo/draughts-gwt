@@ -1,4 +1,4 @@
-package online.shashki.rus.client.util;
+package online.shashki.rus.client.utils;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.UmbrellaException;
