@@ -39,13 +39,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
 
   private void setLinks() {
     for (final NameTokens.Link link : nameTokens.getLeftLinks()) {
-      final AnchorListItem anchor = new AnchorListItem(link.name);
-      switch (link.token) {
-        case NameTokens.homePage:
-          anchor.setIcon(IconType.HOME);
-          break;
-      }
-      createAnchor(link, anchor);
+      final AnchorListItem anchor = createAnchor(link);
       navLeft.add(anchor);
     }
 
@@ -59,30 +53,19 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
       public void onSuccess(Boolean result) {
         if (result) {
           for (NameTokens.Link link : nameTokens.getRightAuthLinks()) {
-            AnchorListItem anchor = new AnchorListItem(link.name);
-            switch (link.token) {
-              case NameTokens.logoutPage:
-                anchor.setIcon(IconType.SIGN_OUT);
-                anchor.setHref(NameTokens.logoutPage);
-                break;
-              case NameTokens.profilePage:
-                anchor.setIcon(IconType.USER);
-                break;
-            }
+            AnchorListItem anchor;
             if (!link.token.equals(NameTokens.logoutPage)) {
-              createAnchor(link, anchor);
+              anchor = createAnchor(link);
+            } else {
+              anchor = new AnchorListItem(link.name);
+              anchor.setIcon(IconType.SIGN_OUT);
+              anchor.setHref(link.token);
             }
             navRight.add(anchor);
           }
         } else {
           for (NameTokens.Link link : nameTokens.getRightLinks()) {
-            AnchorListItem anchor = new AnchorListItem(link.name);
-            switch (link.token) {
-              case NameTokens.loginPage:
-                anchor.setIcon(IconType.SIGN_IN);
-                break;
-            }
-            createAnchor(link, anchor);
+            AnchorListItem anchor = createAnchor(link);
             navRight.add(anchor);
           }
         }
@@ -90,7 +73,19 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     });
   }
 
-  private void createAnchor(final NameTokens.Link link, final AnchorListItem anchor) {
+  private AnchorListItem createAnchor(final NameTokens.Link link) {
+    final AnchorListItem anchor = new AnchorListItem(link.name);
+    switch (link.token) {
+      case NameTokens.homePage:
+        anchor.setIcon(IconType.HOME);
+        break;
+      case NameTokens.profilePage:
+        anchor.setIcon(IconType.USER);
+        break;
+      case NameTokens.loginPage:
+        anchor.setIcon(IconType.SIGN_IN);
+        break;
+    }
     anchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
@@ -100,6 +95,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
         getUiHandlers().displayPage(link.token);
       }
     });
+    return anchor;
   }
 
   private void disableLink(AnchorListItem link) {

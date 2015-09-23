@@ -17,6 +17,7 @@
 package online.shashki.rus.client.application;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -25,7 +26,9 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
+import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.Proxy;
+import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.shashki.rus.client.application.login.CurrentSession;
 import online.shashki.rus.client.application.menu.MenuPresenter;
 import online.shashki.rus.client.rpc.ProfileRpcServiceAsync;
@@ -46,17 +49,20 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
   private final MenuPresenter menuPresenter;
   private final ProfileRpcServiceAsync profileService;
   private final CurrentSession currentSession;
+  private final PlaceManager placeManager;
 
   @Inject
   ApplicationPresenter(
       EventBus eventBus,
       MyView view,
       MyProxy proxy,
+      PlaceManager placeManager,
       MenuPresenter menuPresenter,
       CurrentSession currentSession,
       ProfileRpcServiceAsync profileService) {
     super(eventBus, view, proxy, RevealType.Root);
 
+    this.placeManager = placeManager;
     this.menuPresenter = menuPresenter;
     this.profileService = profileService;
     this.currentSession = currentSession;
@@ -72,7 +78,6 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
   }
 
   public void getCurrentProfile() {
-    GWT.log("Current Profile");
     profileService.getCurrentProfile(new AsyncCallback<Shashist>() {
       @Override
       public void onFailure(Throwable caught) {
@@ -81,8 +86,13 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
 
       @Override
       public void onSuccess(Shashist result) {
-        GWT.log(result != null ? result.getPublicName() : "NONE");
         currentSession.setCurrentPlayer(result);
+        String hash = Window.Location.getHash();
+        String token = hash.substring(1, hash.length());
+        PlaceRequest placeRequest = new PlaceRequest.Builder()
+            .nameToken(token)
+            .build();
+        placeManager.revealPlace(placeRequest);
       }
     });
   }

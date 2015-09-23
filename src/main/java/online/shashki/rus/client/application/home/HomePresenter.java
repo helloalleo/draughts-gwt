@@ -5,6 +5,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
@@ -43,6 +44,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
    */
   @ProxyCodeSplit
   @NameToken(NameTokens.homePage)
+  @NoGatekeeper
   public interface MyProxy extends ProxyPlace<HomePresenter> {
   }
 

@@ -1,6 +1,7 @@
 package online.shashki.rus.client.application.login;
 
 import com.google.inject.Inject;
+import com.gwtplatform.mvp.client.annotations.DefaultGatekeeper;
 import com.gwtplatform.mvp.client.proxy.Gatekeeper;
 
 /**
@@ -9,6 +10,7 @@ import com.gwtplatform.mvp.client.proxy.Gatekeeper;
  * Date: 21.09.15
  * Time: 11:39
  */
+@DefaultGatekeeper
 public class LoggedInGatekeeper implements Gatekeeper {
   private final CurrentSession currentSession;
 

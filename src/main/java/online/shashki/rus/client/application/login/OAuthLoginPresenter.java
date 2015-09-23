@@ -6,6 +6,7 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
@@ -31,6 +32,7 @@ public class OAuthLoginPresenter extends Presenter<OAuthLoginPresenter.MyView, O
 
   @ProxyCodeSplit
   @NameToken(NameTokens.loginPage)
+  @NoGatekeeper
   interface MyProxy extends ProxyPlace<OAuthLoginPresenter> {
   }
 }
