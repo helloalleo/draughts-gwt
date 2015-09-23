@@ -7,7 +7,6 @@ import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizatio
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
-import online.shashki.rus.server.config.OAuthClient;
 import online.shashki.rus.server.config.ServerConfiguration;
 import online.shashki.rus.server.service.ShashistService;
 import online.shashki.rus.server.util.Util;
@@ -45,7 +44,7 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
   @Override
   protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential) throws ServletException, IOException {
     String accessToken = credential.getAccessToken();
-    GenericUrl url = new GenericUrl(OAuthClient.API_VK_GET_USER_INFO);
+    GenericUrl url = new GenericUrl(serverConfiguration.getVkApiUserInfo());
     url.set("access_token", accessToken);
 
     HttpRequest request = Util.HTTP_TRANSPORT.createRequestFactory().buildGetRequest(url);
@@ -54,8 +53,13 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
     JsonReader jsonReader = Json.createReader(inputStream);
     JsonObject responseObject = jsonReader.readObject();
 
+    if (responseObject.getJsonObject("error") != null) {
+      resp.sendRedirect("/rus/500.html");
+      return;
+    }
+
     if (responseObject.getJsonArray("response").isEmpty()) {
-      resp.sendRedirect("/404.html");
+      resp.sendRedirect("/rus/404.html");
       return;
     }
 
@@ -87,7 +91,8 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
       }
     }
 
-    resp.sendRedirect("/");
+    req.getSession().setAttribute("isAuthenticated", true);
+    resp.sendRedirect(serverConfiguration.getContext());
   }
 
   @Override
@@ -105,7 +110,7 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
   @Override
   protected String getRedirectUri(HttpServletRequest httpServletRequest) throws ServletException, IOException {
     GenericUrl url = new GenericUrl(httpServletRequest.getRequestURL().toString());
-    url.setRawPath(OAuthClient.REDIRECT_VK_CALLBACK_URL);
+    url.setRawPath(serverConfiguration.getVkRedirectUri());
     return url.build();
   }
 
@@ -113,5 +118,4 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
   protected String getUserId(HttpServletRequest httpServletRequest) throws ServletException, IOException {
     return httpServletRequest.getSession(true).getId();
   }
-
 }

@@ -1,5 +1,6 @@
 package online.shashki.rus.server.servlet;
 
+import online.shashki.rus.server.config.ServerConfiguration;
 import online.shashki.rus.server.service.ShashistService;
 import online.shashki.rus.shared.model.entity.ShashistEntity;
 
@@ -22,6 +23,8 @@ public class LogoutServlet extends HttpServlet {
 
   @Inject
   private ShashistService shashistService;
+  @Inject
+  private ServerConfiguration configuration;
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     ShashistEntity shashistEntity = shashistService.findBySessionId(request.getSession().getId());
@@ -31,7 +34,7 @@ public class LogoutServlet extends HttpServlet {
     shashistService.edit(shashistEntity);
 
     request.getSession().invalidate();
-    response.sendRedirect("/");
+    response.sendRedirect(configuration.getContext());
   }
 
 }

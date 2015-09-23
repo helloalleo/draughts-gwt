@@ -22,7 +22,7 @@ public interface ShashkiMessages extends Messages {
 
   String signIn();
 
-  String signInToken();
+  String login();
 
   String logout();
 
@@ -167,4 +167,12 @@ public interface ShashkiMessages extends Messages {
   String SURRENDER_WHITE();
 
   String DRAW();
+
+  String contacts();
+
+  String contactsToken();
+
+  String errorToken();
+
+  String myGames();
 }

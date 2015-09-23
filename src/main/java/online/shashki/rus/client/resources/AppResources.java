@@ -29,5 +29,7 @@ public interface AppResources extends ClientBundle {
     String playerList();
 
     String mainContainer();
+
+    String alignHorizontal();
   }
 }

@@ -17,5 +17,5 @@ public interface ProfileRpcServiceAsync {
 
   void saveProfile(Shashist profile, AsyncCallback<Void> async);
 
-  void getAuthProfile(AsyncCallback<Shashist> async);
+  void getCurrentProfile(AsyncCallback<Shashist> async);
 }

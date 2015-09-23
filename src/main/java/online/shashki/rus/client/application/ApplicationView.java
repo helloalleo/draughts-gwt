@@ -44,9 +44,4 @@ public class ApplicationView extends ViewImpl implements ApplicationPresenter.My
     bindSlot(ApplicationPresenter.SLOT_MENU, menuPanel);
     bindSlot(ApplicationPresenter.SLOT_MAIN_CONTENT, mainContentPanel);
   }
-
-  @Override
-  public void showLoading(boolean visibile) {
-//        loadingMessage.getStyle().setVisibility(visibile ? Visibility.VISIBLE : Visibility.HIDDEN);
-  }
 }

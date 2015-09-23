@@ -153,7 +153,7 @@
 //    confirmPlayDialogBox = new ConfirmPlayDialogBox() {
 //      @Override
 //      public void submitted() {
-//        profileService.getProfile(gameMessage.getSender().getId(), new AsyncCallback<Shashist>() {
+//        profileService.getCurrentProfile(gameMessage.getSender().getId(), new AsyncCallback<Shashist>() {
 //          @Override
 //          public void onFailure(Throwable caught) {
 //            new DialogBox(constants.error(), constants.errorWhileGettingProfile()).show();

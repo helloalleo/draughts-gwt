@@ -9,5 +9,4 @@ package online.shashki.rus.server.config;
 public class ConfigHelper {
 
   public static final String CREDENTIAL_STORE_FILE_PATH = "~/.datastore";
-
 }

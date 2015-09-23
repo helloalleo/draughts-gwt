@@ -17,22 +17,23 @@
 package online.shashki.rus.client.application;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
-import online.shashki.rus.client.application.contact.ContactPresenter;
-import online.shashki.rus.client.application.contact.ContactPresenterBase;
-import online.shashki.rus.client.application.contact.ContactView;
+import online.shashki.rus.client.application.error.ErrorModule;
 import online.shashki.rus.client.application.home.HomeModule;
+import online.shashki.rus.client.application.login.OAuthLoginModule;
 import online.shashki.rus.client.application.menu.MenuModule;
+import online.shashki.rus.client.application.profile.ProfileModule;
 
 public class ApplicationModule extends AbstractPresenterModule {
   @Override
   protected void configure() {
+    install(new ProfileModule());
+    install(new ErrorModule());
     install(new MenuModule());
     install(new HomeModule());
+    install(new OAuthLoginModule());
 
     // Applicaiton Presenters
     bindPresenter(ApplicationPresenter.class, ApplicationPresenter.MyView.class, ApplicationView.class,
         ApplicationPresenter.MyProxy.class);
-    bindPresenter(ContactPresenter.class, ContactPresenterBase.MyView.class, ContactView.class,
-        ContactPresenter.MyProxy.class);
   }
 }

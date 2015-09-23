@@ -21,3 +21,8 @@
 .playerSearch {
     z-index: 0;
 }
+
+.alignHorizontal {
+    margin: 0 auto;
+    display: table;
+}

@@ -3,6 +3,44 @@
          xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
+    <servlet>
+        <servlet-name>online.shashki.rus ProfileRpcService</servlet-name>
+        <servlet-class>online.shashki.rus.server.rpc.ProfileRpcServiceImpl</servlet-class>
+    </servlet>
+    <!--<servlet>-->
+        <!--<servlet-name>online.shashki.rus GameRpcMessageService</servlet-name>-->
+        <!--<servlet-class>online.shashki.rus.server.rpc.GameMessageRpcServiceImpl</servlet-class>-->
+    <!--</servlet>-->
+    <servlet>
+        <servlet-name>online.shashki.rus GameRpcService</servlet-name>
+        <servlet-class>online.shashki.rus.server.rpc.GameRpcServiceImpl</servlet-class>
+    </servlet>
+    <servlet-mapping>
+        <servlet-name>online.shashki.rus ProfileRpcService</servlet-name>
+        <url-pattern>/Application/ProfileRpcService</url-pattern>
+    </servlet-mapping>
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>online.shashki.rus GameRpcMessageService</servlet-name>-->
+        <!--<url-pattern>/Application/GameMessageRpcService</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <servlet-mapping>
+        <servlet-name>online.shashki.rus GameRpcService</servlet-name>
+        <url-pattern>/Application/GameRpcService</url-pattern>
+    </servlet-mapping>
+
+    <error-page>
+        <error-code>500</error-code>
+        <location>/500.html</location>
+    </error-page>
+
+    <error-page>
+        <error-code>404</error-code>
+        <location>/404.html</location>
+    </error-page>
+
+    <session-config>
+        <session-timeout>-1</session-timeout>
+    </session-config>
 
     <welcome-file-list>
         <welcome-file>index.html</welcome-file>

@@ -37,5 +37,4 @@ public interface GameRpcService extends RemoteService {
       return ourInstance;
     }
   }
-
 }

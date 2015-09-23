@@ -29,11 +29,14 @@ public class ProfileRpcServiceImpl extends RemoteServiceServlet implements Profi
 
   @Override
   public Shashist getProfile(Long profileId) {
+    if (profileId == null) {
+      return null;
+    }
     return shashistService.find(profileId);
   }
 
   @Override
-  public Shashist getAuthProfile() {
+  public Shashist getCurrentProfile() {
     HttpSession session = getThreadLocalRequest().getSession();
     if (session != null) {
       return shashistService.findBySessionId(session.getId());

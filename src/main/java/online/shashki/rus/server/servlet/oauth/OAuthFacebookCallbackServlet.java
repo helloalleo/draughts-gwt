@@ -5,7 +5,6 @@ import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
 import com.google.api.client.auth.oauth2.Credential;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeCallbackServlet;
 import com.google.api.client.http.GenericUrl;
-import online.shashki.rus.server.config.OAuthClient;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -41,7 +40,7 @@ public class OAuthFacebookCallbackServlet extends AbstractAuthorizationCodeCallb
   @Override
   protected String getRedirectUri(HttpServletRequest httpServletRequest) throws ServletException, IOException {
     GenericUrl url = new GenericUrl(httpServletRequest.getRequestURL().toString());
-    url.setRawPath(OAuthClient.REDIRECT_FACEBOOK_CALLBACK_URL);
+//    url.setRawPath(OAuthClient.REDIRECT_FACEBOOK_CALLBACK_URL);
     return url.build();
   }
 

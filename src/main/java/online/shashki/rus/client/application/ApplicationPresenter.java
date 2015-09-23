@@ -16,17 +16,20 @@
 
 package online.shashki.rus.client.application;
 
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
-import com.gwtplatform.mvp.client.annotations.ProxyEvent;
 import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
-import com.gwtplatform.mvp.client.proxy.LockInteractionEvent;
 import com.gwtplatform.mvp.client.proxy.Proxy;
+import online.shashki.rus.client.application.login.CurrentSession;
 import online.shashki.rus.client.application.menu.MenuPresenter;
+import online.shashki.rus.client.rpc.ProfileRpcServiceAsync;
+import online.shashki.rus.shared.model.Shashist;
 
 /**
  * This is the top-level presenter of the hierarchy. Other presenters reveal themselves within this presenter.
@@ -41,16 +44,24 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
   public static final NestedSlot SLOT_MAIN_CONTENT = new NestedSlot();
   static final PermanentSlot<MenuPresenter> SLOT_MENU = new PermanentSlot<>();
   private final MenuPresenter menuPresenter;
+  private final ProfileRpcServiceAsync profileService;
+  private final CurrentSession currentSession;
 
   @Inject
   ApplicationPresenter(
       EventBus eventBus,
       MyView view,
       MyProxy proxy,
-      MenuPresenter menuPresenter) {
+      MenuPresenter menuPresenter,
+      CurrentSession currentSession,
+      ProfileRpcServiceAsync profileService) {
     super(eventBus, view, proxy, RevealType.Root);
 
     this.menuPresenter = menuPresenter;
+    this.profileService = profileService;
+    this.currentSession = currentSession;
+
+    getCurrentProfile();
   }
 
   @Override
@@ -60,14 +71,20 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
     setInSlot(SLOT_MENU, menuPresenter);
   }
 
-  /**
-   * We display a short lock message whenever navigation is in progress.
-   *
-   * @param event The {@link LockInteractionEvent}.
-   */
-  @ProxyEvent
-  public void onLockInteraction(LockInteractionEvent event) {
-    getView().showLoading(event.shouldLock());
+  public void getCurrentProfile() {
+    GWT.log("Current Profile");
+    profileService.getCurrentProfile(new AsyncCallback<Shashist>() {
+      @Override
+      public void onFailure(Throwable caught) {
+
+      }
+
+      @Override
+      public void onSuccess(Shashist result) {
+        GWT.log(result != null ? result.getPublicName() : "NONE");
+        currentSession.setCurrentPlayer(result);
+      }
+    });
   }
 
   /**
@@ -81,6 +98,5 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
    * {@link ApplicationPresenter}'s view.
    */
   public interface MyView extends View {
-    void showLoading(boolean visibile);
   }
 }

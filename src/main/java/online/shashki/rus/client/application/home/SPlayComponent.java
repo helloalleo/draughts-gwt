@@ -494,7 +494,7 @@
 //      @Override
 //      public void render(Context context, Shashist value, SafeHtmlBuilder sb) {
 //        if (value != null) {
-//          if (value.isLoggedIn()) {
+//          if (value.isAuthenticated()) {
 //            org.gwtbootstrap3.client.ui.Image img;
 //            String playerPublicName = value.getPublicName();
 //            if (player.getSystemId().equals(value.getSystemId())) {

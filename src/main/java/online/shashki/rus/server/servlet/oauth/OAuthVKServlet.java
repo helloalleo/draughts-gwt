@@ -3,7 +3,6 @@ package online.shashki.rus.server.servlet.oauth;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeServlet;
 import com.google.api.client.http.GenericUrl;
-import online.shashki.rus.server.config.OAuthClient;
 import online.shashki.rus.server.config.ServerConfiguration;
 import online.shashki.rus.server.util.Util;
 
@@ -38,7 +37,7 @@ public class OAuthVKServlet extends AbstractAuthorizationCodeServlet {
   @Override
   protected String getRedirectUri(HttpServletRequest httpServletRequest) throws ServletException, IOException {
     GenericUrl url = new GenericUrl(httpServletRequest.getRequestURL().toString());
-    url.setRawPath(OAuthClient.REDIRECT_VK_CALLBACK_URL);
+    url.setRawPath(serverConfiguration.getVkRedirectUri());
     return url.build();
   }
 
@@ -46,5 +45,4 @@ public class OAuthVKServlet extends AbstractAuthorizationCodeServlet {
   protected String getUserId(HttpServletRequest httpServletRequest) throws ServletException, IOException {
     return httpServletRequest.getSession(true).getId();
   }
-
 }

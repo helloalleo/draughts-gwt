@@ -18,7 +18,7 @@ public interface ProfileRpcService extends RemoteService {
 
   Shashist getProfile(Long shashistId);
 
-  Shashist getAuthProfile();
+  Shashist getCurrentProfile();
 
   void saveProfile(Shashist profile);
 
