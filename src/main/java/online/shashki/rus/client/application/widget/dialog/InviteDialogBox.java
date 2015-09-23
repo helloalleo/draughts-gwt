@@ -32,23 +32,23 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   private Label waitMessageLabel;
 
   public InviteDialogBox() {
-    setText(constants.captionGame());
+    setText(messages.captionGame());
     VerticalPanel panel = new VerticalPanel();
     panel.setPixelSize(WIDTH, HEIGHT);
 
     panel.add(inviteLabel);
 
-    submitButton = new Button(constants.next());
-    cancelButton = new Button(constants.cancel());
+    submitButton = new Button(messages.next());
+    cancelButton = new Button(messages.cancel());
 
-    Label label = new Label(constants.chooseYourColor());
+    Label label = new Label(messages.chooseYourColor());
     panel.add(label);
 
     FlowPanel radioGroup = new FlowPanel();
-    whiteRadio = new RadioButton(constants.white());
+    whiteRadio = new RadioButton(messages.white());
     whiteRadio.setName("rb-color");
     whiteRadio.getElement().getStyle().setMargin(10, Style.Unit.PX);
-    RadioButton blackRadio = new RadioButton(constants.black());
+    RadioButton blackRadio = new RadioButton(messages.black());
     blackRadio.setName("rb-color");
     whiteRadio.setValue(true);
 
@@ -59,7 +59,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     final Image waitImage = new Image(ResourceLoader.INSTANCE.images().busyIconImage());
     waitMessage.setVisible(false);
     waitMessage.add(waitImage);
-    waitMessageLabel = new Label(constants.waitResponse());
+    waitMessageLabel = new Label(messages.waitResponse());
     waitMessageLabel.setHeight("32px");
     waitMessageLabel.getElement().getStyle().setPaddingLeft(5, Style.Unit.PX);
     waitMessageLabel.getElement().getStyle().setVerticalAlign(Style.VerticalAlign.MIDDLE);
@@ -70,7 +70,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     timerCounterTimer = new Timer() {
       @Override
       public void run() {
-        waitMessageLabel.setText(constants.waitResponse() + " " + waitCounter);
+        waitMessageLabel.setText(messages.waitResponse() + " " + waitCounter);
         waitCounter -= 1;
       }
     };
@@ -112,7 +112,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
         timerCounterTimer.cancel();
         waitResponseTimer.cancel();
         submitButton.setEnabled(true);
-        waitMessageLabel.setText(constants.waitResponse());
+        waitMessageLabel.setText(messages.waitResponse());
         waitMessage.setVisible(false);
         waitCounter = WAIT;
       }
@@ -133,7 +133,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
 
   private void stopTimers() {
     timerCounterTimer.cancel();
-    waitMessageLabel.setText(constants.waitResponse());
+    waitMessageLabel.setText(messages.waitResponse());
     waitCounter = WAIT;
     submitButton.setEnabled(true);
     waitMessage.setVisible(false);

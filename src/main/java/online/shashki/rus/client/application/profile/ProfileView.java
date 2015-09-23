@@ -35,12 +35,6 @@ public class ProfileView extends ViewWithUiHandlers<ProfileUiHandlers> implement
 
     bindSlot(ProfilePresenter.SLOT_PROFILE, main);
     bindSlot(ProfilePresenter.SLOT_PROFILE_CONTENT, subcontent);
-  }
-
-  @Override
-  protected void onAttach() {
-    super.onAttach();
-
     setUpLinks();
   }
 
@@ -55,6 +49,8 @@ public class ProfileView extends ViewWithUiHandlers<ProfileUiHandlers> implement
     switch (link.token) {
       case NameTokens.myGamesPage:
         anchor.setIcon(IconType.PLAY_CIRCLE);
+        // делаем ссылку мои игры активной, так как она первая в списке
+        anchor.setActive(true);
         break;
       case NameTokens.settingsPage:
         anchor.setIcon(IconType.COG);

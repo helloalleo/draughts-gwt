@@ -11,18 +11,13 @@ import online.shashki.rus.shared.model.Shashist;
  */
 @Singleton
 public class CurrentSession {
-  private Shashist currentPlayer;
+  private boolean loggedIn;
 
-  public boolean isLoggedIn() {
-    return currentPlayer != null;
+  public void setLoggedIn(Boolean loggedIn) {
+    this.loggedIn = loggedIn;
   }
 
-  public Shashist getCurrentPlayer() {
-    return currentPlayer;
-  }
-
-  public CurrentSession setCurrentPlayer(Shashist currentPlayer) {
-    this.currentPlayer = currentPlayer;
-    return this;
+  public Boolean isLoggedIn() {
+    return loggedIn;
   }
 }

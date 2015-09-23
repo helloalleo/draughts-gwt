@@ -15,10 +15,10 @@ import org.gwtbootstrap3.client.ui.Button;
  * Date: 25.01.14
  * Time: 14:12
  */
-public class DialogBox extends BasicDialogBox {
+public class MyDialogBox extends BasicDialogBox {
   private HTML contentHTML;
 
-  public DialogBox(String header, String content) {
+  public MyDialogBox(String header, String content) {
     setText(header);
 
     ScrollPanel contentScrollPanel = new ScrollPanel();
@@ -31,7 +31,7 @@ public class DialogBox extends BasicDialogBox {
     panel.setPixelSize(WIDTH, HEIGHT);
     panel.add(contentScrollPanel);
 
-    final Button buttonClose = new Button(constants.close(), new ClickHandler() {
+    final Button buttonClose = new Button(messages.close(), new ClickHandler() {
       @Override
       public void onClick(final ClickEvent event) {
         hide();

@@ -33,8 +33,8 @@
 //import online.shashki.ru.shashki.BoardBackgroundLayer;
 //import online.shashki.ru.shashki.dto.MoveDto;
 //import org.gwtbootstrap3.client.ui.Button;
-//import org.gwtbootstrap3.client.ui.constants.ButtonType;
-//import org.gwtbootstrap3.client.ui.constants.IconType;
+//import org.gwtbootstrap3.client.ui.messages.ButtonType;
+//import org.gwtbootstrap3.client.ui.messages.IconType;
 //
 //import java.util.ArrayList;
 //import java.util.Date;
@@ -90,7 +90,7 @@
 //    this.player = clientFactory.getPlayer();
 //    this.gameService = shashkiGinjector.getGameService();
 //
-//    initEmptyDeskPanel(constants.playStartDescription());
+//    initEmptyDeskPanel(messages.playStartDescription());
 //    initNotationPanel();
 //    initPlayersCellList();
 //
@@ -119,11 +119,11 @@
 //            return;
 //          case PLAY:
 //            if (playerSelectionModel.getSelectedObject() == null) {
-//              new DialogBox(constants.info(), constants.selectPlayer());
+//              new DialogBox(messages.info(), messages.selectPlayer());
 //              return;
 //            }
 //            if (playerSelectionModel.getSelectedObject().getSystemId().equals(clientFactory.getPlayer().getSystemId())) {
-//              new DialogBox(constants.info(), constants.selectAnotherPlayerItsYou());
+//              new DialogBox(messages.info(), messages.selectAnotherPlayerItsYou());
 //              return;
 //            }
 //            clientFactory.setOpponent(playerSelectionModel.getSelectedObject());
@@ -134,21 +134,21 @@
 //                GameMessage gameMessage = createSendGameMessage(clientFactory);
 //                gameMessage.setMessageType(GameMessage.MessageType.PLAY_INVITE);
 //
-//                gameMessage.setMessage(constants.inviteMessage(clientFactory.getPlayer().getPublicName(),
-//                    String.valueOf(white ? constants.black() : constants.white())));
+//                gameMessage.setMessage(messages.inviteMessage(clientFactory.getPlayer().getPublicName(),
+//                    String.valueOf(white ? messages.black() : messages.white())));
 //                gameMessage.setData(String.valueOf(!white));
 //
 //                eventBus.fireEvent(new GameMessageEvent(gameMessage));
 //              }
 //            };
-//            inviteDialogBox.show(constants.inviteToPlay(clientFactory.getOpponent().getPublicName(),
-//                constants.draughts()));
+//            inviteDialogBox.show(messages.inviteToPlay(clientFactory.getOpponent().getPublicName(),
+//                messages.draughts()));
 //        }
 //      }
 //    });
 //
 //    drawButton.addClickHandler(clickEvent -> {
-//      new ConfirmeDialogBox(constants.doYouWantToProposeDraw()) {
+//      new ConfirmeDialogBox(messages.doYouWantToProposeDraw()) {
 //        @Override
 //        public void procConfirm() {
 //          if (isConfirmed()) {
@@ -161,7 +161,7 @@
 //    });
 //
 //    surrenderButton.addClickHandler(clickEvent -> {
-//      new ConfirmeDialogBox(constants.areYouSureYouWantSurrender()) {
+//      new ConfirmeDialogBox(messages.areYouSureYouWantSurrender()) {
 //        @Override
 //        public void procConfirm() {
 //          if (isConfirmed()) {
@@ -186,10 +186,10 @@
 //          return;
 //        }
 //        if (board.isMyTurn() && !(lastMove != null && lastMove.isContinueBeat())) {
-//          new DialogBox(constants.info(), constants.youDontMove());
+//          new DialogBox(messages.info(), messages.youDontMove());
 //          return;
 //        }
-//        new ConfirmeDialogBox(constants.doYouWantToCancelMove()) {
+//        new ConfirmeDialogBox(messages.doYouWantToCancelMove()) {
 //          @Override
 //          public void procConfirm() {
 //            if (isConfirmed()) {
@@ -220,12 +220,12 @@
 //          gameService.saveGame(game, new AsyncCallback<Void>() {
 //            @Override
 //            public void onFailure(Throwable throwable) {
-//              new DialogBox(constants.error(), constants.errorWhileSavingGame());
+//              new DialogBox(messages.error(), messages.errorWhileSavingGame());
 //            }
 //
 //            @Override
 //            public void onSuccess(Void aVoid) {
-//              new DialogBox(constants.info(), constants.opponentLeftGame()) {
+//              new DialogBox(messages.info(), messages.opponentLeftGame()) {
 //                @Override
 //                public void submit() {
 //                  eventBus.fireEvent(new ClearPlayComponentEvent());
@@ -254,10 +254,10 @@
 //        connectToPlayButton.setBlock(true);
 //        connectToPlayButton.addStyleName("btn-danger");
 //        connectToPlayButton.setIcon(IconType.REFRESH);
-//        connectToPlayButton.setText(constants.reconnect());
+//        connectToPlayButton.setText(messages.reconnect());
 //
 //        playersCellList.setRowData(new ArrayList<>());
-//        turnLabel.setHTML(constants.youDisconnected());
+//        turnLabel.setHTML(messages.youDisconnected());
 //
 //        hidePlayingButtonsAndShowPlayButton();
 //      }
@@ -299,7 +299,7 @@
 //        setBeatenOpponent(CHECKERS_ON_DESK_INIT - board.getOpponentDraughts().size());
 //        Game endGame = clientFactory.getGame();
 //        if (0 == board.getMyDraughts().size()) {
-//          new DialogBox(constants.info(), constants.youLose()).show();
+//          new DialogBox(messages.info(), messages.youLose()).show();
 //          if (board.isWhite()) {
 //            endGame.setPlayEndStatus(GameEnds.BLACK_WON);
 //          } else {
@@ -307,7 +307,7 @@
 //          }
 //        }
 //        if (0 == board.getOpponentDraughts().size()) {
-//          new DialogBox(constants.info(), constants.youWon());
+//          new DialogBox(messages.info(), messages.youWon());
 //          if (board.isWhite()) {
 //            endGame.setPlayEndStatus(GameEnds.WHITE_WON);
 //          } else {
@@ -320,7 +320,7 @@
 //        gameService.getGame(endGame.getId(), new AsyncCallback<Game>() {
 //          @Override
 //          public void onFailure(Throwable throwable) {
-//            new DialogBox(constants.error(), constants.errorWhileGettingGame());
+//            new DialogBox(messages.error(), messages.errorWhileGettingGame());
 //          }
 //
 //          @Override
@@ -331,7 +331,7 @@
 //              gameService.saveGame(endGame, new AsyncCallback<Void>() {
 //                @Override
 //                public void onFailure(Throwable caught) {
-//                  new DialogBox(constants.error(), constants.errorWhileSavingGame());
+//                  new DialogBox(messages.error(), messages.errorWhileSavingGame());
 //                }
 //
 //                @Override
@@ -399,33 +399,33 @@
 //    lienzoPanel.removeAll();
 //    board.clearDesk();
 //    shashki.remove(lienzoPanel);
-//    initEmptyDeskPanel(constants.playRestartDescription());
+//    initEmptyDeskPanel(messages.playRestartDescription());
 //
-//    turnLabel.setHTML(constants.playDidNotStart());
+//    turnLabel.setHTML(messages.playDidNotStart());
 //  }
 //
 //  public void setBeatenMy(int count) {
-//    beatenMineDraughtsLabel.setText(count + " - " + (board.isWhite() ? constants.whites()
-//        : constants.blacks()));
+//    beatenMineDraughtsLabel.setText(count + " - " + (board.isWhite() ? messages.whites()
+//        : messages.blacks()));
 //  }
 //
 //  public void setBeatenOpponent(int count) {
-//    beatenOpponentDraughtsLabel.setText(count + " - " + (board.isWhite() ? constants.blacks()
-//        : constants.whites()));
+//    beatenOpponentDraughtsLabel.setText(count + " - " + (board.isWhite() ? messages.blacks()
+//        : messages.whites()));
 //  }
 //
 //  private void updateTurn(boolean myTurn) {
 //    if (myTurn) {
-//      turnLabel.setHTML(constants.yourTurn());
+//      turnLabel.setHTML(messages.yourTurn());
 //    } else {
-//      turnLabel.setHTML(constants.opponentTurn());
+//      turnLabel.setHTML(messages.opponentTurn());
 //    }
 //  }
 //
 //  private void toggleInPlayButton() {
 //    connectToPlayButton.setType(ButtonType.DEFAULT);
 //    connectToPlayButton.setIcon(IconType.PLAY);
-//    connectToPlayButton.setText(constants.play());
+//    connectToPlayButton.setText(messages.play());
 //  }
 //
 //  private void setPlayerList(List<Shashist> playerList) {

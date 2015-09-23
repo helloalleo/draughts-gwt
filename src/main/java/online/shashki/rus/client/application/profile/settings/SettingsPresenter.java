@@ -13,6 +13,7 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.proxy.Proxy;
 import online.shashki.rus.client.application.login.CurrentSession;
 import online.shashki.rus.client.application.profile.ProfilePresenter;
+import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.rpc.ProfileRpcServiceAsync;
 import online.shashki.rus.shared.locale.ShashkiMessages;
@@ -24,6 +25,7 @@ public class SettingsPresenter extends Presenter<SettingsPresenter.MyView, Setti
   private final ProfileRpcServiceAsync profileService;
   private final CurrentSession currentSession;
   private final ShashkiMessages messages;
+  private Shashist player;
 
 
   @Inject
@@ -41,17 +43,27 @@ public class SettingsPresenter extends Presenter<SettingsPresenter.MyView, Setti
     this.messages = messages;
 
     getView().setUiHandlers(this);
-    getView().setPlayerName(currentSession.getCurrentPlayer().getPlayerName());
+    profileService.getCurrentProfile(new AsyncCallback<Shashist>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        ErrorDialogBox.showError(caught).show();
+      }
+
+      @Override
+      public void onSuccess(Shashist result) {
+        player = result;
+        getView().setPlayerName(result.getPlayerName());
+      }
+    });
   }
 
   @Override
   public void submitNewPlayerName(String playerName) {
-    Shashist shashist = currentSession.getCurrentPlayer();
-    shashist.setPlayerName(playerName);
-    profileService.saveProfile(shashist, new AsyncCallback<Void>() {
+    player.setPlayerName(playerName);
+    profileService.saveProfile(player, new AsyncCallback<Void>() {
       @Override
       public void onFailure(Throwable caught) {
-        currentSession.setCurrentPlayer(null);
+        ErrorDialogBox.showError(caught).show();
       }
 
       @Override

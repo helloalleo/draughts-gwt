@@ -16,7 +16,7 @@ import online.shashki.rus.shared.locale.ShashkiMessages;
  */
 public class BasicDialogBox extends DialogBox {
   @Inject
-  protected ShashkiMessages constants;
+  protected static ShashkiMessages messages;
   protected int WIDTH = 400;
   protected int HEIGHT = 60;
 

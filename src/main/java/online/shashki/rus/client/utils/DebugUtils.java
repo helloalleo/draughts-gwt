@@ -55,7 +55,7 @@ public class DebugUtils {
     // I cut the stacktrace at depth 7
     final int length = Math.min(7, trace.length);
     for (int i = 0; i <= length; i++) {
-      sbuf.append(trace[i].toString());
+      sbuf.append(String.valueOf(trace[i]));
       sbuf.append("\n");
     }
     if (trace.length > 7) {

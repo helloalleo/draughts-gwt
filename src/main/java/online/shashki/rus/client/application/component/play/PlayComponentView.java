@@ -6,9 +6,11 @@ import com.ait.lienzo.client.core.shape.Text;
 import com.ait.lienzo.client.widget.LienzoPanel;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
@@ -42,7 +44,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @UiField
   HTMLPanel notationList;
   @UiField
-  Button connectToPlayButton;
+  Button connectToServerButton;
   @UiField
   Button drawButton;
   @UiField
@@ -70,13 +72,26 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private GameRpcServiceAsync gameService;
 
   @Inject
-  PlayComponentView(Binder uiBinder, ShashkiMessages messages) {
+  PlayComponentView(Binder uiBinder,
+                    ShashkiMessages messages) {
     initWidget(uiBinder.createAndBindUi(this));
     this.messages = messages;
 
     initEmptyDeskPanel();
     initNotationPanel();
     initPlayersCellList();
+  }
+
+  @UiHandler("connectToServerButton")
+  public void onConnectToServer(ClickEvent event) {
+    switch (connectToServerButton.getIcon()) {
+      case REFRESH:
+        getUiHandlers().refreshConnectionToServer();
+        break;
+      case PLAY:
+        getUiHandlers().connectToServer(playerSelectionModel.getSelectedObject());
+        break;
+    }
   }
 
   private void initEmptyDeskPanel() {
@@ -166,6 +181,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public void setPlayerList(List<Shashist> shashistList) {
     playersCellList.setRowData(shashistList);
+  }
+
+  @Override
+  public void setPlayer(Shashist player) {
+    this.player = player;
   }
 
   interface Binder extends UiBinder<Widget, PlayComponentView> {

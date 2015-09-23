@@ -10,12 +10,6 @@ import com.google.gwt.i18n.client.ConstantsWithLookup;
  */
 public interface ShashkiConfiguration extends ConstantsWithLookup {
 
-  String protocol();
-
-  String hostname();
-
-  String port();
-
   @Key("player.websocket.url")
   String playerWebsocketUrl();
 }

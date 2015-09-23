@@ -2,7 +2,7 @@ package online.shashki.rus.client.application.widget.dialog;//package net.rushas
 //
 //import com.emitrom.lienzo.client.widget.LienzoPanel;
 //import com.github.gwtbootstrap.client.ui.ButtonGroup;
-//import com.github.gwtbootstrap.client.ui.constants.IconType;
+//import com.github.gwtbootstrap.client.ui.messages.IconType;
 //import com.google.gwt.core.client.GWT;
 //import com.google.gwt.event.dom.client.ClickEvent;
 //import com.google.gwt.event.dom.client.ClickHandler;
@@ -42,7 +42,7 @@ package online.shashki.rus.client.application.widget.dialog;//package net.rushas
 //  private Button nextButton = new Button("", IconType.FORWARD);
 //  private Button toEndButton = new Button("", IconType.FAST_FORWARD);
 //  private Button closeButton;
-//  private RUCheckersConstants constants = GWT.create(RUCheckersConstants.class);
+//  private RUCheckersConstants messages = GWT.create(RUCheckersConstants.class);
 //  private int side = 0;
 //  private int deskSide = 0;
 //  private int notationCursor;
@@ -64,7 +64,7 @@ package online.shashki.rus.client.application.widget.dialog;//package net.rushas
 //        + ". Результат: " + codeNameEndPlay.getProvider(game.getPlayEndStatus()));
 //    side = getSide() - 20;
 //    deskSide = side - 20;
-//    closeButton = new Button(constants.close());
+//    closeButton = new Button(messages.close());
 //    VerticalPanel verticalPanel = new VerticalPanel();
 //
 //    BoardBackgroundLayer boardBackground = new BoardBackgroundLayer(side, deskSide, rows, cols);
@@ -105,7 +105,7 @@ package online.shashki.rus.client.application.widget.dialog;//package net.rushas
 //
 //    notationScroll.add(notationHTMLPanel);
 //
-//    notationPanel.add(new Label(constants.notationTitle()));
+//    notationPanel.add(new Label(messages.notationTitle()));
 //    notationPanel.add(notationScroll);
 //    notationPanel.addStyleName("game-notation");
 //    checkersPanel.add(notationPanel);

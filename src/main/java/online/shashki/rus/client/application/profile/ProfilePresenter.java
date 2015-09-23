@@ -40,6 +40,8 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
   @Override
   protected void onBind() {
     super.onBind();
+
+    setInSlot(SLOT_PROFILE_CONTENT, myGamesPresenter);
   }
 
   @Override

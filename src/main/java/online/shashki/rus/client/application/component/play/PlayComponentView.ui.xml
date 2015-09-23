@@ -30,7 +30,7 @@
             </g:HTMLPanel>
             <g:HTMLPanel ui:field="playerListColumn" addStyleNames="{res.style.playerList}">
                 <span>
-                    <b:Button ui:field="connectToPlayButton" icon="REFRESH"
+                    <b:Button ui:field="connectToServerButton" icon="REFRESH"
                               addStyleNames="btn btn-default btn-primary btn-block">
                         <ui:msg description="Подключиться" key="connectToPlayButton">Подключиться</ui:msg>
                     </b:Button>
