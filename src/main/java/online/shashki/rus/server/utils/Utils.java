@@ -1,4 +1,4 @@
-package online.shashki.rus.server.util;
+package online.shashki.rus.server.utils;
 
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.BearerToken;
@@ -10,14 +10,10 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
-import com.google.web.bindery.autobean.shared.AutoBean;
-import com.google.web.bindery.autobean.shared.AutoBeanCodex;
-import com.google.web.bindery.autobean.shared.AutoBeanUtils;
-import com.google.web.bindery.autobean.vm.AutoBeanFactorySource;
 import online.shashki.rus.server.config.ConfigHelper;
 import online.shashki.rus.server.servlet.oauth.ClientSecrets;
 import online.shashki.rus.shared.model.GameMessage;
-import online.shashki.rus.shared.websocket.message.MessageFactory;
+import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
 import java.util.List;
@@ -28,14 +24,13 @@ import java.util.List;
  * Date: 16.11.14
  * Time: 17:19
  */
-public class Util {
+public class Utils {
 
-  public static final String LOCALHOST = "127.0.0.1";
   public static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
   public static final JsonFactory JSON_FACTORY = new JacksonFactory();
 
   public static AuthorizationCodeFlow getFlow(ClientSecrets secrets,
-                                               List<String> scopes) throws IOException {
+                                              List<String> scopes) throws IOException {
     return new AuthorizationCodeFlow.Builder(BearerToken.authorizationHeaderAccessMethod(),
         HTTP_TRANSPORT,
         JSON_FACTORY,
@@ -56,14 +51,19 @@ public class Util {
   }
 
   public static String serializePlayerMessageToJson(GameMessage message) {
-    // Retrieve the AutoBean controller
-    AutoBean<GameMessage> bean = AutoBeanUtils.getAutoBean(message);
-    return AutoBeanCodex.encode(bean).getPayload();
+    ObjectMapper objectMapper = new ObjectMapper();
+    StringWriter stringWriter = new StringWriter();
+    try {
+      objectMapper.writeValue(stringWriter, message);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return "";
+    }
+    return stringWriter.toString();
   }
 
-  public static GameMessage deserializeFromJson(String json) {
-    MessageFactory messageFactory = AutoBeanFactorySource.create(MessageFactory.class);
-    AutoBean<GameMessage> playerMessageBean = AutoBeanCodex.decode(messageFactory, GameMessage.class, json);
-    return playerMessageBean.as();
+  public static GameMessage deserializeFromJson(String json) throws IOException {
+    ObjectMapper objectMapper = new ObjectMapper();
+    return objectMapper.readValue(json, GameMessage.class);
   }
 }

@@ -1,6 +1,8 @@
 package online.shashki.rus.shared.model.entity;
 
+import com.google.gwt.user.client.rpc.GwtTransient;
 import online.shashki.rus.shared.model.PersistableObject;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 
@@ -17,6 +19,8 @@ public class PersistableObjectImpl implements PersistableObject {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
+  @GwtTransient
+  @JsonIgnore
   @Version
   private Integer version;
 
@@ -34,5 +38,4 @@ public class PersistableObjectImpl implements PersistableObject {
   public Integer getVersion() {
     return version;
   }
-
 }

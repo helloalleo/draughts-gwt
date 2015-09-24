@@ -2,7 +2,6 @@ package online.shashki.rus.server.service;
 
 import online.shashki.rus.server.dao.Dao;
 import online.shashki.rus.server.dao.PlayerMessageDao;
-import online.shashki.rus.shared.model.entity.GameMessageEntity;
 import online.shashki.rus.shared.model.GameMessage;
 
 import javax.ejb.Stateless;
@@ -16,13 +15,13 @@ import java.util.List;
  * Time: 21:52
  */
 @Stateless
-public class GameMessageService extends BaseService<GameMessageEntity> {
+public class GameMessageService extends BaseService<GameMessage> {
 
   @Inject
   private PlayerMessageDao playerMessageDao;
 
   @Override
-  protected Dao<GameMessageEntity> getDao() {
+  protected Dao<GameMessage> getDao() {
     return playerMessageDao;
   }
 

@@ -43,6 +43,8 @@
         <commons-lang.version>2.6</commons-lang.version>
         <google-oauth-client.version>1.19.0</google-oauth-client.version>
         <postgresql.version>9.3-1102-jdbc41</postgresql.version>
+        <jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
+        <gwt-jackson.version>0.10.0</gwt-jackson.version>
     </properties>
 
     <profiles>
@@ -163,6 +165,20 @@
             <!--<scope>provided</scope>-->
         </dependency>
 
+        <!--<dependency>-->
+        <!--<groupId>com.gwtplatform</groupId>-->
+        <!--<artifactId>gwtp-dispatch-rest</artifactId>-->
+        <!--<version>${gwtp.version}</version>-->
+        <!--&lt;!&ndash;<scope>provided</scope>&ndash;&gt;-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+        <!--<groupId>com.gwtplatform</groupId>-->
+        <!--<artifactId>gwtp-dispatch-rest-shared</artifactId>-->
+        <!--<version>${gwtp.version}</version>-->
+        <!--&lt;!&ndash;<scope>compile</scope>&ndash;&gt;-->
+        <!--</dependency>-->
+
         <!-- DI -->
         <dependency>
             <groupId>com.google.gwt.inject</groupId>
@@ -231,6 +247,19 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--Json Processing-->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>${jackson-mapper-asl.version}</version>
+        </dependency>
+
+        <!--GWT Jackson for JSON-->
+        <dependency>
+            <groupId>com.github.nmorel.gwtjackson</groupId>
+            <artifactId>gwt-jackson</artifactId>
+            <version>${gwt-jackson.version}</version>
+        </dependency>
         <!--JAVA EE-->
         <!-- First declare the APIs we depend on and need for compilation. All
                             of them are provided by JBoss WildFly -->

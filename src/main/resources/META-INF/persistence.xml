@@ -7,7 +7,7 @@
         <jta-data-source>java:jboss/datasources/ShashkiDS</jta-data-source>
 
         <class>online.shashki.rus.shared.model.entity.GameEntity</class>
-        <class>online.shashki.rus.shared.model.entity.GameMessageEntity</class>
+        <class>online.shashki.rus.shared.model.GameMessage</class>
         <class>online.shashki.rus.shared.model.entity.MoveEntity</class>
         <class>online.shashki.rus.shared.model.Shashist</class>
         <class>online.shashki.rus.shared.model.entity.FriendEntity</class>

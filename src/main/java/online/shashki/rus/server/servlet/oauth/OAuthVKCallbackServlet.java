@@ -9,7 +9,7 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
 import online.shashki.rus.server.config.ServerConfiguration;
 import online.shashki.rus.server.service.ShashistService;
-import online.shashki.rus.server.util.Util;
+import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.shared.model.Shashist;
 
 import javax.inject.Inject;
@@ -47,7 +47,7 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
     GenericUrl url = new GenericUrl(serverConfiguration.getVkApiUserInfo());
     url.set("access_token", accessToken);
 
-    HttpRequest request = Util.HTTP_TRANSPORT.createRequestFactory().buildGetRequest(url);
+    HttpRequest request = Utils.HTTP_TRANSPORT.createRequestFactory().buildGetRequest(url);
     HttpResponse response = request.execute();
     InputStream inputStream = response.getContent();
     JsonReader jsonReader = Json.createReader(inputStream);
@@ -104,7 +104,7 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
   @Override
   protected AuthorizationCodeFlow initializeFlow() throws ServletException, IOException {
     ClientSecrets clientSecrets = new ClientSecrets(serverConfiguration, ClientSecrets.SocialType.VK);
-    return Util.getFlow(clientSecrets, scopes);
+    return Utils.getFlow(clientSecrets, scopes);
   }
 
   @Override

@@ -1,7 +1,6 @@
 package online.shashki.rus.server.dao.impl;
 
 import online.shashki.rus.server.dao.PlayerMessageDao;
-import online.shashki.rus.shared.model.entity.GameMessageEntity;
 import online.shashki.rus.shared.model.GameMessage;
 
 import javax.ejb.Stateless;
@@ -18,13 +17,13 @@ import java.util.List;
  * Time: 21:55
  */
 @Stateless
-public class GameMessageDaoImpl extends DaoImpl<GameMessageEntity> implements PlayerMessageDao {
+public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements PlayerMessageDao {
 
   @Inject
   private EntityManager entityManager;
 
   public GameMessageDaoImpl() {
-    super(GameMessageEntity.class);
+    super(GameMessage.class);
   }
 
   @Override

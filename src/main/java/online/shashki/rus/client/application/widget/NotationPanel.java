@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.shashki.Square;
-import online.shashki.rus.shashki.dto.MoveDto;
+import online.shashki.rus.shared.dto.MoveDto;
 
 /**
  * Created with IntelliJ IDEA.

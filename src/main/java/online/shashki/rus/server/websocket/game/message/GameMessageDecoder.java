@@ -1,11 +1,12 @@
 package online.shashki.rus.server.websocket.game.message;
 
-import online.shashki.rus.server.util.Util;
+import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.shared.model.GameMessage;
 
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;
 import javax.websocket.EndpointConfig;
+import java.io.IOException;
 import java.util.Arrays;
 
 /**
@@ -26,7 +27,7 @@ public class GameMessageDecoder implements Decoder.Text<GameMessage> {
   @Override
   public GameMessage decode(String s) throws DecodeException {
     try {
-      return Util.deserializeFromJson(s);
+      return Utils.deserializeFromJson(s);
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -35,7 +36,13 @@ public class GameMessageDecoder implements Decoder.Text<GameMessage> {
 
   @Override
   public boolean willDecode(String s) {
-    GameMessage gameMessage = Util.deserializeFromJson(s);
+    GameMessage gameMessage = null;
+    try {
+      gameMessage = Utils.deserializeFromJson(s);
+    } catch (IOException e) {
+      e.printStackTrace();
+      return false;
+    }
     return Arrays.asList(GameMessage.MessageType.values()).contains(gameMessage.getMessageType());
   }
 

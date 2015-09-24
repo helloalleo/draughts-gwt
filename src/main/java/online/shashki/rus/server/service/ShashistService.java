@@ -6,6 +6,7 @@ import online.shashki.rus.shared.model.Shashist;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,6 +23,11 @@ public class ShashistService extends BaseService<Shashist> {
   @Override
   protected Dao<Shashist> getDao() {
     return shashistDao;
+  }
+
+  @Override
+  public List<Shashist> findAll() {
+    return shashistDao.findAll();
   }
 
   public Shashist findByVkUid(String uid) {

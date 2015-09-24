@@ -1,5 +1,6 @@
 package online.shashki.rus.shared.model.entity;
 
+import online.shashki.rus.shared.model.GameMessage;
 import online.shashki.rus.shared.model.Move;
 import online.shashki.rus.shared.model.PersistableObject;
 import online.shashki.rus.shashki.Square;
@@ -23,7 +24,7 @@ class MoveEntity extends PersistableObjectImpl implements Move, PersistableObjec
 
   @OneToOne
   @JoinColumn(name="move_id", nullable=false, updatable=false)
-  private GameMessageEntity gameMessage;
+  private GameMessage gameMessage;
 
   @Column(name = "start_pos")
   private String startSquare;
@@ -98,11 +99,11 @@ class MoveEntity extends PersistableObjectImpl implements Move, PersistableObjec
     return this;
   }
 
-  public GameMessageEntity getGameMessage() {
+  public GameMessage getGameMessage() {
     return gameMessage;
   }
 
-  public MoveEntity setGameMessage(GameMessageEntity gameMessage) {
+  public MoveEntity setGameMessage(GameMessage gameMessage) {
     this.gameMessage = gameMessage;
     return this;
   }

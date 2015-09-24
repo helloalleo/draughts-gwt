@@ -4,11 +4,11 @@
 <module rename-to='Application'>
     <inherits name='com.google.gwt.user.User'/>
     <inherits name="com.gwtplatform.mvp.MvpWithEntryPoint"/>
-    <inherits name="com.google.web.bindery.autobean.AutoBean"/>
     <inherits name="org.gwtbootstrap3.GwtBootstrap3"/>
     <inherits name="com.google.gwt.websockets.WebSockets"/>
     <inherits name="com.ait.lienzo.Lienzo"/>
     <inherits name='com.google.gwt.user.theme.clean.Clean'/>
+    <inherits name="com.github.nmorel.gwtjackson.GwtJackson"/>
 
     <extend-configuration-property name="gin.ginjector.modules"
                                    value="online.shashki.rus.client.gin.ClientModule"/>

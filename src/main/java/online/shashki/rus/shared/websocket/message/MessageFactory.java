@@ -14,13 +14,13 @@ import online.shashki.rus.shared.model.Shashist;
  * Date: 07.12.14
  * Time: 16:37
  */
-public interface MessageFactory extends AutoBeanFactory {
-
-  AutoBean<Game> game();
-
-  AutoBean<GameMessage> gameMessage();
-
-  AutoBean<Shashist> shashist();
-
-  AutoBean<Move> move();
-}
+//public interface MessageFactory extends AutoBeanFactory {
+//
+//  AutoBean<Game> game();
+//
+//  AutoBean<GameMessage> gameMessage();
+//
+//  AutoBean<Shashist> shashist();
+//
+//  AutoBean<Move> move();
+//}

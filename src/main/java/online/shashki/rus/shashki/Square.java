@@ -1,8 +1,10 @@
 package online.shashki.rus.shashki;
 
-
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.shared.core.types.Color;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,43 +12,35 @@ import com.ait.lienzo.shared.core.types.Color;
  * Date: 07.12.13
  * Time: 21:07
  */
-public class Square extends Rectangle {
+public class Square implements Serializable {
 
+  @JsonIgnore
+  private Rectangle shape;
+  @JsonIgnore
   private static final String TO_SEND_SEP = ",";
-  private final int row;
-  private final int col;
-  private static final Color boardBackground = new Color(65, 133, 132);
+  private int row;
+  private int col;
+  @JsonIgnore
+  private final Color boardBackground = new Color(65, 133, 132);
   private boolean occupied;
+  @JsonIgnore
   private Draught occupant;
-  private static double strokeLineWidth = 0;
+  @JsonIgnore
   private String[] alph = new String[]{"a", "b", "c", "d", "e", "f", "g", "h"};
 
   public Square(int row, int col) {
-    super(0, 0);
+    this.shape = new Rectangle(0, 0);
     this.row = row;
     this.col = col;
 
     this.occupied = false;
     this.occupant = null;
 
-    this.setFillColor(boardBackground);
-//    this.setStrokeWidth(strokeLineWidth);
+    this.shape.setFillColor(boardBackground);
   }
 
-//  public static Square fromString(int row, int col) {
-//    Square square = new Square();
-//
-//    square.row = row;
-//    square.col = col;
-//
-//    square.occupied = false;
-//    square.occupant = null;
-//
-//    square.setFillColor(boardBackground);
-//    square.setStrokeWidth(strokeLineWidth);
-//
-//    return square;
-//  }
+  public Square() {
+  }
 
   public static Square fromString(String toSendStr) {
     if (toSendStr == null || toSendStr.isEmpty()) {
@@ -56,6 +50,10 @@ public class Square extends Rectangle {
     final Integer row = Integer.valueOf(toSendArr[0]);
     final Integer col = Integer.valueOf(toSendArr[1]);
     return new Square(row, col);
+  }
+
+  public Rectangle getShape() {
+    return shape;
   }
 
   public static boolean isValid(int row, int col) {
@@ -101,7 +99,7 @@ public class Square extends Rectangle {
 
   public String toString() {
     return "row=" + String.valueOf(row) + " col=" + String.valueOf(col)
-        + "; x=" + String.valueOf(getX()) + " y=" + String.valueOf(getY());
+        + "; x=" + String.valueOf(shape.getX()) + " y=" + String.valueOf(shape.getY());
   }
 
   public String toSend() {
@@ -157,23 +155,11 @@ public class Square extends Rectangle {
   }
 
   public boolean isBetween(Square from, Square to) {
-    if (isBetween(this.getRow(), from.getRow(), to.getRow())
-        && isBetween(this.getCol(), from.getCol(), to.getCol())) {
-      return true;
-    }
-    if (isBetween(this.getRow(), from.getRow(), to.getRow())
-        && isBetween(this.getCol(), to.getCol(), from.getCol())) {
-      return true;
-    }
-    if (isBetween(this.getRow(), to.getRow(), from.getRow())
-        && isBetween(this.getCol(), to.getCol(), from.getCol())) {
-      return true;
-    }
-    if (isBetween(this.getRow(), to.getRow(), from.getRow())
-        && isBetween(this.getCol(), from.getCol(), to.getCol())) {
-      return true;
-    }
-    return false;
+    return isBetween(this.getRow(), from.getRow(), to.getRow())
+        && isBetween(this.getCol(), from.getCol(), to.getCol()) || isBetween(this.getRow(), from.getRow(), to.getRow())
+        && isBetween(this.getCol(), to.getCol(), from.getCol()) || isBetween(this.getRow(), to.getRow(), from.getRow())
+        && isBetween(this.getCol(), to.getCol(), from.getCol()) || isBetween(this.getRow(), to.getRow(), from.getRow())
+        && isBetween(this.getCol(), from.getCol(), to.getCol());
   }
 
   private static boolean isBetween(int value, int min, int max) {
@@ -183,25 +169,26 @@ public class Square extends Rectangle {
   public void updateShape(int side, int rows, int cols, double offsetX, int offsetY) {
     double x = ((double) col) * side / ((double) rows) + offsetX;
     double y = ((double) row) * side / ((double) cols) + offsetY;
-    setX(x);
-    setY(y);
+    shape.setX(x);
+    shape.setY(y);
 
     double squareSize = side / (double) rows;
-    setWidth(squareSize);
-    setHeight(squareSize);
+    shape.setWidth(squareSize);
+    shape.setHeight(squareSize);
 //    this.setStrokeWidth(strokeLineWidth);
   }
 
   public boolean contains(double x, double y) {
-    return (Math.abs(x - getX()) < getWidth()) && (Math.abs(y - getY()) < getHeight());
+    return (Math.abs(x - shape.getX()) < shape.getWidth())
+        && (Math.abs(y - shape.getY()) < shape.getHeight());
   }
 
   public double getCenterX() {
-    return getX() + getWidth() / 2;
+    return shape.getX() + shape.getWidth() / 2;
   }
 
   public double getCenterY() {
-    return getY() + getHeight() / 2;
+    return shape.getY() + shape.getHeight() / 2;
   }
 
   public Square mirror() {
@@ -209,5 +196,13 @@ public class Square extends Rectangle {
     int col = BoardBackgroundLayer.COLS - 1 - this.col;
 
     return new Square(row, col);
+  }
+
+  public void setAlpha(double alpha) {
+    shape.setAlpha(alpha);
+  }
+
+  public double getAlpha() {
+    return shape.getAlpha();
   }
 }

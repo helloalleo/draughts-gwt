@@ -11,7 +11,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 import online.shashki.rus.client.event.*;
-import online.shashki.rus.shashki.dto.MoveDto;
+import online.shashki.rus.shared.dto.MoveDto;
 import online.shashki.rus.shashki.util.Operator;
 import online.shashki.rus.shashki.util.PossibleOperators;
 
@@ -80,10 +80,10 @@ public class Board extends Layer {
     alphMap.put("g", 6);
     alphMap.put("h", 7);
 
-    handlers();
+    bindEvents();
   }
 
-  private void handlers() {
+  private void bindEvents() {
     eventBus.addHandler(PlayMoveCancelEvent.TYPE, new PlayMoveCancelEventHandler() {
       @Override
       public void onPlayMove(PlayMoveCancelEvent event) {

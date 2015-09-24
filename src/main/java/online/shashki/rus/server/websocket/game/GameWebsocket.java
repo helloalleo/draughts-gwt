@@ -1,17 +1,15 @@
 package online.shashki.rus.server.websocket.game;
 
-import com.google.web.bindery.autobean.vm.AutoBeanFactorySource;
 import online.shashki.rus.server.service.GameMessageService;
 import online.shashki.rus.server.service.GameService;
 import online.shashki.rus.server.service.ShashistService;
-import online.shashki.rus.server.util.Util;
+import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.server.websocket.game.message.GameMessageDecoder;
 import online.shashki.rus.server.websocket.game.message.GameMessageEncoder;
+import online.shashki.rus.shared.dto.GameMessageDto;
 import online.shashki.rus.shared.model.GameMessage;
 import online.shashki.rus.shared.model.Shashist;
 import online.shashki.rus.shared.model.entity.GameEntity;
-import online.shashki.rus.shared.model.entity.GameMessageEntity;
-import online.shashki.rus.shared.websocket.message.MessageFactory;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -85,21 +83,20 @@ public class GameWebsocket {
 
   private void handleNewPlayer(GameMessage message, Session session) {
     Shashist shashist = message.getSender();
+    final Long shashistId = shashist.getId();
     if (!peers.isEmpty()) {
-      boolean registered = peers.keySet().parallelStream().filter(sh -> sh.getId().equals(shashist.getId()))
+      boolean registered = peers.keySet().parallelStream().filter(sh -> sh.getId().equals(shashistId))
           .findAny().isPresent();
       if (registered) {
         return;
       }
     }
-    Shashist shashistEntity = shashistService.find(shashist.getId());
 
-    shashistEntity.setLoggedIn(true);
-    shashistEntity.setOnline(true);
-    shashistService.edit(shashistEntity);
+    shashist = shashistService.find(shashistId);
 
     shashist.setLoggedIn(true);
     shashist.setOnline(true);
+    shashistService.edit(shashist);
 
     peers.put(shashist, session);
     System.out.println("Register new player: " + shashist.getId() + " " + session.getId());
@@ -139,28 +136,28 @@ public class GameWebsocket {
     Shashist shashistSender = shashistService.find(message.getSender().getId());
     GameEntity gameEntity = message.getGame() != null ? gameService.find(message.getGame().getId()) : null;
 
-    GameMessageEntity gameMessageEntity = new GameMessageEntity();
-    gameMessageEntity.setMessageType(message.getMessageType());
-    gameMessageEntity.setData(message.getData());
-    gameMessageEntity.setMessage(message.getMessage());
+    GameMessage gameMessage = new GameMessage();
+    gameMessage.setMessageType(message.getMessageType());
+    gameMessage.setData(message.getData());
+    gameMessage.setMessage(message.getMessage());
 
-    gameMessageEntity.setGame(gameEntity);
-    gameMessageEntity.setMove(message.getMove());
+    gameMessage.setGame(gameEntity);
+    gameMessage.setMove(message.getMove());
 
-    gameMessageEntity.setReceiver(shashistReceiver);
-    gameMessageEntity.setSender(shashistSender);
+    gameMessage.setReceiver(shashistReceiver);
+    gameMessage.setSender(shashistSender);
 
-    gameMessageEntity.setSentDate(new Date());
+    gameMessage.setSentDate(new Date());
 
-    gameMessageService.create(gameMessageEntity);
+    gameMessageService.create(gameMessage);
   }
 
   private void updatePlayerList(Session session) {
-    MessageFactory messageFactory = AutoBeanFactorySource.create(MessageFactory.class);
-    GameMessage gameMessage = messageFactory.gameMessage().as();
+    GameMessage gameMessage = new GameMessageDto();
     gameMessage.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
     List<Shashist> shashistList = shashistService.findAll();
-//    gameMessage.setPlayerList(shashistEntityList);
+    gameMessage.setPlayerList(shashistList);
+    gameMessageService.create();
     session.getOpenSessions().stream().filter(Session::isOpen).forEach(peer -> {
       sendMessage(peer, gameMessage);
     });
@@ -171,7 +168,7 @@ public class GameWebsocket {
 
     if (remote != null) {
       try {
-        remote.sendText(Util.serializePlayerMessageToJson(message), true);
+        remote.sendText(Utils.serializePlayerMessageToJson(message), true);
       } catch (IOException e) {
         e.printStackTrace();
       }

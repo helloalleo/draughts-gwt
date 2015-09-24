@@ -4,7 +4,7 @@ import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeServlet;
 import com.google.api.client.http.GenericUrl;
 import online.shashki.rus.server.config.ServerConfiguration;
-import online.shashki.rus.server.util.Util;
+import online.shashki.rus.server.utils.Utils;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -31,7 +31,7 @@ public class OAuthVKServlet extends AbstractAuthorizationCodeServlet {
   @Override
   protected AuthorizationCodeFlow initializeFlow() throws ServletException, IOException {
     ClientSecrets clientSecrets = new ClientSecrets(serverConfiguration, ClientSecrets.SocialType.VK);
-    return Util.getFlow(clientSecrets, scope);
+    return Utils.getFlow(clientSecrets, scope);
   }
 
   @Override

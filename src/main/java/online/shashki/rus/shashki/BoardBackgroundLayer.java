@@ -65,7 +65,7 @@ public class BoardBackgroundLayer extends Layer {
           Square square = new Square(i, j);
           square.updateShape(deskSide, rows, cols, OFFSET_X, OFFSET_X - 2);
           gameBoard[i][j] = square;
-          add(square);
+          add(square.getShape());
 
           // текст для отладки
 //            Text t = new Text(i + " " + j, "sanse", 12);

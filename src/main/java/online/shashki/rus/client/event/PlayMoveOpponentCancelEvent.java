@@ -1,7 +1,7 @@
 package online.shashki.rus.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
-import online.shashki.rus.shashki.dto.MoveDto;
+import online.shashki.rus.shared.dto.MoveDto;
 
 /**
  * Created with IntelliJ IDEA.

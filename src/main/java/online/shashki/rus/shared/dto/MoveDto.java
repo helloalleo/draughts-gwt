@@ -1,4 +1,4 @@
-package online.shashki.rus.shashki.dto;
+package online.shashki.rus.shared.dto;
 
 import online.shashki.rus.shared.model.Move;
 import online.shashki.rus.shashki.Square;

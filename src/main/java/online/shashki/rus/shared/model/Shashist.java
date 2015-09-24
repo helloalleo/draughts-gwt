@@ -3,8 +3,8 @@ package online.shashki.rus.shared.model;
 import com.google.gwt.user.client.rpc.GwtTransient;
 import online.shashki.rus.shared.model.entity.FriendEntity;
 import online.shashki.rus.shared.model.entity.GameEntity;
-import online.shashki.rus.shared.model.entity.GameMessageEntity;
 import online.shashki.rus.shared.model.entity.PersistableObjectImpl;
+import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.*;
@@ -21,13 +21,18 @@ import java.util.Set;
 @Table(name = "shashist")
 public class Shashist extends PersistableObjectImpl {
 
+  @GwtTransient
+  @JsonIgnore
   @Column(name = "session_id")
   private String sessionId;
 
   @GwtTransient
+  @JsonIgnore
   @Column(name = "vk_uid")
   private String vkUid;
 
+  @GwtTransient
+  @JsonIgnore
   @Email
   private String email;
 
@@ -40,39 +45,49 @@ public class Shashist extends PersistableObjectImpl {
   @Column(name = "player_name")
   private String playerName;
 
+  @GwtTransient
+  @JsonIgnore
   @Column(name = "auth_provider")
   private String authProvider;
 
   @GwtTransient
+  @JsonIgnore
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.friendOf", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<FriendEntity> friends;
 
   @GwtTransient
+  @JsonIgnore
   @Column(name = "fiends_of")
   @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.friend", cascade = CascadeType.ALL, orphanRemoval = true)
   private Set<FriendEntity> friendOf;
 
   @GwtTransient
+  @JsonIgnore
   @OneToMany(mappedBy = "receiver")
-  private Set<GameMessageEntity> receivedPlayerMessages;
+  private Set<GameMessage> receivedPlayerMessages;
 
   @GwtTransient
+  @JsonIgnore
   @OneToMany(mappedBy = "sender")
-  private Set<GameMessageEntity> sentPlayerMessages;
+  private Set<GameMessage> sentPlayerMessages;
 
   @GwtTransient
+  @JsonIgnore
   @OneToMany(mappedBy = "receiver")
-  private Set<GameMessageEntity> receivedGameMessages;
+  private Set<GameMessage> receivedGameMessages;
 
   @GwtTransient
+  @JsonIgnore
   @OneToMany(mappedBy = "sender")
-  private Set<GameMessageEntity> sentGameMessages;
+  private Set<GameMessage> sentGameMessages;
 
   @GwtTransient
+  @JsonIgnore
   @OneToMany(mappedBy = "playerWhite")
   private Set<GameEntity> whiteRoleGames;
 
   @GwtTransient
+  @JsonIgnore
   @OneToMany(mappedBy = "playerBlack")
   private Set<GameEntity> blackRoleGames;
 
@@ -80,10 +95,16 @@ public class Shashist extends PersistableObjectImpl {
   private boolean loggedIn;
   private boolean playing;
   private boolean online;
+  @GwtTransient
+  @JsonIgnore
   @Column(name = "register_date")
   private Date registerDate;
+  @GwtTransient
+  @JsonIgnore
   @Column(name = "last_visited")
   private Date lastVisited;
+  @GwtTransient
+  @JsonIgnore
   @Column(name = "visit_counter")
   private int visitCounter;
 
@@ -179,35 +200,35 @@ public class Shashist extends PersistableObjectImpl {
     this.friendOf = friendOf;
   }
 
-  public Set<GameMessageEntity> getReceivedPlayerMessages() {
+  public Set<GameMessage> getReceivedPlayerMessages() {
     return receivedPlayerMessages;
   }
 
-  public void setReceivedPlayerMessages(Set<GameMessageEntity> playerMessageEntities) {
+  public void setReceivedPlayerMessages(Set<GameMessage> playerMessageEntities) {
     this.receivedPlayerMessages = playerMessageEntities;
   }
 
-  public Set<GameMessageEntity> getSentPlayerMessages() {
+  public Set<GameMessage> getSentPlayerMessages() {
     return sentPlayerMessages;
   }
 
-  public void setSentPlayerMessages(Set<GameMessageEntity> playerMessageEntities) {
+  public void setSentPlayerMessages(Set<GameMessage> playerMessageEntities) {
     this.sentPlayerMessages = playerMessageEntities;
   }
 
-  public Set<GameMessageEntity> getReceivedGameMessages() {
+  public Set<GameMessage> getReceivedGameMessages() {
     return receivedGameMessages;
   }
 
-  public void setReceivedGameMessages(Set<GameMessageEntity> receivedGameMessages) {
+  public void setReceivedGameMessages(Set<GameMessage> receivedGameMessages) {
     this.receivedGameMessages = receivedGameMessages;
   }
 
-  public Set<GameMessageEntity> getSentGameMessages() {
+  public Set<GameMessage> getSentGameMessages() {
     return sentGameMessages;
   }
 
-  public void setSentGameMessages(Set<GameMessageEntity> sentGameMessages) {
+  public void setSentGameMessages(Set<GameMessage> sentGameMessages) {
     this.sentGameMessages = sentGameMessages;
   }
 
@@ -275,6 +296,7 @@ public class Shashist extends PersistableObjectImpl {
     this.blackRoleGames = blackRoleGames;
   }
 
+  @JsonIgnore
   public String getPublicName() {
     if (getPlayerName() == null) {
       String fullName = getFullName().trim();
@@ -286,6 +308,7 @@ public class Shashist extends PersistableObjectImpl {
     return getPlayerName();
   }
 
+  @JsonIgnore
   public String getFullName() {
     return getFirstName() + " " + getLastName();
   }

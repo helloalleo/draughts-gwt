@@ -30,9 +30,17 @@ public class ShashistDaoImpl extends DaoImpl<Shashist> implements ShashistDao {
     return entityManager;
   }
 
+//  @Override
+//  public List<Shashist> findAll() {
+//    Query query = getEntityManager().createQuery("SELECT sh FROM Shashist sh " +
+//        "JOIN FETCH sh.blackRoleGames " +
+//        "JOIN FETCH sh.whiteRoleGames");
+//    return query.getResultList();
+//  }
+
   @Override
   public Shashist findByVkUid(String uid) {
-    Query query = getEntityManager().createQuery("FROM ShashistEntity " +
+    Query query = getEntityManager().createQuery("FROM Shashist " +
         "WHERE vkUid = :vkUid");
     query.setParameter("vkUid", uid);
     List list = query.getResultList();
@@ -41,7 +49,8 @@ public class ShashistDaoImpl extends DaoImpl<Shashist> implements ShashistDao {
 
   @Override
   public Shashist findBySessionId(String sessionId) {
-    Query query = getEntityManager().createQuery("FROM ShashistEntity " +
+    Query query = getEntityManager().createQuery(
+        "FROM Shashist " +
         "WHERE sessionId = :sessionId");
     query.setParameter("sessionId", sessionId);
     List result = query.getResultList();

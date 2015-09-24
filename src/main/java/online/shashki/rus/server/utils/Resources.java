@@ -1,4 +1,4 @@
-package online.shashki.rus.server.util;
+package online.shashki.rus.server.utils;
 
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.SimpleEventBus;
