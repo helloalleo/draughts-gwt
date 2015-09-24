@@ -9,7 +9,7 @@
         <class>online.shashki.rus.shared.model.entity.GameEntity</class>
         <class>online.shashki.rus.shared.model.entity.GameMessageEntity</class>
         <class>online.shashki.rus.shared.model.entity.MoveEntity</class>
-        <class>online.shashki.rus.shared.model.entity.ShashistEntity</class>
+        <class>online.shashki.rus.shared.model.Shashist</class>
         <class>online.shashki.rus.shared.model.entity.FriendEntity</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>

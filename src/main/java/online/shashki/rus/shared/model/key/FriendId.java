@@ -1,6 +1,6 @@
 package online.shashki.rus.shared.model.key;
 
-import online.shashki.rus.shared.model.entity.ShashistEntity;
+import online.shashki.rus.shared.model.Shashist;
 
 import javax.persistence.*;
 import java.io.Serializable;
@@ -15,23 +15,23 @@ import java.io.Serializable;
 public class FriendId implements Serializable {
 
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private ShashistEntity friend;
+  private Shashist friend;
   @ManyToOne(fetch = FetchType.LAZY, cascade = CascadeType.ALL)
-  private ShashistEntity friendOf;
+  private Shashist friendOf;
 
-  public ShashistEntity getFriend() {
+  public Shashist getFriend() {
     return friend;
   }
 
-  public void setFriend(ShashistEntity friend) {
+  public void setFriend(Shashist friend) {
     this.friend = friend;
   }
 
-  public ShashistEntity getFriendOf() {
+  public Shashist getFriendOf() {
     return friendOf;
   }
 
-  public void setFriendOf(ShashistEntity friendOf) {
+  public void setFriendOf(Shashist friendOf) {
     this.friendOf = friendOf;
   }
 

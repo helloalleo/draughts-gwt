@@ -19,11 +19,11 @@ public class GameEntity extends PersistableObjectImpl implements Game {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "player_white_id")
-  private ShashistEntity playerWhite;
+  private Shashist playerWhite;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "player_black_id")
-  private ShashistEntity playerBlack;
+  private Shashist playerBlack;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "play_end_status")
@@ -45,10 +45,6 @@ public class GameEntity extends PersistableObjectImpl implements Game {
 
   @Override
   public void setPlayerWhite(Shashist playerWhite) {
-
-  }
-
-  public void setPlayerWhite(ShashistEntity playerWhite) {
     this.playerWhite = playerWhite;
   }
 
@@ -59,10 +55,6 @@ public class GameEntity extends PersistableObjectImpl implements Game {
 
   @Override
   public void setPlayerBlack(Shashist playerBlack) {
-
-  }
-
-  public void setPlayerBlack(ShashistEntity playerBlack) {
     this.playerBlack = playerBlack;
   }
 

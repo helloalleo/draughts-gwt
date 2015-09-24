@@ -21,11 +21,11 @@ public class GameMessageEntity extends PersistableObjectImpl implements GameMess
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "sender_id")
-  private ShashistEntity sender;
+  private Shashist sender;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "receiver_id")
-  private ShashistEntity receiver;
+  private Shashist receiver;
 
   private String message;
 
@@ -51,10 +51,7 @@ public class GameMessageEntity extends PersistableObjectImpl implements GameMess
   }
 
   @Override
-  public void setSender(Shashist sender) {
-  }
-
-  public void setSender(ShashistEntity entity) {
+  public void setSender(Shashist entity) {
     this.sender = entity;
   }
 
@@ -64,10 +61,7 @@ public class GameMessageEntity extends PersistableObjectImpl implements GameMess
   }
 
   @Override
-  public void setReceiver(Shashist receiver) {
-  }
-
-  public void setReceiver(ShashistEntity entity) {
+  public void setReceiver(Shashist entity) {
     this.receiver = entity;
   }
 

@@ -2,7 +2,7 @@ package online.shashki.rus.server.service;
 
 import online.shashki.rus.server.dao.Dao;
 import online.shashki.rus.server.dao.ShashistDao;
-import online.shashki.rus.shared.model.entity.ShashistEntity;
+import online.shashki.rus.shared.model.Shashist;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -14,21 +14,21 @@ import javax.inject.Inject;
  * Time: 0:08
  */
 @Stateless
-public class ShashistService extends BaseService<ShashistEntity> {
+public class ShashistService extends BaseService<Shashist> {
 
   @Inject
   private ShashistDao shashistDao;
 
   @Override
-  protected Dao<ShashistEntity> getDao() {
+  protected Dao<Shashist> getDao() {
     return shashistDao;
   }
 
-  public ShashistEntity findByVkUid(String uid) {
+  public Shashist findByVkUid(String uid) {
     return shashistDao.findByVkUid(uid);
   }
 
-  public ShashistEntity findBySessionId(String sessionId) {
+  public Shashist findBySessionId(String sessionId) {
     return shashistDao.findBySessionId(sessionId);
   }
 }

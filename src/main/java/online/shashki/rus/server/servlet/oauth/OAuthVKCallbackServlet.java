@@ -10,7 +10,7 @@ import com.google.api.client.http.HttpResponse;
 import online.shashki.rus.server.config.ServerConfiguration;
 import online.shashki.rus.server.service.ShashistService;
 import online.shashki.rus.server.util.Util;
-import online.shashki.rus.shared.model.entity.ShashistEntity;
+import online.shashki.rus.shared.model.Shashist;
 
 import javax.inject.Inject;
 import javax.json.*;
@@ -68,26 +68,26 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
     JsonNumber uid = array.getJsonNumber("uid");
     String vkUid = uid.toString();
 
-    ShashistEntity shashistEntity = shashistService.findByVkUid(vkUid);
-    if (shashistEntity == null) {
+    Shashist shashist = shashistService.findByVkUid(vkUid);
+    if (shashist == null) {
       JsonString firstName = array.getJsonString("first_name");
       JsonString lastName = array.getJsonString("last_name");
-      shashistEntity = new ShashistEntity();
-      shashistEntity.setVkUid(vkUid);
-      shashistEntity.setFirstName(firstName.getString());
-      shashistEntity.setLastName(lastName.getString());
+      shashist = new Shashist();
+      shashist.setVkUid(vkUid);
+      shashist.setFirstName(firstName.getString());
+      shashist.setLastName(lastName.getString());
     } else {
-      shashistEntity.setVisitCounter(shashistEntity.getVisitCounter() + 1);
+      shashist.setVisitCounter(shashist.getVisitCounter() + 1);
     }
 
     HttpSession session = req.getSession();
-    if (shashistEntity.getSessionId() == null
-        || !shashistEntity.getSessionId().equals(session.getId())) {
-      shashistEntity.setSessionId(session.getId());
-      if (shashistEntity.getId() == null) {
-        shashistService.create(shashistEntity);
+    if (shashist.getSessionId() == null
+        || !shashist.getSessionId().equals(session.getId())) {
+      shashist.setSessionId(session.getId());
+      if (shashist.getId() == null) {
+        shashistService.create(shashist);
       } else {
-        shashistService.edit(shashistEntity);
+        shashistService.edit(shashist);
       }
     }
 

@@ -66,8 +66,8 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
 
     this.placeManager = placeManager;
     this.menuPresenter = menuPresenter;
-    this.profileService = profileService;
     this.currentSession = currentSession;
+    this.profileService = profileService;
 
     checkIfAuthenticated();
   }

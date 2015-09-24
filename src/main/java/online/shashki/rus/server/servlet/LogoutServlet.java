@@ -2,7 +2,7 @@ package online.shashki.rus.server.servlet;
 
 import online.shashki.rus.server.config.ServerConfiguration;
 import online.shashki.rus.server.service.ShashistService;
-import online.shashki.rus.shared.model.entity.ShashistEntity;
+import online.shashki.rus.shared.model.Shashist;
 
 import javax.inject.Inject;
 import javax.servlet.ServletException;
@@ -27,12 +27,12 @@ public class LogoutServlet extends HttpServlet {
   private ServerConfiguration configuration;
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    ShashistEntity shashistEntity = shashistService.findBySessionId(request.getSession().getId());
-    if (shashistEntity != null) {
-      shashistEntity.setOnline(false);
-      shashistEntity.setPlaying(false);
-      shashistEntity.setOnline(false);
-      shashistService.edit(shashistEntity);
+    Shashist shashist = shashistService.findBySessionId(request.getSession().getId());
+    if (shashist != null) {
+      shashist.setOnline(false);
+      shashist.setPlaying(false);
+      shashist.setOnline(false);
+      shashistService.edit(shashist);
     }
 
     request.getSession().invalidate();

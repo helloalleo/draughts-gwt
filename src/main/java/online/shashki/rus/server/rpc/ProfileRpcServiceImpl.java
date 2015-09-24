@@ -4,7 +4,6 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import online.shashki.rus.client.rpc.ProfileRpcService;
 import online.shashki.rus.server.service.ShashistService;
 import online.shashki.rus.shared.model.Shashist;
-import online.shashki.rus.shared.model.entity.ShashistEntity;
 
 import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
@@ -46,9 +45,8 @@ public class ProfileRpcServiceImpl extends RemoteServiceServlet implements Profi
 
   @Override
   public void saveProfile(Shashist profile) {
-    ShashistEntity shashistEntity = shashistService.find(profile.getId());
-    if (shashistEntity != null) {
-      shashistService.edit(shashistEntity.copy(profile));
+    if (profile != null) {
+      shashistService.edit(profile);
     }
   }
 }

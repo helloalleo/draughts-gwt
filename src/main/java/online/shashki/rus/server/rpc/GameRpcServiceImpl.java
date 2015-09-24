@@ -7,7 +7,7 @@ import online.shashki.rus.server.service.ShashistService;
 import online.shashki.rus.shared.dto.GameDto;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.entity.GameEntity;
-import online.shashki.rus.shared.model.entity.ShashistEntity;
+import online.shashki.rus.shared.model.Shashist;
 
 import javax.inject.Inject;
 import java.util.ArrayList;
@@ -30,11 +30,11 @@ public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcS
   @Override
   public Game createGame(Game game) {
     GameEntity gameEntity = new GameEntity().copy(game);
-    ShashistEntity playerWhite = shashistService.find(game.getPlayerWhite().getId());
+    Shashist playerWhite = shashistService.find(game.getPlayerWhite().getId());
     if (playerWhite == null) {
       return null;
     }
-    ShashistEntity playerBlack = shashistService.find(game.getPlayerBlack().getId());
+    Shashist playerBlack = shashistService.find(game.getPlayerBlack().getId());
     if (playerBlack == null) {
       return null;
     }
@@ -54,11 +54,11 @@ public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcS
     GameEntity gameEntity = gameService.find(game.getId());
     if (gameEntity != null) {
       gameEntity.copy(game);
-      ShashistEntity playerWhite = shashistService.find(game.getPlayerWhite().getId());
+      Shashist playerWhite = shashistService.find(game.getPlayerWhite().getId());
       if (playerWhite == null) {
         return;
       }
-      ShashistEntity playerBlack = shashistService.find(game.getPlayerBlack().getId());
+      Shashist playerBlack = shashistService.find(game.getPlayerBlack().getId());
       if (playerBlack == null) {
         return;
       }

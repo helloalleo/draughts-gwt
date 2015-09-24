@@ -1,6 +1,6 @@
 package online.shashki.rus.server.dao;
 
-import online.shashki.rus.shared.model.entity.ShashistEntity;
+import online.shashki.rus.shared.model.Shashist;
 
 /**
  * Created with IntelliJ IDEA.
@@ -8,10 +8,10 @@ import online.shashki.rus.shared.model.entity.ShashistEntity;
  * Date: 05.12.14
  * Time: 0:18
  */
-public interface ShashistDao extends Dao<ShashistEntity> {
+public interface ShashistDao extends Dao<Shashist> {
 
-  public ShashistEntity findByVkUid(String uid);
+  public Shashist findByVkUid(String uid);
 
-  ShashistEntity findBySessionId(String sessionId);
+  Shashist findBySessionId(String sessionId);
 
 }
