@@ -1,7 +1,7 @@
 package online.shashki.rus.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
-import online.shashki.rus.shared.dto.MoveDto;
+import online.shashki.rus.shared.model.Move;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,13 +11,13 @@ import online.shashki.rus.shared.dto.MoveDto;
  */
 public class PlayMoveMessageEvent extends GwtEvent<PlayMoveMessageEventHandler> {
   public static Type<PlayMoveMessageEventHandler> TYPE = new Type<PlayMoveMessageEventHandler>();
-  private final MoveDto move;
+  private final Move move;
 
-  public PlayMoveMessageEvent(MoveDto move) {
+  public PlayMoveMessageEvent(Move move) {
     this.move = move;
   }
 
-  public MoveDto getMove() {
+  public Move getMove() {
     return move;
   }
 

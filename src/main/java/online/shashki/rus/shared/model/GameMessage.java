@@ -1,12 +1,7 @@
 package online.shashki.rus.shared.model;
 
-import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.model.GameMessage;
-import online.shashki.rus.shared.model.Move;
-import online.shashki.rus.shared.model.Shashist;
-import online.shashki.rus.shared.model.entity.GameEntity;
-import online.shashki.rus.shared.model.entity.MoveEntity;
-import online.shashki.rus.shared.model.entity.PersistableObjectImpl;
+import com.google.gwt.user.client.rpc.GwtTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,7 +15,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "game_message")
-public class GameMessage extends PersistableObjectImpl implements GameMessage {
+public class GameMessage extends PersistableObjectImpl implements Message {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "sender_id")
@@ -36,17 +31,24 @@ public class GameMessage extends PersistableObjectImpl implements GameMessage {
   @Column(name = "message_type")
   private MessageType messageType;
 
+  @GwtTransient
+  @JsonIgnore
   private String data;
 
+  @GwtTransient
+  @JsonIgnore
   @Column(name = "sent_date")
   private Date sentDate;
 
   @OneToOne(mappedBy = "gameMessage", cascade = CascadeType.ALL)
-  private MoveEntity move;
+  private Move move;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "game_id")
-  private GameEntity game;
+  private Game game;
+
+  @Transient
+  private List<Shashist> playerList;
 
   @Override
   public Shashist getSender() {
@@ -108,38 +110,27 @@ public class GameMessage extends PersistableObjectImpl implements GameMessage {
     this.messageType = messageType;
   }
 
-  @Override
-  public List<Shashist> getPlayerList() {
-    return null;
-  }
-
-  @Override
-  public void setPlayerList(List<Shashist> playerList) {
-  }
-
-  @Override
-  public MoveEntity getMove() {
+  public Move getMove() {
     return move;
   }
 
-  @Override
   public void setMove(Move move) {
-  }
-
-  public void setMove(MoveEntity move) {
     this.move = move;
   }
 
-  @Override
   public Game getGame() {
     return game;
   }
 
-  @Override
-  public void setGame(Game game) {
+  public void setGame(Game entity) {
+    this.game = entity;
   }
 
-  public void setGame(GameEntity entity) {
-    this.game = entity;
+  public void setPlayerList(List<Shashist> playerList) {
+    this.playerList = playerList;
+  }
+
+  public List<Shashist> getPlayerList() {
+    return playerList;
   }
 }

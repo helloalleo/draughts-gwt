@@ -1,7 +1,7 @@
 package online.shashki.rus.server.dao.impl;
 
 import online.shashki.rus.server.dao.GameDao;
-import online.shashki.rus.shared.model.entity.GameEntity;
+import online.shashki.rus.shared.model.Game;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -16,13 +16,13 @@ import java.util.List;
  * Time: 17:34
  */
 @Stateless
-public class GameDaoImpl extends DaoImpl<GameEntity> implements GameDao {
+public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
 
   @Inject
   private EntityManager entityManager;
 
   public GameDaoImpl() {
-    super(GameEntity.class);
+    super(Game.class);
   }
 
   @Override
@@ -31,7 +31,7 @@ public class GameDaoImpl extends DaoImpl<GameEntity> implements GameDao {
   }
 
   @Override
-  public GameEntity findLazyFalse(Long id) {
+  public Game findLazyFalse(Long id) {
     String hql = "SELECT g " +
         "FROM GameEntity g " +
         "JOIN FETCH g.playerWhite " +
@@ -39,11 +39,11 @@ public class GameDaoImpl extends DaoImpl<GameEntity> implements GameDao {
         "WHERE g.id = :gameId";
     Query query = entityManager.createQuery(hql);
     query.setParameter("gameId", id);
-    return (GameEntity) query.getSingleResult();
+    return (Game) query.getSingleResult();
   }
 
   @Override
-  public List<GameEntity> findRange(int start, int length) {
+  public List<Game> findRange(int start, int length) {
     String hql = "SELECT ge " +
         "FROM GameEntity ge " +
         "JOIN FETCH ge.playerWhite " +

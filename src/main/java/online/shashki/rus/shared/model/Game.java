@@ -1,36 +1,84 @@
 package online.shashki.rus.shared.model;
 
+import javax.persistence.*;
 import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
  * Date: 31.12.14
- * Time: 16:13
+ * Time: 16:18
  */
-public interface Game extends PersistableObject {
+@Entity
+@Table(name = "game")
+public class Game extends PersistableObjectImpl {
 
-  GameEnds getPlayEndStatus();
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "player_white_id")
+  private Shashist playerWhite;
 
-  void setPlayEndStatus(GameEnds playEndStatus);
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "player_black_id")
+  private Shashist playerBlack;
 
-  Date getPlayStartDate();
+  @Enumerated(EnumType.STRING)
+  @Column(name = "play_end_status")
+  private GameEnds playEndStatus;
 
-  void setPlayStartDate(Date playDate);
+  @Column(name = "play_start_date")
+  private Date playStartDate;
 
-  Date getPlayEndDate();
+  @Column(name = "play_end_date")
+  private Date playEndDate;
 
-  void setPlayEndDate(Date playEndDate);
+  @Column(name = "party_notation", length = 1000)
+  private String partyNotation;
 
-  String getPartyNotation();
+  public Shashist getPlayerWhite() {
+    return playerWhite;
+  }
 
-  void setPartyNotation(String partyNotation);
+  public void setPlayerWhite(Shashist playerWhite) {
+    this.playerWhite = playerWhite;
+  }
 
-  Shashist getPlayerBlack();
+  public Shashist getPlayerBlack() {
+    return playerBlack;
+  }
 
-  void setPlayerBlack(Shashist playerBlack);
+  public void setPlayerBlack(Shashist playerBlack) {
+    this.playerBlack = playerBlack;
+  }
 
-  Shashist getPlayerWhite();
+  public GameEnds getPlayEndStatus() {
+    return playEndStatus;
+  }
 
-  void setPlayerWhite(Shashist playerWhite);
+  public void setPlayEndStatus(GameEnds playEndStatus) {
+    this.playEndStatus = playEndStatus;
+  }
+
+  public Date getPlayStartDate() {
+    return playStartDate;
+  }
+
+  public void setPlayStartDate(Date playStartDate) {
+    this.playStartDate = playStartDate;
+  }
+
+  public Date getPlayEndDate() {
+    return playEndDate;
+  }
+
+  public void setPlayEndDate(Date playEndDate) {
+    this.playEndDate = playEndDate;
+  }
+
+  public String getPartyNotation() {
+    return partyNotation;
+  }
+
+  public void setPartyNotation(String partyNotation) {
+    this.partyNotation = partyNotation;
+  }
 }

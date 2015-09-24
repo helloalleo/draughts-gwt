@@ -6,10 +6,9 @@ import online.shashki.rus.server.service.ShashistService;
 import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.server.websocket.game.message.GameMessageDecoder;
 import online.shashki.rus.server.websocket.game.message.GameMessageEncoder;
-import online.shashki.rus.shared.dto.GameMessageDto;
+import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.GameMessage;
 import online.shashki.rus.shared.model.Shashist;
-import online.shashki.rus.shared.model.entity.GameEntity;
 
 import javax.inject.Inject;
 import javax.inject.Singleton;
@@ -134,14 +133,14 @@ public class GameWebsocket {
 
     Shashist shashistReceiver = shashistService.find(message.getReceiver().getId());
     Shashist shashistSender = shashistService.find(message.getSender().getId());
-    GameEntity gameEntity = message.getGame() != null ? gameService.find(message.getGame().getId()) : null;
+    Game game = message.getGame() != null ? gameService.find(message.getGame().getId()) : null;
 
     GameMessage gameMessage = new GameMessage();
     gameMessage.setMessageType(message.getMessageType());
     gameMessage.setData(message.getData());
     gameMessage.setMessage(message.getMessage());
 
-    gameMessage.setGame(gameEntity);
+    gameMessage.setGame(game);
     gameMessage.setMove(message.getMove());
 
     gameMessage.setReceiver(shashistReceiver);
@@ -153,11 +152,11 @@ public class GameWebsocket {
   }
 
   private void updatePlayerList(Session session) {
-    GameMessage gameMessage = new GameMessageDto();
+    GameMessage gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
     List<Shashist> shashistList = shashistService.findAll();
     gameMessage.setPlayerList(shashistList);
-    gameMessageService.create();
+    gameMessageService.create(gameMessage);
     session.getOpenSessions().stream().filter(Session::isOpen).forEach(peer -> {
       sendMessage(peer, gameMessage);
     });

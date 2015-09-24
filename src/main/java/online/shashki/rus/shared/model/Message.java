@@ -10,7 +10,7 @@ import java.util.Date;
  * Date: 01.10.14
  * Time: 22:51
  */
-public interface Message extends PersistableObject {
+public interface Message {
 
   Shashist getSender();
 

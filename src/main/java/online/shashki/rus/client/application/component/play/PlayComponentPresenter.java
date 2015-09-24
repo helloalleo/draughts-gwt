@@ -15,7 +15,6 @@ import online.shashki.rus.client.application.widget.dialog.MyDialogBox;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.rpc.GameRpcServiceAsync;
 import online.shashki.rus.client.websocket.GameWebsocket;
-import online.shashki.rus.shared.dto.GameMessageDto;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.GameEnds;
@@ -113,7 +112,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   private GameMessage createSendGameMessage(GameWebsocket gameWebsocket) {
-    GameMessage gameMessage = GWT.create(GameMessageDto.class);
+    GameMessage gameMessage = GWT.create(GameMessage.class);
     gameMessage.setSender(gameWebsocket.getPlayer());
     gameMessage.setReceiver(gameWebsocket.getOpponent());
     gameMessage.setGame(gameWebsocket.getGame());

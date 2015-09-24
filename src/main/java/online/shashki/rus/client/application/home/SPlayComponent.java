@@ -24,14 +24,14 @@
 //import online.shashki.ru.client.application.widget.dialog.InviteDialogBox;
 //import online.shashki.ru.client.event.*;
 //import online.shashki.ru.client.rpc.GameRpcServiceAsync;
-//import online.shashki.ru.shared.dto.GameMessageDto;
+//import online.shashki.ru.shared.dto.GameMessage;
 //import online.shashki.ru.shared.model.Game;
 //import online.shashki.ru.shared.model.GameEnds;
 //import online.shashki.ru.shared.model.GameMessage;
 //import online.shashki.ru.shared.model.Shashist;
 //import online.shashki.ru.shashki.Board;
 //import online.shashki.ru.shashki.BoardBackgroundLayer;
-//import online.shashki.ru.shashki.dto.MoveDto;
+//import online.shashki.ru.shashki.dto.Move;
 //import org.gwtbootstrap3.client.ui.Button;
 //import org.gwtbootstrap3.client.ui.messages.ButtonType;
 //import org.gwtbootstrap3.client.ui.messages.IconType;
@@ -180,8 +180,8 @@
 //        if (board == null) {
 //          return;
 //        }
-//        final MoveDto lastMove = board.getLastMove();
-//        final MoveDto lastOpponentMove = board.getLastOpponentMove();
+//        final Move lastMove = board.getLastMove();
+//        final Move lastOpponentMove = board.getLastOpponentMove();
 //        if (lastOpponentMove != null && lastOpponentMove.isContinueBeat()) {
 //          return;
 //        }
@@ -365,7 +365,7 @@
 //  }
 //
 //  private GameMessage createSendGameMessage(ClientFactory clientFactory) {
-//    GameMessage gameMessage = GWT.create(GameMessageDto.class);
+//    GameMessage gameMessage = GWT.create(GameMessage.class);
 //    gameMessage.setSender(clientFactory.getPlayer());
 //    gameMessage.setReceiver(clientFactory.getOpponent());
 //    gameMessage.setGame(clientFactory.getGame());

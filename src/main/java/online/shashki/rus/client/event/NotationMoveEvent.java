@@ -1,7 +1,7 @@
 package online.shashki.rus.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
-import online.shashki.rus.shared.dto.MoveDto;
+import online.shashki.rus.shared.model.Move;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,13 +11,13 @@ import online.shashki.rus.shared.dto.MoveDto;
  */
 public class NotationMoveEvent extends GwtEvent<NotationMoveEventHandler> {
   public static Type<NotationMoveEventHandler> TYPE = new Type<>();
-  private final MoveDto move;
+  private final Move move;
 
-  public NotationMoveEvent(MoveDto move) {
+  public NotationMoveEvent(Move move) {
     this.move = move;
   }
 
-  public MoveDto getMove() {
+  public Move getMove() {
     return move;
   }
 

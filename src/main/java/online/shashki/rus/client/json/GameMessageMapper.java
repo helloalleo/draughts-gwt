@@ -1,7 +1,7 @@
 package online.shashki.rus.client.json;
 
 import com.github.nmorel.gwtjackson.client.ObjectMapper;
-import online.shashki.rus.shared.dto.GameMessageDto;
+import online.shashki.rus.shared.model.GameMessage;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,5 +9,5 @@ import online.shashki.rus.shared.dto.GameMessageDto;
  * Date: 24.09.15
  * Time: 12:36
  */
-public interface GameMessageMapper extends ObjectMapper<GameMessageDto> {
+public interface GameMessageMapper extends ObjectMapper<GameMessage> {
 }

@@ -11,7 +11,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 import online.shashki.rus.client.event.*;
-import online.shashki.rus.shared.dto.MoveDto;
+import online.shashki.rus.shared.model.Move;
 import online.shashki.rus.shashki.util.Operator;
 import online.shashki.rus.shashki.util.PossibleOperators;
 
@@ -51,8 +51,8 @@ public class Board extends Layer {
 //  private String lastCaptured;
   private HandlerRegistration playMoveOpponentHR;
 
-  private Stack<MoveDto> moveMyStack = new Stack<>();
-  private Stack<MoveDto> moveOpponentStack = new Stack<>();
+  private Stack<Move> moveMyStack = new Stack<>();
+  private Stack<Move> moveOpponentStack = new Stack<>();
   private int moveCounter = 0;
   private boolean complexBeat = false;
 
@@ -87,7 +87,7 @@ public class Board extends Layer {
     eventBus.addHandler(PlayMoveCancelEvent.TYPE, new PlayMoveCancelEventHandler() {
       @Override
       public void onPlayMove(PlayMoveCancelEvent event) {
-        final MoveDto move = event.getMove();
+        final Move move = event.getMove();
 //        if (move.isCancel()) {
           eventBus.fireEvent(new NotationCancelMoveEvent(move));
 //          if (isMyTurn() && !move.isContinueBeat()) {
@@ -106,7 +106,7 @@ public class Board extends Layer {
     eventBus.addHandler(PlayMoveOpponentCancelEvent.TYPE, new PlayMoveOpponentCancelEventHandler() {
       @Override
       public void onPlayMoveOpponentCancel(PlayMoveOpponentCancelEvent event) {
-        final MoveDto move = event.getMove();
+        final Move move = event.getMove();
         eventBus.fireEvent(new NotationCancelMoveEvent(move));
         moveOpponentCanceled(move);
       }
@@ -556,8 +556,8 @@ public class Board extends Layer {
    * @param to   The square to which we are moving
    * @return возвращете передвижение с установленными флагами и взятой шашкой
    */
-  public MoveDto calcMove(Square from, Square to) {
-    MoveDto move = new MoveDto();
+  public Move calcMove(Square from, Square to) {
+    Move move = new Move();
     Draught beingMoved = from.getOccupant();
 
     from.setOccupant(null);
@@ -823,7 +823,7 @@ public class Board extends Layer {
 //    }
 //  }
 
-  public void moveOpponent(MoveDto move) {
+  public void moveOpponent(Move move) {
     GWT.log("MOVE OPPONENT " + move.toString());
 
     Square startSquare, endSquare, takenSquare = null;
@@ -863,14 +863,14 @@ public class Board extends Layer {
       final boolean first = isFirstMoveFlag();
       move.setNumber(move.getNumber())
           .setFirst(first);
-      MoveDto forNotation = move.mirror();
+      Move forNotation = move.mirror();
       eventBus.fireEvent(new NotationMoveEvent(forNotation));
     }
 
     doMove(move); // сделать ход
   }
 
-  private void doMove(MoveDto moveDto) {
+  private void doMove(Move moveDto) {
     doMove(moveDto, -1);
   }
 
@@ -880,7 +880,7 @@ public class Board extends Layer {
    * @param move
    * @param stepCursor
    */
-  private void doMove(MoveDto move, final int stepCursor) {
+  private void doMove(Move move, final int stepCursor) {
     final Draught occupant = move.getStartSquare().getOccupant();
     GWT.log("DO MOVE " + move.toString());
 
@@ -1007,7 +1007,7 @@ public class Board extends Layer {
 
       if (highlightedSquares.contains(endSquare) && startSquare != null && startSquare.isOnLine(endSquare)) {
         // получаем флаги передвижения и взятую шашку
-        MoveDto move = calcMove(startSquare, endSquare);
+        Move move = calcMove(startSquare, endSquare);
 
         move.setStartSquare(startSquare);
         move.setEndSquare(endSquare);
@@ -1073,7 +1073,7 @@ public class Board extends Layer {
     }
   }
 
-  private void moveCanceled(MoveDto move) {
+  private void moveCanceled(Move move) {
 //    if (!isMyTurn() && move.isContinueBeat()) {
       move = move.mirror();
 //    }
@@ -1120,32 +1120,32 @@ public class Board extends Layer {
     GWT.log("MOVE CANCELED 2");
   }
 
-  private void moveOpponentCanceled(MoveDto moveDto) {
+  private void moveOpponentCanceled(Move moveDto) {
     GWT.log("OPPONENT CANCELED");
     moveCanceled(moveDto);
-    MoveDto canceled = moveOpponentStack.pop();
+    Move canceled = moveOpponentStack.pop();
     if (canceled.isFirst()) {
       moveCounter--;
     }
   }
 
-  private void moveMyCanceled(MoveDto moveDto) {
+  private void moveMyCanceled(Move moveDto) {
     GWT.log("MY CANCELED");
     moveCanceled(moveDto);
-    MoveDto canceled = moveMyStack.pop();
+    Move canceled = moveMyStack.pop();
     if (canceled.isFirst()) {
       moveCounter--;
     }
   }
 
-  public MoveDto getLastMove() {
+  public Move getLastMove() {
     if (moveMyStack.isEmpty()) {
       return null;
     }
     return moveMyStack.lastElement();
   }
 
-  public MoveDto getLastOpponentMove() {
+  public Move getLastOpponentMove() {
     if (moveOpponentStack.isEmpty()) {
       return null;
     }

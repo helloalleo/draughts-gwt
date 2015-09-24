@@ -1,6 +1,6 @@
 package online.shashki.rus.server.dao;
 
-import online.shashki.rus.shared.model.entity.GameEntity;
+import online.shashki.rus.shared.model.Game;
 
 import java.util.List;
 
@@ -10,8 +10,8 @@ import java.util.List;
  * Date: 31.12.14
  * Time: 17:33
  */
-public interface GameDao extends Dao<GameEntity> {
-  GameEntity findLazyFalse(Long id);
+public interface GameDao extends Dao<Game> {
+  Game findLazyFalse(Long id);
 
-  List<GameEntity> findRange(int start, int length);
+  List<Game> findRange(int start, int length);
 }

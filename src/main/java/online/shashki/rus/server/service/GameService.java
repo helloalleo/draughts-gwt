@@ -2,7 +2,7 @@ package online.shashki.rus.server.service;
 
 import online.shashki.rus.server.dao.Dao;
 import online.shashki.rus.server.dao.GameDao;
-import online.shashki.rus.shared.model.entity.GameEntity;
+import online.shashki.rus.shared.model.Game;
 
 import javax.ejb.Stateless;
 import javax.inject.Inject;
@@ -15,22 +15,22 @@ import java.util.List;
  * Time: 17:38
  */
 @Stateless
-public class GameService extends BaseService<GameEntity> {
+public class GameService extends BaseService<Game> {
 
   @Inject
   private GameDao gameDao;
 
   @Override
-  protected Dao<GameEntity> getDao() {
+  protected Dao<Game> getDao() {
     return gameDao;
   }
 
   @Override
-  public List<GameEntity> findRange(int start, int length) {
+  public List<Game> findRange(int start, int length) {
     return gameDao.findRange(start, length);
   }
 
-  public GameEntity findLazyFalse(Long id) {
+  public Game findLazyFalse(Long id) {
     return gameDao.findLazyFalse(id);
   }
 }

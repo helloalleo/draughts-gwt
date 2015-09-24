@@ -1,9 +1,6 @@
 package online.shashki.rus.shared.model;
 
 import com.google.gwt.user.client.rpc.GwtTransient;
-import online.shashki.rus.shared.model.entity.FriendEntity;
-import online.shashki.rus.shared.model.entity.GameEntity;
-import online.shashki.rus.shared.model.entity.PersistableObjectImpl;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 
@@ -50,16 +47,16 @@ public class Shashist extends PersistableObjectImpl {
   @Column(name = "auth_provider")
   private String authProvider;
 
-  @GwtTransient
-  @JsonIgnore
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.friendOf", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<FriendEntity> friends;
+//  @GwtTransient
+//  @JsonIgnore
+//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.friendOf", cascade = CascadeType.ALL, orphanRemoval = true)
+//  private Set<FriendEntity> friends;
 
-  @GwtTransient
-  @JsonIgnore
-  @Column(name = "fiends_of")
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.friend", cascade = CascadeType.ALL, orphanRemoval = true)
-  private Set<FriendEntity> friendOf;
+//  @GwtTransient
+//  @JsonIgnore
+//  @Column(name = "fiends_of")
+//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.friend", cascade = CascadeType.ALL, orphanRemoval = true)
+//  private Set<FriendEntity> friendOf;
 
   @GwtTransient
   @JsonIgnore
@@ -84,12 +81,12 @@ public class Shashist extends PersistableObjectImpl {
   @GwtTransient
   @JsonIgnore
   @OneToMany(mappedBy = "playerWhite")
-  private Set<GameEntity> whiteRoleGames;
+  private Set<Game> whiteRoleGames;
 
   @GwtTransient
   @JsonIgnore
   @OneToMany(mappedBy = "playerBlack")
-  private Set<GameEntity> blackRoleGames;
+  private Set<Game> blackRoleGames;
 
   @Column(name = "logged_in")
   private boolean loggedIn;
@@ -184,21 +181,21 @@ public class Shashist extends PersistableObjectImpl {
     this.authProvider = authProvider;
   }
 
-  public Set<FriendEntity> getFriends() {
-    return friends;
-  }
-
-  public void setFriends(Set<FriendEntity> friends) {
-    this.friends = friends;
-  }
-
-  public Set<FriendEntity> getFriendOf() {
-    return friendOf;
-  }
-
-  public void setFriendOf(Set<FriendEntity> friendOf) {
-    this.friendOf = friendOf;
-  }
+//  public Set<FriendEntity> getFriends() {
+//    return friends;
+//  }
+//
+//  public void setFriends(Set<FriendEntity> friends) {
+//    this.friends = friends;
+//  }
+//
+//  public Set<FriendEntity> getFriendOf() {
+//    return friendOf;
+//  }
+//
+//  public void setFriendOf(Set<FriendEntity> friendOf) {
+//    this.friendOf = friendOf;
+//  }
 
   public Set<GameMessage> getReceivedPlayerMessages() {
     return receivedPlayerMessages;
@@ -280,19 +277,19 @@ public class Shashist extends PersistableObjectImpl {
     this.visitCounter = visitCounter;
   }
 
-  public Set<GameEntity> getWhiteRoleGames() {
+  public Set<Game> getWhiteRoleGames() {
     return whiteRoleGames;
   }
 
-  public void setWhiteRoleGames(Set<GameEntity> whiteRoleGames) {
+  public void setWhiteRoleGames(Set<Game> whiteRoleGames) {
     this.whiteRoleGames = whiteRoleGames;
   }
 
-  public Set<GameEntity> getBlackRoleGames() {
+  public Set<Game> getBlackRoleGames() {
     return blackRoleGames;
   }
 
-  public void setBlackRoleGames(Set<GameEntity> blackRoleGames) {
+  public void setBlackRoleGames(Set<Game> blackRoleGames) {
     this.blackRoleGames = blackRoleGames;
   }
 

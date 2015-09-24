@@ -8,7 +8,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.shashki.Square;
-import online.shashki.rus.shared.dto.MoveDto;
+import online.shashki.rus.shared.model.Move;
 
 /**
  * Created with IntelliJ IDEA.
@@ -63,7 +63,7 @@ public class NotationPanel extends ScrollPanel {
     });
   }
 
-  public void appendMove(MoveDto move) {
+  public void appendMove(Move move) {
     notation = getElement().getInnerHTML();
     notation = notation.replaceAll(DIV_GARBAGE, "");
 
@@ -120,7 +120,7 @@ public class NotationPanel extends ScrollPanel {
     return notation;
   }
 
-  public void cancelMove(MoveDto move) {
+  public void cancelMove(Move move) {
     GWT.log(notation);
     notation = notation.replaceAll(DIV_GARBAGE, "");
     if (move.isSimple()) {

@@ -13,9 +13,8 @@ import online.shashki.rus.client.json.GameMessageMapper;
 import online.shashki.rus.client.rpc.GameRpcServiceAsync;
 import online.shashki.rus.client.rpc.ProfileRpcServiceAsync;
 import online.shashki.rus.shared.config.ShashkiConfiguration;
-import online.shashki.rus.shared.dto.GameDto;
-import online.shashki.rus.shared.dto.GameMessageDto;
-import online.shashki.rus.shared.dto.MoveDto;
+import online.shashki.rus.shared.model.GameMessage;
+import online.shashki.rus.shared.model.Move;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.*;
 
@@ -78,7 +77,7 @@ public class GameWebsocket implements WebSocketCallback {
     HandlerRegistration gameMessageHR = eventBus.addHandler(GameMessageEvent.TYPE, new GameMessageEventHandler() {
       @Override
       public void onPlayerMessage(GameMessageEvent event) {
-        GameMessageDto gameMessage = (GameMessageDto) event.getGameMessage();
+        GameMessage gameMessage = (GameMessage) event.getGameMessage();
 
         sendGameMessage(gameMessage);
       }
@@ -87,7 +86,7 @@ public class GameWebsocket implements WebSocketCallback {
     HandlerRegistration playMoveHR = eventBus.addHandler(PlayMoveMessageEvent.TYPE, new PlayMoveMessageEventHandler() {
       @Override
       public void onPlayMoveMessage(PlayMoveMessageEvent event) {
-        GameMessageDto message = createSendGameMessage();
+        GameMessage message = createSendGameMessage();
         message.setMessageType(Message.MessageType.PLAY_MOVE);
         message.setMove(event.getMove());
         message.setGame(connectionSession.getGame());
@@ -100,7 +99,7 @@ public class GameWebsocket implements WebSocketCallback {
       @Override
       public void onUpdatePlayerList(UpdatePlayerListEvent event) {
         GWT.log("UPDATE PLAYER LIST");
-        GameMessageDto message = createSendGameMessage();
+        GameMessage message = createSendGameMessage();
         message.setMessageType(Message.MessageType.USER_LIST_UPDATE);
         sendGameMessage(message);
       }
@@ -121,14 +120,14 @@ public class GameWebsocket implements WebSocketCallback {
 //    gameMessageHR.removeHandler();
   }
 
-  private GameMessageDto createSendGameMessage() {
-    GameMessageDto message = GWT.create(GameMessageDto.class);
+  private GameMessage createSendGameMessage() {
+    GameMessage message = GWT.create(GameMessage.class);
     message.setSender(connectionSession.getPlayer());
     message.setReceiver(connectionSession.getOpponent());
     return message;
   }
 
-  private void sendGameMessage(GameMessageDto gameMessage) {
+  private void sendGameMessage(GameMessage gameMessage) {
 //    MessageFactory chatFactory = GWT.create(MessageFactory.class);
 //    AutoBean<GameMessage> bean = chatFactory.create(GameMessage.class, gameMessage);
 //    String message = AutoBeanCodex.encode(bean).getPayload();
@@ -144,7 +143,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlayInvite(final GameMessage gameMessage) {
     if (confirmPlayDialogBox != null && confirmPlayDialogBox.isShowing()) {
-      GameMessageDto message = createSendGameMessage(gameMessage);
+      GameMessage message = createSendGameMessage(gameMessage);
       message.setMessageType(Message.MessageType.PLAY_ALREADY_PLAYING);
       sendGameMessage(message);
       return;
@@ -168,7 +167,7 @@ public class GameWebsocket implements WebSocketCallback {
 
             connectionSession.setOpponent(result);
 
-            Game game = GWT.create(GameDto.class);
+            Game game = GWT.create(Game.class);
             game.setPlayStartDate(new Date());
             game.setPlayerWhite(isWhite() ? connectionSession.getPlayer() : connectionSession.getOpponent());
             game.setPlayerBlack(isWhite() ? connectionSession.getOpponent() : connectionSession.getPlayer());
@@ -182,7 +181,7 @@ public class GameWebsocket implements WebSocketCallback {
 
               @Override
               public void onSuccess(Game game) {
-                GameMessageDto message = createSendGameMessage(gameMessage);
+                GameMessage message = createSendGameMessage(gameMessage);
                 message.setMessageType(Message.MessageType.PLAY_START);
 
                 message.setData(Boolean.TRUE.toString());
@@ -201,7 +200,7 @@ public class GameWebsocket implements WebSocketCallback {
 
       @Override
       public void canceled() {
-        GameMessageDto message = createSendGameMessage(gameMessage);
+        GameMessage message = createSendGameMessage(gameMessage);
         message.setMessageType(GameMessage.MessageType.PLAY_REJECT_INVITE);
 
         sendGameMessage(message);
@@ -217,7 +216,7 @@ public class GameWebsocket implements WebSocketCallback {
       InfoDialogBox.setMessage(messages.failToConnectToServer()).show();
       return;
     }
-    GameMessageDto gameMessage = GWT.create(GameMessageDto.class);
+    GameMessage gameMessage = GWT.create(GameMessage.class);
     gameMessage.setSender(player);
     gameMessage.setMessageType(GameMessage.MessageType.PLAYER_REGISTER);
 
@@ -239,7 +238,7 @@ public class GameWebsocket implements WebSocketCallback {
 //    AutoBean<GameMessage> bean = AutoBeanCodex.decode(messageFactory, GameMessage.class, message);
 //    GameMessage gameMessage = bean.as();
     GWT.log(message);
-    GameMessageDto gameMessage = gameMessageMapper.read(message);
+    GameMessage gameMessage = gameMessageMapper.read(message);
 //    GameMessage gameMessage = jsonSerialization.deserialize("json", null, message);
     switch (gameMessage.getMessageType()) {
       case USER_LIST_UPDATE:
@@ -294,7 +293,7 @@ public class GameWebsocket implements WebSocketCallback {
   private void handlePlayCancelMoveResponse(GameMessage gameMessage) {
     boolean isAcceptedCancelMove = Boolean.valueOf(gameMessage.getData());
     if (isAcceptedCancelMove) {
-      final MoveDto move = new MoveDto(gameMessage.getMove()).mirror();
+      final Move move = gameMessage.getMove().mirror();
       eventBus.fireEvent(new PlayMoveCancelEvent(move));
     } else {
       new MyDialogBox(messages.info(), messages.playerRejectedMoveCancel(gameMessage.getSender().getPublicName()));
@@ -311,12 +310,12 @@ public class GameWebsocket implements WebSocketCallback {
     new ConfirmeDialogBox(messages.playerProposesCancelMove(gameMessage.getSender().getPublicName())) {
       @Override
       public void procConfirm() {
-        GameMessageDto returnGameMessage = createSendGameMessage(gameMessage);
+        GameMessage returnGameMessage = createSendGameMessage(gameMessage);
         returnGameMessage.setMessageType(Message.MessageType.PLAY_CANCEL_MOVE_RESPONSE);
         returnGameMessage.setMove(gameMessage.getMove());
         if (isConfirmed()) {
           returnGameMessage.setData(Boolean.TRUE.toString());
-          eventBus.fireEvent(new PlayMoveOpponentCancelEvent(new MoveDto(gameMessage.getMove())));
+          eventBus.fireEvent(new PlayMoveOpponentCancelEvent(gameMessage.getMove()));
         } else {
           returnGameMessage.setData(Boolean.FALSE.toString());
         }
@@ -352,7 +351,7 @@ public class GameWebsocket implements WebSocketCallback {
     new ConfirmeDialogBox(messages.playerProposesDraw(senderName)) {
       @Override
       public void procConfirm() {
-        GameMessageDto message = createSendGameMessage(gameMessage);
+        GameMessage message = createSendGameMessage(gameMessage);
         message.setMessageType(GameMessage.MessageType.PLAY_ACCEPT_DRAW);
 
         if (isConfirmed()) {
@@ -370,8 +369,8 @@ public class GameWebsocket implements WebSocketCallback {
     };
   }
 
-  private GameMessageDto createSendGameMessage(GameMessage gameMessage) {
-    GameMessageDto message = GWT.create(GameMessageDto.class);
+  private GameMessage createSendGameMessage(GameMessage gameMessage) {
+    GameMessage message = GWT.create(GameMessage.class);
     message.setSender(gameMessage.getReceiver());
     message.setReceiver(gameMessage.getSender());
     return message;
@@ -399,7 +398,7 @@ public class GameWebsocket implements WebSocketCallback {
   private void handlePlayMove(GameMessage gameMessage) {
     GWT.log(gameMessage.getMove().toString());
     // отправлем отраженный ход здесь
-    final MoveDto moveDto = new MoveDto(gameMessage.getMove()).mirror();
+    final Move moveDto = gameMessage.getMove().mirror();
     eventBus.fireEvent(new PlayMoveOpponentEvent(moveDto));
   }
 

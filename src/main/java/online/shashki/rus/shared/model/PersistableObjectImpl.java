@@ -1,4 +1,4 @@
-package online.shashki.rus.shared.model.entity;
+package online.shashki.rus.shared.model;
 
 import com.google.gwt.user.client.rpc.GwtTransient;
 import online.shashki.rus.shared.model.PersistableObject;
