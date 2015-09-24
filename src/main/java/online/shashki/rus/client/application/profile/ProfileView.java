@@ -51,6 +51,7 @@ public class ProfileView extends ViewWithUiHandlers<ProfileUiHandlers> implement
         anchor.setIcon(IconType.PLAY_CIRCLE);
         // делаем ссылку мои игры активной, так как она первая в списке
         anchor.setActive(true);
+        prevAnchor = anchor;
         break;
       case NameTokens.settingsPage:
         anchor.setIcon(IconType.COG);

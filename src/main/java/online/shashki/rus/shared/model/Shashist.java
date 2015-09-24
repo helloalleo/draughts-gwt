@@ -89,6 +89,4 @@ public interface Shashist extends PersistableObject {
   String getSessionId();
 
   void setSessionId(String sessionId);
-
-  String getSystemId();
 }

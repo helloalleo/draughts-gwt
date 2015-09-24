@@ -87,7 +87,8 @@ public class GameWebsocket {
   private void handleNewPlayer(GameMessage message, Session session) {
     Shashist shashist = message.getSender();
     if (!peers.isEmpty()) {
-      boolean registered = peers.keySet().parallelStream().filter(sh -> sh.getSystemId().equals(shashist.getSystemId())).findAny().isPresent();
+      boolean registered = peers.keySet().parallelStream().filter(sh -> sh.getId().equals(shashist.getId()))
+          .findAny().isPresent();
       if (registered) {
         return;
       }
@@ -102,7 +103,7 @@ public class GameWebsocket {
     shashist.setOnline(true);
 
     peers.put(shashist, session);
-    System.out.println("Register new player: " + shashist.getSystemId() + " " + session.getId());
+    System.out.println("Register new player: " + shashist.getId() + " " + session.getId());
     updatePlayerList(session);
   }
 
@@ -118,7 +119,7 @@ public class GameWebsocket {
     shashist.setOnline(false);
     shashist.setPlaying(false);
 
-    System.out.println("Disconnected: " + shashist.getSystemId() + " " + session.getId());
+    System.out.println("Disconnected: " + shashist.getId() + " " + session.getId());
     peers.values().remove(session);
     updatePlayerList(session);
   }
@@ -131,7 +132,7 @@ public class GameWebsocket {
   private void handleChatPrivateMessage(GameMessage message) {
     Shashist receiver = message.getReceiver();
     Shashist shashist = peers.keySet().stream()
-        .filter(sh -> sh.getSystemId().equals(receiver.getSystemId())).findFirst().get();
+        .filter(sh -> sh.getId().equals(receiver.getId())).findFirst().get();
     Session session = peers.get(shashist);
     sendMessage(session, message);
 
@@ -159,7 +160,8 @@ public class GameWebsocket {
     MessageFactory messageFactory = AutoBeanFactorySource.create(MessageFactory.class);
     GameMessage gameMessage = messageFactory.gameMessage().as();
     gameMessage.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
-    gameMessage.setPlayerList(new ArrayList<>(peers.keySet()));
+    List<ShashistEntity> shashistEntityList = shashistService.findAll();
+//    gameMessage.setPlayerList(shashistEntityList);
     session.getOpenSessions().stream().filter(Session::isOpen).forEach(peer -> {
       sendMessage(peer, gameMessage);
     });

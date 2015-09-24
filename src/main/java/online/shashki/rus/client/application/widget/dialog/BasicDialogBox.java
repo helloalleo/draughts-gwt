@@ -1,11 +1,11 @@
 package online.shashki.rus.client.application.widget.dialog;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DialogBox;
-import com.google.inject.Inject;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 
 /**
@@ -15,8 +15,8 @@ import online.shashki.rus.shared.locale.ShashkiMessages;
  * Time: 23:17
  */
 public class BasicDialogBox extends DialogBox {
-  @Inject
-  protected static ShashkiMessages messages;
+  protected static ShashkiMessages messages = GWT.create(ShashkiMessages.class);
+
   protected int WIDTH = 400;
   protected int HEIGHT = 60;
 

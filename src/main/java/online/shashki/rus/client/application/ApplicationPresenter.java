@@ -68,6 +68,8 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
     this.menuPresenter = menuPresenter;
     this.profileService = profileService;
     this.currentSession = currentSession;
+
+    checkIfAuthenticated();
   }
 
   @Override
@@ -77,11 +79,11 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
     setInSlot(SLOT_MENU, menuPresenter);
   }
 
-  public void getCurrentProfile() {
+  public void checkIfAuthenticated() {
     profileService.isAuthenticated(new AsyncCallback<Boolean>() {
       @Override
       public void onFailure(Throwable caught) {
-        ErrorDialogBox.showError(caught).show();
+        ErrorDialogBox.setMessage(caught).show();
       }
 
       @Override

@@ -28,10 +28,12 @@ public class LogoutServlet extends HttpServlet {
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
     ShashistEntity shashistEntity = shashistService.findBySessionId(request.getSession().getId());
-    shashistEntity.setOnline(false);
-    shashistEntity.setPlaying(false);
-    shashistEntity.setOnline(false);
-    shashistService.edit(shashistEntity);
+    if (shashistEntity != null) {
+      shashistEntity.setOnline(false);
+      shashistEntity.setPlaying(false);
+      shashistEntity.setOnline(false);
+      shashistService.edit(shashistEntity);
+    }
 
     request.getSession().invalidate();
     response.sendRedirect(configuration.getContext());

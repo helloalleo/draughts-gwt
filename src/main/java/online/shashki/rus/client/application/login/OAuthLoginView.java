@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 
 
 public class OAuthLoginView extends ViewWithUiHandlers<OAuthLoginUiHandlers> implements OAuthLoginPresenter.MyView {
@@ -24,7 +25,7 @@ public class OAuthLoginView extends ViewWithUiHandlers<OAuthLoginUiHandlers> imp
     GWT.runAsync(new RunAsyncCallback() {
       @Override
       public void onFailure(Throwable reason) {
-
+        ErrorDialogBox.setMessage(reason).show();
       }
 
       @Override

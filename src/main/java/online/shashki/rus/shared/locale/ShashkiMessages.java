@@ -102,7 +102,7 @@ public interface ShashkiMessages extends Messages {
 
   String playerRejectedPlayRequest(String sender);
 
-  String failedToStartGame();
+  String failToStartGame();
 
   String errorWhileGettingProfile();
 
@@ -175,4 +175,16 @@ public interface ShashkiMessages extends Messages {
   String errorToken();
 
   String myGames();
+
+  String playingTitle();
+
+  String onlineTitle();
+
+  String offlineTitle();
+
+  String errorInAuthentication();
+
+  String opponentNotFound();
+
+  String failToConnectToServer();
 }

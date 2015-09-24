@@ -22,6 +22,7 @@ public class ShashistEntity extends PersistableObjectImpl implements Shashist {
   @Column(name = "session_id")
   private String sessionId;
 
+  @GwtTransient
   @Column(name = "vk_uid")
   private String vkUid;
 
@@ -325,17 +326,6 @@ public class ShashistEntity extends PersistableObjectImpl implements Shashist {
   @Override
   public String getFullName() {
     return getFirstName() + " " + getLastName();
-  }
-
-  @Override
-  public String getSystemId() {
-    String uid = "";
-    if (getEmail() != null) {
-      uid = getEmail();
-    } else if (getVkUid() != null) {
-      uid = getVkUid();
-    }
-    return BigInteger.valueOf(uid.hashCode()).toString(16);
   }
 
   public ShashistEntity copy(Shashist shashist) {

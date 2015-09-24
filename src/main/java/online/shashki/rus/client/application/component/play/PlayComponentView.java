@@ -18,15 +18,17 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.client.application.widget.NotationPanel;
-import online.shashki.rus.client.application.widget.dialog.InviteDialogBox;
 import online.shashki.rus.client.resources.ResourceLoader;
 import online.shashki.rus.client.resources.constants.GSSConstants;
-import online.shashki.rus.client.rpc.GameRpcServiceAsync;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Shashist;
 import online.shashki.rus.shashki.Board;
+import online.shashki.rus.shashki.BoardBackgroundLayer;
 import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.constants.ButtonType;
+import org.gwtbootstrap3.client.ui.constants.IconType;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandlers>
@@ -44,7 +46,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @UiField
   HTMLPanel notationList;
   @UiField
-  Button connectToServerButton;
+  Button playButton;
   @UiField
   Button drawButton;
   @UiField
@@ -67,9 +69,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private CellList<Shashist> playersCellList;
   private SingleSelectionModel<Shashist> playerSelectionModel;
   private NotationPanel notationPanel;
-  private InviteDialogBox inviteDialogBox;
-  private int CHECKERS_ON_DESK_INIT = 12;
-  private GameRpcServiceAsync gameService;
 
   @Inject
   PlayComponentView(Binder uiBinder,
@@ -82,14 +81,14 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     initPlayersCellList();
   }
 
-  @UiHandler("connectToServerButton")
+  @UiHandler("playButton")
   public void onConnectToServer(ClickEvent event) {
-    switch (connectToServerButton.getIcon()) {
+    switch (playButton.getIcon()) {
       case REFRESH:
         getUiHandlers().refreshConnectionToServer();
         break;
       case PLAY:
-        getUiHandlers().connectToServer(playerSelectionModel.getSelectedObject());
+        getUiHandlers().startPlayWith(playerSelectionModel.getSelectedObject());
         break;
     }
   }
@@ -151,19 +150,20 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
           if (value.isLoggedIn()) {
             org.gwtbootstrap3.client.ui.Image img;
             String playerPublicName = value.getPublicName();
-            if (player.getSystemId().equals(value.getSystemId())) {
+            if (player.getId().equals(value.getId())) {
               sb.appendEscaped(playerPublicName);
             } else {
+              // TODO: не показывать статус. Пусть играют с теми кого знают либо наугад
               if (value.isPlaying()) {
                 img = new org.gwtbootstrap3.client.ui.Image(ResourceLoader.INSTANCE.images().playingIconImage().getSafeUri());
-                img.setTitle(playerPublicName + " играет");
+                img.setTitle(playerPublicName + messages.playingTitle());
               } else {
                 if (value.isOnline()) {
                   img = new org.gwtbootstrap3.client.ui.Image(ResourceLoader.INSTANCE.images().onlineIconImage().getSafeUri());
-                  img.setTitle(playerPublicName + " в сети");
+                  img.setTitle(playerPublicName + messages.onlineTitle());
                 } else {
                   img = new org.gwtbootstrap3.client.ui.Image(ResourceLoader.INSTANCE.images().offlineIconImage().getSafeUri());
-                  img.setTitle(playerPublicName + " не в сети");
+                  img.setTitle(playerPublicName + messages.offlineTitle());
                 }
               }
               sb.appendHtmlConstant(img.getElement().getString());
@@ -186,6 +186,103 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public void setPlayer(Shashist player) {
     this.player = player;
+  }
+
+  @Override
+  public void toggleInPlayButton() {
+    playButton.setType(ButtonType.DEFAULT);
+    playButton.setIcon(IconType.PLAY);
+    playButton.setText(messages.play());
+  }
+
+  @Override
+  public void setUpViewOnDisconnectFromServer() {
+    playButton.setActive(true);
+    playButton.setBlock(true);
+    playButton.addStyleName("btn-danger");
+    playButton.setIcon(IconType.REFRESH);
+    playButton.setText(messages.reconnect());
+
+    playersCellList.setRowData(new ArrayList<Shashist>());
+    turnLabel.setHTML(messages.youDisconnected());
+
+    hidePlayingButtonsAndShowPlayButton();
+  }
+
+  @Override
+  public void hidePlayingButtonsAndShowPlayButton() {
+    playButton.setVisible(true);
+    drawButton.setVisible(false);
+    surrenderButton.setVisible(false);
+    setBeatenMy(0);
+    setBeatenOpponent(0);
+  }
+
+  @Override
+  public void hidePlayButtonAndShowPlayingButtons() {
+    playButton.setVisible(false);
+    drawButton.setVisible(true);
+    surrenderButton.setVisible(true);
+    setBeatenMy(0);
+    setBeatenOpponent(0);
+  }
+
+  @Override
+  public void clearPlayComponent() {
+
+  }
+
+  public void setBeatenMy(int count) {
+    beatenMineDraughtsLabel.setText(count + " - " + (board.isWhite() ? messages.whites()
+        : messages.blacks()));
+  }
+
+  public void setBeatenOpponent(int count) {
+    beatenOpponentDraughtsLabel.setText(count + " - " + (board.isWhite() ? messages.blacks()
+        : messages.whites()));
+  }
+
+  @Override
+  public void startPlay(boolean white) {
+    BoardBackgroundLayer backgroundLayer = initDeskPanel(white);
+    board = new Board(backgroundLayer, 8, 8, white);
+    lienzoPanel.add(board);
+    updateTurn(getUiHandlers().isMyTurn());
+    hidePlayButtonAndShowPlayingButtons();
+  }
+
+  @Override
+  public void updateTurn(boolean myTurn) {
+    if (myTurn) {
+      turnLabel.setHTML(messages.yourTurn());
+    } else {
+      turnLabel.setHTML(messages.opponentTurn());
+    }
+  }
+
+  @Override
+  public int getMyDraughtsSize() {
+    return board.getMyDraughts().size();
+  }
+
+  @Override
+  public int getOpponentDraughtsSize() {
+    return board.getOpponentDraughts().size();
+  }
+
+  @Override
+  public boolean isWhite() {
+    return board.isWhite();
+  }
+
+  private BoardBackgroundLayer initDeskPanel(boolean white) {
+    int lienzoSide = lienzoPanel.getHeight() - 50;
+    BoardBackgroundLayer boardBackgroundLayer = new BoardBackgroundLayer(
+        lienzoSide, lienzoSide - 30,
+        8, 8);
+    boardBackgroundLayer.drawCoordinates(white);
+    lienzoPanel.setBackgroundLayer(boardBackgroundLayer);
+    return boardBackgroundLayer;
   }
 
   interface Binder extends UiBinder<Widget, PlayComponentView> {

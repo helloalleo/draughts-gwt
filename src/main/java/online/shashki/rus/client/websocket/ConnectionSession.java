@@ -68,6 +68,6 @@ public class ConnectionSession {
         && player != null
         && game != null
         && game.getPlayerWhite() != null
-        && player.getSystemId().equals(game.getPlayerWhite().getSystemId());
+        && player.getId().equals(game.getPlayerWhite().getId());
   }
 }

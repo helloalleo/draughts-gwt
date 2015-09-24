@@ -9,12 +9,15 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
+import online.shashki.rus.shared.locale.ShashkiMessages;
 import org.gwtbootstrap3.client.ui.AnchorListItem;
 import org.gwtbootstrap3.client.ui.NavbarNav;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 
 public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements MenuPresenter.MyView {
+  private final ShashkiMessages messages;
   @UiField
   HTMLPanel panel;
   @UiField
@@ -26,9 +29,12 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   private NameTokens nameTokens;
 
   @Inject
-  MenuView(Binder binder, NameTokens nameTokens) {
+  MenuView(Binder binder,
+           ShashkiMessages messages,
+           NameTokens nameTokens) {
     initWidget(binder.createAndBindUi(this));
     this.nameTokens = nameTokens;
+    this.messages = messages;
   }
 
   @Override
@@ -46,7 +52,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     getUiHandlers().isAuthenticated(new AsyncCallback<Boolean>() {
       @Override
       public void onFailure(Throwable caught) {
-
+        ErrorDialogBox.setMessage(messages.errorInAuthentication()).show();
       }
 
       @Override

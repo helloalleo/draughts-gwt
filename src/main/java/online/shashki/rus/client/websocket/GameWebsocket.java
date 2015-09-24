@@ -9,10 +9,7 @@ import com.google.web.bindery.autobean.shared.AutoBean;
 import com.google.web.bindery.autobean.shared.AutoBeanCodex;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-import online.shashki.rus.client.application.widget.dialog.ConfirmPlayDialogBox;
-import online.shashki.rus.client.application.widget.dialog.ConfirmeDialogBox;
-import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
-import online.shashki.rus.client.application.widget.dialog.MyDialogBox;
+import online.shashki.rus.client.application.widget.dialog.*;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.rpc.GameRpcServiceAsync;
 import online.shashki.rus.client.rpc.ProfileRpcServiceAsync;
@@ -41,18 +38,18 @@ public class GameWebsocket implements WebSocketCallback {
   private WebSocket webSocket;
   private EventBus eventBus;
   private Shashist player;
-  private ShashkiMessages constants;
+  private ShashkiMessages messages;
   private ConfirmPlayDialogBox confirmPlayDialogBox;
   private ConnectionSession connectionSession = new ConnectionSession();
 
   @Inject
-  private GameWebsocket(EventBus eventBus, ShashkiMessages constants,
+  private GameWebsocket(EventBus eventBus, ShashkiMessages messages,
                         GameRpcServiceAsync gameService, ProfileRpcServiceAsync profileService) {
     GWT.log("GAME WS");
     profileService.getCurrentProfile(new AsyncCallback<Shashist>() {
       @Override
       public void onFailure(Throwable caught) {
-        ErrorDialogBox.showError(caught).show();
+        ErrorDialogBox.setMessage(caught).show();
       }
 
       @Override
@@ -66,7 +63,7 @@ public class GameWebsocket implements WebSocketCallback {
     GWT.log(eventBus == null ? "NULL EVENT BUS" : "OK EVENT BUS");
     this.profileService = profileService;
     this.eventBus = eventBus;
-    this.constants = constants;
+    this.messages = messages;
     this.gameService = gameService;
     this.profileService = profileService;
 
@@ -98,6 +95,7 @@ public class GameWebsocket implements WebSocketCallback {
     HandlerRegistration updatePlayerListHR = eventBus.addHandler(UpdatePlayerListEvent.TYPE, new UpdatePlayerListEventHandler() {
       @Override
       public void onUpdatePlayerList(UpdatePlayerListEvent event) {
+        GWT.log("UPDATE PLAYER LIST");
         GameMessage message = createSendGameMessage();
         message.setMessageType(Message.MessageType.USER_LIST_UPDATE);
         sendGameMessage(message);
@@ -151,22 +149,28 @@ public class GameWebsocket implements WebSocketCallback {
         profileService.getProfile(gameMessage.getSender().getId(), new AsyncCallback<Shashist>() {
           @Override
           public void onFailure(Throwable caught) {
-            new MyDialogBox(messages.error(), messages.errorWhileGettingProfile()).show();
+            ErrorDialogBox.setMessage(messages.errorWhileGettingProfile(), caught).show();
           }
 
           @Override
           public void onSuccess(Shashist result) {
+            if (result == null) {
+              InfoDialogBox.setMessage(messages.opponentNotFound()).show();;
+              return;
+            }
+
             connectionSession.setOpponent(result);
 
             Game game = GWT.create(GameDto.class);
             game.setPlayStartDate(new Date());
             game.setPlayerWhite(isWhite() ? connectionSession.getPlayer() : connectionSession.getOpponent());
             game.setPlayerBlack(isWhite() ? connectionSession.getOpponent() : connectionSession.getPlayer());
+            GWT.log(game.getPlayerWhite().getPublicName() + " PLAYER WHITE");
+            GWT.log(game.getPlayerBlack().getPublicName() + " PLAYER BLACK");
             gameService.createGame(game, new AsyncCallback<Game>() {
               @Override
               public void onFailure(Throwable throwable) {
-                new MyDialogBox(messages.error(), messages.failedToStartGame() + throwable.getMessage()).show();
-                throwable.printStackTrace();
+                ErrorDialogBox.setMessage(messages.failToStartGame(), throwable).show();
               }
 
               @Override
@@ -202,6 +206,10 @@ public class GameWebsocket implements WebSocketCallback {
 
   @Override
   public void onConnect() {
+    if (player == null) {
+      InfoDialogBox.setMessage(messages.failToConnectToServer()).show();
+      return;
+    }
     GameMessage gameMessage = GWT.create(GameMessageDto.class);
     gameMessage.setSender(player);
     gameMessage.setMessageType(GameMessage.MessageType.PLAYER_REGISTER);
@@ -265,7 +273,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlayAlreadyPlaying(GameMessage gameMessage) {
     eventBus.fireEvent(new HideInviteDialogBoxEvent());
-    new MyDialogBox(constants.info(), constants.playAlreadyPlaying(gameMessage.getSender().getPublicName()));
+    new MyDialogBox(messages.info(), messages.playAlreadyPlaying(gameMessage.getSender().getPublicName()));
   }
 
   /**
@@ -279,7 +287,7 @@ public class GameWebsocket implements WebSocketCallback {
       final MoveDto move = new MoveDto(gameMessage.getMove()).mirror();
       eventBus.fireEvent(new PlayMoveCancelEvent(move));
     } else {
-      new MyDialogBox(constants.info(), constants.playerRejectedMoveCancel(gameMessage.getSender().getPublicName()));
+      new MyDialogBox(messages.info(), messages.playerRejectedMoveCancel(gameMessage.getSender().getPublicName()));
     }
   }
 
@@ -290,7 +298,7 @@ public class GameWebsocket implements WebSocketCallback {
    * @param gameMessage
    */
   private void handlePlayCancelMove(final GameMessage gameMessage) {
-    new ConfirmeDialogBox(constants.playerProposesCancelMove(gameMessage.getSender().getPublicName())) {
+    new ConfirmeDialogBox(messages.playerProposesCancelMove(gameMessage.getSender().getPublicName())) {
       @Override
       public void procConfirm() {
         GameMessage returnGameMessage = createSendGameMessage(gameMessage);
@@ -315,7 +323,7 @@ public class GameWebsocket implements WebSocketCallback {
       gameService.saveGame(game, new AsyncCallback<Void>() {
         @Override
         public void onFailure(Throwable throwable) {
-          new MyDialogBox(constants.error(), constants.errorWhileSavingGame());
+          ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
         }
 
         @Override
@@ -325,13 +333,13 @@ public class GameWebsocket implements WebSocketCallback {
       });
     } else {
       String senderName = gameMessage.getSender().getPublicName();
-      new MyDialogBox(constants.info(), constants.playerRejectedDraw(senderName));
+      new MyDialogBox(messages.info(), messages.playerRejectedDraw(senderName));
     }
   }
 
   private void handlePlayProposeDraw(final GameMessage gameMessage) {
     String senderName = gameMessage.getSender().getPublicName();
-    new ConfirmeDialogBox(constants.playerProposesDraw(senderName)) {
+    new ConfirmeDialogBox(messages.playerProposesDraw(senderName)) {
       @Override
       public void procConfirm() {
         GameMessage message = createSendGameMessage(gameMessage);
@@ -367,12 +375,12 @@ public class GameWebsocket implements WebSocketCallback {
     gameService.saveGame(game, new AsyncCallback<Void>() {
       @Override
       public void onFailure(Throwable throwable) {
-        new MyDialogBox(constants.error(), constants.error()).show();
+        ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
       }
 
       @Override
       public void onSuccess(Void aVoid) {
-        new MyDialogBox(constants.info(), constants.opponentSurrendered());
+        new MyDialogBox(messages.info(), messages.opponentSurrendered());
         eventBus.fireEvent(new ClearPlayComponentEvent());
       }
     });
@@ -389,7 +397,7 @@ public class GameWebsocket implements WebSocketCallback {
     gameService.getGame(gameMessage.getGame().getId(), new AsyncCallback<Game>() {
       @Override
       public void onFailure(Throwable throwable) {
-        new MyDialogBox(constants.error(), constants.errorWhileGettingGame()).show();
+        ErrorDialogBox.setMessage(messages.errorWhileGettingGame(), throwable).show();
       }
 
       @Override
@@ -408,8 +416,8 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlayRejectInvite(GameMessage gameMessage) {
     connectionSession.setOpponent(null);
-    new MyDialogBox(constants.info(),
-        constants.playerRejectedPlayRequest(gameMessage.getSender().getPublicName()))
+    new MyDialogBox(messages.info(),
+        messages.playerRejectedPlayRequest(gameMessage.getSender().getPublicName()))
         .show();
     eventBus.fireEvent(new RejectPlayEvent());
   }
@@ -447,5 +455,9 @@ public class GameWebsocket implements WebSocketCallback {
 
   public Game getGame() {
     return connectionSession.getGame();
+  }
+
+  public boolean isPlayerHasWhiteColor() {
+    return connectionSession.isPlayerHasWhiteColor();
   }
 }
