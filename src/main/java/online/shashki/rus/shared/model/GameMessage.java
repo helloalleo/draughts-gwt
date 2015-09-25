@@ -1,6 +1,7 @@
 package online.shashki.rus.shared.model;
 
 import com.google.gwt.user.client.rpc.GwtTransient;
+import com.google.gwt.user.client.rpc.IsSerializable;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
@@ -15,7 +16,7 @@ import java.util.List;
  */
 @Entity
 @Table(name = "game_message")
-public class GameMessage extends PersistableObjectImpl implements Message {
+public class GameMessage extends PersistableObjectImpl {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "sender_id")
@@ -32,10 +33,12 @@ public class GameMessage extends PersistableObjectImpl implements Message {
   private MessageType messageType;
 
   @GwtTransient
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @JsonIgnore
   private String data;
 
   @GwtTransient
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @JsonIgnore
   @Column(name = "sent_date")
   private Date sentDate;
@@ -50,62 +53,50 @@ public class GameMessage extends PersistableObjectImpl implements Message {
   @Transient
   private List<Shashist> playerList;
 
-  @Override
   public Shashist getSender() {
     return sender;
   }
 
-  @Override
   public void setSender(Shashist entity) {
     this.sender = entity;
   }
 
-  @Override
   public Shashist getReceiver() {
     return receiver;
   }
 
-  @Override
   public void setReceiver(Shashist entity) {
     this.receiver = entity;
   }
 
-  @Override
   public String getMessage() {
     return message;
   }
 
-  @Override
   public void setMessage(String message) {
     this.message = message;
   }
 
-  @Override
   public String getData() {
     return data;
   }
 
-  @Override
   public void setData(String data) {
     this.data = data;
   }
 
-  @Override
   public Date getSentDate() {
     return sentDate;
   }
 
-  @Override
   public void setSentDate(Date sentDate) {
     this.sentDate = sentDate;
   }
 
-  @Override
   public MessageType getMessageType() {
     return messageType;
   }
 
-  @Override
   public void setMessageType(MessageType messageType) {
     this.messageType = messageType;
   }
@@ -132,5 +123,24 @@ public class GameMessage extends PersistableObjectImpl implements Message {
 
   public List<Shashist> getPlayerList() {
     return playerList;
+  }
+
+  public enum MessageType implements IsSerializable {
+
+    CHAT_MESSAGE,
+    CHAT_PRIVATE_MESSAGE,
+    USER_LIST_UPDATE,
+    PLAY_INVITE,
+    PLAY_REJECT_INVITE,
+    PLAY_ALREADY_PLAYING,
+    PLAY_START,
+    PLAY_MOVE,
+    PLAY_CANCEL_MOVE,
+    PLAY_CANCEL_MOVE_RESPONSE,
+    PLAY_PROPOSE_DRAW,
+    PLAY_ACCEPT_DRAW,
+    PLAY_END,
+    PLAY_SURRENDER,
+    PLAYER_REGISTER
   }
 }

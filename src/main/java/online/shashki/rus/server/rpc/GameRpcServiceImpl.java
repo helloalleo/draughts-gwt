@@ -26,17 +26,25 @@ public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcS
 
   @Override
   public Game createGame(Game game) {
-//    Shashist playerWhite = shashistService.find(game.getPlayerWhite().getId());
-//    if (playerWhite == null) {
-//      return null;
-//    }
-//    Shashist playerBlack = shashistService.find(game.getPlayerBlack().getId());
-//    if (playerBlack == null) {
-//      return null;
-//    }
-//
-//    gameEntity.setPlayerWhite(playerWhite);
-//    gameEntity.setPlayerBlack(playerBlack);
+    Shashist playerWhite = game.getPlayerWhite();
+    if (playerWhite == null) {
+      return null;
+    }
+    playerWhite = shashistService.find(playerWhite.getId());
+    if (playerWhite == null) {
+      return null;
+    }
+    Shashist playerBlack = game.getPlayerBlack();
+    if (playerBlack == null) {
+      return null;
+    }
+    playerBlack = shashistService.find(playerBlack.getId());
+    if (playerBlack == null) {
+      return null;
+    }
+
+    game.setPlayerWhite(playerWhite);
+    game.setPlayerBlack(playerBlack);
     gameService.create(game);
     return game;
   }

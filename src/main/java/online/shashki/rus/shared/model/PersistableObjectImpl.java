@@ -1,7 +1,6 @@
 package online.shashki.rus.shared.model;
 
 import com.google.gwt.user.client.rpc.GwtTransient;
-import online.shashki.rus.shared.model.PersistableObject;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
@@ -21,6 +20,7 @@ public class PersistableObjectImpl implements PersistableObject {
 
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @Version
   private Integer version;
 

@@ -35,7 +35,7 @@ public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements PlayerMe
   public List<GameMessage> findLastMessages(int countLast, Long playerId, Long opponentId) {
     Query query = getEntityManager().createQuery(
         "SELECT m " +
-            " FROM GameMessageEntity m " +
+            " FROM GameMessage m " +
             " JOIN FETCH m.sender " +
             " JOIN FETCH m.receiver " +
             " WHERE ((m.sender.id = :senderId AND m.receiver.id = :receiverId) " +

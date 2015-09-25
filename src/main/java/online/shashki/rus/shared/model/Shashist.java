@@ -20,16 +20,19 @@ public class Shashist extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "session_id")
   private String sessionId;
 
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "vk_uid")
   private String vkUid;
 
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @Email
   private String email;
 
@@ -44,6 +47,7 @@ public class Shashist extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "auth_provider")
   private String authProvider;
 
@@ -60,31 +64,37 @@ public class Shashist extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @OneToMany(mappedBy = "receiver")
   private Set<GameMessage> receivedPlayerMessages;
 
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @OneToMany(mappedBy = "sender")
   private Set<GameMessage> sentPlayerMessages;
 
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @OneToMany(mappedBy = "receiver")
   private Set<GameMessage> receivedGameMessages;
 
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @OneToMany(mappedBy = "sender")
   private Set<GameMessage> sentGameMessages;
 
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @OneToMany(mappedBy = "playerWhite")
   private Set<Game> whiteRoleGames;
 
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @OneToMany(mappedBy = "playerBlack")
   private Set<Game> blackRoleGames;
 
@@ -94,14 +104,17 @@ public class Shashist extends PersistableObjectImpl {
   private boolean online;
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "register_date")
   private Date registerDate;
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "last_visited")
   private Date lastVisited;
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "visit_counter")
   private int visitCounter;
 
@@ -114,23 +127,6 @@ public class Shashist extends PersistableObjectImpl {
 
   public void setSessionId(String sessionId) {
     this.sessionId = sessionId;
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-
-    Shashist that = (Shashist) o;
-
-    if (!sessionId.equals(that.sessionId)) return false;
-
-    return true;
-  }
-
-  @Override
-  public int hashCode() {
-    return sessionId.hashCode();
   }
 
   public String getVkUid() {
@@ -308,5 +304,30 @@ public class Shashist extends PersistableObjectImpl {
   @JsonIgnore
   public String getFullName() {
     return getFirstName() + " " + getLastName();
+  }
+
+  @Override
+  public String toString() {
+    return "Shashist{" +
+        "sessionId='" + sessionId + '\'' +
+        ", vkUid='" + vkUid + '\'' +
+        ", email='" + email + '\'' +
+        ", firstName='" + firstName + '\'' +
+        ", lastName='" + lastName + '\'' +
+        ", playerName='" + playerName + '\'' +
+        ", authProvider='" + authProvider + '\'' +
+        ", receivedPlayerMessages=" + receivedPlayerMessages +
+        ", sentPlayerMessages=" + sentPlayerMessages +
+        ", receivedGameMessages=" + receivedGameMessages +
+        ", sentGameMessages=" + sentGameMessages +
+        ", whiteRoleGames=" + whiteRoleGames +
+        ", blackRoleGames=" + blackRoleGames +
+        ", loggedIn=" + loggedIn +
+        ", playing=" + playing +
+        ", online=" + online +
+        ", registerDate=" + registerDate +
+        ", lastVisited=" + lastVisited +
+        ", visitCounter=" + visitCounter +
+        '}';
   }
 }

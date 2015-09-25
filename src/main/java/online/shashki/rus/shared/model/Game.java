@@ -1,5 +1,8 @@
 package online.shashki.rus.shared.model;
 
+import com.google.gwt.user.client.rpc.GwtTransient;
+import org.codehaus.jackson.annotate.JsonIgnore;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -25,6 +28,8 @@ public class Game extends PersistableObjectImpl {
   @Column(name = "play_end_status")
   private GameEnds playEndStatus;
 
+  @GwtTransient
+  @JsonIgnore
   @Column(name = "play_start_date")
   private Date playStartDate;
 

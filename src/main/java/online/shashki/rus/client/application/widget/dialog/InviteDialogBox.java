@@ -1,5 +1,6 @@
 package online.shashki.rus.client.application.widget.dialog;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -47,10 +48,10 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     panel.add(label);
 
     FlowPanel radioGroup = new FlowPanel();
-    whiteRadio = new RadioButton(messages.white());
+    whiteRadio = new RadioButton("white", messages.white());
     whiteRadio.setName("rb-color");
     whiteRadio.getElement().getStyle().setMargin(10, Style.Unit.PX);
-    RadioButton blackRadio = new RadioButton(messages.black());
+    RadioButton blackRadio = new RadioButton("black", messages.black());
     blackRadio.setName("rb-color");
     whiteRadio.setValue(true);
 

@@ -77,13 +77,13 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       InfoDialogBox.setMessage(messages.selectAnotherPlayerItsYou()).show();
       return;
     }
-    gameWebsocket.setOpponent(opponent);
 
     inviteDialogBox = new InviteDialogBox() {
       @Override
       public void submitted(boolean white) {
         GameMessage gameMessage = createSendGameMessage(gameWebsocket);
         gameMessage.setMessageType(GameMessage.MessageType.PLAY_INVITE);
+        gameMessage.setReceiver(opponent);
 
         gameMessage.setMessage(messages.inviteMessage(gameWebsocket.getPlayer().getPublicName(),
             String.valueOf(white ? messages.black() : messages.white())));
@@ -92,7 +92,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         eventBus.fireEvent(new GameMessageEvent(gameMessage));
       }
     };
-    inviteDialogBox.show(messages.inviteToPlay(gameWebsocket.getOpponent().getPublicName(),
+    inviteDialogBox.show(messages.inviteToPlay(opponent.getPublicName(),
         messages.draughts()));
   }
 

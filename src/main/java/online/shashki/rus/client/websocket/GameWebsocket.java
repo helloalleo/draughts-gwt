@@ -87,7 +87,7 @@ public class GameWebsocket implements WebSocketCallback {
       @Override
       public void onPlayMoveMessage(PlayMoveMessageEvent event) {
         GameMessage message = createSendGameMessage();
-        message.setMessageType(Message.MessageType.PLAY_MOVE);
+        message.setMessageType(GameMessage.MessageType.PLAY_MOVE);
         message.setMove(event.getMove());
         message.setGame(connectionSession.getGame());
 
@@ -100,7 +100,7 @@ public class GameWebsocket implements WebSocketCallback {
       public void onUpdatePlayerList(UpdatePlayerListEvent event) {
         GWT.log("UPDATE PLAYER LIST");
         GameMessage message = createSendGameMessage();
-        message.setMessageType(Message.MessageType.USER_LIST_UPDATE);
+        message.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
         sendGameMessage(message);
       }
     });
@@ -128,23 +128,19 @@ public class GameWebsocket implements WebSocketCallback {
   }
 
   private void sendGameMessage(GameMessage gameMessage) {
-//    MessageFactory chatFactory = GWT.create(MessageFactory.class);
-//    AutoBean<GameMessage> bean = chatFactory.create(GameMessage.class, gameMessage);
-//    String message = AutoBeanCodex.encode(bean).getPayload();
     String message = gameMessageMapper.write(gameMessage);
-//    SerializedValue message = jsonSerialization.serialize("json", null, gameMessage);
     webSocket.send(message);
   }
 
   private void handleUpdatePlayerList(List<Shashist> playerList) {
-    connectionSession.setPlayerList(playerList);
+    GWT.log(playerList.size() + " PLAYER LIST SIZE");
     eventBus.fireEvent(new RecivedPlayerListEvent(playerList));
   }
 
   private void handlePlayInvite(final GameMessage gameMessage) {
     if (confirmPlayDialogBox != null && confirmPlayDialogBox.isShowing()) {
       GameMessage message = createSendGameMessage(gameMessage);
-      message.setMessageType(Message.MessageType.PLAY_ALREADY_PLAYING);
+      message.setMessageType(GameMessage.MessageType.PLAY_ALREADY_PLAYING);
       sendGameMessage(message);
       return;
     }
@@ -161,9 +157,9 @@ public class GameWebsocket implements WebSocketCallback {
           public void onSuccess(Shashist result) {
             if (result == null) {
               InfoDialogBox.setMessage(messages.opponentNotFound()).show();
-              ;
               return;
             }
+            GWT.log(connectionSession.getPlayer().toString());
 
             connectionSession.setOpponent(result);
 
@@ -182,7 +178,7 @@ public class GameWebsocket implements WebSocketCallback {
               @Override
               public void onSuccess(Game game) {
                 GameMessage message = createSendGameMessage(gameMessage);
-                message.setMessageType(Message.MessageType.PLAY_START);
+                message.setMessageType(GameMessage.MessageType.PLAY_START);
 
                 message.setData(Boolean.TRUE.toString());
                 message.setGame(game);
@@ -222,6 +218,7 @@ public class GameWebsocket implements WebSocketCallback {
 
     sendGameMessage(gameMessage);
 
+    connectionSession.setPlayer(player);
     connectionSession.setConnected(true);
     eventBus.fireEvent(new ConnectedToPlayEvent());
   }
@@ -282,7 +279,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlayAlreadyPlaying(GameMessage gameMessage) {
     eventBus.fireEvent(new HideInviteDialogBoxEvent());
-    new MyDialogBox(messages.info(), messages.playAlreadyPlaying(gameMessage.getSender().getPublicName()));
+    InfoDialogBox.setMessage(messages.playAlreadyPlaying(gameMessage.getSender().getPublicName())).show();
   }
 
   /**
@@ -311,7 +308,7 @@ public class GameWebsocket implements WebSocketCallback {
       @Override
       public void procConfirm() {
         GameMessage returnGameMessage = createSendGameMessage(gameMessage);
-        returnGameMessage.setMessageType(Message.MessageType.PLAY_CANCEL_MOVE_RESPONSE);
+        returnGameMessage.setMessageType(GameMessage.MessageType.PLAY_CANCEL_MOVE_RESPONSE);
         returnGameMessage.setMove(gameMessage.getMove());
         if (isConfirmed()) {
           returnGameMessage.setData(Boolean.TRUE.toString());
@@ -452,10 +449,6 @@ public class GameWebsocket implements WebSocketCallback {
 
   public void setPlayer(Shashist player) {
     this.player = player;
-  }
-
-  public void setOpponent(Shashist opponent) {
-    connectionSession.setOpponent(opponent);
   }
 
   public Shashist getOpponent() {

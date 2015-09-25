@@ -4,8 +4,6 @@ import com.google.inject.Singleton;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.Shashist;
 
-import java.util.List;
-
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -17,7 +15,6 @@ public class ConnectionSession {
   private Shashist player;
   private Shashist opponent;
   private Game game;
-  private List<Shashist> playerList;
   private boolean connected;
 
   public Shashist getPlayer() {
@@ -45,14 +42,6 @@ public class ConnectionSession {
   public ConnectionSession setGame(Game game) {
     this.game = game;
     return this;
-  }
-
-  public void setPlayerList(List<Shashist> playerList) {
-    this.playerList = playerList;
-  }
-
-  public List<Shashist> getPlayerList() {
-    return playerList;
   }
 
   public void setConnected(boolean connected) {

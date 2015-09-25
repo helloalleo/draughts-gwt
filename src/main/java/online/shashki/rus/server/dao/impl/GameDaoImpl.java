@@ -33,7 +33,7 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
   @Override
   public Game findLazyFalse(Long id) {
     String hql = "SELECT g " +
-        "FROM GameEntity g " +
+        "FROM Game g " +
         "JOIN FETCH g.playerWhite " +
         "JOIN FETCH g.playerBlack " +
         "WHERE g.id = :gameId";
@@ -44,10 +44,10 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
 
   @Override
   public List<Game> findRange(int start, int length) {
-    String hql = "SELECT ge " +
-        "FROM GameEntity ge " +
-        "JOIN FETCH ge.playerWhite " +
-        "JOIN FETCH ge.playerBlack";
+    String hql = "SELECT g " +
+        "FROM Game g " +
+        "JOIN FETCH g.playerWhite " +
+        "JOIN FETCH g.playerBlack";
     Query query = entityManager.createQuery(hql);
     query.setFirstResult(start);
     query.setMaxResults(length);

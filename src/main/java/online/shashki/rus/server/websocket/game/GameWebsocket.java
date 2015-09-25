@@ -104,15 +104,16 @@ public class GameWebsocket {
 
   @OnClose
   public void onClose(Session session) {
-    Shashist shashist = peers.keySet().stream().filter(sh -> peers.get(sh) == session).findFirst().get();
-    Shashist shashistEntity = shashistService.find(shashist.getId());
-
-    shashistEntity.setOnline(false);
-    shashistEntity.setPlaying(false);
-    shashistService.edit(shashistEntity);
+    final Optional<Shashist> first = peers.keySet().stream().filter(sh -> peers.get(sh) == session).findFirst();
+    if (!first.isPresent()) {
+      return;
+    }
+    Shashist shashist = first.get();
+    shashist = shashistService.find(shashist.getId());
 
     shashist.setOnline(false);
     shashist.setPlaying(false);
+    shashistService.edit(shashist);
 
     System.out.println("Disconnected: " + shashist.getId() + " " + session.getId());
     peers.values().remove(session);
@@ -126,9 +127,19 @@ public class GameWebsocket {
 
   private void handleChatPrivateMessage(GameMessage message) {
     Shashist receiver = message.getReceiver();
-    Shashist shashist = peers.keySet().stream()
-        .filter(sh -> sh.getId().equals(receiver.getId())).findFirst().get();
+    if (receiver == null) {
+      return;
+    }
+    final Optional<Shashist> first = peers.keySet().stream()
+        .filter(sh -> sh.getId().equals(receiver.getId())).findFirst();
+    if (!first.isPresent()) {
+      return;
+    }
+    Shashist shashist = first.get();
     Session session = peers.get(shashist);
+    if (session == null) {
+      return;
+    }
     sendMessage(session, message);
 
     Shashist shashistReceiver = shashistService.find(message.getReceiver().getId());

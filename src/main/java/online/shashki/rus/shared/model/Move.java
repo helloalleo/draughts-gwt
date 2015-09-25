@@ -34,22 +34,25 @@ public class Move extends PersistableObjectImpl {
   @JoinColumn(name = "move_id", nullable = false, updatable = false)
   private GameMessage gameMessage;
 
-  @GwtTransient
-  @JsonIgnore
   @Column(name = "start_pos")
   private String startPos;
+  @GwtTransient
+  @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @Transient
   private Square startSquare;
-  @GwtTransient
-  @JsonIgnore
   @Column(name = "end_pos")
   private String endPos;
-  @Transient
-  private Square endSquare;
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
+  @Transient
+  private Square endSquare;
   @Column(name = "taken_pos")
   private String takenPos;
+  @GwtTransient
+  @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @Transient
   private Square takenSquare;
 
