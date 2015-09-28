@@ -212,7 +212,7 @@
 //  public void handlers(final ClientFactory clientFactory) {
 //    eventBus.addHandler(RecivedPlayerListEvent.TYPE, new RecivedPlayerListEventHandler() {
 //      @Override
-//      public void onRecivedPlayerList(RecivedPlayerListEvent event) {
+//      public void onReceivedPlayerList(RecivedPlayerListEvent event) {
 //        if (!event.getPlayerList().contains(clientFactory.getOpponent()) && clientFactory.getGame() != null) {
 //          Game game = clientFactory.getGame();
 //          game.setPlayEndStatus(clientFactory.isPlayerHasWhiteColor() ? GameEnds.BLACK_LEFT : GameEnds.WHITE_LEFT);
@@ -249,7 +249,7 @@
 //    eventBus.addHandler(DisconnectFromPlayEvent.TYPE, new DisconnectFromPlayEventHandler() {
 //      @Override
 //      public void onDisconnectFromPlay(DisconnectFromPlayEvent event) {
-//        GWT.log("Disconnected from Play");
+//        SHLog.log("Disconnected from Play");
 //        connectToPlayButton.setActive(true);
 //        connectToPlayButton.setBlock(true);
 //        connectToPlayButton.addStyleName("btn-danger");

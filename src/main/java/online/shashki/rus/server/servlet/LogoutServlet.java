@@ -31,12 +31,11 @@ public class LogoutServlet extends HttpServlet {
     if (shashist != null) {
       shashist.setOnline(false);
       shashist.setPlaying(false);
-      shashist.setOnline(false);
+      shashist.setLoggedIn(false);
       shashistService.edit(shashist);
     }
 
     request.getSession().invalidate();
     response.sendRedirect(configuration.getContext());
   }
-
 }

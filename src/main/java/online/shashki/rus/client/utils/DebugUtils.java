@@ -30,10 +30,10 @@ public class DebugUtils {
     }
     if (caught != null) {
       final String stacktrace = DebugUtils.getStacktraceAsString(caught);
-      GWT.log(stacktrace, caught);
+      SHLog.log(stacktrace, caught);
     } else {
       final String message = "Error occurred, but we have no further information about the cause";
-      GWT.log(message);
+      SHLog.log(message);
     }
   }
 

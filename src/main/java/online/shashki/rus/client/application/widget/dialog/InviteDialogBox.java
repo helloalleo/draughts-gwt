@@ -4,6 +4,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
@@ -34,7 +35,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   private Timer timerCounterTimer;
   private Label waitMessageLabel;
 
-  public InviteDialogBox() {
+  public InviteDialogBox(ClickHandler submitClickHandler) {
     setText(messages.captionGame());
     VerticalPanel panel = new VerticalPanel();
     panel.setPixelSize(WIDTH, HEIGHT);
@@ -97,6 +98,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
       }
     };
 
+    // последовательность обработчиков кликов обязательна!
     submitButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
@@ -107,6 +109,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
         submitButton.setEnabled(false);
       }
     });
+    submitButton.addClickHandler(submitClickHandler);
 
     cancelButton.addClickHandler(new ClickHandler() {
       @Override

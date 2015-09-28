@@ -12,9 +12,11 @@ import online.shashki.rus.shared.model.Move;
 public class NotationMoveEvent extends GwtEvent<NotationMoveEventHandler> {
   public static Type<NotationMoveEventHandler> TYPE = new Type<>();
   private final Move move;
+  private boolean opponentMove;
 
-  public NotationMoveEvent(Move move) {
+  public NotationMoveEvent(Move move, boolean opponentMove) {
     this.move = move;
+    this.opponentMove = opponentMove;
   }
 
   public Move getMove() {
@@ -27,5 +29,9 @@ public class NotationMoveEvent extends GwtEvent<NotationMoveEventHandler> {
 
   protected void dispatch(NotationMoveEventHandler handler) {
     handler.onNotationMove(this);
+  }
+
+  public boolean isOpponentMove() {
+    return opponentMove;
   }
 }

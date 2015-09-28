@@ -8,6 +8,6 @@ import com.google.gwt.event.shared.EventHandler;
  * Date: 11.12.14
  * Time: 0:41
  */
-public interface RecivedPlayerListEventHandler extends EventHandler {
-  void onRecivedPlayerList(RecivedPlayerListEvent event);
+public interface ReceivedPlayerListEventHandler extends EventHandler {
+  void onReceivedPlayerList(ReceivedPlayerListEvent event);
 }

@@ -1,6 +1,7 @@
 package online.shashki.rus.shared.model;
 
 import com.google.gwt.user.client.rpc.GwtTransient;
+import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shashki.Square;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -20,10 +21,12 @@ public class Move extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @Transient
   private static final String SIMPLE_MOVE_SEP = "-";
   @GwtTransient
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   @Transient
   private static final String BEAT_MOVE_SEP = ":";
 
@@ -31,7 +34,7 @@ public class Move extends PersistableObjectImpl {
   private boolean first; // первый ход в паре ходов. Например, ee-aa в ee-aa bb-cc
 
   @OneToOne
-  @JoinColumn(name = "move_id", nullable = false, updatable = false)
+  @JoinColumn(name = "message_id", nullable = false, updatable = false)
   private GameMessage gameMessage;
 
   @Column(name = "start_pos")
@@ -60,27 +63,31 @@ public class Move extends PersistableObjectImpl {
   @ElementCollection
   private Set<MoveFlags> moveFlags = new HashSet<>();
 
+  public Move() {
+  }
+
+  public Move(int number, boolean first, GameMessage gameMessage, String startPos, String endPos, String takenPos,
+              Set<MoveFlags> moveFlags) {
+    this.number = number;
+    this.first = first;
+    this.gameMessage = gameMessage;
+    this.startPos = startPos;
+    this.endPos = endPos;
+    this.takenPos = takenPos;
+    this.moveFlags = moveFlags;
+  }
+
+  public Move(Move move) {
+    this(move.getNumber(), move.isFirst(), move.getGameMessage(), move.getStartPos(), move.getEndPos(),
+        move.getTakenPos(), move.getMoveFlags());
+  }
+
   public GameMessage getGameMessage() {
     return gameMessage;
   }
 
   public Move setGameMessage(GameMessage gameMessage) {
     this.gameMessage = gameMessage;
-    return this;
-  }
-
-  public Move setStartPos(String startPos) {
-    this.startPos = startPos;
-    return this;
-  }
-
-  public Move setEndPos(String endPos) {
-    this.endPos = endPos;
-    return this;
-  }
-
-  public Move setTakenPos(String takenPos) {
-    this.takenPos = takenPos;
     return this;
   }
 
@@ -108,6 +115,9 @@ public class Move extends PersistableObjectImpl {
 
   public Move setTakenSquare(Square takenSquare) {
     this.takenSquare = takenSquare;
+    if (takenSquare != null) {
+      this.takenPos = takenSquare.toSend();
+    }
     return this;
   }
 
@@ -115,8 +125,16 @@ public class Move extends PersistableObjectImpl {
     return takenSquare;
   }
 
+  public void setTakenPos(String takenPos) {
+    this.takenPos = takenPos;
+  }
+
   public String getStartPos() {
     return startPos;
+  }
+
+  public void setStartPos(String startPos) {
+    this.startPos = startPos;
   }
 
   public Square getStartSquare() {
@@ -125,11 +143,18 @@ public class Move extends PersistableObjectImpl {
 
   public Move setStartSquare(Square startSquare) {
     this.startSquare = startSquare;
+    if (startSquare != null) {
+      this.startPos = startSquare.toSend();
+    }
     return this;
   }
 
   public String getEndPos() {
     return endPos;
+  }
+
+  public void setEndPos(String endPos) {
+    this.endPos = endPos;
   }
 
   public Square getEndSquare() {
@@ -138,9 +163,13 @@ public class Move extends PersistableObjectImpl {
 
   public Move setEndSquare(Square endSquare) {
     this.endSquare = endSquare;
+    if (endSquare != null) {
+      this.endPos = endSquare.toSend();
+    }
     return this;
   }
 
+  @JsonIgnore
   public boolean isCancel() {
     return moveFlags.contains(MoveFlags.CANCEL_MOVE);
   }
@@ -153,6 +182,7 @@ public class Move extends PersistableObjectImpl {
     moveFlags.remove(MoveFlags.CANCEL_MOVE);
   }
 
+  @JsonIgnore
   public boolean isSimple() {
     return moveFlags.contains(MoveFlags.SIMPLE_MOVE);
   }
@@ -165,6 +195,7 @@ public class Move extends PersistableObjectImpl {
     moveFlags.remove(MoveFlags.SIMPLE_MOVE);
   }
 
+  @JsonIgnore
   public boolean isContinueBeat() {
     return moveFlags.contains(MoveFlags.CONTINUE_BEAT);
   }
@@ -177,6 +208,7 @@ public class Move extends PersistableObjectImpl {
     moveFlags.remove(MoveFlags.CONTINUE_BEAT);
   }
 
+  @JsonIgnore
   public boolean isStopBeat() {
     return moveFlags.contains(MoveFlags.STOP_BEAT);
   }
@@ -189,6 +221,7 @@ public class Move extends PersistableObjectImpl {
     moveFlags.remove(MoveFlags.STOP_BEAT);
   }
 
+  @JsonIgnore
   public boolean isStartBeat() {
     return moveFlags.contains(MoveFlags.START_BEAT);
   }
@@ -205,9 +238,33 @@ public class Move extends PersistableObjectImpl {
     return moveFlags;
   }
 
-  public String toNotation() {
-    return isSimple() ? startSquare.toNotation(first) + SIMPLE_MOVE_SEP + endSquare.toNotation(first)
-        : startSquare.toNotation(first) + BEAT_MOVE_SEP + endSquare.toNotation(first);
+  public void setMoveFlags(Set<MoveFlags> moveFlags) {
+    this.moveFlags = moveFlags;
+  }
+
+  public String toNotation(boolean isWhite) {
+    String notation;
+    if (first && isWhite) {
+      SHLog.log("FIRST WHITE");
+      notation = getNotation(true);
+    } else if (!first && isWhite){
+      SHLog.log("SECOND WHITE");
+      notation = getNotation(true);
+    } else if (first) {
+      SHLog.log("FIRST BLACK");
+      notation = getNotation(false);
+    } else {
+      SHLog.log("SECOND BLACK");
+      notation = getNotation(false);
+    }
+    return notation;
+  }
+
+  private String getNotation(boolean normal) {
+    final String s = startSquare.toNotation(normal);
+    final String e = endSquare.toNotation(normal);
+    return isSimple() ? s + SIMPLE_MOVE_SEP + e
+        : s + BEAT_MOVE_SEP + e;
   }
 
   public String toNotationLastMove() {
@@ -219,8 +276,12 @@ public class Move extends PersistableObjectImpl {
     return "Move{" +
         "number=" + number +
         ", first=" + first +
+        ", gameMessage=" + gameMessage +
+        ", startPos='" + startPos + '\'' +
         ", startSquare=" + startSquare +
+        ", endPos='" + endPos + '\'' +
         ", endSquare=" + endSquare +
+        ", takenPos='" + takenPos + '\'' +
         ", takenSquare=" + takenSquare +
         ", moveFlags=" + moveFlags +
         '}';
@@ -234,15 +295,33 @@ public class Move extends PersistableObjectImpl {
   public Move mirror() {
     Move move = new Move();
 
-    if (move.getStartSquare() != null) {
+    if (startSquare != null) {
       move.setStartSquare(startSquare.mirror());
+    } else {
+      final Square square = Square.getFromPos(startPos);
+      if (square != null) {
+        move.setStartSquare(square.mirror());
+      }
     }
-    if (move.getEndSquare() != null) {
+    if (endSquare != null) {
       move.setEndSquare(endSquare.mirror());
+    } else {
+      final Square square = Square.getFromPos(endPos);
+      if (square != null) {
+        move.setEndSquare(square.mirror());
+      }
     }
-    if (move.getTakenSquare() != null) {
+    if (takenSquare != null) {
       move.setTakenSquare(takenSquare.mirror());
+    } else {
+      final Square square = Square.getFromPos(takenPos);
+      if (square != null) {
+        move.setTakenSquare(square.mirror());
+      }
     }
+    move.setMoveFlags(moveFlags);
+    move.setFirst(first);
+    move.setNumber(number);
     return move;
   }
 

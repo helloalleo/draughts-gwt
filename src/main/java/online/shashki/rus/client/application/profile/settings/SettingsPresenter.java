@@ -1,6 +1,5 @@
 package online.shashki.rus.client.application.profile.settings;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -18,6 +17,7 @@ import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
 import online.shashki.rus.client.event.UpdatePlayerListEvent;
 import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.rpc.ProfileRpcServiceAsync;
+import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Shashist;
 
@@ -64,7 +64,7 @@ public class SettingsPresenter extends Presenter<SettingsPresenter.MyView, Setti
   @Override
   public void submitNewPlayerName(String playerName) {
     player.setPlayerName(playerName);
-    GWT.log(playerName);
+    SHLog.log(playerName);
     profileService.saveProfile(player, new AsyncCallback<Void>() {
       @Override
       public void onFailure(Throwable caught) {

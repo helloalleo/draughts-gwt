@@ -3,6 +3,7 @@ package online.shashki.rus.shashki;
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.shared.core.types.Color;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import online.shashki.rus.client.utils.SHLog;
 
 import java.io.Serializable;
 
@@ -16,6 +17,8 @@ public class Square implements Serializable {
 
   @JsonIgnore
   private Rectangle shape;
+  @JsonIgnore
+  private static BoardBackgroundLayer board;
   @JsonIgnore
   private static final String TO_SEND_SEP = ",";
   private int row;
@@ -42,7 +45,13 @@ public class Square implements Serializable {
   public Square() {
   }
 
+  public Square(BoardBackgroundLayer backgroundLayer, int row, int col) {
+    this(row, col);
+    Square.board = backgroundLayer;
+  }
+
   public static Square fromString(String toSendStr) {
+    SHLog.log(toSendStr + " TO SEND STR");
     if (toSendStr == null || toSendStr.isEmpty()) {
       return null;
     }
@@ -97,17 +106,27 @@ public class Square implements Serializable {
     return occupied;
   }
 
+  @Override
   public String toString() {
-    return "row=" + String.valueOf(row) + " col=" + String.valueOf(col)
-        + "; x=" + String.valueOf(shape.getX()) + " y=" + String.valueOf(shape.getY());
+    return "Square{" +
+        "row=" + row +
+        ", col=" + col +
+        ", occupied=" + occupied +
+        ", occupant=" + occupant +
+        '}';
   }
 
   public String toSend() {
     return String.valueOf(row) + TO_SEND_SEP + String.valueOf(col);
   }
 
-  public String toNotation(boolean first) {
-    if (first) {
+  /**
+   * переводит клетку в нотацию в зависимости от параметра нормал
+   * @param normal нужно ли отображать нотацию или нет
+   * @return нотация для клетки
+   */
+  public String toNotation(boolean normal) {
+    if (normal) {
       return alph[col] + String.valueOf(BoardBackgroundLayer.ROWS - row);
     }
     return alph[BoardBackgroundLayer.COLS - 1 - col] + String.valueOf(row + 1);
@@ -175,7 +194,6 @@ public class Square implements Serializable {
     double squareSize = side / (double) rows;
     shape.setWidth(squareSize);
     shape.setHeight(squareSize);
-//    this.setStrokeWidth(strokeLineWidth);
   }
 
   public boolean contains(double x, double y) {
@@ -204,5 +222,18 @@ public class Square implements Serializable {
 
   public double getAlpha() {
     return shape.getAlpha();
+  }
+
+  public static Square getFromPos(String pos) {
+    if (pos == null || pos.isEmpty()) {
+      return null;
+    }
+    String[] arr = pos.split(TO_SEND_SEP);
+
+    try {
+      return board.getSquare(Integer.valueOf(arr[0]), Integer.valueOf(arr[1]));
+    } catch (SquareNotFoundException e) {
+      return null;
+    }
   }
 }

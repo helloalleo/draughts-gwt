@@ -25,6 +25,7 @@ public class StartupListener implements ServletContextListener {
     shashistService.findAll().parallelStream().forEach(shashist -> {
       shashist.setOnline(false);
       shashist.setPlaying(false);
+      shashist.setLoggedIn(false);
       shashistService.edit(shashist);
     });
   }

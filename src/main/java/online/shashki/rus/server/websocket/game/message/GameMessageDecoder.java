@@ -36,7 +36,7 @@ public class GameMessageDecoder implements Decoder.Text<GameMessage> {
 
   @Override
   public boolean willDecode(String s) {
-    GameMessage gameMessage = null;
+    GameMessage gameMessage;
     try {
       gameMessage = Utils.deserializeFromJson(s);
     } catch (IOException e) {

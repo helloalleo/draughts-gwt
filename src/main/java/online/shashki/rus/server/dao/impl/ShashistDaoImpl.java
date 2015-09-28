@@ -40,8 +40,9 @@ public class ShashistDaoImpl extends DaoImpl<Shashist> implements ShashistDao {
 
   @Override
   public Shashist findByVkUid(String uid) {
-    Query query = getEntityManager().createQuery("FROM Shashist " +
-        "WHERE vkUid = :vkUid");
+    Query query = getEntityManager().createQuery(
+        "FROM Shashist " +
+            "WHERE vkUid = :vkUid");
     query.setParameter("vkUid", uid);
     List list = query.getResultList();
     return list.isEmpty() ? null : (Shashist) list.get(0);
@@ -51,7 +52,7 @@ public class ShashistDaoImpl extends DaoImpl<Shashist> implements ShashistDao {
   public Shashist findBySessionId(String sessionId) {
     Query query = getEntityManager().createQuery(
         "FROM Shashist " +
-        "WHERE sessionId = :sessionId");
+            "WHERE sessionId = :sessionId");
     query.setParameter("sessionId", sessionId);
     List result = query.getResultList();
     if (result.isEmpty()) {
@@ -60,4 +61,17 @@ public class ShashistDaoImpl extends DaoImpl<Shashist> implements ShashistDao {
     return (Shashist) result.get(0);
   }
 
+  @Override
+  public Shashist findById(Long shashistId) {
+    Query query = getEntityManager().createQuery(
+        "FROM Shashist " +
+            "WHERE id = :shashistId"
+    );
+    query.setParameter("shashistId", shashistId);
+    List result = query.getResultList();
+    if (result.isEmpty()) {
+      return null;
+    }
+    return (Shashist) result.get(0);
+  }
 }

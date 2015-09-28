@@ -12,4 +12,6 @@ public interface ShashkiConfiguration extends ConstantsWithLookup {
 
   @Key("player.websocket.url")
   String playerWebsocketUrl();
+
+  String debug();
 }

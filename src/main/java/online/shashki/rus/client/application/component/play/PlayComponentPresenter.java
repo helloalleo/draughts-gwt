@@ -1,6 +1,8 @@
 package online.shashki.rus.client.application.component.play;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -10,16 +12,13 @@ import com.gwtplatform.mvp.client.View;
 import online.shashki.rus.client.application.widget.NotationPanel;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
-import online.shashki.rus.client.application.widget.dialog.InviteDialogBox;
 import online.shashki.rus.client.application.widget.dialog.MyDialogBox;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.rpc.GameRpcServiceAsync;
+import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.client.websocket.GameWebsocket;
 import online.shashki.rus.shared.locale.ShashkiMessages;
-import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.model.GameEnds;
-import online.shashki.rus.shared.model.GameMessage;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.shared.model.*;
 
 import java.util.Date;
 import java.util.List;
@@ -34,7 +33,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ShashkiMessages messages;
   private final GameRpcServiceAsync gameService;
   private EventBus eventBus;
-  private InviteDialogBox inviteDialogBox;
 
   @Inject
   PlayComponentPresenter(
@@ -51,9 +49,11 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     this.gameService = gameService;
     getView().setUiHandlers(this);
     getView().setPlayer(gameWebsocket.getPlayer());
-    addVisibleHandler(RecivedPlayerListEvent.TYPE, new RecivedPlayerListEventHandler() {
+    getView().initNotationPanel(eventBus);
+
+    addVisibleHandler(ReceivedPlayerListEvent.TYPE, new ReceivedPlayerListEventHandler() {
           @Override
-          public void onRecivedPlayerList(RecivedPlayerListEvent event) {
+          public void onReceivedPlayerList(ReceivedPlayerListEvent event) {
             getView().setPlayerList(event.getPlayerList());
           }
         }
@@ -77,23 +77,24 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       InfoDialogBox.setMessage(messages.selectAnotherPlayerItsYou()).show();
       return;
     }
+    getView().setOpponent(opponent);
 
-    inviteDialogBox = new InviteDialogBox() {
+    getView().showInviteDialog(new ClickHandler() {
       @Override
-      public void submitted(boolean white) {
-        GameMessage gameMessage = createSendGameMessage(gameWebsocket);
+      public void onClick(ClickEvent event) {
+        GameMessage gameMessage = createGameMessage();
         gameMessage.setMessageType(GameMessage.MessageType.PLAY_INVITE);
         gameMessage.setReceiver(opponent);
 
+        final boolean white = getView().opponentColor();
+        SHLog.log(white + " OPPONENT COLOR");
         gameMessage.setMessage(messages.inviteMessage(gameWebsocket.getPlayer().getPublicName(),
-            String.valueOf(white ? messages.black() : messages.white())));
-        gameMessage.setData(String.valueOf(!white));
+            String.valueOf(white ? messages.white() : messages.black())));
+        gameMessage.setData(String.valueOf(white));
 
         eventBus.fireEvent(new GameMessageEvent(gameMessage));
       }
-    };
-    inviteDialogBox.show(messages.inviteToPlay(opponent.getPublicName(),
-        messages.draughts()));
+    });
   }
 
   @Override
@@ -111,7 +112,40 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         .equals(gameWebsocket.getPlayer().getId());
   }
 
-  private GameMessage createSendGameMessage(GameWebsocket gameWebsocket) {
+  @Override
+  public EventBus getPlayEventBus() {
+    return eventBus;
+  }
+
+  @Override
+  public void proposeDraw() {
+    GameMessage gameMessage = createGameMessage();
+    gameMessage.setMessageType(GameMessage.MessageType.PLAY_PROPOSE_DRAW);
+    eventBus.fireEvent(new GameMessageEvent(gameMessage));
+  }
+
+  @Override
+  public void playerSurrendered() {
+    GameMessage gameMessage = createGameMessage();
+    gameMessage.setMessageType(GameMessage.MessageType.PLAY_SURRENDER);
+    eventBus.fireEvent(new GameMessageEvent(gameMessage));
+    eventBus.fireEvent(new ClearPlayComponentEvent());
+  }
+
+  @Override
+  public void proposeCancelMove(Move lastMove) {
+    GameMessage gameMessage = createGameMessage();
+    gameMessage.setMessageType(GameMessage.MessageType.PLAY_CANCEL_MOVE);
+    if (lastMove.isContinueBeat()) {
+      lastMove.mirror();
+    }
+    lastMove.setOnCancelMove();
+    gameMessage.setMove(lastMove);
+
+    eventBus.fireEvent(new GameMessageEvent(gameMessage));
+  }
+
+  private GameMessage createGameMessage() {
     GameMessage gameMessage = GWT.create(GameMessage.class);
     gameMessage.setSender(gameWebsocket.getPlayer());
     gameMessage.setReceiver(gameWebsocket.getOpponent());
@@ -120,9 +154,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   public void bindEvents() {
-    eventBus.addHandler(RecivedPlayerListEvent.TYPE, new RecivedPlayerListEventHandler() {
+    eventBus.addHandler(ReceivedPlayerListEvent.TYPE, new ReceivedPlayerListEventHandler() {
       @Override
-      public void onRecivedPlayerList(RecivedPlayerListEvent event) {
+      public void onReceivedPlayerList(ReceivedPlayerListEvent event) {
         if (!event.getPlayerList().contains(gameWebsocket.getOpponent()) && gameWebsocket.getGame() != null) {
           Game game = gameWebsocket.getGame();
           game.setPlayEndStatus(gameWebsocket.isPlayerHasWhiteColor() ? GameEnds.BLACK_LEFT : GameEnds.WHITE_LEFT);
@@ -166,9 +200,12 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     eventBus.addHandler(StartPlayEvent.TYPE, new StartPlayEventHandler() {
       @Override
       public void onStartPlay(StartPlayEvent event) {
-        if (inviteDialogBox != null) {
-          inviteDialogBox.hide();
-        }
+        getView().hideInviteDialog();
+
+        SHLog.log(event.isWhite() + " START PLAY AT INVITER");
+        SHLog.log("PLAYER " + gameWebsocket.getPlayer());
+        SHLog.log("OPPONENT " + gameWebsocket.getOpponent());
+
         getView().startPlay(event.isWhite());
       }
     });
@@ -176,7 +213,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     eventBus.addHandler(RejectPlayEvent.TYPE, new RejectPlayEventHandler() {
       @Override
       public void onRejectPlay(RejectPlayEvent event) {
-        inviteDialogBox.hide();
+        getView().hideInviteDialog();
       }
     });
 
@@ -251,14 +288,14 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     eventBus.addHandler(HideInviteDialogBoxEvent.TYPE, new HideInviteDialogBoxEventHandler() {
       @Override
       public void onHideInviteDialogBox(HideInviteDialogBoxEvent event) {
-        if (inviteDialogBox != null && inviteDialogBox.isVisible()) {
-          inviteDialogBox.hide();
-        }
+        getView().hideInviteDialog();
       }
     });
   }
 
   interface MyView extends View, HasUiHandlers<PlayComponentUiHandlers> {
+    void initNotationPanel(EventBus eventBus);
+
     void setPlayerList(List<Shashist> shashistList);
 
     void setPlayer(Shashist player);
@@ -286,5 +323,13 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     int getOpponentDraughtsSize();
 
     boolean isWhite();
+
+    void hideInviteDialog();
+
+    void showInviteDialog(ClickHandler inviteClickHandler);
+
+    boolean opponentColor();
+
+    void setOpponent(Shashist opponent);
   }
 }

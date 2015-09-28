@@ -19,10 +19,10 @@ import java.util.Vector;
 public class BoardBackgroundLayer extends Layer {
   public static final int ROWS = 8;
   public static final int COLS = 8;
-  private final int rows;
-  private final int cols;
+  private int rows;
+  private int cols;
   private static int side;
-  private final int deskSide;
+  private int deskSide;
   private Square[][] gameBoard;
   private Rectangle boardConturRect;
   private Vector<Text> coordsTextVector = new Vector<>();
@@ -32,7 +32,7 @@ public class BoardBackgroundLayer extends Layer {
   public BoardBackgroundLayer(int side, int deskSide, int rows, int cols) {
     setListening(false);
 
-    this.side = side;
+    BoardBackgroundLayer.side = side;
     this.deskSide = deskSide;
 
     this.rows = rows;
@@ -62,7 +62,7 @@ public class BoardBackgroundLayer extends Layer {
     for (int i = 0; i < rows; i++) {
       for (int j = 0; j < cols; j++) {
         if (lastColor) {
-          Square square = new Square(i, j);
+          Square square = new Square(this, i, j);
           square.updateShape(deskSide, rows, cols, OFFSET_X, OFFSET_X - 2);
           gameBoard[i][j] = square;
           add(square.getShape());

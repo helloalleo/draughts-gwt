@@ -6,7 +6,9 @@ import com.ait.lienzo.client.core.shape.Text;
 import com.ait.lienzo.client.widget.LienzoPanel;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -16,11 +18,19 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.inject.Inject;
+import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.client.application.widget.NotationPanel;
+import online.shashki.rus.client.application.widget.dialog.ConfirmeDialogBox;
+import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
+import online.shashki.rus.client.application.widget.dialog.InviteDialogBox;
+import online.shashki.rus.client.event.GameMessageEvent;
 import online.shashki.rus.client.resources.ResourceLoader;
 import online.shashki.rus.client.resources.constants.GSSConstants;
+import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
+import online.shashki.rus.shared.model.GameMessage;
+import online.shashki.rus.shared.model.Move;
 import online.shashki.rus.shared.model.Shashist;
 import online.shashki.rus.shashki.Board;
 import online.shashki.rus.shashki.BoardBackgroundLayer;
@@ -69,15 +79,19 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private CellList<Shashist> playersCellList;
   private SingleSelectionModel<Shashist> playerSelectionModel;
   private NotationPanel notationPanel;
+  private InviteDialogBox inviteDialogBox;
+  private boolean opponentColor;
+  private Shashist opponent;
 
   @Inject
   PlayComponentView(Binder uiBinder,
-                    ShashkiMessages messages) {
+                    ShashkiMessages messages
+                    ) {
     initWidget(uiBinder.createAndBindUi(this));
     this.messages = messages;
+//    this.injectionFactory = injectionFactory; //GWT.create(AssistedInjectionFactory.class);
 
     initEmptyDeskPanel();
-    initNotationPanel();
     initPlayersCellList();
   }
 
@@ -91,6 +105,54 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         getUiHandlers().startPlayWith(playerSelectionModel.getSelectedObject());
         break;
     }
+  }
+
+  @UiHandler("drawButton")
+  public void onDrawButton(ClickEvent event) {
+    new ConfirmeDialogBox(messages.doYouWantToProposeDraw()) {
+      @Override
+      public void procConfirm() {
+        if (isConfirmed()) {
+          getUiHandlers().proposeDraw();
+        }
+      }
+    };
+  }
+
+  @UiHandler("surrenderButton")
+  public void onSurrenderButton(ClickEvent event) {
+    new ConfirmeDialogBox(messages.areYouSureYouWantSurrender()) {
+      @Override
+      public void procConfirm() {
+        if (isConfirmed()) {
+          getUiHandlers().playerSurrendered();
+        }
+      }
+    };
+  }
+
+  @UiHandler("cancelMove")
+  public void onCancelMove(ClickEvent event) {
+    if (board == null) {
+      return;
+    }
+    final Move lastMove = board.getLastMove();
+    final Move lastOpponentMove = board.getLastOpponentMove();
+    if (lastOpponentMove != null && lastOpponentMove.isContinueBeat()) {
+      return;
+    }
+    if (board.isMyTurn() && !(lastMove != null && lastMove.isContinueBeat())) {
+      InfoDialogBox.setMessage(messages.youDontMove()).show();
+      return;
+    }
+    new ConfirmeDialogBox(messages.doYouWantToCancelMove()) {
+      @Override
+      public void procConfirm() {
+        if (isConfirmed()) {
+          getUiHandlers().proposeCancelMove(lastMove);
+        }
+      }
+    };
   }
 
   private void initEmptyDeskPanel() {
@@ -121,9 +183,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     shashki.add(lienzoPanel);
   }
 
-  private void initNotationPanel() {
-    notationPanel = new NotationPanel();
+  @Override
+  public void initNotationPanel(EventBus eventBus) {
+    notationPanel = new NotationPanel(eventBus);
     notationList.add(notationPanel);
+
+    SHLog.log("INIT NOTATION PANEL");
 
     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
       @Override
@@ -245,8 +310,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public void startPlay(boolean white) {
     BoardBackgroundLayer backgroundLayer = initDeskPanel(white);
-    board = new Board(backgroundLayer, 8, 8, white);
+    board = new Board(getUiHandlers().getPlayEventBus(), backgroundLayer, 8, 8, white);
     lienzoPanel.add(board);
+    lienzoPanel.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     updateTurn(getUiHandlers().isMyTurn());
     hidePlayButtonAndShowPlayingButtons();
   }
@@ -275,6 +341,30 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     return board.isWhite();
   }
 
+  @Override
+  public void hideInviteDialog() {
+    if (inviteDialogBox != null && inviteDialogBox.isVisible()) {
+      inviteDialogBox.hide();
+    }
+  }
+
+  @Override
+  public void showInviteDialog(ClickHandler inviteClickHandler) {
+    inviteDialogBox = new InviteDialogBox(inviteClickHandler) {
+      @Override
+      public void submitted(boolean white) {
+        PlayComponentView.this.opponentColor = !white;
+      }
+    };
+    inviteDialogBox.show(messages.inviteToPlay(opponent.getPublicName(),
+        messages.draughts()));
+  }
+
+  @Override
+  public boolean opponentColor() {
+    return opponentColor;
+  }
+
   private BoardBackgroundLayer initDeskPanel(boolean white) {
     int lienzoSide = lienzoPanel.getHeight() - 50;
     BoardBackgroundLayer boardBackgroundLayer = new BoardBackgroundLayer(
@@ -283,6 +373,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     boardBackgroundLayer.drawCoordinates(white);
     lienzoPanel.setBackgroundLayer(boardBackgroundLayer);
     return boardBackgroundLayer;
+  }
+
+  @Override
+  public void setOpponent(Shashist opponent) {
+    this.opponent = opponent;
   }
 
   interface Binder extends UiBinder<Widget, PlayComponentView> {

@@ -78,6 +78,9 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
       shashist.setLastName(lastName.getString());
     } else {
       shashist.setVisitCounter(shashist.getVisitCounter() + 1);
+      if (shashist.isLoggedIn()) {
+//        throw new RuntimeException("Вы уже вошли " + shashist.getVkUid());
+      }
     }
 
     HttpSession session = req.getSession();

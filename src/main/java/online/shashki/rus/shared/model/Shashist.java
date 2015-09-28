@@ -4,7 +4,10 @@ import com.google.gwt.user.client.rpc.GwtTransient;
 import org.codehaus.jackson.annotate.JsonIgnore;
 import org.hibernate.validator.constraints.Email;
 
-import javax.persistence.*;
+import javax.persistence.Column;
+import javax.persistence.Entity;
+import javax.persistence.OneToMany;
+import javax.persistence.Table;
 import java.util.Date;
 import java.util.Set;
 
@@ -329,5 +332,18 @@ public class Shashist extends PersistableObjectImpl {
         ", lastVisited=" + lastVisited +
         ", visitCounter=" + visitCounter +
         '}';
+  }
+
+  /**
+   * Обновляем только сеарилизуемые поля
+   * @param profile
+   */
+  public void updateSerializable(Shashist profile) {
+    this.loggedIn = profile.isLoggedIn();
+    this.playing = profile.isPlaying();
+    this.online = profile.isOnline();
+    this.firstName = profile.getFirstName();
+    this.lastName = profile.getLastName();
+    this.playerName = profile.getPlayerName();
   }
 }

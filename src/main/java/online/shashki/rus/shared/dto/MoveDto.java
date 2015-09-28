@@ -12,7 +12,7 @@
 // * Date: 02.09.15
 // * Time: 17:25
 // */
-//public class Move implements Move {
+//public class MoveDto implements Move {
 //  private static final String SIMPLE_MOVE_SEP = "-";
 //  private static final String BEAT_MOVE_SEP = ":";
 //
@@ -24,13 +24,13 @@
 //  private Square takenSquare;
 //  private Set<Move.MoveFlags> moveFlags = new HashSet<>();
 //
-//  public Move() {
+//  public MoveDto() {
 //    startSquare = null;
 //    endSquare = null;
 //    takenSquare = null;
 //  }
 //
-//  public Move(Move move) {
+//  public MoveDto(Move move) {
 //    this.number = move.getNumber();
 //    this.first = move.isFirst();
 //    this.startSquare = Square.fromString(move.getStartPos());

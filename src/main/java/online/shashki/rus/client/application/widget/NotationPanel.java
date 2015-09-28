@@ -1,14 +1,13 @@
 package online.shashki.rus.client.application.widget;
 
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
-import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import online.shashki.rus.client.event.*;
-import online.shashki.rus.shashki.Square;
+import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.model.Move;
+import online.shashki.rus.shashki.Square;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,20 +24,17 @@ public class NotationPanel extends ScrollPanel {
   private static final String COUNT_SEP = ". ";
   private static final String NOTATION_WIDTH = "200px";
 
-  private final EventBus eventBus = new SimpleEventBus();
 //  private final ShashkiGinjector shashkiGinjector = ShashkiGinjector.INSTANCE;
   private static String notation;
   private boolean cancelBite;
   private int cancelCounter;
 
-  public NotationPanel() {
-//    this.eventBus = shashkiGinjector.getEventBus();
-
-    // TODO: Not Compile
+  public NotationPanel(EventBus eventBus) {
     eventBus.addHandler(NotationMoveEvent.TYPE, new NotationMoveEventHandler() {
       @Override
       public void onNotationMove(NotationMoveEvent event) {
-        NotationPanel.this.appendMove(event.getMove());
+        NotationPanel.this.appendMove(event.getMove(),
+            event.isOpponentMove());
       }
     });
     eventBus.addHandler(NotationCancelMoveEvent.TYPE, new NotationCancelMoveEventHandler() {
@@ -63,7 +59,7 @@ public class NotationPanel extends ScrollPanel {
     });
   }
 
-  public void appendMove(Move move) {
+  public void appendMove(Move move, boolean opponentMove) {
     notation = getElement().getInnerHTML();
     notation = notation.replaceAll(DIV_GARBAGE, "");
 
@@ -71,27 +67,27 @@ public class NotationPanel extends ScrollPanel {
     if (steps.length == 0) {
       notation = "";
     }
-    GWT.log("MOVE in NOTATION " + move);
+    SHLog.log("MOVE in NOTATION " + move);
     // первый шаг. например, h4:f6:d4 - h4
     Square start = move.getStartSquare();
-    GWT.log("FIRST STEP " + start.toString());
+    SHLog.log("FIRST STEP " + start.toString());
 
     if (move.isSimple()) {
       if (move.isFirst()) {
-        notation += move.getNumber() + COUNT_SEP + move.toNotation();
+        notation += move.getNumber() + COUNT_SEP + move.toNotation(opponentMove);
       } else {
-        notation += MOVE_SEP + move.toNotation() + NOTATION_SEP;
+        notation += MOVE_SEP + move.toNotation(opponentMove) + NOTATION_SEP;
       }
     } else { // взята одна или более шашек
-      GWT.log(move.isFirst() + " FIRST CONT BEAT");
+      SHLog.log(move.isFirst() + " FIRST CONT BEAT");
       if (move.isStartBeat()) {
         if (move.isFirst()) {
-          notation += move.getNumber() + COUNT_SEP + move.toNotation();
+          notation += move.getNumber() + COUNT_SEP + move.toNotation(opponentMove);
         } else {
           if (move.isContinueBeat()) {
-            notation += MOVE_SEP + move.toNotation();
+            notation += MOVE_SEP + move.toNotation(opponentMove);
           } else {
-            notation += MOVE_SEP + move.toNotation() + NOTATION_SEP;
+            notation += MOVE_SEP + move.toNotation(opponentMove) + NOTATION_SEP;
           }
         }
       } else if (move.isStopBeat()) {
@@ -106,7 +102,7 @@ public class NotationPanel extends ScrollPanel {
     }
 
     getElement().setInnerHTML(notation);
-    GWT.log("Notation " + notation);
+    SHLog.log("Notation " + notation);
     pushScroll();
   }
 
@@ -121,11 +117,15 @@ public class NotationPanel extends ScrollPanel {
   }
 
   public void cancelMove(Move move) {
-    GWT.log(notation);
+    SHLog.log(notation);
     notation = notation.replaceAll(DIV_GARBAGE, "");
     if (move.isSimple()) {
       if (move.isFirst()) {
-        notation = notation.substring(0, notation.lastIndexOf(NOTATION_SEP)) + NOTATION_SEP;
+        if (move.getNumber() != 0) {
+          notation = notation.substring(0, notation.lastIndexOf(NOTATION_SEP)) + NOTATION_SEP;
+        } else {
+          notation = "";
+        }
       } else {
         notation = notation.substring(0, notation.lastIndexOf(MOVE_SEP));
       }
@@ -144,44 +144,6 @@ public class NotationPanel extends ScrollPanel {
         }
       }
     }
-//    String[] notationArray = notation.split(NOTATION_SEP);
-//    // ход. 2. h4:f6 e7:g5
-//    String calcMove = notationArray[notationArray.length - 1];
-//    GWT.log("MOVE " + calcMove);
-//    String lastMove = calcMove.split(COUNT_SEP_REGEX)[1];
-//    String[] lastMoveArray = lastMove.split(MOVE_SEP);
-//    GWT.log("LAST MOVE " + lastMove);
-//    if (lastMove.contains(BEAT_SEP) && !lastMove.contains(MOVE_SEP)) { // первый ход
-//      GWT.log(notation + " - " + notation.lastIndexOf(BEAT_SEP));
-//      if (lastMove.split(BEAT_SEP).length == 2) { // первый ход содержит побитые шашки и она одна
-//        notation = notation.substring(0, notation.lastIndexOf(NOTATION_SEP)) + NOTATION_SEP;
-//        stepCounter -= cancelCounter;
-//        cancelCounter = 1;
-//      } else { // побито несколько шашек
-//        notation = notation.substring(0, notation.lastIndexOf(BEAT_SEP));
-//        cancelBite = true;
-//      }
-//    } else { // второй ход
-//      if (lastMoveArray.length == 2) {
-//        // послед ход e7:g5
-//        final String lastStep = lastMoveArray[1];
-//        final String[] lastStepArray = lastStep.split(BEAT_SEP);
-//        GWT.log(lastStep);
-//        if (lastStep.contains(BEAT_SEP) && lastStep.split(BEAT_SEP).length != 2) { // последний ход содержит побитые
-//          // шашки
-//          notation = notation.substring(0, notation.lastIndexOf(BEAT_SEP));
-//          cancelBite = true;
-//        } else {
-//          notation = notation.substring(0, notation.lastIndexOf(MOVE_SEP));
-//          stepCounter -= cancelCounter;
-//          cancelCounter = 1;
-//        }
-//      } else { // первый ход, где нет побитых шашек
-//        notation = notation.substring(0, notation.lastIndexOf(NOTATION_SEP)) + NOTATION_SEP;
-//        stepCounter -= cancelCounter;
-//        cancelCounter = 1;
-//      }
-//    }
     getElement().setInnerHTML(notation);
   }
 }

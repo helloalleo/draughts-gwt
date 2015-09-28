@@ -8,6 +8,7 @@ import online.shashki.rus.server.websocket.game.message.GameMessageDecoder;
 import online.shashki.rus.server.websocket.game.message.GameMessageEncoder;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.GameMessage;
+import online.shashki.rus.shared.model.Move;
 import online.shashki.rus.shared.model.Shashist;
 
 import javax.inject.Inject;
@@ -47,6 +48,11 @@ public class GameWebsocket {
 
   @OnMessage
   public void onMessage(Session session, GameMessage gameMessage) {
+    if (gameMessage == null) {
+      return;
+    }
+
+    System.out.println(gameMessage.toString());
     switch (gameMessage.getMessageType()) {
       case PLAYER_REGISTER:
         handleNewPlayer(gameMessage, session);
@@ -61,8 +67,8 @@ public class GameWebsocket {
       case PLAY_REJECT_INVITE:
       case PLAY_ALREADY_PLAYING:
       case PLAY_START:
-      case PLAY_MOVE:
       case PLAY_END:
+      case PLAY_MOVE:
       case PLAY_SURRENDER:
       case PLAY_PROPOSE_DRAW:
       case PLAY_ACCEPT_DRAW:
@@ -72,6 +78,10 @@ public class GameWebsocket {
         handleChatPrivateMessage(gameMessage);
         break;
     }
+  }
+
+  private void handlePlayMoveMessage(GameMessage gameMessage) {
+
   }
 
   private void handleChatMessage(Session session, GameMessage message) {
@@ -140,19 +150,28 @@ public class GameWebsocket {
     if (session == null) {
       return;
     }
-    sendMessage(session, message);
 
+    saveGameMessage(message);
+    sendMessage(session, message);
+  }
+
+  private void saveGameMessage(GameMessage message) {
     Shashist shashistReceiver = shashistService.find(message.getReceiver().getId());
     Shashist shashistSender = shashistService.find(message.getSender().getId());
     Game game = message.getGame() != null ? gameService.find(message.getGame().getId()) : null;
 
     GameMessage gameMessage = new GameMessage();
+
     gameMessage.setMessageType(message.getMessageType());
     gameMessage.setData(message.getData());
     gameMessage.setMessage(message.getMessage());
 
     gameMessage.setGame(game);
-    gameMessage.setMove(message.getMove());
+
+    if (message.getMove() != null) {
+      gameMessage.setMove(new Move(message.getMove()));
+      gameMessage.getMove().setGameMessage(gameMessage);
+    }
 
     gameMessage.setReceiver(shashistReceiver);
     gameMessage.setSender(shashistSender);

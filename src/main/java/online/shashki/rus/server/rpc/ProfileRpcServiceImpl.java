@@ -46,7 +46,11 @@ public class ProfileRpcServiceImpl extends RemoteServiceServlet implements Profi
   @Override
   public void saveProfile(Shashist profile) {
     if (profile != null) {
-      shashistService.edit(profile);
+      Shashist shashist = shashistService.findById(profile.getId());
+
+      if (shashist != null) {
+        shashist.updateSerializable(profile);
+        shashistService.edit(shashist);}
     }
   }
 }

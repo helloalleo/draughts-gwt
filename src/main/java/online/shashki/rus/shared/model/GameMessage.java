@@ -32,9 +32,6 @@ public class GameMessage extends PersistableObjectImpl {
   @Column(name = "message_type")
   private MessageType messageType;
 
-  @GwtTransient
-  @com.fasterxml.jackson.annotation.JsonIgnore
-  @JsonIgnore
   private String data;
 
   @GwtTransient
@@ -123,6 +120,21 @@ public class GameMessage extends PersistableObjectImpl {
 
   public List<Shashist> getPlayerList() {
     return playerList;
+  }
+
+  @Override
+  public String toString() {
+    return "GameMessage{" +
+        "sender=" + sender +
+        ", receiver=" + receiver +
+        ", message='" + message + '\'' +
+        ", messageType=" + messageType +
+        ", data='" + data + '\'' +
+        ", sentDate=" + sentDate +
+        ", move=" + move +
+        ", game=" + game +
+        ", playerList=" + playerList +
+        '}';
   }
 
   public enum MessageType implements IsSerializable {

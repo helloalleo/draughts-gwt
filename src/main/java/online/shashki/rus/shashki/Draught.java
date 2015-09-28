@@ -14,8 +14,7 @@ import com.ait.lienzo.client.core.shape.Star;
 import com.ait.lienzo.client.core.types.Shadow;
 import com.ait.lienzo.shared.core.types.Color;
 import com.ait.lienzo.shared.core.types.ColorName;
-
-import java.io.Serializable;
+import com.google.gwt.dom.client.Element;
 
 /**
  * Created with IntelliJ IDEA.
@@ -23,9 +22,11 @@ import java.io.Serializable;
  * Date: 07.12.13
  * Time: 21:08
  */
-public class Draught extends Group implements Serializable {
-  private final int deskSide;
+public class Draught extends Group {
+  private int deskSide;
   private static Draught selectedDraught;
+
+  private Element element;
   private Board board;
 
   private int row;
@@ -46,7 +47,13 @@ public class Draught extends Group implements Serializable {
   private Draught currentDraught;
   private double offsetX;
 
-  public Draught(int deskSide, int rows, int cols, int row, int col, boolean white, double offsetX) {
+  public Draught(Integer deskSide,
+                 Integer rows,
+                 Integer cols,
+                 Integer row,
+                 Integer col,
+                 Boolean white,
+                 Double offsetX) {
     this.deskSide = deskSide;
     this.row = row;
     this.col = col;
@@ -89,6 +96,10 @@ public class Draught extends Group implements Serializable {
     updateShape();
 
     // TODO: Not Compile
+    bindHandlers();
+  }
+
+  private void bindHandlers() {
     addNodeMouseDownHandler(new NodeMouseDownHandler() {
       @Override
       public void onNodeMouseDown(NodeMouseDownEvent nodeMouseDownEvent) {
@@ -104,7 +115,7 @@ public class Draught extends Group implements Serializable {
     });
   }
 
-  private void onNodeTouch(Draught draught) {
+  public void onNodeTouch(Draught draught) {
     if (!isValidStroke()) {
       return;
     }
@@ -210,6 +221,17 @@ public class Draught extends Group implements Serializable {
 
   public void setCol(int col) {
     this.col = col;
+  }
+
+  @Override
+  public String toString() {
+    return "Draught{" +
+        "deskSide=" + deskSide +
+        ", row=" + row +
+        ", col=" + col +
+        ", white=" + white +
+        ", queen=" + queen +
+        '}';
   }
 
   public static Draught getSelectedDraught() {

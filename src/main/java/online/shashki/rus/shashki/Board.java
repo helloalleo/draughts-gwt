@@ -6,11 +6,10 @@ import com.ait.lienzo.client.core.event.NodeMouseClickHandler;
 import com.ait.lienzo.client.core.event.NodeTouchEndEvent;
 import com.ait.lienzo.client.core.event.NodeTouchEndHandler;
 import com.ait.lienzo.client.core.shape.Layer;
-import com.google.gwt.core.client.GWT;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-import com.google.web.bindery.event.shared.SimpleEventBus;
 import online.shashki.rus.client.event.*;
+import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.model.Move;
 import online.shashki.rus.shashki.util.Operator;
 import online.shashki.rus.shashki.util.PossibleOperators;
@@ -27,7 +26,6 @@ import java.util.Stack;
  * Time: 13:26
  */
 public class Board extends Layer {
-  private final BoardBackgroundLayer backgroundLayer;
   private List<Square> capturedSquares = new ArrayList<>();
   private List<Draught> myDraughtList;
   private List<Draught> opponentDraughtList;
@@ -43,8 +41,7 @@ public class Board extends Layer {
   // стек ходов шашек, когда они становятся дамками
   private Stack<Integer> queenStepStack = new Stack<>();
 
-//  private ShashkiGinjector shashkiGinjector = ShashkiGinjector.INSTANCE;
-  private EventBus eventBus;
+  //  private ShashkiGinjector shashkiGinjector = ShashkiGinjector.INSTANCE;
   private List<Square> highlightedSquares = new ArrayList<>();
   //  private String lastEndMove;
 //  private String lastStartMove;
@@ -56,10 +53,18 @@ public class Board extends Layer {
   private int moveCounter = 0;
   private boolean complexBeat = false;
 
-  public Board(BoardBackgroundLayer backgroundLayer, int rows, int cols, boolean white) {
+  private BoardBackgroundLayer backgroundLayer;
+
+  private EventBus eventBus;
+
+  public Board(EventBus playEventBus,
+               BoardBackgroundLayer backgroundLayer,
+               int rows,
+               int cols,
+               boolean white) {
+    this.eventBus = playEventBus;
     this.backgroundLayer = backgroundLayer;
     this.white = white;
-    this.eventBus = new SimpleEventBus();
     turn = white;
 
     this.rows = rows;
@@ -89,9 +94,9 @@ public class Board extends Layer {
       public void onPlayMove(PlayMoveCancelEvent event) {
         final Move move = event.getMove();
 //        if (move.isCancel()) {
-          eventBus.fireEvent(new NotationCancelMoveEvent(move));
+        eventBus.fireEvent(new NotationCancelMoveEvent(move));
 //          if (isMyTurn() && !move.isContinueBeat()) {
-            moveMyCanceled(move);
+        moveMyCanceled(move);
            /*else {
             if (move.isContinueBeat()) {
               moveOpponent(move);
@@ -182,7 +187,12 @@ public class Board extends Layer {
     try {
       Square square = backgroundLayer.getSquare(row, col);
       if (Square.isValid(row, col)) {
-        Draught draught = new Draught(backgroundLayer.getDeskSide(), rows, cols, row, col, white, backgroundLayer.getOffsetX());
+        Draught draught = new Draught(
+            backgroundLayer.getDeskSide(),
+            rows, cols,
+            row, col,
+            white,
+            backgroundLayer.getOffsetX());
         add(draught);
         square.setOccupant(draught);
         return draught;
@@ -207,7 +217,7 @@ public class Board extends Layer {
             highlightPossibleMoves(draught, clickedPiece);
           }
         } catch (SquareNotFoundException ignore) {
-//          GWT.log(e.getLocalizedMessage(), e);
+//          SHLog.log(e.getLocalizedMessage(), e);
         }
       }
     }
@@ -332,7 +342,7 @@ public class Board extends Layer {
         square = backgroundLayer.getSquare(opRow.apply(row, 1), opCol.apply(col, 1));
         nextSquare = backgroundLayer.getSquare(opRow.apply(row, 2), opCol.apply(col, 2));
       } catch (SquareNotFoundException ignore) {
-//        GWT.log(e.getLocalizedMessage(), e);
+//        SHLog.log(e.getLocalizedMessage(), e);
       }
       // Check moves to the op1, op2 of this Draught
       if (square != null && !square.isOccupied()) {
@@ -630,7 +640,7 @@ public class Board extends Layer {
         complexBeat = true;
       }
 
-      GWT.log(takenSquare.toString());
+      SHLog.log(takenSquare.toString());
       removeDraughtFrom(takenSquare);
     } else {
       move.setOnSimpleMove();
@@ -719,7 +729,7 @@ public class Board extends Layer {
 //        startSquare = parseStep(steps[0]);
 //        endSquare = parseStep(steps[1]);
 //      } catch (SquareNotFoundException e) {
-//        GWT.log(e.getLocalizedMessage(), e);
+//        SHLog.log(e.getLocalizedMessage(), e);
 //        return;
 //      }
 //      calcMove(startSquare, endSquare, null, false, stepCursor);
@@ -731,7 +741,7 @@ public class Board extends Layer {
 //          firstStep = parseStep(steps[i]);
 //          secondStep = parseStep(steps[i + 1]);
 //        } catch (SquareNotFoundException e) {
-//          GWT.log(e.getLocalizedMessage(), e);
+//          SHLog.log(e.getLocalizedMessage(), e);
 //          continue;
 //        }
 //        Square captured = findCaptured(firstStep, secondStep);
@@ -752,7 +762,7 @@ public class Board extends Layer {
 //        startSquare = parseStep(steps[0]);
 //        endSquare = parseStep(steps[1]);
 //      } catch (SquareNotFoundException e) {
-//        GWT.log(e.getLocalizedMessage(), e);
+//        SHLog.log(e.getLocalizedMessage(), e);
 //        return;
 //      }
 //      calcMove(startSquare, endSquare, null, false, stepCursor);
@@ -764,7 +774,7 @@ public class Board extends Layer {
 //          firstStep = parseStep(steps[i]);
 //          secondStep = parseStep(steps[i + 1]);
 //        } catch (SquareNotFoundException e) {
-//          GWT.log(e.getLocalizedMessage(), e);
+//          SHLog.log(e.getLocalizedMessage(), e);
 //          continue;
 //        }
 //        Square captured = findCaptured(firstStep, secondStep);
@@ -824,7 +834,7 @@ public class Board extends Layer {
 //  }
 
   public void moveOpponent(Move move) {
-    GWT.log("MOVE OPPONENT " + move.toString());
+    SHLog.log("MOVE OPPONENT " + move.toString());
 
     Square startSquare, endSquare, takenSquare = null;
     try {
@@ -856,15 +866,14 @@ public class Board extends Layer {
 
     if (move.isContinueBeat()) {
 //      move.mirror();
-      GWT.log("MOVE CONT BEAT " + move.toString());
+      SHLog.log("MOVE CONT BEAT " + move.toString());
     }
 
     if (!move.isCancel()) {
       final boolean first = isFirstMoveFlag();
       move.setNumber(move.getNumber())
           .setFirst(first);
-      Move forNotation = move.mirror();
-      eventBus.fireEvent(new NotationMoveEvent(forNotation));
+      eventBus.fireEvent(new NotationMoveEvent(move, isWhite()));
     }
 
     doMove(move); // сделать ход
@@ -881,8 +890,8 @@ public class Board extends Layer {
    * @param stepCursor
    */
   private void doMove(Move move, final int stepCursor) {
+    SHLog.log("DO MOVE " + move.toString());
     final Draught occupant = move.getStartSquare().getOccupant();
-    GWT.log("DO MOVE " + move.toString());
 
     // вычисляем координаты для перемещения шашки относительно её центра
     occupant.updateShape();
@@ -969,10 +978,9 @@ public class Board extends Layer {
     return turn;
   }
 
-  public boolean toggleTurn() {
+  public void toggleTurn() {
     turn = !turn;
     eventBus.fireEvent(new TurnChangeEvent(turn));
-    return turn;
   }
 
   public List<Draught> getMyDraughts() {
@@ -1013,7 +1021,7 @@ public class Board extends Layer {
         move.setEndSquare(endSquare);
 
         boolean isSimpleMove = move.isSimple();
-        GWT.log("SIMPLE MOVE " + isSimpleMove);
+        SHLog.log("SIMPLE MOVE " + isSimpleMove);
         if (isSimpleMove || move.isStopBeat()) {
           toggleTurn();
         }
@@ -1023,14 +1031,16 @@ public class Board extends Layer {
           }
         }
 
+        SHLog.log("END SQUARE " + endSquare);
         if (endSquare != null) {
 //          String op = isSimpleMove ? ANNOTATION_SIMPLE_MOVE : ANNOTATION_BEAT_MOVE;
 //          String calcMove = startSquare.toNotation(isWhite(), false, false)
 //              + op
 //              + endSquare.toNotation(isWhite(), true, false);
-          eventBus.fireEvent(new NotationMoveEvent(move));
+          eventBus.fireEvent(new NotationMoveEvent(move, isWhite()));
           eventBus.fireEvent(new PlayMoveMessageEvent(move));
           moveMyStack.push(move);
+          SHLog.log("MOVE DRAUGHT " + move.toString());
 
           AnimationProperties props = new AnimationProperties();
           props.push(AnimationProperty.Properties.X(endSquare.getCenterX()));
@@ -1051,6 +1061,7 @@ public class Board extends Layer {
 
   /**
    * Вычисляем является ли ход первым в полном ходе a1 b2 - а1 первый ход
+   *
    * @return
    */
   private boolean isFirstMoveFlag() {
@@ -1075,10 +1086,10 @@ public class Board extends Layer {
 
   private void moveCanceled(Move move) {
 //    if (!isMyTurn() && move.isContinueBeat()) {
-      move = move.mirror();
+    move = move.mirror();
 //    }
 
-    GWT.log("MOVE CANCELED " + move.toString());
+    SHLog.log("MOVE CANCELED " + move.toString());
     int startRow = move.getStartSquare().getRow();
     int startCol = move.getStartSquare().getCol();
 
@@ -1098,11 +1109,11 @@ public class Board extends Layer {
 //      move.setStartSquare(startSquare);
 //      move.setEndSquare(endSquare);
 //    } else {
-      move.setStartSquare(endSquare);
-      move.setEndSquare(startSquare);
+    move.setStartSquare(endSquare);
+    move.setEndSquare(startSquare);
 //    }
 
-    GWT.log("MOVE CANCELED REVERSED " + move.toString());
+    SHLog.log("MOVE CANCELED REVERSED " + move.toString());
 
     Square taken = null;
     if (!move.isSimple()) {
@@ -1115,13 +1126,13 @@ public class Board extends Layer {
       move.setTakenSquare(taken);
     }
 
-    GWT.log("MOVE CANCELED 1");
+    SHLog.log("MOVE CANCELED 1");
     doMove(move);
-    GWT.log("MOVE CANCELED 2");
+    SHLog.log("MOVE CANCELED 2");
   }
 
   private void moveOpponentCanceled(Move moveDto) {
-    GWT.log("OPPONENT CANCELED");
+    SHLog.log("OPPONENT CANCELED");
     moveCanceled(moveDto);
     Move canceled = moveOpponentStack.pop();
     if (canceled.isFirst()) {
@@ -1130,7 +1141,7 @@ public class Board extends Layer {
   }
 
   private void moveMyCanceled(Move moveDto) {
-    GWT.log("MY CANCELED");
+    SHLog.log("MY CANCELED");
     moveCanceled(moveDto);
     Move canceled = moveMyStack.pop();
     if (canceled.isFirst()) {

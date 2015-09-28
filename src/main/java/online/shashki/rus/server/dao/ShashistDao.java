@@ -10,8 +10,9 @@ import online.shashki.rus.shared.model.Shashist;
  */
 public interface ShashistDao extends Dao<Shashist> {
 
-  public Shashist findByVkUid(String uid);
+  Shashist findByVkUid(String uid);
 
   Shashist findBySessionId(String sessionId);
 
+  Shashist findById(Long shashistId);
 }
