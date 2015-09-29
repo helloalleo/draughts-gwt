@@ -31,7 +31,7 @@ import java.util.*;
 )
 public class GameWebsocket {
 
-  private static Map<Shashist, Session> peers = Collections.synchronizedMap(new HashMap<>());
+  private static Map<Shashist, Session> peers = Collections.synchronizedMap(new HashMap<Shashist, Session>());
   private final long MAX_IDLE_TIMEOUT = 1000 * 60 * 15;
   @Inject
   private ShashistService shashistService;
@@ -85,19 +85,21 @@ public class GameWebsocket {
   }
 
   private void handleChatMessage(Session session, GameMessage message) {
-    session.getOpenSessions().parallelStream().filter(Session::isOpen).forEach(peer -> {
-      sendMessage(peer, message);
-    });
+    for (Session s : session.getOpenSessions()) {
+      if (s.isOpen()) {
+        sendMessage(s, message);
+      }
+    }
   }
 
   private void handleNewPlayer(GameMessage message, Session session) {
     Shashist shashist = message.getSender();
     final Long shashistId = shashist.getId();
-    if (!peers.isEmpty()) {
-      boolean registered = peers.keySet().parallelStream().filter(sh -> sh.getId().equals(shashistId))
-          .findAny().isPresent();
-      if (registered) {
-        return;
+    if (!peers.isEmpty() && shashistId != null) {
+      for (Shashist sh : peers.keySet()) {
+        if (shashistId.equals(sh.getId())) {
+          return;
+        }
       }
     }
 
@@ -114,11 +116,16 @@ public class GameWebsocket {
 
   @OnClose
   public void onClose(Session session) {
-    final Optional<Shashist> first = peers.keySet().stream().filter(sh -> peers.get(sh) == session).findFirst();
-    if (!first.isPresent()) {
+    Shashist shashist = null;
+    for (Shashist sh : peers.keySet()) {
+      if (peers.get(sh).equals(session)) {
+        shashist = sh;
+        break;
+      }
+    }
+    if (shashist == null) {
       return;
     }
-    Shashist shashist = first.get();
     shashist = shashistService.find(shashist.getId());
 
     shashist.setOnline(false);
@@ -140,12 +147,16 @@ public class GameWebsocket {
     if (receiver == null) {
       return;
     }
-    final Optional<Shashist> first = peers.keySet().stream()
-        .filter(sh -> sh.getId().equals(receiver.getId())).findFirst();
-    if (!first.isPresent()) {
+    Shashist shashist = null;
+    for (Shashist sh : peers.keySet()) {
+      if (receiver.getId().equals(sh.getId())) {
+        shashist = sh;
+        break;
+      }
+    }
+    if (shashist == null) {
       return;
     }
-    Shashist shashist = first.get();
     Session session = peers.get(shashist);
     if (session == null) {
       return;
@@ -187,9 +198,11 @@ public class GameWebsocket {
     List<Shashist> shashistList = shashistService.findAll();
     gameMessage.setPlayerList(shashistList);
     gameMessageService.create(gameMessage);
-    session.getOpenSessions().stream().filter(Session::isOpen).forEach(peer -> {
-      sendMessage(peer, gameMessage);
-    });
+    for (Session s : session.getOpenSessions()) {
+      if (s.isOpen()) {
+        sendMessage(s, gameMessage);
+      }
+    }
   }
 
   private void sendMessage(Session session, GameMessage message) {

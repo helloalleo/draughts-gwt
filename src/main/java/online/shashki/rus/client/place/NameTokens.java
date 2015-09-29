@@ -1,6 +1,7 @@
 package online.shashki.rus.client.place;
 
 import com.google.inject.Inject;
+import online.shashki.rus.client.utils.Utils;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 
 public class NameTokens {
@@ -46,6 +47,10 @@ public class NameTokens {
 
   public Link[] getProfileLinks() {
     return new Link[]{myGamesLink, settingsLink};
+  }
+
+  public Link[] getAllLinks() {
+    return Utils.concatLinks(Utils.concatLinks(getLeftLinks(), getRightAuthLinks()), getRightAuthLinks());
   }
 
   public static class Link {

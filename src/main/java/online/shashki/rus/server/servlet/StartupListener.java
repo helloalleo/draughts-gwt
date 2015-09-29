@@ -1,11 +1,13 @@
 package online.shashki.rus.server.servlet;
 
 import online.shashki.rus.server.service.ShashistService;
+import online.shashki.rus.shared.model.Shashist;
 
 import javax.inject.Inject;
 import javax.servlet.ServletContextEvent;
 import javax.servlet.ServletContextListener;
 import javax.servlet.annotation.WebListener;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -22,12 +24,13 @@ public class StartupListener implements ServletContextListener {
   @Override
   public void contextInitialized(ServletContextEvent servletContextEvent) {
     // сбрасываем всех пользователей как не залогиненных при старте контейнера
-    shashistService.findAll().parallelStream().forEach(shashist -> {
+    final List<Shashist> shashistList = shashistService.findAll();
+    for (Shashist shashist : shashistList) {
       shashist.setOnline(false);
       shashist.setPlaying(false);
       shashist.setLoggedIn(false);
       shashistService.edit(shashist);
-    });
+    }
   }
 
   @Override

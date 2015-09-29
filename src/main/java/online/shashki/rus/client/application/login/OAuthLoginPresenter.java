@@ -12,6 +12,7 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import online.shashki.rus.client.application.ApplicationPresenter;
 import online.shashki.rus.client.place.NameTokens;
+import online.shashki.rus.client.utils.SHCookies;
 
 
 public class OAuthLoginPresenter extends Presenter<OAuthLoginPresenter.MyView, OAuthLoginPresenter.MyProxy> implements OAuthLoginUiHandlers {
@@ -25,6 +26,8 @@ public class OAuthLoginPresenter extends Presenter<OAuthLoginPresenter.MyView, O
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     getView().setUiHandlers(this);
+    SHCookies.setLocation(NameTokens.loginPage);
+
   }
 
   interface MyView extends View, HasUiHandlers<OAuthLoginUiHandlers> {

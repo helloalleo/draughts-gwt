@@ -24,12 +24,13 @@ import online.shashki.rus.client.application.widget.NotationPanel;
 import online.shashki.rus.client.application.widget.dialog.ConfirmeDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InviteDialogBox;
-import online.shashki.rus.client.event.GameMessageEvent;
+import online.shashki.rus.client.event.ClearNotationEvent;
+import online.shashki.rus.client.event.RemovePlayMoveOpponentHandlerEvent;
+import online.shashki.rus.client.event.UpdatePlayerListEvent;
 import online.shashki.rus.client.resources.ResourceLoader;
 import online.shashki.rus.client.resources.constants.GSSConstants;
 import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
-import online.shashki.rus.shared.model.GameMessage;
 import online.shashki.rus.shared.model.Move;
 import online.shashki.rus.shared.model.Shashist;
 import online.shashki.rus.shashki.Board;
@@ -294,7 +295,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Override
   public void clearPlayComponent() {
+    lienzoPanel.removeAll();
+    board.clearDesk();
+    shashki.remove(lienzoPanel);
+    initEmptyDeskPanel();
 
+    turnLabel.setHTML(messages.playDidNotStart());
   }
 
   public void setBeatenMy(int count) {
@@ -367,6 +373,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   private BoardBackgroundLayer initDeskPanel(boolean white) {
     int lienzoSide = lienzoPanel.getHeight() - 50;
+    if (lienzoSide > 800) {
+      lienzoSide = 800;
+    } else if (lienzoSide < 200) {
+      lienzoSide = 200;
+    }
     BoardBackgroundLayer boardBackgroundLayer = new BoardBackgroundLayer(
         lienzoSide, lienzoSide - 30,
         8, 8);

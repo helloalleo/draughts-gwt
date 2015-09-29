@@ -1,8 +1,5 @@
 package online.shashki.rus.client.application.widget.dialog;
 
-import com.google.gwt.core.client.GWT;
-import online.shashki.rus.shared.locale.ShashkiMessages;
-
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -16,6 +13,6 @@ public class InfoDialogBox extends MyDialogBox {
   }
 
   public static InfoDialogBox setMessage(String message) {
-    return new InfoDialogBox(messages.info(), message);
+    return new InfoDialogBox(messages.info(), message + ".");
   }
 }

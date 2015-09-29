@@ -13,6 +13,7 @@ import online.shashki.rus.client.application.ApplicationPresenter;
 import online.shashki.rus.client.application.component.play.PlayComponentPresenter;
 import online.shashki.rus.client.application.login.CurrentSession;
 import online.shashki.rus.client.place.NameTokens;
+import online.shashki.rus.client.utils.SHCookies;
 
 public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter.MyProxy>
     implements HomeUiHandlers {
@@ -29,7 +30,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     this.playPresenter = playPresenterFactory;
-//    currentSession.isAuthenticated();
+    SHCookies.setLocation(NameTokens.homePage);
   }
 
   @Override

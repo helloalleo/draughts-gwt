@@ -478,4 +478,12 @@ public class GameWebsocket implements WebSocketCallback {
   public boolean isPlayerHasWhiteColor() {
     return connectionSession.isPlayerHasWhiteColor();
   }
+
+  public void setOpponent(Shashist opponent) {
+    connectionSession.setOpponent(opponent);
+  }
+
+  public void setGame(Game game) {
+    connectionSession.setGame(game);
+  }
 }

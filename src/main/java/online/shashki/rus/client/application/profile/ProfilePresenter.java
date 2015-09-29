@@ -13,6 +13,7 @@ import online.shashki.rus.client.application.ApplicationPresenter;
 import online.shashki.rus.client.application.profile.mygames.MyGamesPresenter;
 import online.shashki.rus.client.application.profile.settings.SettingsPresenter;
 import online.shashki.rus.client.place.NameTokens;
+import online.shashki.rus.client.utils.SHCookies;
 
 
 public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, ProfilePresenter.MyProxy> implements ProfileUiHandlers {
@@ -35,6 +36,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
     this.settingsPresenter = settingsPresenter;
 
     getView().setUiHandlers(this);
+    SHCookies.setLocation(NameTokens.profilePage);
   }
 
   @Override

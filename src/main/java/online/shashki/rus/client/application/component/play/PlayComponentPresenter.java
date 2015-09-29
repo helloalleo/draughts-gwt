@@ -280,6 +280,14 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     eventBus.addHandler(ClearPlayComponentEvent.TYPE, new ClearPlayComponentEventHandler() {
       @Override
       public void onClearPlayComponent(ClearPlayComponentEvent event) {
+        eventBus.fireEvent(new ClearNotationEvent());
+        eventBus.fireEvent(new UpdatePlayerListEvent());
+        eventBus.fireEvent(new RemovePlayMoveOpponentHandlerEvent());
+
+        gameWebsocket.setOpponent(null);
+        getView().setOpponent(null);
+        gameWebsocket.setGame(null);
+
         getView().clearPlayComponent();
         getView().hidePlayingButtonsAndShowPlayButton();
       }

@@ -7,10 +7,13 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
+import online.shashki.rus.client.utils.SHCookies;
+import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import org.gwtbootstrap3.client.ui.AnchorListItem;
 import org.gwtbootstrap3.client.ui.NavbarNav;
@@ -75,6 +78,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
             navRight.add(anchor);
           }
         }
+        highlightMenu();
       }
     });
   }
@@ -101,6 +105,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
         getUiHandlers().displayPage(link.token);
       }
     });
+    anchor.setId(link.token);
     return anchor;
   }
 
@@ -108,6 +113,29 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     if (link != null) {
       link.setActive(false);
     }
+  }
+
+  private void highlightMenu() {
+    String nameToken = SHCookies.getLocation();
+    if (nameToken == null || nameToken.isEmpty()) {
+      return;
+    }
+    SHLog.log("highlight token " + nameToken);
+    for (Widget aNavLeft : navLeft) {
+      if (setActiveAnchor(nameToken, (AnchorListItem) aNavLeft)) return;
+    }
+    for (Widget widget : navRight) {
+      if (setActiveAnchor(nameToken, (AnchorListItem) widget)) return;
+    }
+  }
+
+  private boolean setActiveAnchor(String nameToken, AnchorListItem anchor) {
+    if (nameToken.equals(anchor.getId())) {
+      anchor.setActive(true);
+      prevAnchor = anchor;
+      return true;
+    }
+    return false;
   }
 
   interface Binder extends UiBinder<HTMLPanel, MenuView> {

@@ -9,6 +9,7 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.shashki.rus.client.rpc.ProfileRpcServiceAsync;
+import online.shashki.rus.client.utils.SHCookies;
 
 public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> implements MenuUiHandlers {
   private final PlaceManager placeManager;
@@ -32,6 +33,7 @@ public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> impleme
         .nameToken(token)
         .build();
 
+    SHCookies.setLocation(token);
     placeManager.revealPlace(placeRequest);
   }
 
