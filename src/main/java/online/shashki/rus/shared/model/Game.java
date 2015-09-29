@@ -39,6 +39,9 @@ public class Game extends PersistableObjectImpl {
   @Column(name = "party_notation", length = 1000)
   private String partyNotation;
 
+  @Column(name = "end_game_screenshot")
+  public String endGameScreenshot;
+
   public Shashist getPlayerWhite() {
     return playerWhite;
   }
@@ -85,5 +88,14 @@ public class Game extends PersistableObjectImpl {
 
   public void setPartyNotation(String partyNotation) {
     this.partyNotation = partyNotation;
+  }
+
+  public String getEndGameScreenshot() {
+    return endGameScreenshot;
+  }
+
+  public Game setEndGameScreenshot(String endGameScreenshot) {
+    this.endGameScreenshot = endGameScreenshot;
+    return this;
   }
 }

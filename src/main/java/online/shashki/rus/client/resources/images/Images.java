@@ -19,9 +19,12 @@ public interface Images extends ClientBundle {
   @Source("img/busy.gif")
   ImageResource busyIconImage();
 
-  @Source("img/close.png")
-  ImageResource closeIconImage();
-
   @Source("img/loading.gif")
   ImageResource loadIconImage();
+
+  @Source("img/black-win.png")
+  ImageResource blackWin();
+
+  @Source("img/white-win.png")
+  ImageResource whiteWin();
 }

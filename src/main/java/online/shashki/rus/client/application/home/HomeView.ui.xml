@@ -1,11 +1,16 @@
 <!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
         >
 
     <ui:with field="res" type="online.shashki.rus.client.resources.AppResources"/>
 
     <g:HTMLPanel>
-        <g:SimplePanel ui:field="play"/>
+        <b:Button ui:field="newGameButton" size="LARGE">Новая игра</b:Button>
+        <hr/>
+        <g:SimplePanel ui:field="play" visible="false"/>
+        <hr/>
+        <g:SimplePanel ui:field="playShowPanel"/>
     </g:HTMLPanel>
 </ui:UiBinder>

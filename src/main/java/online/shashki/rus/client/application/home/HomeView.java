@@ -16,8 +16,10 @@
 
 package online.shashki.rus.client.application.home;
 
+import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -27,6 +29,8 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   @UiField
   SimplePanel play;
+  @UiField
+  SimplePanel playShowPanel;
 
   @Inject
   HomeView(
@@ -34,6 +38,12 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     initWidget(binder.createAndBindUi(this));
 
     bindSlot(HomePresenter.SLOT_PLAY, play);
+    bindSlot(HomePresenter.SLOT_PLAY_SHOW_PANEL, playShowPanel);
+  }
+
+  @UiHandler("newGameButton")
+  public void onNewGame(ClickEvent event) {
+    play.setVisible(!play.isVisible());
   }
 
   interface Binder extends UiBinder<Widget, HomeView> {

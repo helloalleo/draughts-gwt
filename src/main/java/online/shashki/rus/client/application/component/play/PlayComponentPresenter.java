@@ -260,6 +260,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
             if (game.getPlayEndStatus() == null) {
               endGame.setPartyNotation(NotationPanel.getNotation());
               endGame.setPlayEndDate(new Date());
+              endGame.setEndGameScreenshot(getView().takeScreenshot());
               gameService.saveGame(endGame, new AsyncCallback<Void>() {
                 @Override
                 public void onFailure(Throwable caught) {
@@ -337,6 +338,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     void showInviteDialog(ClickHandler inviteClickHandler);
 
     boolean opponentColor();
+
+    String takeScreenshot();
 
     void setOpponent(Shashist opponent);
   }

@@ -4,6 +4,7 @@ import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.client.core.shape.Text;
 import com.ait.lienzo.client.widget.LienzoPanel;
+import com.ait.lienzo.shared.core.types.DataURLType;
 import com.google.gwt.cell.client.AbstractCell;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
@@ -369,6 +370,15 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public boolean opponentColor() {
     return opponentColor;
+  }
+
+  @Override
+  public String takeScreenshot() {
+    return takeScreenshot(DataURLType.JPG, true);
+  }
+
+  public String takeScreenshot(DataURLType dataType, boolean includeBackgroundLayer) {
+    return lienzoPanel.toDataURL(dataType, includeBackgroundLayer);
   }
 
   private BoardBackgroundLayer initDeskPanel(boolean white) {
