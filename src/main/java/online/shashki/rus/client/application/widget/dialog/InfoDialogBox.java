@@ -8,11 +8,11 @@ package online.shashki.rus.client.application.widget.dialog;
  */
 public class InfoDialogBox extends MyDialogBox {
 
-  private InfoDialogBox(String header, String content) {
-    super(header, content);
+  private InfoDialogBox(String content) {
+    super(messages.info(), content);
   }
 
   public static InfoDialogBox setMessage(String message) {
-    return new InfoDialogBox(messages.info(), message + ".");
+    return new InfoDialogBox(message + ".");
   }
 }

@@ -1,5 +1,7 @@
+@require "variables";
+
 .mainContainer {
-    margin-top: eval("online.shashki.rus.client.resources.constants.GSSConstants.mainContainerMarginTop()");
+    margin-top: S_MAIN_CONTAINER_MARGIN_TOP;
 }
 
 .shashkiColumn {

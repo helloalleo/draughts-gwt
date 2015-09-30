@@ -8,8 +8,8 @@ package online.shashki.rus.client.application.widget.dialog;
  */
 public class ErrorDialogBox extends MyDialogBox {
 
-  private ErrorDialogBox(String header, String content) {
-    super(header, content);
+  private ErrorDialogBox(String content) {
+    super(messages.error(), content);
   }
 
   private static String constructMessage(String message, Throwable throwable) {
@@ -23,14 +23,14 @@ public class ErrorDialogBox extends MyDialogBox {
   }
 
   public static ErrorDialogBox setMessage(Throwable caught) {
-    return new ErrorDialogBox(messages.error(), constructMessage(null, caught));
+    return new ErrorDialogBox(constructMessage(null, caught));
   }
 
   public static ErrorDialogBox setMessage(String message, Throwable throwable) {
-    return new ErrorDialogBox(messages.error(), constructMessage(message, throwable));
+    return new ErrorDialogBox(constructMessage(message, throwable));
   }
 
   public static ErrorDialogBox setMessage(String message) {
-    return new ErrorDialogBox(messages.error(), constructMessage(message, null));
+    return new ErrorDialogBox(constructMessage(message, null));
   }
 }

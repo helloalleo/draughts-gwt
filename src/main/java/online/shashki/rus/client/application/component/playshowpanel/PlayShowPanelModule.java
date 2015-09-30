@@ -7,8 +7,6 @@ import online.shashki.rus.client.application.component.playrow.PlayRowModule;
 public class PlayShowPanelModule extends AbstractPresenterModule {
   @Override
   protected void configure() {
-    install(new PlayRowModule());
-
     bindPresenterWidget(PlayShowPanelPresenter.class, PlayShowPanelPresenter.MyView.class, PlayShowPanelView.class);
   }
 }

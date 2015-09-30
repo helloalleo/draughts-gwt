@@ -1,6 +1,8 @@
 package online.shashki.rus.shared.model;
 
 import com.google.gwt.user.client.rpc.GwtTransient;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
@@ -12,6 +14,7 @@ import java.util.Date;
  * Date: 31.12.14
  * Time: 16:18
  */
+@Singleton
 @Entity
 @Table(name = "game")
 public class Game extends PersistableObjectImpl {
@@ -41,6 +44,10 @@ public class Game extends PersistableObjectImpl {
 
   @Column(name = "end_game_screenshot")
   public String endGameScreenshot;
+
+  @Inject
+  public Game() {
+  }
 
   public Shashist getPlayerWhite() {
     return playerWhite;

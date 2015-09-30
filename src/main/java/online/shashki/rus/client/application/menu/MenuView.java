@@ -121,8 +121,8 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
       return;
     }
     SHLog.log("highlight token " + nameToken);
-    for (Widget aNavLeft : navLeft) {
-      if (setActiveAnchor(nameToken, (AnchorListItem) aNavLeft)) return;
+    for (Widget widget : navLeft) {
+      if (setActiveAnchor(nameToken, (AnchorListItem) widget)) return;
     }
     for (Widget widget : navRight) {
       if (setActiveAnchor(nameToken, (AnchorListItem) widget)) return;

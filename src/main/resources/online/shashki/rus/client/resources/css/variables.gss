@@ -1,0 +1,18 @@
+@provide 'variables';
+
+/**
+ * Colors
+ */
+
+@def C_PANEL_DARK               eval("online.shashki.rus.client.resources.Variables.C_PANEL_DARK");
+@def C_PANEL_LIGHT              eval("online.shashki.rus.client.resources.Variables.C_PANEL_LIGHT");
+@def C_PANEL_MEDIUM             eval("online.shashki.rus.client.resources.Variables.C_PANEL_MEDIUM");
+@def C_MESSAGEBOX               eval("online.shashki.rus.client.resources.Variables.C_MESSAGEBOX");
+@def C_TITLE                    eval("online.shashki.rus.client.resources.Variables.C_TITLE");
+
+/**
+ * Sizes
+ */
+
+@def S_TITLE                    eval("online.shashki.rus.client.resources.Variables.S_TITLE");
+@def S_MAIN_CONTAINER_MARGIN_TOP eval("online.shashki.rus.client.resources.Variables.S_MAIN_CONTAINER_MARGIN_TOP");

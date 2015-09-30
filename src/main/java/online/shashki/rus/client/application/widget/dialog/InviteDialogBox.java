@@ -8,8 +8,6 @@ import com.google.gwt.inject.client.AsyncProvider;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
-import online.shashki.rus.client.resources.ResourceLoader;
-import online.shashki.rus.shared.locale.ShashkiMessages;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
 import org.gwtbootstrap3.client.ui.Image;
@@ -60,7 +58,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     radioGroup.add(blackRadio);
     panel.add(radioGroup);
 
-    final Image waitImage = new Image(ResourceLoader.INSTANCE.images().busyIconImage());
+    final Image waitImage = new Image(/*ResourceLoader.INSTANCE.images().busyIconImage()*/);
     waitMessage.setVisible(false);
     waitMessage.add(waitImage);
     waitMessageLabel = new Label(messages.waitResponse());

@@ -34,11 +34,13 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   @Inject
   HomeView(
-      Binder binder) {
+      Binder binder
+      ) {
     initWidget(binder.createAndBindUi(this));
 
+
     bindSlot(HomePresenter.SLOT_PLAY, play);
-    bindSlot(HomePresenter.SLOT_PLAY_SHOW_PANEL, playShowPanel);
+//    bindSlot(HomePresenter.SLOT_PLAY_SHOW_PANEL, playShowPanel);
   }
 
   @UiHandler("newGameButton")

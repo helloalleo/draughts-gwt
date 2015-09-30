@@ -25,11 +25,8 @@ import online.shashki.rus.client.application.widget.NotationPanel;
 import online.shashki.rus.client.application.widget.dialog.ConfirmeDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InviteDialogBox;
-import online.shashki.rus.client.event.ClearNotationEvent;
-import online.shashki.rus.client.event.RemovePlayMoveOpponentHandlerEvent;
-import online.shashki.rus.client.event.UpdatePlayerListEvent;
-import online.shashki.rus.client.resources.ResourceLoader;
-import online.shashki.rus.client.resources.constants.GSSConstants;
+import online.shashki.rus.client.resources.AppResources;
+import online.shashki.rus.client.resources.Variables;
 import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Move;
@@ -47,6 +44,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     implements PlayComponentPresenter.MyView {
 
   private final ShashkiMessages messages;
+  private final AppResources resources;
   @UiField
   HTMLPanel main;
   @UiField
@@ -87,10 +85,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Inject
   PlayComponentView(Binder uiBinder,
-                    ShashkiMessages messages
-                    ) {
+                    ShashkiMessages messages,
+                    AppResources resources) {
     initWidget(uiBinder.createAndBindUi(this));
     this.messages = messages;
+    this.resources = resources;
 //    this.injectionFactory = injectionFactory; //GWT.create(AssistedInjectionFactory.class);
 
     initEmptyDeskPanel();
@@ -158,7 +157,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   private void initEmptyDeskPanel() {
-    final String mainContainerMarginTop = GSSConstants.mainContainerMarginTop();
+    final String mainContainerMarginTop = Variables.S_MAIN_CONTAINER_MARGIN_TOP;
     final String highStr = mainContainerMarginTop.substring(0, mainContainerMarginTop.length() - 2); // отсекаем строку пикселей
     int shashkiSide = Window.getClientHeight() - Integer.valueOf(highStr);
     shashkiColumn.setWidth(shashkiSide + "px");
@@ -222,14 +221,14 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
             } else {
               // TODO: не показывать статус. Пусть играют с теми кого знают либо наугад
               if (value.isPlaying()) {
-                img = new org.gwtbootstrap3.client.ui.Image(ResourceLoader.INSTANCE.images().playingIconImage().getSafeUri());
+                img = new org.gwtbootstrap3.client.ui.Image(resources.images().playingIconImage().getSafeUri());
                 img.setTitle(playerPublicName + messages.playingTitle());
               } else {
                 if (value.isOnline()) {
-                  img = new org.gwtbootstrap3.client.ui.Image(ResourceLoader.INSTANCE.images().onlineIconImage().getSafeUri());
+                  img = new org.gwtbootstrap3.client.ui.Image(resources.images().onlineIconImage().getSafeUri());
                   img.setTitle(playerPublicName + messages.onlineTitle());
                 } else {
-                  img = new org.gwtbootstrap3.client.ui.Image(ResourceLoader.INSTANCE.images().offlineIconImage().getSafeUri());
+                  img = new org.gwtbootstrap3.client.ui.Image(resources.images().offlineIconImage().getSafeUri());
                   img.setTitle(playerPublicName + messages.offlineTitle());
                 }
               }

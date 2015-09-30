@@ -22,6 +22,7 @@ import online.shashki.rus.client.application.home.HomeModule;
 import online.shashki.rus.client.application.login.OAuthLoginModule;
 import online.shashki.rus.client.application.menu.MenuModule;
 import online.shashki.rus.client.application.profile.ProfileModule;
+import online.shashki.rus.client.application.widget.dialog.DialogModule;
 
 public class ApplicationModule extends AbstractPresenterModule {
   @Override
