@@ -12,7 +12,6 @@ import online.shashki.rus.client.websocket.WebsocketModule;
 public class ClientModule extends AbstractPresenterModule {
   @Override
   protected void configure() {
-    install(new GinFactoryModuleBuilder().build(WidgetsFactory.class));
     install(new DefaultModule.Builder()
         .defaultPlace(NameTokens.homePage)
         .errorPlace(NameTokens.errorPage)

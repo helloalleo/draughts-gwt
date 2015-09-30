@@ -24,6 +24,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import org.gwtbootstrap3.client.ui.Button;
 
 public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements HomePresenter.MyView {
 
@@ -31,6 +32,8 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   SimplePanel play;
   @UiField
   SimplePanel playShowPanel;
+  @UiField
+  Button newGameButton;
 
   @Inject
   HomeView(
@@ -40,12 +43,17 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
 
     bindSlot(HomePresenter.SLOT_PLAY, play);
-//    bindSlot(HomePresenter.SLOT_PLAY_SHOW_PANEL, playShowPanel);
+    bindSlot(HomePresenter.SLOT_PLAY_SHOW_PANEL, playShowPanel);
   }
 
   @UiHandler("newGameButton")
   public void onNewGame(ClickEvent event) {
     play.setVisible(!play.isVisible());
+  }
+
+  @Override
+  public void setShowLoggedInControls(Boolean loggedIn) {
+    newGameButton.setVisible(loggedIn);
   }
 
   interface Binder extends UiBinder<Widget, HomeView> {
