@@ -16,34 +16,32 @@
 
 package online.shashki.rus.client.application.home;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
-import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import online.shashki.rus.client.application.component.playshowpanel.PlayShowPanel;
 import org.gwtbootstrap3.client.ui.Button;
 
 public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements HomePresenter.MyView {
 
+  private static Binder binder = GWT.create(Binder.class);
+
   @UiField
   SimplePanel play;
   @UiField
-  SimplePanel playShowPanel;
+  PlayShowPanel playShowPanel;
   @UiField
   Button newGameButton;
 
-  @Inject
-  HomeView(
-      Binder binder
-      ) {
+  HomeView() {
     initWidget(binder.createAndBindUi(this));
 
-
     bindSlot(HomePresenter.SLOT_PLAY, play);
-    bindSlot(HomePresenter.SLOT_PLAY_SHOW_PANEL, playShowPanel);
   }
 
   @UiHandler("newGameButton")

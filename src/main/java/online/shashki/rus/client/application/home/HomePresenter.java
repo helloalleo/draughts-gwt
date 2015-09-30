@@ -14,7 +14,6 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.shashki.rus.client.application.ApplicationPresenter;
 import online.shashki.rus.client.application.component.play.PlayComponentPresenter;
-import online.shashki.rus.client.application.component.playshowpanel.PlayShowPanelPresenter;
 import online.shashki.rus.client.application.login.CurrentSession;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
@@ -28,11 +27,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     implements HomeUiHandlers {
 
   public static final PermanentSlot<PlayComponentPresenter> SLOT_PLAY = new PermanentSlot<>();
-  public static final PermanentSlot<PlayShowPanelPresenter> SLOT_PLAY_SHOW_PANEL
-      = new PermanentSlot<>();
-  private final PlayShowPanelPresenter.Factory playShowPanelFactory;
   private PlayComponentPresenter playPresenter;
-  private PlayShowPanelPresenter playShowPanelPresenter;
   private GameRpcServiceAsync gameService;
 
   @Inject
@@ -42,16 +37,13 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       MyProxy proxy,
       CurrentSession currentSession,
       GameRpcServiceAsync gameService,
-      PlayComponentPresenter playPresenter,
-      final PlayShowPanelPresenter.Factory playShowPanelFactory) {
+      PlayComponentPresenter playPresenter) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     getView().setUiHandlers(this);
 
-    getView().setShowLoggedInControls(currentSession.isLoggedIn());
     this.gameService = gameService;
     this.playPresenter = playPresenter;
-    this.playShowPanelFactory = playShowPanelFactory;
 
     SHCookies.setLocation(NameTokens.homePage);
   }
@@ -66,8 +58,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   @Override
   protected void onReveal() {
     super.onReveal();
-
-    setInSlot(SLOT_PLAY_SHOW_PANEL, playShowPanelPresenter);
   }
 
   @Override
@@ -83,7 +73,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
       @Override
       public void onSuccess(List<Game> result) {
-        playShowPanelPresenter = playShowPanelFactory.create(result);
         getProxy().manualReveal(HomePresenter.this);
       }
     });

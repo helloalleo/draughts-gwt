@@ -1,16 +1,19 @@
 
-package online.shashki.rus.client.application.component.playitem;
+package online.shashki.rus.client.application.component.playshowpanel;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Image;
-import com.google.inject.Inject;
-import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.shared.model.Game;
 
-public class PlayItemView extends ViewWithUiHandlers<PlayItemUiHandlers> implements PlayItemPresenter.MyView {
+public class PlayItem extends Composite {
+
+  private static Binder binder = GWT.create(Binder.class);
+
   @UiField
   HTMLPanel panel;
   @UiField
@@ -24,12 +27,10 @@ public class PlayItemView extends ViewWithUiHandlers<PlayItemUiHandlers> impleme
   @UiField
   HTML playEndDate;
 
-  @Inject
-  PlayItemView(Binder binder) {
+  PlayItem() {
     initWidget(binder.createAndBindUi(this));
   }
 
-  @Override
   public void setGame(Game game) {
     whitePlayerName.setHTML(game.getPlayerWhite().getPlayerName());
     blackPlayerName.setHTML(game.getPlayerBlack().getPlayerName());
@@ -37,6 +38,6 @@ public class PlayItemView extends ViewWithUiHandlers<PlayItemUiHandlers> impleme
     playEndDate.setHTML(game.getPlayEndDate().toString());
   }
 
-  interface Binder extends UiBinder<HTMLPanel, PlayItemView> {
+  interface Binder extends UiBinder<HTMLPanel, PlayItem> {
   }
 }
