@@ -2,11 +2,13 @@
 package online.shashki.rus.client.application.component.playrow;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
-import online.shashki.rus.client.application.component.playitem.PlayItemModule;
+import online.shashki.rus.client.application.component.playshowpanel.PlayShowPanelPresenter;
+import online.shashki.rus.client.application.component.playshowpanel.PlayShowPanelView;
 
 public class PlayRowModule extends AbstractPresenterModule {
   @Override
   protected void configure() {
-    bindPresenterWidget(PlayRowPresenter.class, PlayRowPresenter.MyView.class, PlayRowView.class);
+    bindPresenterWidgetFactory(PlayRowPresenter.Factory.class, PlayRowPresenter.FactoryImpl.class,
+        PlayRowPresenter.ViewFactory.class, PlayRowView.FactoryImpl.class);
   }
 }

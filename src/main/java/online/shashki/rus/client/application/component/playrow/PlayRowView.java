@@ -16,6 +16,21 @@ public class PlayRowView extends ViewWithUiHandlers<PlayRowUiHandlers> implement
     initWidget(binder.createAndBindUi(this));
   }
 
+  public static class FactoryImpl implements PlayRowPresenter.ViewFactory {
+
+    private final Binder binder;
+
+    @Inject
+    public FactoryImpl(Binder binder) {
+      this.binder = binder;
+    }
+
+    @Override
+    public PlayRowPresenter.MyView create() {
+      return new PlayRowView(binder);
+    }
+  }
+  
   interface Binder extends UiBinder<HTMLPanel, PlayRowView> {
   }
 }

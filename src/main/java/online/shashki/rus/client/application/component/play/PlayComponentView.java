@@ -88,9 +88,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
                     ShashkiMessages messages,
                     AppResources resources) {
     initWidget(uiBinder.createAndBindUi(this));
+
     this.messages = messages;
     this.resources = resources;
-//    this.injectionFactory = injectionFactory; //GWT.create(AssistedInjectionFactory.class);
 
     initEmptyDeskPanel();
     initPlayersCellList();

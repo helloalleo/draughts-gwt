@@ -74,7 +74,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public void prepareFromRequest(PlaceRequest request) {
     super.prepareFromRequest(request);
 
-    gameService.findGames(0, 5, new AsyncCallback<List<Game>>() {
+    gameService.findGames(0, 10, new AsyncCallback<List<Game>>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();
@@ -85,7 +85,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       public void onSuccess(List<Game> result) {
         playShowPanelPresenter = playShowPanelFactory.create(result);
         getProxy().manualReveal(HomePresenter.this);
-//        setInSlot(SLOT_PLAY_SHOW_PANEL, playShowPanelPresenter);
       }
     });
   }

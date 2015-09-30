@@ -9,16 +9,7 @@
     <g:HTMLPanel>
         <b:Button ui:field="newGameButton" size="LARGE">Новая игра</b:Button>
 
-        <b:Container>
-            <b:Row>
-                <g:SimplePanel ui:field="play" visible="false"/>
-            </b:Row>
-        </b:Container>
-
-        <b:Container>
-            <b:Row>
-                <g:SimplePanel ui:field="playShowPanel"/>
-            </b:Row>
-        </b:Container>
+        <g:SimplePanel ui:field="play" visible="false"/>
+        <g:SimplePanel ui:field="playShowPanel"/>
     </g:HTMLPanel>
 </ui:UiBinder>
