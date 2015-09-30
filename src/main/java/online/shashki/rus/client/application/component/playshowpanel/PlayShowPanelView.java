@@ -19,7 +19,7 @@ public class PlayShowPanelView extends ViewWithUiHandlers<PlayShowPanelUiHandler
   PlayShowPanelView(Binder binder) {
     initWidget(binder.createAndBindUi(this));
 //    bindSlot(PlayShowPanelPresenter.SLOT_PLAY_ROW, panel);
-    bindSlot(PlayShowPanelPresenter.SLOT_PLAY_2, p);
+//    bindSlot(PlayShowPanelPresenter.SLOT_PLAY_2, p);
   }
 
   public static class FactoryImpl implements PlayShowPanelPresenter.ViewFactory {

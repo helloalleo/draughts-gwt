@@ -49,6 +49,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @UiHandler("newGameButton")
   public void onNewGame(ClickEvent event) {
     play.setVisible(!play.isVisible());
+    playShowPanel.setVisible(!playShowPanel.isVisible());
   }
 
   @Override

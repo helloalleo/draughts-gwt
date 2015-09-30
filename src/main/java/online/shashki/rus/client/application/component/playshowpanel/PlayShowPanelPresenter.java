@@ -4,34 +4,29 @@ package online.shashki.rus.client.application.component.playshowpanel;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
-import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
-import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
-import com.gwtplatform.mvp.client.proxy.Proxy;
 import online.shashki.rus.client.application.component.playrow.PlayRowPresenter;
 import online.shashki.rus.shared.model.Game;
 
-import java.util.ArrayList;
 import java.util.List;
 
-public class PlayShowPanelPresenter extends Presenter<PlayShowPanelPresenter.MyView, PlayShowPanelPresenter.MyProxy>
+public class PlayShowPanelPresenter extends PresenterWidget<PlayShowPanelPresenter.MyView>
     implements PlayShowPanelUiHandlers {
 
 //  private final ArrayList<PlayRowPresenter> rowPresenterList;
 //  public static final OrderedSlot<PlayRowPresenter> SLOT_PLAY_ROW = new OrderedSlot<>();
-  public static final PermanentSlot<PlayRowPresenter> SLOT_PLAY_2 = new PermanentSlot<>();
-  private final PlayRowPresenter rowPresenter;
+//  public static final PermanentSlot<PlayRowPresenter> SLOT_PLAY_2 = new PermanentSlot<>();
+//  private final PlayRowPresenter rowPresenter;
 
   @Inject
   PlayShowPanelPresenter(EventBus eventBus,
                          MyView view,
-                         MyProxy proxy,
                          PlayRowPresenter.Factory playRowFactory,
                          List<Game> gameList) {
-    super(eventBus, view, proxy);
+    super(eventBus, view);
 
-    this.rowPresenter = playRowFactory.create(0, new ArrayList<Game>());
+//    this.rowPresenter = playRowFactory.create(0, new ArrayList<Game>());
 //    rowPresenterList = new ArrayList<>();
 //    List<Game> rowGames = new ArrayList<>();
 //    int order = 0;
@@ -59,7 +54,7 @@ public class PlayShowPanelPresenter extends Presenter<PlayShowPanelPresenter.MyV
 //    for (PlayRowPresenter playRowPresenter : rowPresenterList) {
 //      addToSlot(SLOT_PLAY_ROW, playRowPresenter);
 //    }
-    setInSlot(SLOT_PLAY_2, rowPresenter);
+//    setInSlot(SLOT_PLAY_2, rowPresenter);
   }
 
   public interface ViewFactory {
@@ -74,27 +69,20 @@ public class PlayShowPanelPresenter extends Presenter<PlayShowPanelPresenter.MyV
     private final EventBus eventBus;
     private final ViewFactory viewFactory;
     private final PlayRowPresenter.Factory playRowFactory;
-    private final MyProxy proxy;
 
     @Inject
     public FactoryImpl(EventBus eventBus,
-                       MyProxy proxy,
                        PlayRowPresenter.Factory playRowFactory,
                        ViewFactory viewFactory) {
       this.eventBus = eventBus;
-      this.proxy = proxy;
       this.playRowFactory = playRowFactory;
       this.viewFactory = viewFactory;
     }
 
     @Override
     public PlayShowPanelPresenter create(List<Game> gameList) {
-      return new PlayShowPanelPresenter(eventBus, viewFactory.create(), proxy, playRowFactory, gameList);
+      return new PlayShowPanelPresenter(eventBus, viewFactory.create(), playRowFactory, gameList);
     }
-  }
-
-  @ProxyCodeSplit
-  public interface MyProxy extends Proxy<PlayShowPanelPresenter> {
   }
 
   public interface MyView extends View, HasUiHandlers<PlayShowPanelUiHandlers> {
