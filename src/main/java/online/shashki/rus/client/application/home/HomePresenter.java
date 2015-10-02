@@ -44,7 +44,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
     this.gameService = gameService;
     this.playPresenter = playPresenter;
-
+    getView().setShowLoggedInControls(currentSession.isLoggedIn());
     SHCookies.setLocation(NameTokens.homePage);
   }
 
@@ -74,6 +74,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       @Override
       public void onSuccess(List<Game> result) {
         getProxy().manualReveal(HomePresenter.this);
+        getView().setGames(result);
       }
     });
   }
@@ -97,5 +98,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
    */
   public interface MyView extends View, HasUiHandlers<HomeUiHandlers> {
     void setShowLoggedInControls(Boolean loggedIn);
+
+    void setGames(List<Game> gameList);
   }
 }

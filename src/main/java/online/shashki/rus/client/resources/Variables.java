@@ -17,4 +17,7 @@ public class Variables {
   /* -- Sizes -- */
   public static final String S_TITLE = "22px";
   public static final String S_MAIN_CONTAINER_MARGIN_TOP = "80px";
+
+  /*Bootstrap*/
+  public static final int COLUMNS_IN_LAYOUT = 12;
 }

@@ -3,7 +3,7 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel>
         <hr/>
-        <p:PlayRow ui:field="playRow"/>
+        <g:HTMLPanel ui:field="playRowList"/>
     </g:HTMLPanel>
 
 </ui:UiBinder>
