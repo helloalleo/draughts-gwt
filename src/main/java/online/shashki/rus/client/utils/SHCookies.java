@@ -14,11 +14,11 @@ public class SHCookies {
 
   public static void setLocation(String nameToken) {
     Cookies.setCookie(loc, nameToken);
-    SHLog.log("set location: " + nameToken);
+    SHLog.debug("set location: " + nameToken);
   }
 
   public static String getLocation() {
-    SHLog.log("get location: " + Cookies.getCookie(loc));
+    SHLog.debug("get location: " + Cookies.getCookie(loc));
     return Cookies.getCookie(loc);
   }
 }

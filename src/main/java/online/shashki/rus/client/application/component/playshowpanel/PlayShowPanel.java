@@ -2,10 +2,14 @@
 package online.shashki.rus.client.application.component.playshowpanel;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.dom.client.ScrollEvent;
+import com.google.gwt.event.dom.client.ScrollHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.gwt.user.client.ui.ScrollPanel;
 import online.shashki.rus.client.application.home.HomeView;
 import online.shashki.rus.client.resources.Variables;
 import online.shashki.rus.client.utils.SHLog;
@@ -19,16 +23,54 @@ import java.util.List;
 public class PlayShowPanel extends Composite {
 
   private static Binder binder = GWT.create(Binder.class);
+  private final HomeView homeView;
 
   @UiField
   HTMLPanel playRowList;
+  @UiField
+  ScrollPanel mainScrollPanel;
 
   private final int[] gameOnPanelArr = {6, 4, 3, 2, 1};
   private int gameOnPanelCounter = 3;
   private List<Game> gameList;
+  private int panelHeight;
 
-  PlayShowPanel() {
+  private final int incrementSize = 50;
+
+  private boolean updateFlag = true;
+
+  private int lastMaxHeight = 0;
+  private int lastScrollPos = 0;
+
+  public PlayShowPanel(HomeView homeView) {
+    this.homeView = homeView;
     initWidget(binder.createAndBindUi(this));
+    final String marginStr = Variables.S_MAIN_CONTAINER_MARGIN_TOP.substring(0, Variables.S_MAIN_CONTAINER_MARGIN_TOP.length() - 2);
+    panelHeight = Window.getClientHeight() - Integer.valueOf(marginStr) - 60;
+    mainScrollPanel.setHeight(panelHeight + "px");
+    mainScrollPanel.addScrollHandler(new ScrollHandler() {
+      @Override
+      public void onScroll(ScrollEvent event) {
+        int oldScrollPos = lastScrollPos;
+        lastScrollPos = mainScrollPanel.getVerticalScrollPosition();
+        if (oldScrollPos >= lastScrollPos) {
+          return;
+        }
+
+        int maxScrollTop = mainScrollPanel.getWidget().getOffsetHeight() - mainScrollPanel.getOffsetHeight();
+        int halfIncrementScrollSize = (maxScrollTop - lastMaxHeight) / 2;
+        if (lastScrollPos >= (maxScrollTop - halfIncrementScrollSize) && updateFlag) {
+          final int newPageSize = gameList.size() + incrementSize;
+          PlayShowPanel.this.homeView.getMoreGames(newPageSize);
+          SHLog.debug("DISPLAYED GAMES " + gameList.size());
+          lastMaxHeight = maxScrollTop;
+          updateFlag = false;
+        }
+        if (maxScrollTop > lastMaxHeight) {
+          updateFlag = true;
+        }
+      }
+    });
   }
 
   public void setGames(List<Game> gameList) {
@@ -38,13 +80,13 @@ public class PlayShowPanel extends Composite {
 
   private void updateGameListPanel() {
     if (gameList == null || gameList.isEmpty()) {
-      SHLog.log("EMPTY GAME LIST");
+      SHLog.debug("EMPTY GAME LIST");
       return;
     }
     playRowList.clear();
     List<Game> rowGameList = new ArrayList<>();
     final int gameInRow = gameOnPanelArr[gameOnPanelCounter];
-    SHLog.log("GAME IN ROW " + gameInRow);
+    SHLog.debug("GAME IN ROW " + gameInRow);
     for (int i = 0; i < gameList.size(); i++) {
       if ((i + 1) % gameInRow == 0) {
         rowGameList.add(gameList.get(i));
@@ -69,7 +111,7 @@ public class PlayShowPanel extends Composite {
     playRowList.add(row);
   }
 
-  public void moreGameOnPanel(HomeView homeView) {
+  public void moreGameOnPanel() {
     gameOnPanelCounter++;
     if (!homeView.isEnabledLessGameButton()) {
       homeView.setEnableLessGameButton(true);
@@ -80,7 +122,7 @@ public class PlayShowPanel extends Composite {
     }
   }
 
-  public void lessGameOnPanel(HomeView homeView) {
+  public void lessGameOnPanel() {
     gameOnPanelCounter--;
     if (!homeView.isEnabledMoreGameButton()) {
       homeView.setEnableMoreGameButton(true);
@@ -91,6 +133,6 @@ public class PlayShowPanel extends Composite {
     }
   }
 
-  interface Binder extends UiBinder<HTMLPanel, PlayShowPanel> {
+  interface Binder extends UiBinder<ScrollPanel, PlayShowPanel> {
   }
 }

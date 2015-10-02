@@ -51,7 +51,7 @@ public class Square implements Serializable {
   }
 
   public static Square fromString(String toSendStr) {
-    SHLog.log(toSendStr + " TO SEND STR");
+    SHLog.debug(toSendStr + " TO SEND STR");
     if (toSendStr == null || toSendStr.isEmpty()) {
       return null;
     }

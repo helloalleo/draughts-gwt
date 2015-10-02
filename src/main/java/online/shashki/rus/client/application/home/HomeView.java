@@ -25,6 +25,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.client.application.component.playshowpanel.PlayShowPanel;
+import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.model.Game;
 import org.gwtbootstrap3.client.ui.Button;
 
@@ -36,7 +37,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   @UiField
   SimplePanel play;
-  @UiField
+  @UiField(provided = true)
   PlayShowPanel playShowPanel;
   @UiField
   Button newGameButton;
@@ -46,6 +47,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   Button lessGameOnPage;
 
   HomeView() {
+    playShowPanel = new PlayShowPanel(this);
     initWidget(binder.createAndBindUi(this));
 
     bindSlot(HomePresenter.SLOT_PLAY, play);
@@ -59,16 +61,17 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   @UiHandler("moreGameOnPage")
   public void onLessGameOnPage(ClickEvent event) {
-    playShowPanel.moreGameOnPanel(this);
+    playShowPanel.moreGameOnPanel();
   }
 
   @UiHandler("lessGameOnPage")
   public void onMoreGameOnPage(ClickEvent event) {
-    playShowPanel.lessGameOnPanel(this);
+    playShowPanel.lessGameOnPanel();
   }
 
   @Override
   public void setShowLoggedInControls(Boolean loggedIn) {
+    SHLog.debug("LOGGED IN " + loggedIn);
     newGameButton.setVisible(loggedIn);
   }
 
@@ -91,6 +94,11 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   public boolean isEnabledLessGameButton() {
     return lessGameOnPage.isEnabled();
+  }
+
+  public void getMoreGames(int newPageSize) {
+    SHLog.debug("GET MORE GAMES " + newPageSize);
+    getUiHandlers().getMoreGames(newPageSize);
   }
 
   interface Binder extends UiBinder<Widget, HomeView> {

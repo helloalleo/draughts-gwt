@@ -217,7 +217,7 @@ public class Board extends Layer {
             highlightPossibleMoves(draught, clickedPiece);
           }
         } catch (SquareNotFoundException ignore) {
-//          SHLog.log(e.getLocalizedMessage(), e);
+//          SHLog.debug(e.getLocalizedMessage(), e);
         }
       }
     }
@@ -342,7 +342,7 @@ public class Board extends Layer {
         square = backgroundLayer.getSquare(opRow.apply(row, 1), opCol.apply(col, 1));
         nextSquare = backgroundLayer.getSquare(opRow.apply(row, 2), opCol.apply(col, 2));
       } catch (SquareNotFoundException ignore) {
-//        SHLog.log(e.getLocalizedMessage(), e);
+//        SHLog.debug(e.getLocalizedMessage(), e);
       }
       // Check moves to the op1, op2 of this Draught
       if (square != null && !square.isOccupied()) {
@@ -640,7 +640,7 @@ public class Board extends Layer {
         complexBeat = true;
       }
 
-      SHLog.log(takenSquare.toString());
+      SHLog.debug(takenSquare.toString());
       removeDraughtFrom(takenSquare);
     } else {
       move.setOnSimpleMove();
@@ -729,7 +729,7 @@ public class Board extends Layer {
 //        startSquare = parseStep(steps[0]);
 //        endSquare = parseStep(steps[1]);
 //      } catch (SquareNotFoundException e) {
-//        SHLog.log(e.getLocalizedMessage(), e);
+//        SHLog.debug(e.getLocalizedMessage(), e);
 //        return;
 //      }
 //      calcMove(startSquare, endSquare, null, false, stepCursor);
@@ -741,7 +741,7 @@ public class Board extends Layer {
 //          firstStep = parseStep(steps[i]);
 //          secondStep = parseStep(steps[i + 1]);
 //        } catch (SquareNotFoundException e) {
-//          SHLog.log(e.getLocalizedMessage(), e);
+//          SHLog.debug(e.getLocalizedMessage(), e);
 //          continue;
 //        }
 //        Square captured = findCaptured(firstStep, secondStep);
@@ -762,7 +762,7 @@ public class Board extends Layer {
 //        startSquare = parseStep(steps[0]);
 //        endSquare = parseStep(steps[1]);
 //      } catch (SquareNotFoundException e) {
-//        SHLog.log(e.getLocalizedMessage(), e);
+//        SHLog.debug(e.getLocalizedMessage(), e);
 //        return;
 //      }
 //      calcMove(startSquare, endSquare, null, false, stepCursor);
@@ -774,7 +774,7 @@ public class Board extends Layer {
 //          firstStep = parseStep(steps[i]);
 //          secondStep = parseStep(steps[i + 1]);
 //        } catch (SquareNotFoundException e) {
-//          SHLog.log(e.getLocalizedMessage(), e);
+//          SHLog.debug(e.getLocalizedMessage(), e);
 //          continue;
 //        }
 //        Square captured = findCaptured(firstStep, secondStep);
@@ -834,7 +834,7 @@ public class Board extends Layer {
 //  }
 
   public void moveOpponent(Move move) {
-    SHLog.log("MOVE OPPONENT " + move.toString());
+    SHLog.debug("MOVE OPPONENT " + move.toString());
 
     Square startSquare, endSquare, takenSquare = null;
     try {
@@ -866,7 +866,7 @@ public class Board extends Layer {
 
     if (move.isContinueBeat()) {
 //      move.mirror();
-      SHLog.log("MOVE CONT BEAT " + move.toString());
+      SHLog.debug("MOVE CONT BEAT " + move.toString());
     }
 
     if (!move.isCancel()) {
@@ -890,7 +890,7 @@ public class Board extends Layer {
    * @param stepCursor
    */
   private void doMove(Move move, final int stepCursor) {
-    SHLog.log("DO MOVE " + move.toString());
+    SHLog.debug("DO MOVE " + move.toString());
     final Draught occupant = move.getStartSquare().getOccupant();
 
     // вычисляем координаты для перемещения шашки относительно её центра
@@ -1021,7 +1021,7 @@ public class Board extends Layer {
         move.setEndSquare(endSquare);
 
         boolean isSimpleMove = move.isSimple();
-        SHLog.log("SIMPLE MOVE " + isSimpleMove);
+        SHLog.debug("SIMPLE MOVE " + isSimpleMove);
         if (isSimpleMove || move.isStopBeat()) {
           toggleTurn();
         }
@@ -1031,7 +1031,7 @@ public class Board extends Layer {
           }
         }
 
-        SHLog.log("END SQUARE " + endSquare);
+        SHLog.debug("END SQUARE " + endSquare);
         if (endSquare != null) {
 //          String op = isSimpleMove ? ANNOTATION_SIMPLE_MOVE : ANNOTATION_BEAT_MOVE;
 //          String calcMove = startSquare.toNotation(isWhite(), false, false)
@@ -1040,7 +1040,7 @@ public class Board extends Layer {
           eventBus.fireEvent(new NotationMoveEvent(move, isWhite()));
           eventBus.fireEvent(new PlayMoveMessageEvent(move));
           moveMyStack.push(move);
-          SHLog.log("MOVE DRAUGHT " + move.toString());
+          SHLog.debug("MOVE DRAUGHT " + move.toString());
 
           AnimationProperties props = new AnimationProperties();
           props.push(AnimationProperty.Properties.X(endSquare.getCenterX()));
@@ -1089,7 +1089,7 @@ public class Board extends Layer {
     move = move.mirror();
 //    }
 
-    SHLog.log("MOVE CANCELED " + move.toString());
+    SHLog.debug("MOVE CANCELED " + move.toString());
     int startRow = move.getStartSquare().getRow();
     int startCol = move.getStartSquare().getCol();
 
@@ -1113,7 +1113,7 @@ public class Board extends Layer {
     move.setEndSquare(startSquare);
 //    }
 
-    SHLog.log("MOVE CANCELED REVERSED " + move.toString());
+    SHLog.debug("MOVE CANCELED REVERSED " + move.toString());
 
     Square taken = null;
     if (!move.isSimple()) {
@@ -1126,13 +1126,13 @@ public class Board extends Layer {
       move.setTakenSquare(taken);
     }
 
-    SHLog.log("MOVE CANCELED 1");
+    SHLog.debug("MOVE CANCELED 1");
     doMove(move);
-    SHLog.log("MOVE CANCELED 2");
+    SHLog.debug("MOVE CANCELED 2");
   }
 
   private void moveOpponentCanceled(Move moveDto) {
-    SHLog.log("OPPONENT CANCELED");
+    SHLog.debug("OPPONENT CANCELED");
     moveCanceled(moveDto);
     Move canceled = moveOpponentStack.pop();
     if (canceled.isFirst()) {
@@ -1141,7 +1141,7 @@ public class Board extends Layer {
   }
 
   private void moveMyCanceled(Move moveDto) {
-    SHLog.log("MY CANCELED");
+    SHLog.debug("MY CANCELED");
     moveCanceled(moveDto);
     Move canceled = moveMyStack.pop();
     if (canceled.isFirst()) {

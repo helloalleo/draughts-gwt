@@ -67,10 +67,10 @@ public class NotationPanel extends ScrollPanel {
     if (steps.length == 0) {
       notation = "";
     }
-    SHLog.log("MOVE in NOTATION " + move);
+    SHLog.debug("MOVE in NOTATION " + move);
     // первый шаг. например, h4:f6:d4 - h4
     Square start = move.getStartSquare();
-    SHLog.log("FIRST STEP " + start.toString());
+    SHLog.debug("FIRST STEP " + start.toString());
 
     if (move.isSimple()) {
       if (move.isFirst()) {
@@ -79,7 +79,7 @@ public class NotationPanel extends ScrollPanel {
         notation += MOVE_SEP + move.toNotation(opponentMove) + NOTATION_SEP;
       }
     } else { // взята одна или более шашек
-      SHLog.log(move.isFirst() + " FIRST CONT BEAT");
+      SHLog.debug(move.isFirst() + " FIRST CONT BEAT");
       if (move.isStartBeat()) {
         if (move.isFirst()) {
           notation += move.getNumber() + COUNT_SEP + move.toNotation(opponentMove);
@@ -102,7 +102,7 @@ public class NotationPanel extends ScrollPanel {
     }
 
     getElement().setInnerHTML(notation);
-    SHLog.log("Notation " + notation);
+    SHLog.debug("Notation " + notation);
     pushScroll();
   }
 
@@ -117,7 +117,7 @@ public class NotationPanel extends ScrollPanel {
   }
 
   public void cancelMove(Move move) {
-    SHLog.log(notation);
+    SHLog.debug(notation);
     notation = notation.replaceAll(DIV_GARBAGE, "");
     if (move.isSimple()) {
       if (move.isFirst()) {

@@ -87,7 +87,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         gameMessage.setReceiver(opponent);
 
         final boolean white = getView().opponentColor();
-        SHLog.log(white + " OPPONENT COLOR");
+        SHLog.debug(white + " OPPONENT COLOR");
         gameMessage.setMessage(messages.inviteMessage(gameWebsocket.getPlayer().getPublicName(),
             String.valueOf(white ? messages.white() : messages.black())));
         gameMessage.setData(String.valueOf(white));
@@ -202,9 +202,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onStartPlay(StartPlayEvent event) {
         getView().hideInviteDialog();
 
-        SHLog.log(event.isWhite() + " START PLAY AT INVITER");
-        SHLog.log("PLAYER " + gameWebsocket.getPlayer());
-        SHLog.log("OPPONENT " + gameWebsocket.getOpponent());
+        SHLog.debug(event.isWhite() + " START PLAY AT INVITER");
+        SHLog.debug("PLAYER " + gameWebsocket.getPlayer());
+        SHLog.debug("OPPONENT " + gameWebsocket.getOpponent());
 
         getView().startPlay(event.isWhite());
       }

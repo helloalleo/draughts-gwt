@@ -120,7 +120,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     if (nameToken == null || nameToken.isEmpty()) {
       return;
     }
-    SHLog.log("highlight token " + nameToken);
+    SHLog.debug("highlight token " + nameToken);
     for (Widget widget : navLeft) {
       if (setActiveAnchor(nameToken, (AnchorListItem) widget)) return;
     }

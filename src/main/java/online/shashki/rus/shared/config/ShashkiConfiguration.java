@@ -14,4 +14,6 @@ public interface ShashkiConfiguration extends ConstantsWithLookup {
   String playerWebsocketUrl();
 
   String debug();
+
+  String level();
 }

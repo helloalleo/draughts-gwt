@@ -46,7 +46,7 @@ public class GameWebsocket implements WebSocketCallback {
                         GameRpcServiceAsync gameService,
 //                        JsonSerialization jsonSerialization,
                         ProfileRpcServiceAsync profileService) {
-    SHLog.log("GAME WS");
+    SHLog.debug("GAME WS");
     profileService.getCurrentProfile(new AsyncCallback<Shashist>() {
       @Override
       public void onFailure(Throwable caught) {
@@ -59,10 +59,10 @@ public class GameWebsocket implements WebSocketCallback {
         if (player == null) {
           throw new RuntimeException("Player not found");
         }
-        SHLog.log("WEBSOCKET PLAYER - " + player.toString());
+        SHLog.debug("WEBSOCKET PLAYER - " + player.toString());
       }
     });
-    SHLog.log(eventBus == null ? "NULL EVENT BUS" : "OK EVENT BUS");
+    SHLog.debug(eventBus == null ? "NULL EVENT BUS" : "OK EVENT BUS");
     this.profileService = profileService;
     this.eventBus = eventBus;
     this.messages = messages;
@@ -98,7 +98,7 @@ public class GameWebsocket implements WebSocketCallback {
     HandlerRegistration updatePlayerListHR = eventBus.addHandler(UpdatePlayerListEvent.TYPE, new UpdatePlayerListEventHandler() {
       @Override
       public void onUpdatePlayerList(UpdatePlayerListEvent event) {
-        SHLog.log("UPDATE PLAYER LIST");
+        SHLog.debug("UPDATE PLAYER LIST");
         GameMessage message = createSendGameMessage();
         message.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
         sendGameMessage(message);
@@ -129,14 +129,14 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void sendGameMessage(GameMessage gameMessage) {
     if (gameMessage.getMove() != null) {
-      SHLog.log(gameMessage.getMove().toString() + " SEND MOVE");
+      SHLog.debug(gameMessage.getMove().toString() + " SEND MOVE");
     }
     String message = gameMessageMapper.write(gameMessage);
     webSocket.send(message);
   }
 
   private void handleUpdatePlayerList(List<Shashist> playerList) {
-    SHLog.log(playerList.size() + " PLAYER LIST SIZE");
+    SHLog.debug(playerList.size() + " PLAYER LIST SIZE");
     eventBus.fireEvent(new ReceivedPlayerListEvent(playerList));
   }
 
@@ -166,7 +166,7 @@ public class GameWebsocket implements WebSocketCallback {
               InfoDialogBox.setMessage(messages.opponentNotFound()).show();
               return;
             }
-            SHLog.log(connectionSession.getPlayer().toString());
+            SHLog.debug(connectionSession.getPlayer().toString());
 
             connectionSession.setOpponent(result);
 
@@ -174,8 +174,8 @@ public class GameWebsocket implements WebSocketCallback {
             game.setPlayStartDate(new Date());
             game.setPlayerWhite(isWhite() ? connectionSession.getPlayer() : connectionSession.getOpponent());
             game.setPlayerBlack(isWhite() ? connectionSession.getOpponent() : connectionSession.getPlayer());
-            SHLog.log(game.getPlayerWhite().getPublicName() + " PLAYER WHITE");
-            SHLog.log(game.getPlayerBlack().getPublicName() + " PLAYER BLACK");
+            SHLog.debug(game.getPlayerWhite().getPublicName() + " PLAYER WHITE");
+            SHLog.debug(game.getPlayerBlack().getPublicName() + " PLAYER BLACK");
             gameService.createGame(game, new AsyncCallback<Game>() {
               @Override
               public void onFailure(Throwable throwable) {
@@ -239,7 +239,7 @@ public class GameWebsocket implements WebSocketCallback {
 //    MessageFactory messageFactory = GWT.create(MessageFactory.class);
 //    AutoBean<GameMessage> bean = AutoBeanCodex.decode(messageFactory, GameMessage.class, message);
 //    GameMessage gameMessage = bean.as();
-    SHLog.log(message);
+    SHLog.debug(message);
     GameMessage gameMessage = gameMessageMapper.read(message);
 //    GameMessage gameMessage = jsonSerialization.deserialize("json", null, message);
     switch (gameMessage.getMessageType()) {
@@ -402,11 +402,11 @@ public class GameWebsocket implements WebSocketCallback {
    * @param gameMessage
    */
   private void handlePlayMove(GameMessage gameMessage) {
-    SHLog.log(gameMessage.getMove().toString());
+    SHLog.debug(gameMessage.getMove().toString());
     // отправлем отраженный ход здесь
-    SHLog.log("MOVE OPPONENT HANDLER " + gameMessage.getMove().toString());
+    SHLog.debug("MOVE OPPONENT HANDLER " + gameMessage.getMove().toString());
     final Move moveDto = gameMessage.getMove().mirror();
-    SHLog.log("MOVE OPPONENT HANDLER " + moveDto.toString());
+    SHLog.debug("MOVE OPPONENT HANDLER " + moveDto.toString());
     eventBus.fireEvent(new PlayMoveOpponentEvent(moveDto));
   }
 
@@ -424,7 +424,7 @@ public class GameWebsocket implements WebSocketCallback {
       @Override
       public void onSuccess(Game game) {
         connectionSession.setGame(game);
-        SHLog.log(gameMessage.getData() + " RECEIVED DATA");
+        SHLog.debug(gameMessage.getData() + " RECEIVED DATA");
         boolean white = Boolean.valueOf(gameMessage.getData());
         connectionSession.setOpponent(white ? game.getPlayerBlack() : game.getPlayerWhite());
         eventBus.fireEvent(new StartPlayEvent(white));

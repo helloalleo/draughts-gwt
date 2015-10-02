@@ -119,11 +119,11 @@
 //            return;
 //          case PLAY:
 //            if (playerSelectionModel.getSelectedObject() == null) {
-//              new DialogBox(messages.info(), messages.selectPlayer());
+//              new DialogBox(messages.debug(), messages.selectPlayer());
 //              return;
 //            }
 //            if (playerSelectionModel.getSelectedObject().getSystemId().equals(clientFactory.getPlayer().getSystemId())) {
-//              new DialogBox(messages.info(), messages.selectAnotherPlayerItsYou());
+//              new DialogBox(messages.debug(), messages.selectAnotherPlayerItsYou());
 //              return;
 //            }
 //            clientFactory.setOpponent(playerSelectionModel.getSelectedObject());
@@ -186,7 +186,7 @@
 //          return;
 //        }
 //        if (board.isMyTurn() && !(lastMove != null && lastMove.isContinueBeat())) {
-//          new DialogBox(messages.info(), messages.youDontMove());
+//          new DialogBox(messages.debug(), messages.youDontMove());
 //          return;
 //        }
 //        new ConfirmeDialogBox(messages.doYouWantToCancelMove()) {
@@ -225,7 +225,7 @@
 //
 //            @Override
 //            public void onSuccess(Void aVoid) {
-//              new DialogBox(messages.info(), messages.opponentLeftGame()) {
+//              new DialogBox(messages.debug(), messages.opponentLeftGame()) {
 //                @Override
 //                public void submit() {
 //                  eventBus.fireEvent(new ClearPlayComponentEvent());
@@ -249,7 +249,7 @@
 //    eventBus.addHandler(DisconnectFromPlayEvent.TYPE, new DisconnectFromPlayEventHandler() {
 //      @Override
 //      public void onDisconnectFromPlay(DisconnectFromPlayEvent event) {
-//        SHLog.log("Disconnected from Play");
+//        SHLog.debug("Disconnected from Play");
 //        connectToPlayButton.setActive(true);
 //        connectToPlayButton.setBlock(true);
 //        connectToPlayButton.addStyleName("btn-danger");
@@ -299,7 +299,7 @@
 //        setBeatenOpponent(CHECKERS_ON_DESK_INIT - board.getOpponentDraughts().size());
 //        Game endGame = clientFactory.getGame();
 //        if (0 == board.getMyDraughts().size()) {
-//          new DialogBox(messages.info(), messages.youLose()).show();
+//          new DialogBox(messages.debug(), messages.youLose()).show();
 //          if (board.isWhite()) {
 //            endGame.setPlayEndStatus(GameEnds.BLACK_WON);
 //          } else {
@@ -307,7 +307,7 @@
 //          }
 //        }
 //        if (0 == board.getOpponentDraughts().size()) {
-//          new DialogBox(messages.info(), messages.youWon());
+//          new DialogBox(messages.debug(), messages.youWon());
 //          if (board.isWhite()) {
 //            endGame.setPlayEndStatus(GameEnds.WHITE_WON);
 //          } else {

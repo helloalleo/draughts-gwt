@@ -245,16 +245,16 @@ public class Move extends PersistableObjectImpl {
   public String toNotation(boolean isWhite) {
     String notation;
     if (first && isWhite) {
-      SHLog.log("FIRST WHITE");
+      SHLog.debug("FIRST WHITE");
       notation = getNotation(true);
     } else if (!first && isWhite){
-      SHLog.log("SECOND WHITE");
+      SHLog.debug("SECOND WHITE");
       notation = getNotation(true);
     } else if (first) {
-      SHLog.log("FIRST BLACK");
+      SHLog.debug("FIRST BLACK");
       notation = getNotation(false);
     } else {
-      SHLog.log("SECOND BLACK");
+      SHLog.debug("SECOND BLACK");
       notation = getNotation(false);
     }
     return notation;

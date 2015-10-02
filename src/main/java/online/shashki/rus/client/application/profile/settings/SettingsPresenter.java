@@ -64,7 +64,7 @@ public class SettingsPresenter extends Presenter<SettingsPresenter.MyView, Setti
   @Override
   public void submitNewPlayerName(String playerName) {
     player.setPlayerName(playerName);
-    SHLog.log(playerName);
+    SHLog.debug(playerName);
     profileService.saveProfile(player, new AsyncCallback<Void>() {
       @Override
       public void onFailure(Throwable caught) {

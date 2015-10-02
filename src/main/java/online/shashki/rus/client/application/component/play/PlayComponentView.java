@@ -189,7 +189,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     notationPanel = new NotationPanel(eventBus);
     notationList.add(notationPanel);
 
-    SHLog.log("INIT NOTATION PANEL");
+    SHLog.debug("INIT NOTATION PANEL");
 
     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
       @Override

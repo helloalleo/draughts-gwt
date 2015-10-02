@@ -14,7 +14,7 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.shashki.rus.client.application.ApplicationPresenter;
 import online.shashki.rus.client.application.component.play.PlayComponentPresenter;
-import online.shashki.rus.client.application.login.CurrentSession;
+import online.shashki.rus.client.application.login.LoggedInGatekeeper;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.rpc.GameRpcServiceAsync;
@@ -35,7 +35,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       EventBus eventBus,
       MyView view,
       MyProxy proxy,
-      CurrentSession currentSession,
+      LoggedInGatekeeper currentSession,
       GameRpcServiceAsync gameService,
       PlayComponentPresenter playPresenter) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
@@ -44,7 +44,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
     this.gameService = gameService;
     this.playPresenter = playPresenter;
-    getView().setShowLoggedInControls(currentSession.isLoggedIn());
+    getView().setShowLoggedInControls(currentSession.canReveal());
     SHCookies.setLocation(NameTokens.homePage);
   }
 
@@ -74,6 +74,21 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       @Override
       public void onSuccess(List<Game> result) {
         getProxy().manualReveal(HomePresenter.this);
+        getView().setGames(result);
+      }
+    });
+  }
+
+  @Override
+  public void getMoreGames(int newPageSize) {
+    gameService.findGames(0, newPageSize, new AsyncCallback<List<Game>>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        ErrorDialogBox.setMessage(caught).show();
+      }
+
+      @Override
+      public void onSuccess(List<Game> result) {
         getView().setGames(result);
       }
     });

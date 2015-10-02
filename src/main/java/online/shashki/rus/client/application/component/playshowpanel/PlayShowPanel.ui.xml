@@ -1,9 +1,11 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
-             xmlns:p="urn:import:online.shashki.rus.client.application.component.playshowpanel"
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
-    <g:HTMLPanel>
-        <hr/>
-        <g:HTMLPanel ui:field="playRowList"/>
-    </g:HTMLPanel>
+    <g:ScrollPanel ui:field="mainScrollPanel">
+        <g:HTMLPanel>
+            <hr/>
+            <g:HTMLPanel ui:field="playRowList"/>
+        </g:HTMLPanel>
+
+    </g:ScrollPanel>
 
 </ui:UiBinder>

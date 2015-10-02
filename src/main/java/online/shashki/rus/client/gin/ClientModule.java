@@ -1,6 +1,6 @@
 package online.shashki.rus.client.gin;
 
-import com.google.gwt.inject.client.assistedinject.GinFactoryModuleBuilder;
+import com.google.inject.Singleton;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
 import online.shashki.rus.client.application.ApplicationModule;
@@ -22,7 +22,7 @@ public class ClientModule extends AbstractPresenterModule {
     install(new RpcServiceModule());
 
     bind(TestPojo.class).asEagerSingleton();
-    bind(CurrentSession.class).asEagerSingleton();
+    bind(CurrentSession.class).in(Singleton.class);
 
     // Load and inject CSS resources
     bind(ResourceLoader.class).asEagerSingleton();
