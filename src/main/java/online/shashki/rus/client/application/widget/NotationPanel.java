@@ -113,6 +113,7 @@ public class NotationPanel extends ScrollPanel {
   }
 
   public static String getNotation() {
+    SHLog.debug("getNotation() " + notation);
     return notation;
   }
 

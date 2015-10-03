@@ -47,7 +47,8 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
     String hql = "SELECT g " +
         "FROM Game g " +
         "JOIN FETCH g.playerWhite " +
-        "JOIN FETCH g.playerBlack";
+        "JOIN FETCH g.playerBlack " +
+        "ORDER BY g.playFinishDate DESC";
     Query query = entityManager.createQuery(hql);
     query.setFirstResult(start);
     query.setMaxResults(length);

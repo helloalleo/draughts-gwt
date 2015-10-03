@@ -154,7 +154,6 @@
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <version>${gwt.version}</version>
-            <!--<scope>provided</scope>-->
         </dependency>
 
         <!-- GWTP -->
@@ -162,29 +161,13 @@
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-mvp-client</artifactId>
             <version>${gwtp.version}</version>
-            <!--<scope>provided</scope>-->
         </dependency>
-
-        <!--<dependency>-->
-        <!--<groupId>com.gwtplatform</groupId>-->
-        <!--<artifactId>gwtp-dispatch-rest</artifactId>-->
-        <!--<version>${gwtp.version}</version>-->
-        <!--&lt;!&ndash;<scope>provided</scope>&ndash;&gt;-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>com.gwtplatform</groupId>-->
-        <!--<artifactId>gwtp-dispatch-rest-shared</artifactId>-->
-        <!--<version>${gwtp.version}</version>-->
-        <!--&lt;!&ndash;<scope>compile</scope>&ndash;&gt;-->
-        <!--</dependency>-->
 
         <!-- DI -->
         <dependency>
             <groupId>com.google.gwt.inject</groupId>
             <artifactId>gin</artifactId>
             <version>${gin.version}</version>
-            <!--<scope>provided</scope>-->
         </dependency>
 
         <!--OAuth 2.0-->
@@ -303,6 +286,12 @@
             <scope>provided</scope>
         </dependency>
 
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.spec.javax.transaction</groupId>-->
+            <!--<artifactId>jboss-transaction-api_1.2_spec</artifactId>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+
         <!-- Import the JPA API, we use provided scope as the API is included in
         JBoss WildFly -->
         <dependency>
@@ -353,6 +342,7 @@
             <version>${hibernate-validator.version}</version>
             <scope>provided</scope>
         </dependency>
+
     </dependencies>
 
     <repositories>

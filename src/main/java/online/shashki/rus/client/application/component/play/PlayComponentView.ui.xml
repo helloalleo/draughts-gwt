@@ -4,7 +4,6 @@
     <ui:with field="res" type="online.shashki.rus.client.resources.AppResources"/>
 
     <g:HTMLPanel ui:field="main">
-        <hr/>
         <g:HTMLPanel ui:field="shashkiColumn" addStyleNames="{res.style.shashkiColumn}">
             <g:HTMLPanel ui:field="shashki"/>
         </g:HTMLPanel>

@@ -67,8 +67,8 @@ public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcS
       throw new RuntimeException("Unauthorized");
     }
 
-    Game gameEntity = gameService.find(game.getId());
-    if (gameEntity != null) {
+//    Game gameEntity = gameService.find(game.getId());
+//    if (gameEntity != null) {
       Shashist playerWhite = shashistService.find(game.getPlayerWhite().getId());
       if (playerWhite == null) {
         return;
@@ -77,10 +77,11 @@ public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcS
       if (playerBlack == null) {
         return;
       }
-      gameEntity.setPlayerWhite(playerWhite);
-      gameEntity.setPlayerBlack(playerBlack);
-      gameService.edit(gameEntity);
-    }
+//      gameEntity.copyFrom(game);
+      game.setPlayerWhite(playerWhite);
+      game.setPlayerBlack(playerBlack);
+      gameService.edit(game);
+//    }
   }
 
   @Override

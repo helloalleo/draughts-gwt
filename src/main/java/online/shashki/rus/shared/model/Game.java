@@ -1,7 +1,6 @@
 package online.shashki.rus.shared.model;
 
 import com.google.gwt.user.client.rpc.GwtTransient;
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
@@ -31,22 +30,53 @@ public class Game extends PersistableObjectImpl {
   @Column(name = "play_end_status")
   private GameEnds playEndStatus;
 
-  @GwtTransient
-  @JsonIgnore
   @Column(name = "play_start_date")
   private Date playStartDate;
 
-  @Column(name = "play_end_date")
-  private Date playEndDate;
+  @Column(name = "play_finish_date")
+  private Date playFinishDate;
 
   @Column(name = "party_notation", length = 1000)
   private String partyNotation;
 
-  @Column(name = "end_game_screenshot")
+  @Column(name = "end_game_screenshot", columnDefinition = "TEXT")
   public String endGameScreenshot;
 
-  @Inject
   public Game() {
+  }
+
+  public Game(Shashist playerWhite,
+              Shashist playerBlack,
+              GameEnds playEndStatus,
+              Date playStartDate,
+              Date playFinishDate,
+              String partyNotation,
+              String endGameScreenshot) {
+    this.playerWhite = playerWhite;
+    this.playerBlack = playerBlack;
+    this.playEndStatus = playEndStatus;
+    this.playStartDate = playStartDate;
+    this.playFinishDate = playFinishDate;
+    this.partyNotation = partyNotation;
+    this.endGameScreenshot = endGameScreenshot;
+  }
+
+  public void copyFrom(Game game) {
+    if (game.getPlayEndStatus() !=null) {
+      setPlayEndStatus(game.getPlayEndStatus());
+    }
+    if (game.getPlayStartDate() !=null) {
+      setPlayStartDate(game.getPlayStartDate());
+    }
+    if (game.getPlayFinishDate() != null) {
+      setPlayFinishDate(game.getPlayFinishDate());
+    }
+    if (game.getPartyNotation() != null) {
+      setPartyNotation(game.getPartyNotation());
+    }
+    if (game.getEndGameScreenshot() !=null) {
+      setEndGameScreenshot(game.getEndGameScreenshot());
+    }
   }
 
   public Shashist getPlayerWhite() {
@@ -81,12 +111,12 @@ public class Game extends PersistableObjectImpl {
     this.playStartDate = playStartDate;
   }
 
-  public Date getPlayEndDate() {
-    return playEndDate;
+  public Date getPlayFinishDate() {
+    return playFinishDate;
   }
 
-  public void setPlayEndDate(Date playEndDate) {
-    this.playEndDate = playEndDate;
+  public void setPlayFinishDate(Date playEndDate) {
+    this.playFinishDate = playEndDate;
   }
 
   public String getPartyNotation() {

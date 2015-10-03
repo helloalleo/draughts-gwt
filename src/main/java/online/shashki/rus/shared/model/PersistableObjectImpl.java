@@ -1,9 +1,9 @@
 package online.shashki.rus.shared.model;
 
-import com.google.gwt.user.client.rpc.GwtTransient;
-import org.codehaus.jackson.annotate.JsonIgnore;
-
-import javax.persistence.*;
+import javax.persistence.GeneratedValue;
+import javax.persistence.GenerationType;
+import javax.persistence.Id;
+import javax.persistence.MappedSuperclass;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,11 +18,11 @@ public class PersistableObjectImpl implements PersistableObject {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-  @GwtTransient
-  @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
-  @Version
-  private Integer version;
+//  @GwtTransient
+//  @JsonIgnore
+//  @com.fasterxml.jackson.annotation.JsonIgnore
+//  @Version
+//  private Integer version;
 
   @Override
   public Long getId() {
@@ -34,8 +34,8 @@ public class PersistableObjectImpl implements PersistableObject {
     this.id = id;
   }
 
-  @Override
-  public Integer getVersion() {
-    return version;
-  }
+//  @Override
+//  public Integer getVersion() {
+//    return version;
+//  }
 }

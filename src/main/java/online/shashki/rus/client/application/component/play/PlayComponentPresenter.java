@@ -12,7 +12,6 @@ import com.gwtplatform.mvp.client.View;
 import online.shashki.rus.client.application.widget.NotationPanel;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
-import online.shashki.rus.client.application.widget.dialog.MyDialogBox;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.service.GameRpcServiceAsync;
 import online.shashki.rus.client.utils.SHLog;
@@ -159,9 +158,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onReceivedPlayerList(ReceivedPlayerListEvent event) {
         if (!event.getPlayerList().contains(gameWebsocket.getOpponent()) && gameWebsocket.getGame() != null) {
           Game game = gameWebsocket.getGame();
-          game.setPlayEndStatus(gameWebsocket.isPlayerHasWhiteColor() ? GameEnds.BLACK_LEFT : GameEnds.WHITE_LEFT);
-          game.setPlayEndDate(new Date());
-          gameService.saveGame(game, new AsyncCallback<Void>() {
+          final GameEnds gameEnd = gameWebsocket.isPlayerHasWhiteColor() ? GameEnds.BLACK_LEFT : GameEnds.WHITE_LEFT;
+          eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Void>() {
             @Override
             public void onFailure(Throwable throwable) {
               ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
@@ -169,15 +167,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
             @Override
             public void onSuccess(Void aVoid) {
-              new MyDialogBox(messages.info(), messages.opponentLeftGame()) {
-                @Override
-                public void submit() {
-                  eventBus.fireEvent(new ClearPlayComponentEvent());
-                }
-              };
+              InfoDialogBox.setMessage(messages.opponentLeftGame()).show();
             }
-          });
-          return;
+          }));
         }
         getView().setPlayerList(event.getPlayerList());
       }
@@ -230,51 +222,36 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         getView().setBeatenMy(CHECKERS_ON_DESK_INIT - getView().getMyDraughtsSize());
         getView().setBeatenOpponent(CHECKERS_ON_DESK_INIT - getView().getOpponentDraughtsSize());
         final Game endGame = gameWebsocket.getGame();
+        GameEnds gameEnd = null;
         if (0 == getView().getMyDraughtsSize()) {
           InfoDialogBox.setMessage(messages.youLose()).show();
           if ((getView().isWhite())) {
-            endGame.setPlayEndStatus(GameEnds.BLACK_WON);
+            gameEnd = GameEnds.BLACK_WON;
           } else {
-            endGame.setPlayEndStatus(GameEnds.WHITE_WON);
+            gameEnd = GameEnds.WHITE_WON;
           }
         }
         if (0 == getView().getOpponentDraughtsSize()) {
           InfoDialogBox.setMessage(messages.youWon()).show();
           if (getView().isWhite()) {
-            endGame.setPlayEndStatus(GameEnds.WHITE_WON);
+            gameEnd = GameEnds.WHITE_WON;
           } else {
-            endGame.setPlayEndStatus(GameEnds.BLACK_WON);
+            gameEnd = GameEnds.BLACK_WON;
           }
         }
-        if (endGame.getPlayEndStatus() == null) {
+        if (gameEnd == null) {
           return;
         }
-        gameService.getGame(endGame.getId(), new AsyncCallback<Game>() {
+        eventBus.fireEvent(new GameOverEvent(endGame, gameEnd, new AsyncCallback<Void>() {
           @Override
-          public void onFailure(Throwable throwable) {
-            ErrorDialogBox.setMessage(messages.errorWhileGettingGame(), throwable).show();
+          public void onFailure(Throwable caught) {
+            ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), caught).show();
           }
 
           @Override
-          public void onSuccess(Game game) {
-            if (game.getPlayEndStatus() == null) {
-              endGame.setPartyNotation(NotationPanel.getNotation());
-              endGame.setPlayEndDate(new Date());
-              endGame.setEndGameScreenshot(getView().takeScreenshot());
-              gameService.saveGame(endGame, new AsyncCallback<Void>() {
-                @Override
-                public void onFailure(Throwable caught) {
-                  ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), caught).show();
-                }
-
-                @Override
-                public void onSuccess(Void result) {
-                  eventBus.fireEvent(new ClearPlayComponentEvent());
-                }
-              });
-            }
+          public void onSuccess(Void result) {
           }
-        });
+        }));
       }
     });
 
@@ -298,6 +275,19 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       @Override
       public void onHideInviteDialogBox(HideInviteDialogBoxEvent event) {
         getView().hideInviteDialog();
+      }
+    });
+
+    eventBus.addHandler(GameOverEvent.TYPE, new GameOverEventHandler() {
+      @Override
+      public void onGameOver(GameOverEvent event) {
+        Game game = event.getGame();
+        game.setPlayEndStatus(event.getGameEnd());
+        game.setPlayFinishDate(new Date());
+        game.setPartyNotation(NotationPanel.getNotation());
+        game.setEndGameScreenshot(getView().takeScreenshot());
+        gameService.saveGame(game, event.getAsyncCallback());
+        eventBus.fireEvent(new ClearPlayComponentEvent());
       }
     });
   }

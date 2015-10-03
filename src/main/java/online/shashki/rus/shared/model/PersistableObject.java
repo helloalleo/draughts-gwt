@@ -14,5 +14,5 @@ public interface PersistableObject extends IsSerializable {
 
   void setId(Long id);
 
-  Integer getVersion();
+//  Integer getVersion();
 }

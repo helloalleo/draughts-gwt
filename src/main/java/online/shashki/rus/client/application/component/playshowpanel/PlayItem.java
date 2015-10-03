@@ -44,13 +44,14 @@ public class PlayItem extends Composite {
     if (game.getPlayEndStatus() != null) {
       whoDidWin.setHTML(game.getPlayEndStatus().name());
     }
-    if (game.getPlayEndDate() != null) {
+    if (game.getPlayFinishDate() != null) {
       String date = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM)
-          .format(game.getPlayEndDate());
+          .format(game.getPlayFinishDate());
       playEndDate.setHTML(date);
     }
     if (game.getEndGameScreenshot() != null) {
       endGameScreenshot.setUrl(game.getEndGameScreenshot());
+      endGameScreenshot.addStyleName("img-responsive");
     }
   }
 

@@ -111,6 +111,13 @@ public class GameWebsocket implements WebSocketCallback {
         removeHandlers();
       }
     });
+
+    eventBus.addHandler(ClearPlayComponentEvent.TYPE, new ClearPlayComponentEventHandler() {
+      @Override
+      public void onClearPlayComponent(ClearPlayComponentEvent event) {
+        connectionSession.setGame(null);
+      }
+    });
   }
 
   private void removeHandlers() {
@@ -328,10 +335,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlayAcceptDraw(GameMessage gameMessage) {
     if (Boolean.valueOf(gameMessage.getData())) {
-      Game game = connectionSession.getGame();
-      game.setPlayEndDate(new Date());
-      game.setPlayEndStatus(GameEnds.DRAW);
-      gameService.saveGame(game, new AsyncCallback<Void>() {
+      eventBus.fireEvent(new GameOverEvent(connectionSession.getGame(), GameEnds.DRAW, new AsyncCallback<Void>() {
         @Override
         public void onFailure(Throwable throwable) {
           ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
@@ -339,9 +343,8 @@ public class GameWebsocket implements WebSocketCallback {
 
         @Override
         public void onSuccess(Void aVoid) {
-          eventBus.fireEvent(new ClearPlayComponentEvent());
         }
-      });
+      }));
     } else {
       String senderName = gameMessage.getSender().getPublicName();
       new MyDialogBox(messages.info(), messages.playerRejectedDraw(senderName));
@@ -380,10 +383,9 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlaySurrender(GameMessage gameMessage) {
     Game game = connectionSession.getGame();
-    game.setPlayEndDate(new Date());
-    game.setPlayEndStatus(connectionSession.isPlayerHasWhiteColor() ? GameEnds.SURRENDER_WHITE
-        : GameEnds.SURRENDER_BLACK);
-    gameService.saveGame(game, new AsyncCallback<Void>() {
+    final GameEnds gameEnd = connectionSession.isPlayerHasWhiteColor() ? GameEnds.SURRENDER_WHITE
+        : GameEnds.SURRENDER_BLACK;
+    eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Void>() {
       @Override
       public void onFailure(Throwable throwable) {
         ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
@@ -392,9 +394,8 @@ public class GameWebsocket implements WebSocketCallback {
       @Override
       public void onSuccess(Void aVoid) {
         new MyDialogBox(messages.info(), messages.opponentSurrendered());
-        eventBus.fireEvent(new ClearPlayComponentEvent());
       }
-    });
+    }));
   }
 
   /**

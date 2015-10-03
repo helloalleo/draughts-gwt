@@ -13,18 +13,7 @@
             <b:Button ui:field="moreGameOnPage" size="LARGE" icon="ANGLE_LEFT" title="Показать меньше на странице"/>
             <b:Button ui:field="lessGameOnPage" size="LARGE" icon="ANGLE_RIGHT" title="Показать больше на странице"/>
         </b:ButtonGroup>
-        <!--<b:Row>-->
-            <!--<b:Column size="MD_2">-->
-                <!--<b:Button ui:field="newGameButton" size="LARGE">Новая игра</b:Button>-->
-            <!--</b:Column>-->
-
-            <!--<b:Column size="MD_2">-->
-                <!--<b:ButtonGroup>-->
-                    <!--<b:Button ui:field="fourOnPage" size="LARGE">4</b:Button>-->
-                    <!--<b:Button ui:field="sixOnPage" size="LARGE">6</b:Button>-->
-                <!--</b:ButtonGroup>-->
-            <!--</b:Column>-->
-        <!--</b:Row>-->
+        <hr/>
         <g:SimplePanel ui:field="play" visible="false"/>
         <p:PlayShowPanel ui:field="playShowPanel"/>
     </g:HTMLPanel>

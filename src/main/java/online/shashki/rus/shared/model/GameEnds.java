@@ -15,5 +15,5 @@ public enum GameEnds implements IsSerializable {
   WHITE_LEFT,
   SURRENDER_BLACK,
   SURRENDER_WHITE,
-  DRAW;
+  DRAW, gameEnd;
 }

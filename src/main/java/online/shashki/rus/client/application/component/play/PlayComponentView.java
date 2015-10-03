@@ -373,7 +373,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Override
   public String takeScreenshot() {
-    return takeScreenshot(DataURLType.JPG, true);
+    return takeScreenshot(DataURLType.PNG, true);
   }
 
   public String takeScreenshot(DataURLType dataType, boolean includeBackgroundLayer) {

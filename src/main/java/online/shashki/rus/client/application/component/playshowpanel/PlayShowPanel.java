@@ -31,7 +31,7 @@ public class PlayShowPanel extends Composite {
   ScrollPanel mainScrollPanel;
 
   private final int[] gameOnPanelArr = {6, 4, 3, 2, 1};
-  private int gameOnPanelCounter = 3;
+  private int gameOnPanelCounter = 1;
   private List<Game> gameList;
   private int panelHeight;
 
