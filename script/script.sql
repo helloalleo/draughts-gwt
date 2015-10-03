@@ -1,0 +1,1 @@
+SELECT shashist_black.player_name FROM game LEFT JOIN shashist shashist_black ON shashist_black.id = game.player_black_id;

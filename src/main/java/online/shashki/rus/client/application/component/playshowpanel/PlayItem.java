@@ -36,10 +36,10 @@ public class PlayItem extends Composite {
 
   public void setGame(Game game) {
     if (game.getPlayerWhite() != null) {
-      whitePlayerName.setHTML(game.getPlayerWhite().getPlayerName());
+      whitePlayerName.setHTML(game.getPlayerWhite().getPublicName());
     }
     if (game.getPlayerBlack() != null) {
-      blackPlayerName.setHTML(game.getPlayerBlack().getPlayerName());
+      blackPlayerName.setHTML(game.getPlayerBlack().getPublicName());
     }
     if (game.getPlayEndStatus() != null) {
       whoDidWin.setHTML(game.getPlayEndStatus().name());
