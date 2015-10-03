@@ -187,4 +187,8 @@ public interface ShashkiMessages extends Messages {
   String opponentNotFound();
 
   String failToConnectToServer();
+
+  String newGameButtonText();
+
+  String playListButtonText();
 }

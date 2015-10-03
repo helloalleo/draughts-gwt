@@ -13,6 +13,6 @@ public class InfoDialogBox extends MyDialogBox {
   }
 
   public static InfoDialogBox setMessage(String message) {
-    return new InfoDialogBox(message + ".");
+    return new InfoDialogBox(message);
   }
 }

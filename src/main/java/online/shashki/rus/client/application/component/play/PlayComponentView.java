@@ -76,7 +76,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private Board board;
   private LienzoPanel lienzoPanel;
   private Shashist player;
-  private CellList<Shashist> playersCellList;
+  private CellList<Shashist> playerCellList;
   private SingleSelectionModel<Shashist> playerSelectionModel;
   private NotationPanel notationPanel;
   private InviteDialogBox inviteDialogBox;
@@ -204,12 +204,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       String notationHeight = lienzoPanel.getHeight() - 170 + "px";
       notationPanel.setHeight(notationHeight);
       String playerListHeight = lienzoPanel.getHeight() - 105 + "px";
-      playersCellList.setHeight(playerListHeight);
+      playerCellList.setHeight(playerListHeight);
     }
   }
 
   private void initPlayersCellList() {
-    playersCellList = new CellList<>(new AbstractCell<Shashist>() {
+    playerCellList = new CellList<>(new AbstractCell<Shashist>() {
       @Override
       public void render(Context context, Shashist value, SafeHtmlBuilder sb) {
         if (value != null) {
@@ -240,13 +240,14 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       }
     });
     playerSelectionModel = new SingleSelectionModel<>();
-    playersCellList.setSelectionModel(playerSelectionModel);
-    playerPanel.add(playersCellList);
+    playerCellList.setSelectionModel(playerSelectionModel);
+    playerPanel.add(playerCellList);
   }
 
   @Override
   public void setPlayerList(List<Shashist> shashistList) {
-    playersCellList.setRowData(shashistList);
+    playerCellList.setRowCount(0);
+    playerCellList.setRowData(shashistList);
   }
 
   @Override
@@ -269,7 +270,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playButton.setIcon(IconType.REFRESH);
     playButton.setText(messages.reconnect());
 
-    playersCellList.setRowData(new ArrayList<Shashist>());
+    playerCellList.setRowData(new ArrayList<Shashist>());
     turnLabel.setHTML(messages.youDisconnected());
 
     hidePlayingButtonsAndShowPlayButton();

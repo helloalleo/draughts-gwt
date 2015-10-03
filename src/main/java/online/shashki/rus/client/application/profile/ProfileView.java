@@ -47,14 +47,10 @@ public class ProfileView extends ViewWithUiHandlers<ProfileUiHandlers> implement
   private AnchorListItem createAnchor(final NameTokens.Link link) {
     final AnchorListItem anchor = new AnchorListItem(link.name);
     switch (link.token) {
-      case NameTokens.myGamesPage:
-        anchor.setIcon(IconType.PLAY_CIRCLE);
-        // делаем ссылку мои игры активной, так как она первая в списке
-        anchor.setActive(true);
-        prevAnchor = anchor;
-        break;
       case NameTokens.settingsPage:
         anchor.setIcon(IconType.COG);
+        anchor.setActive(true);
+        prevAnchor = anchor;
         break;
     }
     anchor.addClickHandler(new ClickHandler() {

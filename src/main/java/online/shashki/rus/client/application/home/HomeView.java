@@ -23,17 +23,21 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
+import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.client.application.component.playshowpanel.PlayShowPanel;
 import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Game;
 import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.ButtonGroup;
 
 import java.util.List;
 
 public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements HomePresenter.MyView {
 
   private static Binder binder = GWT.create(Binder.class);
+  private final ShashkiMessages messages;
 
   @UiField
   SimplePanel play;
@@ -45,16 +49,25 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   Button moreGameOnPage;
   @UiField
   Button lessGameOnPage;
+  @UiField
+  ButtonGroup countGameOnPageButtonGroup;
 
-  HomeView() {
+  private boolean newGameState = true;
+
+  @Inject
+  HomeView(ShashkiMessages messages) {
     playShowPanel = new PlayShowPanel(this);
     initWidget(binder.createAndBindUi(this));
 
+    this.messages = messages;
     bindSlot(HomePresenter.SLOT_PLAY, play);
   }
 
   @UiHandler("newGameButton")
   public void onNewGame(ClickEvent event) {
+    newGameState = !newGameState;
+    countGameOnPageButtonGroup.setVisible(newGameState);
+    newGameButton.setText(newGameState ? messages.newGameButtonText() : messages.playListButtonText());
     play.setVisible(!play.isVisible());
     playShowPanel.setVisible(!playShowPanel.isVisible());
   }

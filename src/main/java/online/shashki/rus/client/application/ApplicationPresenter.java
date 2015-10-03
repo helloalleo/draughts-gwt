@@ -101,6 +101,6 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
   /**
    * {@link ApplicationPresenter}'s view.
    */
-  public interface MyView extends View {
+  interface MyView extends View {
   }
 }

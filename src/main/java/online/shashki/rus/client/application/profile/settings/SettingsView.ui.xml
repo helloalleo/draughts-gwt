@@ -11,7 +11,7 @@
                 <ui:msg description="Settings" key="lkSettings">Настройки</ui:msg>
             </h1>
             <b:Row>
-                <b:Column size="MD_6">
+                <b:Column size="MD_8">
                     <b:Panel>
                         <b:PanelHeader>
                             <b:Heading size="H3" text="Персональные">

@@ -4,61 +4,41 @@ import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
-import com.gwtplatform.mvp.client.Presenter;
+import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
-import com.gwtplatform.mvp.client.annotations.NameToken;
-import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
-import com.gwtplatform.mvp.client.proxy.Proxy;
-import online.shashki.rus.client.application.security.CurrentSession;
-import online.shashki.rus.client.application.profile.ProfilePresenter;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
 import online.shashki.rus.client.event.UpdatePlayerListEvent;
-import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.service.ProfileRpcServiceAsync;
 import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Shashist;
 
 
-public class SettingsPresenter extends Presenter<SettingsPresenter.MyView, SettingsPresenter.MyProxy> implements SettingsUiHandlers {
+public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView> implements SettingsUiHandlers {
   public static final NestedSlot SLOT_SETTINGS = new NestedSlot();
-  private final ProfileRpcServiceAsync profileService;
-  private final CurrentSession currentSession;
   private final ShashkiMessages messages;
   private final EventBus eventBus;
+  private final ProfileRpcServiceAsync profileService;
   private Shashist player;
-
 
   @Inject
   SettingsPresenter(
       EventBus eventBus,
       MyView view,
-      MyProxy proxy,
-      CurrentSession currentSession,
       ProfileRpcServiceAsync profileService,
-      ShashkiMessages messages) {
-    super(eventBus, view, proxy, ProfilePresenter.SLOT_PROFILE);
+      ShashkiMessages messages,
+      Shashist player) {
+    super(eventBus, view);
 
     this.eventBus = eventBus;
     this.profileService = profileService;
-    this.currentSession = currentSession;
+    this.player = player;
     this.messages = messages;
 
     getView().setUiHandlers(this);
-    profileService.getCurrentProfile(new AsyncCallback<Shashist>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
-      }
-
-      @Override
-      public void onSuccess(Shashist result) {
-        player = result;
-        getView().setPlayerName(result.getPublicName());
-      }
-    });
+    getView().setPlayerName(player.getPublicName());
   }
 
   @Override
@@ -73,18 +53,48 @@ public class SettingsPresenter extends Presenter<SettingsPresenter.MyView, Setti
 
       @Override
       public void onSuccess(Void result) {
-        eventBus.fireEvent(new UpdatePlayerListEvent());
         InfoDialogBox.setMessage(messages.profileUpdated()).show();
+        try {
+          eventBus.fireEvent(new UpdatePlayerListEvent());
+        } catch (Exception e) {
+          SHLog.error(e.getMessage(), e);
+        }
       }
     });
   }
 
-  interface MyView extends View, HasUiHandlers<SettingsUiHandlers> {
-    void setPlayerName(String playerName);
+  public interface ViewFactory {
+    MyView create();
   }
 
-  @ProxyCodeSplit
-  @NameToken(NameTokens.settingsPage)
-  interface MyProxy extends Proxy<SettingsPresenter> {
+  public interface Factory {
+    SettingsPresenter create(Shashist player);
+  }
+
+  public static class FactoryImpl implements Factory {
+
+    private final EventBus eventBus;
+    private final ViewFactory viewFactory;
+    private final ShashkiMessages messages;
+    private final ProfileRpcServiceAsync profileService;
+
+    @Inject
+    FactoryImpl(EventBus eventBus,
+                ViewFactory viewFactory,
+                ProfileRpcServiceAsync profileService,
+                ShashkiMessages messages) {
+      this.eventBus = eventBus;
+      this.viewFactory = viewFactory;
+      this.profileService = profileService;
+      this.messages = messages;
+    }
+
+    public SettingsPresenter create(Shashist player) {
+      return new SettingsPresenter(eventBus, viewFactory.create(), profileService, messages, player);
+    }
+  }
+
+  public interface MyView extends View, HasUiHandlers<SettingsUiHandlers> {
+    void setPlayerName(String playerName);
   }
 }

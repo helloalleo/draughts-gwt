@@ -50,7 +50,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     getView().setPlayer(gameWebsocket.getPlayer());
     getView().initNotationPanel(eventBus);
 
-    addVisibleHandler(ReceivedPlayerListEvent.TYPE, new ReceivedPlayerListEventHandler() {
+    addRegisteredHandler(ReceivedPlayerListEvent.TYPE, new ReceivedPlayerListEventHandler() {
           @Override
           public void onReceivedPlayerList(ReceivedPlayerListEvent event) {
             getView().setPlayerList(event.getPlayerList());

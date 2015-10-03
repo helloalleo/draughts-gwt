@@ -11,7 +11,6 @@ public class NameTokens {
   public static final String profilePage = "!profile";
 
   public static final String errorPage = "!error";
-  public static final String myGamesPage = "!myGames";
   public static final String settingsPage = "!settings";
   public static final String logoutPage = "/rus/logout";
 
@@ -21,7 +20,6 @@ public class NameTokens {
   private final Link logoutLink;
   private final Link profileLink;
   private final Link settingsLink;
-  private final Link myGamesLink;
 
   @Inject
   public NameTokens(ShashkiMessages messages) {
@@ -30,7 +28,6 @@ public class NameTokens {
     logoutLink = new Link(logoutPage, messages.logout());
     profileLink = new Link(profilePage, messages.profile());
     settingsLink = new Link(settingsPage, messages.settings());
-    myGamesLink = new Link(myGamesPage, messages.myGames());
   }
 
   public Link[] getLeftLinks() {
@@ -46,7 +43,7 @@ public class NameTokens {
   }
 
   public Link[] getProfileLinks() {
-    return new Link[]{myGamesLink, settingsLink};
+    return new Link[]{settingsLink};
   }
 
   public Link[] getAllLinks() {

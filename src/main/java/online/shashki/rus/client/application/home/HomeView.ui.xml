@@ -9,7 +9,7 @@
 
     <g:HTMLPanel>
         <b:Button ui:field="newGameButton" size="LARGE">Новая игра</b:Button>
-        <b:ButtonGroup>
+        <b:ButtonGroup ui:field="countGameOnPageButtonGroup">
             <b:Button ui:field="moreGameOnPage" size="LARGE" icon="ANGLE_LEFT" title="Показать меньше на странице"/>
             <b:Button ui:field="lessGameOnPage" size="LARGE" icon="ANGLE_RIGHT" title="Показать больше на странице"/>
         </b:ButtonGroup>

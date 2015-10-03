@@ -336,14 +336,24 @@ public class Shashist extends PersistableObjectImpl {
 
   /**
    * Обновляем только сеарилизуемые поля
+   *
    * @param profile
    */
   public void updateSerializable(Shashist profile) {
+    if (profile == null) {
+      return;
+    }
     this.loggedIn = profile.isLoggedIn();
     this.playing = profile.isPlaying();
     this.online = profile.isOnline();
-    this.firstName = profile.getFirstName();
-    this.lastName = profile.getLastName();
-    this.playerName = profile.getPlayerName();
+    if (profile.getFirstName() != null) {
+      this.firstName = profile.getFirstName();
+    }
+    if (profile.getLastName() != null) {
+      this.lastName = profile.getLastName();
+    }
+    if (profile.getPlayerName() != null && !profile.getPlayerName().isEmpty()) {
+      this.playerName = profile.getPlayerName();
+    }
   }
 }
