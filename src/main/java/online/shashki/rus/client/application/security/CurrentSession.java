@@ -1,7 +1,7 @@
-package online.shashki.rus.client.application.login;
+package online.shashki.rus.client.application.security;
 
 import com.google.inject.Singleton;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.client.utils.SHCookies;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,9 +15,16 @@ public class CurrentSession {
 
   public void setLoggedIn(Boolean loggedIn) {
     this.loggedIn = loggedIn;
+    if (loggedIn) {
+      SHCookies.login();
+    }
   }
 
   public Boolean isLoggedIn() {
-    return loggedIn;
+    return loggedIn || isCookieLoggedIn();
+  }
+
+  private Boolean isCookieLoggedIn() {
+    return SHCookies.isLoggedIn();
   }
 }

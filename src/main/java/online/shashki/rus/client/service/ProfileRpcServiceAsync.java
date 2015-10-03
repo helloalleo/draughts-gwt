@@ -1,4 +1,4 @@
-package online.shashki.rus.client.rpc;
+package online.shashki.rus.client.service;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import online.shashki.rus.shared.model.Shashist;

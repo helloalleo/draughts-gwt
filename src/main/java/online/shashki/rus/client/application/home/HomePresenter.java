@@ -9,15 +9,16 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.annotations.Title;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.shashki.rus.client.application.ApplicationPresenter;
 import online.shashki.rus.client.application.component.play.PlayComponentPresenter;
-import online.shashki.rus.client.application.login.LoggedInGatekeeper;
+import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
-import online.shashki.rus.client.rpc.GameRpcServiceAsync;
+import online.shashki.rus.client.service.GameRpcServiceAsync;
 import online.shashki.rus.client.utils.SHCookies;
 import online.shashki.rus.shared.model.Game;
 
@@ -27,6 +28,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     implements HomeUiHandlers {
 
   public static final PermanentSlot<PlayComponentPresenter> SLOT_PLAY = new PermanentSlot<>();
+  private static final int INIT_SHOW_GAMES = 50;
   private PlayComponentPresenter playPresenter;
   private GameRpcServiceAsync gameService;
 
@@ -35,7 +37,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       EventBus eventBus,
       MyView view,
       MyProxy proxy,
-      LoggedInGatekeeper currentSession,
+      CurrentSession currentSession,
       GameRpcServiceAsync gameService,
       PlayComponentPresenter playPresenter) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
@@ -44,7 +46,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
     this.gameService = gameService;
     this.playPresenter = playPresenter;
-    getView().setShowLoggedInControls(currentSession.canReveal());
+    getView().setShowLoggedInControls(currentSession.isLoggedIn());
     SHCookies.setLocation(NameTokens.homePage);
   }
 
@@ -56,15 +58,10 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   }
 
   @Override
-  protected void onReveal() {
-    super.onReveal();
-  }
-
-  @Override
   public void prepareFromRequest(PlaceRequest request) {
     super.prepareFromRequest(request);
 
-    gameService.findGames(0, 10, new AsyncCallback<List<Game>>() {
+    gameService.findGames(0, INIT_SHOW_GAMES, new AsyncCallback<List<Game>>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();
@@ -97,6 +94,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   /**
    * {@link HomePresenter}'s proxy.
    */
+  @Title("Главная")
   @ProxyCodeSplit
   @NameToken(NameTokens.homePage)
   @NoGatekeeper

@@ -46,7 +46,7 @@ public class PlayShowPanel extends Composite {
     this.homeView = homeView;
     initWidget(binder.createAndBindUi(this));
     final String marginStr = Variables.S_MAIN_CONTAINER_MARGIN_TOP.substring(0, Variables.S_MAIN_CONTAINER_MARGIN_TOP.length() - 2);
-    panelHeight = Window.getClientHeight() - Integer.valueOf(marginStr) - 60;
+    panelHeight = Window.getClientHeight() - Integer.valueOf(marginStr) - 50;
     mainScrollPanel.setHeight(panelHeight + "px");
     mainScrollPanel.addScrollHandler(new ScrollHandler() {
       @Override

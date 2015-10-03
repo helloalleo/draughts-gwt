@@ -1,8 +1,9 @@
 package online.shashki.rus.server.rpc;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import online.shashki.rus.client.rpc.ProfileRpcService;
+import online.shashki.rus.client.service.ProfileRpcService;
 import online.shashki.rus.server.service.ShashistService;
+import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.shared.model.Shashist;
 
 import javax.inject.Inject;
@@ -21,9 +22,7 @@ public class ProfileRpcServiceImpl extends RemoteServiceServlet implements Profi
 
   @Override
   public Boolean isAuthenticated() {
-    HttpSession session = getThreadLocalRequest().getSession();
-    Object isAuth = session.getAttribute("isAuthenticated");
-    return isAuth == null ? Boolean.FALSE : (Boolean) isAuth;
+    return AuthUtils.isAuthenticated(getThreadLocalRequest().getSession());
   }
 
   @Override
@@ -45,12 +44,16 @@ public class ProfileRpcServiceImpl extends RemoteServiceServlet implements Profi
 
   @Override
   public void saveProfile(Shashist profile) {
+    if (!isAuthenticated()) {
+      return;
+    }
     if (profile != null) {
       Shashist shashist = shashistService.findById(profile.getId());
 
       if (shashist != null) {
         shashist.updateSerializable(profile);
-        shashistService.edit(shashist);}
+        shashistService.edit(shashist);
+      }
     }
   }
 }

@@ -16,7 +16,6 @@
 
 package online.shashki.rus.client.application;
 
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -27,11 +26,10 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.Proxy;
-import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
-import online.shashki.rus.client.application.login.CurrentSession;
 import online.shashki.rus.client.application.menu.MenuPresenter;
+import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
-import online.shashki.rus.client.rpc.ProfileRpcServiceAsync;
+import online.shashki.rus.client.service.ProfileRpcServiceAsync;
 import online.shashki.rus.client.utils.DebugUtils;
 
 /**
@@ -89,18 +87,6 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
       @Override
       public void onSuccess(Boolean result) {
         currentSession.setLoggedIn(result);
-        // необходимо чтобы вернуть отображение страницы на отоброжение, соответствующее адресной строке
-        // оно изменяется потому, что на время проверки аутентификации GWTP этот код еще не загрузился и
-        // Gateway получает false в isLoggedIn()
-        String hash = Window.Location.getHash();
-        if (hash == null || hash.isEmpty()) {
-          return;
-        }
-        String token = hash.substring(1, hash.length());
-        PlaceRequest placeRequest = new PlaceRequest.Builder()
-            .nameToken(token)
-            .build();
-        placeManager.revealPlace(placeRequest);
       }
     });
   }

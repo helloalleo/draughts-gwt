@@ -7,6 +7,7 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.annotations.Title;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import online.shashki.rus.client.application.ApplicationPresenter;
@@ -16,7 +17,8 @@ import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.utils.SHCookies;
 
 
-public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, ProfilePresenter.MyProxy> implements ProfileUiHandlers {
+public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, ProfilePresenter.MyProxy>
+    implements ProfileUiHandlers {
   public static final NestedSlot SLOT_PROFILE = new NestedSlot();
   public static final NestedSlot SLOT_PROFILE_CONTENT = new NestedSlot();
   private final MyGamesPresenter myGamesPresenter;
@@ -61,6 +63,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
   interface MyView extends View, HasUiHandlers<ProfileUiHandlers> {
   }
 
+  @Title("Профиль")
   @ProxyCodeSplit
   @NameToken(NameTokens.profilePage)
   interface MyProxy extends ProxyPlace<ProfilePresenter> {

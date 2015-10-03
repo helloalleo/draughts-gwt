@@ -1,9 +1,10 @@
 package online.shashki.rus.server.rpc;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import online.shashki.rus.client.rpc.GameRpcService;
+import online.shashki.rus.client.service.GameRpcService;
 import online.shashki.rus.server.service.GameService;
 import online.shashki.rus.server.service.ShashistService;
+import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.Shashist;
 
@@ -26,6 +27,9 @@ public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcS
 
   @Override
   public Game createGame(Game game) {
+    if (!AuthUtils.isAuthenticated(getThreadLocalRequest().getSession())) {
+      throw new RuntimeException("Unauthorized");
+    }
     Shashist playerWhite = game.getPlayerWhite();
     if (playerWhite == null) {
       return null;
@@ -51,11 +55,18 @@ public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcS
 
   @Override
   public Game getGame(Long id) {
+    if (!AuthUtils.isAuthenticated(getThreadLocalRequest().getSession())) {
+      throw new RuntimeException("Unauthorized");
+    }
     return gameService.findLazyFalse(id);
   }
 
   @Override
   public void saveGame(Game game) {
+    if (!AuthUtils.isAuthenticated(getThreadLocalRequest().getSession())) {
+      throw new RuntimeException("Unauthorized");
+    }
+
     Game gameEntity = gameService.find(game.getId());
     if (gameEntity != null) {
       Shashist playerWhite = shashistService.find(game.getPlayerWhite().getId());

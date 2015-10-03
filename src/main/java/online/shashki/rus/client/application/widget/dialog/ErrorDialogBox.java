@@ -1,5 +1,7 @@
 package online.shashki.rus.client.application.widget.dialog;
 
+import online.shashki.rus.client.utils.SHLog;
+
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -23,6 +25,7 @@ public class ErrorDialogBox extends MyDialogBox {
   }
 
   public static ErrorDialogBox setMessage(Throwable caught) {
+    SHLog.error(caught.getLocalizedMessage(), caught);
     return new ErrorDialogBox(constructMessage(null, caught));
   }
 

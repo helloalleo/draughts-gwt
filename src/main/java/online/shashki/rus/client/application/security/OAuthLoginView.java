@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.login;
+package online.shashki.rus.client.application.security;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;

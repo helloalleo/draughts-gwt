@@ -1,4 +1,4 @@
-package online.shashki.rus.client.rpc;
+package online.shashki.rus.client.service;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 
