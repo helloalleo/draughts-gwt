@@ -49,6 +49,9 @@ public class PlayItem extends Composite {
           .format(game.getPlayEndDate());
       playEndDate.setHTML(date);
     }
+    if (game.getEndGameScreenshot() != null) {
+      endGameScreenshot.setUrl(game.getEndGameScreenshot());
+    }
   }
 
   interface Binder extends UiBinder<HTMLPanel, PlayItem> {

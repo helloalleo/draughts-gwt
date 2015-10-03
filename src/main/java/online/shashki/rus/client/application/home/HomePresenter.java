@@ -29,6 +29,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
   public static final PermanentSlot<PlayComponentPresenter> SLOT_PLAY = new PermanentSlot<>();
   private static final int INIT_SHOW_GAMES = 50;
+  private final CurrentSession currentSession;
   private PlayComponentPresenter playPresenter;
   private GameRpcServiceAsync gameService;
 
@@ -44,9 +45,9 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
     getView().setUiHandlers(this);
 
+    this.currentSession = currentSession;
     this.gameService = gameService;
     this.playPresenter = playPresenter;
-    getView().setShowLoggedInControls(currentSession.isLoggedIn());
     SHCookies.setLocation(NameTokens.homePage);
   }
 
@@ -55,6 +56,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     super.onBind();
 
     setInSlot(SLOT_PLAY, playPresenter);
+    getView().setShowLoggedInControls(currentSession.isLoggedIn());
   }
 
   @Override

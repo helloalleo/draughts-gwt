@@ -22,6 +22,8 @@ public interface ProfileRpcService extends RemoteService {
 
   void saveProfile(Shashist profile);
 
+  boolean isCookieValid(String cookie);
+
   /**
    * Utility/Convenience class.
    * Use ProfileRpcService.App.fromString() to access static instance of ProfileRpcServiceAsync

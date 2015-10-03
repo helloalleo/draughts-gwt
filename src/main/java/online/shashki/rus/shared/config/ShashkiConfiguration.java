@@ -16,4 +16,6 @@ public interface ShashkiConfiguration extends ConstantsWithLookup {
   String debug();
 
   String level();
+
+  String site_url();
 }

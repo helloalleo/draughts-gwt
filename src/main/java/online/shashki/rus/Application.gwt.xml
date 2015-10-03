@@ -9,6 +9,7 @@
     <inherits name="com.ait.lienzo.Lienzo"/>
     <inherits name='com.google.gwt.user.theme.clean.Clean'/>
     <inherits name="com.github.nmorel.gwtjackson.GwtJackson"/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
 
     <extend-configuration-property name="gin.ginjector.modules"
                                    value="online.shashki.rus.client.gin.ClientModule"/>
@@ -25,4 +26,9 @@
 
     <set-configuration-property name="CssResource.enableGss" value="true"/>
     <set-configuration-property name="CssResource.legacy" value="true" />
+
+    <extend-property name="locale" values="en"/>
+    <extend-property name="locale" values="ru"/>
+    <set-property name="locale" value="ru"/>
+
 </module>

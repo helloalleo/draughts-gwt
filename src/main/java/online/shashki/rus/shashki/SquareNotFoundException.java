@@ -8,7 +8,9 @@ package online.shashki.rus.shashki;
  */
 public class SquareNotFoundException extends Exception {
 
+    private static final String MESSAGE = "Square not found";
+
     public SquareNotFoundException() {
-        super("Square not found");
+        super(MESSAGE);
     }
 }

@@ -15,9 +15,6 @@ public class CurrentSession {
 
   public void setLoggedIn(Boolean loggedIn) {
     this.loggedIn = loggedIn;
-    if (loggedIn) {
-      SHCookies.login();
-    }
   }
 
   public Boolean isLoggedIn() {

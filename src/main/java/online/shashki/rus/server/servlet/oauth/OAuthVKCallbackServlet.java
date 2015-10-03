@@ -9,6 +9,7 @@ import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
 import online.shashki.rus.server.config.ServerConfiguration;
 import online.shashki.rus.server.service.ShashistService;
+import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.shared.model.Shashist;
 
@@ -91,7 +92,7 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
       }
     }
 
-    req.getSession().setAttribute("isAuthenticated", true);
+    AuthUtils.login(req, resp);
     resp.sendRedirect(serverConfiguration.getContext());
   }
 

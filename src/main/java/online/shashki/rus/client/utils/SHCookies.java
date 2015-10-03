@@ -1,6 +1,13 @@
 package online.shashki.rus.client.utils;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.rpc.AsyncCallback;
+import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
+import online.shashki.rus.client.exception.InvalidCookieException;
+import online.shashki.rus.client.service.ProfileRpcService;
+import online.shashki.rus.shared.config.ShashkiConfiguration;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,6 +19,7 @@ public class SHCookies {
 
   private static String loc = "loc"; // куки адреса страницы
   private static String authenticated = "loggedIn";
+  private static ShashkiConfiguration configuration = GWT.create(ShashkiConfiguration.class);
 
   public static void setLocation(String nameToken) {
     Cookies.setCookie(loc, nameToken);
@@ -24,13 +32,23 @@ public class SHCookies {
   }
 
   public static boolean isLoggedIn() {
-    SHLog.debug("is logged in " + Boolean.valueOf(Cookies.getCookie(authenticated)));
-    return Boolean.valueOf(Cookies.getCookie(authenticated));
-  }
+    final String authCookie = Cookies.getCookie(authenticated);
+    ProfileRpcService.App.getInstance().isCookieValid(Cookies.getCookie(authenticated), new AsyncCallback<Boolean>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        ErrorDialogBox.setMessage(caught).show();
+      }
 
-  public static void login() {
-    SHLog.debug("login");
-    Cookies.setCookie(authenticated, Boolean.TRUE.toString());
+      @Override
+      public void onSuccess(Boolean result) {
+        if (!result && (authCookie != null && !authCookie.isEmpty())) {
+          Window.Location.assign(configuration.site_url() + "/#!login");
+          throw new InvalidCookieException();
+        }
+      }
+    });
+    SHLog.debug("LOG COOKIE " + authCookie);
+    return authCookie != null && !authCookie.isEmpty();
   }
 
   public static void logout() {

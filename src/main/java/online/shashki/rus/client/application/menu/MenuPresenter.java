@@ -1,5 +1,6 @@
 package online.shashki.rus.client.application.menu;
 
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
@@ -46,6 +47,11 @@ public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> impleme
   @Override
   public void onNavigation(NavigationEvent navigationEvent) {
 //    String nameToken = navigationEvent.getRequest().getNameToken();
+  }
+
+  @Override
+  public void isAuthenticated(AsyncCallback<Boolean> async) {
+    profileService.isAuthenticated(async);
   }
 
   interface MyView extends View, HasUiHandlers<MenuUiHandlers> {

@@ -5,11 +5,11 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.utils.SHCookies;
 import online.shashki.rus.client.utils.SHLog;
@@ -18,7 +18,6 @@ import org.gwtbootstrap3.client.ui.NavbarNav;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 
 public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements MenuPresenter.MyView {
-  private final CurrentSession currentSession;
   @UiField
   HTMLPanel panel;
   @UiField
@@ -31,11 +30,9 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
 
   @Inject
   MenuView(Binder binder,
-           CurrentSession currentSession,
            NameTokens nameTokens) {
     initWidget(binder.createAndBindUi(this));
 
-    this.currentSession = currentSession;
     this.nameTokens = nameTokens;
   }
 
@@ -51,31 +48,42 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
       navLeft.add(anchor);
     }
 
-    if (currentSession.isLoggedIn()) {
-      for (NameTokens.Link link : nameTokens.getRightAuthLinks()) {
-        AnchorListItem anchor;
-        if (link.token.equals(NameTokens.logoutPage)) {
-          anchor = new AnchorListItem(link.name);
-          anchor.setIcon(IconType.SIGN_OUT);
-          anchor.setHref(link.token);
-          anchor.addClickHandler(new ClickHandler() {
-            @Override
-            public void onClick(ClickEvent event) {
-              SHCookies.logout();
+    getUiHandlers().isAuthenticated(new AsyncCallback<Boolean>() {
+      @Override
+      public void onFailure(Throwable caught) {
+
+      }
+
+      @Override
+      public void onSuccess(Boolean result) {
+        if (result) {
+          for (NameTokens.Link link : nameTokens.getRightAuthLinks()) {
+            AnchorListItem anchor;
+            if (link.token.equals(NameTokens.logoutPage)) {
+              anchor = new AnchorListItem(link.name);
+              anchor.setIcon(IconType.SIGN_OUT);
+              anchor.setHref(link.token);
+              anchor.addClickHandler(new ClickHandler() {
+                @Override
+                public void onClick(ClickEvent event) {
+                  SHCookies.logout();
+                }
+              });
+            } else {
+              anchor = createAnchor(link);
             }
-          });
+            navRight.add(anchor);
+          }
         } else {
-          anchor = createAnchor(link);
+          for (NameTokens.Link link : nameTokens.getRightLinks()) {
+            AnchorListItem anchor = createAnchor(link);
+            navRight.add(anchor);
+          }
         }
-        navRight.add(anchor);
+
+        highlightMenu();
       }
-    } else {
-      for (NameTokens.Link link : nameTokens.getRightLinks()) {
-        AnchorListItem anchor = createAnchor(link);
-        navRight.add(anchor);
-      }
-    }
-    highlightMenu();
+    });
   }
 
   private AnchorListItem createAnchor(final NameTokens.Link link) {

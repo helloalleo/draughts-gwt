@@ -13,6 +13,8 @@ public interface ProfileRpcServiceAsync {
 
   void isAuthenticated(AsyncCallback<Boolean> async);
 
+  void isCookieValid(String cookie, AsyncCallback<Boolean> async);
+
   void getProfile(Long shashistId, AsyncCallback<Shashist> async);
 
   void saveProfile(Shashist profile, AsyncCallback<Void> async);

@@ -56,4 +56,10 @@ public class ProfileRpcServiceImpl extends RemoteServiceServlet implements Profi
       }
     }
   }
+
+  @Override
+  public boolean isCookieValid(String cookie) {
+    return !(cookie == null || cookie.isEmpty())
+        && cookie.equals(getThreadLocalRequest().getSession().getId());
+  }
 }
