@@ -8,8 +8,8 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import com.google.gwt.user.client.ui.Image;
 import online.shashki.rus.shared.model.Game;
+import org.gwtbootstrap3.client.ui.Image;
 
 public class PlayItem extends Composite {
 
@@ -51,7 +51,7 @@ public class PlayItem extends Composite {
     }
     if (game.getEndGameScreenshot() != null) {
       endGameScreenshot.setUrl(game.getEndGameScreenshot());
-      endGameScreenshot.addStyleName("img-responsive");
+      endGameScreenshot.setResponsive(true);
     }
   }
 

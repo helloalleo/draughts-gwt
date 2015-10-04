@@ -16,7 +16,6 @@
 
 package online.shashki.rus.client.application;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.Presenter;
@@ -28,9 +27,8 @@ import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.client.proxy.Proxy;
 import online.shashki.rus.client.application.menu.MenuPresenter;
 import online.shashki.rus.client.application.security.CurrentSession;
-import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.service.ProfileRpcServiceAsync;
-import online.shashki.rus.client.utils.DebugUtils;
+import online.shashki.rus.client.utils.SHLog;
 
 /**
  * This is the top-level presenter of the hierarchy. Other presenters reveal themselves within this presenter.
@@ -60,14 +58,13 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
       ProfileRpcServiceAsync profileService) {
     super(eventBus, view, proxy, RevealType.Root);
 
-    DebugUtils.initDebugAndErrorHandling();
 
     this.placeManager = placeManager;
     this.menuPresenter = menuPresenter;
     this.currentSession = currentSession;
     this.profileService = profileService;
 
-    checkIfAuthenticated();
+    SHLog.debug("application presenter");
   }
 
   @Override
@@ -75,20 +72,6 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
     super.onBind();
 
     setInSlot(SLOT_MENU, menuPresenter);
-  }
-
-  public void checkIfAuthenticated() {
-    profileService.isAuthenticated(new AsyncCallback<Boolean>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
-      }
-
-      @Override
-      public void onSuccess(Boolean result) {
-        currentSession.setLoggedIn(result);
-      }
-    });
   }
 
   /**

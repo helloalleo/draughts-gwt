@@ -16,7 +16,7 @@ public class Variables {
   public static final String C_TITLE = "#921b12";
   /* -- Sizes -- */
   public static final String S_TITLE = "22px";
-  public static final String S_MAIN_CONTAINER_MARGIN_TOP = "80px";
+  public static final String S_MAIN_CONTAINER_MARGIN_TOP = "100px";
 
   /*Bootstrap*/
   public static final int COLUMNS_IN_LAYOUT = 12;

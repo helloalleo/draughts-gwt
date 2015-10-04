@@ -31,6 +31,8 @@ import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Game;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
+import org.gwtbootstrap3.client.ui.CheckBoxButton;
+import org.gwtbootstrap3.client.ui.html.Strong;
 
 import java.util.List;
 
@@ -51,6 +53,10 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   Button lessGameOnPage;
   @UiField
   ButtonGroup countGameOnPageButtonGroup;
+  @UiField
+  CheckBoxButton myGameList;
+  @UiField
+  Strong gameListLabel;
 
   private boolean newGameState = true;
 
@@ -66,6 +72,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @UiHandler("newGameButton")
   public void onNewGame(ClickEvent event) {
     newGameState = !newGameState;
+    myGameList.setVisible(!myGameList.isVisible());
     countGameOnPageButtonGroup.setVisible(newGameState);
     newGameButton.setText(newGameState ? messages.newGameButtonText() : messages.playListButtonText());
     play.setVisible(!play.isVisible());
@@ -86,6 +93,8 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   public void setShowLoggedInControls(Boolean loggedIn) {
     SHLog.debug("LOGGED IN " + loggedIn);
     newGameButton.setVisible(loggedIn);
+    myGameList.setVisible(loggedIn);
+    gameListLabel.setVisible(!loggedIn);
   }
 
   @Override

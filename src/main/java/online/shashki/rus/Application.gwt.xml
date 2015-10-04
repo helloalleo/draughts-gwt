@@ -26,6 +26,10 @@
 
     <set-configuration-property name="CssResource.enableGss" value="true"/>
     <set-configuration-property name="CssResource.legacy" value="true" />
+    <set-configuration-property name="gwtp.prebootstrapper"
+                                value="online.shashki.rus.client.application.AppPreBootstrapper"/>
+    <set-configuration-property name="gwtp.bootstrapper"
+                                value="online.shashki.rus.client.application.AppBootstrapper"/>
 
     <extend-property name="locale" values="en"/>
     <extend-property name="locale" values="ru"/>

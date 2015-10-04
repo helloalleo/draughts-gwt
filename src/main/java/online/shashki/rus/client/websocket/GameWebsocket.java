@@ -57,9 +57,9 @@ public class GameWebsocket implements WebSocketCallback {
       public void onSuccess(Shashist result) {
         player = result;
         if (player == null) {
-          throw new RuntimeException("Player not found");
+//          throw new RuntimeException("Player not found");
         }
-        SHLog.debug("WEBSOCKET PLAYER - " + player.toString());
+//        SHLog.debug("WEBSOCKET PLAYER - " + player.toString());
       }
     });
     SHLog.debug(eventBus == null ? "NULL EVENT BUS" : "OK EVENT BUS");

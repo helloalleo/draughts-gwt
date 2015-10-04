@@ -28,3 +28,11 @@
     margin: 0 auto;
     display: table;
 }
+
+.xLargeFont {
+    font-size: x-large;
+}
+
+.largeFont {
+    font-size: large;
+}

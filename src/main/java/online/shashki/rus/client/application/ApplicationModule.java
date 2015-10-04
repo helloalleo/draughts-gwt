@@ -19,9 +19,9 @@ package online.shashki.rus.client.application;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import online.shashki.rus.client.application.error.ErrorModule;
 import online.shashki.rus.client.application.home.HomeModule;
-import online.shashki.rus.client.application.security.OAuthLoginModule;
 import online.shashki.rus.client.application.menu.MenuModule;
 import online.shashki.rus.client.application.profile.ProfileModule;
+import online.shashki.rus.client.application.security.OAuthLoginModule;
 
 public class ApplicationModule extends AbstractPresenterModule {
   @Override

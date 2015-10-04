@@ -31,5 +31,9 @@ public interface AppResources extends ClientBundle {
     String mainContainer();
 
     String alignHorizontal();
+
+    String xLargeFont();
+
+    String largeFont();
   }
 }

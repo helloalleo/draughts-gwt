@@ -10,30 +10,46 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
+import online.shashki.rus.client.resources.AppResources;
 import online.shashki.rus.client.utils.SHCookies;
 import online.shashki.rus.client.utils.SHLog;
 import org.gwtbootstrap3.client.ui.AnchorListItem;
+import org.gwtbootstrap3.client.ui.Image;
+import org.gwtbootstrap3.client.ui.NavbarBrand;
 import org.gwtbootstrap3.client.ui.NavbarNav;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 
 public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements MenuPresenter.MyView {
+  private final AppResources resources;
   @UiField
   HTMLPanel panel;
   @UiField
   NavbarNav navLeft;
   @UiField
   NavbarNav navRight;
+//  @UiField
+//  Image logoImg;
+  @UiField
+  NavbarBrand brand;
 
   private AnchorListItem prevAnchor;
   private NameTokens nameTokens;
 
   @Inject
   MenuView(Binder binder,
+           AppResources resources,
            NameTokens nameTokens) {
     initWidget(binder.createAndBindUi(this));
 
+    this.resources = resources;
     this.nameTokens = nameTokens;
+
+    final Image logo = new Image(resources.images().logo());
+    final String size = "40px";
+    logo.setSize(size, size);
+    brand.add(logo);
   }
 
   @Override
@@ -51,7 +67,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     getUiHandlers().isAuthenticated(new AsyncCallback<Boolean>() {
       @Override
       public void onFailure(Throwable caught) {
-
+        ErrorDialogBox.setMessage(caught).show();
       }
 
       @Override
@@ -90,7 +106,6 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     final AnchorListItem anchor = new AnchorListItem(link.name);
     switch (link.token) {
       case NameTokens.homePage:
-        anchor.setIcon(IconType.HOME);
         break;
       case NameTokens.profilePage:
         anchor.setIcon(IconType.USER);

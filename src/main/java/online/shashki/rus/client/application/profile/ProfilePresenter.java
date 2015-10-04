@@ -50,7 +50,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
   protected void onBind() {
     super.onBind();
 
-//    setInSlot(SLOT_PROFILE_CONTENT, settingsPresenter);
+    setInSlot(SLOT_PROFILE_CONTENT, settingsPresenter);
   }
 
   @Override
