@@ -157,7 +157,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   private void initEmptyDeskPanel() {
-    final String mainContainerMarginTop = Variables.S_MAIN_CONTAINER_MARGIN_TOP;
+    final String mainContainerMarginTop = Variables.S_MAIN_CONTAINER_SCROLL_MARGIN_TOP;
     final String highStr = mainContainerMarginTop.substring(0, mainContainerMarginTop.length() - 2); // отсекаем строку пикселей
     int shashkiSide = Window.getClientHeight() - Integer.valueOf(highStr);
     shashkiColumn.setWidth(shashkiSide + "px");

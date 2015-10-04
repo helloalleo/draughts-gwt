@@ -5,6 +5,8 @@ import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Element;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
@@ -13,16 +15,14 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.resources.AppResources;
+import online.shashki.rus.client.resources.Variables;
 import online.shashki.rus.client.utils.SHCookies;
 import online.shashki.rus.client.utils.SHLog;
-import org.gwtbootstrap3.client.ui.AnchorListItem;
-import org.gwtbootstrap3.client.ui.Image;
-import org.gwtbootstrap3.client.ui.NavbarBrand;
-import org.gwtbootstrap3.client.ui.NavbarNav;
+import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 
 public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements MenuPresenter.MyView {
-  private final AppResources resources;
+  private final Image logo;
   @UiField
   HTMLPanel panel;
   @UiField
@@ -33,9 +33,12 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
 //  Image logoImg;
   @UiField
   NavbarBrand brand;
+  @UiField
+  Navbar navbar;
 
   private AnchorListItem prevAnchor;
   private NameTokens nameTokens;
+  private AppResources resources;
 
   @Inject
   MenuView(Binder binder,
@@ -43,13 +46,48 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
            NameTokens nameTokens) {
     initWidget(binder.createAndBindUi(this));
 
-    this.resources = resources;
     this.nameTokens = nameTokens;
+    this.resources = resources;
 
-    final Image logo = new Image(resources.images().logo());
-    final String size = "40px";
-    logo.setSize(size, size);
+    logo = new Image(resources.images().logo());
     brand.add(logo);
+
+    Window.addWindowScrollHandler(new Window.ScrollHandler() {
+      @Override
+      public void onWindowScroll(Window.ScrollEvent event) {
+        if (event.getScrollTop() == 0) {
+          SHLog.debug("Scrolling");
+          navbarTopHeight();
+        } else {
+          navbarScrollHeight();
+        }
+      }
+    });
+  }
+
+  private void setLinkHeight(String height) {
+    boolean top = Variables.S_NAVBAR_TOP_HEIGHT.equals(height);
+    for (Widget widget : navLeft) {
+      widget.setHeight(height);
+      setLinkChildHeight(widget.getElement(), top);
+    }
+    for (Widget widget : navRight) {
+      widget.setHeight(height);
+      setLinkChildHeight(widget.getElement(), top);
+    }
+  }
+
+  private void setLinkChildHeight(Element element, boolean top) {
+    for (int i = 0; i < element.getChildCount(); i++) {
+      final Element child = (Element) element.getChild(i);
+      if (top) {
+        child.addClassName(resources.style().navbarTop());
+        child.removeClassName(resources.style().navbarScroll());
+      } else {
+        child.addClassName(resources.style().navbarScroll());
+        child.removeClassName(resources.style().navbarTop());
+      }
+    }
   }
 
   @Override
@@ -98,8 +136,25 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
         }
 
         highlightMenu();
+        navbarTopHeight();
       }
     });
+  }
+
+  private void navbarScrollHeight() {
+    final String navbarScrollHeight = Variables.S_NAVBAR_SCROLL_HEIGHT;
+    navbar.setHeight(navbarScrollHeight);
+    setLinkHeight(navbarScrollHeight);
+    final String size = Variables.S_LOGO_SCROLL_HEIGHT;
+    logo.setSize(size, size);
+  }
+
+  private void navbarTopHeight() {
+    final String navbarTopHeight = Variables.S_NAVBAR_TOP_HEIGHT;
+    navbar.setHeight(navbarTopHeight);
+    setLinkHeight(navbarTopHeight);
+    final String size = Variables.S_LOGO_TOP_HEIGHT;
+    logo.setSize(size, size);
   }
 
   private AnchorListItem createAnchor(final NameTokens.Link link) {

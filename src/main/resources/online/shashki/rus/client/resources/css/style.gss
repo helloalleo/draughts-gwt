@@ -43,3 +43,13 @@ body {
 .largeFont {
     font-size: large;
 }
+
+.navbarTop {
+    line-height: 40px !important;
+    height: 70px !important;
+}
+
+.navbarScroll {
+    line-height: 20px !important;
+    height: 50px !important;
+}

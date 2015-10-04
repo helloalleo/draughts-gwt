@@ -5,10 +5,11 @@
         >
 
     <ui:with field="res" type="online.shashki.rus.client.resources.AppResources"/>
+    <ui:with field="vars" type="online.shashki.rus.client.resources.Variables"/>
 
     <g:HTMLPanel ui:field="panel">
-        <b:Navbar position="FIXED_TOP">
-            <b:Container height="70px">
+        <b:Navbar ui:field="navbar" position="FIXED_TOP" height="{vars.navbarTopHeight}">
+            <b:Container>
                 <b:NavbarBrand ui:field="brand" href="#!home">
                 </b:NavbarBrand>
                 <b:NavbarNav ui:field="navLeft" addStyleNames="{res.style.xLargeFont}"/>

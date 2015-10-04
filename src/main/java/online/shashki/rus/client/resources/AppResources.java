@@ -35,5 +35,9 @@ public interface AppResources extends ClientBundle {
     String xLargeFont();
 
     String largeFont();
+
+    String navbarScroll();
+
+    String navbarTop();
   }
 }
