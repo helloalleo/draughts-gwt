@@ -4,5 +4,5 @@ import com.gwtplatform.mvp.client.UiHandlers;
 
 interface HomeUiHandlers extends UiHandlers {
 
-  void getMoreGames(int newPageSize);
+  void getMoreGames(boolean myGames, int newPageSize);
 }

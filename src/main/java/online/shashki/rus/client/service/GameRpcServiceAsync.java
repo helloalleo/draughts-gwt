@@ -13,13 +13,13 @@ import java.util.List;
  */
 public interface GameRpcServiceAsync {
 
-  void getGame(Long id, AsyncCallback<Game> async);
+  void find(Long id, AsyncCallback<Game> async);
 
-  void saveGame(Game game, AsyncCallback<Void> async);
-
-  void createGame(Game game, AsyncCallback<Game> async);
+  void save(Game game, AsyncCallback<Game> async);
 
   void findGames(int start, int length, AsyncCallback<List<Game>> async);
 
   void findAllGames(AsyncCallback<List<Game>> async);
+
+  void findUserGames(int start, int length, AsyncCallback<List<Game>> async);
 }

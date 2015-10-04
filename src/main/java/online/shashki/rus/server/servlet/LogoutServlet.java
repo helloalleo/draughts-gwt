@@ -1,7 +1,7 @@
 package online.shashki.rus.server.servlet;
 
 import online.shashki.rus.server.config.ServerConfiguration;
-import online.shashki.rus.server.service.ShashistService;
+import online.shashki.rus.server.service.ProfileRpcServiceImpl;
 import online.shashki.rus.shared.model.Shashist;
 
 import javax.inject.Inject;
@@ -22,7 +22,7 @@ import java.io.IOException;
 public class LogoutServlet extends HttpServlet {
 
   @Inject
-  private ShashistService shashistService;
+  private ProfileRpcServiceImpl shashistService;
   @Inject
   private ServerConfiguration configuration;
 
@@ -32,7 +32,7 @@ public class LogoutServlet extends HttpServlet {
       shashist.setOnline(false);
       shashist.setPlaying(false);
       shashist.setLoggedIn(false);
-      shashistService.edit(shashist);
+      shashistService.save(shashist);
     }
 
     request.getSession().invalidate();

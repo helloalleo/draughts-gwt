@@ -216,6 +216,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
           if (value.isLoggedIn()) {
             org.gwtbootstrap3.client.ui.Image img;
             String playerPublicName = value.getPublicName();
+            SHLog.debug("CELL LIST userPublicName " + playerPublicName);
             if (player.getId().equals(value.getId())) {
               sb.appendEscaped(playerPublicName);
             } else {
@@ -246,6 +247,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Override
   public void setPlayerList(List<Shashist> shashistList) {
+    SHLog.debug("setPlayerList " + shashistList);
     playerCellList.setRowCount(0);
     playerCellList.setRowData(shashistList);
   }

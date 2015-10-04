@@ -25,7 +25,7 @@
 //
 //  void setOpponent(Shashist opponent);
 //
-//  Game getGame();
+//  Game find();
 //
 //  void setGame(Game game);
 //

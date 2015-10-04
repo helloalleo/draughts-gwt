@@ -8,7 +8,7 @@ import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
 import online.shashki.rus.server.config.ServerConfiguration;
-import online.shashki.rus.server.service.ShashistService;
+import online.shashki.rus.server.service.ProfileRpcServiceImpl;
 import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.shared.model.Shashist;
@@ -22,7 +22,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -35,12 +35,12 @@ import java.util.List;
 public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackServlet {
 
   @Inject
-  private ShashistService shashistService;
+  private ProfileRpcServiceImpl shashistService;
 
   @Inject
   private ServerConfiguration serverConfiguration;
 
-  private List<String> scopes = new ArrayList<>();
+  private List<String> scope = Collections.singletonList("email");
 
   @Override
   protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential) throws ServletException, IOException {
@@ -79,19 +79,17 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
       shashist.setLastName(lastName.getString());
     } else {
       shashist.setVisitCounter(shashist.getVisitCounter() + 1);
-      shashist.setLoggedIn(true);
     }
+    shashist.setLoggedIn(true);
+    shashist.setPlaying(false);
+    shashist.setOnline(false);
 
     HttpSession session = req.getSession();
     if (shashist.getSessionId() == null
         || !shashist.getSessionId().equals(session.getId())) {
       shashist.setSessionId(session.getId());
-      if (shashist.getId() == null) {
-        shashistService.create(shashist);
-      } else {
-        shashistService.edit(shashist);
-      }
     }
+    shashistService.save(shashist, true);
 
     AuthUtils.login(req, resp);
     resp.sendRedirect(serverConfiguration.getContext());
@@ -106,7 +104,7 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
   @Override
   protected AuthorizationCodeFlow initializeFlow() throws ServletException, IOException {
     ClientSecrets clientSecrets = new ClientSecrets(serverConfiguration, ClientSecrets.SocialType.VK);
-    return Utils.getFlow(clientSecrets, scopes);
+    return Utils.getFlow(clientSecrets, scope);
   }
 
   @Override

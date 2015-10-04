@@ -14,4 +14,6 @@ public interface GameDao extends Dao<Game> {
   Game findLazyFalse(Long id);
 
   List<Game> findRange(int start, int length);
+
+  List<Game> findUserGames(Long userId, int start, int length);
 }

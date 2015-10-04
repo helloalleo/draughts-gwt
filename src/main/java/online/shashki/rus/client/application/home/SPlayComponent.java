@@ -213,11 +213,11 @@
 //    eventBus.addHandler(RecivedPlayerListEvent.TYPE, new RecivedPlayerListEventHandler() {
 //      @Override
 //      public void onReceivedPlayerList(RecivedPlayerListEvent event) {
-//        if (!event.getPlayerList().contains(clientFactory.getOpponent()) && clientFactory.getGame() != null) {
-//          Game game = clientFactory.getGame();
+//        if (!event.getPlayerList().contains(clientFactory.getOpponent()) && clientFactory.find() != null) {
+//          Game game = clientFactory.find();
 //          game.setPlayEndStatus(clientFactory.isPlayerHasWhiteColor() ? GameEnds.BLACK_LEFT : GameEnds.WHITE_LEFT);
 //          game.setPlayEndDate(new Date());
-//          gameService.saveGame(game, new AsyncCallback<Void>() {
+//          gameService.save(game, new AsyncCallback<Void>() {
 //            @Override
 //            public void onFailure(Throwable throwable) {
 //              new DialogBox(messages.error(), messages.errorWhileSavingGame());
@@ -272,7 +272,7 @@
 //        BoardBackgroundLayer backgroundLayer = initDeskPanel(event.isWhite());
 //        board = new Board(backgroundLayer, 8, 8, event.isWhite());
 //        lienzoPanel.add(board);
-//        updateTurn(clientFactory.getGame().getPlayerWhite().getSystemId()
+//        updateTurn(clientFactory.find().getPlayerWhite().getSystemId()
 //            .equals(clientFactory.getPlayer().getSystemId()));
 //        hidePlayButtonAndShowPlayingButtons();
 //      }
@@ -297,7 +297,7 @@
 //      public void onCheckWinner(CheckWinnerEvent event) {
 //        setBeatenMy(CHECKERS_ON_DESK_INIT - board.getMyDraughts().size());
 //        setBeatenOpponent(CHECKERS_ON_DESK_INIT - board.getOpponentDraughts().size());
-//        Game endGame = clientFactory.getGame();
+//        Game endGame = clientFactory.find();
 //        if (0 == board.getMyDraughts().size()) {
 //          new DialogBox(messages.debug(), messages.youLose()).show();
 //          if (board.isWhite()) {
@@ -317,7 +317,7 @@
 //        if (endGame.getPlayEndStatus() == null) {
 //          return;
 //        }
-//        gameService.getGame(endGame.getId(), new AsyncCallback<Game>() {
+//        gameService.find(endGame.getId(), new AsyncCallback<Game>() {
 //          @Override
 //          public void onFailure(Throwable throwable) {
 //            new DialogBox(messages.error(), messages.errorWhileGettingGame());
@@ -328,7 +328,7 @@
 //            if (game.getPlayEndStatus() == null) {
 //              endGame.setPartyNotation(NotationPanel.getNotation());
 //              endGame.setPlayEndDate(new Date());
-//              gameService.saveGame(endGame, new AsyncCallback<Void>() {
+//              gameService.save(endGame, new AsyncCallback<Void>() {
 //                @Override
 //                public void onFailure(Throwable caught) {
 //                  new DialogBox(messages.error(), messages.errorWhileSavingGame());
@@ -368,7 +368,7 @@
 //    GameMessage gameMessage = GWT.create(GameMessage.class);
 //    gameMessage.setSender(clientFactory.getPlayer());
 //    gameMessage.setReceiver(clientFactory.getOpponent());
-//    gameMessage.setGame(clientFactory.getGame());
+//    gameMessage.setGame(clientFactory.find());
 //    return gameMessage;
 //  }
 //

@@ -45,14 +45,14 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
   public void submitNewPlayerName(String playerName) {
     player.setPlayerName(playerName);
     SHLog.debug(playerName);
-    profileService.saveProfile(player, new AsyncCallback<Void>() {
+    profileService.save(player, new AsyncCallback<Shashist>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();
       }
 
       @Override
-      public void onSuccess(Void result) {
+      public void onSuccess(Shashist result) {
         InfoDialogBox.setMessage(messages.profileUpdated()).show();
         try {
           eventBus.fireEvent(new UpdatePlayerListEvent());

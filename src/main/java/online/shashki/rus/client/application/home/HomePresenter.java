@@ -19,6 +19,7 @@ import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.service.GameRpcServiceAsync;
+import online.shashki.rus.client.service.ProfileRpcServiceAsync;
 import online.shashki.rus.client.utils.SHCookies;
 import online.shashki.rus.shared.model.Game;
 
@@ -28,8 +29,9 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     implements HomeUiHandlers {
 
   public static final PermanentSlot<PlayComponentPresenter> SLOT_PLAY = new PermanentSlot<>();
-  private static final int INIT_SHOW_GAMES = 50;
+  public static final int INIT_SHOW_GAMES_PAGE_SIZE = 50;
   private final CurrentSession currentSession;
+  private final ProfileRpcServiceAsync profileService;
   private PlayComponentPresenter playPresenter;
   private GameRpcServiceAsync gameService;
 
@@ -39,6 +41,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       MyView view,
       MyProxy proxy,
       CurrentSession currentSession,
+      ProfileRpcServiceAsync profileService,
       GameRpcServiceAsync gameService,
       PlayComponentPresenter playPresenter) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
@@ -46,6 +49,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     getView().setUiHandlers(this);
 
     this.currentSession = currentSession;
+    this.profileService = profileService;
     this.gameService = gameService;
     this.playPresenter = playPresenter;
     SHCookies.setLocation(NameTokens.homePage);
@@ -63,7 +67,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public void prepareFromRequest(PlaceRequest request) {
     super.prepareFromRequest(request);
 
-    gameService.findGames(0, INIT_SHOW_GAMES, new AsyncCallback<List<Game>>() {
+    gameService.findGames(0, INIT_SHOW_GAMES_PAGE_SIZE, new AsyncCallback<List<Game>>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();
@@ -72,25 +76,39 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
       @Override
       public void onSuccess(List<Game> result) {
-        getProxy().manualReveal(HomePresenter.this);
         getView().setGames(result);
+        getProxy().manualReveal(HomePresenter.this);
       }
     });
   }
 
   @Override
-  public void getMoreGames(int newPageSize) {
-    gameService.findGames(0, newPageSize, new AsyncCallback<List<Game>>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
-      }
+  public void getMoreGames(boolean myGames, int newPageSize) {
+    if (myGames) {
+      gameService.findUserGames(0, newPageSize, new AsyncCallback<List<Game>>() {
+        @Override
+        public void onFailure(Throwable caught) {
+          ErrorDialogBox.setMessage(caught).show();
+        }
 
-      @Override
-      public void onSuccess(List<Game> result) {
-        getView().setGames(result);
-      }
-    });
+        @Override
+        public void onSuccess(List<Game> result) {
+          getView().setGames(result);
+        }
+      });
+    } else {
+      gameService.findGames(0, newPageSize, new AsyncCallback<List<Game>>() {
+        @Override
+        public void onFailure(Throwable caught) {
+          ErrorDialogBox.setMessage(caught).show();
+        }
+
+        @Override
+        public void onSuccess(List<Game> result) {
+          getView().setGames(result);
+        }
+      });
+    }
   }
 
   /**

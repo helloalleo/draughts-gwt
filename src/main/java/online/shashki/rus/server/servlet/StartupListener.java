@@ -1,6 +1,6 @@
 package online.shashki.rus.server.servlet;
 
-import online.shashki.rus.server.service.ShashistService;
+import online.shashki.rus.server.service.ProfileRpcServiceImpl;
 import online.shashki.rus.shared.model.Shashist;
 
 import javax.inject.Inject;
@@ -19,7 +19,7 @@ import java.util.List;
 public class StartupListener implements ServletContextListener {
 
   @Inject
-  private ShashistService shashistService;
+  private ProfileRpcServiceImpl shashistService;
 
   @Override
   public void contextInitialized(ServletContextEvent servletContextEvent) {
@@ -29,7 +29,7 @@ public class StartupListener implements ServletContextListener {
       shashist.setOnline(false);
       shashist.setPlaying(false);
       shashist.setLoggedIn(false);
-      shashistService.edit(shashist);
+      shashistService.save(shashist, true);
     }
   }
 

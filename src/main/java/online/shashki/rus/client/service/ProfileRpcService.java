@@ -16,11 +16,11 @@ public interface ProfileRpcService extends RemoteService {
 
   Boolean isAuthenticated();
 
-  Shashist getProfile(Long shashistId);
+  Shashist find(Long shashistId);
 
   Shashist getCurrentProfile();
 
-  void saveProfile(Shashist profile);
+  Shashist save(Shashist profile);
 
   boolean isCookieValid(String cookie);
 

@@ -5,13 +5,17 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.resources.AppResources;
+import online.shashki.rus.client.service.ProfileRpcService;
 import online.shashki.rus.client.utils.TrUtils;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Game;
+import online.shashki.rus.shared.model.Shashist;
 import org.gwtbootstrap3.client.ui.Image;
 
 public class PlayItem extends Composite {
@@ -19,6 +23,7 @@ public class PlayItem extends Composite {
   private static Binder binder = GWT.create(Binder.class);
   private final ShashkiMessages messages = GWT.create(ShashkiMessages.class);
   private final AppResources resources = GWT.create(AppResources.class);
+  private final String PLAYER_COLOR_DELIMITER = ": ";
 
   @UiField
   HTMLPanel panel;
@@ -33,14 +38,25 @@ public class PlayItem extends Composite {
   @UiField
   HTML playEndDate;
 
-  PlayItem(Game game) {
+  PlayItem(final Game game) {
     initWidget(binder.createAndBindUi(this));
 
     panel.addStyleName(resources.style().playItem());
-    setGame(game);
+
+    ProfileRpcService.App.getInstance().getCurrentProfile(new AsyncCallback<Shashist>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        ErrorDialogBox.setMessage(caught).show();
+      }
+
+      @Override
+      public void onSuccess(Shashist result) {
+        setGame(result, game);
+      }
+    });
   }
 
-  public void setGame(Game game) {
+  public void setGame(Shashist player, Game game) {
     if (game.getPlayEndStatus() != null) {
       whoDidWin.setHTML(TrUtils.translateEndGame(game.getPlayEndStatus()));
     }
@@ -52,6 +68,13 @@ public class PlayItem extends Composite {
     if (game.getEndGameScreenshot() != null) {
       endGameScreenshot.setUrl(game.getEndGameScreenshot());
       endGameScreenshot.setResponsive(true);
+    }
+
+    if (player != null
+        && (player.getId().equals(game.getPlayerBlack().getId())
+        || player.getId().equals(game.getPlayerWhite().getId()))) {
+      whitePlayerName.setHTML(messages.white() + PLAYER_COLOR_DELIMITER + game.getPlayerWhite().getPublicName());
+      blackPlayerName.setHTML(messages.black() + PLAYER_COLOR_DELIMITER + game.getPlayerBlack().getPublicName());
     }
   }
 

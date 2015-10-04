@@ -54,7 +54,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @UiField
   ButtonGroup countGameOnPageButtonGroup;
   @UiField
-  CheckBoxButton myGameList;
+  CheckBoxButton myGameListCheckButton;
   @UiField
   Strong gameListLabel;
 
@@ -72,7 +72,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @UiHandler("newGameButton")
   public void onNewGame(ClickEvent event) {
     newGameState = !newGameState;
-    myGameList.setVisible(!myGameList.isVisible());
+    myGameListCheckButton.setVisible(!myGameListCheckButton.isVisible());
     countGameOnPageButtonGroup.setVisible(newGameState);
     newGameButton.setText(newGameState ? messages.newGameButtonText() : messages.playListButtonText());
     play.setVisible(!play.isVisible());
@@ -89,11 +89,16 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     playShowPanel.lessGameOnPanel();
   }
 
+  @UiHandler("myGameListCheckButton")
+  public void onMyGameList(ClickEvent event) {
+    getUiHandlers().getMoreGames(myGameListCheckButton.getValue(), HomePresenter.INIT_SHOW_GAMES_PAGE_SIZE);
+  }
+
   @Override
   public void setShowLoggedInControls(Boolean loggedIn) {
     SHLog.debug("LOGGED IN " + loggedIn);
     newGameButton.setVisible(loggedIn);
-    myGameList.setVisible(loggedIn);
+    myGameListCheckButton.setVisible(loggedIn);
     gameListLabel.setVisible(!loggedIn);
   }
 
@@ -120,7 +125,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   public void getMoreGames(int newPageSize) {
     SHLog.debug("GET MORE GAMES " + newPageSize);
-    getUiHandlers().getMoreGames(newPageSize);
+    getUiHandlers().getMoreGames(myGameListCheckButton.getValue(), newPageSize);
   }
 
   interface Binder extends UiBinder<Widget, HomeView> {

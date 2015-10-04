@@ -1,14 +1,15 @@
-package online.shashki.rus.server.rpc;
+package online.shashki.rus.server.service;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import online.shashki.rus.client.service.GameRpcService;
-import online.shashki.rus.server.service.GameService;
-import online.shashki.rus.server.service.ShashistService;
+import online.shashki.rus.server.dao.GameDao;
+import online.shashki.rus.server.dao.ShashistDao;
 import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.Shashist;
 
 import javax.inject.Inject;
+import java.util.ArrayList;
 import java.util.List;
 
 /**
@@ -20,13 +21,16 @@ import java.util.List;
 public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcService {
 
   @Inject
-  private GameService gameService;
+  private GameDao gameDao;
 
   @Inject
-  private ShashistService shashistService;
+  private ShashistDao shashistDao;
+
+  @Inject
+  private ProfileRpcServiceImpl profileService;
 
   @Override
-  public Game createGame(Game game) {
+  public Game save(Game game) {
     if (!AuthUtils.isAuthenticated(getThreadLocalRequest().getSession())) {
       throw new RuntimeException("Unauthorized");
     }
@@ -34,7 +38,7 @@ public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcS
     if (playerWhite == null) {
       return null;
     }
-    playerWhite = shashistService.find(playerWhite.getId());
+    playerWhite = shashistDao.find(playerWhite.getId());
     if (playerWhite == null) {
       return null;
     }
@@ -42,51 +46,46 @@ public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcS
     if (playerBlack == null) {
       return null;
     }
-    playerBlack = shashistService.find(playerBlack.getId());
+    playerBlack = shashistDao.find(playerBlack.getId());
     if (playerBlack == null) {
       return null;
     }
 
     game.setPlayerWhite(playerWhite);
     game.setPlayerBlack(playerBlack);
-    gameService.create(game);
+    if (game.getId() == null) {
+      gameDao.create(game);
+    } else {
+      gameDao.edit(game);
+    }
     return game;
   }
 
   @Override
-  public Game getGame(Long id) {
+  public Game find(Long id) {
     if (!AuthUtils.isAuthenticated(getThreadLocalRequest().getSession())) {
       throw new RuntimeException("Unauthorized");
     }
-    return gameService.findLazyFalse(id);
-  }
-
-  @Override
-  public void saveGame(Game game) {
-    if (!AuthUtils.isAuthenticated(getThreadLocalRequest().getSession())) {
-      throw new RuntimeException("Unauthorized");
-    }
-
-    Shashist playerWhite = shashistService.find(game.getPlayerWhite().getId());
-    if (playerWhite == null) {
-      return;
-    }
-    Shashist playerBlack = shashistService.find(game.getPlayerBlack().getId());
-    if (playerBlack == null) {
-      return;
-    }
-    game.setPlayerWhite(playerWhite);
-    game.setPlayerBlack(playerBlack);
-    gameService.edit(game);
+    return gameDao.findLazyFalse(id);
   }
 
   @Override
   public List<Game> findGames(int start, int length) {
-    return gameService.findRange(start, length);
+    return gameDao.findRange(start, length);
   }
 
   @Override
   public List<Game> findAllGames() {
-    return gameService.findAll();
+    return gameDao.findAll();
+  }
+
+  @Override
+  public List<Game> findUserGames(int start, int length) {
+    Shashist currentUser = profileService.getCurrentProfile();
+    System.out.println(currentUser);
+    if (currentUser == null) {
+      return new ArrayList<>();
+    }
+    return gameDao.findUserGames(currentUser.getId(), start, length);
   }
 }

@@ -11,7 +11,7 @@ import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
-import java.util.ArrayList;
+import java.util.Collections;
 import java.util.List;
 
 /**
@@ -23,7 +23,7 @@ import java.util.List;
 @WebServlet(name = "OAuthVKServlet", urlPatterns = {"/OAuthVKServlet"})
 public class OAuthVKServlet extends AbstractAuthorizationCodeServlet {
 
-  private List<String> scope = new ArrayList<>();
+  private List<String> scope = Collections.singletonList("email");
 
   @Inject
   private ServerConfiguration serverConfiguration;

@@ -54,4 +54,20 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
     query.setMaxResults(length);
     return query.getResultList();
   }
+
+  @Override
+  public List<Game> findUserGames(Long userId, int start, int length) {
+    String hql = "SELECT g " +
+        "FROM Game g " +
+        "JOIN FETCH g.playerWhite white " +
+        "JOIN FETCH g.playerBlack black " +
+        "WHERE white.id = :userId " +
+        "   OR black.id = :userId " +
+        "ORDER BY g.playFinishDate DESC";
+    Query query = entityManager.createQuery(hql);
+    query.setParameter("userId", userId);
+    query.setFirstResult(start);
+    query.setMaxResults(length);
+    return query.getResultList();
+  }
 }

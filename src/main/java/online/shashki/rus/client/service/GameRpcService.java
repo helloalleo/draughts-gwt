@@ -16,15 +16,15 @@ import java.util.List;
 @RemoteServiceRelativePath("GameRpcService")
 public interface GameRpcService extends RemoteService {
 
-  Game createGame(Game game);
+  Game save(Game game);
 
-  Game getGame(Long id);
-
-  void saveGame(Game game);
+  Game find(Long id);
 
   List<Game> findGames(int start, int length);
 
   List<Game> findAllGames();
+
+  List<Game> findUserGames(int start, int length);
 
   /**
    * Utility/Convenience class.

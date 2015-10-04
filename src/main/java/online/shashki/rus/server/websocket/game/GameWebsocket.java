@@ -1,8 +1,8 @@
 package online.shashki.rus.server.websocket.game;
 
-import online.shashki.rus.server.service.GameMessageService;
-import online.shashki.rus.server.service.GameService;
-import online.shashki.rus.server.service.ShashistService;
+import online.shashki.rus.server.service.GameMessageRpcServiceImpl;
+import online.shashki.rus.server.service.GameRpcServiceImpl;
+import online.shashki.rus.server.service.ProfileRpcServiceImpl;
 import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.server.websocket.game.message.GameMessageDecoder;
 import online.shashki.rus.server.websocket.game.message.GameMessageEncoder;
@@ -34,11 +34,11 @@ public class GameWebsocket {
   private static Map<Shashist, Session> peers = Collections.synchronizedMap(new HashMap<Shashist, Session>());
   private final long MAX_IDLE_TIMEOUT = 1000 * 60 * 15;
   @Inject
-  private ShashistService shashistService;
+  private ProfileRpcServiceImpl shashistService;
   @Inject
-  private GameMessageService gameMessageService;
+  private GameMessageRpcServiceImpl gameMessageService;
   @Inject
-  private GameService gameService;
+  private GameRpcServiceImpl gameService;
 
   @OnOpen
   public void onOpen(Session session) {
@@ -105,9 +105,8 @@ public class GameWebsocket {
 
     shashist = shashistService.find(shashistId);
 
-    shashist.setLoggedIn(true);
     shashist.setOnline(true);
-    shashistService.edit(shashist);
+    shashistService.save(shashist, true);
 
     peers.put(shashist, session);
     System.out.println("Register new player: " + shashist.getId() + " " + session.getId());
@@ -130,7 +129,7 @@ public class GameWebsocket {
 
     shashist.setOnline(false);
     shashist.setPlaying(false);
-    shashistService.edit(shashist);
+    shashistService.save(shashist, true);
 
     System.out.println("Disconnected: " + shashist.getId() + " " + session.getId());
     peers.values().remove(session);
@@ -189,7 +188,7 @@ public class GameWebsocket {
 
     gameMessage.setSentDate(new Date());
 
-    gameMessageService.create(gameMessage);
+    gameMessageService.save(gameMessage);
   }
 
   private void updatePlayerList(Session session) {
@@ -197,7 +196,7 @@ public class GameWebsocket {
     gameMessage.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
     List<Shashist> shashistList = shashistService.findAll();
     gameMessage.setPlayerList(shashistList);
-    gameMessageService.create(gameMessage);
+    gameMessageService.save(gameMessage);
     for (Session s : session.getOpenSessions()) {
       if (s.isOpen()) {
         sendMessage(s, gameMessage);

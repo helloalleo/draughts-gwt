@@ -15,9 +15,9 @@ public class GameOverEvent extends GwtEvent<GameOverEventHandler> {
   public static Type<GameOverEventHandler> TYPE = new Type<GameOverEventHandler>();
   private final Game game;
   private final GameEnds gameEnd;
-  private final AsyncCallback<Void> asyncCallback;
+  private final AsyncCallback<Game> asyncCallback;
 
-  public GameOverEvent(Game game, GameEnds gameEnd, AsyncCallback<Void> asyncCallback) {
+  public GameOverEvent(Game game, GameEnds gameEnd, AsyncCallback<Game> asyncCallback) {
     this.game = game;
     this.gameEnd = gameEnd;
     this.asyncCallback = asyncCallback;
@@ -31,7 +31,7 @@ public class GameOverEvent extends GwtEvent<GameOverEventHandler> {
     return gameEnd;
   }
 
-  public AsyncCallback<Void> getAsyncCallback() {
+  public AsyncCallback<Game> getAsyncCallback() {
     return asyncCallback;
   }
 

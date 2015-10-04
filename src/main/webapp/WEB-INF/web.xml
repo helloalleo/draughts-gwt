@@ -5,24 +5,24 @@
          version="2.5">
     <servlet>
         <servlet-name>online.shashki.rus ProfileRpcService</servlet-name>
-        <servlet-class>online.shashki.rus.server.rpc.ProfileRpcServiceImpl</servlet-class>
+        <servlet-class>online.shashki.rus.server.service.ProfileRpcServiceImpl</servlet-class>
     </servlet>
-    <!--<servlet>-->
-        <!--<servlet-name>online.shashki.rus GameRpcMessageService</servlet-name>-->
-        <!--<servlet-class>online.shashki.rus.server.rpc.GameMessageRpcServiceImpl</servlet-class>-->
-    <!--</servlet>-->
+    <servlet>
+        <servlet-name>online.shashki.rus GameRpcMessageService</servlet-name>
+        <servlet-class>online.shashki.rus.server.service.GameMessageRpcServiceImpl</servlet-class>
+    </servlet>
     <servlet>
         <servlet-name>online.shashki.rus GameRpcService</servlet-name>
-        <servlet-class>online.shashki.rus.server.rpc.GameRpcServiceImpl</servlet-class>
+        <servlet-class>online.shashki.rus.server.service.GameRpcServiceImpl</servlet-class>
     </servlet>
     <servlet-mapping>
         <servlet-name>online.shashki.rus ProfileRpcService</servlet-name>
         <url-pattern>/Application/ProfileRpcService</url-pattern>
     </servlet-mapping>
-    <!--<servlet-mapping>-->
-        <!--<servlet-name>online.shashki.rus GameRpcMessageService</servlet-name>-->
-        <!--<url-pattern>/Application/GameMessageRpcService</url-pattern>-->
-    <!--</servlet-mapping>-->
+    <servlet-mapping>
+        <servlet-name>online.shashki.rus GameRpcMessageService</servlet-name>
+        <url-pattern>/Application/GameMessageRpcService</url-pattern>
+    </servlet-mapping>
     <servlet-mapping>
         <servlet-name>online.shashki.rus GameRpcService</servlet-name>
         <url-pattern>/Application/GameRpcService</url-pattern>

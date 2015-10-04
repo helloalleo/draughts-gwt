@@ -15,9 +15,9 @@ public interface ProfileRpcServiceAsync {
 
   void isCookieValid(String cookie, AsyncCallback<Boolean> async);
 
-  void getProfile(Long shashistId, AsyncCallback<Shashist> async);
+  void find(Long shashistId, AsyncCallback<Shashist> async);
 
-  void saveProfile(Shashist profile, AsyncCallback<Void> async);
+  void save(Shashist profile, AsyncCallback<Shashist> async);
 
   void getCurrentProfile(AsyncCallback<Shashist> async);
 }

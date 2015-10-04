@@ -161,7 +161,7 @@ public class GameWebsocket implements WebSocketCallback {
     confirmPlayDialogBox = new ConfirmPlayDialogBox() {
       @Override
       public void submitted() {
-        profileService.getProfile(gameMessage.getSender().getId(), new AsyncCallback<Shashist>() {
+        profileService.find(gameMessage.getSender().getId(), new AsyncCallback<Shashist>() {
           @Override
           public void onFailure(Throwable caught) {
             ErrorDialogBox.setMessage(messages.errorWhileGettingProfile(), caught).show();
@@ -183,7 +183,7 @@ public class GameWebsocket implements WebSocketCallback {
             game.setPlayerBlack(isWhite() ? connectionSession.getOpponent() : connectionSession.getPlayer());
             SHLog.debug(game.getPlayerWhite().getPublicName() + " PLAYER WHITE");
             SHLog.debug(game.getPlayerBlack().getPublicName() + " PLAYER BLACK");
-            gameService.createGame(game, new AsyncCallback<Game>() {
+            gameService.save(game, new AsyncCallback<Game>() {
               @Override
               public void onFailure(Throwable throwable) {
                 ErrorDialogBox.setMessage(messages.failToStartGame(), throwable).show();
@@ -335,14 +335,14 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlayAcceptDraw(GameMessage gameMessage) {
     if (Boolean.valueOf(gameMessage.getData())) {
-      eventBus.fireEvent(new GameOverEvent(connectionSession.getGame(), GameEnds.DRAW, new AsyncCallback<Void>() {
+      eventBus.fireEvent(new GameOverEvent(connectionSession.getGame(), GameEnds.DRAW, new AsyncCallback<Game>() {
         @Override
         public void onFailure(Throwable throwable) {
           ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
         }
 
         @Override
-        public void onSuccess(Void aVoid) {
+        public void onSuccess(Game aVoid) {
         }
       }));
     } else {
@@ -385,14 +385,14 @@ public class GameWebsocket implements WebSocketCallback {
     Game game = connectionSession.getGame();
     final GameEnds gameEnd = connectionSession.isPlayerHasWhiteColor() ? GameEnds.SURRENDER_WHITE
         : GameEnds.SURRENDER_BLACK;
-    eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Void>() {
+    eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
       @Override
       public void onFailure(Throwable throwable) {
         ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
       }
 
       @Override
-      public void onSuccess(Void aVoid) {
+      public void onSuccess(Game aVoid) {
         new MyDialogBox(messages.info(), messages.opponentSurrendered());
       }
     }));
@@ -416,7 +416,7 @@ public class GameWebsocket implements WebSocketCallback {
    * @param gameMessage
    */
   private void handlePlayStart(final GameMessage gameMessage) {
-    gameService.getGame(gameMessage.getGame().getId(), new AsyncCallback<Game>() {
+    gameService.find(gameMessage.getGame().getId(), new AsyncCallback<Game>() {
       @Override
       public void onFailure(Throwable throwable) {
         ErrorDialogBox.setMessage(messages.errorWhileGettingGame(), throwable).show();

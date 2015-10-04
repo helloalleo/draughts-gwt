@@ -48,6 +48,15 @@ public class Shashist extends PersistableObjectImpl {
   @Column(name = "player_name")
   private String playerName;
 
+
+  @GwtTransient
+  @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
+  @Column(name = "include_in_rating")
+  private boolean includeInRating;
+
+  private int rating;
+
   @GwtTransient
   @JsonIgnore
   @com.fasterxml.jackson.annotation.JsonIgnore
@@ -80,13 +89,13 @@ public class Shashist extends PersistableObjectImpl {
   @GwtTransient
   @JsonIgnore
   @com.fasterxml.jackson.annotation.JsonIgnore
-  @OneToMany(mappedBy = "receiver")
+  @OneToMany(mappedBy = "receiverGame")
   private Set<GameMessage> receivedGameMessages;
 
   @GwtTransient
   @JsonIgnore
   @com.fasterxml.jackson.annotation.JsonIgnore
-  @OneToMany(mappedBy = "sender")
+  @OneToMany(mappedBy = "senderGame")
   private Set<GameMessage> sentGameMessages;
 
   @GwtTransient
@@ -292,6 +301,24 @@ public class Shashist extends PersistableObjectImpl {
     this.blackRoleGames = blackRoleGames;
   }
 
+  public boolean isIncludeInRating() {
+    return includeInRating;
+  }
+
+  public Shashist setIncludeInRating(boolean includeInRating) {
+    this.includeInRating = includeInRating;
+    return this;
+  }
+
+  public int getRating() {
+    return rating;
+  }
+
+  public Shashist setRating(int rating) {
+    this.rating = rating;
+    return this;
+  }
+
   @JsonIgnore
   public String getPublicName() {
     if (getPlayerName() == null) {
@@ -319,12 +346,6 @@ public class Shashist extends PersistableObjectImpl {
         ", lastName='" + lastName + '\'' +
         ", playerName='" + playerName + '\'' +
         ", authProvider='" + authProvider + '\'' +
-        ", receivedPlayerMessages=" + receivedPlayerMessages +
-        ", sentPlayerMessages=" + sentPlayerMessages +
-        ", receivedGameMessages=" + receivedGameMessages +
-        ", sentGameMessages=" + sentGameMessages +
-        ", whiteRoleGames=" + whiteRoleGames +
-        ", blackRoleGames=" + blackRoleGames +
         ", loggedIn=" + loggedIn +
         ", playing=" + playing +
         ", online=" + online +
@@ -342,6 +363,9 @@ public class Shashist extends PersistableObjectImpl {
   public void updateSerializable(Shashist profile) {
     if (profile == null) {
       return;
+    }
+    if (profile.getSessionId() != null) {
+      this.sessionId = profile.getSessionId();
     }
     this.loggedIn = profile.isLoggedIn();
     this.playing = profile.isPlaying();

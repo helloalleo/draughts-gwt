@@ -159,14 +159,14 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         if (!event.getPlayerList().contains(gameWebsocket.getOpponent()) && gameWebsocket.getGame() != null) {
           Game game = gameWebsocket.getGame();
           final GameEnds gameEnd = gameWebsocket.isPlayerHasWhiteColor() ? GameEnds.BLACK_LEFT : GameEnds.WHITE_LEFT;
-          eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Void>() {
+          eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
             @Override
             public void onFailure(Throwable throwable) {
               ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
             }
 
             @Override
-            public void onSuccess(Void aVoid) {
+            public void onSuccess(Game aVoid) {
               InfoDialogBox.setMessage(messages.opponentLeftGame()).show();
             }
           }));
@@ -242,14 +242,14 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         if (gameEnd == null) {
           return;
         }
-        eventBus.fireEvent(new GameOverEvent(endGame, gameEnd, new AsyncCallback<Void>() {
+        eventBus.fireEvent(new GameOverEvent(endGame, gameEnd, new AsyncCallback<Game>() {
           @Override
           public void onFailure(Throwable caught) {
             ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), caught).show();
           }
 
           @Override
-          public void onSuccess(Void result) {
+          public void onSuccess(Game result) {
           }
         }));
       }
@@ -286,7 +286,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         game.setPlayFinishDate(new Date());
         game.setPartyNotation(NotationPanel.getNotation());
         game.setEndGameScreenshot(getView().takeScreenshot());
-        gameService.saveGame(game, event.getAsyncCallback());
+        gameService.save(game, event.getAsyncCallback());
         eventBus.fireEvent(new ClearPlayComponentEvent());
       }
     });

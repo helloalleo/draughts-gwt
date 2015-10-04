@@ -26,6 +26,14 @@ public class GameMessage extends PersistableObjectImpl {
   @JoinColumn(name = "receiver_id")
   private Shashist receiver;
 
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "sender_game_id")
+  private Shashist senderGame;
+
+  @ManyToOne(fetch = FetchType.LAZY)
+  @JoinColumn(name = "receiver_game_id")
+  private Shashist receiverGame;
+
   private String message;
 
   @Enumerated(EnumType.STRING)
@@ -64,6 +72,24 @@ public class GameMessage extends PersistableObjectImpl {
 
   public void setReceiver(Shashist entity) {
     this.receiver = entity;
+  }
+
+  public Shashist getSenderGame() {
+    return senderGame;
+  }
+
+  public GameMessage setSenderGame(Shashist senderGame) {
+    this.senderGame = senderGame;
+    return this;
+  }
+
+  public Shashist getReceiverGame() {
+    return receiverGame;
+  }
+
+  public GameMessage setReceiverGame(Shashist receiverGame) {
+    this.receiverGame = receiverGame;
+    return this;
   }
 
   public String getMessage() {
