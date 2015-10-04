@@ -8,12 +8,17 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import online.shashki.rus.client.resources.AppResources;
+import online.shashki.rus.client.utils.TrUtils;
+import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Game;
 import org.gwtbootstrap3.client.ui.Image;
 
 public class PlayItem extends Composite {
 
   private static Binder binder = GWT.create(Binder.class);
+  private final ShashkiMessages messages = GWT.create(ShashkiMessages.class);
+  private final AppResources resources = GWT.create(AppResources.class);
 
   @UiField
   HTMLPanel panel;
@@ -31,18 +36,13 @@ public class PlayItem extends Composite {
   PlayItem(Game game) {
     initWidget(binder.createAndBindUi(this));
 
+    panel.addStyleName(resources.style().playItem());
     setGame(game);
   }
 
   public void setGame(Game game) {
-    if (game.getPlayerWhite() != null) {
-      whitePlayerName.setHTML(game.getPlayerWhite().getPublicName());
-    }
-    if (game.getPlayerBlack() != null) {
-      blackPlayerName.setHTML(game.getPlayerBlack().getPublicName());
-    }
     if (game.getPlayEndStatus() != null) {
-      whoDidWin.setHTML(game.getPlayEndStatus().name());
+      whoDidWin.setHTML(TrUtils.translateEndGame(game.getPlayEndStatus()));
     }
     if (game.getPlayFinishDate() != null) {
       String date = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM)

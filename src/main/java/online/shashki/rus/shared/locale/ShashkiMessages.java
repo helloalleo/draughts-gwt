@@ -154,9 +154,9 @@ public interface ShashkiMessages extends Messages {
 
   String playViewTitle(String whitePlayer, String blackPlayer, String winner);
 
-  String BLACK_WON();
+  String BLACK_WIN();
 
-  String WHITE_WON();
+  String WHITE_WIN();
 
   String BLACK_LEFT();
 

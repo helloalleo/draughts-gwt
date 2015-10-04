@@ -3,9 +3,9 @@
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel ui:field="panel">
         <g:HTML ui:field="playEndDate"/>
-        <g:HTML ui:field="whitePlayerName"/>
-        <g:HTML ui:field="blackPlayerName"/>
         <g:HTML ui:field="whoDidWin"/>
         <b:Image ui:field="endGameScreenshot"/>
+        <g:HTML ui:field="whitePlayerName"/>
+        <g:HTML ui:field="blackPlayerName"/>
     </g:HTMLPanel>
 </ui:UiBinder>

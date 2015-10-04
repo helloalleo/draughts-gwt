@@ -43,12 +43,6 @@
                                 </b:Row>
                                 <hr/>
                                 <b:Row>
-                                    <b:Column size="MD_12">
-                                        <b:CheckBox ui:field="showMyNameOnMainPage" text="Показывать моё имя на главной"/>
-                                    </b:Column>
-                                </b:Row>
-                                <hr/>
-                                <b:Row>
                                     <b:Column size="MD_9">
                                         <b:InputGroup>
                                             <b:InputGroupAddon icon="EXTERNAL_LINK">

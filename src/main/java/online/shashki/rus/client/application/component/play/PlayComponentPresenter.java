@@ -226,17 +226,17 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         if (0 == getView().getMyDraughtsSize()) {
           InfoDialogBox.setMessage(messages.youLose()).show();
           if ((getView().isWhite())) {
-            gameEnd = GameEnds.BLACK_WON;
+            gameEnd = GameEnds.BLACK_WIN;
           } else {
-            gameEnd = GameEnds.WHITE_WON;
+            gameEnd = GameEnds.WHITE_WIN;
           }
         }
         if (0 == getView().getOpponentDraughtsSize()) {
           InfoDialogBox.setMessage(messages.youWon()).show();
           if (getView().isWhite()) {
-            gameEnd = GameEnds.WHITE_WON;
+            gameEnd = GameEnds.WHITE_WIN;
           } else {
-            gameEnd = GameEnds.BLACK_WON;
+            gameEnd = GameEnds.BLACK_WIN;
           }
         }
         if (gameEnd == null) {

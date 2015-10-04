@@ -79,3 +79,14 @@ body {
     -moz-transition: height, width NAVBAR_CHANGE_DURATION ease-out;
     -webkit-transition: height, width NAVBAR_CHANGE_DURATION ease-out;
 }
+
+.playItem {
+    background-color: #ddd;
+    padding-left: 10px;
+    padding-top: 8px;
+
+    -ms-border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+}

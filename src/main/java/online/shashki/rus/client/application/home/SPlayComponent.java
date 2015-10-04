@@ -301,17 +301,17 @@
 //        if (0 == board.getMyDraughts().size()) {
 //          new DialogBox(messages.debug(), messages.youLose()).show();
 //          if (board.isWhite()) {
-//            endGame.setPlayEndStatus(GameEnds.BLACK_WON);
+//            endGame.setPlayEndStatus(GameEnds.BLACK_WIN);
 //          } else {
-//            endGame.setPlayEndStatus(GameEnds.WHITE_WON);
+//            endGame.setPlayEndStatus(GameEnds.WHITE_WIN);
 //          }
 //        }
 //        if (0 == board.getOpponentDraughts().size()) {
 //          new DialogBox(messages.debug(), messages.youWon());
 //          if (board.isWhite()) {
-//            endGame.setPlayEndStatus(GameEnds.WHITE_WON);
+//            endGame.setPlayEndStatus(GameEnds.WHITE_WIN);
 //          } else {
-//            endGame.setPlayEndStatus(GameEnds.BLACK_WON);
+//            endGame.setPlayEndStatus(GameEnds.BLACK_WIN);
 //          }
 //        }
 //        if (endGame.getPlayEndStatus() == null) {

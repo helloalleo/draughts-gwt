@@ -9,8 +9,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
  * Time: 22:51
  */
 public enum GameEnds implements IsSerializable {
-  BLACK_WON,
-  WHITE_WON,
+  BLACK_WIN,
+  WHITE_WIN,
   BLACK_LEFT,
   WHITE_LEFT,
   SURRENDER_BLACK,
