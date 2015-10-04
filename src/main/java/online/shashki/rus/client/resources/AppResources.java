@@ -39,5 +39,9 @@ public interface AppResources extends ClientBundle {
     String navbarScroll();
 
     String navbarTop();
+
+    String logoTop();
+
+    String logoScroll();
   }
 }

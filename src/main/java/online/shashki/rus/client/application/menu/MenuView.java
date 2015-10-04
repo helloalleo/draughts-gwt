@@ -50,6 +50,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     this.resources = resources;
 
     logo = new Image(resources.images().logo());
+    logo.setSize(Variables.S_LOGO_TOP_HEIGHT, Variables.S_LOGO_TOP_HEIGHT);
     brand.add(logo);
 
     Window.addWindowScrollHandler(new Window.ScrollHandler() {
@@ -68,16 +69,21 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   private void setLinkHeight(String height) {
     boolean top = Variables.S_NAVBAR_TOP_HEIGHT.equals(height);
     for (Widget widget : navLeft) {
-      widget.setHeight(height);
       setLinkChildHeight(widget.getElement(), top);
     }
     for (Widget widget : navRight) {
-      widget.setHeight(height);
       setLinkChildHeight(widget.getElement(), top);
     }
   }
 
   private void setLinkChildHeight(Element element, boolean top) {
+//    if (top) {
+//      element.addClassName(resources.style().navbarTop());
+//      element.removeClassName(resources.style().navbarScroll());
+//    } else {
+//      element.addClassName(resources.style().navbarScroll());
+//      element.removeClassName(resources.style().navbarTop());
+//    }
     for (int i = 0; i < element.getChildCount(); i++) {
       final Element child = (Element) element.getChild(i);
       if (top) {
@@ -143,18 +149,20 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
 
   private void navbarScrollHeight() {
     final String navbarScrollHeight = Variables.S_NAVBAR_SCROLL_HEIGHT;
-    navbar.setHeight(navbarScrollHeight);
+    navbar.getElement().addClassName(resources.style().navbarScroll());
+    navbar.getElement().removeClassName(resources.style().navbarTop());
     setLinkHeight(navbarScrollHeight);
-    final String size = Variables.S_LOGO_SCROLL_HEIGHT;
-    logo.setSize(size, size);
+    logo.addStyleName(resources.style().logoScroll());
+    logo.removeStyleName(resources.style().logoTop());
   }
 
   private void navbarTopHeight() {
     final String navbarTopHeight = Variables.S_NAVBAR_TOP_HEIGHT;
-    navbar.setHeight(navbarTopHeight);
+    navbar.getElement().addClassName(resources.style().navbarTop());
+    navbar.getElement().removeClassName(resources.style().navbarScroll());
     setLinkHeight(navbarTopHeight);
-    final String size = Variables.S_LOGO_TOP_HEIGHT;
-    logo.setSize(size, size);
+    logo.addStyleName(resources.style().logoTop());
+    logo.removeStyleName(resources.style().logoScroll());
   }
 
   private AnchorListItem createAnchor(final NameTokens.Link link) {

@@ -18,3 +18,12 @@
 @def S_MAIN_CONTAINER_MARGIN_TOP    eval("online.shashki.rus.client.resources.Variables.S_MAIN_CONTAINER_MARGIN_TOP");
 @def S_NAVBAR_TOP_HEIGHT            eval("online.shashki.rus.client.resources.Variables.S_NAVBAR_TOP_HEIGHT");
 @def S_NAVBAR_SCROLL_HEIGHT         eval("online.shashki.rus.client.resources.Variables.S_NAVBAR_SCROLL_HEIGHT");
+@def S_NAVBAR_TOP_LINE_HEIGHT       eval("online.shashki.rus.client.resources.Variables.S_NAVBAR_TOP_LINE_HEIGHT");
+@def S_NAVBAR_SCROLL_LINE_HEIGHT    eval("online.shashki.rus.client.resources.Variables.S_NAVBAR_SCROLL_LINE_HEIGHT");
+@def S_LOGO_TOP_HEIGHT              eval("online.shashki.rus.client.resources.Variables.S_LOGO_TOP_HEIGHT");
+@def S_LOGO_SCROLL_HEIGHT           eval("online.shashki.rus.client.resources.Variables.S_LOGO_SCROLL_HEIGHT");
+
+/**
+ * Measure
+ */
+@def NAVBAR_CHANGE_DURATION     0s;
