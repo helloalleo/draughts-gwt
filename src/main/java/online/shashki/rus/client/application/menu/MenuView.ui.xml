@@ -8,11 +8,11 @@
 
     <g:HTMLPanel ui:field="panel">
         <b:Navbar position="FIXED_TOP">
-            <b:Container fluid="true" height="70px">
+            <b:Container height="70px">
                 <b:NavbarBrand ui:field="brand" href="#!home">
                 </b:NavbarBrand>
-                <b:NavbarNav ui:field="navLeft" addStyleNames="{res.style.largeFont}" height="70px"/>
-                <b:NavbarNav ui:field="navRight" pull="RIGHT" addStyleNames="{res.style.largeFont}" height="70px"/>
+                <b:NavbarNav ui:field="navLeft" addStyleNames="{res.style.xLargeFont}"/>
+                <b:NavbarNav ui:field="navRight" pull="RIGHT" addStyleNames="{res.style.largeFont}"/>
             </b:Container>
         </b:Navbar>
     </g:HTMLPanel>

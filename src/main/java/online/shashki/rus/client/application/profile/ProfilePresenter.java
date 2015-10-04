@@ -10,7 +10,7 @@ import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.annotations.Title;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
-import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
+import com.gwtplatform.mvp.client.presenter.slots.Slot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.shashki.rus.client.application.ApplicationPresenter;
@@ -25,7 +25,7 @@ import online.shashki.rus.shared.model.Shashist;
 public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, ProfilePresenter.MyProxy>
     implements ProfileUiHandlers {
   public static final NestedSlot SLOT_PROFILE = new NestedSlot();
-  public static final PermanentSlot<SettingsPresenter> SLOT_PROFILE_CONTENT = new PermanentSlot<SettingsPresenter>();
+  public static final Slot<SettingsPresenter> SLOT_PROFILE_CONTENT = new Slot<>();
   private SettingsPresenter settingsPresenter;
   private final ProfileRpcServiceAsync profileService;
   private final SettingsPresenter.Factory settingsFactory;
@@ -44,13 +44,6 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
 
     getView().setUiHandlers(this);
     SHCookies.setLocation(NameTokens.profilePage);
-  }
-
-  @Override
-  protected void onBind() {
-    super.onBind();
-
-    setInSlot(SLOT_PROFILE_CONTENT, settingsPresenter);
   }
 
   @Override

@@ -1,5 +1,12 @@
 @require "variables";
 
+body {
+    background-color: white;
+    color: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: large;
+}
+
 .mainContainer {
     margin-top: S_MAIN_CONTAINER_MARGIN_TOP;
 }
