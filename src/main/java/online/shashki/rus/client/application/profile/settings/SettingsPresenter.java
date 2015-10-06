@@ -10,26 +10,26 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
 import online.shashki.rus.client.event.UpdatePlayerListEvent;
-import online.shashki.rus.client.service.ProfileRpcServiceAsync;
+import online.shashki.rus.client.service.PlayerServiceAsync;
 import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.shared.model.Player;
 
 
 public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView> implements SettingsUiHandlers {
   public static final NestedSlot SLOT_SETTINGS = new NestedSlot();
   private final ShashkiMessages messages;
   private final EventBus eventBus;
-  private final ProfileRpcServiceAsync profileService;
-  private Shashist player;
+  private final PlayerServiceAsync profileService;
+  private Player player;
 
   @Inject
   SettingsPresenter(
       EventBus eventBus,
       MyView view,
-      ProfileRpcServiceAsync profileService,
+      PlayerServiceAsync profileService,
       ShashkiMessages messages,
-      Shashist player) {
+      Player player) {
     super(eventBus, view);
 
     this.eventBus = eventBus;
@@ -45,14 +45,14 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
   public void submitNewPlayerName(String playerName) {
     player.setPlayerName(playerName);
     SHLog.debug(playerName);
-    profileService.save(player, new AsyncCallback<Shashist>() {
+    profileService.save(player, new AsyncCallback<Player>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();
       }
 
       @Override
-      public void onSuccess(Shashist result) {
+      public void onSuccess(Player result) {
         InfoDialogBox.setMessage(messages.profileUpdated()).show();
         try {
           eventBus.fireEvent(new UpdatePlayerListEvent());
@@ -68,7 +68,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
   }
 
   public interface Factory {
-    SettingsPresenter create(Shashist player);
+    SettingsPresenter create(Player player);
   }
 
   public static class FactoryImpl implements Factory {
@@ -76,12 +76,12 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
     private final EventBus eventBus;
     private final ViewFactory viewFactory;
     private final ShashkiMessages messages;
-    private final ProfileRpcServiceAsync profileService;
+    private final PlayerServiceAsync profileService;
 
     @Inject
     FactoryImpl(EventBus eventBus,
                 ViewFactory viewFactory,
-                ProfileRpcServiceAsync profileService,
+                PlayerServiceAsync profileService,
                 ShashkiMessages messages) {
       this.eventBus = eventBus;
       this.viewFactory = viewFactory;
@@ -89,7 +89,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
       this.messages = messages;
     }
 
-    public SettingsPresenter create(Shashist player) {
+    public SettingsPresenter create(Player player) {
       return new SettingsPresenter(eventBus, viewFactory.create(), profileService, messages, player);
     }
   }

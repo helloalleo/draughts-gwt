@@ -1,9 +1,8 @@
 package online.shashki.rus.server.dao.impl;
 
-import online.shashki.rus.server.dao.ShashistDao;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.server.dao.PlayerDao;
+import online.shashki.rus.shared.model.Player;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -15,14 +14,13 @@ import java.util.List;
  * Date: 05.12.14
  * Time: 0:19
  */
-@Stateless
-public class ShashistDaoImpl extends DaoImpl<Shashist> implements ShashistDao {
+public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
 
   @Inject
   private EntityManager entityManager;
 
-  public ShashistDaoImpl() {
-    super(Shashist.class);
+  public PlayerDaoImpl() {
+    super(Player.class);
   }
 
   @Override
@@ -39,17 +37,17 @@ public class ShashistDaoImpl extends DaoImpl<Shashist> implements ShashistDao {
 //  }
 
   @Override
-  public Shashist findByVkUid(String uid) {
+  public Player findByVkUid(String uid) {
     Query query = getEntityManager().createQuery(
         "FROM Shashist " +
             "WHERE vkUid = :vkUid");
     query.setParameter("vkUid", uid);
     List list = query.getResultList();
-    return list.isEmpty() ? null : (Shashist) list.get(0);
+    return list.isEmpty() ? null : (Player) list.get(0);
   }
 
   @Override
-  public Shashist findBySessionId(String sessionId) {
+  public Player findBySessionId(String sessionId) {
     Query query = getEntityManager().createQuery(
         "FROM Shashist " +
             "WHERE sessionId = :sessionId");
@@ -58,11 +56,11 @@ public class ShashistDaoImpl extends DaoImpl<Shashist> implements ShashistDao {
     if (result.isEmpty()) {
       return null;
     }
-    return (Shashist) result.get(0);
+    return (Player) result.get(0);
   }
 
   @Override
-  public Shashist findById(Long shashistId) {
+  public Player findById(Long shashistId) {
     Query query = getEntityManager().createQuery(
         "FROM Shashist " +
             "WHERE id = :shashistId"
@@ -72,6 +70,6 @@ public class ShashistDaoImpl extends DaoImpl<Shashist> implements ShashistDao {
     if (result.isEmpty()) {
       return null;
     }
-    return (Shashist) result.get(0);
+    return (Player) result.get(0);
   }
 }

@@ -19,7 +19,7 @@ import java.util.Set;
  */
 @Entity
 @Table(name = "shashist")
-public class Shashist extends PersistableObjectImpl {
+public class Player extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
@@ -130,7 +130,7 @@ public class Shashist extends PersistableObjectImpl {
   @Column(name = "visit_counter")
   private int visitCounter;
 
-  public Shashist() {
+  public Player() {
   }
 
   public String getSessionId() {
@@ -305,7 +305,7 @@ public class Shashist extends PersistableObjectImpl {
     return includeInRating;
   }
 
-  public Shashist setIncludeInRating(boolean includeInRating) {
+  public Player setIncludeInRating(boolean includeInRating) {
     this.includeInRating = includeInRating;
     return this;
   }
@@ -314,7 +314,7 @@ public class Shashist extends PersistableObjectImpl {
     return rating;
   }
 
-  public Shashist setRating(int rating) {
+  public Player setRating(int rating) {
     this.rating = rating;
     return this;
   }
@@ -360,7 +360,7 @@ public class Shashist extends PersistableObjectImpl {
    *
    * @param profile
    */
-  public void updateSerializable(Shashist profile) {
+  public void updateSerializable(Player profile) {
     if (profile == null) {
       return;
     }

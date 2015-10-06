@@ -7,13 +7,13 @@ import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizatio
 import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
+import com.google.inject.Inject;
 import online.shashki.rus.server.config.ServerConfiguration;
-import online.shashki.rus.server.service.ProfileRpcServiceImpl;
+import online.shashki.rus.server.service.PlayerServiceImpl;
 import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.server.utils.Utils;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.shared.model.Player;
 
-import javax.inject.Inject;
 import javax.json.*;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -34,13 +34,17 @@ import java.util.List;
 @WebServlet(name = "OAuthVKCallbackServlet", urlPatterns = {"/OAuthVKCallbackServlet"})
 public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackServlet {
 
-  @Inject
-  private ProfileRpcServiceImpl shashistService;
+  private final PlayerServiceImpl playerService;
+
+  private final ServerConfiguration serverConfiguration;
+
+  private final List<String> scope = Collections.singletonList("email");
 
   @Inject
-  private ServerConfiguration serverConfiguration;
-
-  private List<String> scope = Collections.singletonList("email");
+  OAuthVKCallbackServlet(PlayerServiceImpl playerService, ServerConfiguration serverConfiguration) {
+    this.playerService = playerService;
+    this.serverConfiguration = serverConfiguration;
+  }
 
   @Override
   protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential) throws ServletException, IOException {
@@ -69,27 +73,27 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
     JsonNumber uid = array.getJsonNumber("uid");
     String vkUid = uid.toString();
 
-    Shashist shashist = shashistService.findByVkUid(vkUid);
-    if (shashist == null) {
+    Player player = playerService.findByVkUid(vkUid);
+    if (player == null) {
       JsonString firstName = array.getJsonString("first_name");
       JsonString lastName = array.getJsonString("last_name");
-      shashist = new Shashist();
-      shashist.setVkUid(vkUid);
-      shashist.setFirstName(firstName.getString());
-      shashist.setLastName(lastName.getString());
+      player = new Player();
+      player.setVkUid(vkUid);
+      player.setFirstName(firstName.getString());
+      player.setLastName(lastName.getString());
     } else {
-      shashist.setVisitCounter(shashist.getVisitCounter() + 1);
+      player.setVisitCounter(player.getVisitCounter() + 1);
     }
-    shashist.setLoggedIn(true);
-    shashist.setPlaying(false);
-    shashist.setOnline(false);
+    player.setLoggedIn(true);
+    player.setPlaying(false);
+    player.setOnline(false);
 
     HttpSession session = req.getSession();
-    if (shashist.getSessionId() == null
-        || !shashist.getSessionId().equals(session.getId())) {
-      shashist.setSessionId(session.getId());
+    if (player.getSessionId() == null
+        || !player.getSessionId().equals(session.getId())) {
+      player.setSessionId(session.getId());
     }
-    shashistService.save(shashist, true);
+    playerService.save(player, true);
 
     AuthUtils.login(req, resp);
     resp.sendRedirect(serverConfiguration.getContext());

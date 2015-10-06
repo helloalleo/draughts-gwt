@@ -1,8 +1,6 @@
 package online.shashki.rus.shared.model;
 
-import com.google.gwt.user.client.rpc.GwtTransient;
 import com.google.inject.Singleton;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,11 +18,11 @@ public class Game extends PersistableObjectImpl {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "player_white_id")
-  private Shashist playerWhite;
+  private Player playerWhite;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "player_black_id")
-  private Shashist playerBlack;
+  private Player playerBlack;
 
   @Enumerated(EnumType.STRING)
   @Column(name = "play_end_status")
@@ -45,8 +43,8 @@ public class Game extends PersistableObjectImpl {
   public Game() {
   }
 
-  public Game(Shashist playerWhite,
-              Shashist playerBlack,
+  public Game(Player playerWhite,
+              Player playerBlack,
               GameEnds playEndStatus,
               Date playStartDate,
               Date playFinishDate,
@@ -79,19 +77,19 @@ public class Game extends PersistableObjectImpl {
     }
   }
 
-  public Shashist getPlayerWhite() {
+  public Player getPlayerWhite() {
     return playerWhite;
   }
 
-  public void setPlayerWhite(Shashist playerWhite) {
+  public void setPlayerWhite(Player playerWhite) {
     this.playerWhite = playerWhite;
   }
 
-  public Shashist getPlayerBlack() {
+  public Player getPlayerBlack() {
     return playerBlack;
   }
 
-  public void setPlayerBlack(Shashist playerBlack) {
+  public void setPlayerBlack(Player playerBlack) {
     this.playerBlack = playerBlack;
   }
 

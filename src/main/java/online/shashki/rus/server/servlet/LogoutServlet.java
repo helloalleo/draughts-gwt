@@ -1,10 +1,10 @@
 package online.shashki.rus.server.servlet;
 
+import com.google.inject.Inject;
 import online.shashki.rus.server.config.ServerConfiguration;
-import online.shashki.rus.server.service.ProfileRpcServiceImpl;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.server.service.PlayerServiceImpl;
+import online.shashki.rus.shared.model.Player;
 
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
@@ -21,18 +21,22 @@ import java.io.IOException;
 @WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
 public class LogoutServlet extends HttpServlet {
 
+  private final PlayerServiceImpl playerService;
+  private final ServerConfiguration configuration;
+
   @Inject
-  private ProfileRpcServiceImpl shashistService;
-  @Inject
-  private ServerConfiguration configuration;
+  LogoutServlet(PlayerServiceImpl playerService, ServerConfiguration serverConfiguration) {
+    this.playerService = playerService;
+    this.configuration = serverConfiguration;
+  }
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    Shashist shashist = shashistService.findBySessionId(request.getSession().getId());
-    if (shashist != null) {
-      shashist.setOnline(false);
-      shashist.setPlaying(false);
-      shashist.setLoggedIn(false);
-      shashistService.save(shashist);
+    Player player = playerService.findBySessionId(request.getSession().getId());
+    if (player != null) {
+      player.setOnline(false);
+      player.setPlaying(false);
+      player.setLoggedIn(false);
+      playerService.save(player);
     }
 
     request.getSession().invalidate();

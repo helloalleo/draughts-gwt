@@ -3,7 +3,6 @@ package online.shashki.rus.server.dao.impl;
 import online.shashki.rus.server.dao.GameDao;
 import online.shashki.rus.shared.model.Game;
 
-import javax.ejb.Stateless;
 import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -15,7 +14,6 @@ import java.util.List;
  * Date: 31.12.14
  * Time: 17:34
  */
-@Stateless
 public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
 
   @Inject

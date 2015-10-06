@@ -2,7 +2,7 @@ package online.shashki.rus.client.websocket;
 
 import com.google.inject.Singleton;
 import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.shared.model.Player;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,25 +12,25 @@ import online.shashki.rus.shared.model.Shashist;
  */
 @Singleton
 public class ConnectionSession {
-  private Shashist player;
-  private Shashist opponent;
+  private Player player;
+  private Player opponent;
   private Game game;
   private boolean connected;
 
-  public Shashist getPlayer() {
+  public Player getPlayer() {
     return player;
   }
 
-  public ConnectionSession setPlayer(Shashist player) {
+  public ConnectionSession setPlayer(Player player) {
     this.player = player;
     return this;
   }
 
-  public Shashist getOpponent() {
+  public Player getOpponent() {
     return opponent;
   }
 
-  public ConnectionSession setOpponent(Shashist opponent) {
+  public ConnectionSession setOpponent(Player opponent) {
     this.opponent = opponent;
     return this;
   }

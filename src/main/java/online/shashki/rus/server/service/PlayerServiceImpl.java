@@ -1,12 +1,13 @@
 package online.shashki.rus.server.service;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
-import online.shashki.rus.client.service.ProfileRpcService;
-import online.shashki.rus.server.dao.ShashistDao;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
+import online.shashki.rus.client.service.PlayerService;
+import online.shashki.rus.server.dao.PlayerDao;
 import online.shashki.rus.server.utils.AuthUtils;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.shared.model.Player;
 
-import javax.inject.Inject;
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
@@ -16,10 +17,15 @@ import java.util.List;
  * Date: 05.12.14
  * Time: 20:03
  */
-public class ProfileRpcServiceImpl extends RemoteServiceServlet implements ProfileRpcService {
+@Singleton
+public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerService {
+
+  private final PlayerDao playerDao;
 
   @Inject
-  private ShashistDao shashistDao;
+  public PlayerServiceImpl(PlayerDao playerDao) {
+    this.playerDao = playerDao;
+  }
 
   @Override
   public Boolean isAuthenticated() {
@@ -30,21 +36,21 @@ public class ProfileRpcServiceImpl extends RemoteServiceServlet implements Profi
   }
 
   @Override
-  public Shashist find(Long profileId) {
+  public Player find(Long profileId) {
     if (profileId == null) {
       return null;
     }
-    return shashistDao.find(profileId);
+    return playerDao.find(profileId);
   }
 
   @Override
-  public Shashist getCurrentProfile() {
+  public Player getCurrentProfile() {
     if (getThreadLocalRequest() == null) {
       return null;
     }
     HttpSession session = getThreadLocalRequest().getSession();
     if (session != null) {
-      final Shashist bySessionId = shashistDao.findBySessionId(session.getId());
+      final Player bySessionId = playerDao.findBySessionId(session.getId());
       System.out.println(bySessionId);
       return bySessionId;
     }
@@ -52,14 +58,14 @@ public class ProfileRpcServiceImpl extends RemoteServiceServlet implements Profi
   }
 
   @Override
-  public Shashist save(Shashist profile) {
+  public Player save(Player profile) {
     return save(profile, false);
   }
 
-  public Shashist save(Shashist profile, boolean onServer) {
-    final Shashist currentProfile = getCurrentProfile();
+  public Player save(Player profile, boolean onServer) {
+    final Player currentProfile = getCurrentProfile();
     if (currentProfile == null && profile != null && profile.getId() == null) {
-      shashistDao.create(profile);
+      playerDao.create(profile);
       return profile;
     }
 
@@ -71,12 +77,12 @@ public class ProfileRpcServiceImpl extends RemoteServiceServlet implements Profi
       return null;
     }
 
-    Shashist shashist = shashistDao.findById(profile.getId());
+    Player player = playerDao.findById(profile.getId());
 
-    if (shashist != null) {
-      shashist.updateSerializable(profile);
-      shashistDao.edit(shashist);
-      return shashist;
+    if (player != null) {
+      player.updateSerializable(profile);
+      playerDao.edit(player);
+      return player;
     }
     return null;
   }
@@ -87,15 +93,15 @@ public class ProfileRpcServiceImpl extends RemoteServiceServlet implements Profi
         && cookie.equals(getThreadLocalRequest().getSession().getId());
   }
 
-  public List<Shashist> findAll() {
-    return shashistDao.findAll();
+  public List<Player> findAll() {
+    return playerDao.findAll();
   }
 
-  public Shashist findByVkUid(String vkUid) {
-    return shashistDao.findByVkUid(vkUid);
+  public Player findByVkUid(String vkUid) {
+    return playerDao.findByVkUid(vkUid);
   }
 
-  public Shashist findBySessionId(String sessionId) {
-    return shashistDao.findBySessionId(sessionId);
+  public Player findBySessionId(String sessionId) {
+    return playerDao.findBySessionId(sessionId);
   }
 }

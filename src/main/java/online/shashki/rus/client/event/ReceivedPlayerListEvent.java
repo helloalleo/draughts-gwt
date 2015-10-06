@@ -1,7 +1,7 @@
 package online.shashki.rus.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.shared.model.Player;
 
 import java.util.List;
 
@@ -13,13 +13,13 @@ import java.util.List;
  */
 public class ReceivedPlayerListEvent extends GwtEvent<ReceivedPlayerListEventHandler> {
   public static Type<ReceivedPlayerListEventHandler> TYPE = new Type<>();
-  private List<Shashist> playerList;
+  private List<Player> playerList;
 
-  public ReceivedPlayerListEvent(List<Shashist> playerList) {
+  public ReceivedPlayerListEvent(List<Player> playerList) {
     this.playerList = playerList;
   }
 
-  public List<Shashist> getPlayerList() {
+  public List<Player> getPlayerList() {
     return playerList;
   }
 

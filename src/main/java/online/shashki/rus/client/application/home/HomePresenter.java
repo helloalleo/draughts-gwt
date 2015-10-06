@@ -19,7 +19,7 @@ import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.service.GameRpcServiceAsync;
-import online.shashki.rus.client.service.ProfileRpcServiceAsync;
+import online.shashki.rus.client.service.PlayerServiceAsync;
 import online.shashki.rus.client.utils.SHCookies;
 import online.shashki.rus.shared.model.Game;
 
@@ -31,7 +31,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public static final PermanentSlot<PlayComponentPresenter> SLOT_PLAY = new PermanentSlot<>();
   public static final int INIT_SHOW_GAMES_PAGE_SIZE = 50;
   private final CurrentSession currentSession;
-  private final ProfileRpcServiceAsync profileService;
+  private final PlayerServiceAsync profileService;
   private PlayComponentPresenter playPresenter;
   private GameRpcServiceAsync gameService;
 
@@ -41,7 +41,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       MyView view,
       MyProxy proxy,
       CurrentSession currentSession,
-      ProfileRpcServiceAsync profileService,
+      PlayerServiceAsync profileService,
       GameRpcServiceAsync gameService,
       PlayComponentPresenter playPresenter) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);

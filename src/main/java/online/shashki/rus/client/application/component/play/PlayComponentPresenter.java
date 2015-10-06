@@ -67,7 +67,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   @Override
-  public void startPlayWith(final Shashist opponent) {
+  public void startPlayWith(final Player opponent) {
     if (opponent == null) {
       InfoDialogBox.setMessage(messages.selectPlayer()).show();
       return;
@@ -295,9 +295,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   interface MyView extends View, HasUiHandlers<PlayComponentUiHandlers> {
     void initNotationPanel(EventBus eventBus);
 
-    void setPlayerList(List<Shashist> shashistList);
+    void setPlayerList(List<Player> playerList);
 
-    void setPlayer(Shashist player);
+    void setPlayer(Player player);
 
     void toggleInPlayButton();
 
@@ -331,6 +331,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
     String takeScreenshot();
 
-    void setOpponent(Shashist opponent);
+    void setOpponent(Player opponent);
   }
 }

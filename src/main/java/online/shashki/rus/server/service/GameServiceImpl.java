@@ -1,14 +1,16 @@
 package online.shashki.rus.server.service;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import online.shashki.rus.client.service.GameRpcService;
 import online.shashki.rus.server.dao.GameDao;
-import online.shashki.rus.server.dao.ShashistDao;
+import online.shashki.rus.server.dao.PlayerDao;
 import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.shared.model.Player;
 
-import javax.inject.Inject;
+import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -18,35 +20,43 @@ import java.util.List;
  * Date: 31.12.14
  * Time: 17:13
  */
-public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcService {
+@Singleton
+public class GameServiceImpl extends RemoteServiceServlet implements GameRpcService {
+
+  private final GameDao gameDao;
+  private final PlayerDao playerDao;
+  private final PlayerServiceImpl profileService;
+  private final HttpServletRequest httpServletRequest;
 
   @Inject
-  private GameDao gameDao;
-
-  @Inject
-  private ShashistDao shashistDao;
-
-  @Inject
-  private ProfileRpcServiceImpl profileService;
+  public GameServiceImpl(GameDao gameDao,
+                         PlayerDao playerDao,
+                         PlayerServiceImpl profileService,
+                         HttpServletRequest httpServletRequest) {
+    this.gameDao = gameDao;
+    this.playerDao = playerDao;
+    this.profileService = profileService;
+    this.httpServletRequest = httpServletRequest;
+  }
 
   @Override
   public Game save(Game game) {
     if (!AuthUtils.isAuthenticated(getThreadLocalRequest().getSession())) {
       throw new RuntimeException("Unauthorized");
     }
-    Shashist playerWhite = game.getPlayerWhite();
+    Player playerWhite = game.getPlayerWhite();
     if (playerWhite == null) {
       return null;
     }
-    playerWhite = shashistDao.find(playerWhite.getId());
+    playerWhite = playerDao.find(playerWhite.getId());
     if (playerWhite == null) {
       return null;
     }
-    Shashist playerBlack = game.getPlayerBlack();
+    Player playerBlack = game.getPlayerBlack();
     if (playerBlack == null) {
       return null;
     }
-    playerBlack = shashistDao.find(playerBlack.getId());
+    playerBlack = playerDao.find(playerBlack.getId());
     if (playerBlack == null) {
       return null;
     }
@@ -63,7 +73,7 @@ public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcS
 
   @Override
   public Game find(Long id) {
-    if (!AuthUtils.isAuthenticated(getThreadLocalRequest().getSession())) {
+    if (!AuthUtils.isAuthenticated(httpServletRequest.getSession())) {
       throw new RuntimeException("Unauthorized");
     }
     return gameDao.findLazyFalse(id);
@@ -81,7 +91,7 @@ public class GameRpcServiceImpl extends RemoteServiceServlet implements GameRpcS
 
   @Override
   public List<Game> findUserGames(int start, int length) {
-    Shashist currentUser = profileService.getCurrentProfile();
+    Player currentUser = profileService.getCurrentProfile();
     System.out.println(currentUser);
     if (currentUser == null) {
       return new ArrayList<>();

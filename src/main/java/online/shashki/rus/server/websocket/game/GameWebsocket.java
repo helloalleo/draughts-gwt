@@ -1,17 +1,17 @@
 package online.shashki.rus.server.websocket.game;
 
-import online.shashki.rus.server.service.GameMessageRpcServiceImpl;
-import online.shashki.rus.server.service.GameRpcServiceImpl;
-import online.shashki.rus.server.service.ProfileRpcServiceImpl;
+import com.google.inject.Inject;
+import online.shashki.rus.server.service.GameMessageServiceImpl;
+import online.shashki.rus.server.service.GameServiceImpl;
+import online.shashki.rus.server.service.PlayerServiceImpl;
 import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.server.websocket.game.message.GameMessageDecoder;
 import online.shashki.rus.server.websocket.game.message.GameMessageEncoder;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.GameMessage;
 import online.shashki.rus.shared.model.Move;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.shared.model.Player;
 
-import javax.inject.Inject;
 import javax.inject.Singleton;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
@@ -31,14 +31,20 @@ import java.util.*;
 )
 public class GameWebsocket {
 
-  private static Map<Shashist, Session> peers = Collections.synchronizedMap(new HashMap<Shashist, Session>());
+  private static Map<Player, Session> peers = Collections.synchronizedMap(new HashMap<Player, Session>());
   private final long MAX_IDLE_TIMEOUT = 1000 * 60 * 15;
+  private final PlayerServiceImpl playerService;
+  private final GameMessageServiceImpl gameMessageService;
+  private final GameServiceImpl gameService;
+
   @Inject
-  private ProfileRpcServiceImpl shashistService;
-  @Inject
-  private GameMessageRpcServiceImpl gameMessageService;
-  @Inject
-  private GameRpcServiceImpl gameService;
+  private GameWebsocket(GameServiceImpl gameService,
+                        PlayerServiceImpl playerService,
+                        GameMessageServiceImpl gameMessageService) {
+    this.gameService = gameService;
+    this.playerService = playerService;
+    this.gameMessageService = gameMessageService;
+  }
 
   @OnOpen
   public void onOpen(Session session) {
@@ -93,45 +99,45 @@ public class GameWebsocket {
   }
 
   private void handleNewPlayer(GameMessage message, Session session) {
-    Shashist shashist = message.getSender();
-    final Long shashistId = shashist.getId();
+    Player player = message.getSender();
+    final Long shashistId = player.getId();
     if (!peers.isEmpty() && shashistId != null) {
-      for (Shashist sh : peers.keySet()) {
+      for (Player sh : peers.keySet()) {
         if (shashistId.equals(sh.getId())) {
           return;
         }
       }
     }
 
-    shashist = shashistService.find(shashistId);
+    player = playerService.find(shashistId);
 
-    shashist.setOnline(true);
-    shashistService.save(shashist, true);
+    player.setOnline(true);
+    playerService.save(player, true);
 
-    peers.put(shashist, session);
-    System.out.println("Register new player: " + shashist.getId() + " " + session.getId());
+    peers.put(player, session);
+    System.out.println("Register new player: " + player.getId() + " " + session.getId());
     updatePlayerList(session);
   }
 
   @OnClose
   public void onClose(Session session) {
-    Shashist shashist = null;
-    for (Shashist sh : peers.keySet()) {
+    Player player = null;
+    for (Player sh : peers.keySet()) {
       if (peers.get(sh).equals(session)) {
-        shashist = sh;
+        player = sh;
         break;
       }
     }
-    if (shashist == null) {
+    if (player == null) {
       return;
     }
-    shashist = shashistService.find(shashist.getId());
+    player = playerService.find(player.getId());
 
-    shashist.setOnline(false);
-    shashist.setPlaying(false);
-    shashistService.save(shashist, true);
+    player.setOnline(false);
+    player.setPlaying(false);
+    playerService.save(player, true);
 
-    System.out.println("Disconnected: " + shashist.getId() + " " + session.getId());
+    System.out.println("Disconnected: " + player.getId() + " " + session.getId());
     peers.values().remove(session);
     updatePlayerList(session);
   }
@@ -142,21 +148,21 @@ public class GameWebsocket {
   }
 
   private void handleChatPrivateMessage(GameMessage message) {
-    Shashist receiver = message.getReceiver();
+    Player receiver = message.getReceiver();
     if (receiver == null) {
       return;
     }
-    Shashist shashist = null;
-    for (Shashist sh : peers.keySet()) {
+    Player player = null;
+    for (Player sh : peers.keySet()) {
       if (receiver.getId().equals(sh.getId())) {
-        shashist = sh;
+        player = sh;
         break;
       }
     }
-    if (shashist == null) {
+    if (player == null) {
       return;
     }
-    Session session = peers.get(shashist);
+    Session session = peers.get(player);
     if (session == null) {
       return;
     }
@@ -166,8 +172,8 @@ public class GameWebsocket {
   }
 
   private void saveGameMessage(GameMessage message) {
-    Shashist shashistReceiver = shashistService.find(message.getReceiver().getId());
-    Shashist shashistSender = shashistService.find(message.getSender().getId());
+    Player playerReceiver = playerService.find(message.getReceiver().getId());
+    Player playerSender = playerService.find(message.getSender().getId());
     Game game = message.getGame() != null ? gameService.find(message.getGame().getId()) : null;
 
     GameMessage gameMessage = new GameMessage();
@@ -183,8 +189,8 @@ public class GameWebsocket {
       gameMessage.getMove().setGameMessage(gameMessage);
     }
 
-    gameMessage.setReceiver(shashistReceiver);
-    gameMessage.setSender(shashistSender);
+    gameMessage.setReceiver(playerReceiver);
+    gameMessage.setSender(playerSender);
 
     gameMessage.setSentDate(new Date());
 
@@ -194,8 +200,8 @@ public class GameWebsocket {
   private void updatePlayerList(Session session) {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
-    List<Shashist> shashistList = shashistService.findAll();
-    gameMessage.setPlayerList(shashistList);
+    List<Player> playerList = playerService.findAll();
+    gameMessage.setPlayerList(playerList);
     gameMessageService.save(gameMessage);
     for (Session s : session.getOpenSessions()) {
       if (s.isOpen()) {

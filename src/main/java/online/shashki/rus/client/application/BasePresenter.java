@@ -11,7 +11,7 @@ import com.gwtplatform.mvp.client.proxy.RevealContentHandler;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
-import online.shashki.rus.client.service.ProfileRpcServiceAsync;
+import online.shashki.rus.client.service.PlayerServiceAsync;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,7 +26,7 @@ public abstract class BasePresenter<View_ extends View, Proxy_ extends Proxy<?>>
   @Inject
   private CurrentSession currentSession;
   @Inject
-  private ProfileRpcServiceAsync profileService;
+  private PlayerServiceAsync profileService;
 
   protected BasePresenter(
       EventBus eventBus,
@@ -86,11 +86,11 @@ public abstract class BasePresenter<View_ extends View, Proxy_ extends Proxy<?>>
     return this;
   }
 
-  public ProfileRpcServiceAsync getProfileService() {
+  public PlayerServiceAsync getProfileService() {
     return profileService;
   }
 
-  public BasePresenter setProfileService(ProfileRpcServiceAsync profileService) {
+  public BasePresenter setProfileService(PlayerServiceAsync profileService) {
     this.profileService = profileService;
     return this;
   }

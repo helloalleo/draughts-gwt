@@ -11,7 +11,7 @@ import online.shashki.rus.client.application.widget.dialog.*;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.json.GameMessageMapper;
 import online.shashki.rus.client.service.GameRpcServiceAsync;
-import online.shashki.rus.client.service.ProfileRpcServiceAsync;
+import online.shashki.rus.client.service.PlayerServiceAsync;
 import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.config.ShashkiConfiguration;
 import online.shashki.rus.shared.locale.ShashkiMessages;
@@ -29,12 +29,12 @@ import java.util.List;
 public class GameWebsocket implements WebSocketCallback {
 
 //  private final JsonSerialization jsonSerialization;
-  private ProfileRpcServiceAsync profileService;
+  private PlayerServiceAsync profileService;
   private ShashkiConfiguration configuration = GWT.create(ShashkiConfiguration.class);
   private GameRpcServiceAsync gameService;
   private WebSocket webSocket;
   private EventBus eventBus;
-  private Shashist player;
+  private Player player;
   private ShashkiMessages messages;
   private ConfirmPlayDialogBox confirmPlayDialogBox;
   private ConnectionSession connectionSession = new ConnectionSession();
@@ -45,16 +45,16 @@ public class GameWebsocket implements WebSocketCallback {
                         ShashkiMessages messages,
                         GameRpcServiceAsync gameService,
 //                        JsonSerialization jsonSerialization,
-                        ProfileRpcServiceAsync profileService) {
+                        PlayerServiceAsync profileService) {
     SHLog.debug("GAME WS");
-    profileService.getCurrentProfile(new AsyncCallback<Shashist>() {
+    profileService.getCurrentProfile(new AsyncCallback<Player>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();
       }
 
       @Override
-      public void onSuccess(Shashist result) {
+      public void onSuccess(Player result) {
         player = result;
         if (player == null) {
 //          throw new RuntimeException("Player not found");
@@ -142,7 +142,7 @@ public class GameWebsocket implements WebSocketCallback {
     webSocket.send(message);
   }
 
-  private void handleUpdatePlayerList(List<Shashist> playerList) {
+  private void handleUpdatePlayerList(List<Player> playerList) {
     SHLog.debug(playerList.size() + " PLAYER LIST SIZE");
     eventBus.fireEvent(new ReceivedPlayerListEvent(playerList));
   }
@@ -161,14 +161,14 @@ public class GameWebsocket implements WebSocketCallback {
     confirmPlayDialogBox = new ConfirmPlayDialogBox() {
       @Override
       public void submitted() {
-        profileService.find(gameMessage.getSender().getId(), new AsyncCallback<Shashist>() {
+        profileService.find(gameMessage.getSender().getId(), new AsyncCallback<Player>() {
           @Override
           public void onFailure(Throwable caught) {
             ErrorDialogBox.setMessage(messages.errorWhileGettingProfile(), caught).show();
           }
 
           @Override
-          public void onSuccess(Shashist result) {
+          public void onSuccess(Player result) {
             if (result == null) {
               InfoDialogBox.setMessage(messages.opponentNotFound()).show();
               return;
@@ -460,15 +460,15 @@ public class GameWebsocket implements WebSocketCallback {
     return connectionSession.isConnected();
   }
 
-  public Shashist getPlayer() {
+  public Player getPlayer() {
     return player;
   }
 
-  public void setPlayer(Shashist player) {
+  public void setPlayer(Player player) {
     this.player = player;
   }
 
-  public Shashist getOpponent() {
+  public Player getOpponent() {
     return connectionSession.getOpponent();
   }
 
@@ -480,7 +480,7 @@ public class GameWebsocket implements WebSocketCallback {
     return connectionSession.isPlayerHasWhiteColor();
   }
 
-  public void setOpponent(Shashist opponent) {
+  public void setOpponent(Player opponent) {
     connectionSession.setOpponent(opponent);
   }
 

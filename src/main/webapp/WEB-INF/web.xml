@@ -3,30 +3,39 @@
          xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
-    <servlet>
-        <servlet-name>online.shashki.rus ProfileRpcService</servlet-name>
-        <servlet-class>online.shashki.rus.server.service.ProfileRpcServiceImpl</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>online.shashki.rus GameRpcMessageService</servlet-name>
-        <servlet-class>online.shashki.rus.server.service.GameMessageRpcServiceImpl</servlet-class>
-    </servlet>
-    <servlet>
-        <servlet-name>online.shashki.rus GameRpcService</servlet-name>
-        <servlet-class>online.shashki.rus.server.service.GameRpcServiceImpl</servlet-class>
-    </servlet>
-    <servlet-mapping>
-        <servlet-name>online.shashki.rus ProfileRpcService</servlet-name>
-        <url-pattern>/Application/ProfileRpcService</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>online.shashki.rus GameRpcMessageService</servlet-name>
-        <url-pattern>/Application/GameMessageRpcService</url-pattern>
-    </servlet-mapping>
-    <servlet-mapping>
-        <servlet-name>online.shashki.rus GameRpcService</servlet-name>
-        <url-pattern>/Application/GameRpcService</url-pattern>
-    </servlet-mapping>
+    <!--<servlet>-->
+        <!--<servlet-name>online.shashki.rus ProfileRpcService</servlet-name>-->
+        <!--<servlet-class>online.shashki.rus.server.service.ProfileRpcServiceImpl</servlet-class>-->
+    <!--</servlet>-->
+    <!--<servlet>-->
+        <!--<servlet-name>online.shashki.rus GameRpcMessageService</servlet-name>-->
+        <!--<servlet-class>online.shashki.rus.server.service.GameMessageRpcServiceImpl</servlet-class>-->
+    <!--</servlet>-->
+    <!--<servlet>-->
+        <!--<servlet-name>online.shashki.rus GameRpcService</servlet-name>-->
+        <!--<servlet-class>online.shashki.rus.server.service.GameRpcServiceImpl</servlet-class>-->
+    <!--</servlet>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>online.shashki.rus ProfileRpcService</servlet-name>-->
+        <!--<url-pattern>/Application/ProfileRpcService</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>online.shashki.rus GameRpcMessageService</servlet-name>-->
+        <!--<url-pattern>/Application/GameMessageRpcService</url-pattern>-->
+    <!--</servlet-mapping>-->
+    <!--<servlet-mapping>-->
+        <!--<servlet-name>online.shashki.rus GameRpcService</servlet-name>-->
+        <!--<url-pattern>/Application/GameRpcService</url-pattern>-->
+    <!--</servlet-mapping>-->
+
+    <filter>
+        <filter-name>guiceFilter</filter-name>
+        <filter-class>com.google.inject.servlet.GuiceFilter</filter-class>
+    </filter>
+    <filter-mapping>
+        <filter-name>guiceFilter</filter-name>
+        <url-pattern>/*</url-pattern>
+    </filter-mapping>
 
     <error-page>
         <error-code>500</error-code>

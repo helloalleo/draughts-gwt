@@ -5,9 +5,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.inject.Inject;
-import online.shashki.rus.shared.locale.ShashkiMessages;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.shared.model.Player;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
 
@@ -76,7 +74,7 @@ public abstract class ConfirmPlayDialogBox extends BasicDialogBox {
     return senderName;
   }
 
-  public void show(String message, Shashist sender, boolean playWithColor) {
+  public void show(String message, Player sender, boolean playWithColor) {
     this.senderId = sender.getSessionId();
     this.senderName = sender.getPublicName();
     this.white = playWithColor;

@@ -45,6 +45,7 @@
         <postgresql.version>9.3-1102-jdbc41</postgresql.version>
         <jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
         <gwt-jackson.version>0.10.0</gwt-jackson.version>
+        <guice.version>4.0</guice.version>
     </properties>
 
     <profiles>
@@ -222,6 +223,25 @@
             <version>${gwtbootstrap3.version}</version>
         </dependency>
 
+        <!--Guice-->
+        <dependency>
+            <groupId>com.google.inject</groupId>
+            <artifactId>guice</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-servlet</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.google.inject.extensions</groupId>
+            <artifactId>guice-persist</artifactId>
+            <version>${guice.version}</version>
+        </dependency>
+
         <!--Postgresql-->
         <dependency>
             <groupId>org.postgresql</groupId>
@@ -249,11 +269,11 @@
 
         <!-- Import the CDI API, we use provided scope as the API is included in
             JBoss WildFly -->
-        <dependency>
-            <groupId>javax.enterprise</groupId>
-            <artifactId>cdi-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
+        <!--<dependency>-->
+        <!--<groupId>javax.enterprise</groupId>-->
+        <!--<artifactId>cdi-api</artifactId>-->
+        <!--<scope>provided</scope>-->
+        <!--</dependency>-->
 
         <!-- Import the Common Annotations API (JSR-250), we use provided scope
             as the API is included in JBoss WildFly -->
@@ -287,9 +307,9 @@
         </dependency>
 
         <!--<dependency>-->
-            <!--<groupId>org.jboss.spec.javax.transaction</groupId>-->
-            <!--<artifactId>jboss-transaction-api_1.2_spec</artifactId>-->
-            <!--<scope>provided</scope>-->
+        <!--<groupId>org.jboss.spec.javax.transaction</groupId>-->
+        <!--<artifactId>jboss-transaction-api_1.2_spec</artifactId>-->
+        <!--<scope>provided</scope>-->
         <!--</dependency>-->
 
         <!-- Import the JPA API, we use provided scope as the API is included in

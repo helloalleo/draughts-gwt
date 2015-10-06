@@ -11,7 +11,7 @@ import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 public class RpcServiceModule extends AbstractPresenterModule {
   @Override
   protected void configure() {
-    bind(ProfileRpcServiceAsync.class).asEagerSingleton();
+    bind(PlayerServiceAsync.class).asEagerSingleton();
     bind(GameRpcServiceAsync.class).asEagerSingleton();
   }
 }

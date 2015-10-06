@@ -30,7 +30,7 @@ import online.shashki.rus.client.resources.Variables;
 import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Move;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shashki.Board;
 import online.shashki.rus.shashki.BoardBackgroundLayer;
 import org.gwtbootstrap3.client.ui.Button;
@@ -75,13 +75,13 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   Button cancelMove;
   private Board board;
   private LienzoPanel lienzoPanel;
-  private Shashist player;
-  private CellList<Shashist> playerCellList;
-  private SingleSelectionModel<Shashist> playerSelectionModel;
+  private Player player;
+  private CellList<Player> playerCellList;
+  private SingleSelectionModel<Player> playerSelectionModel;
   private NotationPanel notationPanel;
   private InviteDialogBox inviteDialogBox;
   private boolean opponentColor;
-  private Shashist opponent;
+  private Player opponent;
 
   @Inject
   PlayComponentView(Binder uiBinder,
@@ -209,9 +209,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   private void initPlayersCellList() {
-    playerCellList = new CellList<>(new AbstractCell<Shashist>() {
+    playerCellList = new CellList<>(new AbstractCell<Player>() {
       @Override
-      public void render(Context context, Shashist value, SafeHtmlBuilder sb) {
+      public void render(Context context, Player value, SafeHtmlBuilder sb) {
         if (value != null) {
           if (value.isLoggedIn()) {
             org.gwtbootstrap3.client.ui.Image img;
@@ -246,14 +246,14 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void setPlayerList(List<Shashist> shashistList) {
-    SHLog.debug("setPlayerList " + shashistList);
+  public void setPlayerList(List<Player> playerList) {
+    SHLog.debug("setPlayerList " + playerList);
     playerCellList.setRowCount(0);
-    playerCellList.setRowData(shashistList);
+    playerCellList.setRowData(playerList);
   }
 
   @Override
-  public void setPlayer(Shashist player) {
+  public void setPlayer(Player player) {
     this.player = player;
   }
 
@@ -272,7 +272,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playButton.setIcon(IconType.REFRESH);
     playButton.setText(messages.reconnect());
 
-    playerCellList.setRowData(new ArrayList<Shashist>());
+    playerCellList.setRowData(new ArrayList<Player>());
     turnLabel.setHTML(messages.youDisconnected());
 
     hidePlayingButtonsAndShowPlayButton();
@@ -399,7 +399,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void setOpponent(Shashist opponent) {
+  public void setOpponent(Player opponent) {
     this.opponent = opponent;
   }
 

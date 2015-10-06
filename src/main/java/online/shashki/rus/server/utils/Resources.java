@@ -1,11 +1,6 @@
 package online.shashki.rus.server.utils;
 
-import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.event.shared.SimpleEventBus;
-
 import javax.ejb.Singleton;
-import javax.enterprise.inject.Default;
-import javax.enterprise.inject.Produces;
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 
@@ -21,15 +16,15 @@ public class Resources {
   @PersistenceContext(unitName = "shashki64PU")
   private EntityManager entityManager;
 
-  @Produces
-  public EntityManager getEntityManager() {
-    return entityManager;
-  }
+//  @Produces
+//  public EntityManager getEntityManager() {
+//    return entityManager;
+//  }
 
-  @Default
-  @Produces
-  public EventBus getEventBus() {
-    return new SimpleEventBus();
-  }
+//  @Default
+//  @Produces
+//  public EventBus getEventBus() {
+//    return new SimpleEventBus();
+//  }
 
 }

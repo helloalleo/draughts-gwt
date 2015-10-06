@@ -3,7 +3,7 @@ package online.shashki.rus.client.service;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;
 import com.google.gwt.user.client.rpc.RemoteServiceRelativePath;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.shared.model.Player;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,15 +12,15 @@ import online.shashki.rus.shared.model.Shashist;
  * Time: 20:03
  */
 @RemoteServiceRelativePath("ProfileRpcService")
-public interface ProfileRpcService extends RemoteService {
+public interface PlayerService extends RemoteService {
 
   Boolean isAuthenticated();
 
-  Shashist find(Long shashistId);
+  Player find(Long shashistId);
 
-  Shashist getCurrentProfile();
+  Player getCurrentProfile();
 
-  Shashist save(Shashist profile);
+  Player save(Player profile);
 
   boolean isCookieValid(String cookie);
 
@@ -29,9 +29,9 @@ public interface ProfileRpcService extends RemoteService {
    * Use ProfileRpcService.App.fromString() to access static instance of ProfileRpcServiceAsync
    */
   class App {
-    private static final ProfileRpcServiceAsync ourInstance = (ProfileRpcServiceAsync) GWT.create(ProfileRpcService.class);
+    private static final PlayerServiceAsync ourInstance = (PlayerServiceAsync) GWT.create(PlayerService.class);
 
-    public static ProfileRpcServiceAsync getInstance() {
+    public static PlayerServiceAsync getInstance() {
       return ourInstance;
     }
   }

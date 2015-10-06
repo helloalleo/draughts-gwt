@@ -6,7 +6,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.exception.InvalidCookieException;
-import online.shashki.rus.client.service.ProfileRpcService;
+import online.shashki.rus.client.service.PlayerService;
 import online.shashki.rus.shared.config.ShashkiConfiguration;
 
 /**
@@ -33,7 +33,7 @@ public class SHCookies {
 
   public static boolean isLoggedIn() {
     final String authCookie = Cookies.getCookie(authenticated);
-    ProfileRpcService.App.getInstance().isCookieValid(Cookies.getCookie(authenticated), new AsyncCallback<Boolean>() {
+    PlayerService.App.getInstance().isCookieValid(Cookies.getCookie(authenticated), new AsyncCallback<Boolean>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();

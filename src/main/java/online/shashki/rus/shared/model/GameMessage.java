@@ -20,19 +20,19 @@ public class GameMessage extends PersistableObjectImpl {
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "sender_id")
-  private Shashist sender;
+  private Player sender;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "receiver_id")
-  private Shashist receiver;
+  private Player receiver;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "sender_game_id")
-  private Shashist senderGame;
+  private Player senderGame;
 
   @ManyToOne(fetch = FetchType.LAZY)
   @JoinColumn(name = "receiver_game_id")
-  private Shashist receiverGame;
+  private Player receiverGame;
 
   private String message;
 
@@ -56,38 +56,38 @@ public class GameMessage extends PersistableObjectImpl {
   private Game game;
 
   @Transient
-  private List<Shashist> playerList;
+  private List<Player> playerList;
 
-  public Shashist getSender() {
+  public Player getSender() {
     return sender;
   }
 
-  public void setSender(Shashist entity) {
+  public void setSender(Player entity) {
     this.sender = entity;
   }
 
-  public Shashist getReceiver() {
+  public Player getReceiver() {
     return receiver;
   }
 
-  public void setReceiver(Shashist entity) {
+  public void setReceiver(Player entity) {
     this.receiver = entity;
   }
 
-  public Shashist getSenderGame() {
+  public Player getSenderGame() {
     return senderGame;
   }
 
-  public GameMessage setSenderGame(Shashist senderGame) {
+  public GameMessage setSenderGame(Player senderGame) {
     this.senderGame = senderGame;
     return this;
   }
 
-  public Shashist getReceiverGame() {
+  public Player getReceiverGame() {
     return receiverGame;
   }
 
-  public GameMessage setReceiverGame(Shashist receiverGame) {
+  public GameMessage setReceiverGame(Player receiverGame) {
     this.receiverGame = receiverGame;
     return this;
   }
@@ -140,11 +140,11 @@ public class GameMessage extends PersistableObjectImpl {
     this.game = entity;
   }
 
-  public void setPlayerList(List<Shashist> playerList) {
+  public void setPlayerList(List<Player> playerList) {
     this.playerList = playerList;
   }
 
-  public List<Shashist> getPlayerList() {
+  public List<Player> getPlayerList() {
     return playerList;
   }
 

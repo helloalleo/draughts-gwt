@@ -17,9 +17,9 @@ import online.shashki.rus.client.application.ApplicationPresenter;
 import online.shashki.rus.client.application.profile.settings.SettingsPresenter;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
-import online.shashki.rus.client.service.ProfileRpcServiceAsync;
+import online.shashki.rus.client.service.PlayerServiceAsync;
 import online.shashki.rus.client.utils.SHCookies;
-import online.shashki.rus.shared.model.Shashist;
+import online.shashki.rus.shared.model.Player;
 
 
 public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, ProfilePresenter.MyProxy>
@@ -27,7 +27,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
   public static final NestedSlot SLOT_PROFILE = new NestedSlot();
   public static final Slot<SettingsPresenter> SLOT_PROFILE_CONTENT = new Slot<>();
   private SettingsPresenter settingsPresenter;
-  private final ProfileRpcServiceAsync profileService;
+  private final PlayerServiceAsync profileService;
   private final SettingsPresenter.Factory settingsFactory;
 
   @Inject
@@ -35,7 +35,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
       EventBus eventBus,
       MyView view,
       MyProxy proxy,
-      ProfileRpcServiceAsync profileService,
+      PlayerServiceAsync profileService,
       SettingsPresenter.Factory settingsFactory) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
@@ -59,7 +59,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
   public void prepareFromRequest(PlaceRequest request) {
     super.prepareFromRequest(request);
 
-    profileService.getCurrentProfile(new AsyncCallback<Shashist>() {
+    profileService.getCurrentProfile(new AsyncCallback<Player>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();
@@ -67,7 +67,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
       }
 
       @Override
-      public void onSuccess(Shashist result) {
+      public void onSuccess(Player result) {
         settingsPresenter = settingsFactory.create(result);
         getProxy().manualReveal(ProfilePresenter.this);
         displayPage(NameTokens.settingsPage);

@@ -1,11 +1,12 @@
 package online.shashki.rus.server.service;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
+import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import online.shashki.rus.client.service.GameMessageRpcService;
 import online.shashki.rus.server.dao.GameMessageDao;
 import online.shashki.rus.shared.model.GameMessage;
 
-import javax.inject.Inject;
 import java.util.List;
 
 /**
@@ -14,10 +15,15 @@ import java.util.List;
  * Date: 30.12.14
  * Time: 9:31
  */
-public class GameMessageRpcServiceImpl extends RemoteServiceServlet implements GameMessageRpcService {
+@Singleton
+public class GameMessageServiceImpl extends RemoteServiceServlet implements GameMessageRpcService {
+
+  private final GameMessageDao gameMessageDao;
 
   @Inject
-  private GameMessageDao gameMessageDao;
+  public GameMessageServiceImpl(GameMessageDao gameMessageDao) {
+    this.gameMessageDao = gameMessageDao;
+  }
 
   @Override
   public List<GameMessage> getLastPlayerMessages(int countLast, Long playerId, Long opponentId) {
