@@ -1,6 +1,7 @@
 package online.shashki.rus.server.dao.impl;
 
 import com.google.inject.Inject;
+import com.google.inject.TypeLiteral;
 import online.shashki.rus.server.dao.GameDao;
 import online.shashki.rus.shared.model.Game;
 
@@ -19,8 +20,9 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
   @Inject
   private EntityManager entityManager;
 
-  public GameDaoImpl(Class<Game> clazz) {
-    super(clazz);
+  @Inject
+  public GameDaoImpl(TypeLiteral<Game> type) {
+    super(type);
   }
 
   @Override

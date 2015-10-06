@@ -100,16 +100,16 @@ public class GameWebsocket {
 
   private void handleNewPlayer(GameMessage message, Session session) {
     Player player = message.getSender();
-    final Long shashistId = player.getId();
-    if (!peers.isEmpty() && shashistId != null) {
+    final Long playerId = player.getId();
+    if (!peers.isEmpty() && playerId != null) {
       for (Player sh : peers.keySet()) {
-        if (shashistId.equals(sh.getId())) {
+        if (playerId.equals(sh.getId())) {
           return;
         }
       }
     }
 
-    player = playerService.find(shashistId);
+    player = playerService.find(playerId);
 
     player.setOnline(true);
     playerService.save(player, true);

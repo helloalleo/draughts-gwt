@@ -41,7 +41,7 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   @Override
   public Player findByVkUid(String uid) {
     Query query = getEntityManager().createQuery(
-        "FROM Shashist " +
+        "FROM Player " +
             "WHERE vkUid = :vkUid");
     query.setParameter("vkUid", uid);
     List list = query.getResultList();
@@ -51,7 +51,7 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   @Override
   public Player findBySessionId(String sessionId) {
     Query query = getEntityManager().createQuery(
-        "FROM Shashist " +
+        "FROM Player " +
             "WHERE sessionId = :sessionId");
     query.setParameter("sessionId", sessionId);
     List result = query.getResultList();
@@ -62,12 +62,12 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   }
 
   @Override
-  public Player findById(Long shashistId) {
+  public Player findById(Long playerId) {
     Query query = getEntityManager().createQuery(
-        "FROM Shashist " +
-            "WHERE id = :shashistId"
+        "FROM Player " +
+            "WHERE id = :playerId"
     );
-    query.setParameter("shashistId", shashistId);
+    query.setParameter("playerId", playerId);
     List result = query.getResultList();
     if (result.isEmpty()) {
       return null;

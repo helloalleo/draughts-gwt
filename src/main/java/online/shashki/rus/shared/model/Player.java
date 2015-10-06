@@ -18,7 +18,7 @@ import java.util.Set;
  * Time: 0:36
  */
 @Entity
-@Table(name = "shashist")
+@Table(name = "player")
 public class Player extends PersistableObjectImpl {
 
   @GwtTransient

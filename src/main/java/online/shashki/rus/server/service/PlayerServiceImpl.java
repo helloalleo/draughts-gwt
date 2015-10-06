@@ -18,6 +18,7 @@ import java.util.List;
  * Date: 05.12.14
  * Time: 20:03
  */
+@Singleton
 public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerService {
 
   private final PlayerDao playerDao;
@@ -36,11 +37,11 @@ public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerSer
   }
 
   @Override
-  public Player find(Long profileId) {
-    if (profileId == null) {
+  public Player find(Long playerId) {
+    if (playerId == null) {
       return null;
     }
-    return playerDao.find(profileId);
+    return playerDao.find(playerId);
   }
 
   @Override

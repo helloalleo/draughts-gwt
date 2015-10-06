@@ -14,5 +14,5 @@ public interface PlayerDao extends Dao<Player> {
 
   Player findBySessionId(String sessionId);
 
-  Player findById(Long shashistId);
+  Player findById(Long playerId);
 }

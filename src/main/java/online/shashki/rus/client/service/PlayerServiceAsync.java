@@ -15,7 +15,7 @@ public interface PlayerServiceAsync {
 
   void isCookieValid(String cookie, AsyncCallback<Boolean> async);
 
-  void find(Long shashistId, AsyncCallback<Player> async);
+  void find(Long playerId, AsyncCallback<Player> async);
 
   void save(Player profile, AsyncCallback<Player> async);
 

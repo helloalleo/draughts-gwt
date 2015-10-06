@@ -16,7 +16,7 @@ public interface PlayerService extends RemoteService {
 
   Boolean isAuthenticated();
 
-  Player find(Long shashistId);
+  Player find(Long playerId);
 
   Player getCurrentProfile();
 
