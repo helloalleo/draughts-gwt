@@ -3,10 +3,10 @@ package online.shashki.rus.server.servlet.oauth;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeServlet;
 import com.google.api.client.http.GenericUrl;
+import com.google.inject.Inject;
 import online.shashki.rus.server.config.ServerConfiguration;
 import online.shashki.rus.server.utils.Utils;
 
-import javax.inject.Inject;
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -25,8 +25,12 @@ public class OAuthVKServlet extends AbstractAuthorizationCodeServlet {
 
   private List<String> scope = Collections.singletonList("email");
 
+  private final ServerConfiguration serverConfiguration;
+
   @Inject
-  private ServerConfiguration serverConfiguration;
+  public OAuthVKServlet(ServerConfiguration serverConfiguration) {
+    this.serverConfiguration = serverConfiguration;
+  }
 
   @Override
   protected AuthorizationCodeFlow initializeFlow() throws ServletException, IOException {

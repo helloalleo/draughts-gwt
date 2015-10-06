@@ -1,9 +1,9 @@
 package online.shashki.rus.server.dao.impl;
 
+import com.google.inject.Inject;
 import online.shashki.rus.server.dao.GameMessageDao;
 import online.shashki.rus.shared.model.GameMessage;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.Collections;
@@ -20,8 +20,8 @@ public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements GameMess
   @Inject
   private EntityManager entityManager;
 
-  public GameMessageDaoImpl() {
-    super(GameMessage.class);
+  public GameMessageDaoImpl(Class<GameMessage> clazz) {
+    super(clazz);
   }
 
   @Override

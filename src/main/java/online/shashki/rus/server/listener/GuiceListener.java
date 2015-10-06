@@ -5,14 +5,9 @@ import com.google.inject.Injector;
 import com.google.inject.servlet.GuiceServletContextListener;
 import online.shashki.rus.server.config.ServerModule;
 import online.shashki.rus.server.config.ServerServletModule;
-import online.shashki.rus.server.dao.PlayerDao;
-import online.shashki.rus.server.dao.impl.PlayerDaoImpl;
-import online.shashki.rus.server.service.PlayerServiceImpl;
-import online.shashki.rus.shared.model.Player;
 
 import javax.servlet.ServletContextEvent;
 import javax.servlet.annotation.WebListener;
-import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -32,20 +27,20 @@ public class GuiceListener extends GuiceServletContextListener {
   public void contextInitialized(ServletContextEvent servletContextEvent) {
     super.contextInitialized(servletContextEvent);
 
-    Injector injector = getInjector();
-
-    PlayerDao playerDao = new PlayerDaoImpl();
-    injector.injectMembers(playerDao);
-    PlayerServiceImpl playerService = new PlayerServiceImpl(playerDao);
-    injector.injectMembers(playerService);
-
-    // сбрасываем всех пользователей как не залогиненных при старте контейнера
-    final List<Player> playerList = playerService.findAll();
-    for (Player player : playerList) {
-      player.setOnline(false);
-      player.setPlaying(false);
-      player.setLoggedIn(false);
-      playerService.save(player, true);
-    }
+//    Injector injector = getInjector();
+//
+//    PlayerDao playerDao = new PlayerDaoImpl();
+//    injector.injectMembers(playerDao);
+//    PlayerServiceImpl playerService = new PlayerServiceImpl(playerDao);
+//    injector.injectMembers(playerService);
+//
+//    // сбрасываем всех пользователей как не залогиненных при старте контейнера
+//    final List<Player> playerList = playerService.findAll();
+//    for (Player player : playerList) {
+//      player.setOnline(false);
+//      player.setPlaying(false);
+//      player.setLoggedIn(false);
+//      playerService.save(player, true);
+//    }
   }
 }

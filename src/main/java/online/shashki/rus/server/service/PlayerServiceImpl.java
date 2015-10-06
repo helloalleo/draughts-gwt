@@ -2,6 +2,7 @@ package online.shashki.rus.server.service;
 
 import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import online.shashki.rus.client.service.PlayerService;
 import online.shashki.rus.server.dao.PlayerDao;
@@ -17,14 +18,13 @@ import java.util.List;
  * Date: 05.12.14
  * Time: 20:03
  */
-@Singleton
 public class PlayerServiceImpl extends RemoteServiceServlet implements PlayerService {
 
   private final PlayerDao playerDao;
 
   @Inject
-  public PlayerServiceImpl(PlayerDao playerDao) {
-    this.playerDao = playerDao;
+  public PlayerServiceImpl(Provider<PlayerDao> playerDao) {
+    this.playerDao = playerDao.get();
   }
 
   @Override

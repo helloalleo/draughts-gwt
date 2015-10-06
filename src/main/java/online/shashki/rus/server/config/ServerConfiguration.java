@@ -1,6 +1,7 @@
 package online.shashki.rus.server.config;
 
-import javax.ejb.Stateless;
+import com.google.inject.Singleton;
+
 import java.util.ResourceBundle;
 
 /**
@@ -9,7 +10,7 @@ import java.util.ResourceBundle;
  * Date: 15.03.15
  * Time: 18:43
  */
-@Stateless
+@Singleton
 public class ServerConfiguration {
 
   private String context;

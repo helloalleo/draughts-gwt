@@ -1,5 +1,6 @@
 package online.shashki.rus.server.dao.impl;
 
+import com.google.inject.TypeLiteral;
 import online.shashki.rus.server.dao.Dao;
 import online.shashki.rus.shared.model.PersistableObject;
 
@@ -19,8 +20,8 @@ import java.util.List;
 public abstract class DaoImpl<E extends PersistableObject> implements Dao<E> {
   private Class<E> entityClass;
 
-  public DaoImpl(Class<E> entityClass) {
-    this.entityClass = entityClass;
+  public DaoImpl(TypeLiteral<E> type) {
+    this.entityClass = (Class<E>) type.getRawType();
   }
 
   protected abstract EntityManager getEntityManager();
@@ -52,7 +53,7 @@ public abstract class DaoImpl<E extends PersistableObject> implements Dao<E> {
 
   public List<E> findPublishedAll() {
     CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-    CriteriaQuery cq = cb.createQuery(entityClass);
+    CriteriaQuery<E> cq = cb.createQuery(entityClass);
     Root<E> root = cq.from(entityClass);
     cq.select(root).where(cb.equal(root.get("published"), true));
     return getEntityManager().createQuery(cq).getResultList();

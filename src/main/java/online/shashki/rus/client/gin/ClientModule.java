@@ -6,7 +6,7 @@ import com.gwtplatform.mvp.client.gin.DefaultModule;
 import online.shashki.rus.client.application.ApplicationModule;
 import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.place.NameTokens;
-import online.shashki.rus.client.service.RpcServiceModule;
+import online.shashki.rus.client.service.ServiceModule;
 import online.shashki.rus.client.websocket.WebsocketModule;
 
 public class ClientModule extends AbstractPresenterModule {
@@ -19,7 +19,7 @@ public class ClientModule extends AbstractPresenterModule {
         .build());
     install(new ApplicationModule());
     install(new WebsocketModule());
-    install(new RpcServiceModule());
+    install(new ServiceModule());
 
     bind(TestPojo.class).asEagerSingleton();
     bind(CurrentSession.class).in(Singleton.class);

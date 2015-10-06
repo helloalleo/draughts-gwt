@@ -1,9 +1,9 @@
 package online.shashki.rus.server.dao.impl;
 
+import com.google.inject.Inject;
 import online.shashki.rus.server.dao.GameDao;
 import online.shashki.rus.shared.model.Game;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
@@ -19,8 +19,8 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
   @Inject
   private EntityManager entityManager;
 
-  public GameDaoImpl() {
-    super(Game.class);
+  public GameDaoImpl(Class<Game> clazz) {
+    super(clazz);
   }
 
   @Override

@@ -1,6 +1,7 @@
 package online.shashki.rus.server.utils;
 
-import javax.ejb.Singleton;
+import com.google.inject.Singleton;
+
 import javax.persistence.EntityManager;
 import javax.persistence.PersistenceContext;
 

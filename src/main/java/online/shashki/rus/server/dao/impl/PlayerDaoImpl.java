@@ -1,9 +1,10 @@
 package online.shashki.rus.server.dao.impl;
 
+import com.google.inject.Inject;
+import com.google.inject.TypeLiteral;
 import online.shashki.rus.server.dao.PlayerDao;
 import online.shashki.rus.shared.model.Player;
 
-import javax.inject.Inject;
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
 import java.util.List;
@@ -19,8 +20,9 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   @Inject
   private EntityManager entityManager;
 
-  public PlayerDaoImpl() {
-    super(Player.class);
+  @Inject
+  public PlayerDaoImpl(TypeLiteral<Player> type) {
+    super(type);
   }
 
   @Override

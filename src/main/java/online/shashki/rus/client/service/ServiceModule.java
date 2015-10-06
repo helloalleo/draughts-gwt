@@ -8,7 +8,7 @@ import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
  * Date: 27.09.15
  * Time: 10:48
  */
-public class RpcServiceModule extends AbstractPresenterModule {
+public class ServiceModule extends AbstractPresenterModule {
   @Override
   protected void configure() {
     bind(PlayerServiceAsync.class).asEagerSingleton();
