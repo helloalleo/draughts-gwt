@@ -6,11 +6,11 @@
         <description>SP Persistence Unit</description>
         <jta-data-source>java:jboss/datasources/ShashkiDS</jta-data-source>
 
-        <class>online.shashki.rus.shared.model.Game</class>
-        <class>online.shashki.rus.shared.model.GameMessage</class>
-        <class>online.shashki.rus.shared.model.Move</class>
-        <class>online.shashki.rus.shared.model.Player</class>
-        <!--<class>online.shashki.rus.shared.model.entity.FriendEntity</class>-->
+        <class>online.shashki.rus.client.shared.model.Game</class>
+        <class>online.shashki.rus.client.shared.model.GameMessage</class>
+        <class>online.shashki.rus.client.shared.model.Move</class>
+        <class>online.shashki.rus.client.shared.model.Player</class>
+        <!--<class>online.shashki.rus.clnt.online.shashki.rus.shared.model.entity.FriendEntity</class>-->
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

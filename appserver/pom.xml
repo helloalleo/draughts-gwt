@@ -1,0 +1,140 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <parent>
+        <artifactId>shashki</artifactId>
+        <groupId>online.shashki</groupId>
+        <version>1.0-SNAPSHOT</version>
+        <relativePath>../pom.xml</relativePath>
+    </parent>
+    <modelVersion>4.0.0</modelVersion>
+
+    <packaging>pom</packaging>
+    <artifactId>appserver</artifactId>
+
+    <properties>
+        <!--JBoss-->
+        <jboss.bom.version>9.0.1.Final</jboss.bom.version>
+        <version.jboss.logging>3.2.1.Final</version.jboss.logging>
+        <hibernate-validator.version>5.1.2.Final</hibernate-validator.version>
+        <commons-codec.version>1.9</commons-codec.version>
+        <commons-lang.version>2.6</commons-lang.version>
+        <postgresql.version>9.3-1102-jdbc41</postgresql.version>
+        <jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
+        <guice.version>4.0</guice.version>
+    </properties>
+
+    <dependencyManagement>
+        <dependencies>
+            <dependency>
+                <groupId>org.wildfly.bom</groupId>
+                <artifactId>jboss-javaee-7.0-wildfly-with-tools</artifactId>
+                <version>${jboss.bom.version}</version>
+                <type>pom</type>
+                <scope>import</scope>
+            </dependency>
+        </dependencies>
+    </dependencyManagement>
+
+    <dependencies>
+       <!--Guice-->
+       <dependency>
+           <groupId>com.google.inject</groupId>
+           <artifactId>guice</artifactId>
+           <version>${guice.version}</version>
+       </dependency>
+
+       <dependency>
+           <groupId>com.google.inject.extensions</groupId>
+           <artifactId>guice-servlet</artifactId>
+           <version>${guice.version}</version>
+       </dependency>
+
+       <dependency>
+           <groupId>com.google.inject.extensions</groupId>
+           <artifactId>guice-persist</artifactId>
+           <version>${guice.version}</version>
+       </dependency>
+
+       <!--Postgresql-->
+       <dependency>
+           <groupId>org.postgresql</groupId>
+           <artifactId>postgresql</artifactId>
+           <version>${postgresql.version}</version>
+           <scope>provided</scope>
+       </dependency>
+
+       <!--Json Processing-->
+       <dependency>
+           <groupId>org.codehaus.jackson</groupId>
+           <artifactId>jackson-mapper-asl</artifactId>
+           <version>${jackson-mapper-asl.version}</version>
+       </dependency>
+
+       <!-- Import the Common Annotations API (JSR-250), we use provided scope
+           as the API is included in JBoss WildFly -->
+       <dependency>
+           <groupId>org.jboss.spec.javax.annotation</groupId>
+           <artifactId>jboss-annotations-api_1.2_spec</artifactId>
+           <scope>provided</scope>
+       </dependency>
+
+       <!-- Import the Servlet API, we use provided scope as the API is included in JBoss WildFly. -->
+       <dependency>
+           <groupId>org.jboss.spec.javax.servlet</groupId>
+           <artifactId>jboss-servlet-api_3.1_spec</artifactId>
+           <scope>provided</scope>
+       </dependency>
+
+       <!-- Import the JPA API, we use provided scope as the API is included in JBoss WildFly -->
+       <dependency>
+           <groupId>org.hibernate.javax.persistence</groupId>
+           <artifactId>hibernate-jpa-2.1-api</artifactId>
+           <scope>provided</scope>
+       </dependency>
+
+       <dependency>
+           <groupId>org.jboss.spec.javax.websocket</groupId>
+           <artifactId>jboss-websocket-api_1.1_spec</artifactId>
+           <scope>provided</scope>
+       </dependency>
+
+       <dependency>
+           <groupId>org.jboss.spec.javax.json</groupId>
+           <artifactId>jboss-json-api_1.0_spec</artifactId>
+           <scope>provided</scope>
+       </dependency>
+
+       <!--Jboss Logging-->
+       <dependency>
+           <groupId>org.jboss.logging</groupId>
+           <artifactId>jboss-logging</artifactId>
+           <version>${version.jboss.logging}</version>
+           <scope>provided</scope>
+       </dependency>
+
+       <!--commons-->
+       <dependency>
+           <groupId>commons-lang</groupId>
+           <artifactId>commons-lang</artifactId>
+           <version>${commons-lang.version}</version>
+           <scope>provided</scope>
+       </dependency>
+
+       <dependency>
+           <groupId>commons-codec</groupId>
+           <artifactId>commons-codec</artifactId>
+           <version>${commons-codec.version}</version>
+           <scope>provided</scope>
+       </dependency>
+
+       <!--Hibernate-->
+       <dependency>
+           <groupId>org.hibernate</groupId>
+           <artifactId>hibernate-validator</artifactId>
+           <version>${hibernate-validator.version}</version>
+           <scope>provided</scope>
+       </dependency>
+   </dependencies>
+</project>

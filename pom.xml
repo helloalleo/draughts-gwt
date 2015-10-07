@@ -3,25 +3,15 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>online.shashki.ru</groupId>
+    <groupId>online.shashki</groupId>
     <artifactId>shashki</artifactId>
     <version>1.0-SNAPSHOT</version>
 
-    <packaging>war</packaging>
+    <packaging>pom</packaging>
     <name>GWTP Basic</name>
 
     <properties>
-        <google.http.version>1.19.0</google.http.version>
-        <google.oauth.version>1.19.0</google.oauth.version>
-
-        <!--JBoss-->
-        <jboss.bom.version>9.0.1.Final</jboss.bom.version>
-        <version.jboss.logging>3.2.1.Final</version.jboss.logging>
-
-        <!-- com.google.gwt.websockets.client -->
         <gwt.version>2.7.0</gwt.version>
-        <gwtp.version>1.5</gwtp.version>
-        <gin.version>2.1.2</gin.version>
         <gwt.style>PRETTY</gwt.style>
 
         <!-- GWT needs at least java 1.6 -->
@@ -36,17 +26,15 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
-        <lienzo-core.version>2.0.151-RC1</lienzo-core.version>
-        <gwtbootstrap3.version>0.9.1</gwtbootstrap3.version>
-        <hibernate-validator.version>5.1.2.Final</hibernate-validator.version>
-        <commons-codec.version>1.9</commons-codec.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <google-oauth-client.version>1.19.0</google-oauth-client.version>
-        <postgresql.version>9.3-1102-jdbc41</postgresql.version>
-        <jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
-        <gwt-jackson.version>0.10.0</gwt-jackson.version>
-        <guice.version>3.0</guice.version>
     </properties>
+
+    <modules>
+        <module>ws</module>
+        <module>rus/shared</module>
+        <module>rus/client</module>
+        <module>rus/server</module>
+        <module>appserver</module>
+    </modules>
 
     <profiles>
         <profile>
@@ -137,231 +125,35 @@
         </plugins>
     </build>
 
-    <dependencyManagement>
-        <dependencies>
-            <dependency>
-                <groupId>org.wildfly.bom</groupId>
-                <artifactId>jboss-javaee-7.0-wildfly-with-tools</artifactId>
-                <version>${jboss.bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-        </dependencies>
-    </dependencyManagement>
-
     <dependencies>
-        <!-- GWT -->
         <dependency>
             <groupId>com.google.gwt</groupId>
             <artifactId>gwt-user</artifactId>
             <version>${gwt.version}</version>
         </dependency>
 
-        <!-- GWTP -->
-        <dependency>
-            <groupId>com.gwtplatform</groupId>
-            <artifactId>gwtp-mvp-client</artifactId>
-            <version>${gwtp.version}</version>
-        </dependency>
-
-        <!-- DI -->
-        <dependency>
-            <groupId>com.google.gwt.inject</groupId>
-            <artifactId>gin</artifactId>
-            <version>${gin.version}</version>
-        </dependency>
-
-        <!--OAuth 2.0-->
-        <dependency>
-            <groupId>com.google.oauth-client</groupId>
-            <artifactId>google-oauth-client</artifactId>
-            <version>${google-oauth-client.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-codec</groupId>
-                    <artifactId>commons-codec</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.oauth-client</groupId>
-            <artifactId>google-oauth-client-servlet</artifactId>
-            <version>${google.oauth.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.jdo</groupId>
-                    <artifactId>jdo2-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.http-client</groupId>
-            <artifactId>google-http-client-jackson2</artifactId>
-            <version>${google.http.version}</version>
-        </dependency>
-
-        <!--Lienzo-->
-        <dependency>
-            <groupId>com.ahome-it</groupId>
-            <artifactId>lienzo-core</artifactId>
-            <version>${lienzo-core.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>org.gwtbootstrap3</groupId>
-            <artifactId>gwtbootstrap3</artifactId>
-            <version>${gwtbootstrap3.version}</version>
-        </dependency>
-
-        <!--Guice-->
-        <!--<dependency>-->
-            <!--<groupId>com.google.inject</groupId>-->
-            <!--<artifactId>guice</artifactId>-->
-            <!--<version>${guice.version}</version>-->
-        <!--</dependency>-->
-
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-servlet</artifactId>
-            <version>${guice.version}</version>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.inject.extensions</groupId>
-            <artifactId>guice-persist</artifactId>
-            <version>${guice.version}</version>
-        </dependency>
-
-        <!--Postgresql-->
-        <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--Json Processing-->
-        <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>${jackson-mapper-asl.version}</version>
-        </dependency>
-
-        <!--GWT Jackson for JSON-->
-        <dependency>
-            <groupId>com.github.nmorel.gwtjackson</groupId>
-            <artifactId>gwt-jackson</artifactId>
-            <version>${gwt-jackson.version}</version>
-        </dependency>
-        <!--JAVA EE-->
-        <!-- First declare the APIs we depend on and need for compilation. All
-                            of them are provided by JBoss WildFly -->
-
-        <!-- Import the CDI API, we use provided scope as the API is included in
-            JBoss WildFly -->
-        <!--<dependency>-->
-        <!--<groupId>javax.enterprise</groupId>-->
-        <!--<artifactId>cdi-api</artifactId>-->
-        <!--<scope>provided</scope>-->
-        <!--</dependency>-->
-
-        <!-- Import the Common Annotations API (JSR-250), we use provided scope
-            as the API is included in JBoss WildFly -->
-        <dependency>
-            <groupId>org.jboss.spec.javax.annotation</groupId>
-            <artifactId>jboss-annotations-api_1.2_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
         <!-- Import the JAX-RS API, we use provided scope as the API is included
             in JBoss WildFly -->
-        <dependency>
-            <groupId>org.jboss.spec.javax.ws.rs</groupId>
-            <artifactId>jboss-jaxrs-api_2.0_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.spec.javax.ws.rs</groupId>-->
+            <!--<artifactId>jboss-jaxrs-api_2.0_spec</artifactId>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
 
         <!-- Import the EJB API, we use provided scope as the API is included in
             JBoss WildFly -->
-        <dependency>
-            <groupId>org.jboss.spec.javax.ejb</groupId>
-            <artifactId>jboss-ejb-api_3.2_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.jboss.spec.javax.ejb</groupId>-->
+            <!--<artifactId>jboss-ejb-api_3.2_spec</artifactId>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
 
-        <!-- Import the Servlet API, we use provided scope as the API is included in JBoss WildFly. -->
-        <dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
 
         <!--<dependency>-->
         <!--<groupId>org.jboss.spec.javax.transaction</groupId>-->
         <!--<artifactId>jboss-transaction-api_1.2_spec</artifactId>-->
         <!--<scope>provided</scope>-->
         <!--</dependency>-->
-
-        <!-- Import the JPA API, we use provided scope as the API is included in
-        JBoss WildFly -->
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.spec.javax.websocket</groupId>
-            <artifactId>jboss-websocket-api_1.1_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>org.jboss.spec.javax.json</groupId>
-            <artifactId>jboss-json-api_1.0_spec</artifactId>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--Jboss Logging-->
-        <dependency>
-            <groupId>org.jboss.logging</groupId>
-            <artifactId>jboss-logging</artifactId>
-            <version>${version.jboss.logging}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--commons-->
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${commons-lang.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
-            <scope>provided</scope>
-        </dependency>
-
-        <!--Hibernate-->
-        <dependency>
-            <groupId>org.hibernate</groupId>
-            <artifactId>hibernate-validator</artifactId>
-            <version>${hibernate-validator.version}</version>
-            <scope>provided</scope>
-        </dependency>
 
     </dependencies>
 
