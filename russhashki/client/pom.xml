@@ -4,14 +4,15 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>online.shashki</groupId>
-        <artifactId>shashki</artifactId>
+        <groupId>online.shashki.rus</groupId>
+        <artifactId>russhashki</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../../pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>online.shashki.rus</groupId>
     <artifactId>client</artifactId>
+    <version>1.0-SNAPSHOT</version>
+    <packaging>war</packaging>
 
     <properties>
         <!--GWT-->
@@ -29,14 +30,14 @@
 
     <dependencies>
         <dependency>
-            <groupId>com.google.gwt.ws</groupId>
-            <artifactId>websocket</artifactId>
+            <groupId>online.shashki.rus</groupId>
+            <artifactId>gwtclient</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 
         <dependency>
-            <groupId>online.shashki</groupId>
-            <artifactId>gwtclient</artifactId>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>websocket</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
 

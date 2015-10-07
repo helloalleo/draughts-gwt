@@ -5,27 +5,17 @@
 
     <parent>
         <groupId>online.shashki</groupId>
-        <artifactId>appserver</artifactId>
+        <artifactId>shashki</artifactId>
         <version>1.0-SNAPSHOT</version>
-        <relativePath>../../appserver/pom.xml</relativePath>
+        <relativePath>../pom.xml</relativePath>
     </parent>
 
-    <groupId>online.shashki.rus</groupId>
-    <artifactId>shared</artifactId>
-    <version>1.0-SNAPSHOT</version>
-
-    <properties>
-    </properties>
+    <groupId>com.google.gwt</groupId>
+    <artifactId>websocket</artifactId>
 
     <dependencies>
         <dependency>
-            <groupId>online.shashki</groupId>
-            <artifactId>appserver</artifactId>
-            <version>1.0-SNAPSHOT</version>
-        </dependency>
-
-        <dependency>
-            <groupId>online.shashki</groupId>
+            <groupId>online.shashki.rus</groupId>
             <artifactId>gwtclient</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>

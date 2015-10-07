@@ -8,7 +8,7 @@
     <version>1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
-    <name>GWTP Basic</name>
+    <name>Shashki</name>
 
     <properties>
         <gwt.version>2.7.0</gwt.version>
@@ -31,10 +31,8 @@
     <modules>
         <module>appserver</module>
         <module>gwtclient</module>
-        <module>ws</module>
-        <module>rus/shared</module>
-        <module>rus/client</module>
-        <module>rus/server</module>
+        <module>websocket</module>
+        <module>russhashki</module>
     </modules>
 
     <profiles>
