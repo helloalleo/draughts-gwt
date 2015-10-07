@@ -2,8 +2,9 @@ package online.shashki.rus.shared.model;
 
 import com.google.gwt.user.client.rpc.GwtTransient;
 import com.google.gwt.user.client.rpc.IsSerializable;
+import org.codehaus.jackson.annotate.JsonIgnore;
 
-import java.beans.Transient;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
 

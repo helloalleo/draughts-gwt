@@ -1,4 +1,4 @@
-package online.shashki.rus.shashki;
+package online.shashki.rus.client.shashki;
 
 import com.ait.lienzo.client.core.animation.*;
 import com.ait.lienzo.client.core.event.NodeMouseClickEvent;
@@ -8,12 +8,10 @@ import com.ait.lienzo.client.core.event.NodeTouchEndHandler;
 import com.ait.lienzo.client.core.shape.Layer;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-import online.shashki.rus.client.application.component.play.PlayComponentPresenter;
-import online.shashki.rus.client.event.*;
+import online.shashki.rus.client.shashki.util.Operator;
+import online.shashki.rus.client.shashki.util.PossibleOperators;
 import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.model.Move;
-import online.shashki.rus.shashki.util.Operator;
-import online.shashki.rus.shashki.util.PossibleOperators;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -58,7 +56,7 @@ public class Board extends Layer {
 
   private EventBus eventBus;
 
-  public Board(PlayComponentPresenter playComponentPresenter,
+  public Board(PlayComponentPresenter
                BoardBackgroundLayer backgroundLayer,
                int rows,
                int cols,
@@ -827,50 +825,50 @@ public class Board extends Layer {
 //    }
 //  }
 
-  public void moveOpponent(Stroke stroke) {
-    SHLog.debug("MOVE OPPONENT " + stroke.toString());
+  public void moveOpponent(Move move) {
+    SHLog.debug("MOVE OPPONENT " + move.toString());
 
     Square startSquare, endSquare, takenSquare = null;
     try {
-      startSquare = getSquare(stroke.getStartSquare().getRow(), stroke.getStartSquare().getCol());
-      endSquare = getSquare(stroke.getEndSquare().getRow(), stroke.getEndSquare().getCol());
-      if (stroke.getTakenSquare() != null) {
-        takenSquare = getSquare(stroke.getTakenSquare().getRow(), stroke.getTakenSquare().getCol());
+      startSquare = getSquare(move.getStartSquare().getRow(), move.getStartSquare().getCol());
+      endSquare = getSquare(move.getEndSquare().getRow(), move.getEndSquare().getCol());
+      if (move.getTakenSquare() != null) {
+        takenSquare = getSquare(move.getTakenSquare().getRow(), move.getTakenSquare().getCol());
       }
     } catch (SquareNotFoundException e) {
       return;
     }
 
-    if (stroke.isCancel()) {
-      if (stroke.isStopBeat()) {
-        stroke.setStartSquare(endSquare);
-        stroke.setEndSquare(startSquare);
+    if (move.isCancel()) {
+      if (move.isStopBeat()) {
+        move.setStartSquare(endSquare);
+        move.setEndSquare(startSquare);
       } else {
-        stroke.setStartSquare(endSquare);
-        stroke.setEndSquare(startSquare);
+        move.setStartSquare(endSquare);
+        move.setEndSquare(startSquare);
       }
       moveOpponentStack.pop();
     } else {
-      stroke.setStartSquare(startSquare);
-      stroke.setEndSquare(endSquare);
-      moveOpponentStack.push(stroke);
+      move.setStartSquare(startSquare);
+      move.setEndSquare(endSquare);
+      moveOpponentStack.push(move);
     }
 
-    stroke.setTakenSquare(takenSquare);
+    move.setTakenSquare(takenSquare);
 
-    if (stroke.isContinueBeat()) {
-//      stroke.mirror();
-      SHLog.debug("MOVE CONT BEAT " + stroke.toString());
+    if (move.isContinueBeat()) {
+//      move.mirror();
+      SHLog.debug("MOVE CONT BEAT " + move.toString());
     }
 
-    if (!stroke.isCancel()) {
+    if (!move.isCancel()) {
       final boolean first = isFirstMoveFlag();
-      stroke.setNumber(stroke.getNumber())
+      move.setNumber(move.getNumber())
           .setFirst(first);
-      eventBus.fireEvent(new NotationStrokeEvent(stroke, isWhite()));
+      eventBus.fireEvent(new NotationMoveEvent(move, isWhite()));
     }
 
-    doMove(stroke); // сделать ход
+    doMove(move); // сделать ход
   }
 
   private void doMove(Move moveDto) {
@@ -1031,7 +1029,7 @@ public class Board extends Layer {
 //          String calcMove = startSquare.toNotation(isWhite(), false, false)
 //              + op
 //              + endSquare.toNotation(isWhite(), true, false);
-          eventBus.fireEvent(new NotationStrokeEvent(move, isWhite()));
+          eventBus.fireEvent(new NotationMoveEvent(move, isWhite()));
           eventBus.fireEvent(new PlayMoveMessageEvent(move));
           moveMyStack.push(move);
           SHLog.debug("MOVE DRAUGHT " + move.toString());

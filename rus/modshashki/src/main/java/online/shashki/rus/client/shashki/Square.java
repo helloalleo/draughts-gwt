@@ -1,4 +1,4 @@
-package online.shashki.rus.shashki;
+package online.shashki.rus.client.shashki;
 
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.shared.core.types.Color;
