@@ -1,0 +1,16 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
+        >
+
+    <ui:with field="res" type="online.shashki.rus.client.resources.AppResources"/>
+
+    <g:HTMLPanel>
+        <g:SimplePanel ui:field="menuPanel"/>
+
+        <b:Container>
+            <g:SimplePanel ui:field="mainContentPanel" addStyleNames="{res.style.mainContainer}"/>
+        </b:Container>
+
+    </g:HTMLPanel>
+</ui:UiBinder>
