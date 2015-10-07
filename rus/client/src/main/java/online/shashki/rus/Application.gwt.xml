@@ -5,11 +5,12 @@
     <inherits name='com.google.gwt.user.User'/>
     <inherits name="com.gwtplatform.mvp.MvpWithEntryPoint"/>
     <inherits name="org.gwtbootstrap3.GwtBootstrap3"/>
-    <inherits name="com.google.gwt.ws.websockets.WebSockets"/>
     <inherits name="com.ait.lienzo.Lienzo"/>
     <inherits name='com.google.gwt.user.theme.clean.Clean'/>
     <inherits name="com.github.nmorel.gwtjackson.GwtJackson"/>
     <inherits name="com.google.gwt.i18n.I18N"/>
+
+    <inherits name="com.google.gwt.websockets.WebSockets"/>
 
     <extend-configuration-property name="gin.ginjector.modules"
                                    value="online.shashki.rus.client.gin.ClientModule"/>

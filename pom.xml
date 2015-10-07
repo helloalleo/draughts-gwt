@@ -35,7 +35,6 @@
         <module>rus/shared</module>
         <module>rus/client</module>
         <module>rus/server</module>
-        <module>rus/shashki</module>
     </modules>
 
     <profiles>

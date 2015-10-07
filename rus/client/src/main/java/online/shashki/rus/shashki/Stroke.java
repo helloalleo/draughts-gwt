@@ -2,7 +2,6 @@ package online.shashki.rus.shashki;
 
 import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.model.Move;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -21,9 +20,13 @@ public class Stroke {
   private Square takenSquare;
   private Square startSquare;
   private Square endSquare;
+
   private Set<Move.MoveFlags> moveFlags = new HashSet<>();
   private boolean first;
   private int number;
+
+  public Stroke() {
+  }
 
   public Square getTakenSquare() {
     return takenSquare;
@@ -34,8 +37,7 @@ public class Stroke {
     return this;
   }
 
-
-    public Square getStartSquare() {
+  public Square getStartSquare() {
     return startSquare;
   }
 
@@ -44,7 +46,7 @@ public class Stroke {
     return this;
   }
 
-    public Square getEndSquare() {
+  public Square getEndSquare() {
     return endSquare;
   }
 
@@ -53,12 +55,12 @@ public class Stroke {
     return this;
   }
 
-    public String toNotation(boolean isWhite) {
+  public String toNotation(boolean isWhite) {
     String notation;
     if (first && isWhite) {
       SHLog.debug("FIRST WHITE");
       notation = getNotation(true);
-    } else if (!first && isWhite){
+    } else if (!first && isWhite) {
       SHLog.debug("SECOND WHITE");
       notation = getNotation(true);
     } else if (first) {
@@ -81,31 +83,46 @@ public class Stroke {
   public String toNotationLastMove() {
     return endSquare.toNotation(first);
   }
-  @JsonIgnore
+
   public boolean isCancel() {
     return moveFlags.contains(Move.MoveFlags.CANCEL_MOVE);
   }
 
-  @JsonIgnore
   public boolean isSimple() {
     return moveFlags.contains(Move.MoveFlags.SIMPLE_MOVE);
   }
 
-  @JsonIgnore
   public boolean isContinueBeat() {
     return moveFlags.contains(Move.MoveFlags.CONTINUE_BEAT);
   }
 
-  @JsonIgnore
   public boolean isStopBeat() {
     return moveFlags.contains(Move.MoveFlags.STOP_BEAT);
   }
 
-  @JsonIgnore
   public boolean isStartBeat() {
     return moveFlags.contains(Move.MoveFlags.START_BEAT);
   }
 
+  public void setOnCancelMove() {
+    moveFlags.add(Move.MoveFlags.CANCEL_MOVE);
+  }
+
+  public void setOnSimpleMove() {
+    moveFlags.add(Move.MoveFlags.SIMPLE_MOVE);
+  }
+
+  public void setOnContinueBeat() {
+    moveFlags.add(Move.MoveFlags.CONTINUE_BEAT);
+  }
+
+  public void setOnStopBeat() {
+    moveFlags.add(Move.MoveFlags.STOP_BEAT);
+  }
+
+  public void setOnStartBeat() {
+    moveFlags.add(Move.MoveFlags.START_BEAT);
+  }
 
   /**
    * Отражает ход на доске не изменяя сам объект
@@ -124,12 +141,14 @@ public class Stroke {
     return move;
   }
 
-  public void setMoveFlags(Set<Move.MoveFlags> moveFlags) {
+  public Stroke setMoveFlags(Set<Move.MoveFlags> moveFlags) {
     this.moveFlags = moveFlags;
+    return this;
   }
 
-  public void setFirst(boolean first) {
+  public Stroke setFirst(boolean first) {
     this.first = first;
+    return this;
   }
 
   public Stroke setNumber(int number) {
@@ -139,5 +158,13 @@ public class Stroke {
 
   public int getNumber() {
     return number;
+  }
+
+  public boolean isFirst() {
+    return first;
+  }
+
+  public Set<Move.MoveFlags> getMoveFlags() {
+    return moveFlags;
   }
 }

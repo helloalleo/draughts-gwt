@@ -41,11 +41,13 @@ public class Move extends PersistableObjectImpl {
               Set<MoveFlags> moveFlags) {
     this.number = number;
     this.first = first;
+    this.moveFlags = moveFlags;
+
     this.gameMessage = gameMessage;
+
     this.startPos = startPos;
     this.endPos = endPos;
     this.takenPos = takenPos;
-    this.moveFlags = moveFlags;
   }
 
   public Move(Move move) {
@@ -84,52 +86,36 @@ public class Move extends PersistableObjectImpl {
     return takenPos;
   }
 
-  public void setTakenPos(String takenPos) {
+  public Move setTakenPos(String takenPos) {
     this.takenPos = takenPos;
+    return this;
   }
 
   public String getStartPos() {
     return startPos;
   }
 
-  public void setStartPos(String startPos) {
+  public Move setStartPos(String startPos) {
     this.startPos = startPos;
+    return this;
   }
 
   public String getEndPos() {
     return endPos;
   }
 
-  public void setEndPos(String endPos) {
+  public Move setEndPos(String endPos) {
     this.endPos = endPos;
-  }
-
-  public void setOnCancelMove() {
-    moveFlags.add(MoveFlags.CANCEL_MOVE);
-  }
-
-  public void setOnSimpleMove() {
-    moveFlags.add(MoveFlags.SIMPLE_MOVE);
-  }
-
-  public void setOnContinueBeat() {
-    moveFlags.add(MoveFlags.CONTINUE_BEAT);
-  }
-
-  public void setOnStopBeat() {
-    moveFlags.add(MoveFlags.STOP_BEAT);
-  }
-
-  public void setOnStartBeat() {
-    moveFlags.add(MoveFlags.START_BEAT);
+    return this;
   }
 
   public Set<MoveFlags> getMoveFlags() {
     return moveFlags;
   }
 
-  public void setMoveFlags(Set<MoveFlags> moveFlags) {
+  public Move setMoveFlags(Set<MoveFlags> moveFlags) {
     this.moveFlags = moveFlags;
+    return this;
   }
 
   @Override

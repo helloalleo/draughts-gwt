@@ -234,4 +234,8 @@ public class Square implements Serializable {
       return null;
     }
   }
+
+  public String getPos() {
+    return row + TO_SEND_SEP + col;
+  }
 }
