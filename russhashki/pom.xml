@@ -17,8 +17,5 @@
     <modules>
         <module>client</module>
         <module>server</module>
-        <module>../russhaski/shared</module>
-        <module>shared</module>
-        <module>russhashki/shared</module>
     </modules>
 </project>
