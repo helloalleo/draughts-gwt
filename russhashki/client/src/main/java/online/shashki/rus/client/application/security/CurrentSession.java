@@ -14,7 +14,7 @@ public class CurrentSession {
   private Player player;
 
   public Boolean isLoggedIn() {
-    return player.isLoggedIn();
+    return player != null && player.isLoggedIn();
   }
 
   public void setPlayer(Player player) {

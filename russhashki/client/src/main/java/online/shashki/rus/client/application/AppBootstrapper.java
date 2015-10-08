@@ -45,7 +45,7 @@ public class AppBootstrapper implements Bootstrapper {
       public void onSuccess(FetchCurrentPlayerResult result) {
         currentSession.setPlayer(result.getPlayer());
         placeManager.revealCurrentPlace();
-        SHLog.debug("Is logged in? " + result);
+        SHLog.debug("Is logged in? " + result.getPlayer());
       }
     });
 
