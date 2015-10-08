@@ -13,6 +13,8 @@ import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.json.GameMessageMapper;
 import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.config.ShashkiConfiguration;
+import online.shashki.rus.shared.dispatch.FetchCurrentPlayerAction;
+import online.shashki.rus.shared.dispatch.FetchCurrentPlayerResult;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.*;
 import online.shashki.rus.shared.service.GameService;
@@ -44,20 +46,20 @@ public class GameWebsocket implements WebSocketCallback {
 
   @Inject
   private GameWebsocket(EventBus eventBus,
-                        DispatchAsync currentPlayerDispatch,
+                        DispatchAsync dispatcher,
                         ShashkiMessages messages) {
     SHLog.debug("GAME WS");
-//    currentPlayerDispatch.execute(new FetchCurrentPlayerAction("hi"), new AsyncCallback<FetchCurrentPlayerResult>() {
-//      @Override
-//      public void onFailure(Throwable caught) {
-//        ErrorDialogBox.setMessage(caught).show();
-//      }
-//
-//      @Override
-//      public void onSuccess(FetchCurrentPlayerResult result) {
-//        InfoDialogBox.setMessage(result.getPlayer());
-//      }
-//    });
+    dispatcher.execute(new FetchCurrentPlayerAction(), new AsyncCallback<FetchCurrentPlayerResult>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        ErrorDialogBox.setMessage(caught).show();
+      }
+
+      @Override
+      public void onSuccess(FetchCurrentPlayerResult result) {
+        player = result.getPlayer();
+      }
+    });
 //    this.playrService = PlayerService.App.getInstance();
 //    playrService.getCurrentProfile(new AsyncCallback<Player>() {
 //      @Override

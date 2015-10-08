@@ -1,6 +1,7 @@
 package online.shashki.rus.client.application.security;
 
 import com.google.inject.Singleton;
+import online.shashki.rus.shared.model.Player;
 
 /**
  * Created with IntelliJ IDEA.
@@ -10,13 +11,17 @@ import com.google.inject.Singleton;
  */
 @Singleton
 public class CurrentSession {
-  private boolean loggedIn;
-
-  public void setLoggedIn(Boolean loggedIn) {
-    this.loggedIn = loggedIn;
-  }
+  private Player player;
 
   public Boolean isLoggedIn() {
-    return loggedIn;
+    return player.isLoggedIn();
+  }
+
+  public void setPlayer(Player player) {
+    this.player = player;
+  }
+
+  public Player getPlayer() {
+    return player;
   }
 }

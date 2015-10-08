@@ -2,7 +2,6 @@ package online.shashki.rus.server.guice;
 
 import com.google.inject.Guice;
 import com.google.inject.Injector;
-import com.google.inject.persist.PersistService;
 import com.google.inject.servlet.GuiceServletContextListener;
 
 /**
@@ -14,24 +13,9 @@ import com.google.inject.servlet.GuiceServletContextListener;
 
 public class GuiceServletConfig extends GuiceServletContextListener {
 
-  private static final String SHASHKI_PU = "shashki64PU";
-  private PersistService persistService;
-
   @Override
   protected Injector getInjector() {
-    return Guice.createInjector(new DispatchServletModule(), new ServerModule() /*, new AbstractModule() {
-      @Override
-      protected void configure() {
-        bind(PlayerDao.class).to(PlayerDaoImpl.class);
-        bind(GameDao.class).to(GameDaoImpl.class);
-        bind(GameMessageDao.class).to(GameMessageDaoImpl.class);
-
-        bind(PlayerService.class).to(PlayerServiceImpl.class);
-        bind(GameService.class).to(GameServiceImpl.class);
-        bind(GameMessageService.class).to(GameMessageServiceImpl.class);
-      }
-    }*/
-    );
+    return Guice.createInjector(new DispatchServletModule(), new ServerModule(), new DbModule());
   }
 
 //  @Override

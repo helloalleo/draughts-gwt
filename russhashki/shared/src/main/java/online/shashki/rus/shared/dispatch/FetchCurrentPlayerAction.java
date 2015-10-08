@@ -10,16 +10,6 @@ import com.gwtplatform.dispatch.rpc.shared.UnsecuredActionImpl;
  */
 public class FetchCurrentPlayerAction extends UnsecuredActionImpl<FetchCurrentPlayerResult> {
 
-  private String hi;
-
   public FetchCurrentPlayerAction() {
-  }
-
-  public FetchCurrentPlayerAction(String hi) {
-    this.hi = hi;
-  }
-
-  public String getHi() {
-    return hi;
   }
 }

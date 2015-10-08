@@ -16,13 +16,21 @@
 
 package online.shashki.rus.server.guice;
 
+import com.google.inject.persist.PersistFilter;
+import com.google.inject.persist.jpa.JpaPersistModule;
 import com.google.inject.servlet.ServletModule;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
 
 public class DispatchServletModule extends ServletModule {
-    @Override
-    public void configureServlets() {
-        serve("/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
-    }
+
+  public static final String SHASHKI64_PU = "shashki64PU";
+
+  @Override
+  public void configureServlets() {
+    install(new JpaPersistModule(SHASHKI64_PU));
+    filter("/*").through(PersistFilter.class);
+
+    serve("/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
+  }
 }

@@ -11,16 +11,16 @@ import online.shashki.rus.shared.model.Player;
  */
 public class FetchCurrentPlayerResult implements Result {
 
-  private String player;
+  private Player player;
 
   public FetchCurrentPlayerResult() {
   }
 
-  public FetchCurrentPlayerResult(String player) {
+  public FetchCurrentPlayerResult(Player player) {
     this.player = player;
   }
 
-  public String getPlayer() {
+  public Player getPlayer() {
     return player;
   }
 }

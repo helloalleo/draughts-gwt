@@ -17,7 +17,9 @@
 package online.shashki.rus.server.guice;
 
 import com.gwtplatform.dispatch.rpc.server.guice.HandlerModule;
+import online.shashki.rus.server.dispatch.FetchCurrentUserHandler;
 import online.shashki.rus.server.dispatch.SendTextToServerHandler;
+import online.shashki.rus.shared.dispatch.FetchCurrentPlayerAction;
 import online.shashki.rus.shared.dispatch.SendTextToServerAction;
 
 /**
@@ -27,5 +29,6 @@ public class ServerModule extends HandlerModule {
     @Override
     protected void configureHandlers() {
         bindHandler(SendTextToServerAction.class, SendTextToServerHandler.class);
+        bindHandler(FetchCurrentPlayerAction.class, FetchCurrentUserHandler.class);
     }
 }
