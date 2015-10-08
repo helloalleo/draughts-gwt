@@ -6,8 +6,8 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.exception.InvalidCookieException;
-import online.shashki.rus.client.service.PlayerService;
 import online.shashki.rus.shared.config.ShashkiConfiguration;
+import online.shashki.rus.shared.service.PlayerService;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,4 +1,4 @@
-package online.shashki.rus.client.service;
+package online.shashki.rus.shared.service;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.rpc.RemoteService;

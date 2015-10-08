@@ -4,10 +4,10 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import online.shashki.rus.client.service.PlayerService;
 import online.shashki.rus.server.dao.PlayerDao;
 import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.shared.model.Player;
+import online.shashki.rus.shared.service.PlayerService;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;

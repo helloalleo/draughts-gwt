@@ -1,0 +1,101 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project xmlns="http://maven.apache.org/POM/4.0.0"
+         xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+         xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+    <modelVersion>4.0.0</modelVersion>
+
+    <groupId>online.shashki.rus</groupId>
+    <artifactId>shared</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
+
+        <gwt.version>2.7.0</gwt.version>
+        <gwt.style>OBFUSCATED</gwt.style>
+
+        <!-- GWT needs at least java 1.6 -->
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+
+        <!-- maven -->
+        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+
+        <target.jdk>1.7</target.jdk>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <jackson-annotations.version>2.6.2</jackson-annotations.version>
+        <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
+    </properties>
+
+    <dependencies>
+        <dependency>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt.version}</version>
+        </dependency>
+
+        <!-- Import the JPA API, we use provided scope as the API is included in JBoss WildFly -->
+        <dependency>
+            <groupId>org.hibernate.javax.persistence</groupId>
+            <artifactId>hibernate-jpa-2.1-api</artifactId>
+            <version>${hibernate-jpa-2.1-api.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-annotations</artifactId>
+            <version>${jackson-annotations.version}</version>
+        </dependency>
+
+        <!--For Shared models that processed on server-->
+        <dependency>
+            <groupId>org.codehaus.jackson</groupId>
+            <artifactId>jackson-mapper-asl</artifactId>
+            <version>${jackson-mapper-asl.version}</version>
+        </dependency>
+    </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${target.jdk}</source>
+                    <target>${target.jdk}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt.version}</version>
+                <configuration>
+                    <strict>true</strict>
+
+                    <testTimeOut>180</testTimeOut>
+                    <mode>htmlunit</mode>
+                    <includes>**/*GwtTest.java</includes>
+
+                    <logLevel>INFO</logLevel>
+
+                    <runTarget>index.html</runTarget>
+                    <module>online.shashki.rus.RusShashkiShared</module>
+                    <draftCompile>true</draftCompile>
+                    <sourceLevel>${maven.compiler.source}</sourceLevel>
+                    <style>${gwt.style}</style>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
+</project>

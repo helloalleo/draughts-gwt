@@ -10,14 +10,14 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 import online.shashki.rus.client.application.widget.dialog.*;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.json.GameMessageMapper;
-import online.shashki.rus.client.service.GameService;
-import online.shashki.rus.client.service.GameServiceAsync;
-import online.shashki.rus.client.service.PlayerService;
-import online.shashki.rus.client.service.PlayerServiceAsync;
 import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.config.ShashkiConfiguration;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.*;
+import online.shashki.rus.shared.service.GameService;
+import online.shashki.rus.shared.service.GameServiceAsync;
+import online.shashki.rus.shared.service.PlayerService;
+import online.shashki.rus.shared.service.PlayerServiceAsync;
 
 import java.util.Date;
 import java.util.List;

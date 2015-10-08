@@ -18,12 +18,12 @@ import online.shashki.rus.client.application.component.play.PlayComponentPresent
 import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
-import online.shashki.rus.client.service.GameService;
-import online.shashki.rus.client.service.GameServiceAsync;
-import online.shashki.rus.client.service.PlayerService;
-import online.shashki.rus.client.service.PlayerServiceAsync;
 import online.shashki.rus.client.utils.SHCookies;
 import online.shashki.rus.shared.model.Game;
+import online.shashki.rus.shared.service.GameService;
+import online.shashki.rus.shared.service.GameServiceAsync;
+import online.shashki.rus.shared.service.PlayerService;
+import online.shashki.rus.shared.service.PlayerServiceAsync;
 
 import java.util.List;
 

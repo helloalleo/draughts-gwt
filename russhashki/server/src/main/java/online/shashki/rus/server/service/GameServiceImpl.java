@@ -4,12 +4,12 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import online.shashki.rus.client.service.GameService;
 import online.shashki.rus.server.dao.GameDao;
 import online.shashki.rus.server.dao.PlayerDao;
 import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.Player;
+import online.shashki.rus.shared.service.GameService;
 
 import javax.servlet.http.HttpServletRequest;
 import java.util.ArrayList;

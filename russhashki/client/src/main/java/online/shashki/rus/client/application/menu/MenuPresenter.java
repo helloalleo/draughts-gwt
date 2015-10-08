@@ -10,9 +10,9 @@ import com.gwtplatform.mvp.client.proxy.NavigationEvent;
 import com.gwtplatform.mvp.client.proxy.NavigationHandler;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
-import online.shashki.rus.client.service.PlayerService;
-import online.shashki.rus.client.service.PlayerServiceAsync;
 import online.shashki.rus.client.utils.SHCookies;
+import online.shashki.rus.shared.service.PlayerService;
+import online.shashki.rus.shared.service.PlayerServiceAsync;
 
 public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> implements MenuUiHandlers, NavigationHandler {
   private final PlaceManager placeManager;

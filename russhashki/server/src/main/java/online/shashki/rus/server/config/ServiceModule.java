@@ -8,12 +8,12 @@ package online.shashki.rus.server.config;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Singleton;
-import online.shashki.rus.client.service.GameMessageService;
-import online.shashki.rus.client.service.GameService;
-import online.shashki.rus.client.service.PlayerService;
 import online.shashki.rus.server.service.GameMessageServiceImpl;
 import online.shashki.rus.server.service.GameServiceImpl;
 import online.shashki.rus.server.service.PlayerServiceImpl;
+import online.shashki.rus.shared.service.GameMessageService;
+import online.shashki.rus.shared.service.GameService;
+import online.shashki.rus.shared.service.PlayerService;
 
 public class ServiceModule extends AbstractModule {
   protected void configure() {

@@ -4,9 +4,9 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import online.shashki.rus.client.service.GameMessageService;
 import online.shashki.rus.server.dao.GameMessageDao;
 import online.shashki.rus.shared.model.GameMessage;
+import online.shashki.rus.shared.service.GameMessageService;
 
 import java.util.List;
 

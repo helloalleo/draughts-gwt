@@ -11,11 +11,11 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.resources.AppResources;
-import online.shashki.rus.client.service.PlayerService;
 import online.shashki.rus.client.utils.TrUtils;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.Player;
+import online.shashki.rus.shared.service.PlayerService;
 import org.gwtbootstrap3.client.ui.Image;
 
 public class PlayItem extends Composite {

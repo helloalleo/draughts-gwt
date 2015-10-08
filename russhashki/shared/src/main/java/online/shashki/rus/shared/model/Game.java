@@ -1,7 +1,5 @@
 package online.shashki.rus.shared.model;
 
-import com.google.inject.Singleton;
-
 import javax.persistence.*;
 import java.util.Date;
 
@@ -11,7 +9,6 @@ import java.util.Date;
  * Date: 31.12.14
  * Time: 16:18
  */
-@Singleton
 @Entity
 @Table(name = "game")
 public class Game extends PersistableObjectImpl {

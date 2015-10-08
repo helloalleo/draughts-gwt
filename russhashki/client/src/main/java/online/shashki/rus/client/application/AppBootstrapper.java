@@ -6,9 +6,9 @@ import com.gwtplatform.mvp.client.Bootstrapper;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
-import online.shashki.rus.client.service.PlayerService;
-import online.shashki.rus.client.service.PlayerServiceAsync;
 import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.shared.service.PlayerService;
+import online.shashki.rus.shared.service.PlayerServiceAsync;
 
 /**
  * Created with IntelliJ IDEA.
