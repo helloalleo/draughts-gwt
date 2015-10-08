@@ -7,6 +7,7 @@ import com.google.gwt.websockets.client.WebSocketCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+import com.gwtplatform.dispatch.rpc.shared.DispatchAsync;
 import online.shashki.rus.client.application.widget.dialog.*;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.json.GameMessageMapper;
@@ -16,7 +17,6 @@ import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.*;
 import online.shashki.rus.shared.service.GameService;
 import online.shashki.rus.shared.service.GameServiceAsync;
-import online.shashki.rus.shared.service.PlayerService;
 import online.shashki.rus.shared.service.PlayerServiceAsync;
 
 import java.util.Date;
@@ -44,25 +44,33 @@ public class GameWebsocket implements WebSocketCallback {
 
   @Inject
   private GameWebsocket(EventBus eventBus,
+                        DispatchAsync currentPlayerDispatch,
                         ShashkiMessages messages) {
     SHLog.debug("GAME WS");
-    playrService.getCurrentProfile(new AsyncCallback<Player>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
-      }
-
-      @Override
-      public void onSuccess(Player result) {
-        player = result;
-        if (player == null) {
-//          throw new RuntimeException("Player not found");
-        }
-//        SHLog.debug("WEBSOCKET PLAYER - " + player.toString());
-      }
-    });
+//    currentPlayerDispatch.execute(new FetchCurrentPlayerAction("hi"), new AsyncCallback<FetchCurrentPlayerResult>() {
+//      @Override
+//      public void onFailure(Throwable caught) {
+//        ErrorDialogBox.setMessage(caught).show();
+//      }
+//
+//      @Override
+//      public void onSuccess(FetchCurrentPlayerResult result) {
+//        InfoDialogBox.setMessage(result.getPlayer());
+//      }
+//    });
+//    this.playrService = PlayerService.App.getInstance();
+//    playrService.getCurrentProfile(new AsyncCallback<Player>() {
+//      @Override
+//      public void onFailure(Throwable caught) {
+//        ErrorDialogBox.setMessage(caught).show();
+//      }
+//
+//      @Override
+//      public void onSuccess(Player result) {
+//        player = result;
+//      }
+//    });
     SHLog.debug(eventBus == null ? "NULL EVENT BUS" : "OK EVENT BUS");
-    this.playrService = PlayerService.App.getInstance();
     this.eventBus = eventBus;
     this.messages = messages;
     this.gameService = GameService.App.getInstance();

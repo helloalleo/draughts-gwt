@@ -10,15 +10,11 @@
         <class>online.shashki.rus.shared.model.GameMessage</class>
         <class>online.shashki.rus.shared.model.Move</class>
         <class>online.shashki.rus.shared.model.Player</class>
-        <!--<class>online.shashki.rus.clnt.online.shashki.rus.shared.model.entity.FriendEntity</class>-->
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
-            <!--<property name="hibernate.format_sql" value="true"/>-->
-            <!--<property name="hibernate.dialect" value="org.hibernate.dialect.H2Dialect"/>-->
-            <!--<property name="hibernate.transaaction.flush_before_completion" value="true"/>-->
         </properties>
     </persistence-unit>
 </persistence>

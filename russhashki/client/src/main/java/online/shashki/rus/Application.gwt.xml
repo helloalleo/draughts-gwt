@@ -12,6 +12,8 @@
 
     <inherits name="com.google.gwt.websockets.WebSockets"/>
     <inherits name="online.shashki.rus.RusShashkiShared"/>
+    <inherits name="com.gwtplatform.dispatch.rpc.DispatchRpcShared"/>
+    <inherits name="com.gwtplatform.dispatch.rpc.DispatchRpc"/>
 
     <extend-configuration-property name="gin.ginjector.modules"
                                    value="online.shashki.rus.client.gin.ClientModule"/>

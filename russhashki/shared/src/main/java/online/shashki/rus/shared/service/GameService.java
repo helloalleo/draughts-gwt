@@ -13,7 +13,7 @@ import java.util.List;
  * Date: 31.12.14
  * Time: 17:13
  */
-@RemoteServiceRelativePath("GameRpcService")
+@RemoteServiceRelativePath("GameService")
 public interface GameService extends RemoteService {
 
   Game save(Game game);

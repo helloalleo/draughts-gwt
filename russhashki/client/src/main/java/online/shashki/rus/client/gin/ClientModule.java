@@ -1,6 +1,7 @@
 package online.shashki.rus.client.gin;
 
 import com.google.inject.Singleton;
+import com.gwtplatform.dispatch.rpc.client.gin.RpcDispatchAsyncModule;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
 import online.shashki.rus.client.application.ApplicationModule;
@@ -16,6 +17,7 @@ public class ClientModule extends AbstractPresenterModule {
         .errorPlace(NameTokens.errorPage)
         .unauthorizedPlace(NameTokens.loginPage)
         .build());
+    install(new RpcDispatchAsyncModule());
     install(new ApplicationModule());
     install(new WebsocketModule());
 

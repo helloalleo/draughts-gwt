@@ -1,11 +1,9 @@
 package online.shashki.rus.client.application;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.Bootstrapper;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import online.shashki.rus.client.application.security.CurrentSession;
-import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.service.PlayerService;
 import online.shashki.rus.shared.service.PlayerServiceAsync;
@@ -33,19 +31,19 @@ public class AppBootstrapper implements Bootstrapper {
 
   @Override
   public void onBootstrap() {
-    profileService.isAuthenticated(new AsyncCallback<Boolean>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
-      }
-
-      @Override
-      public void onSuccess(Boolean result) {
-        currentSession.setLoggedIn(result);
-        placeManager.revealCurrentPlace();
-        SHLog.debug("Is logged in? " + result);
-      }
-    });
+//    profileService.isAuthenticated(new AsyncCallback<Boolean>() {
+//      @Override
+//      public void onFailure(Throwable caught) {
+//        ErrorDialogBox.setMessage(caught).show();
+//      }
+//
+//      @Override
+//      public void onSuccess(Boolean result) {
+//        currentSession.setLoggedIn(result);
+//        placeManager.revealCurrentPlace();
+//        SHLog.debug("Is logged in? " + result);
+//      }
+//    });
     SHLog.info("Bootstrapped");
   }
 }

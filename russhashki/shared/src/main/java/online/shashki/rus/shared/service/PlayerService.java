@@ -11,7 +11,7 @@ import online.shashki.rus.shared.model.Player;
  * Date: 05.12.14
  * Time: 20:03
  */
-@RemoteServiceRelativePath("ProfileRpcService")
+@RemoteServiceRelativePath("PlayerService")
 public interface PlayerService extends RemoteService {
 
   Boolean isAuthenticated();

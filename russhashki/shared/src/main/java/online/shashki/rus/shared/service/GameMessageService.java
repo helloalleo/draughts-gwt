@@ -13,7 +13,7 @@ import java.util.List;
  * Date: 30.12.14
  * Time: 9:31
  */
-@RemoteServiceRelativePath("GameMessageRpcService")
+@RemoteServiceRelativePath("GameMessageService")
 public interface GameMessageService extends RemoteService {
 
   List<GameMessage> getLastPlayerMessages(int countLast, Long playerId, Long opponentId);

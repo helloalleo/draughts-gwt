@@ -21,11 +21,13 @@ import online.shashki.rus.client.application.error.ErrorModule;
 import online.shashki.rus.client.application.home.HomeModule;
 import online.shashki.rus.client.application.menu.MenuModule;
 import online.shashki.rus.client.application.profile.ProfileModule;
+import online.shashki.rus.client.application.response.ResponseModule;
 import online.shashki.rus.client.application.security.OAuthLoginModule;
 
 public class ApplicationModule extends AbstractPresenterModule {
   @Override
   protected void configure() {
+    install(new ResponseModule());
     install(new ProfileModule());
     install(new ErrorModule());
     install(new MenuModule());

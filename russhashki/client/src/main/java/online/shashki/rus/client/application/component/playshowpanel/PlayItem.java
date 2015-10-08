@@ -5,17 +5,14 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.resources.AppResources;
 import online.shashki.rus.client.utils.TrUtils;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.Player;
-import online.shashki.rus.shared.service.PlayerService;
 import org.gwtbootstrap3.client.ui.Image;
 
 public class PlayItem extends Composite {
@@ -43,17 +40,17 @@ public class PlayItem extends Composite {
 
     panel.addStyleName(resources.style().playItem());
 
-    PlayerService.App.getInstance().getCurrentProfile(new AsyncCallback<Player>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
-      }
-
-      @Override
-      public void onSuccess(Player result) {
-        setGame(result, game);
-      }
-    });
+//    PlayerService.App.getInstance().getCurrentProfile(new AsyncCallback<Player>() {
+//      @Override
+//      public void onFailure(Throwable caught) {
+//        ErrorDialogBox.setMessage(caught).show();
+//      }
+//
+//      @Override
+//      public void onSuccess(Player result) {
+//        setGame(result, game);
+//      }
+//    });
   }
 
   public void setGame(Player player, Game game) {

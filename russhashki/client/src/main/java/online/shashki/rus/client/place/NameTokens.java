@@ -13,6 +13,7 @@ public class NameTokens {
   public static final String errorPage = "!error";
   public static final String settingsPage = "!settings";
   public static final String logoutPage = "/rus/logout";
+  public static final String response = "!response";
 
   // ссылки - название и токен
   private final Link homeLink;
