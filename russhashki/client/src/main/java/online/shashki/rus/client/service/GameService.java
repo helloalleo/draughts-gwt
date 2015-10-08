@@ -14,7 +14,7 @@ import java.util.List;
  * Time: 17:13
  */
 @RemoteServiceRelativePath("GameRpcService")
-public interface GameRpcService extends RemoteService {
+public interface GameService extends RemoteService {
 
   Game save(Game game);
 
@@ -31,9 +31,9 @@ public interface GameRpcService extends RemoteService {
    * Use GameRpcService.App.fromString() to access static instance of GameRpcServiceAsync
    */
   class App {
-    private static final GameRpcServiceAsync ourInstance = (GameRpcServiceAsync) GWT.create(GameRpcService.class);
+    private static final GameServiceAsync ourInstance = (GameServiceAsync) GWT.create(GameService.class);
 
-    public static GameRpcServiceAsync getInstance() {
+    public static GameServiceAsync getInstance() {
       return ourInstance;
     }
   }

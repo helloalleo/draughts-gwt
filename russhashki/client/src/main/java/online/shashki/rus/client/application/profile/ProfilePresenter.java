@@ -17,6 +17,7 @@ import online.shashki.rus.client.application.ApplicationPresenter;
 import online.shashki.rus.client.application.profile.settings.SettingsPresenter;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
+import online.shashki.rus.client.service.PlayerService;
 import online.shashki.rus.client.service.PlayerServiceAsync;
 import online.shashki.rus.client.utils.SHCookies;
 import online.shashki.rus.shared.model.Player;
@@ -27,7 +28,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
   public static final NestedSlot SLOT_PROFILE = new NestedSlot();
   public static final Slot<SettingsPresenter> SLOT_PROFILE_CONTENT = new Slot<>();
   private SettingsPresenter settingsPresenter;
-  private final PlayerServiceAsync profileService;
+  private final PlayerServiceAsync playrService;
   private final SettingsPresenter.Factory settingsFactory;
 
   @Inject
@@ -35,11 +36,10 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
       EventBus eventBus,
       MyView view,
       MyProxy proxy,
-      PlayerServiceAsync profileService,
       SettingsPresenter.Factory settingsFactory) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
-    this.profileService = profileService;
+    this.playrService = PlayerService.App.getInstance();
     this.settingsFactory = settingsFactory;
 
     getView().setUiHandlers(this);
@@ -59,7 +59,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
   public void prepareFromRequest(PlaceRequest request) {
     super.prepareFromRequest(request);
 
-    profileService.getCurrentProfile(new AsyncCallback<Player>() {
+    playrService.getCurrentProfile(new AsyncCallback<Player>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();

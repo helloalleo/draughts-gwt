@@ -11,7 +11,7 @@ import java.util.List;
  * Date: 31.12.14
  * Time: 17:13
  */
-public interface GameRpcServiceAsync {
+public interface GameServiceAsync {
 
   void find(Long id, AsyncCallback<Game> async);
 

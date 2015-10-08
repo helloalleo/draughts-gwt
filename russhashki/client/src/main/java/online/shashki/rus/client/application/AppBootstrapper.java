@@ -6,6 +6,7 @@ import com.gwtplatform.mvp.client.Bootstrapper;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
+import online.shashki.rus.client.service.PlayerService;
 import online.shashki.rus.client.service.PlayerServiceAsync;
 import online.shashki.rus.client.utils.SHLog;
 
@@ -23,10 +24,9 @@ public class AppBootstrapper implements Bootstrapper {
 
   @Inject
   public AppBootstrapper(PlaceManager placeManager,
-                         PlayerServiceAsync profileService,
                          CurrentSession currentSession) {
     this.placeManager = placeManager;
-    this.profileService = profileService;
+    this.profileService = PlayerService.App.getInstance();
     this.currentSession = currentSession;
     SHLog.debug("Bootstrap constructor");
   }

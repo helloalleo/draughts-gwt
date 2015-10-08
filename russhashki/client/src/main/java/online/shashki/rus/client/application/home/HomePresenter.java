@@ -18,7 +18,9 @@ import online.shashki.rus.client.application.component.play.PlayComponentPresent
 import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
-import online.shashki.rus.client.service.GameRpcServiceAsync;
+import online.shashki.rus.client.service.GameService;
+import online.shashki.rus.client.service.GameServiceAsync;
+import online.shashki.rus.client.service.PlayerService;
 import online.shashki.rus.client.service.PlayerServiceAsync;
 import online.shashki.rus.client.utils.SHCookies;
 import online.shashki.rus.shared.model.Game;
@@ -33,7 +35,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   private final CurrentSession currentSession;
   private final PlayerServiceAsync profileService;
   private PlayComponentPresenter playPresenter;
-  private GameRpcServiceAsync gameService;
+  private GameServiceAsync gameService;
 
   @Inject
   HomePresenter(
@@ -41,16 +43,14 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       MyView view,
       MyProxy proxy,
       CurrentSession currentSession,
-      PlayerServiceAsync profileService,
-      GameRpcServiceAsync gameService,
       PlayComponentPresenter playPresenter) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     getView().setUiHandlers(this);
 
     this.currentSession = currentSession;
-    this.profileService = profileService;
-    this.gameService = gameService;
+    this.profileService = PlayerService.App.getInstance();
+    this.gameService = GameService.App.getInstance();
     this.playPresenter = playPresenter;
     SHCookies.setLocation(NameTokens.homePage);
   }

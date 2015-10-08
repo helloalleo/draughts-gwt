@@ -4,7 +4,7 @@ import com.google.gwt.user.server.rpc.RemoteServiceServlet;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import online.shashki.rus.client.service.GameRpcService;
+import online.shashki.rus.client.service.GameService;
 import online.shashki.rus.server.dao.GameDao;
 import online.shashki.rus.server.dao.PlayerDao;
 import online.shashki.rus.server.utils.AuthUtils;
@@ -22,7 +22,7 @@ import java.util.List;
  * Time: 17:13
  */
 @Singleton
-public class GameServiceImpl extends RemoteServiceServlet implements GameRpcService {
+public class GameServiceImpl extends RemoteServiceServlet implements GameService {
 
   private final GameDao gameDao;
   private final PlayerDao playerDao;

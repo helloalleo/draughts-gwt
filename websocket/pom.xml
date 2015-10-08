@@ -3,21 +3,76 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <parent>
-        <groupId>online.shashki</groupId>
-        <artifactId>shashki</artifactId>
-        <version>1.0-SNAPSHOT</version>
-        <relativePath>../pom.xml</relativePath>
-    </parent>
+    <packaging>jar</packaging>
 
     <groupId>com.google.gwt</groupId>
     <artifactId>websocket</artifactId>
+    <version>1.0-SNAPSHOT</version>
+
+    <properties>
+        <gwt.version>2.7.0</gwt.version>
+        <gwt.style>OBFUSCATED</gwt.style>
+
+        <!-- GWT needs at least java 1.6 -->
+        <maven.compiler.source>1.7</maven.compiler.source>
+        <maven.compiler.target>1.7</maven.compiler.target>
+
+        <!-- maven -->
+        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+
+        <target.jdk>1.7</target.jdk>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+    </properties>
 
     <dependencies>
         <dependency>
-            <groupId>online.shashki.rus</groupId>
-            <artifactId>gwtclient</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-user</artifactId>
+            <version>${gwt.version}</version>
         </dependency>
     </dependencies>
+
+    <build>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <version>${maven-compiler-plugin.version}</version>
+                <configuration>
+                    <source>${target.jdk}</source>
+                    <target>${target.jdk}</target>
+                    <encoding>${project.build.sourceEncoding}</encoding>
+                </configuration>
+            </plugin>
+
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>gwt-maven-plugin</artifactId>
+                <version>${gwt.version}</version>
+                <configuration>
+                    <strict>true</strict>
+
+                    <testTimeOut>180</testTimeOut>
+                    <mode>htmlunit</mode>
+                    <includes>**/*GwtTest.java</includes>
+
+                    <logLevel>INFO</logLevel>
+
+                    <runTarget>index.html</runTarget>
+                    <module>com.google.gwt.websockets.WebSockets</module>
+                    <draftCompile>true</draftCompile>
+                    <sourceLevel>${maven.compiler.source}</sourceLevel>
+                    <style>${gwt.style}</style>
+                </configuration>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>compile</goal>
+                            <goal>test</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+        </plugins>
+    </build>
 </project>

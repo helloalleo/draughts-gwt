@@ -14,7 +14,7 @@ import java.util.List;
  * Time: 9:31
  */
 @RemoteServiceRelativePath("GameMessageRpcService")
-public interface GameMessageRpcService extends RemoteService {
+public interface GameMessageService extends RemoteService {
 
   List<GameMessage> getLastPlayerMessages(int countLast, Long playerId, Long opponentId);
 
@@ -23,9 +23,9 @@ public interface GameMessageRpcService extends RemoteService {
    * Use GameMessageService.App.fromString() to access static instance of GameMessageServiceAsync
    */
   class App {
-    private static final GameMessageRpcServiceAsync ourInstance = (GameMessageRpcServiceAsync) GWT.create(GameMessageRpcService.class);
+    private static final GameMessageServiceAsync ourInstance = (GameMessageServiceAsync) GWT.create(GameMessageService.class);
 
-    public static GameMessageRpcServiceAsync getInstance() {
+    public static GameMessageServiceAsync getInstance() {
       return ourInstance;
     }
   }

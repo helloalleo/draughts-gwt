@@ -29,8 +29,6 @@
     </properties>
 
     <modules>
-        <module>appserver</module>
-        <module>gwtclient</module>
         <module>websocket</module>
         <module>russhashki</module>
     </modules>
@@ -120,6 +118,20 @@
                         </goals>
                     </execution>
                 </executions>
+            </plugin>
+
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-war-plugin</artifactId>
+                <version>${maven-war-plugin.version}</version>
+                <configuration>
+                    <webResources>
+                        <resource>
+                            <!-- this is relative to the pom.xml directory -->
+                            <!--<directory>resource2</directory>-->
+                        </resource>
+                    </webResources>
+                </configuration>
             </plugin>
         </plugins>
     </build>

@@ -11,7 +11,7 @@ import java.util.List;
  * Date: 30.12.14
  * Time: 9:31
  */
-public interface GameMessageRpcServiceAsync {
+public interface GameMessageServiceAsync {
 
   void getLastPlayerMessages(int countLast, Long playerId, Long opponentId, AsyncCallback<List<GameMessage>> async);
 }

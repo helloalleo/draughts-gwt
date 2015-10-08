@@ -10,14 +10,14 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 import online.shashki.rus.client.application.widget.dialog.*;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.json.GameMessageMapper;
-import online.shashki.rus.client.service.GameRpcServiceAsync;
+import online.shashki.rus.client.service.GameService;
+import online.shashki.rus.client.service.GameServiceAsync;
+import online.shashki.rus.client.service.PlayerService;
 import online.shashki.rus.client.service.PlayerServiceAsync;
 import online.shashki.rus.client.utils.SHLog;
 import online.shashki.rus.shared.config.ShashkiConfiguration;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.*;
-import online.shashki.rus.shashki.Stroke;
-import online.shashki.rus.shashki.StrokeFactory;
 
 import java.util.Date;
 import java.util.List;
@@ -31,9 +31,9 @@ import java.util.List;
 public class GameWebsocket implements WebSocketCallback {
 
 //  private final JsonSerialization jsonSerialization;
-  private PlayerServiceAsync profileService;
+  private PlayerServiceAsync playrService;
   private ShashkiConfiguration configuration = GWT.create(ShashkiConfiguration.class);
-  private GameRpcServiceAsync gameService;
+  private GameServiceAsync gameService;
   private WebSocket webSocket;
   private EventBus eventBus;
   private Player player;
@@ -44,12 +44,9 @@ public class GameWebsocket implements WebSocketCallback {
 
   @Inject
   private GameWebsocket(EventBus eventBus,
-                        ShashkiMessages messages,
-                        GameRpcServiceAsync gameService,
-//                        JsonSerialization jsonSerialization,
-                        PlayerServiceAsync profileService) {
+                        ShashkiMessages messages) {
     SHLog.debug("GAME WS");
-    profileService.getCurrentProfile(new AsyncCallback<Player>() {
+    playrService.getCurrentProfile(new AsyncCallback<Player>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();
@@ -65,12 +62,10 @@ public class GameWebsocket implements WebSocketCallback {
       }
     });
     SHLog.debug(eventBus == null ? "NULL EVENT BUS" : "OK EVENT BUS");
-    this.profileService = profileService;
+    this.playrService = PlayerService.App.getInstance();
     this.eventBus = eventBus;
     this.messages = messages;
-    this.gameService = gameService;
-//    this.jsonSerialization = jsonSerialization;
-    this.profileService = profileService;
+    this.gameService = GameService.App.getInstance();
 
     bindEvents();
   }
@@ -163,7 +158,7 @@ public class GameWebsocket implements WebSocketCallback {
     confirmPlayDialogBox = new ConfirmPlayDialogBox() {
       @Override
       public void submitted() {
-        profileService.find(gameMessage.getSender().getId(), new AsyncCallback<Player>() {
+        playrService.find(gameMessage.getSender().getId(), new AsyncCallback<Player>() {
           @Override
           public void onFailure(Throwable caught) {
             ErrorDialogBox.setMessage(messages.errorWhileGettingProfile(), caught).show();

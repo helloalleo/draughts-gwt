@@ -1,4 +1,4 @@
-//package online.shashki.rus.clnt.online.shashki.rus.shared.model.entity;
+package online.shashki.rus.shared.model.entity;//package online.shashki.rus.clnt.online.shashki.rus.shared.model.entity;
 //
 //import com.google.gwt.user.client.rpc.IsSerializable;
 //import online.shashki.rus.clnt.online.shashki.rus.shared.model.key.FriendId;

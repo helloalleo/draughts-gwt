@@ -1,4 +1,4 @@
-//package online.shashki.rus.clnt.online.shashki.rus.shared.model.key;
+package online.shashki.rus.shared.model.key;//package online.shashki.rus.clnt.online.shashki.rus.shared.model.key;
 //
 //import online.shashki.rus.clnt.online.shashki.rus.shared.model.Shashist;
 //

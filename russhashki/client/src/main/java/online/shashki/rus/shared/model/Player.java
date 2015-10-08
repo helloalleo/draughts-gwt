@@ -2,7 +2,6 @@ package online.shashki.rus.shared.model;
 
 import com.google.gwt.user.client.rpc.GwtTransient;
 import org.codehaus.jackson.annotate.JsonIgnore;
-import org.hibernate.validator.constraints.Email;
 
 import javax.persistence.Column;
 import javax.persistence.Entity;
@@ -36,7 +35,6 @@ public class Player extends PersistableObjectImpl {
   @GwtTransient
   @JsonIgnore
   @com.fasterxml.jackson.annotation.JsonIgnore
-  @Email
   private String email;
 
   @Column(name = "first_name")

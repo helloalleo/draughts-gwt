@@ -10,8 +10,8 @@ import com.google.api.client.http.javanet.NetHttpTransport;
 import com.google.api.client.json.JsonFactory;
 import com.google.api.client.json.jackson2.JacksonFactory;
 import com.google.api.client.util.store.FileDataStoreFactory;
-import online.shashki.rus.server.server.config.ConfigHelper;
-import online.shashki.rus.server.server.servlet.oauth.ClientSecrets;
+import online.shashki.rus.server.config.ConfigHelper;
+import online.shashki.rus.server.servlet.oauth.ClientSecrets;
 import online.shashki.rus.shared.model.GameMessage;
 import org.codehaus.jackson.map.ObjectMapper;
 
