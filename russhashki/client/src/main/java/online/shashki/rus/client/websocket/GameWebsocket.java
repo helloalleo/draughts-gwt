@@ -11,7 +11,7 @@ import com.gwtplatform.dispatch.rpc.shared.DispatchAsync;
 import online.shashki.rus.client.application.widget.dialog.*;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.json.GameMessageMapper;
-import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.config.ShashkiConfiguration;
 import online.shashki.rus.shared.dispatch.FetchCurrentPlayerAction;
 import online.shashki.rus.shared.dispatch.FetchCurrentPlayerResult;

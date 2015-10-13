@@ -9,7 +9,7 @@ import com.ait.lienzo.client.core.shape.Layer;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import online.shashki.rus.client.event.*;
-import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.model.Move;
 import online.shashki.rus.shashki.util.Operator;
 import online.shashki.rus.shashki.util.PossibleOperators;

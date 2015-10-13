@@ -10,7 +10,7 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
 import online.shashki.rus.client.event.UpdatePlayerListEvent;
-import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shared.service.PlayerService;

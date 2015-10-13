@@ -1,5 +1,5 @@
 /*
- * Copyright 2015 ArcBees Inc.
+ * Copyright 2013 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,14 +14,10 @@
  * the License.
  */
 
-package online.shashki.rus.client.application.response;
+package online.shashki.rus.shared.api;
 
-import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
-
-public class ResponseModule extends AbstractPresenterModule {
-    @Override
-    protected void configure() {
-        bindPresenter(ResponsePresenter.class, ResponsePresenter.MyView.class, ResponseView.class,
-                ResponsePresenter.MyProxy.class);
-    }
+public class ApiParameters {
+    public static final String ID = "id";
+    public static final String LIMIT = "limit";
+    public static final String OFFSET = "offset";
 }

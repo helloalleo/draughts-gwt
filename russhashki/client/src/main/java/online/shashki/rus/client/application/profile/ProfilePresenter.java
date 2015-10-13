@@ -17,7 +17,7 @@ import online.shashki.rus.client.application.ApplicationPresenter;
 import online.shashki.rus.client.application.profile.settings.SettingsPresenter;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
-import online.shashki.rus.client.utils.SHCookies;
+import online.shashki.rus.client.util.SHCookies;
 import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shared.service.PlayerService;
 import online.shashki.rus.shared.service.PlayerServiceAsync;

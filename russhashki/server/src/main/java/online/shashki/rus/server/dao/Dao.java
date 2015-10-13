@@ -24,4 +24,6 @@ public interface Dao<E extends PersistableObject> {
   List<E> findPublishedAll();
 
   List<E> findRange(int start, int length);
+
+  Long countAll();
 }

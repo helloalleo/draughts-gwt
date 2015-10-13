@@ -13,7 +13,7 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import online.shashki.rus.client.application.ApplicationPresenter;
 import online.shashki.rus.client.place.NameTokens;
-import online.shashki.rus.client.utils.SHCookies;
+import online.shashki.rus.client.util.SHCookies;
 
 
 public class OAuthLoginPresenter extends Presenter<OAuthLoginPresenter.MyView, OAuthLoginPresenter.MyProxy>

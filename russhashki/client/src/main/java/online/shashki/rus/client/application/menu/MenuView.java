@@ -16,8 +16,8 @@ import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.resources.AppResources;
 import online.shashki.rus.client.resources.Variables;
-import online.shashki.rus.client.utils.SHCookies;
-import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.client.util.SHCookies;
+import online.shashki.rus.client.util.SHLog;
 import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 

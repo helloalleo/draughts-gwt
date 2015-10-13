@@ -26,7 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.client.application.component.playshowpanel.PlayShowPanel;
-import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Game;
 import org.gwtbootstrap3.client.ui.Button;

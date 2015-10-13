@@ -1,7 +1,7 @@
 package online.shashki.rus.client.place;
 
 import com.google.inject.Inject;
-import online.shashki.rus.client.utils.Utils;
+import online.shashki.rus.client.util.Utils;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 
 public class NameTokens {

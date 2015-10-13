@@ -7,7 +7,7 @@ import com.gwtplatform.mvp.client.Bootstrapper;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
-import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.dispatch.FetchCurrentPlayerAction;
 import online.shashki.rus.shared.dispatch.FetchCurrentPlayerResult;
 

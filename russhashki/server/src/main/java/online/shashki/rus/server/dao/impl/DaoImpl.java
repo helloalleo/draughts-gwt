@@ -67,4 +67,12 @@ public abstract class DaoImpl<E extends PersistableObject> implements Dao<E> {
     q.setFirstResult(start);
     return q.getResultList();
   }
+
+  public Long countAll() {
+    CriteriaBuilder qb = getEntityManager().getCriteriaBuilder();
+    CriteriaQuery<Long> cq = qb.createQuery(Long.class);
+    cq.select(qb.count(cq.from(entityClass)));
+    cq.where(/*your stuff*/);
+    return getEntityManager().createQuery(cq).getSingleResult();
+  }
 }

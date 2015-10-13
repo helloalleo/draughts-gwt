@@ -14,10 +14,15 @@
  * the License.
  */
 
-package online.shashki.rus.client.application.response;
+package online.shashki.rus.shared.api;
 
-import com.gwtplatform.mvp.client.UiHandlers;
+public class ApiPaths {
+  public static final String ROOT = "/rest";
 
-public interface ResponseUiHandlers extends UiHandlers {
-    void onClose();
+  public static final String GAMES = "/games";
+  public static final String PLAYERS = "/players";
+  public static final String COUNT = "/count";
+  public static final String LOGGED_IN_USER = "/loggedin";
+
+  public static final String PATH_ID = "/{" + ApiParameters.ID + "}";
 }

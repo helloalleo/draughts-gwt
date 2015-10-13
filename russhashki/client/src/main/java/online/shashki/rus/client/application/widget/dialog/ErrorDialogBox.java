@@ -1,6 +1,6 @@
 package online.shashki.rus.client.application.widget.dialog;
 
-import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.client.util.SHLog;
 
 /**
  * Created with IntelliJ IDEA.

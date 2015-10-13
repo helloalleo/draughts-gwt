@@ -13,7 +13,7 @@ import online.shashki.rus.client.application.widget.NotationPanel;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
 import online.shashki.rus.client.event.*;
-import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.client.websocket.GameWebsocket;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.*;

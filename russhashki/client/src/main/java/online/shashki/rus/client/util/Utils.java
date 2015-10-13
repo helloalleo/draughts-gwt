@@ -1,4 +1,4 @@
-package online.shashki.rus.client.utils;
+package online.shashki.rus.client.util;
 
 import online.shashki.rus.client.place.NameTokens;
 

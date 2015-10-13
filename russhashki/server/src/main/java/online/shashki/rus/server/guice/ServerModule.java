@@ -1,34 +1,20 @@
-/*
- * Copyright 2011 ArcBees Inc.
- *
- * Licensed under the Apache License, Version 2.0 (the "License"); you may not
- * use this file except in compliance with the License. You may obtain a copy of
- * the License at
- *
- * http://www.apache.org/licenses/LICENSE-2.0
- *
- * Unless required by applicable law or agreed to in writing, software
- * distributed under the License is distributed on an "AS IS" BASIS, WITHOUT
- * WARRANTIES OR CONDITIONS OF ANY KIND, either express or implied. See the
- * License for the specific language governing permissions and limitations under
- * the License.
- */
-
 package online.shashki.rus.server.guice;
 
-import com.gwtplatform.dispatch.rpc.server.guice.HandlerModule;
-import online.shashki.rus.server.dispatch.FetchCurrentUserHandler;
-import online.shashki.rus.server.dispatch.SendTextToServerHandler;
-import online.shashki.rus.shared.dispatch.FetchCurrentPlayerAction;
-import online.shashki.rus.shared.dispatch.SendTextToServerAction;
+import com.google.inject.AbstractModule;
+import online.shashki.rus.server.api.ApiModule;
 
 /**
- * Module which binds the handlers and configurations.
+ * Created with IntelliJ IDEA.
+ * User: alekspo
+ * Date: 09.10.15
+ * Time: 14:03
  */
-public class ServerModule extends HandlerModule {
-    @Override
-    protected void configureHandlers() {
-        bindHandler(SendTextToServerAction.class, SendTextToServerHandler.class);
-        bindHandler(FetchCurrentPlayerAction.class, FetchCurrentUserHandler.class);
-    }
+public class ServerModule extends AbstractModule {
+  @Override
+  protected void configure() {
+    install(new ApiModule());
+    install(new DispatchServletModule());
+    install(new DbModule());
+    install(new ServerHandlerModule());
+  }
 }

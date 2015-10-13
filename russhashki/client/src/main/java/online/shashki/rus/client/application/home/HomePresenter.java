@@ -1,8 +1,8 @@
 package online.shashki.rus.client.application.home;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
@@ -16,12 +16,11 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.shashki.rus.client.application.ApplicationPresenter;
 import online.shashki.rus.client.application.component.play.PlayComponentPresenter;
 import online.shashki.rus.client.application.security.CurrentSession;
-import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
-import online.shashki.rus.client.utils.SHCookies;
+import online.shashki.rus.client.util.AbstractAsyncCallback;
+import online.shashki.rus.client.util.SHCookies;
+import online.shashki.rus.shared.api.GamesResource;
 import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.service.GameService;
-import online.shashki.rus.shared.service.GameServiceAsync;
 import online.shashki.rus.shared.service.PlayerService;
 import online.shashki.rus.shared.service.PlayerServiceAsync;
 
@@ -35,7 +34,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   private final CurrentSession currentSession;
   private final PlayerServiceAsync profileService;
   private PlayComponentPresenter playPresenter;
-  private GameServiceAsync gameService;
+  private final ResourceDelegate<GamesResource> gamesDelegate;
 
   @Inject
   HomePresenter(
@@ -43,15 +42,16 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       MyView view,
       MyProxy proxy,
       CurrentSession currentSession,
-      PlayComponentPresenter playPresenter) {
+      PlayComponentPresenter playPresenter,
+      ResourceDelegate<GamesResource> gamesDelegate) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     getView().setUiHandlers(this);
 
     this.currentSession = currentSession;
     this.profileService = PlayerService.App.getInstance();
-    this.gameService = GameService.App.getInstance();
     this.playPresenter = playPresenter;
+    this.gamesDelegate = gamesDelegate;
     SHCookies.setLocation(NameTokens.homePage);
   }
 
@@ -67,10 +67,10 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public void prepareFromRequest(PlaceRequest request) {
     super.prepareFromRequest(request);
 
-    gameService.findGames(0, INIT_SHOW_GAMES_PAGE_SIZE, new AsyncCallback<List<Game>>() {
+    gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
       @Override
       public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
+        super.onFailure(caught);
         getProxy().manualRevealFailed();
       }
 
@@ -79,35 +79,25 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         getView().setGames(result);
         getProxy().manualReveal(HomePresenter.this);
       }
-    });
+    }).getGames(0, INIT_SHOW_GAMES_PAGE_SIZE);
   }
 
   @Override
   public void getMoreGames(boolean myGames, int newPageSize) {
     if (myGames) {
-      gameService.findUserGames(0, newPageSize, new AsyncCallback<List<Game>>() {
-        @Override
-        public void onFailure(Throwable caught) {
-          ErrorDialogBox.setMessage(caught).show();
-        }
-
+      gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
         @Override
         public void onSuccess(List<Game> result) {
           getView().setGames(result);
         }
-      });
+      }).getLoggedInUserGames(0, newPageSize);
     } else {
-      gameService.findGames(0, newPageSize, new AsyncCallback<List<Game>>() {
-        @Override
-        public void onFailure(Throwable caught) {
-          ErrorDialogBox.setMessage(caught).show();
-        }
-
+      gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
         @Override
         public void onSuccess(List<Game> result) {
           getView().setGames(result);
         }
-      });
+      }).getGames(0, newPageSize);
     }
   }
 

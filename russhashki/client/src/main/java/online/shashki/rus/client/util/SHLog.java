@@ -1,4 +1,4 @@
-package online.shashki.rus.client.utils;
+package online.shashki.rus.client.util;
 
 import com.google.gwt.core.client.GWT;
 import online.shashki.rus.shared.config.ShashkiConfiguration;

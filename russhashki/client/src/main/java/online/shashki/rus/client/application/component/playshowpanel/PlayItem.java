@@ -9,7 +9,7 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import online.shashki.rus.client.resources.AppResources;
-import online.shashki.rus.client.utils.TrUtils;
+import online.shashki.rus.client.util.TrUtils;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.Player;

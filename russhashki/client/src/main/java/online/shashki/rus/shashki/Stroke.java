@@ -1,6 +1,6 @@
 package online.shashki.rus.shashki;
 
-import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.model.Move;
 
 import java.util.HashSet;

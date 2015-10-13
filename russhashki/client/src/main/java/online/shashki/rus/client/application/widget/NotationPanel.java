@@ -5,7 +5,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import online.shashki.rus.client.event.*;
-import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shashki.Square;
 import online.shashki.rus.shashki.Stroke;
 

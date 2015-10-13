@@ -1,5 +1,5 @@
 /*
- * Copyright 2011 ArcBees Inc.
+ * Copyright 2014 ArcBees Inc.
  *
  * Licensed under the Apache License, Version 2.0 (the "License"); you may not
  * use this file except in compliance with the License. You may obtain a copy of
@@ -14,28 +14,16 @@
  * the License.
  */
 
-package online.shashki.rus.shared.dispatch;
+package online.shashki.rus.shared.api;
 
-import com.gwtplatform.dispatch.rpc.shared.Result;
+import online.shashki.rus.shared.model.Game;
 
-/**
- * The result of a {@link SendTextToServerAction} action.
- */
-public class SendTextToServerResult implements Result {
-    private String response;
+import javax.ws.rs.GET;
+import javax.ws.rs.Produces;
+import javax.ws.rs.core.MediaType;
 
-    public SendTextToServerResult(final String response) {
-        this.response = response;
-    }
-
-    /**
-     * For serialization only.
-     */
-    @SuppressWarnings("unused")
-    private SendTextToServerResult() {
-    }
-
-    public String getResponse() {
-        return response;
-    }
+@Produces(MediaType.APPLICATION_JSON)
+public interface GameResource {
+    @GET
+    Game get();
 }

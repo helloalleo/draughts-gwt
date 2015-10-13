@@ -25,7 +25,7 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.Proxy;
 import online.shashki.rus.client.application.menu.MenuPresenter;
-import online.shashki.rus.client.utils.SHLog;
+import online.shashki.rus.client.util.SHLog;
 
 /**
  * This is the top-level presenter of the hierarchy. Other presenters reveal themselves within this presenter.
