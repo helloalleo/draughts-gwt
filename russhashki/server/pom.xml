@@ -12,9 +12,9 @@
         <tomcat.version>7.0.57</tomcat.version>
 
         <!--Google-->
-        <google.http.version>1.19.0</google.http.version>
-        <google.oauth.version>1.19.0</google.oauth.version>
-        <google-oauth-client.version>1.19.0</google-oauth-client.version>
+        <google.http.version>1.20.0</google.http.version>
+        <google.oauth.version>1.20.0</google.oauth.version>
+        <google-oauth-client.version>1.20.0</google-oauth-client.version>
 
         <!--GWTP-->
         <gwtp.version>1.5</gwtp.version>

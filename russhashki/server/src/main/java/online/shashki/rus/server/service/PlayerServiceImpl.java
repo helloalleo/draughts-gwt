@@ -98,8 +98,8 @@
 //    return playerDao.findAll();
 //  }
 //
-//  public Player findByVkUid(String vkUid) {
-//    return playerDao.findByVkUid(vkUid);
+//  public Player findByVkId(String vkUid) {
+//    return playerDao.findByVkId(vkUid);
 //  }
 //
 //  public Player findBySessionId(String sessionId) {

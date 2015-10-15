@@ -68,8 +68,8 @@ public class PlayersResourceImpl implements PlayersResource {
     return null;
   }
 
-  public Player findByVkUid(String vkUid) {
-    return playerDaoProvider.get().findByVkUid(vkUid);
+  public Player findByVkId(String vkId) {
+    return playerDaoProvider.get().findByVkId(vkId);
   }
 
   public Player findBySessionId(String sessionId) {

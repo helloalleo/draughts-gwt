@@ -40,11 +40,11 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
 //  }
 
   @Override
-  public Player findByVkUid(String uid) {
+  public Player findByVkId(String uid) {
     Query query = getEntityManager().createQuery(
         "FROM Player " +
-            "WHERE vkUid = :vkUid");
-    query.setParameter("vkUid", uid);
+            "WHERE vkId = :vkId");
+    query.setParameter("vkId", uid);
     List list = query.getResultList();
     return list.isEmpty() ? null : (Player) list.get(0);
   }

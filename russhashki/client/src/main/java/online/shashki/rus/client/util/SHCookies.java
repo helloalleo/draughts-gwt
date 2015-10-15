@@ -12,16 +12,16 @@ import online.shashki.rus.shared.config.ShashkiConfiguration;
  */
 public class SHCookies {
 
-  private static String loc = "loc"; // куки адреса страницы
+  private static String location = "location"; // куки адреса страницы
   private static ShashkiConfiguration configuration = GWT.create(ShashkiConfiguration.class);
 
   public static void setLocation(String nameToken) {
-    Cookies.setCookie(loc, nameToken);
+    Cookies.setCookie(location, nameToken);
     SHLog.debug("set location: " + nameToken);
   }
 
   public static String getLocation() {
-    SHLog.debug("get location: " + Cookies.getCookie(loc));
-    return Cookies.getCookie(loc);
+    SHLog.debug("get location: " + Cookies.getCookie(location));
+    return Cookies.getCookie(location);
   }
 }

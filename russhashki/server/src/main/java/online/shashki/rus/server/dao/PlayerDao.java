@@ -10,7 +10,7 @@ import online.shashki.rus.shared.model.Player;
  */
 public interface PlayerDao extends Dao<Player> {
 
-  Player findByVkUid(String uid);
+  Player findByVkId(String uid);
 
   Player findBySessionId(String sessionId);
 

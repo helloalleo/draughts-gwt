@@ -48,9 +48,16 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
 
   @Override
   protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential) throws ServletException, IOException {
+    System.out.println(resp.getHeaderNames());
+    String stream = "";
+    resp.getOutputStream().print(stream);
+    System.out.println(stream);
+    System.out.println(resp.toString());
     String accessToken = credential.getAccessToken();
     GenericUrl url = new GenericUrl(serverConfiguration.getVkApiUserInfo());
     url.set("access_token", accessToken);
+    url.set("v", "5.37");
+    url.set("fields", "uid,first_name,last_name,email");
 
     HttpRequest request = Utils.HTTP_TRANSPORT.createRequestFactory().buildGetRequest(url);
     HttpResponse response = request.execute();
@@ -59,28 +66,32 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
     JsonObject responseObject = jsonReader.readObject();
 
     if (responseObject.getJsonObject("error") != null) {
-      resp.sendRedirect("/rus/500.html");
+      resp.sendRedirect(serverConfiguration.getContext() + "/500.html");
       return;
     }
 
     if (responseObject.getJsonArray("response").isEmpty()) {
-      resp.sendRedirect("/rus/404.html");
+      resp.sendRedirect(serverConfiguration.getContext() + "/404.html");
       return;
     }
 
     JsonArray usersArray = responseObject.getJsonArray("response");
     JsonObject array = usersArray.getJsonObject(0);
-    JsonNumber uid = array.getJsonNumber("uid");
-    String vkUid = uid.toString();
+    JsonNumber uid = array.getJsonNumber("id");
+    String vkId = uid.toString();
 
-    Player player = playersResource.findByVkUid(vkUid);
+    Player player = playersResource.findByVkId(vkId);
     if (player == null) {
       JsonString firstName = array.getJsonString("first_name");
       JsonString lastName = array.getJsonString("last_name");
+      JsonString email = array.getJsonString("email");
       player = new Player();
-      player.setVkUid(vkUid);
+      player.setVkId(vkId);
       player.setFirstName(firstName.getString());
       player.setLastName(lastName.getString());
+      if (email != null) {
+        player.setEmail(email.getString());
+      }
     } else {
       player.setVisitCounter(player.getVisitCounter() + 1);
     }

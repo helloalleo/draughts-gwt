@@ -29,8 +29,8 @@ public class Player extends PersistableObjectImpl {
   @GwtTransient
   @JsonIgnore
   @com.fasterxml.jackson.annotation.JsonIgnore
-  @Column(name = "vk_uid")
-  private String vkUid;
+  @Column(name = "vk_id")
+  private String vkId;
 
   @GwtTransient
   @JsonIgnore
@@ -139,12 +139,12 @@ public class Player extends PersistableObjectImpl {
     this.sessionId = sessionId;
   }
 
-  public String getVkUid() {
-    return vkUid;
+  public String getVkId() {
+    return vkId;
   }
 
-  public void setVkUid(String vkUid) {
-    this.vkUid = vkUid;
+  public void setVkId(String vkId) {
+    this.vkId = vkId;
   }
 
   public String getEmail() {
@@ -336,9 +336,9 @@ public class Player extends PersistableObjectImpl {
 
   @Override
   public String toString() {
-    return "Shashist{" +
+    return "Player{" +
         "sessionId='" + sessionId + '\'' +
-        ", vkUid='" + vkUid + '\'' +
+        ", vkId='" + vkId + '\'' +
         ", email='" + email + '\'' +
         ", firstName='" + firstName + '\'' +
         ", lastName='" + lastName + '\'' +
