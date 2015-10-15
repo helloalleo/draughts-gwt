@@ -1,6 +1,5 @@
 package online.shashki.rus.client.application.menu;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
@@ -10,23 +9,23 @@ import com.gwtplatform.mvp.client.proxy.NavigationEvent;
 import com.gwtplatform.mvp.client.proxy.NavigationHandler;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
+import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.util.SHCookies;
-import online.shashki.rus.shared.service.PlayerService;
-import online.shashki.rus.shared.service.PlayerServiceAsync;
 
 public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> implements MenuUiHandlers, NavigationHandler {
   private final PlaceManager placeManager;
-  private final PlayerServiceAsync profileService;
+  private final CurrentSession currentSession;
 
   @Inject
   MenuPresenter(EventBus eventBus,
                 MyView view,
-                PlaceManager placeManager) {
+                PlaceManager placeManager,
+                CurrentSession currentSession) {
     super(eventBus, view);
     getView().setUiHandlers(this);
 
     this.placeManager = placeManager;
-    this.profileService = PlayerService.App.getInstance();
+    this.currentSession = currentSession;
   }
 
   @Override
@@ -50,8 +49,8 @@ public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> impleme
   }
 
   @Override
-  public void isAuthenticated(AsyncCallback<Boolean> async) {
-    profileService.isAuthenticated(async);
+  public boolean isLoggedIn() {
+    return currentSession.isLoggedIn();
   }
 
   interface MyView extends View, HasUiHandlers<MenuUiHandlers> {

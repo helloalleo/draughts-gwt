@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
@@ -17,8 +18,7 @@ import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.client.websocket.GameWebsocket;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.*;
-import online.shashki.rus.shared.service.GameService;
-import online.shashki.rus.shared.service.GameServiceAsync;
+import online.shashki.rus.shared.rest.GamesResource;
 import online.shashki.rus.shashki.MoveFactory;
 import online.shashki.rus.shashki.Stroke;
 
@@ -33,7 +33,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   private final GameWebsocket gameWebsocket;
   private final ShashkiMessages messages;
-  private final GameServiceAsync gameService;
+  private final ResourceDelegate<GamesResource> gamesDelegate;
   private EventBus eventBus;
 
   @Inject
@@ -41,13 +41,14 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       EventBus eventBus,
       MyView view,
       ShashkiMessages messages,
+      ResourceDelegate<GamesResource> gamesDelegate,
       GameWebsocket gameWebsocket) {
     super(eventBus, view);
 
     this.eventBus = eventBus;
     this.messages = messages;
     this.gameWebsocket = gameWebsocket;
-    this.gameService = GameService.App.getInstance();
+    this.gamesDelegate = gamesDelegate;
     getView().setUiHandlers(this);
     getView().setPlayer(gameWebsocket.getPlayer());
     getView().initNotationPanel(eventBus);
@@ -289,7 +290,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         game.setPlayFinishDate(new Date());
         game.setPartyNotation(NotationPanel.getNotation());
         game.setEndGameScreenshot(getView().takeScreenshot());
-        gameService.save(game, event.getAsyncCallback());
+        gamesDelegate.withCallback(event.getAsyncCallback()).saveOrCreate(game);
         eventBus.fireEvent(new ClearPlayComponentEvent());
       }
     });

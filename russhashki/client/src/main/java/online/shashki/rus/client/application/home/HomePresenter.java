@@ -19,10 +19,9 @@ import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.util.AbstractAsyncCallback;
 import online.shashki.rus.client.util.SHCookies;
-import online.shashki.rus.shared.rest.GamesResource;
 import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.service.PlayerService;
-import online.shashki.rus.shared.service.PlayerServiceAsync;
+import online.shashki.rus.shared.rest.GamesResource;
+import online.shashki.rus.shared.rest.PlayersResource;
 
 import java.util.List;
 
@@ -32,7 +31,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public static final PermanentSlot<PlayComponentPresenter> SLOT_PLAY = new PermanentSlot<>();
   public static final int INIT_SHOW_GAMES_PAGE_SIZE = 50;
   private final CurrentSession currentSession;
-  private final PlayerServiceAsync profileService;
   private PlayComponentPresenter playPresenter;
   private final ResourceDelegate<GamesResource> gamesDelegate;
 
@@ -43,13 +41,13 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       MyProxy proxy,
       CurrentSession currentSession,
       PlayComponentPresenter playPresenter,
+      ResourceDelegate<PlayersResource> playersDelegate,
       ResourceDelegate<GamesResource> gamesDelegate) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     getView().setUiHandlers(this);
 
     this.currentSession = currentSession;
-    this.profileService = PlayerService.App.getInstance();
     this.playPresenter = playPresenter;
     this.gamesDelegate = gamesDelegate;
     SHCookies.setLocation(NameTokens.homePage);

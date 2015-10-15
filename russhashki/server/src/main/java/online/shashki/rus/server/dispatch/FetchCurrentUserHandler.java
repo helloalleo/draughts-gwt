@@ -34,12 +34,9 @@ public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayer
   @Override
   public FetchCurrentPlayerResult execute(FetchCurrentPlayerAction fetchCurrentPlayerAction, ExecutionContext executionContext) throws ActionException {
     HttpSession session = requestProvider.get().getSession();
-    if (session != null) {
-      final Player bySessionId = playerDaoProvider.get().findBySessionId(session.getId());
-      System.out.println(bySessionId);
-      return new FetchCurrentPlayerResult(bySessionId);
-    }
-    return null;
+    final Player bySessionId = playerDaoProvider.get().findBySessionId(session.getId());
+    System.out.println(bySessionId);
+    return new FetchCurrentPlayerResult(bySessionId);
   }
 
   @Override

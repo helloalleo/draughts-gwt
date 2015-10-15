@@ -7,6 +7,7 @@ import com.google.gwt.websockets.client.WebSocketCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.dispatch.rpc.shared.DispatchAsync;
 import online.shashki.rus.client.application.widget.dialog.*;
 import online.shashki.rus.client.event.*;
@@ -17,9 +18,8 @@ import online.shashki.rus.shared.dispatch.FetchCurrentPlayerAction;
 import online.shashki.rus.shared.dispatch.FetchCurrentPlayerResult;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.*;
-import online.shashki.rus.shared.service.GameService;
-import online.shashki.rus.shared.service.GameServiceAsync;
-import online.shashki.rus.shared.service.PlayerServiceAsync;
+import online.shashki.rus.shared.rest.GamesResource;
+import online.shashki.rus.shared.rest.PlayersResource;
 
 import java.util.Date;
 import java.util.List;
@@ -32,10 +32,9 @@ import java.util.List;
  */
 public class GameWebsocket implements WebSocketCallback {
 
-//  private final JsonSerialization jsonSerialization;
-  private PlayerServiceAsync playrService;
   private ShashkiConfiguration configuration = GWT.create(ShashkiConfiguration.class);
-  private GameServiceAsync gameService;
+  private ResourceDelegate<PlayersResource> playersDelegate;
+  private ResourceDelegate<GamesResource> gamesDelegate;
   private WebSocket webSocket;
   private EventBus eventBus;
   private Player player;
@@ -47,6 +46,8 @@ public class GameWebsocket implements WebSocketCallback {
   @Inject
   private GameWebsocket(EventBus eventBus,
                         DispatchAsync dispatcher,
+                        ResourceDelegate<PlayersResource> playersDelegate,
+                        ResourceDelegate<GamesResource> gamesDelegate,
                         ShashkiMessages messages) {
     SHLog.debug("GAME WS");
     dispatcher.execute(new FetchCurrentPlayerAction(), new AsyncCallback<FetchCurrentPlayerResult>() {
@@ -60,22 +61,11 @@ public class GameWebsocket implements WebSocketCallback {
         player = result.getPlayer();
       }
     });
-//    this.playrService = PlayerService.App.getInstance();
-//    playrService.getCurrentProfile(new AsyncCallback<Player>() {
-//      @Override
-//      public void onFailure(Throwable caught) {
-//        ErrorDialogBox.setMessage(caught).show();
-//      }
-//
-//      @Override
-//      public void onSuccess(Player result) {
-//        player = result;
-//      }
-//    });
-    SHLog.debug(eventBus == null ? "NULL EVENT BUS" : "OK EVENT BUS");
+
+    this.playersDelegate = playersDelegate;
+    this.gamesDelegate = gamesDelegate;
     this.eventBus = eventBus;
     this.messages = messages;
-    this.gameService = GameService.App.getInstance();
 
     bindEvents();
   }
@@ -156,6 +146,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   /**
    * Начало игры на стороне приглашенного
+   *
    * @param gameMessage
    */
   private void handlePlayInvite(final GameMessage gameMessage) {
@@ -168,49 +159,39 @@ public class GameWebsocket implements WebSocketCallback {
     confirmPlayDialogBox = new ConfirmPlayDialogBox() {
       @Override
       public void submitted() {
-        playrService.find(gameMessage.getSender().getId(), new AsyncCallback<Player>() {
+        if (gameMessage.getSender() == null) {
+          InfoDialogBox.setMessage(messages.opponentNotFound()).show();
+          return;
+        }
+        SHLog.debug(connectionSession.getPlayer().toString());
+
+        connectionSession.setOpponent(gameMessage.getSender());
+
+        Game game = GWT.create(Game.class);
+        game.setPlayStartDate(new Date());
+        game.setPlayerWhite(isWhite() ? connectionSession.getPlayer() : connectionSession.getOpponent());
+        game.setPlayerBlack(isWhite() ? connectionSession.getOpponent() : connectionSession.getPlayer());
+        SHLog.debug(game.getPlayerWhite().getPublicName() + " PLAYER WHITE");
+        SHLog.debug(game.getPlayerBlack().getPublicName() + " PLAYER BLACK");
+        gamesDelegate.withCallback(new AsyncCallback<Game>() {
           @Override
-          public void onFailure(Throwable caught) {
-            ErrorDialogBox.setMessage(messages.errorWhileGettingProfile(), caught).show();
+          public void onFailure(Throwable throwable) {
+            ErrorDialogBox.setMessage(messages.failToStartGame(), throwable).show();
           }
 
           @Override
-          public void onSuccess(Player result) {
-            if (result == null) {
-              InfoDialogBox.setMessage(messages.opponentNotFound()).show();
-              return;
-            }
-            SHLog.debug(connectionSession.getPlayer().toString());
+          public void onSuccess(Game game) {
+            GameMessage message = createSendGameMessage(gameMessage);
+            message.setMessageType(GameMessage.MessageType.PLAY_START);
+            message.setGame(game);
+            message.setData(String.valueOf(!isWhite()));
 
-            connectionSession.setOpponent(result);
+            sendGameMessage(message);
 
-            Game game = GWT.create(Game.class);
-            game.setPlayStartDate(new Date());
-            game.setPlayerWhite(isWhite() ? connectionSession.getPlayer() : connectionSession.getOpponent());
-            game.setPlayerBlack(isWhite() ? connectionSession.getOpponent() : connectionSession.getPlayer());
-            SHLog.debug(game.getPlayerWhite().getPublicName() + " PLAYER WHITE");
-            SHLog.debug(game.getPlayerBlack().getPublicName() + " PLAYER BLACK");
-            gameService.save(game, new AsyncCallback<Game>() {
-              @Override
-              public void onFailure(Throwable throwable) {
-                ErrorDialogBox.setMessage(messages.failToStartGame(), throwable).show();
-              }
-
-              @Override
-              public void onSuccess(Game game) {
-                GameMessage message = createSendGameMessage(gameMessage);
-                message.setMessageType(GameMessage.MessageType.PLAY_START);
-                message.setGame(game);
-                message.setData(String.valueOf(!isWhite()));
-
-                sendGameMessage(message);
-
-                connectionSession.setGame(game);
-                eventBus.fireEvent(new StartPlayEvent(isWhite()));
-              }
-            });
+            connectionSession.setGame(game);
+            eventBus.fireEvent(new StartPlayEvent(isWhite()));
           }
-        });
+        }).saveOrCreate(game);
       }
 
       @Override
@@ -407,6 +388,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   /**
    * Обрабатываем ход оппонента
+   *
    * @param gameMessage
    */
   private void handlePlayMove(GameMessage gameMessage) {
@@ -418,24 +400,16 @@ public class GameWebsocket implements WebSocketCallback {
 
   /**
    * Начало игры на стороне приглашающего
+   *
    * @param gameMessage
    */
   private void handlePlayStart(final GameMessage gameMessage) {
-    gameService.find(gameMessage.getGame().getId(), new AsyncCallback<Game>() {
-      @Override
-      public void onFailure(Throwable throwable) {
-        ErrorDialogBox.setMessage(messages.errorWhileGettingGame(), throwable).show();
-      }
-
-      @Override
-      public void onSuccess(Game game) {
-        connectionSession.setGame(game);
-        SHLog.debug(gameMessage.getData() + " RECEIVED DATA");
-        boolean white = Boolean.valueOf(gameMessage.getData());
-        connectionSession.setOpponent(white ? game.getPlayerBlack() : game.getPlayerWhite());
-        eventBus.fireEvent(new StartPlayEvent(white));
-      }
-    });
+    final Game game = gameMessage.getGame();
+    connectionSession.setGame(game);
+    SHLog.debug(gameMessage.getData() + " RECEIVED DATA");
+    boolean white = Boolean.valueOf(gameMessage.getData());
+    connectionSession.setOpponent(white ? game.getPlayerBlack() : game.getPlayerWhite());
+    eventBus.fireEvent(new StartPlayEvent(white));
   }
 
   private void handleChatPrivateMessage(GameMessage gameMessage) {

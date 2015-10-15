@@ -3,6 +3,7 @@ package online.shashki.rus.client.application.profile.settings;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
@@ -13,15 +14,14 @@ import online.shashki.rus.client.event.UpdatePlayerListEvent;
 import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Player;
-import online.shashki.rus.shared.service.PlayerService;
-import online.shashki.rus.shared.service.PlayerServiceAsync;
+import online.shashki.rus.shared.rest.PlayersResource;
 
 
 public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView> implements SettingsUiHandlers {
   public static final NestedSlot SLOT_SETTINGS = new NestedSlot();
   private final ShashkiMessages messages;
   private final EventBus eventBus;
-  private final PlayerServiceAsync playrService;
+  private final ResourceDelegate<PlayersResource> playersDelegate;
   private Player player;
 
   @Inject
@@ -29,11 +29,12 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
       EventBus eventBus,
       MyView view,
       ShashkiMessages messages,
+      ResourceDelegate<PlayersResource> playersDelegate,
       Player player) {
     super(eventBus, view);
 
     this.eventBus = eventBus;
-    this.playrService = PlayerService.App.getInstance();
+    this.playersDelegate = playersDelegate;
     this.player = player;
     this.messages = messages;
 
@@ -45,7 +46,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
   public void submitNewPlayerName(String playerName) {
     player.setPlayerName(playerName);
     SHLog.debug(playerName);
-    playrService.save(player, new AsyncCallback<Player>() {
+    playersDelegate.withCallback(new AsyncCallback<Player>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();
@@ -60,7 +61,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
           SHLog.error(e.getMessage(), e);
         }
       }
-    });
+    }).saveOrCreate(player);
   }
 
   public interface ViewFactory {
@@ -76,18 +77,21 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
     private final EventBus eventBus;
     private final ViewFactory viewFactory;
     private final ShashkiMessages messages;
+    private final ResourceDelegate<PlayersResource> playersDelegate;
 
     @Inject
     FactoryImpl(EventBus eventBus,
                 ViewFactory viewFactory,
-                ShashkiMessages messages) {
+                ShashkiMessages messages,
+                ResourceDelegate<PlayersResource> playersDelegate) {
       this.eventBus = eventBus;
       this.viewFactory = viewFactory;
       this.messages = messages;
+      this.playersDelegate = playersDelegate;
     }
 
     public SettingsPresenter create(Player player) {
-      return new SettingsPresenter(eventBus, viewFactory.create(), messages, player);
+      return new SettingsPresenter(eventBus, viewFactory.create(), messages, playersDelegate, player);
     }
   }
 

@@ -48,17 +48,6 @@ public class AppBootstrapper implements Bootstrapper {
         SHLog.debug("Is logged in? " + result.getPlayer());
       }
     });
-
-//    profileService.isAuthenticated(new AsyncCallback<Boolean>() {
-//      @Override
-//      public void onFailure(Throwable caught) {
-//        ErrorDialogBox.setMessage(caught).show();
-//      }
-//
-//      @Override
-//      public void onSuccess(Boolean result) {
-//      }
-//    });
     SHLog.info("Bootstrapped");
   }
 }

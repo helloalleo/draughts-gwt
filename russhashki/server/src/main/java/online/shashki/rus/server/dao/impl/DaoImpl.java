@@ -1,6 +1,7 @@
 package online.shashki.rus.server.dao.impl;
 
 import com.google.inject.TypeLiteral;
+import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.Dao;
 import online.shashki.rus.shared.model.PersistableObject;
 
@@ -26,14 +27,17 @@ public abstract class DaoImpl<E extends PersistableObject> implements Dao<E> {
 
   protected abstract EntityManager getEntityManager();
 
+  @Transactional
   public void create(E entity) {
     getEntityManager().persist(entity);
   }
 
+  @Transactional
   public void edit(E entity) {
     getEntityManager().merge(entity);
   }
 
+  @Transactional
   public void remove(E entity) {
     getEntityManager().remove(getEntityManager().merge(entity));
   }

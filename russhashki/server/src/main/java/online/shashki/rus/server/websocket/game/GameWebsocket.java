@@ -1,9 +1,9 @@
 package online.shashki.rus.server.websocket.game;
 
 import com.google.inject.Inject;
-import online.shashki.rus.server.service.GameMessageServiceImpl;
-import online.shashki.rus.server.service.GameServiceImpl;
-import online.shashki.rus.server.service.PlayerServiceImpl;
+import online.shashki.rus.server.rest.GameMessagesResourceImpl;
+import online.shashki.rus.server.rest.GamesResourceImpl;
+import online.shashki.rus.server.rest.PlayersResourceImpl;
 import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.server.websocket.game.message.GameMessageDecoder;
 import online.shashki.rus.server.websocket.game.message.GameMessageEncoder;
@@ -31,16 +31,16 @@ public class GameWebsocket {
 
   private static Map<Player, Session> peers = Collections.synchronizedMap(new HashMap<Player, Session>());
   private final long MAX_IDLE_TIMEOUT = 1000 * 60 * 15;
-  private final PlayerServiceImpl playerService;
-  private final GameMessageServiceImpl gameMessageService;
-  private final GameServiceImpl gameService;
+  private final PlayersResourceImpl playerResource;
+  private final GameMessagesResourceImpl gameMessageService;
+  private final GamesResourceImpl gameResource;
 
   @Inject
-  private GameWebsocket(GameServiceImpl gameService,
-                        PlayerServiceImpl playerService,
-                        GameMessageServiceImpl gameMessageService) {
-    this.gameService = gameService;
-    this.playerService = playerService;
+  private GameWebsocket(GamesResourceImpl gameResource,
+                        PlayersResourceImpl playerResource,
+                        GameMessagesResourceImpl gameMessageService) {
+    this.gameResource = gameResource;
+    this.playerResource = playerResource;
     this.gameMessageService = gameMessageService;
   }
 
@@ -107,10 +107,10 @@ public class GameWebsocket {
       }
     }
 
-    player = playerService.find(playerId);
+    player = playerResource.find(playerId);
 
     player.setOnline(true);
-    playerService.save(player, true);
+    playerResource.saveOrCreate(player, true);
 
     peers.put(player, session);
     System.out.println("Register new player: " + player.getId() + " " + session.getId());
@@ -129,11 +129,11 @@ public class GameWebsocket {
     if (player == null) {
       return;
     }
-    player = playerService.find(player.getId());
+    player = playerResource.find(player.getId());
 
     player.setOnline(false);
     player.setPlaying(false);
-    playerService.save(player, true);
+    playerResource.saveOrCreate(player, true);
 
     System.out.println("Disconnected: " + player.getId() + " " + session.getId());
     peers.values().remove(session);
@@ -170,9 +170,9 @@ public class GameWebsocket {
   }
 
   private void saveGameMessage(GameMessage message) {
-    Player playerReceiver = playerService.find(message.getReceiver().getId());
-    Player playerSender = playerService.find(message.getSender().getId());
-    Game game = message.getGame() != null ? gameService.find(message.getGame().getId()) : null;
+    Player playerReceiver = playerResource.find(message.getReceiver().getId());
+    Player playerSender = playerResource.find(message.getSender().getId());
+    Game game = message.getGame() != null ? gameResource.game(message.getGame().getId()) : null;
 
     GameMessage gameMessage = new GameMessage();
 
@@ -192,15 +192,15 @@ public class GameWebsocket {
 
     gameMessage.setSentDate(new Date());
 
-    gameMessageService.save(gameMessage);
+    gameMessageService.saveOrCreate(gameMessage);
   }
 
   private void updatePlayerList(Session session) {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
-    List<Player> playerList = playerService.findAll();
+    List<Player> playerList = playerResource.findAll();
     gameMessage.setPlayerList(playerList);
-    gameMessageService.save(gameMessage);
+    gameMessageService.saveOrCreate(gameMessage);
     for (Session s : session.getOpenSessions()) {
       if (s.isOpen()) {
         sendMessage(s, gameMessage);

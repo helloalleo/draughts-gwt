@@ -10,7 +10,7 @@ import com.google.api.client.http.HttpResponse;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.shashki.rus.server.config.ServerConfiguration;
-import online.shashki.rus.server.service.PlayerServiceImpl;
+import online.shashki.rus.server.rest.PlayersResourceImpl;
 import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.shared.model.Player;
@@ -34,15 +34,15 @@ import java.util.List;
 @Singleton
 public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackServlet {
 
-  private final PlayerServiceImpl playerService;
+  private final PlayersResourceImpl playersResource;
 
   private final ServerConfiguration serverConfiguration;
 
   private final List<String> scope = Collections.singletonList("email");
 
   @Inject
-  OAuthVKCallbackServlet(PlayerServiceImpl playerService, ServerConfiguration serverConfiguration) {
-    this.playerService = playerService;
+  OAuthVKCallbackServlet(PlayersResourceImpl playersResource, ServerConfiguration serverConfiguration) {
+    this.playersResource = playersResource;
     this.serverConfiguration = serverConfiguration;
   }
 
@@ -73,7 +73,7 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
     JsonNumber uid = array.getJsonNumber("uid");
     String vkUid = uid.toString();
 
-    Player player = playerService.findByVkUid(vkUid);
+    Player player = playersResource.findByVkUid(vkUid);
     if (player == null) {
       JsonString firstName = array.getJsonString("first_name");
       JsonString lastName = array.getJsonString("last_name");
@@ -93,9 +93,9 @@ public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackSer
         || !player.getSessionId().equals(session.getId())) {
       player.setSessionId(session.getId());
     }
-    playerService.save(player, true);
+    playersResource.saveOrCreate(player, true);
 
-    AuthUtils.login(req, resp);
+    AuthUtils.login(req);
     resp.sendRedirect(serverConfiguration.getContext());
   }
 

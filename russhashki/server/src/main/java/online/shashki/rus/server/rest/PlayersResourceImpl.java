@@ -5,11 +5,12 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import online.shashki.rus.server.dao.PlayerDao;
 import online.shashki.rus.server.utils.AuthUtils;
-import online.shashki.rus.shared.rest.PlayersResource;
 import online.shashki.rus.shared.model.Player;
+import online.shashki.rus.shared.rest.PlayersResource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
+import java.util.List;
 
 @Singleton
 public class PlayersResourceImpl implements PlayersResource {
@@ -21,10 +22,10 @@ public class PlayersResourceImpl implements PlayersResource {
 
   @Inject
   PlayersResourceImpl(
-      Provider<PlayerDao> playerDaoProvider
-      /*HttpServletRequest requestProvider*/) {
+      Provider<PlayerDao> playerDaoProvider,
+      Provider<HttpServletRequest> requestProvider) {
     this.playerDaoProvider = playerDaoProvider;
-    this.requestProvider = null;
+    this.requestProvider = requestProvider;
   }
 
   @Override
@@ -33,13 +34,13 @@ public class PlayersResourceImpl implements PlayersResource {
   }
 
   public Player saveOrCreate(Player player, boolean serverSide) {
-    final Player currentProfile = getCurrentProfile();
+    final Player currentProfile = getLoggedInUser();
     if (currentProfile == null && player != null && player.getId() == null) {
       playerDaoProvider.get().create(player);
       return player;
     }
 
-    if (!(isAuthenticated() || serverSide)) {
+    if (!(AuthUtils.isAuthenticated(requestProvider.get().getSession()) || serverSide)) {
       return null;
     }
 
@@ -57,7 +58,7 @@ public class PlayersResourceImpl implements PlayersResource {
     return null;
   }
 
-  private Player getCurrentProfile() {
+  public Player getLoggedInUser() {
     HttpSession session = requestProvider.get().getSession();
     if (session != null) {
       final Player bySessionId = playerDaoProvider.get().findBySessionId(session.getId());
@@ -67,7 +68,19 @@ public class PlayersResourceImpl implements PlayersResource {
     return null;
   }
 
-  private Boolean isAuthenticated() {
-    return AuthUtils.isAuthenticated(requestProvider.get().getSession());
+  public Player findByVkUid(String vkUid) {
+    return playerDaoProvider.get().findByVkUid(vkUid);
+  }
+
+  public Player findBySessionId(String sessionId) {
+    return playerDaoProvider.get().findBySessionId(sessionId);
+  }
+
+  public Player find(Long playerId) {
+    return playerDaoProvider.get().find(playerId);
+  }
+
+  public List<Player> findAll() {
+    return playerDaoProvider.get().findAll();
   }
 }

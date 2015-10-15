@@ -7,12 +7,10 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.resources.AppResources;
 import online.shashki.rus.client.resources.Variables;
@@ -29,7 +27,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   NavbarNav navLeft;
   @UiField
   NavbarNav navRight;
-//  @UiField
+  //  @UiField
 //  Image logoImg;
   @UiField
   NavbarBrand brand;
@@ -108,43 +106,27 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
       navLeft.add(anchor);
     }
 
-    getUiHandlers().isAuthenticated(new AsyncCallback<Boolean>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
-      }
-
-      @Override
-      public void onSuccess(Boolean result) {
-        if (result) {
-          for (NameTokens.Link link : nameTokens.getRightAuthLinks()) {
-            AnchorListItem anchor;
-            if (link.token.equals(NameTokens.logoutPage)) {
-              anchor = new AnchorListItem(link.name);
-              anchor.setIcon(IconType.SIGN_OUT);
-              anchor.setHref(link.token);
-              anchor.addClickHandler(new ClickHandler() {
-                @Override
-                public void onClick(ClickEvent event) {
-                  SHCookies.logout();
-                }
-              });
-            } else {
-              anchor = createAnchor(link);
-            }
-            navRight.add(anchor);
-          }
+    if (getUiHandlers().isLoggedIn()) {
+      for (NameTokens.Link link : nameTokens.getRightAuthLinks()) {
+        AnchorListItem anchor;
+        if (link.token.equals(NameTokens.logoutPage)) {
+          anchor = new AnchorListItem(link.name);
+          anchor.setIcon(IconType.SIGN_OUT);
+          anchor.setHref(link.token);
         } else {
-          for (NameTokens.Link link : nameTokens.getRightLinks()) {
-            AnchorListItem anchor = createAnchor(link);
-            navRight.add(anchor);
-          }
+          anchor = createAnchor(link);
         }
-
-        highlightMenu();
-        navbarTopHeight();
+        navRight.add(anchor);
       }
-    });
+    } else {
+      for (NameTokens.Link link : nameTokens.getRightLinks()) {
+        AnchorListItem anchor = createAnchor(link);
+        navRight.add(anchor);
+      }
+    }
+
+    highlightMenu();
+    navbarTopHeight();
   }
 
   private void navbarScrollHeight() {

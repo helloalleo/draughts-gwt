@@ -31,6 +31,7 @@ public interface GamesResource {
   @POST
   Game saveOrCreate(Game game);
 
+  @GET
   @Path(ApiPaths.PATH_ID)
-  GameResource game(@PathParam(ApiParameters.ID) Long gameId);
+  Game game(@PathParam(ApiParameters.ID) Long gameId);
 }
