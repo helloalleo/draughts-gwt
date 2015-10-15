@@ -8,6 +8,7 @@ import com.google.api.client.http.GenericUrl;
 import com.google.api.client.http.HttpRequest;
 import com.google.api.client.http.HttpResponse;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import online.shashki.rus.server.config.ServerConfiguration;
 import online.shashki.rus.server.service.PlayerServiceImpl;
 import online.shashki.rus.server.utils.AuthUtils;
@@ -16,7 +17,6 @@ import online.shashki.rus.shared.model.Player;
 
 import javax.json.*;
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -31,7 +31,7 @@ import java.util.List;
  * Date: 16.11.14
  * Time: 15:55
  */
-@WebServlet(name = "OAuthVKCallbackServlet", urlPatterns = {"/OAuthVKCallbackServlet"})
+@Singleton
 public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackServlet {
 
   private final PlayerServiceImpl playerService;

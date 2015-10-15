@@ -5,7 +5,7 @@ import com.gwtplatform.dispatch.rest.client.RestApplicationPath;
 import com.gwtplatform.dispatch.rest.client.gin.RestDispatchAsyncModule;
 import com.gwtplatform.dispatch.rpc.client.gin.RpcDispatchAsyncModule;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
-import online.shashki.rus.shared.api.ApiPaths;
+import online.shashki.rus.shared.rest.ApiPaths;
 
 /**
  * Created with IntelliJ IDEA.

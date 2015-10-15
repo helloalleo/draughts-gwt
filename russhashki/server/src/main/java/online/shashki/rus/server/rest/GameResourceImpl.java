@@ -14,12 +14,12 @@
  * the License.
  */
 
-package online.shashki.rus.server.api;
+package online.shashki.rus.server.rest;
 
 import com.google.inject.assistedinject.Assisted;
 import online.shashki.rus.server.dao.GameDao;
 import online.shashki.rus.server.utils.AuthUtils;
-import online.shashki.rus.shared.api.GameResource;
+import online.shashki.rus.shared.rest.GameResource;
 import online.shashki.rus.shared.model.Game;
 
 import javax.inject.Inject;

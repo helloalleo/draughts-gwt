@@ -16,7 +16,7 @@ import javax.websocket.EndpointConfig;
 public class GameMessageEncoder implements Encoder.Text<GameMessage> {
   @Override
   public String encode(GameMessage gameMessage) throws EncodeException {
-    return Utils.serializePlayerMessageToJson(gameMessage);
+    return Utils.serializeGameMessageToJson(gameMessage);
   }
 
   @Override

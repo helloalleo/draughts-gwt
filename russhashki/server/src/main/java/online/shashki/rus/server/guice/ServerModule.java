@@ -1,7 +1,6 @@
 package online.shashki.rus.server.guice;
 
 import com.google.inject.AbstractModule;
-import online.shashki.rus.server.api.ApiModule;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +11,7 @@ import online.shashki.rus.server.api.ApiModule;
 public class ServerModule extends AbstractModule {
   @Override
   protected void configure() {
-    install(new ApiModule());
+    install(new RestModule());
     install(new DispatchServletModule());
     install(new DbModule());
     install(new ServerHandlerModule());

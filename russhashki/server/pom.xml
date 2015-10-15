@@ -1,65 +1,49 @@
-<?xml version="1.0" encoding="UTF-8"?>
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-
     <groupId>online.shashki.rus</groupId>
     <artifactId>server</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>war</packaging>
-
+    <packaging>jar</packaging>
+    <name>Shashki.Online Server</name>
+    <url>http://shashki.online</url>
     <properties>
-        <!--OAuth-->
+        <!--Tomcat-->
+        <tomcat.version>7.0.57</tomcat.version>
+
+        <!--Google-->
         <google.http.version>1.19.0</google.http.version>
         <google.oauth.version>1.19.0</google.oauth.version>
         <google-oauth-client.version>1.19.0</google-oauth-client.version>
 
-        <!--JBoss-->
-        <jboss.bom.version>9.0.1.Final</jboss.bom.version>
-        <version.jboss.logging>3.2.1.Final</version.jboss.logging>
-        <!--<hibernate-validator.version>5.1.2.Final</hibernate-validator.version>-->
-        <commons-codec.version>1.9</commons-codec.version>
-        <commons-lang.version>2.6</commons-lang.version>
-        <postgresql.version>9.3-1102-jdbc41</postgresql.version>
-        <jackson-mapper-asl.version>1.9.13</jackson-mapper-asl.version>
+        <!--GWTP-->
+        <gwtp.version>1.5</gwtp.version>
+        <!--Guice-->
         <guice.version>4.0</guice.version>
+        <guicy-resteasy.version>1.2</guicy-resteasy.version>
 
-        <!--REST-->
-        <resteasy.version>3.0.11.Final</resteasy.version>
+        <!--PostgreSQL-->
+        <postgresql.version>9.3-1102-jdbc41</postgresql.version>
+
+        <!--RESTEasy-->
         <jax-rs.version>1.1.1</jax-rs.version>
+        <jersey.version>1.19</jersey.version>
 
-        <!-- GWT needs at least java 1.6 -->
+        <!--Maven-->
+        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <project.artifacts.directory>out/artifacts</project.artifacts.directory>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <maven.compiler.source>1.7</maven.compiler.source>
         <maven.compiler.target>1.7</maven.compiler.target>
-
-        <!-- maven -->
-        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
-
         <target.jdk>1.7</target.jdk>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <gwtp.version>1.5</gwtp.version>
-        <guicy-resteasy.version>1.2</guicy-resteasy.version>
-        <resteasy-jackson2-provider.version>3.0.9.Final</resteasy-jackson2-provider.version>
-        <resteasy-jaxrs.version>3.0.9.Final</resteasy-jaxrs.version>
-
-        <project.artifacts.directory>out/artifacts</project.artifacts.directory>
+        <jackson-datatype-jsr353.version>2.6.3</jackson-datatype-jsr353.version>
+        <servlet-api.version>3.1.0</servlet-api.version>
+        <hibernate-entitymanager.version>4.3.10.Final</hibernate-entitymanager.version>
+        <resteasy-guice.version>3.0.13.Final</resteasy-guice.version>
     </properties>
 
     <dependencyManagement>
         <dependencies>
-            <dependency>
-                <groupId>org.wildfly.bom</groupId>
-                <artifactId>jboss-javaee-7.0-wildfly-with-tools</artifactId>
-                <version>${jboss.bom.version}</version>
-                <type>pom</type>
-                <scope>import</scope>
-            </dependency>
-
-            <dependency>
-                <groupId>com.gwtplatform</groupId>
-                <artifactId>gwtp-dispatch-rpc-server-guice</artifactId>
-                <version>${gwtp.version}</version>
-            </dependency>
             <dependency>
                 <groupId>com.gwtplatform</groupId>
                 <artifactId>gwtp-dispatch-rpc-server</artifactId>
@@ -87,6 +71,7 @@
                 <artifactId>guice-assistedinject</artifactId>
                 <version>4.0</version>
             </dependency>
+
             <!-- Testing -->
             <dependency>
                 <groupId>junit</groupId>
@@ -102,15 +87,50 @@
             </dependency>
         </dependencies>
     </dependencyManagement>
-
     <dependencies>
         <dependency>
-            <groupId>online.shashki.rus</groupId>
-            <artifactId>shared</artifactId>
-            <version>1.0-SNAPSHOT</version>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-core</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-logging-juli</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jasper-el</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-jsp-api</artifactId>
+            <version>${tomcat.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>org.apache.tomcat.embed</groupId>
+            <artifactId>tomcat-embed-websocket</artifactId>
+            <version>${tomcat.version}</version>
         </dependency>
 
         <!--Guice-->
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-dispatch-rpc-server-guice</artifactId>
+            <version>${gwtp.version}</version>
+        </dependency>
+
         <dependency>
             <groupId>com.google.inject</groupId>
             <artifactId>guice</artifactId>
@@ -137,80 +157,32 @@
             <groupId>org.postgresql</groupId>
             <artifactId>postgresql</artifactId>
             <version>${postgresql.version}</version>
-            <!--<scope>provided</scope>-->
         </dependency>
 
         <!--Json Processing-->
         <dependency>
-            <groupId>org.codehaus.jackson</groupId>
-            <artifactId>jackson-mapper-asl</artifactId>
-            <version>${jackson-mapper-asl.version}</version>
+            <groupId>com.fasterxml.jackson.datatype</groupId>
+            <artifactId>jackson-datatype-jsr353</artifactId>
+            <version>${jackson-datatype-jsr353.version}</version>
         </dependency>
 
-        <!-- Import the Common Annotations API (JSR-250), we use provided scope
-            as the API is included in JBoss WildFly -->
         <dependency>
-            <groupId>org.jboss.spec.javax.annotation</groupId>
-            <artifactId>jboss-annotations-api_1.2_spec</artifactId>
-            <!--<scope>provided</scope>-->
-        </dependency>
-
-        <!-- Import the Servlet API, we use provided scope as the API is included in JBoss WildFly. -->
-        <dependency>
-            <groupId>org.jboss.spec.javax.servlet</groupId>
-            <artifactId>jboss-servlet-api_3.1_spec</artifactId>
-            <!--<scope>provided</scope>-->
+            <groupId>org.glassfish</groupId>
+            <artifactId>javax.json</artifactId>
+            <version>1.0.4</version>
         </dependency>
 
         <!-- Import the JPA API, we use provided scope as the API is included in JBoss WildFly -->
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <!--<scope>provided</scope>-->
+            <version>1.0.0.Final</version>
         </dependency>
-
         <dependency>
-            <groupId>org.jboss.spec.javax.websocket</groupId>
-            <artifactId>jboss-websocket-api_1.1_spec</artifactId>
-            <!--<scope>provided</scope>-->
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-entitymanager</artifactId>
+            <version>${hibernate-entitymanager.version}</version>
         </dependency>
-
-        <dependency>
-            <groupId>org.jboss.spec.javax.json</groupId>
-            <artifactId>jboss-json-api_1.0_spec</artifactId>
-            <!--<scope>provided</scope>-->
-        </dependency>
-
-        <!--Jboss Logging-->
-        <dependency>
-            <groupId>org.jboss.logging</groupId>
-            <artifactId>jboss-logging</artifactId>
-            <version>${version.jboss.logging}</version>
-            <!--<scope>provided</scope>-->
-        </dependency>
-
-        <!--commons-->
-        <dependency>
-            <groupId>commons-lang</groupId>
-            <artifactId>commons-lang</artifactId>
-            <version>${commons-lang.version}</version>
-            <!--<scope>provided</scope>-->
-        </dependency>
-
-        <dependency>
-            <groupId>commons-codec</groupId>
-            <artifactId>commons-codec</artifactId>
-            <version>${commons-codec.version}</version>
-            <!--<scope>provided</scope>-->
-        </dependency>
-
-        <!--Hibernate-->
-        <!--<dependency>-->
-        <!--<groupId>org.hibernate</groupId>-->
-        <!--<artifactId>hibernate-validator</artifactId>-->
-        <!--<version>${hibernate-validator.version}</version>-->
-        <!--&lt;!&ndash;<scope>provided</scope>&ndash;&gt;-->
-        <!--</dependency>-->
 
         <!--OAuth 2.0-->
         <dependency>
@@ -254,28 +226,20 @@
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-dispatch-rpc-server</artifactId>
         </dependency>
-        <dependency>
-            <groupId>com.gwtplatform</groupId>
-            <artifactId>gwtp-dispatch-rpc-server-guice</artifactId>
-        </dependency>
+
         <!-- REST -->
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-jaxrs</artifactId>
-            <version>${resteasy.version}</version>
-            <scope>provided</scope>
+            <artifactId>resteasy-guice</artifactId>
+            <version>${resteasy-guice.version}</version>
         </dependency>
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jackson2-provider</artifactId>
-            <version>${resteasy.version}</version>
-            <scope>provided</scope>
+            <version>3.0.9.Final</version>
         </dependency>
-        <dependency>
-            <groupId>org.jboss.resteasy</groupId>
-            <artifactId>resteasy-guice</artifactId>
-            <version>${resteasy.version}</version>
-        </dependency>
+
+        <!--  Test Dependencies  -->
         <dependency>
             <groupId>com.arcbees</groupId>
             <artifactId>guicy-resteasy</artifactId>
@@ -285,37 +249,39 @@
             <groupId>javax.ws.rs</groupId>
             <artifactId>jsr311-api</artifactId>
             <version>${jax-rs.version}</version>
-            <!-- Provided because RestEasy has its own implementation -->
             <scope>provided</scope>
         </dependency>
-
-        <!--<dependency>-->
-            <!--<groupId>org.jboss.resteasy</groupId>-->
-            <!--<artifactId>resteasy-jackson2-provider</artifactId>-->
-            <!--&lt;!&ndash;<version>${resteasy-jackson2-provider.version}</version>&ndash;&gt;-->
-            <!--&lt;!&ndash;<scope>provided</scope>&ndash;&gt;-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.jboss.resteasy</groupId>-->
-            <!--<artifactId>resteasy-jaxrs</artifactId>-->
-            <!--&lt;!&ndash;<version>${resteasy-jaxrs.version}</version>&ndash;&gt;-->
-            <!--&lt;!&ndash;<scope>provided</scope>&ndash;&gt;-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.fasterxml.jackson.jaxrs</groupId>-->
-            <!--<artifactId>jackson-jaxrs-base</artifactId>-->
-            <!--<version>2.4.1</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>com.fasterxml.jackson.jaxrs</groupId>-->
-            <!--<artifactId>jackson-jaxrs-json-provider</artifactId>-->
-            <!--<version>2.4.1</version>-->
-        <!--</dependency>-->
+        <dependency>
+            <groupId>com.fasterxml.jackson.core</groupId>
+            <artifactId>jackson-databind</artifactId>
+            <version>2.4.5</version>
+        </dependency>
     </dependencies>
-
     <build>
-        <finalName>shashki_web_exploded</finalName>
+        <finalName>server</finalName>
         <plugins>
+            <plugin>
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>appassembler-maven-plugin</artifactId>
+                <version>1.1.1</version>
+                <configuration>
+                    <assembleDirectory>target</assembleDirectory>
+                    <programs>
+                        <program>
+                            <mainClass>launch.Main</mainClass>
+                            <name>webapp</name>
+                        </program>
+                    </programs>
+                </configuration>
+                <executions>
+                    <execution>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>assemble</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -333,10 +299,70 @@
                 <version>2.6</version>
                 <configuration>
                     <webappDirectory>
-                        ../../${project.basedir}/${project.artifacts.directory}/${project.build.finalName}.${project.packaging}
+                        ${project.basedir}/../../${project.artifacts.directory}/${project.build.finalName}.${project.packaging}
                     </webappDirectory>
                 </configuration>
             </plugin>
         </plugins>
     </build>
 </project>
+        <!--<?xml version="1.0" encoding="UTF-8"?>-->
+        <!--<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
+        <!--xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">-->
+        <!--<modelVersion>4.0.0</modelVersion>-->
+
+        <!--<groupId>online.shashki.rus</groupId>-->
+        <!--<artifactId>server</artifactId>-->
+        <!--<version>1.0-SNAPSHOT</version>-->
+        <!--<packaging>war</packaging>-->
+
+        <!--<properties>-->
+        <!--&lt;!&ndash;OAuth&ndash;&gt;-->
+        <!--&lt;!&ndash;JBoss&ndash;&gt;-->
+        <!--<jboss.bom.version>9.0.1.Final</jboss.bom.version>-->
+        <!--<version.jboss.logging>3.2.1.Final</version.jboss.logging>-->
+        <!--&lt;!&ndash;<hibernate-validator.version>5.1.2.Final</hibernate-validator.version>&ndash;&gt;-->
+        <!--<commons-codec.version>1.9</commons-codec.version>-->
+        <!--<commons-lang.version>2.6</commons-lang.version>-->
+
+        <!--&lt;!&ndash;REST&ndash;&gt;-->
+
+        <!--&lt;!&ndash; GWT needs at least java 1.6 &ndash;&gt;-->
+
+        <!--&lt;!&ndash; maven &ndash;&gt;-->
+
+
+        <!--</properties>-->
+
+        <!--<dependencyManagement>-->
+        <!--<dependencies>-->
+        <!--&lt;!&ndash;<dependency>&ndash;&gt;-->
+        <!--&lt;!&ndash;<groupId>org.wildfly.bom</groupId>&ndash;&gt;-->
+        <!--&lt;!&ndash;<artifactId>jboss-javaee-7.0-wildfly-with-tools</artifactId>&ndash;&gt;-->
+        <!--&lt;!&ndash;<version>${jboss.bom.version}</version>&ndash;&gt;-->
+        <!--&lt;!&ndash;<type>pom</type>&ndash;&gt;-->
+        <!--&lt;!&ndash;<scope>import</scope>&ndash;&gt;-->
+        <!--&lt;!&ndash;</dependency>&ndash;&gt;-->
+
+        <!--</dependencies>-->
+        <!--</dependencyManagement>-->
+
+        <!--<dependencies>-->
+        <!--<dependency>-->
+        <!--<groupId>online.shashki.rus</groupId>-->
+        <!--<artifactId>shared</artifactId>-->
+        <!--<version>1.0-SNAPSHOT</version>-->
+        <!--</dependency>-->
+
+        <!--&lt;!&ndash;Guice&ndash;&gt;-->
+
+
+        <!--<dependency>-->
+        <!--<groupId>org.apache.tomcat.embed</groupId>-->
+        <!--<artifactId>tomcat-embed-websocket</artifactId>-->
+        <!--<version>7.0.52</version>-->
+        <!--</dependency>-->
+
+        <!--</dependencies>-->
+
+        <!--</project>-->

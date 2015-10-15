@@ -19,7 +19,7 @@ import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.util.AbstractAsyncCallback;
 import online.shashki.rus.client.util.SHCookies;
-import online.shashki.rus.shared.api.GamesResource;
+import online.shashki.rus.shared.rest.GamesResource;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.service.PlayerService;
 import online.shashki.rus.shared.service.PlayerServiceAsync;

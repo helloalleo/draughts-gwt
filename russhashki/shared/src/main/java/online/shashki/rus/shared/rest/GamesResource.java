@@ -1,4 +1,4 @@
-package online.shashki.rus.shared.api;
+package online.shashki.rus.shared.rest;
 
 import online.shashki.rus.shared.model.Game;
 

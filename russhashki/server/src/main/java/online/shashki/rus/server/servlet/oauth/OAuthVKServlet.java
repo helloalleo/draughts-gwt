@@ -4,11 +4,11 @@ import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeServlet;
 import com.google.api.client.http.GenericUrl;
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import online.shashki.rus.server.config.ServerConfiguration;
 import online.shashki.rus.server.utils.Utils;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServletRequest;
 import java.io.IOException;
 import java.util.Collections;
@@ -20,7 +20,7 @@ import java.util.List;
  * Date: 16.11.14
  * Time: 12:37
  */
-@WebServlet(name = "OAuthVKServlet", urlPatterns = {"/OAuthVKServlet"})
+@Singleton
 public class OAuthVKServlet extends AbstractAuthorizationCodeServlet {
 
   private List<String> scope = Collections.singletonList("email");

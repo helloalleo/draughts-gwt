@@ -14,16 +14,10 @@
  * the License.
  */
 
-package online.shashki.rus.shared.api;
+package online.shashki.rus.server.rest;
 
-import online.shashki.rus.shared.model.Game;
+import online.shashki.rus.shared.rest.GameResource;
 
-import javax.ws.rs.GET;
-import javax.ws.rs.Produces;
-import javax.ws.rs.core.MediaType;
-
-@Produces(MediaType.APPLICATION_JSON)
-public interface GameResource {
-    @GET
-    Game get();
+public interface ResourcesFactory {
+    GameResource createGameResource(Long carId);
 }

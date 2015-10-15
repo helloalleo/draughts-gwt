@@ -1,5 +1,6 @@
 package online.shashki.rus.server.utils;
 
+import com.fasterxml.jackson.databind.ObjectMapper;
 import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
 import com.google.api.client.auth.oauth2.BearerToken;
 import com.google.api.client.auth.oauth2.ClientParametersAuthentication;
@@ -13,7 +14,6 @@ import com.google.api.client.util.store.FileDataStoreFactory;
 import online.shashki.rus.server.config.ConfigHelper;
 import online.shashki.rus.server.servlet.oauth.ClientSecrets;
 import online.shashki.rus.shared.model.GameMessage;
-import org.codehaus.jackson.map.ObjectMapper;
 
 import java.io.*;
 import java.util.List;
@@ -50,7 +50,7 @@ public class Utils {
     return bufferedReader.readLine();
   }
 
-  public static String serializePlayerMessageToJson(GameMessage message) {
+  public static String serializeGameMessageToJson(GameMessage message) {
     ObjectMapper objectMapper = new ObjectMapper();
     StringWriter stringWriter = new StringWriter();
     try {
@@ -62,7 +62,7 @@ public class Utils {
     return stringWriter.toString();
   }
 
-  public static GameMessage deserializeFromJson(String json) throws IOException {
+  public static GameMessage deserializeGameMessageFromJson(String json) throws IOException {
     ObjectMapper objectMapper = new ObjectMapper();
     return objectMapper.readValue(json, GameMessage.class);
   }

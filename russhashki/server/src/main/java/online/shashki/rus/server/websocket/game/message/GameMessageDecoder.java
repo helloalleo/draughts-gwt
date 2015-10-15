@@ -27,7 +27,7 @@ public class GameMessageDecoder implements Decoder.Text<GameMessage> {
   @Override
   public GameMessage decode(String s) throws DecodeException {
     try {
-      return Utils.deserializeFromJson(s);
+      return Utils.deserializeGameMessageFromJson(s);
     } catch (Exception e) {
       e.printStackTrace();
       return null;
@@ -38,7 +38,7 @@ public class GameMessageDecoder implements Decoder.Text<GameMessage> {
   public boolean willDecode(String s) {
     GameMessage gameMessage;
     try {
-      gameMessage = Utils.deserializeFromJson(s);
+      gameMessage = Utils.deserializeGameMessageFromJson(s);
     } catch (IOException e) {
       e.printStackTrace();
       return false;

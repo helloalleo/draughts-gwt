@@ -1,23 +1,30 @@
-package online.shashki.rus.server.api;
+package online.shashki.rus.server.rest;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.Singleton;
 import online.shashki.rus.server.dao.PlayerDao;
 import online.shashki.rus.server.utils.AuthUtils;
-import online.shashki.rus.shared.api.PlayersResource;
+import online.shashki.rus.shared.rest.PlayersResource;
 import online.shashki.rus.shared.model.Player;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;
 
+@Singleton
 public class PlayersResourceImpl implements PlayersResource {
-  private final PlayerDao playerDao;
-  private final HttpServletRequest request;
+  private Provider<PlayerDao> playerDaoProvider;
+  private Provider<HttpServletRequest> requestProvider;
+
+  public PlayersResourceImpl() {
+  }
 
   @Inject
-  public PlayersResourceImpl(
-      PlayerDao playerDao) {
-    this.playerDao = playerDao;
-    this.request = null;
+  PlayersResourceImpl(
+      Provider<PlayerDao> playerDaoProvider
+      /*HttpServletRequest requestProvider*/) {
+    this.playerDaoProvider = playerDaoProvider;
+    this.requestProvider = null;
   }
 
   @Override
@@ -28,7 +35,7 @@ public class PlayersResourceImpl implements PlayersResource {
   public Player saveOrCreate(Player player, boolean serverSide) {
     final Player currentProfile = getCurrentProfile();
     if (currentProfile == null && player != null && player.getId() == null) {
-      playerDao.create(player);
+      playerDaoProvider.get().create(player);
       return player;
     }
 
@@ -40,20 +47,20 @@ public class PlayersResourceImpl implements PlayersResource {
       return null;
     }
 
-    Player playerById = playerDao.findById(player.getId());
+    Player playerById = playerDaoProvider.get().findById(player.getId());
 
     if (playerById != null) {
       playerById.updateSerializable(playerById);
-      playerDao.edit(playerById);
+      playerDaoProvider.get().edit(playerById);
       return playerById;
     }
     return null;
   }
 
   private Player getCurrentProfile() {
-    HttpSession session = request.getSession();
+    HttpSession session = requestProvider.get().getSession();
     if (session != null) {
-      final Player bySessionId = playerDao.findBySessionId(session.getId());
+      final Player bySessionId = playerDaoProvider.get().findBySessionId(session.getId());
       System.out.println(bySessionId);
       return bySessionId;
     }
@@ -61,6 +68,6 @@ public class PlayersResourceImpl implements PlayersResource {
   }
 
   private Boolean isAuthenticated() {
-    return AuthUtils.isAuthenticated(request.getSession());
+    return AuthUtils.isAuthenticated(requestProvider.get().getSession());
   }
 }

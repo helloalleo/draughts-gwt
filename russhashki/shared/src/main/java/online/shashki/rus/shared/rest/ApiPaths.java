@@ -14,10 +14,10 @@
  * the License.
  */
 
-package online.shashki.rus.shared.api;
+package online.shashki.rus.shared.rest;
 
 public class ApiPaths {
-  public static final String ROOT = "/rest";
+  public static final String ROOT = "/rus/rest";
 
   public static final String GAMES = "/games";
   public static final String PLAYERS = "/players";

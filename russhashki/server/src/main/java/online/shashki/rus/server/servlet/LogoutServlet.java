@@ -1,12 +1,12 @@
 package online.shashki.rus.server.servlet;
 
 import com.google.inject.Inject;
+import com.google.inject.Singleton;
 import online.shashki.rus.server.config.ServerConfiguration;
 import online.shashki.rus.server.service.PlayerServiceImpl;
 import online.shashki.rus.shared.model.Player;
 
 import javax.servlet.ServletException;
-import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -18,7 +18,7 @@ import java.io.IOException;
  * Date: 05.12.14
  * Time: 21:46
  */
-@WebServlet(name = "LogoutServlet", urlPatterns = {"/logout"})
+@Singleton
 public class LogoutServlet extends HttpServlet {
 
   private final PlayerServiceImpl playerService;

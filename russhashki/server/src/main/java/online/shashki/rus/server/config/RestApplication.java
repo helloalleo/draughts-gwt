@@ -6,9 +6,9 @@ import javax.ws.rs.core.Application;
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
- * Date: 12.10.15
- * Time: 15:58
+ * Date: 15.10.15
+ * Time: 7:36
  */
-@ApplicationPath("rest")
+@ApplicationPath("/rest")
 public class RestApplication extends Application {
 }

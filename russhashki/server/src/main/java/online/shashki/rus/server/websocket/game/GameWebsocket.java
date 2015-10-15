@@ -12,7 +12,6 @@ import online.shashki.rus.shared.model.GameMessage;
 import online.shashki.rus.shared.model.Move;
 import online.shashki.rus.shared.model.Player;
 
-import javax.inject.Singleton;
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
@@ -24,7 +23,6 @@ import java.util.*;
  * Date: 07.12.14
  * Time: 12:05
  */
-@Singleton
 @ServerEndpoint(value = "/ws/game",
     decoders = {GameMessageDecoder.class},
     encoders = {GameMessageEncoder.class}
@@ -215,7 +213,7 @@ public class GameWebsocket {
 
     if (remote != null) {
       try {
-        remote.sendText(Utils.serializePlayerMessageToJson(message), true);
+        remote.sendText(Utils.serializeGameMessageToJson(message), true);
       } catch (IOException e) {
         e.printStackTrace();
       }

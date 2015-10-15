@@ -16,13 +16,14 @@
 
 package online.shashki.rus.server.guice;
 
-import com.arcbees.guicyresteasy.GuiceRestEasyFilterDispatcher;
 import com.google.inject.persist.PersistFilter;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import com.google.inject.servlet.ServletModule;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
-import online.shashki.rus.shared.api.ApiPaths;
+import online.shashki.rus.server.servlet.LogoutServlet;
+import online.shashki.rus.server.servlet.oauth.OAuthVKCallbackServlet;
+import online.shashki.rus.server.servlet.oauth.OAuthVKServlet;
 
 public class DispatchServletModule extends ServletModule {
 
@@ -33,8 +34,9 @@ public class DispatchServletModule extends ServletModule {
     install(new JpaPersistModule(SHASHKI64_PU));
     filter("/*").through(PersistFilter.class);
 
-    filter(ApiPaths.ROOT + "/*").through(GuiceRestEasyFilterDispatcher.class);
-
     serve("/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
+    serve("/logout").with(LogoutServlet.class);
+    serve("/OAuthVKServlet").with(OAuthVKServlet.class);
+    serve("/OAuthVKCallbackServlet").with(OAuthVKCallbackServlet.class);
   }
 }
