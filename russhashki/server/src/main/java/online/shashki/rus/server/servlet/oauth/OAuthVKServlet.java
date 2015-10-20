@@ -1,52 +1,51 @@
 package online.shashki.rus.server.servlet.oauth;
 
-import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
-import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeServlet;
-import com.google.api.client.http.GenericUrl;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.shashki.rus.server.config.ServerConfiguration;
-import online.shashki.rus.server.utils.Utils;
+import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
+import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
-import java.util.Collections;
-import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
- * Date: 16.11.14
- * Time: 12:37
+ * Date: 15.10.15
+ * Time: 16:51
  */
 @Singleton
-public class OAuthVKServlet extends AbstractAuthorizationCodeServlet {
+public class OAuthVKServlet extends HttpServlet {
 
-  private List<String> scope = Collections.singletonList("email");
-
-  private final ServerConfiguration serverConfiguration;
+  private final Logger log;
+  private final ServerConfiguration config;
 
   @Inject
-  public OAuthVKServlet(ServerConfiguration serverConfiguration) {
-    this.serverConfiguration = serverConfiguration;
+  public OAuthVKServlet(ServerConfiguration configuration, Logger log) {
+    this.config = configuration;
+    this.log = log;
   }
 
   @Override
-  protected AuthorizationCodeFlow initializeFlow() throws ServletException, IOException {
-    ClientSecrets clientSecrets = new ClientSecrets(serverConfiguration, ClientSecrets.SocialType.VK);
-    return Utils.getFlow(clientSecrets, scope);
-  }
-
-  @Override
-  protected String getRedirectUri(HttpServletRequest httpServletRequest) throws ServletException, IOException {
-    GenericUrl url = new GenericUrl(httpServletRequest.getRequestURL().toString());
-    url.setRawPath(serverConfiguration.getVkRedirectUri());
-    return url.build();
-  }
-
-  @Override
-  protected String getUserId(HttpServletRequest httpServletRequest) throws ServletException, IOException {
-    return httpServletRequest.getSession(true).getId();
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    try {
+      OAuthClientRequest oAuthRequest = OAuthClientRequest
+          .authorizationLocation(config.getVkAuthUri())
+          .setClientId(config.getVkClientId())
+          .setScope(config.getVkScope())
+          .setRedirectURI(config.getVkRedirectUri())
+          .setParameter("v", config.getVkVersion())
+          .setResponseType("code")
+          .buildQueryMessage();
+      log.info("REQUEST URI: " + oAuthRequest.getLocationUri());
+      resp.sendRedirect(oAuthRequest.getLocationUri());
+    } catch (OAuthSystemException e) {
+      log.severe(e.getLocalizedMessage());
+    }
   }
 }

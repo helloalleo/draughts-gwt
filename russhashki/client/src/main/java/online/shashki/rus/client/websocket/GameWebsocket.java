@@ -8,16 +8,17 @@ import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
-import com.gwtplatform.dispatch.rpc.shared.DispatchAsync;
+import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.application.widget.dialog.*;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.json.GameMessageMapper;
 import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.config.ShashkiConfiguration;
-import online.shashki.rus.shared.dispatch.FetchCurrentPlayerAction;
-import online.shashki.rus.shared.dispatch.FetchCurrentPlayerResult;
 import online.shashki.rus.shared.locale.ShashkiMessages;
-import online.shashki.rus.shared.model.*;
+import online.shashki.rus.shared.model.Game;
+import online.shashki.rus.shared.model.GameMessage;
+import online.shashki.rus.shared.model.Move;
+import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shared.rest.GamesResource;
 import online.shashki.rus.shared.rest.PlayersResource;
 
@@ -32,8 +33,8 @@ import java.util.List;
  */
 public class GameWebsocket implements WebSocketCallback {
 
+  private final CurrentSession currentSession;
   private ShashkiConfiguration configuration = GWT.create(ShashkiConfiguration.class);
-  private ResourceDelegate<PlayersResource> playersDelegate;
   private ResourceDelegate<GamesResource> gamesDelegate;
   private WebSocket webSocket;
   private EventBus eventBus;
@@ -45,24 +46,25 @@ public class GameWebsocket implements WebSocketCallback {
 
   @Inject
   private GameWebsocket(EventBus eventBus,
-                        DispatchAsync dispatcher,
+                        CurrentSession currentSession,
                         ResourceDelegate<PlayersResource> playersDelegate,
                         ResourceDelegate<GamesResource> gamesDelegate,
                         ShashkiMessages messages) {
     SHLog.debug("GAME WS");
-    dispatcher.execute(new FetchCurrentPlayerAction(), new AsyncCallback<FetchCurrentPlayerResult>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
-      }
+    this.currentSession = currentSession;
+    SHLog.info("WebSocket Player: " + player);
+//    dispatcher.execute(new FetchCurrentPlayerAction(), new AsyncCallback<FetchCurrentPlayerResult>() {
+//      @Override
+//      public void onFailure(Throwable caught) {
+//        ErrorDialogBox.setMessage(caught).show();
+//      }
+//
+//      @Override
+//      public void onSuccess(FetchCurrentPlayerResult result) {
+//        player = result.getPlayer();
+//      }
+//    });
 
-      @Override
-      public void onSuccess(FetchCurrentPlayerResult result) {
-        player = result.getPlayer();
-      }
-    });
-
-    this.playersDelegate = playersDelegate;
     this.gamesDelegate = gamesDelegate;
     this.eventBus = eventBus;
     this.messages = messages;
@@ -208,6 +210,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   @Override
   public void onConnect() {
+    player = currentSession.getPlayer();
     if (player == null) {
       InfoDialogBox.setMessage(messages.failToConnectToServer()).show();
       return;
@@ -323,7 +326,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlayAcceptDraw(GameMessage gameMessage) {
     if (Boolean.valueOf(gameMessage.getData())) {
-      eventBus.fireEvent(new GameOverEvent(connectionSession.getGame(), GameEnds.DRAW, new AsyncCallback<Game>() {
+      eventBus.fireEvent(new GameOverEvent(connectionSession.getGame(), Game.GameEnds.DRAW, new AsyncCallback<Game>() {
         @Override
         public void onFailure(Throwable throwable) {
           ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
@@ -371,8 +374,8 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlaySurrender(GameMessage gameMessage) {
     Game game = connectionSession.getGame();
-    final GameEnds gameEnd = connectionSession.isPlayerHasWhiteColor() ? GameEnds.SURRENDER_WHITE
-        : GameEnds.SURRENDER_BLACK;
+    final Game.GameEnds gameEnd = connectionSession.isPlayerHasWhiteColor() ? Game.GameEnds.SURRENDER_WHITE
+        : Game.GameEnds.SURRENDER_BLACK;
     eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
       @Override
       public void onFailure(Throwable throwable) {

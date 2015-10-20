@@ -13,6 +13,8 @@ import java.util.ResourceBundle;
 @Singleton
 public class ServerConfiguration {
 
+  private String notFoundError;
+  private String serverError;
   private String context;
   private String vkRedirectUri;
   private String vkClientId;
@@ -20,17 +22,32 @@ public class ServerConfiguration {
   private String vkAuthUri;
   private String vkTokenUri;
   private String vkApiUserInfo;
+  private String vkScope;
+  private String vkVersion;
 
   public ServerConfiguration() {
-    ResourceBundle resourceBundle = ResourceBundle.getBundle("SocialConfiguration");
+    ResourceBundle resourceBundle = ResourceBundle.getBundle("ServerConfiguration");
 
     context = resourceBundle.getString("context");
+    serverError = resourceBundle.getString("server_error");
+    notFoundError = resourceBundle.getString("not_found_error");
+
+    vkRedirectUri = resourceBundle.getString("vk_redirect_uri");
     vkClientId = resourceBundle.getString("vk_client_id");
     vkClientSecret = resourceBundle.getString("vk_client_secret");
-    vkRedirectUri = resourceBundle.getString("vk_redirect_uri");
+    vkScope = resourceBundle.getString("vk_scope");
     vkAuthUri = resourceBundle.getString("vk_auth_uri");
     vkTokenUri = resourceBundle.getString("vk_token_uri");
     vkApiUserInfo = resourceBundle.getString("vk_api_user_info");
+    vkVersion = resourceBundle.getString("vk_version");
+  }
+
+  public String getNotFoundError() {
+    return notFoundError;
+  }
+
+  public String getServerError() {
+    return serverError;
   }
 
   public String getContext() {
@@ -59,5 +76,17 @@ public class ServerConfiguration {
 
   public String getVkApiUserInfo() {
     return vkApiUserInfo;
+  }
+
+  public String getVkScope() {
+    return vkScope;
+  }
+
+  public String getVkVersion() {
+    return vkVersion;
+  }
+
+  public void setVkVersion(String vkVersion) {
+    this.vkVersion = vkVersion;
   }
 }

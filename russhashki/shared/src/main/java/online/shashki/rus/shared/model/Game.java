@@ -1,5 +1,7 @@
 package online.shashki.rus.shared.model;
 
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 import javax.persistence.*;
 import java.util.Date;
 
@@ -21,8 +23,8 @@ public class Game extends PersistableObjectImpl {
   @JoinColumn(name = "player_black_id")
   private Player playerBlack;
 
-  @Enumerated(EnumType.STRING)
   @Column(name = "play_end_status")
+  @Enumerated(EnumType.STRING)
   private GameEnds playEndStatus;
 
   @Column(name = "play_start_date")
@@ -129,5 +131,15 @@ public class Game extends PersistableObjectImpl {
   public Game setEndGameScreenshot(String endGameScreenshot) {
     this.endGameScreenshot = endGameScreenshot;
     return this;
+  }
+
+  public enum GameEnds implements IsSerializable {
+    BLACK_WIN,
+    WHITE_WIN,
+    BLACK_LEFT,
+    WHITE_LEFT,
+    SURRENDER_BLACK,
+    SURRENDER_WHITE,
+    DRAW
   }
 }

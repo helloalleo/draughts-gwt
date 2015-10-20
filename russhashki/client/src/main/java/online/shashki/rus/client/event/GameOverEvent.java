@@ -3,7 +3,6 @@ package online.shashki.rus.client.event;
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.model.GameEnds;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,10 +13,10 @@ import online.shashki.rus.shared.model.GameEnds;
 public class GameOverEvent extends GwtEvent<GameOverEventHandler> {
   public static Type<GameOverEventHandler> TYPE = new Type<GameOverEventHandler>();
   private final Game game;
-  private final GameEnds gameEnd;
+  private final Game.GameEnds gameEnd;
   private final AsyncCallback<Game> asyncCallback;
 
-  public GameOverEvent(Game game, GameEnds gameEnd, AsyncCallback<Game> asyncCallback) {
+  public GameOverEvent(Game game, Game.GameEnds gameEnd, AsyncCallback<Game> asyncCallback) {
     this.game = game;
     this.gameEnd = gameEnd;
     this.asyncCallback = asyncCallback;
@@ -27,7 +26,7 @@ public class GameOverEvent extends GwtEvent<GameOverEventHandler> {
     return game;
   }
 
-  public GameEnds getGameEnd() {
+  public Game.GameEnds getGameEnd() {
     return gameEnd;
   }
 

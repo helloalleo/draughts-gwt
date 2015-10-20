@@ -51,7 +51,7 @@ public class PlayersResourceImpl implements PlayersResource {
     Player playerById = playerDaoProvider.get().findById(player.getId());
 
     if (playerById != null) {
-      playerById.updateSerializable(playerById);
+      playerById.updateSerializable(player);
       playerDaoProvider.get().edit(playerById);
       return playerById;
     }

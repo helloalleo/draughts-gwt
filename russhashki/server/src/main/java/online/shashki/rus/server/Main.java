@@ -8,6 +8,7 @@ package online.shashki.rus.server;
  */
 
 import org.apache.catalina.startup.Tomcat;
+
 import java.io.File;
 
 public class Main {
@@ -33,3 +34,28 @@ public class Main {
     tomcat.getServer().await();
   }
 }
+
+//public class Main {
+//  private Random rand = new Random();
+//
+//  public void main(String[] args) {
+//    int r = args[0];
+//    int diam = r ^ 2;
+//    int circleDot = 0;
+//    int squareDot = 0;
+//
+//    for (int i = 0; i < 10000; i++) {
+//      int dx = rand.nextInt();
+//      int dy = rand.nextInt();
+//      int sumSq = dx ^ 2 + dy ^ 2;
+//      if (sumSq <= diam) {
+//        circleDot++;
+//      } else if (Math.abs(dx) <= r && Math.abs(dy) <= r) {
+//        squareDot++;
+//      }
+//    }
+//
+//    double pi = 4 * circleDot / squareDot;
+//    System.out.println(pi)
+//  }
+//}

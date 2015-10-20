@@ -38,5 +38,7 @@ public class DispatchServletModule extends ServletModule {
     serve("/logout").with(LogoutServlet.class);
     serve("/OAuthVKServlet").with(OAuthVKServlet.class);
     serve("/OAuthVKCallbackServlet").with(OAuthVKCallbackServlet.class);
+
+    requestStaticInjection(CustomConfigurator.class);
   }
 }

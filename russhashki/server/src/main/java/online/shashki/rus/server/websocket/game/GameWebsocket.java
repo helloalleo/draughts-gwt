@@ -1,6 +1,7 @@
 package online.shashki.rus.server.websocket.game;
 
 import com.google.inject.Inject;
+import online.shashki.rus.server.guice.CustomConfigurator;
 import online.shashki.rus.server.rest.GameMessagesResourceImpl;
 import online.shashki.rus.server.rest.GamesResourceImpl;
 import online.shashki.rus.server.rest.PlayersResourceImpl;
@@ -25,18 +26,19 @@ import java.util.*;
  */
 @ServerEndpoint(value = "/ws/game",
     decoders = {GameMessageDecoder.class},
-    encoders = {GameMessageEncoder.class}
+    encoders = {GameMessageEncoder.class},
+    configurator = CustomConfigurator.class
 )
 public class GameWebsocket {
 
   private static Map<Player, Session> peers = Collections.synchronizedMap(new HashMap<Player, Session>());
   private final long MAX_IDLE_TIMEOUT = 1000 * 60 * 15;
-  private final PlayersResourceImpl playerResource;
-  private final GameMessagesResourceImpl gameMessageService;
-  private final GamesResourceImpl gameResource;
+  private PlayersResourceImpl playerResource;
+  private GameMessagesResourceImpl gameMessageService;
+  private GamesResourceImpl gameResource;
 
   @Inject
-  private GameWebsocket(GamesResourceImpl gameResource,
+  GameWebsocket(GamesResourceImpl gameResource,
                         PlayersResourceImpl playerResource,
                         GameMessagesResourceImpl gameMessageService) {
     this.gameResource = gameResource;

@@ -1,136 +1,131 @@
 package online.shashki.rus.server.servlet.oauth;
 
-import com.google.api.client.auth.oauth2.AuthorizationCodeFlow;
-import com.google.api.client.auth.oauth2.AuthorizationCodeResponseUrl;
-import com.google.api.client.auth.oauth2.Credential;
-import com.google.api.client.extensions.servlet.auth.oauth2.AbstractAuthorizationCodeCallbackServlet;
-import com.google.api.client.http.GenericUrl;
-import com.google.api.client.http.HttpRequest;
-import com.google.api.client.http.HttpResponse;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.shashki.rus.server.config.ServerConfiguration;
 import online.shashki.rus.server.rest.PlayersResourceImpl;
 import online.shashki.rus.server.utils.AuthUtils;
-import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.shared.model.Player;
+import org.apache.commons.lang3.StringUtils;
+import org.apache.oltu.oauth2.client.OAuthClient;
+import org.apache.oltu.oauth2.client.URLConnectionClient;
+import org.apache.oltu.oauth2.client.request.OAuthBearerClientRequest;
+import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
+import org.apache.oltu.oauth2.client.response.OAuthAccessTokenResponse;
+import org.apache.oltu.oauth2.client.response.OAuthAuthzResponse;
+import org.apache.oltu.oauth2.client.response.OAuthJSONAccessTokenResponse;
+import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
+import org.apache.oltu.oauth2.common.OAuth;
+import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
+import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 
 import javax.json.*;
 import javax.servlet.ServletException;
+import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.io.InputStream;
-import java.util.Collections;
-import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
- * Date: 16.11.14
- * Time: 15:55
+ * Date: 16.10.15
+ * Time: 7:54
  */
 @Singleton
-public class OAuthVKCallbackServlet extends AbstractAuthorizationCodeCallbackServlet {
+public class OAuthVKCallbackServlet extends HttpServlet {
 
+  private final ServerConfiguration config;
   private final PlayersResourceImpl playersResource;
+  private Logger log;
 
-  private final ServerConfiguration serverConfiguration;
-
-  private final List<String> scope = Collections.singletonList("email");
 
   @Inject
-  OAuthVKCallbackServlet(PlayersResourceImpl playersResource, ServerConfiguration serverConfiguration) {
+  public OAuthVKCallbackServlet(Logger log, ServerConfiguration config, PlayersResourceImpl playersResource) {
+    this.log = log;
+    this.config = config;
     this.playersResource = playersResource;
-    this.serverConfiguration = serverConfiguration;
   }
 
   @Override
-  protected void onSuccess(HttpServletRequest req, HttpServletResponse resp, Credential credential) throws ServletException, IOException {
-    System.out.println(resp.getHeaderNames());
-    String stream = "";
-    resp.getOutputStream().print(stream);
-    System.out.println(stream);
-    System.out.println(resp.toString());
-    String accessToken = credential.getAccessToken();
-    GenericUrl url = new GenericUrl(serverConfiguration.getVkApiUserInfo());
-    url.set("access_token", accessToken);
-    url.set("v", "5.37");
-    url.set("fields", "uid,first_name,last_name,email");
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    try {
+      OAuthAuthzResponse oAuthAuthzResponse = OAuthAuthzResponse.oauthCodeAuthzResponse(req);
+      String code = oAuthAuthzResponse.getCode();
 
-    HttpRequest request = Utils.HTTP_TRANSPORT.createRequestFactory().buildGetRequest(url);
-    HttpResponse response = request.execute();
-    InputStream inputStream = response.getContent();
-    JsonReader jsonReader = Json.createReader(inputStream);
-    JsonObject responseObject = jsonReader.readObject();
+      OAuthClientRequest request = OAuthClientRequest
+          .tokenLocation(config.getVkTokenUri())
+          .setClientId(config.getVkClientId())
+          .setClientSecret(config.getVkClientSecret())
+          .setRedirectURI(config.getVkRedirectUri())
+          .setScope(config.getVkScope())
+          .setCode(code)
+          .buildQueryMessage();
 
-    if (responseObject.getJsonObject("error") != null) {
-      resp.sendRedirect(serverConfiguration.getContext() + "/500.html");
-      return;
-    }
+      log.info("Request Token Uri: " + request.getLocationUri());
+      OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
+      OAuthAccessTokenResponse response = oAuthClient.accessToken(request, OAuthJSONAccessTokenResponse.class);
+      String accessToken = response.getAccessToken();
+      Long expiresIn = response.getExpiresIn();
+      String user_id = response.getParam("user_id");
+      String email = response.getParam("email");
 
-    if (responseObject.getJsonArray("response").isEmpty()) {
-      resp.sendRedirect(serverConfiguration.getContext() + "/404.html");
-      return;
-    }
-
-    JsonArray usersArray = responseObject.getJsonArray("response");
-    JsonObject array = usersArray.getJsonObject(0);
-    JsonNumber uid = array.getJsonNumber("id");
-    String vkId = uid.toString();
-
-    Player player = playersResource.findByVkId(vkId);
-    if (player == null) {
-      JsonString firstName = array.getJsonString("first_name");
-      JsonString lastName = array.getJsonString("last_name");
-      JsonString email = array.getJsonString("email");
-      player = new Player();
-      player.setVkId(vkId);
-      player.setFirstName(firstName.getString());
-      player.setLastName(lastName.getString());
-      if (email != null) {
-        player.setEmail(email.getString());
+      if (StringUtils.isEmpty(accessToken)) {
+        resp.sendRedirect(config.getServerError());
+        return;
       }
-    } else {
-      player.setVisitCounter(player.getVisitCounter() + 1);
+
+      OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(config.getVkApiUserInfo())
+          .setAccessToken(accessToken).buildQueryMessage();
+
+      OAuthResourceResponse resourceResponse = oAuthClient.resource(bearerClientRequest,
+          OAuth.HttpMethod.GET,
+          OAuthResourceResponse.class);
+
+      if (resourceResponse.getResponseCode() != 200) {
+        resp.sendRedirect(config.getServerError());
+        return;
+      }
+
+      Player player = playersResource.findByVkId(user_id);
+      if (player == null) {
+        final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes());
+        JsonReader jsonReader = Json.createReader(inBody);
+        JsonObject responseObject = jsonReader.readObject();
+        JsonArray usersArray = responseObject.getJsonArray("response");
+        JsonObject array = usersArray.getJsonObject(0);
+        JsonString firstName = array.getJsonString("first_name");
+        JsonString lastName = array.getJsonString("last_name");
+
+        player = new Player();
+        player.setVkId(user_id);
+        player.setAuthProvider(Player.AuthProvider.VK);
+        player.setFirstName(firstName.getString());
+        player.setLastName(lastName.getString());
+        if (StringUtils.isNotEmpty(email)) {
+          player.setEmail(email);
+        }
+      } else {
+        player.setVisitCounter(player.getVisitCounter() + 1);
+      }
+      player.setLoggedIn(true);
+      player.setPlaying(false);
+      player.setOnline(false);
+
+      HttpSession session = req.getSession();
+      if (player.getSessionId() == null
+          || !player.getSessionId().equals(session.getId())) {
+        player.setSessionId(session.getId());
+      }
+      playersResource.saveOrCreate(player, true);
+
+      AuthUtils.login(req);
+      resp.sendRedirect(config.getContext());
+    } catch (OAuthSystemException | OAuthProblemException e) {
+      log.severe(e.getLocalizedMessage());
     }
-    player.setLoggedIn(true);
-    player.setPlaying(false);
-    player.setOnline(false);
-
-    HttpSession session = req.getSession();
-    if (player.getSessionId() == null
-        || !player.getSessionId().equals(session.getId())) {
-      player.setSessionId(session.getId());
-    }
-    playersResource.saveOrCreate(player, true);
-
-    AuthUtils.login(req);
-    resp.sendRedirect(serverConfiguration.getContext());
-  }
-
-  @Override
-  protected void onError(HttpServletRequest req, HttpServletResponse resp, AuthorizationCodeResponseUrl errorResponse)
-      throws ServletException, IOException {
-    resp.sendError(HttpServletResponse.SC_INTERNAL_SERVER_ERROR);
-  }
-
-  @Override
-  protected AuthorizationCodeFlow initializeFlow() throws ServletException, IOException {
-    ClientSecrets clientSecrets = new ClientSecrets(serverConfiguration, ClientSecrets.SocialType.VK);
-    return Utils.getFlow(clientSecrets, scope);
-  }
-
-  @Override
-  protected String getRedirectUri(HttpServletRequest httpServletRequest) throws ServletException, IOException {
-    GenericUrl url = new GenericUrl(httpServletRequest.getRequestURL().toString());
-    url.setRawPath(serverConfiguration.getVkRedirectUri());
-    return url.build();
-  }
-
-  @Override
-  protected String getUserId(HttpServletRequest httpServletRequest) throws ServletException, IOException {
-    return httpServletRequest.getSession(true).getId();
   }
 }

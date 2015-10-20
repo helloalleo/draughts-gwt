@@ -1,12 +1,10 @@
 package online.shashki.rus.shared.model;
 
 import com.google.gwt.user.client.rpc.GwtTransient;
+import online.shashki.rus.shared.util.StringUtils;
 import org.codehaus.jackson.annotate.JsonIgnore;
 
-import javax.persistence.Column;
-import javax.persistence.Entity;
-import javax.persistence.OneToMany;
-import javax.persistence.Table;
+import javax.persistence.*;
 import java.util.Date;
 import java.util.Set;
 
@@ -46,7 +44,6 @@ public class Player extends PersistableObjectImpl {
   @Column(name = "player_name")
   private String playerName;
 
-
   @GwtTransient
   @JsonIgnore
   @com.fasterxml.jackson.annotation.JsonIgnore
@@ -59,7 +56,8 @@ public class Player extends PersistableObjectImpl {
   @JsonIgnore
   @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "auth_provider")
-  private String authProvider;
+  @Enumerated(EnumType.STRING)
+  private AuthProvider authProvider;
 
 //  @GwtTransient
 //  @JsonIgnore
@@ -179,11 +177,11 @@ public class Player extends PersistableObjectImpl {
     this.playerName = playerName;
   }
 
-  public String getAuthProvider() {
+  public AuthProvider getAuthProvider() {
     return authProvider;
   }
 
-  public void setAuthProvider(String authProvider) {
+  public void setAuthProvider(AuthProvider authProvider) {
     this.authProvider = authProvider;
   }
 
@@ -318,6 +316,7 @@ public class Player extends PersistableObjectImpl {
   }
 
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   public String getPublicName() {
     if (getPlayerName() == null) {
       String fullName = getFullName().trim();
@@ -330,6 +329,7 @@ public class Player extends PersistableObjectImpl {
   }
 
   @JsonIgnore
+  @com.fasterxml.jackson.annotation.JsonIgnore
   public String getFullName() {
     return getFirstName() + " " + getLastName();
   }
@@ -362,20 +362,27 @@ public class Player extends PersistableObjectImpl {
     if (profile == null) {
       return;
     }
-    if (profile.getSessionId() != null) {
+    if (StringUtils.isNotEmpty(profile.getSessionId())) {
       this.sessionId = profile.getSessionId();
     }
     this.loggedIn = profile.isLoggedIn();
     this.playing = profile.isPlaying();
     this.online = profile.isOnline();
-    if (profile.getFirstName() != null) {
+    if (StringUtils.isNotEmpty(profile.getFirstName())) {
       this.firstName = profile.getFirstName();
     }
-    if (profile.getLastName() != null) {
+    if (StringUtils.isNotEmpty(profile.getLastName())) {
       this.lastName = profile.getLastName();
     }
-    if (profile.getPlayerName() != null && !profile.getPlayerName().isEmpty()) {
+    if (StringUtils.isNotEmpty(profile.getPlayerName())) {
       this.playerName = profile.getPlayerName();
     }
+  }
+
+  public enum AuthProvider {
+    VK,
+    FACEBOOK,
+    GOOGLE,
+    WINDOWS
   }
 }

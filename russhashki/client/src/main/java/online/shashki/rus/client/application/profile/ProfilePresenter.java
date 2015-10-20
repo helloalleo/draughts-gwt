@@ -7,7 +7,6 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.annotations.Title;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.presenter.slots.Slot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
@@ -70,7 +69,6 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
   interface MyView extends View, HasUiHandlers<ProfileUiHandlers> {
   }
 
-  @Title("Профиль")
   @ProxyCodeSplit
   @NameToken(NameTokens.profilePage)
   interface MyProxy extends ProxyPlace<ProfilePresenter> {

@@ -9,12 +9,12 @@
     <url>http://shashki.online</url>
     <properties>
         <!--Tomcat-->
-        <tomcat.version>7.0.57</tomcat.version>
+        <tomcat.version>8.0.28</tomcat.version>
 
-        <!--Google-->
-        <google.http.version>1.20.0</google.http.version>
-        <google.oauth.version>1.20.0</google.oauth.version>
-        <google-oauth-client.version>1.20.0</google-oauth-client.version>
+        <!--&lt;!&ndash;Google&ndash;&gt;-->
+        <!--<google.http.version>1.20.0</google.http.version>-->
+        <!--<google.oauth.version>1.20.0</google.oauth.version>-->
+        <!--<google-oauth-client.version>1.20.0</google-oauth-client.version>-->
 
         <!--GWTP-->
         <gwtp.version>1.5</gwtp.version>
@@ -40,6 +40,8 @@
         <servlet-api.version>3.1.0</servlet-api.version>
         <hibernate-entitymanager.version>4.3.10.Final</hibernate-entitymanager.version>
         <resteasy-guice.version>3.0.13.Final</resteasy-guice.version>
+        <resteasy-jackson2-provider.version>3.0.9.Final</resteasy-jackson2-provider.version>
+        <commons-lang3.version>3.4</commons-lang3.version>
     </properties>
 
     <dependencyManagement>
@@ -103,25 +105,42 @@
             <artifactId>tomcat-embed-jasper</artifactId>
             <version>${tomcat.version}</version>
         </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jasper</artifactId>
-            <version>${tomcat.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jasper-el</artifactId>
-            <version>${tomcat.version}</version>
-        </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-jsp-api</artifactId>
-            <version>${tomcat.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.tomcat</groupId>-->
+            <!--<artifactId>tomcat-jasper</artifactId>-->
+            <!--<version>${tomcat.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.tomcat</groupId>-->
+            <!--<artifactId>tomcat-jasper-el</artifactId>-->
+            <!--<version>${tomcat.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.tomcat</groupId>-->
+            <!--<artifactId>tomcat-jsp-api</artifactId>-->
+            <!--<version>${tomcat.version}</version>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.tomcat.embed</groupId>
             <artifactId>tomcat-embed-websocket</artifactId>
             <version>${tomcat.version}</version>
+        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.tomcat.embed</groupId>-->
+            <!--<artifactId>tomcat-embed-logging-log4j</artifactId>-->
+            <!--<version>${tomcat.version}</version>-->
+        <!--</dependency>-->
+
+        <!--<dependency>-->
+            <!--<groupId>org.apache.logging.log4j</groupId>-->
+            <!--<artifactId>log4j-jul</artifactId>-->
+            <!--<version>2.4.1</version>-->
+        <!--</dependency>-->
+
+        <dependency>
+            <groupId>org.apache.commons</groupId>
+            <artifactId>commons-lang3</artifactId>
+            <version>${commons-lang3.version}</version>
         </dependency>
 
         <!--Guice-->
@@ -186,42 +205,12 @@
 
         <!--OAuth 2.0-->
         <dependency>
-            <groupId>com.google.oauth-client</groupId>
-            <artifactId>google-oauth-client</artifactId>
-            <version>${google-oauth-client.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>commons-codec</groupId>
-                    <artifactId>commons-codec</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>commons-logging</groupId>
-                    <artifactId>commons-logging</artifactId>
-                </exclusion>
-            </exclusions>
+            <groupId>org.apache.oltu.oauth2</groupId>
+            <artifactId>org.apache.oltu.oauth2.client</artifactId>
+            <version>1.0.1</version>
         </dependency>
 
-        <dependency>
-            <groupId>com.google.oauth-client</groupId>
-            <artifactId>google-oauth-client-servlet</artifactId>
-            <version>${google.oauth.version}</version>
-            <exclusions>
-                <exclusion>
-                    <groupId>javax.servlet</groupId>
-                    <artifactId>servlet-api</artifactId>
-                </exclusion>
-                <exclusion>
-                    <groupId>javax.jdo</groupId>
-                    <artifactId>jdo2-api</artifactId>
-                </exclusion>
-            </exclusions>
-        </dependency>
-
-        <dependency>
-            <groupId>com.google.http-client</groupId>
-            <artifactId>google-http-client-jackson2</artifactId>
-            <version>${google.http.version}</version>
-        </dependency>
+        <!--GWTP-->
         <dependency>
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-dispatch-rpc-server</artifactId>
@@ -236,7 +225,7 @@
         <dependency>
             <groupId>org.jboss.resteasy</groupId>
             <artifactId>resteasy-jackson2-provider</artifactId>
-            <version>3.0.9.Final</version>
+            <version>${resteasy-jackson2-provider.version}</version>
         </dependency>
 
         <!--  Test Dependencies  -->

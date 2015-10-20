@@ -2,7 +2,7 @@ package online.shashki.rus.server.rest;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import com.google.inject.servlet.RequestScoped;
+import com.google.inject.Singleton;
 import online.shashki.rus.server.dao.GameMessageDao;
 import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.shared.model.GameMessage;
@@ -10,7 +10,7 @@ import online.shashki.rus.shared.model.GameMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.util.logging.Logger;
 
-@RequestScoped
+@Singleton
 public class GameMessagesResourceImpl {
   private Logger logger;
   private Provider<GameMessageDao> gameMessageDaoProvider;

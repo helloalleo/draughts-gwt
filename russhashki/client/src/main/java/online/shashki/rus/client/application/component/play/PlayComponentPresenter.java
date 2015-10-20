@@ -17,7 +17,10 @@ import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.client.websocket.GameWebsocket;
 import online.shashki.rus.shared.locale.ShashkiMessages;
-import online.shashki.rus.shared.model.*;
+import online.shashki.rus.shared.model.Game;
+import online.shashki.rus.shared.model.GameMessage;
+import online.shashki.rus.shared.model.Move;
+import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shared.rest.GamesResource;
 import online.shashki.rus.shashki.MoveFactory;
 import online.shashki.rus.shashki.Stroke;
@@ -162,7 +165,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onReceivedPlayerList(ReceivedPlayerListEvent event) {
         if (!event.getPlayerList().contains(gameWebsocket.getOpponent()) && gameWebsocket.getGame() != null) {
           Game game = gameWebsocket.getGame();
-          final GameEnds gameEnd = gameWebsocket.isPlayerHasWhiteColor() ? GameEnds.BLACK_LEFT : GameEnds.WHITE_LEFT;
+          final Game.GameEnds gameEnd = gameWebsocket.isPlayerHasWhiteColor() ? Game.GameEnds.BLACK_LEFT : Game.GameEnds.WHITE_LEFT;
           eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
             @Override
             public void onFailure(Throwable throwable) {
@@ -226,21 +229,21 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         getView().setBeatenMy(CHECKERS_ON_DESK_INIT - getView().getMyDraughtsSize());
         getView().setBeatenOpponent(CHECKERS_ON_DESK_INIT - getView().getOpponentDraughtsSize());
         final Game endGame = gameWebsocket.getGame();
-        GameEnds gameEnd = null;
+        Game.GameEnds gameEnd = null;
         if (0 == getView().getMyDraughtsSize()) {
           InfoDialogBox.setMessage(messages.youLose()).show();
           if ((getView().isWhite())) {
-            gameEnd = GameEnds.BLACK_WIN;
+            gameEnd = Game.GameEnds.BLACK_WIN;
           } else {
-            gameEnd = GameEnds.WHITE_WIN;
+            gameEnd = Game.GameEnds.WHITE_WIN;
           }
         }
         if (0 == getView().getOpponentDraughtsSize()) {
           InfoDialogBox.setMessage(messages.youWon()).show();
           if (getView().isWhite()) {
-            gameEnd = GameEnds.WHITE_WIN;
+            gameEnd = Game.GameEnds.WHITE_WIN;
           } else {
-            gameEnd = GameEnds.BLACK_WIN;
+            gameEnd = Game.GameEnds.BLACK_WIN;
           }
         }
         if (gameEnd == null) {

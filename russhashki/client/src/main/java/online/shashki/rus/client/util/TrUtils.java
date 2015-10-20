@@ -2,7 +2,7 @@ package online.shashki.rus.client.util;
 
 import com.google.gwt.core.client.GWT;
 import online.shashki.rus.shared.locale.ShashkiMessages;
-import online.shashki.rus.shared.model.GameEnds;
+import online.shashki.rus.shared.model.Game;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,7 +14,7 @@ public class TrUtils {
 
   private static ShashkiMessages messages = GWT.create(ShashkiMessages.class);
 
-  public static String translateEndGame(GameEnds gameEnd) {
+  public static String translateEndGame(Game.GameEnds gameEnd) {
     switch (gameEnd) {
       case WHITE_WIN:
         return messages.WHITE_WIN();
