@@ -3,7 +3,7 @@ package online.shashki.rus.server.servlet.oauth;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.shashki.rus.server.config.ServerConfiguration;
-import online.shashki.rus.server.rest.PlayersResourceImpl;
+import online.shashki.rus.server.service.PlayerService;
 import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.shared.model.Player;
 import org.apache.commons.lang3.StringUtils;
@@ -39,15 +39,17 @@ import java.util.logging.Logger;
 public class OAuthVKCallbackServlet extends HttpServlet {
 
   private final ServerConfiguration config;
-  private final PlayersResourceImpl playersResource;
+  private final PlayerService playerService;
   private Logger log;
 
 
   @Inject
-  public OAuthVKCallbackServlet(Logger log, ServerConfiguration config, PlayersResourceImpl playersResource) {
+  public OAuthVKCallbackServlet(Logger log,
+                                ServerConfiguration config,
+                                PlayerService playerService) {
     this.log = log;
     this.config = config;
-    this.playersResource = playersResource;
+    this.playerService = playerService;
   }
 
   @Override
@@ -90,7 +92,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         return;
       }
 
-      Player player = playersResource.findByVkId(user_id);
+      Player player = playerService.findByVkId(user_id);
       if (player == null) {
         final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes());
         JsonReader jsonReader = Json.createReader(inBody);
@@ -120,7 +122,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
           || !player.getSessionId().equals(session.getId())) {
         player.setSessionId(session.getId());
       }
-      playersResource.saveOrCreate(player, true);
+      playerService.saveOrCreate(req.getSession(), player, true);
 
       AuthUtils.login(req);
       resp.sendRedirect(config.getContext());

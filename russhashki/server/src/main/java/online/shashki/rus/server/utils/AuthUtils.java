@@ -12,6 +12,9 @@ import javax.servlet.http.HttpSession;
 public class AuthUtils {
 
   public static Boolean isAuthenticated(HttpSession session) {
+    if (session == null) {
+      return false;
+    }
     Object isAuth = session.getAttribute("isAuthenticated");
     return isAuth == null ? Boolean.FALSE : (Boolean) isAuth;
   }

@@ -1,9 +1,9 @@
-package online.shashki.rus.server.rest;
+package online.shashki.rus.server.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
+import com.google.inject.servlet.RequestScoped;
 import online.shashki.rus.server.dao.GameDao;
-import online.shashki.rus.server.service.PlayerService;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shared.rest.GamesResource;
@@ -18,16 +18,17 @@ import java.util.List;
  * Date: 15.10.15
  * Time: 9:48
  */
-public class GamesResourceImpl implements GamesResource {
+@RequestScoped
+public class GameService implements GamesResource {
 
   private final Provider<GameDao> gameDaoProvider;
   private final PlayerService playerService;
   private final Provider<HttpServletRequest> requestProvider;
 
   @Inject
-  public GamesResourceImpl(Provider<GameDao> gameDaoProvider,
-                           PlayerService playerService,
-                           Provider<HttpServletRequest> requestProvider) {
+  public GameService(Provider<GameDao> gameDaoProvider,
+                     PlayerService playerService,
+                     Provider<HttpServletRequest> requestProvider) {
     this.gameDaoProvider = gameDaoProvider;
     this.playerService = playerService;
     this.requestProvider = requestProvider;

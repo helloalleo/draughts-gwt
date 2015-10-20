@@ -2,9 +2,9 @@ package online.shashki.rus.server.websocket.game;
 
 import com.google.inject.Inject;
 import online.shashki.rus.server.guice.CustomConfigurator;
-import online.shashki.rus.server.rest.GameMessagesResourceImpl;
+import online.shashki.rus.server.service.GameMessageService;
 import online.shashki.rus.server.rest.GamesResourceImpl;
-import online.shashki.rus.server.rest.PlayersResourceImpl;
+import online.shashki.rus.server.service.PlayerService;
 import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.server.websocket.game.message.GameMessageDecoder;
 import online.shashki.rus.server.websocket.game.message.GameMessageEncoder;
@@ -33,16 +33,16 @@ public class GameWebsocket {
 
   private static Map<Player, Session> peers = Collections.synchronizedMap(new HashMap<Player, Session>());
   private final long MAX_IDLE_TIMEOUT = 1000 * 60 * 15;
-  private PlayersResourceImpl playerResource;
-  private GameMessagesResourceImpl gameMessageService;
+  private PlayerService playerService;
+  private GameMessageService gameMessageService;
   private GamesResourceImpl gameResource;
 
   @Inject
   GameWebsocket(GamesResourceImpl gameResource,
-                        PlayersResourceImpl playerResource,
-                        GameMessagesResourceImpl gameMessageService) {
+                        PlayerService playerService,
+                        GameMessageService gameMessageService) {
     this.gameResource = gameResource;
-    this.playerResource = playerResource;
+    this.playerService = playerService;
     this.gameMessageService = gameMessageService;
   }
 
@@ -109,10 +109,10 @@ public class GameWebsocket {
       }
     }
 
-    player = playerResource.find(playerId);
+    player = playerService.find(playerId);
 
     player.setOnline(true);
-    playerResource.saveOrCreate(player, true);
+    playerService.saveOrCreate(null, player, true);
 
     peers.put(player, session);
     System.out.println("Register new player: " + player.getId() + " " + session.getId());
@@ -131,11 +131,11 @@ public class GameWebsocket {
     if (player == null) {
       return;
     }
-    player = playerResource.find(player.getId());
+    player = playerService.find(player.getId());
 
     player.setOnline(false);
     player.setPlaying(false);
-    playerResource.saveOrCreate(player, true);
+    playerService.saveOrCreate(null, player, true);
 
     System.out.println("Disconnected: " + player.getId() + " " + session.getId());
     peers.values().remove(session);
@@ -172,8 +172,8 @@ public class GameWebsocket {
   }
 
   private void saveGameMessage(GameMessage message) {
-    Player playerReceiver = playerResource.find(message.getReceiver().getId());
-    Player playerSender = playerResource.find(message.getSender().getId());
+    Player playerReceiver = playerService.find(message.getReceiver().getId());
+    Player playerSender = playerService.find(message.getSender().getId());
     Game game = message.getGame() != null ? gameResource.game(message.getGame().getId()) : null;
 
     GameMessage gameMessage = new GameMessage();
@@ -200,7 +200,7 @@ public class GameWebsocket {
   private void updatePlayerList(Session session) {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
-    List<Player> playerList = playerResource.findAll();
+    List<Player> playerList = playerService.findAll();
     gameMessage.setPlayerList(playerList);
     gameMessageService.saveOrCreate(gameMessage);
     for (Session s : session.getOpenSessions()) {

@@ -3,7 +3,7 @@ package online.shashki.rus.server.servlet;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.shashki.rus.server.config.ServerConfiguration;
-import online.shashki.rus.server.rest.PlayersResourceImpl;
+import online.shashki.rus.server.service.PlayerService;
 import online.shashki.rus.shared.model.Player;
 
 import javax.servlet.ServletException;
@@ -21,22 +21,22 @@ import java.io.IOException;
 @Singleton
 public class LogoutServlet extends HttpServlet {
 
-  private final PlayersResourceImpl playerResource;
+  private final PlayerService playerService;
   private final ServerConfiguration configuration;
 
   @Inject
-  LogoutServlet(PlayersResourceImpl playerResource, ServerConfiguration serverConfiguration) {
-    this.playerResource = playerResource;
+  LogoutServlet(PlayerService playerService, ServerConfiguration serverConfiguration) {
+    this.playerService = playerService;
     this.configuration = serverConfiguration;
   }
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    Player player = playerResource.findBySessionId(request.getSession().getId());
+    Player player = playerService.findBySessionId(request.getSession().getId());
     if (player != null) {
       player.setOnline(false);
       player.setPlaying(false);
       player.setLoggedIn(false);
-      playerResource.saveOrCreate(player, true);
+      playerService.saveOrCreate(request.getSession(), player, true);
     }
 
     request.getSession().invalidate();
