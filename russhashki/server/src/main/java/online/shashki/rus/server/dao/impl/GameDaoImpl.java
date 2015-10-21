@@ -3,6 +3,7 @@ package online.shashki.rus.server.dao.impl;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
+import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.GameDao;
 import online.shashki.rus.shared.model.Game;
 
@@ -32,6 +33,7 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
   }
 
   @Override
+  @Transactional
   public Game findLazyFalse(Long id) {
     String hql = "SELECT g " +
         "FROM Game g " +
@@ -44,6 +46,7 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
   }
 
   @Override
+  @Transactional
   public List<Game> findRange(int start, int length) {
     String hql = "SELECT g " +
         "FROM Game g " +
@@ -57,6 +60,7 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
   }
 
   @Override
+  @Transactional
   public List<Game> findUserGames(Long userId, int start, int length) {
     String hql = "SELECT g " +
         "FROM Game g " +

@@ -53,7 +53,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     this.gameWebsocket = gameWebsocket;
     this.gamesDelegate = gamesDelegate;
     getView().setUiHandlers(this);
-    getView().setPlayer(gameWebsocket.getPlayer());
     getView().initNotationPanel(eventBus);
 
     addRegisteredHandler(ReceivedPlayerListEvent.TYPE, new ReceivedPlayerListEventHandler() {
@@ -109,6 +108,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     } else {
       gameWebsocket.connect();
     }
+    getView().setPlayer(gameWebsocket.getPlayer());
+    SHLog.debug("Set player for Play View: " + gameWebsocket.getPlayer());
   }
 
   @Override

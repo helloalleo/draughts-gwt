@@ -217,6 +217,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
             org.gwtbootstrap3.client.ui.Image img;
             String playerPublicName = value.getPublicName();
             SHLog.debug("CELL LIST userPublicName " + playerPublicName);
+            SHLog.debug("CELL LIST Player " + player);
             if (player.getId().equals(value.getId())) {
               sb.appendEscaped(playerPublicName);
             } else {

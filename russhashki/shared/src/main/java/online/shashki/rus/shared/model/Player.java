@@ -337,7 +337,8 @@ public class Player extends PersistableObjectImpl {
   @Override
   public String toString() {
     return "Player{" +
-        "sessionId='" + sessionId + '\'' +
+        "id='" + getId() + '\'' +
+        ", sessionId='" + sessionId + '\'' +
         ", vkId='" + vkId + '\'' +
         ", email='" + email + '\'' +
         ", firstName='" + firstName + '\'' +

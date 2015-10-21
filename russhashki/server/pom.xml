@@ -4,7 +4,7 @@
     <groupId>online.shashki.rus</groupId>
     <artifactId>server</artifactId>
     <version>1.0-SNAPSHOT</version>
-    <packaging>jar</packaging>
+    <packaging>war</packaging>
     <name>server</name>
     <url>http://shashki.online</url>
     <properties>
@@ -91,20 +91,27 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-core</artifactId>
-            <version>${tomcat.version}</version>
+            <groupId>online.shashki.rus</groupId>
+            <artifactId>shared</artifactId>
+            <version>1.0-SNAPSHOT</version>
         </dependency>
+
         <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-logging-juli</artifactId>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat</artifactId>
             <version>${tomcat.version}</version>
+            <scope>provided</scope>
         </dependency>
-        <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-jasper</artifactId>
-            <version>${tomcat.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.apache.tomcat.embed</groupId>-->
+            <!--<artifactId>tomcat-embed-logging-juli</artifactId>-->
+            <!--<version>${tomcat.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>org.apache.tomcat.embed</groupId>-->
+            <!--<artifactId>tomcat-embed-jasper</artifactId>-->
+            <!--<version>${tomcat.version}</version>-->
+        <!--</dependency>-->
         <!--<dependency>-->
             <!--<groupId>org.apache.tomcat</groupId>-->
             <!--<artifactId>tomcat-jasper</artifactId>-->
@@ -121,9 +128,10 @@
             <!--<version>${tomcat.version}</version>-->
         <!--</dependency>-->
         <dependency>
-            <groupId>org.apache.tomcat.embed</groupId>
-            <artifactId>tomcat-embed-websocket</artifactId>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat-websocket</artifactId>
             <version>${tomcat.version}</version>
+            <scope>provided</scope>
         </dependency>
         <!--<dependency>-->
             <!--<groupId>org.apache.tomcat.embed</groupId>-->
@@ -337,12 +345,6 @@
         <!--</dependencyManagement>-->
 
         <!--<dependencies>-->
-        <!--<dependency>-->
-        <!--<groupId>online.shashki.rus</groupId>-->
-        <!--<artifactId>shared</artifactId>-->
-        <!--<version>1.0-SNAPSHOT</version>-->
-        <!--</dependency>-->
-
         <!--&lt;!&ndash;Guice&ndash;&gt;-->
 
 

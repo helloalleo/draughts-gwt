@@ -14,6 +14,7 @@ public class SHCookies {
 
   private static String location = "location"; // куки адреса страницы
   private static ShashkiConfiguration configuration = GWT.create(ShashkiConfiguration.class);
+  private static String newGameButtonStateMainPage = "newGameButtonState";
 
   public static void setLocation(String nameToken) {
     Cookies.setCookie(location, nameToken);
@@ -23,5 +24,13 @@ public class SHCookies {
   public static String getLocation() {
     SHLog.debug("get location: " + Cookies.getCookie(location));
     return Cookies.getCookie(location);
+  }
+
+  public static void setNewGameButtonState(boolean newGame) {
+    Cookies.setCookie(newGameButtonStateMainPage, String.valueOf(newGame));
+  }
+
+  public static boolean getNewGameButtonState() {
+    return Boolean.valueOf(Cookies.getCookie(newGameButtonStateMainPage));
   }
 }

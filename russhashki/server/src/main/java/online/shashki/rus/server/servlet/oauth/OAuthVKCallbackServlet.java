@@ -27,6 +27,7 @@ import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.Date;
 import java.util.logging.Logger;
 
 /**
@@ -113,6 +114,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
       } else {
         player.setVisitCounter(player.getVisitCounter() + 1);
       }
+      player.setLastVisited(new Date());
       player.setLoggedIn(true);
       player.setPlaying(false);
       player.setOnline(false);

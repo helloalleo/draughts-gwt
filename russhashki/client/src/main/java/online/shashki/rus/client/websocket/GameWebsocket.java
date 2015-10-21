@@ -50,21 +50,7 @@ public class GameWebsocket implements WebSocketCallback {
                         ResourceDelegate<PlayersResource> playersDelegate,
                         ResourceDelegate<GamesResource> gamesDelegate,
                         ShashkiMessages messages) {
-    SHLog.debug("GAME WS");
     this.currentSession = currentSession;
-    SHLog.info("WebSocket Player: " + player);
-//    dispatcher.execute(new FetchCurrentPlayerAction(), new AsyncCallback<FetchCurrentPlayerResult>() {
-//      @Override
-//      public void onFailure(Throwable caught) {
-//        ErrorDialogBox.setMessage(caught).show();
-//      }
-//
-//      @Override
-//      public void onSuccess(FetchCurrentPlayerResult result) {
-//        player = result.getPlayer();
-//      }
-//    });
-
     this.gamesDelegate = gamesDelegate;
     this.eventBus = eventBus;
     this.messages = messages;
@@ -210,7 +196,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   @Override
   public void onConnect() {
-    player = currentSession.getPlayer();
+    SHLog.debug("ON_CONNECT PLAYER: " + player);
     if (player == null) {
       InfoDialogBox.setMessage(messages.failToConnectToServer()).show();
       return;
@@ -430,6 +416,7 @@ public class GameWebsocket implements WebSocketCallback {
   public void connect() {
     webSocket = new WebSocket(GameWebsocket.this);
     webSocket.connect(configuration.playerWebsocketUrl());
+    player = currentSession.getPlayer();
   }
 
   public void reconnect() {

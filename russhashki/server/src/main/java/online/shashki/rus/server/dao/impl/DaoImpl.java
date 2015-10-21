@@ -42,6 +42,7 @@ public abstract class DaoImpl<E extends PersistableObject> implements Dao<E> {
     getEntityManager().remove(getEntityManager().merge(entity));
   }
 
+  @Transactional
   public E find(Object id) {
     if (id == null) {
       return null;
@@ -49,12 +50,14 @@ public abstract class DaoImpl<E extends PersistableObject> implements Dao<E> {
     return getEntityManager().find(entityClass, id);
   }
 
+  @Transactional
   public List<E> findAll() {
     CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
     cq.select(cq.from(entityClass));
     return getEntityManager().createQuery(cq).getResultList();
   }
 
+  @Transactional
   public List<E> findPublishedAll() {
     CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
     CriteriaQuery<E> cq = cb.createQuery(entityClass);
@@ -63,6 +66,7 @@ public abstract class DaoImpl<E extends PersistableObject> implements Dao<E> {
     return getEntityManager().createQuery(cq).getResultList();
   }
 
+  @Transactional
   public List<E> findRange(int start, int length) {
     CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
     cq.select(cq.from(entityClass));
@@ -72,6 +76,7 @@ public abstract class DaoImpl<E extends PersistableObject> implements Dao<E> {
     return q.getResultList();
   }
 
+  @Transactional
   public Long countAll() {
     CriteriaBuilder qb = getEntityManager().getCriteriaBuilder();
     CriteriaQuery<Long> cq = qb.createQuery(Long.class);

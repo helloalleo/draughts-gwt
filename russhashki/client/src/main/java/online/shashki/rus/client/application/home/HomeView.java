@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.client.application.component.playshowpanel.PlayShowPanel;
+import online.shashki.rus.client.util.SHCookies;
 import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Game;
@@ -52,7 +53,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @UiField
   Button lessGameOnPage;
   @UiField
-  ButtonGroup countGameOnPageButtonGroup;
+  ButtonGroup showGameOnPageButtonGroup;
   @UiField
   CheckBoxButton myGameListCheckButton;
   @UiField
@@ -69,14 +70,33 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     bindSlot(HomePresenter.SLOT_PLAY, play);
   }
 
+  @Override
+  protected void onAttach() {
+    super.onAttach();
+    newGameState = SHCookies.getNewGameButtonState();
+    SHLog.debug("NEW STATE " + newGameState);
+    showControlsNewGameButton();
+  }
+
   @UiHandler("newGameButton")
   public void onNewGame(ClickEvent event) {
+    toggelNewGameButton();
+    showControlsNewGameButton();
+  }
+
+  private void showControlsNewGameButton() {
+    showGameOnPageButtonGroup.setVisible(!newGameState);
+    myGameListCheckButton.setVisible(!newGameState);
+
+    newGameButton.setText(newGameState ? messages.playListButtonText() : messages.newGameButtonText());
+
+    play.setVisible(newGameState);
+    playShowPanel.setVisible(newGameState);
+  }
+
+  private void toggelNewGameButton() {
     newGameState = !newGameState;
-    myGameListCheckButton.setVisible(!myGameListCheckButton.isVisible());
-    countGameOnPageButtonGroup.setVisible(newGameState);
-    newGameButton.setText(newGameState ? messages.newGameButtonText() : messages.playListButtonText());
-    play.setVisible(!play.isVisible());
-    playShowPanel.setVisible(!playShowPanel.isVisible());
+    SHCookies.setNewGameButtonState(newGameState);
   }
 
   @UiHandler("moreGameOnPage")
