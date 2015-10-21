@@ -134,7 +134,9 @@ public class Stroke {
 
     move.setStartSquare(startSquare.mirror());
     move.setEndSquare(endSquare.mirror());
-    move.setTakenSquare(takenSquare.mirror());
+    if (takenSquare != null) {
+      move.setTakenSquare(takenSquare.mirror());
+    }
     move.setMoveFlags(moveFlags);
     move.setFirst(first);
     move.setNumber(number);
@@ -166,5 +168,17 @@ public class Stroke {
 
   public Set<Move.MoveFlags> getMoveFlags() {
     return moveFlags;
+  }
+
+  @Override
+  public String toString() {
+    return "Stroke{" +
+        "takenSquare=" + takenSquare +
+        ", startSquare=" + startSquare +
+        ", endSquare=" + endSquare +
+        ", moveFlags=" + moveFlags +
+        ", first=" + first +
+        ", number=" + number +
+        '}';
   }
 }

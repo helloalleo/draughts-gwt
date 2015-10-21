@@ -3,6 +3,7 @@ package online.shashki.rus.shashki;
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.shared.core.types.Color;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import online.shashki.rus.shared.util.StringUtils;
 
 import java.io.Serializable;
 
@@ -50,7 +51,7 @@ public class Square implements Serializable {
   }
 
   public static Square fromString(String toSendStr) {
-    if (toSendStr == null || toSendStr.isEmpty()) {
+    if (StringUtils.isEmpty(toSendStr)) {
       return null;
     }
     final String[] toSendArr = toSendStr.split(TO_SEND_SEP);

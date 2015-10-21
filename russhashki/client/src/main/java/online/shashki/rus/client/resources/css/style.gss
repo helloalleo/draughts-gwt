@@ -24,7 +24,7 @@ body {
 .playerList {
     float: left;
     margin-left: 20px;
-    max-width: 200px;
+    max-width: 295px;
 }
 
 .playerSearch {

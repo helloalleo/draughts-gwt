@@ -26,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.client.application.component.playshowpanel.PlayShowPanel;
+import online.shashki.rus.client.application.security.CurrentSession;
 import online.shashki.rus.client.util.SHCookies;
 import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
@@ -41,6 +42,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   private static Binder binder = GWT.create(Binder.class);
   private final ShashkiMessages messages;
+  private final CurrentSession currentSession;
 
   @UiField
   SimplePanel play;
@@ -62,10 +64,12 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   private boolean newGameState = true;
 
   @Inject
-  HomeView(ShashkiMessages messages) {
+  HomeView(CurrentSession currentSession,
+      ShashkiMessages messages) {
     playShowPanel = new PlayShowPanel(this);
     initWidget(binder.createAndBindUi(this));
 
+    this.currentSession = currentSession;
     this.messages = messages;
     bindSlot(HomePresenter.SLOT_PLAY, play);
   }
@@ -75,7 +79,9 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     super.onAttach();
     newGameState = SHCookies.getNewGameButtonState();
     SHLog.debug("NEW STATE " + newGameState);
-    showControlsNewGameButton();
+    if (currentSession.isLoggedIn()) {
+      showControlsNewGameButton();
+    }
   }
 
   @UiHandler("newGameButton")
@@ -91,7 +97,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     newGameButton.setText(newGameState ? messages.playListButtonText() : messages.newGameButtonText());
 
     play.setVisible(newGameState);
-    playShowPanel.setVisible(newGameState);
+    playShowPanel.setVisible(!newGameState);
   }
 
   private void toggelNewGameButton() {

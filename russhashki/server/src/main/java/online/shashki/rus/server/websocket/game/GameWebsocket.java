@@ -3,7 +3,7 @@ package online.shashki.rus.server.websocket.game;
 import com.google.inject.Inject;
 import online.shashki.rus.server.guice.CustomConfigurator;
 import online.shashki.rus.server.service.GameMessageService;
-import online.shashki.rus.server.rest.GamesResourceImpl;
+import online.shashki.rus.server.service.GameService;
 import online.shashki.rus.server.service.PlayerService;
 import online.shashki.rus.server.utils.Utils;
 import online.shashki.rus.server.websocket.game.message.GameMessageDecoder;
@@ -35,14 +35,14 @@ public class GameWebsocket {
   private final long MAX_IDLE_TIMEOUT = 1000 * 60 * 15;
   private PlayerService playerService;
   private GameMessageService gameMessageService;
-  private GamesResourceImpl gameResource;
+  private GameService gameService;
 
   @Inject
-  GameWebsocket(GamesResourceImpl gameResource,
-                        PlayerService playerService,
-                        GameMessageService gameMessageService) {
-    this.gameResource = gameResource;
+  GameWebsocket(PlayerService playerService,
+                GameService gameService,
+                GameMessageService gameMessageService) {
     this.playerService = playerService;
+    this.gameService = gameService;
     this.gameMessageService = gameMessageService;
   }
 
@@ -174,7 +174,7 @@ public class GameWebsocket {
   private void saveGameMessage(GameMessage message) {
     Player playerReceiver = playerService.find(message.getReceiver().getId());
     Player playerSender = playerService.find(message.getSender().getId());
-    Game game = message.getGame() != null ? gameResource.game(message.getGame().getId()) : null;
+    Game game = message.getGame() != null ? gameService.find(message.getGame().getId()) : null;
 
     GameMessage gameMessage = new GameMessage();
 

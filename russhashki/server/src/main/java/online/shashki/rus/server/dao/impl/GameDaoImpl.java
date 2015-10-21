@@ -3,7 +3,6 @@ package online.shashki.rus.server.dao.impl;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
-import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.GameDao;
 import online.shashki.rus.shared.model.Game;
 
@@ -19,48 +18,45 @@ import java.util.List;
  */
 public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
 
-  private final EntityManager entityManager;
+  private final Provider<EntityManager> entityManagerProvider;
 
   @Inject
   public GameDaoImpl(TypeLiteral<Game> type, Provider<EntityManager> entityManagerProvider) {
     super(type);
-    entityManager = entityManagerProvider.get();
+    this.entityManagerProvider = entityManagerProvider;
   }
 
   @Override
   protected EntityManager getEntityManager() {
-    return entityManager;
+    return entityManagerProvider.get();
   }
 
   @Override
-  @Transactional
   public Game findLazyFalse(Long id) {
     String hql = "SELECT g " +
         "FROM Game g " +
         "JOIN FETCH g.playerWhite " +
         "JOIN FETCH g.playerBlack " +
         "WHERE g.id = :gameId";
-    Query query = entityManager.createQuery(hql);
+    Query query = getEntityManager().createQuery(hql);
     query.setParameter("gameId", id);
     return (Game) query.getSingleResult();
   }
 
   @Override
-  @Transactional
   public List<Game> findRange(int start, int length) {
     String hql = "SELECT g " +
         "FROM Game g " +
         "JOIN FETCH g.playerWhite " +
         "JOIN FETCH g.playerBlack " +
         "ORDER BY g.playFinishDate DESC";
-    Query query = entityManager.createQuery(hql);
+    Query query = getEntityManager().createQuery(hql);
     query.setFirstResult(start);
     query.setMaxResults(length);
     return query.getResultList();
   }
 
   @Override
-  @Transactional
   public List<Game> findUserGames(Long userId, int start, int length) {
     String hql = "SELECT g " +
         "FROM Game g " +
@@ -69,7 +65,7 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
         "WHERE white.id = :userId " +
         "   OR black.id = :userId " +
         "ORDER BY g.playFinishDate DESC";
-    Query query = entityManager.createQuery(hql);
+    Query query = getEntityManager().createQuery(hql);
     query.setParameter("userId", userId);
     query.setFirstResult(start);
     query.setMaxResults(length);

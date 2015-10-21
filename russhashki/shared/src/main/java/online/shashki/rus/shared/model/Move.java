@@ -123,7 +123,6 @@ public class Move extends PersistableObjectImpl {
     return "Move{" +
         "number=" + number +
         ", first=" + first +
-        ", gameMessage=" + gameMessage +
         ", startPos='" + startPos + '\'' +
         ", endPos='" + endPos + '\'' +
         ", takenPos='" + takenPos + '\'' +

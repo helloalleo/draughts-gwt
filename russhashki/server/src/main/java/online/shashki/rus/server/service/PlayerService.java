@@ -3,6 +3,7 @@ package online.shashki.rus.server.service;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.PlayerDao;
 import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.shared.model.Player;
@@ -24,6 +25,7 @@ public class PlayerService {
     return saveOrCreate(session, player, false);
   }
 
+  @Transactional
   public Player saveOrCreate(HttpSession session, Player player, boolean serverSide) {
     final Player currentProfile = getLoggedInUser(session);
     if (currentProfile == null && player != null && player.getId() == null) {

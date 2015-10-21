@@ -3,7 +3,6 @@ package online.shashki.rus.server.dao.impl;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
-import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.GameMessageDao;
 import online.shashki.rus.shared.model.GameMessage;
 
@@ -20,21 +19,20 @@ import java.util.List;
  */
 public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements GameMessageDao {
 
-  private final EntityManager entityManager;
+  private final Provider<EntityManager> entityManagerProvider;
 
   @Inject
   public GameMessageDaoImpl(TypeLiteral<GameMessage> type, Provider<EntityManager> entityManagerProvider) {
     super(type);
-    entityManager = entityManagerProvider.get();
+    this.entityManagerProvider = entityManagerProvider;
   }
 
   @Override
   protected EntityManager getEntityManager() {
-    return entityManager;
+    return entityManagerProvider.get();
   }
 
   @Override
-  @Transactional
   public List<GameMessage> findLastMessages(int countLast, Long playerId, Long opponentId) {
     Query query = getEntityManager().createQuery(
         "SELECT m " +

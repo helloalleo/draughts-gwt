@@ -130,6 +130,7 @@ public class Board extends Layer {
       public void onPlayMoveOpponent(PlayMoveOpponentEvent event) {
         final Move move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
+        SHLog.debug("PLAY MOVE STROKE " + stroke);
         final Stroke mirror = stroke.mirror();
         moveOpponent(mirror);
       }
@@ -557,15 +558,18 @@ public class Board extends Layer {
    * @return возвращете передвижение с установленными флагами и взятой шашкой
    */
   public Stroke calcStroke(Square from, Square to) {
-    Stroke move = new Stroke();
+    Stroke stroke = new Stroke();
     Draught beingMoved = from.getOccupant();
 
     from.setOccupant(null);
     beingMoved.setPosition(to.getRow(), to.getCol());
     to.setOccupant(beingMoved);
 
+    stroke.setStartSquare(from);
+    stroke.setEndSquare(to);
+
     final boolean first = isFirstMoveFlag();
-    move.setFirst(first);
+    stroke.setFirst(first);
 
     if (!capturedSquares.isEmpty()) {
       //A jump has been performed, so getProvider the Square that lies between from and to
@@ -578,8 +582,8 @@ public class Board extends Layer {
       }
 
       if (takenSquare == null) {
-        move.setOnSimpleMove();
-        return move;
+        stroke.setOnSimpleMove();
+        return stroke;
       }
 
       int row = to.getRow();
@@ -613,19 +617,19 @@ public class Board extends Layer {
             jumpMoves);
       }
 
-      move.setTakenSquare(takenSquare);
+      stroke.setTakenSquare(takenSquare);
       if (jumpMoves.isEmpty()) {
-        move.setOnStopBeat();
+        stroke.setOnStopBeat();
 
         if (!complexBeat) {
-          move.setOnStartBeat();
+          stroke.setOnStartBeat();
         } else {
           complexBeat = false;
         }
       } else {
-        move.setOnContinueBeat();
+        stroke.setOnContinueBeat();
         if (!complexBeat) {
-          move.setOnStartBeat();
+          stroke.setOnStartBeat();
         }
         complexBeat = true;
       }
@@ -633,15 +637,15 @@ public class Board extends Layer {
       SHLog.debug(takenSquare.toString());
       removeDraughtFrom(takenSquare);
     } else {
-      move.setOnSimpleMove();
+      stroke.setOnSimpleMove();
     }
 
-    if (move.isSimple() || move.isStartBeat()) {
+    if (stroke.isSimple() || stroke.isStartBeat()) {
       moveCounter++;
     }
-    move.setNumber(moveCounter);
+    stroke.setNumber(moveCounter);
 
-    return move;
+    return stroke;
   }
 
   public void removeDraughtFrom(Square takenSquare) {

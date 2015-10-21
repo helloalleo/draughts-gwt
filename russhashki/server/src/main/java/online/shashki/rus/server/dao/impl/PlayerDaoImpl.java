@@ -3,7 +3,6 @@ package online.shashki.rus.server.dao.impl;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
-import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.PlayerDao;
 import online.shashki.rus.shared.model.Player;
 
@@ -19,17 +18,17 @@ import java.util.List;
  */
 public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
 
-  private final EntityManager entityManager;
+  private final Provider<EntityManager> entityManagerProvider;
 
   @Inject
   public PlayerDaoImpl(TypeLiteral<Player> type, Provider<EntityManager> entityManagerProvider) {
     super(type);
-    entityManager = entityManagerProvider.get();
+    this.entityManagerProvider = entityManagerProvider;
   }
 
   @Override
   protected EntityManager getEntityManager() {
-    return entityManager;
+    return entityManagerProvider.get();
   }
 
 //  @Override
@@ -41,7 +40,6 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
 //  }
 
   @Override
-  @Transactional
   public Player findByVkId(String uid) {
     Query query = getEntityManager().createQuery("FROM Player " +
             "WHERE vkId = :vkId");
@@ -51,7 +49,6 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   }
 
   @Override
-  @Transactional
   public Player findBySessionId(String sessionId) {
     Query query = getEntityManager().createQuery("FROM Player " +
             "WHERE sessionId = :sessionId");
@@ -64,7 +61,6 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   }
 
   @Override
-  @Transactional
   public Player findById(Long playerId) {
     Query query = getEntityManager().createQuery("FROM Player " +
             "WHERE id = :playerId"

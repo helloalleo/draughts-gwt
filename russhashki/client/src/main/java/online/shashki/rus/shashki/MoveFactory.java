@@ -10,12 +10,22 @@ import online.shashki.rus.shared.model.Move;
  */
 public class MoveFactory {
 
+  /**
+   * Создание "перемещения" для сервера из "хода" для клиента
+   * @param stroke ход на клиенте
+   * @return перемещение для сервера
+   */
   public static Move createMoveFromStroke(Stroke stroke) {
-    return new Move().setFirst(stroke.isFirst())
+    Move move = new Move().setFirst(stroke.isFirst())
         .setNumber(stroke.getNumber())
         .setMoveFlags(stroke.getMoveFlags())
         .setStartPos(stroke.getStartSquare().getPos())
-        .setEndPos(stroke.getEndSquare().getPos())
-        .setTakenPos(stroke.getTakenSquare().getPos());
+        .setEndPos(stroke.getEndSquare().getPos());
+
+    // При преобразовании не всегда есть захваченная шашка, поэтому делаем проверка
+    if (stroke.getTakenSquare() != null) {
+      move.setTakenPos(stroke.getTakenSquare().getPos());
+    }
+    return move;
   }
 }
