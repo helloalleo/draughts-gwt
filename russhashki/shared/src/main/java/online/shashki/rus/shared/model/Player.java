@@ -113,6 +113,11 @@ public class Player extends PersistableObjectImpl {
   @Column(name = "visit_counter")
   private int visitCounter;
 
+  @GwtTransient
+  @JsonIgnore
+  @Column(name = "fb_id")
+  private String fbId;
+
   public Player() {
   }
 
@@ -363,6 +368,14 @@ public class Player extends PersistableObjectImpl {
     if (StringUtils.isNotEmpty(profile.getPlayerName())) {
       this.playerName = profile.getPlayerName();
     }
+  }
+
+  public void setFbId(String fbId) {
+    this.fbId = fbId;
+  }
+
+  public String getFbId() {
+    return fbId;
   }
 
   public enum AuthProvider {

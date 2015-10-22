@@ -100,20 +100,21 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         JsonObject responseObject = jsonReader.readObject();
         JsonArray usersArray = responseObject.getJsonArray("response");
         JsonObject array = usersArray.getJsonObject(0);
-        JsonString firstName = array.getJsonString("first_name");
-        JsonString lastName = array.getJsonString("last_name");
+        String firstName = array.getString("first_name");
+        String lastName = array.getString("last_name");
 
         player = new Player();
         player.setVkId(user_id);
         player.setAuthProvider(Player.AuthProvider.VK);
-        player.setFirstName(firstName.getString());
-        player.setLastName(lastName.getString());
+        player.setFirstName(firstName);
+        player.setLastName(lastName);
         if (StringUtils.isNotEmpty(email)) {
           player.setEmail(email);
         }
       } else {
         player.setVisitCounter(player.getVisitCounter() + 1);
       }
+
       player.setLastVisited(new Date());
       player.setLoggedIn(true);
       player.setPlaying(false);

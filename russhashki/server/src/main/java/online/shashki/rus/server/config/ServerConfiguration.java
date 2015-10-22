@@ -13,17 +13,26 @@ import java.util.ResourceBundle;
 @Singleton
 public class ServerConfiguration {
 
-  private String notFoundError;
-  private String serverError;
-  private String context;
-  private String vkRedirectUri;
-  private String vkClientId;
-  private String vkClientSecret;
-  private String vkAuthUri;
-  private String vkTokenUri;
-  private String vkApiUserInfo;
-  private String vkScope;
-  private String vkVersion;
+  private final String notFoundError;
+  private final String serverError;
+  private final String context;
+  private final String vkRedirectUri;
+  private final String vkClientId;
+  private final String vkClientSecret;
+  private final String vkAuthUri;
+  private final String vkTokenUri;
+  private final String vkApiUserInfo;
+  private final String vkScope;
+  private final String vkApiVersion;
+  private final String fbRedirectUri;
+  private final String fbClientId;
+  private final String fbClientSecret;
+  private final String fbScope;
+  private final String fbApiVersion;
+  private final String fbApiGraph;
+  private String fbApiOAuthPath;
+  private String loginUrl;
+  private String homeUrl;
 
   public ServerConfiguration() {
     ResourceBundle resourceBundle = ResourceBundle.getBundle("ServerConfiguration");
@@ -31,7 +40,10 @@ public class ServerConfiguration {
     context = resourceBundle.getString("context");
     serverError = resourceBundle.getString("server_error");
     notFoundError = resourceBundle.getString("not_found_error");
+    loginUrl = resourceBundle.getString("login");
+    homeUrl = resourceBundle.getString("home");
 
+    // VK API Data
     vkRedirectUri = resourceBundle.getString("vk_redirect_uri");
     vkClientId = resourceBundle.getString("vk_client_id");
     vkClientSecret = resourceBundle.getString("vk_client_secret");
@@ -39,7 +51,16 @@ public class ServerConfiguration {
     vkAuthUri = resourceBundle.getString("vk_auth_uri");
     vkTokenUri = resourceBundle.getString("vk_token_uri");
     vkApiUserInfo = resourceBundle.getString("vk_api_user_info");
-    vkVersion = resourceBundle.getString("vk_version");
+    vkApiVersion = resourceBundle.getString("vk_api_version");
+
+    // Facebook API Data
+    fbRedirectUri = resourceBundle.getString("fb_redirect_uri");
+    fbApiGraph = resourceBundle.getString("fb_api_graph");
+    fbApiOAuthPath = resourceBundle.getString("fb_api_oauth_path");
+    fbClientId = resourceBundle.getString("fb_client_id");
+    fbClientSecret = resourceBundle.getString("fb_client_secret");
+    fbScope = resourceBundle.getString("fb_scope");
+    fbApiVersion = resourceBundle.getString("fb_api_version");
   }
 
   public String getNotFoundError() {
@@ -82,11 +103,44 @@ public class ServerConfiguration {
     return vkScope;
   }
 
-  public String getVkVersion() {
-    return vkVersion;
+  public String getVkApiVersion() {
+    return vkApiVersion;
   }
 
-  public void setVkVersion(String vkVersion) {
-    this.vkVersion = vkVersion;
+  public String getFbRedirectUri() {
+    return fbRedirectUri;
+  }
+
+  public String getFbClientId() {
+    return fbClientId;
+  }
+
+  public String getFbClientSecret() {
+    return fbClientSecret;
+  }
+
+  public String getFbScope() {
+    return fbScope;
+  }
+
+  public String getFbApiVersion() {
+    return fbApiVersion;
+  }
+
+  public String getFbApiGraph() {
+    return fbApiGraph;
+  }
+
+  public String getFbApiOAuthPath() {
+    return fbApiOAuthPath;
+  }
+
+  public String getLoginUrl() {
+    return loginUrl;
+  }
+
+
+  public String getHomeUrl() {
+    return homeUrl;
   }
 }

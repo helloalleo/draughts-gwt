@@ -39,7 +39,7 @@ public class OAuthVKServlet extends HttpServlet {
           .setClientId(config.getVkClientId())
           .setScope(config.getVkScope())
           .setRedirectURI(config.getVkRedirectUri())
-          .setParameter("v", config.getVkVersion())
+          .setParameter("v", config.getVkApiVersion())
           .setResponseType("code")
           .buildQueryMessage();
       log.info("REQUEST URI: " + oAuthRequest.getLocationUri());

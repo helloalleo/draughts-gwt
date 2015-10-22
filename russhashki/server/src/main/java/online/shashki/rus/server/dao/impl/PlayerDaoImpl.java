@@ -63,9 +63,20 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   @Override
   public Player findById(Long playerId) {
     Query query = getEntityManager().createQuery("FROM Player " +
-            "WHERE id = :playerId"
-    );
+            "WHERE id = :playerId");
     query.setParameter("playerId", playerId);
+    List result = query.getResultList();
+    if (result.isEmpty()) {
+      return null;
+    }
+    return (Player) result.get(0);
+  }
+
+  @Override
+  public Player findByFbId(String user_id) {
+    Query query = getEntityManager().createQuery("FROM Player " +
+            "WHERE fbId = :fbId");
+    query.setParameter("fbId", user_id);
     List result = query.getResultList();
     if (result.isEmpty()) {
       return null;

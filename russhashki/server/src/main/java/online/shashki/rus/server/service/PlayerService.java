@@ -75,4 +75,8 @@ public class PlayerService {
   public List<Player> findAll() {
     return playerDaoProvider.get().findAll();
   }
+
+  public Player findByFbId(String user_id) {
+    return playerDaoProvider.get().findByFbId(user_id);
+  }
 }

@@ -22,6 +22,8 @@ import com.google.inject.servlet.ServletModule;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
 import online.shashki.rus.server.servlet.LogoutServlet;
+import online.shashki.rus.server.servlet.oauth.OAuthFacebookCallbackServlet;
+import online.shashki.rus.server.servlet.oauth.OAuthFacebookServlet;
 import online.shashki.rus.server.servlet.oauth.OAuthVKCallbackServlet;
 import online.shashki.rus.server.servlet.oauth.OAuthVKServlet;
 
@@ -38,6 +40,8 @@ public class DispatchServletModule extends ServletModule {
     serve("/logout").with(LogoutServlet.class);
     serve("/OAuthVKServlet").with(OAuthVKServlet.class);
     serve("/OAuthVKCallbackServlet").with(OAuthVKCallbackServlet.class);
+    serve("/OAuthFacebookServlet").with(OAuthFacebookServlet.class);
+    serve("/OAuthFacebookCallbackServlet").with(OAuthFacebookCallbackServlet.class);
 
     requestStaticInjection(CustomConfigurator.class);
   }
