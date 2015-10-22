@@ -272,11 +272,14 @@
 
                     <logLevel>INFO</logLevel>
 
+                    <extraJvmArgs>-Xmx2048m</extraJvmArgs>
+
                     <runTarget>index.html</runTarget>
                     <module>online.shashki.rus.Application-dev</module>
                     <draftCompile>true</draftCompile>
                     <sourceLevel>${maven.compiler.source}</sourceLevel>
                     <style>${gwt.style}</style>
+                    <webappDirectory>${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}</webappDirectory>
                 </configuration>
                 <executions>
                     <execution>

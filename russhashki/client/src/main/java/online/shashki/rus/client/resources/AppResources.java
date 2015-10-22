@@ -53,5 +53,7 @@ public interface AppResources extends ClientBundle {
     String rowHeight();
 
     String inside();
+
+//    String insideFullHeight();
   }
 }

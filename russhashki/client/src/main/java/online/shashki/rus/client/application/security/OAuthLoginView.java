@@ -2,6 +2,7 @@ package online.shashki.rus.client.application.security;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
@@ -38,7 +39,7 @@ public class OAuthLoginView extends ViewWithUiHandlers<OAuthLoginUiHandlers> imp
     int windowHeight = Window.getClientHeight();
     int loginHeight = loginContainer.getOffsetHeight();
     double containerMarginTop = windowHeight / 2 - loginHeight - 100;
-//    loginContainer.getElement().getStyle().setMarginTop(containerMarginTop, Style.Unit.PX);
+    loginContainer.getElement().getStyle().setMarginTop(containerMarginTop, Style.Unit.PX);
   }
 
   interface Binder extends UiBinder<Widget, OAuthLoginView> {

@@ -33,6 +33,7 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <project.artifacts.directory>out/artifacts</project.artifacts.directory>
+        <project.devOutput.directory>shashki_dev.war</project.devOutput.directory>
     </properties>
 
     <modules>
