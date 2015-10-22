@@ -15,7 +15,8 @@
         <properties>
             <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
             <property name="hibernate.connection.username" value="shashki"/>
-            <property name="hibernate.connection.password" value="shashki"/>
+            <property name="hibernate.connection.password" value="shashki000"/>
+            <!--<property name="hibernate.connection.url" value="jdbc:postgresql://postgres2428-shashki.mircloud.host/shashki"/>-->
             <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/shashki"/>
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>

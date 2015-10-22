@@ -13,7 +13,7 @@ import online.shashki.rus.client.application.widget.dialog.*;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.json.GameMessageMapper;
 import online.shashki.rus.client.util.SHLog;
-import online.shashki.rus.shared.config.ShashkiConfiguration;
+import online.shashki.rus.shared.config.ClientConfiguration;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.GameMessage;
@@ -34,7 +34,7 @@ import java.util.List;
 public class GameWebsocket implements WebSocketCallback {
 
   private final CurrentSession currentSession;
-  private ShashkiConfiguration configuration = GWT.create(ShashkiConfiguration.class);
+  private ClientConfiguration configuration = GWT.create(ClientConfiguration.class);
   private ResourceDelegate<GamesResource> gamesDelegate;
   private WebSocket webSocket;
   private EventBus eventBus;

@@ -1,8 +1,8 @@
 package online.shashki.rus.shared.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.user.client.rpc.GwtTransient;
 import online.shashki.rus.shared.util.StringUtils;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -20,19 +20,16 @@ public class Player extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "session_id")
   private String sessionId;
 
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "vk_id")
   private String vkId;
 
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   private String email;
 
   @Column(name = "first_name")
@@ -46,7 +43,6 @@ public class Player extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "include_in_rating")
   private boolean includeInRating;
 
@@ -54,7 +50,6 @@ public class Player extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "auth_provider")
   @Enumerated(EnumType.STRING)
   private AuthProvider authProvider;
@@ -72,37 +67,32 @@ public class Player extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @OneToMany(mappedBy = "receiver")
   private Set<GameMessage> receivedPlayerMessages;
 
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @OneToMany(mappedBy = "sender")
   private Set<GameMessage> sentPlayerMessages;
 
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
+
   @OneToMany(mappedBy = "receiverGame")
   private Set<GameMessage> receivedGameMessages;
 
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @OneToMany(mappedBy = "senderGame")
   private Set<GameMessage> sentGameMessages;
 
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @OneToMany(mappedBy = "playerWhite")
   private Set<Game> whiteRoleGames;
 
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @OneToMany(mappedBy = "playerBlack")
   private Set<Game> blackRoleGames;
 
@@ -112,17 +102,14 @@ public class Player extends PersistableObjectImpl {
   private boolean online;
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "register_date")
   private Date registerDate;
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "last_visited")
   private Date lastVisited;
   @GwtTransient
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @Column(name = "visit_counter")
   private int visitCounter;
 
@@ -316,7 +303,6 @@ public class Player extends PersistableObjectImpl {
   }
 
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   public String getPublicName() {
     if (getPlayerName() == null) {
       String fullName = getFullName().trim();
@@ -329,7 +315,6 @@ public class Player extends PersistableObjectImpl {
   }
 
   @JsonIgnore
-  @com.fasterxml.jackson.annotation.JsonIgnore
   public String getFullName() {
     return getFirstName() + " " + getLastName();
   }

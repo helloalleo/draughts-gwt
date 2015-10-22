@@ -45,5 +45,13 @@ public interface AppResources extends ClientBundle {
     String logoScroll();
 
     String playItem();
+
+    String colHeight();
+
+    String colMiddle();
+
+    String rowHeight();
+
+    String inside();
   }
 }

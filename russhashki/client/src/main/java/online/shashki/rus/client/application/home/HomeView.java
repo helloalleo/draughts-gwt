@@ -27,10 +27,13 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.client.application.component.playshowpanel.PlayShowPanel;
 import online.shashki.rus.client.application.security.CurrentSession;
+import online.shashki.rus.client.util.DebugUtils;
 import online.shashki.rus.client.util.SHCookies;
 import online.shashki.rus.client.util.SHLog;
+import online.shashki.rus.shared.config.ClientConfiguration;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Game;
+import online.shashki.rus.shared.model.Player;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
 import org.gwtbootstrap3.client.ui.CheckBoxButton;
@@ -43,6 +46,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   private static Binder binder = GWT.create(Binder.class);
   private final ShashkiMessages messages;
   private final CurrentSession currentSession;
+  private final ClientConfiguration config;
 
   @UiField
   SimplePanel play;
@@ -65,7 +69,9 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   @Inject
   HomeView(CurrentSession currentSession,
-      ShashkiMessages messages) {
+           ClientConfiguration config,
+           ShashkiMessages messages) {
+    this.config = config;
     playShowPanel = new PlayShowPanel(this);
     initWidget(binder.createAndBindUi(this));
 
@@ -79,6 +85,10 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     super.onAttach();
     newGameState = SHCookies.getNewGameButtonState();
     SHLog.debug("NEW STATE " + newGameState);
+    if (DebugUtils.isProduction()) {
+      newGameState = true;
+      newGameButton.setVisible(false);
+    }
     if (currentSession.isLoggedIn()) {
       showControlsNewGameButton();
     }
@@ -86,7 +96,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   @UiHandler("newGameButton")
   public void onNewGame(ClickEvent event) {
-    toggelNewGameButton();
+    toggleNewGameButton();
     showControlsNewGameButton();
   }
 
@@ -100,7 +110,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     playShowPanel.setVisible(!newGameState);
   }
 
-  private void toggelNewGameButton() {
+  private void toggleNewGameButton() {
     newGameState = !newGameState;
     SHCookies.setNewGameButtonState(newGameState);
   }
@@ -152,6 +162,10 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   public void getMoreGames(int newPageSize) {
     SHLog.debug("GET MORE GAMES " + newPageSize);
     getUiHandlers().getMoreGames(myGameListCheckButton.getValue(), newPageSize);
+  }
+
+  public Player getPlayer() {
+    return getUiHandlers().getPlayer();
   }
 
   interface Binder extends UiBinder<Widget, HomeView> {

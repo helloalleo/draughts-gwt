@@ -11,8 +11,6 @@
 
     <inherits name="com.ait.lienzo.Lienzo"/>
 
-    <inherits name='com.google.gwt.user.theme.clean.Clean'/>
-
     <inherits name="com.github.nmorel.gwtjackson.GwtJackson"/>
 
     <inherits name="com.google.gwt.i18n.I18N"/>

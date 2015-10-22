@@ -105,7 +105,7 @@ public class PlayShowPanel extends Composite {
     Row row = new Row();
     for (Game game : rowGameList) {
       Column column = new Column("MD_" + Variables.COLUMNS_IN_LAYOUT / gameInRow);
-      column.add(new PlayItem(game));
+      column.add(new PlayItem(homeView.getPlayer(), game));
       row.add(column);
     }
     playRowList.add(row);

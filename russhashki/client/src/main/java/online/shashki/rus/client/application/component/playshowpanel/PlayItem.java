@@ -35,11 +35,11 @@ public class PlayItem extends Composite {
   @UiField
   HTML playEndDate;
 
-  PlayItem(final Game game) {
+  PlayItem(final Player player, final Game game) {
     initWidget(binder.createAndBindUi(this));
 
     panel.addStyleName(resources.style().playItem());
-
+    setGame(player, game);
 //    PlayerService.App.getInstance().getCurrentProfile(new AsyncCallback<Player>() {
 //      @Override
 //      public void onFailure(Throwable caught) {

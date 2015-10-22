@@ -2,6 +2,7 @@ package online.shashki.rus.client.util;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.UmbrellaException;
+import online.shashki.rus.shared.config.ClientConfiguration;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,8 +12,17 @@ import com.google.gwt.event.shared.UmbrellaException;
  */
 public class DebugUtils {
 
+  private static final ClientConfiguration config = GWT.create(ClientConfiguration.class);
+
   private DebugUtils() {
-    // hide constructor because we are a utility class with static methods only.
+  }
+
+  public static boolean isProduction() {
+    return Boolean.valueOf(config.production());
+  }
+
+  public static boolean isNotProduction() {
+    return !isProduction();
   }
 
   public static void initDebugAndErrorHandling() {

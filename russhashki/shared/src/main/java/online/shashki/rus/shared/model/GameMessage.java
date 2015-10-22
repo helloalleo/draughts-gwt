@@ -1,8 +1,8 @@
 package online.shashki.rus.shared.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.user.client.rpc.GwtTransient;
 import com.google.gwt.user.client.rpc.IsSerializable;
-import org.codehaus.jackson.annotate.JsonIgnore;
 
 import javax.persistence.*;
 import java.util.Date;
@@ -43,7 +43,6 @@ public class GameMessage extends PersistableObjectImpl {
   private String data;
 
   @GwtTransient
-  @com.fasterxml.jackson.annotation.JsonIgnore
   @JsonIgnore
   @Column(name = "sent_date")
   private Date sentDate;

@@ -1,23 +1,35 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
-    <groupId>online.shashki.rus</groupId>
+
+    <parent>
+        <groupId>online.shashki.rus</groupId>
+        <artifactId>russhashki</artifactId>
+        <version>1.0-SNAPSHOT</version>
+    </parent>
+
+    <!--<groupId>online.shashki.rus</groupId>-->
     <artifactId>server</artifactId>
     <version>1.0-SNAPSHOT</version>
+
     <packaging>war</packaging>
+
     <name>server</name>
+
     <url>http://shashki.online</url>
+
     <properties>
         <!--Tomcat-->
-        <tomcat.version>8.0.28</tomcat.version>
+        <tomcat.version>7.0.61</tomcat.version>
 
         <!--&lt;!&ndash;Google&ndash;&gt;-->
         <!--<google.http.version>1.20.0</google.http.version>-->
         <!--<google.oauth.version>1.20.0</google.oauth.version>-->
         <!--<google-oauth-client.version>1.20.0</google-oauth-client.version>-->
 
+        <!--<gwt.version>2.7.0</gwt.version>-->
         <!--GWTP-->
-        <gwtp.version>1.5</gwtp.version>
+        <!--<gwtp.version>1.5</gwtp.version>-->
         <!--Guice-->
         <guice.version>4.0</guice.version>
         <guicy-resteasy.version>1.2</guicy-resteasy.version>
@@ -26,26 +38,28 @@
         <postgresql.version>9.3-1102-jdbc41</postgresql.version>
 
         <!--RESTEasy-->
-        <jax-rs.version>1.1.1</jax-rs.version>
+        <!--<jax-rs.version>1.1.1</jax-rs.version>-->
         <jersey.version>1.19</jersey.version>
 
         <!--Maven-->
-        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
-        <project.artifacts.directory>out/artifacts</project.artifacts.directory>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
-        <target.jdk>1.7</target.jdk>
+        <!--<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>-->
+        <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
+        <!--<maven.compiler.source>1.7</maven.compiler.source>-->
+        <!--<maven.compiler.target>1.7</maven.compiler.target>-->
+        <!--<target.jdk>1.7</target.jdk>-->
         <jackson-datatype-jsr353.version>2.6.3</jackson-datatype-jsr353.version>
         <servlet-api.version>3.1.0</servlet-api.version>
         <hibernate-entitymanager.version>4.3.10.Final</hibernate-entitymanager.version>
         <resteasy-guice.version>3.0.13.Final</resteasy-guice.version>
         <resteasy-jackson2-provider.version>3.0.9.Final</resteasy-jackson2-provider.version>
         <commons-lang3.version>3.4</commons-lang3.version>
+
+        <!--<project.artifacts.directory>out/artifacts</project.artifacts.directory>-->
     </properties>
 
     <dependencyManagement>
         <dependencies>
+
             <dependency>
                 <groupId>com.gwtplatform</groupId>
                 <artifactId>gwtp-dispatch-rpc-server</artifactId>
@@ -97,11 +111,11 @@
         </dependency>
 
         <dependency>
-            <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat</artifactId>
-            <version>${tomcat.version}</version>
-            <scope>provided</scope>
+            <groupId>com.google.gwt</groupId>
+            <artifactId>gwt-servlet</artifactId>
+            <version>${gwt.version}</version>
         </dependency>
+
         <!--<dependency>-->
             <!--<groupId>org.apache.tomcat.embed</groupId>-->
             <!--<artifactId>tomcat-embed-logging-juli</artifactId>-->
@@ -129,7 +143,15 @@
         <!--</dependency>-->
         <dependency>
             <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-websocket</artifactId>
+            <artifactId>tomcat</artifactId>
+            <version>${tomcat.version}</version>
+            <type>pom</type>
+            <scope>import</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat7-websocket</artifactId>
             <version>${tomcat.version}</version>
             <scope>provided</scope>
         </dependency>
@@ -255,30 +277,30 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>server</finalName>
+        <finalName>rus</finalName>
         <plugins>
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>appassembler-maven-plugin</artifactId>
-                <version>1.1.1</version>
-                <configuration>
-                    <assembleDirectory>target</assembleDirectory>
-                    <programs>
-                        <program>
-                            <mainClass>launch.Main</mainClass>
-                            <name>webapp</name>
-                        </program>
-                    </programs>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>package</phase>
-                        <goals>
-                            <goal>assemble</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
+            <!--<plugin>-->
+                <!--<groupId>org.codehaus.mojo</groupId>-->
+                <!--<artifactId>appassembler-maven-plugin</artifactId>-->
+                <!--<version>1.1.1</version>-->
+                <!--<configuration>-->
+                    <!--<assembleDirectory>target</assembleDirectory>-->
+                    <!--<programs>-->
+                        <!--<program>-->
+                            <!--<mainClass>launch.Main</mainClass>-->
+                            <!--<name>webapp</name>-->
+                        <!--</program>-->
+                    <!--</programs>-->
+                <!--</configuration>-->
+                <!--<executions>-->
+                    <!--<execution>-->
+                        <!--<phase>package</phase>-->
+                        <!--<goals>-->
+                            <!--<goal>assemble</goal>-->
+                        <!--</goals>-->
+                    <!--</execution>-->
+                <!--</executions>-->
+            <!--</plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -296,64 +318,85 @@
                 <version>2.6</version>
                 <configuration>
                     <webappDirectory>
-                        ${project.basedir}/../../${project.artifacts.directory}/${project.build.finalName}.${project.packaging}
+                        ${project.basedir}/../../${project.artifacts.directory}/shashki_dev.war
                     </webappDirectory>
                 </configuration>
+                <executions>
+                    <execution>
+                        <id>war</id>
+                        <phase>package</phase>
+                        <goals>
+                            <goal>war</goal>
+                        </goals>
+                    </execution>
+                </executions>
             </plugin>
         </plugins>
     </build>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <finalName>rus</finalName>
+                <plugins>
+                    <!--<plugin>-->
+                    <!--<groupId>org.codehaus.mojo</groupId>-->
+                    <!--<artifactId>appassembler-maven-plugin</artifactId>-->
+                    <!--<version>1.1.1</version>-->
+                    <!--<configuration>-->
+                    <!--<assembleDirectory>target</assembleDirectory>-->
+                    <!--<programs>-->
+                    <!--<program>-->
+                    <!--<mainClass>launch.Main</mainClass>-->
+                    <!--<name>webapp</name>-->
+                    <!--</program>-->
+                    <!--</programs>-->
+                    <!--</configuration>-->
+                    <!--<executions>-->
+                    <!--<execution>-->
+                    <!--<phase>package</phase>-->
+                    <!--<goals>-->
+                    <!--<goal>assemble</goal>-->
+                    <!--</goals>-->
+                    <!--</execution>-->
+                    <!--</executions>-->
+                    <!--</plugin>-->
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-compiler-plugin</artifactId>
+                        <version>${maven-compiler-plugin.version}</version>
+                        <configuration>
+                            <source>${target.jdk}</source>
+                            <target>${target.jdk}</target>
+                            <encoding>${project.build.sourceEncoding}</encoding>
+                        </configuration>
+                    </plugin>
+
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-war-plugin</artifactId>
+                        <version>2.6</version>
+                        <configuration>
+                            <webappDirectory>
+                                ${project.basedir}/../../${project.artifacts.directory}/shashki_web_exploded.war
+                            </webappDirectory>
+                            <outputDirectory>
+                                ${project.basedir}/../../${project.artifacts.directory}/server.war
+                            </outputDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <id>war</id>
+                                <phase>package</phase>
+                                <goals>
+                                    <goal>war</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+    </profiles>
 </project>
-        <!--<?xml version="1.0" encoding="UTF-8"?>-->
-        <!--<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"-->
-        <!--xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">-->
-        <!--<modelVersion>4.0.0</modelVersion>-->
-
-        <!--<groupId>online.shashki.rus</groupId>-->
-        <!--<artifactId>server</artifactId>-->
-        <!--<version>1.0-SNAPSHOT</version>-->
-        <!--<packaging>war</packaging>-->
-
-        <!--<properties>-->
-        <!--&lt;!&ndash;OAuth&ndash;&gt;-->
-        <!--&lt;!&ndash;JBoss&ndash;&gt;-->
-        <!--<jboss.bom.version>9.0.1.Final</jboss.bom.version>-->
-        <!--<version.jboss.logging>3.2.1.Final</version.jboss.logging>-->
-        <!--&lt;!&ndash;<hibernate-validator.version>5.1.2.Final</hibernate-validator.version>&ndash;&gt;-->
-        <!--<commons-codec.version>1.9</commons-codec.version>-->
-        <!--<commons-lang.version>2.6</commons-lang.version>-->
-
-        <!--&lt;!&ndash;REST&ndash;&gt;-->
-
-        <!--&lt;!&ndash; GWT needs at least java 1.6 &ndash;&gt;-->
-
-        <!--&lt;!&ndash; maven &ndash;&gt;-->
-
-
-        <!--</properties>-->
-
-        <!--<dependencyManagement>-->
-        <!--<dependencies>-->
-        <!--&lt;!&ndash;<dependency>&ndash;&gt;-->
-        <!--&lt;!&ndash;<groupId>org.wildfly.bom</groupId>&ndash;&gt;-->
-        <!--&lt;!&ndash;<artifactId>jboss-javaee-7.0-wildfly-with-tools</artifactId>&ndash;&gt;-->
-        <!--&lt;!&ndash;<version>${jboss.bom.version}</version>&ndash;&gt;-->
-        <!--&lt;!&ndash;<type>pom</type>&ndash;&gt;-->
-        <!--&lt;!&ndash;<scope>import</scope>&ndash;&gt;-->
-        <!--&lt;!&ndash;</dependency>&ndash;&gt;-->
-
-        <!--</dependencies>-->
-        <!--</dependencyManagement>-->
-
-        <!--<dependencies>-->
-        <!--&lt;!&ndash;Guice&ndash;&gt;-->
-
-
-        <!--<dependency>-->
-        <!--<groupId>org.apache.tomcat.embed</groupId>-->
-        <!--<artifactId>tomcat-embed-websocket</artifactId>-->
-        <!--<version>7.0.52</version>-->
-        <!--</dependency>-->
-
-        <!--</dependencies>-->
-
-        <!--</project>-->

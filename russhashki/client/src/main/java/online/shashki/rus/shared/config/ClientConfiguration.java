@@ -8,7 +8,7 @@ import com.google.gwt.i18n.client.ConstantsWithLookup;
  * Date: 15.03.15
  * Time: 16:19
  */
-public interface ShashkiConfiguration extends ConstantsWithLookup {
+public interface ClientConfiguration extends ConstantsWithLookup {
 
   @Key("player.websocket.url")
   String playerWebsocketUrl();
@@ -18,4 +18,6 @@ public interface ShashkiConfiguration extends ConstantsWithLookup {
   String level();
 
   String site_url();
+
+  String production();
 }

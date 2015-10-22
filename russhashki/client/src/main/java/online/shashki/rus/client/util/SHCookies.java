@@ -2,7 +2,7 @@ package online.shashki.rus.client.util;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
-import online.shashki.rus.shared.config.ShashkiConfiguration;
+import online.shashki.rus.shared.config.ClientConfiguration;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +13,7 @@ import online.shashki.rus.shared.config.ShashkiConfiguration;
 public class SHCookies {
 
   private static String location = "location"; // куки адреса страницы
-  private static ShashkiConfiguration configuration = GWT.create(ShashkiConfiguration.class);
+  private static ClientConfiguration configuration = GWT.create(ClientConfiguration.class);
   private static String newGameButtonStateMainPage = "newGameButtonState";
 
   public static void setLocation(String nameToken) {

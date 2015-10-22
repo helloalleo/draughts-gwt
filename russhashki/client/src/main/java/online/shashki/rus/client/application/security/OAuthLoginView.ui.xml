@@ -2,6 +2,7 @@
 <ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
+             xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html"
              ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
              ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
              ui:generateLocales="default">
@@ -10,35 +11,21 @@
 
     <g:HTMLPanel ui:field="loginContainer">
         <b:Row>
-            <b:Column size="MD_6" offset="MD_3">
-                <b:Well size="LARGE">
-                    <g:HTMLPanel>
+            <b.html:Div addStyleNames="{res.style.rowHeight}">
+                <b:Column size="MD_4" offset="MD_4" addStyleNames="{res.style.colHeight} {res.style.colMiddle}">
+                    <b.html:Div addStyleNames="{res.style.inside}">
                         <b:Row>
-                            <b:Column size="MD_4" offset="MD_4">
+                            <b:Column size="MD_6">
                                 <b:Icon type="SIGN_IN" size="TIMES5" addStyleNames="{res.style.alignHorizontal}"/>
                             </b:Column>
-                        </b:Row>
-                        <br/>
-                        <b:Row>
-                            <b:Column size="MD_3">
-                                <b:Anchor href="/rus/OAuthVKServlet" icon="VK" iconSize="TIMES5" addStyleNames="{res.style.alignHorizontal}"/>
-                            </b:Column>
-
-                            <b:Column size="MD_3">
-                                <b:Anchor href="/rus/OAuthVKServlet" icon="GOOGLE" iconSize="TIMES5" addStyleNames="{res.style.alignHorizontal}"/>
-                            </b:Column>
-
-                            <b:Column size="MD_3">
-                                <b:Anchor href="/rus/OAuthFacebookServlet" icon="FACEBOOK" iconSize="TIMES5" addStyleNames="{res.style.alignHorizontal}"/>
-                            </b:Column>
-
-                            <b:Column size="MD_3">
-                                <b:Anchor href="/rus/OAuthVKServlet" icon="WINDOWS" iconSize="TIMES5" addStyleNames="{res.style.alignHorizontal}"/>
+                            <b:Column size="MD_6">
+                                <b:Anchor href="/rus/OAuthVKServlet" icon="VK" iconSize="TIMES5"
+                                          addStyleNames="{res.style.alignHorizontal}"/>
                             </b:Column>
                         </b:Row>
-                    </g:HTMLPanel>
-                </b:Well>
-            </b:Column>
+                    </b.html:Div>
+                </b:Column>
+            </b.html:Div>
         </b:Row>
     </g:HTMLPanel>
 

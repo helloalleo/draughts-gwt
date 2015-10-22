@@ -20,6 +20,7 @@ import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.util.AbstractAsyncCallback;
 import online.shashki.rus.client.util.SHCookies;
 import online.shashki.rus.shared.model.Game;
+import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shared.rest.GamesResource;
 import online.shashki.rus.shared.rest.PlayersResource;
 
@@ -97,6 +98,11 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         }
       }).getGames(0, newPageSize);
     }
+  }
+
+  @Override
+  public Player getPlayer() {
+    return currentSession.getPlayer();
   }
 
   /**
