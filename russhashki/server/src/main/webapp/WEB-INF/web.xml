@@ -9,6 +9,7 @@
         <!--<listener-class>online.shashki.rus.server.guice.GuiceServletConfig</listener-class>-->
     <!--</listener>-->
 
+    <!--online.shashki.rus.server.guice.MyGuiceResteasyBootstrapServletContextListener-->
     <listener>
         <listener-class>
             org.jboss.resteasy.plugins.guice.GuiceResteasyBootstrapServletContextListener

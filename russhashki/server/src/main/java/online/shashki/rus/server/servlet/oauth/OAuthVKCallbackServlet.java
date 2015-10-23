@@ -115,7 +115,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         }
       }
 
-      AuthUtils.processUserAndRedirect(playerService, config, req, resp, player, newPlayer);
+      AuthUtils.processUserAndRedirectToHomePage(playerService, config, req, resp, player, newPlayer);
     } catch (OAuthSystemException | OAuthProblemException e) {
       log.severe(e.getLocalizedMessage());
     }

@@ -30,9 +30,9 @@ public class AuthUtils {
     req.getSession().setAttribute("isAuthenticated", true);
   }
 
-  public static void processUserAndRedirect(PlayerService playerService, ServerConfiguration config,
-                                            HttpServletRequest req, HttpServletResponse resp,
-                                            Player player, boolean newPlayer) throws IOException {
+  public static void processUserAndRedirectToHomePage(PlayerService playerService, ServerConfiguration config,
+                                                      HttpServletRequest req, HttpServletResponse resp,
+                                                      Player player, boolean newPlayer) throws IOException {
     player.setLastVisited(new Date());
     player.setLoggedIn(true);
     player.setPlaying(false);
@@ -50,6 +50,6 @@ public class AuthUtils {
     }
 
     AuthUtils.login(req);
-    resp.sendRedirect(config.getContext());
+    resp.sendRedirect(config.getHomeUrl());
   }
 }

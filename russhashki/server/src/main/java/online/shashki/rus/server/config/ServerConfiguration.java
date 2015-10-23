@@ -1,7 +1,11 @@
 package online.shashki.rus.server.config;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import online.shashki.rus.server.service.PlayerService;
+import online.shashki.rus.shared.model.Player;
 
+import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -40,7 +44,13 @@ public class ServerConfiguration {
   private String googleClientSecret;
   private String googleApiUserInfo;
 
-  public ServerConfiguration() {
+  private final PlayerService playerService;
+
+  @Inject
+  public ServerConfiguration(PlayerService playerService) {
+    this.playerService = playerService;
+    resetUserStatuses();
+
     ResourceBundle resourceBundle = ResourceBundle.getBundle("ServerConfiguration");
 
     context = resourceBundle.getString("context");
@@ -152,7 +162,6 @@ public class ServerConfiguration {
     return loginUrl;
   }
 
-
   public String getHomeUrl() {
     return homeUrl;
   }
@@ -175,5 +184,16 @@ public class ServerConfiguration {
 
   public String getGoogleApiUserInfo() {
     return googleApiUserInfo;
+  }
+
+  private void resetUserStatuses() {
+    // сбрасываем всех пользователей как не залогиненных при старте контейнера
+    final List<Player> playerList = playerService.findAll();
+    for (Player player : playerList) {
+      player.setOnline(false);
+      player.setPlaying(false);
+      player.setLoggedIn(false);
+      playerService.saveOrCreate(null, player, true);
+    }
   }
 }
