@@ -16,7 +16,7 @@
 
     <properties>
         <!--GWT-->
-        <!--<gwtp.version>1.5</gwtp.version>-->
+        <gwtp.extensions.version>1.5</gwtp.extensions.version>
         <gin.version>2.1.2</gin.version>
         <gwt.style>PRETTY</gwt.style>
 
@@ -153,21 +153,18 @@
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>${hibernate-jpa-2.1-api.version}</version>
-            <!--<scope>provided</scope>-->
         </dependency>
 
         <!-- GWTP -->
         <dependency>
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-mvp-client</artifactId>
-            <!--<version>${gwtp.version}</version>-->
         </dependency>
 
         <!-- DI -->
         <dependency>
             <groupId>com.google.gwt.inject</groupId>
             <artifactId>gin</artifactId>
-            <!--<version>${gin.version}</version>-->
         </dependency>
 
         <!--OAuth 2.0-->
@@ -242,7 +239,7 @@
         <dependency>
             <groupId>com.gwtplatform.extensions</groupId>
             <artifactId>dispatch-rest-delegates</artifactId>
-            <version>${gwtp.version}</version>
+            <version>${gwtp.extensions.version}</version>
         </dependency>
     </dependencies>
 

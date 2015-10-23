@@ -20,11 +20,11 @@
                                   addStyleNames="{res.style.alignHorizontal}"/>
                     </b:Column>
                     <b:Column size="MD_3">
-                        <b:Anchor href="/rus/OAuthGoogleServlet" icon="GOOGLE" iconSize="TIMES5"
+                        <b:Anchor href="/rus/OAuthFacebookServlet" icon="FACEBOOK_OFFICIAL" iconSize="TIMES5"
                                   addStyleNames="{res.style.alignHorizontal}"/>
                     </b:Column>
                     <b:Column size="MD_3">
-                        <b:Anchor href="/rus/OAuthFacebookServlet" icon="FACEBOOK_OFFICIAL" iconSize="TIMES5"
+                        <b:Anchor href="/rus/OAuthGoogleServlet" icon="GOOGLE" iconSize="TIMES5"
                                   addStyleNames="{res.style.alignHorizontal}"/>
                     </b:Column>
                 </b:Row>

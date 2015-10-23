@@ -1,9 +1,11 @@
 package online.shashki.rus.server.guice;
 
 import com.google.inject.AbstractModule;
+import online.shashki.rus.server.dao.FriendDao;
 import online.shashki.rus.server.dao.GameDao;
 import online.shashki.rus.server.dao.GameMessageDao;
 import online.shashki.rus.server.dao.PlayerDao;
+import online.shashki.rus.server.dao.impl.FriendDaoImpl;
 import online.shashki.rus.server.dao.impl.GameDaoImpl;
 import online.shashki.rus.server.dao.impl.GameMessageDaoImpl;
 import online.shashki.rus.server.dao.impl.PlayerDaoImpl;
@@ -18,6 +20,7 @@ public class DbModule extends AbstractModule {
   @Override
   protected void configure() {
     bind(PlayerDao.class).to(PlayerDaoImpl.class);
+    bind(FriendDao.class).to(FriendDaoImpl.class);
     bind(GameDao.class).to(GameDaoImpl.class);
     bind(GameMessageDao.class).to(GameMessageDaoImpl.class);
   }

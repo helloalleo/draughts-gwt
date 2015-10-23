@@ -18,12 +18,6 @@ public class PersistableObjectImpl implements PersistableObject {
   @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
-//  @GwtTransient
-//  @JsonIgnore
-//  @com.fasterxml.jackson.annotation.JsonIgnore
-//  @Version
-//  private Integer version;
-
   @Override
   public Long getId() {
     return id;
@@ -33,9 +27,4 @@ public class PersistableObjectImpl implements PersistableObject {
   public void setId(Long id) {
     this.id = id;
   }
-
-//  @Override
-//  public Integer getVersion() {
-//    return version;
-//  }
 }

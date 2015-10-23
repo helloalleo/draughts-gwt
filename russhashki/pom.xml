@@ -18,7 +18,7 @@
     <properties>
         <!--GWT-->
         <gwt.version>2.7.0</gwt.version>
-        <gwtp.version>1.5</gwtp.version>
+        <gwtp.version>1.5.1</gwtp.version>
 
         <!--JAX-RS-->
         <jsr311-api.version>1.1.1</jsr311-api.version>

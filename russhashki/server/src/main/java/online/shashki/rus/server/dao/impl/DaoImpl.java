@@ -3,7 +3,7 @@ package online.shashki.rus.server.dao.impl;
 import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.Dao;
-import online.shashki.rus.shared.model.PersistableObject;
+import online.shashki.rus.shared.model.BasePersistableObject;
 import online.shashki.rus.shared.model.Player;
 import org.apache.commons.lang3.StringUtils;
 
@@ -20,7 +20,7 @@ import java.util.List;
  * Date: 15.11.14
  * Time: 17:00
  */
-public abstract class DaoImpl<E extends PersistableObject> implements Dao<E> {
+public abstract class DaoImpl<E extends BasePersistableObject> implements Dao<E> {
   private Class<E> entityClass;
 
   public DaoImpl(TypeLiteral<E> type) {

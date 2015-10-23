@@ -22,6 +22,7 @@ import online.shashki.rus.shared.model.GameMessage;
 import online.shashki.rus.shared.model.Move;
 import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shared.rest.GamesResource;
+import online.shashki.rus.shared.rest.PlayersResource;
 import online.shashki.rus.shashki.MoveFactory;
 import online.shashki.rus.shashki.Stroke;
 
@@ -37,7 +38,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final GameWebsocket gameWebsocket;
   private final ShashkiMessages messages;
   private final ResourceDelegate<GamesResource> gamesDelegate;
-  private EventBus eventBus;
+  private final ResourceDelegate<PlayersResource> playersDelegate;
+  private final EventBus eventBus;
 
   @Inject
   PlayComponentPresenter(
@@ -45,6 +47,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       MyView view,
       ShashkiMessages messages,
       ResourceDelegate<GamesResource> gamesDelegate,
+      ResourceDelegate<PlayersResource> playersDelegate,
       GameWebsocket gameWebsocket) {
     super(eventBus, view);
 
@@ -52,6 +55,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     this.messages = messages;
     this.gameWebsocket = gameWebsocket;
     this.gamesDelegate = gamesDelegate;
+    this.playersDelegate = playersDelegate;
+
     getView().setUiHandlers(this);
     getView().initNotationPanel(eventBus);
 

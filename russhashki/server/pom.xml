@@ -8,7 +8,6 @@
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <!--<groupId>online.shashki.rus</groupId>-->
     <artifactId>server</artifactId>
     <version>1.0-SNAPSHOT</version>
 
@@ -22,15 +21,6 @@
         <!--Tomcat-->
         <tomcat.version>7.0.61</tomcat.version>
 
-        <!--&lt;!&ndash;Google&ndash;&gt;-->
-        <!--<google.http.version>1.20.0</google.http.version>-->
-        <!--<google.oauth.version>1.20.0</google.oauth.version>-->
-        <!--<google-oauth-client.version>1.20.0</google-oauth-client.version>-->
-
-        <!--<gwt.version>2.7.0</gwt.version>-->
-        <!--GWTP-->
-        <!--<gwtp.version>1.5</gwtp.version>-->
-        <!--Guice-->
         <guice.version>4.0</guice.version>
         <guicy-resteasy.version>1.2</guicy-resteasy.version>
 
@@ -38,23 +28,19 @@
         <postgresql.version>9.3-1102-jdbc41</postgresql.version>
 
         <!--RESTEasy-->
-        <!--<jax-rs.version>1.1.1</jax-rs.version>-->
         <jersey.version>1.19</jersey.version>
-
-        <!--Maven-->
-        <!--<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>-->
-        <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
-        <!--<maven.compiler.source>1.7</maven.compiler.source>-->
-        <!--<maven.compiler.target>1.7</maven.compiler.target>-->
-        <!--<target.jdk>1.7</target.jdk>-->
         <jackson-datatype-jsr353.version>2.6.3</jackson-datatype-jsr353.version>
-        <servlet-api.version>3.1.0</servlet-api.version>
-        <hibernate-entitymanager.version>4.3.10.Final</hibernate-entitymanager.version>
         <resteasy-guice.version>3.0.13.Final</resteasy-guice.version>
         <resteasy-jackson2-provider.version>3.0.9.Final</resteasy-jackson2-provider.version>
+
+        <servlet-api.version>3.1.0</servlet-api.version>
+
         <commons-lang3.version>3.4</commons-lang3.version>
 
-        <!--<project.artifacts.directory>out/artifacts</project.artifacts.directory>-->
+        <hibernate-entitymanager.version>4.3.10.Final</hibernate-entitymanager.version>
+
+        <jukito.version>1.4.1</jukito.version>
+        <junit.version>4.12</junit.version>
     </properties>
 
     <dependencyManagement>
@@ -116,31 +102,6 @@
             <version>${gwt.version}</version>
         </dependency>
 
-        <!--<dependency>-->
-            <!--<groupId>org.apache.tomcat.embed</groupId>-->
-            <!--<artifactId>tomcat-embed-logging-juli</artifactId>-->
-            <!--<version>${tomcat.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.apache.tomcat.embed</groupId>-->
-            <!--<artifactId>tomcat-embed-jasper</artifactId>-->
-            <!--<version>${tomcat.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.apache.tomcat</groupId>-->
-            <!--<artifactId>tomcat-jasper</artifactId>-->
-            <!--<version>${tomcat.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.apache.tomcat</groupId>-->
-            <!--<artifactId>tomcat-jasper-el</artifactId>-->
-            <!--<version>${tomcat.version}</version>-->
-        <!--</dependency>-->
-        <!--<dependency>-->
-            <!--<groupId>org.apache.tomcat</groupId>-->
-            <!--<artifactId>tomcat-jsp-api</artifactId>-->
-            <!--<version>${tomcat.version}</version>-->
-        <!--</dependency>-->
         <dependency>
             <groupId>org.apache.tomcat</groupId>
             <artifactId>tomcat</artifactId>
@@ -155,17 +116,6 @@
             <version>${tomcat.version}</version>
             <scope>provided</scope>
         </dependency>
-        <!--<dependency>-->
-            <!--<groupId>org.apache.tomcat.embed</groupId>-->
-            <!--<artifactId>tomcat-embed-logging-log4j</artifactId>-->
-            <!--<version>${tomcat.version}</version>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-            <!--<groupId>org.apache.logging.log4j</groupId>-->
-            <!--<artifactId>log4j-jul</artifactId>-->
-            <!--<version>2.4.1</version>-->
-        <!--</dependency>-->
 
         <dependency>
             <groupId>org.apache.commons</groupId>
@@ -258,7 +208,6 @@
             <version>${resteasy-jackson2-provider.version}</version>
         </dependency>
 
-        <!--  Test Dependencies  -->
         <dependency>
             <groupId>com.arcbees</groupId>
             <artifactId>guicy-resteasy</artifactId>
@@ -275,32 +224,20 @@
             <artifactId>jackson-databind</artifactId>
             <version>2.4.5</version>
         </dependency>
+
+        <!--  Test Dependencies  -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jukito</groupId>
+            <artifactId>jukito</artifactId>
+        </dependency>
     </dependencies>
     <build>
         <finalName>rus</finalName>
         <plugins>
-            <!--<plugin>-->
-                <!--<groupId>org.codehaus.mojo</groupId>-->
-                <!--<artifactId>appassembler-maven-plugin</artifactId>-->
-                <!--<version>1.1.1</version>-->
-                <!--<configuration>-->
-                    <!--<assembleDirectory>target</assembleDirectory>-->
-                    <!--<programs>-->
-                        <!--<program>-->
-                            <!--<mainClass>launch.Main</mainClass>-->
-                            <!--<name>webapp</name>-->
-                        <!--</program>-->
-                    <!--</programs>-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>assemble</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
-            <!--</plugin>-->
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-compiler-plugin</artifactId>
@@ -338,28 +275,6 @@
             <build>
                 <finalName>rus</finalName>
                 <plugins>
-                    <!--<plugin>-->
-                    <!--<groupId>org.codehaus.mojo</groupId>-->
-                    <!--<artifactId>appassembler-maven-plugin</artifactId>-->
-                    <!--<version>1.1.1</version>-->
-                    <!--<configuration>-->
-                    <!--<assembleDirectory>target</assembleDirectory>-->
-                    <!--<programs>-->
-                    <!--<program>-->
-                    <!--<mainClass>launch.Main</mainClass>-->
-                    <!--<name>webapp</name>-->
-                    <!--</program>-->
-                    <!--</programs>-->
-                    <!--</configuration>-->
-                    <!--<executions>-->
-                    <!--<execution>-->
-                    <!--<phase>package</phase>-->
-                    <!--<goals>-->
-                    <!--<goal>assemble</goal>-->
-                    <!--</goals>-->
-                    <!--</execution>-->
-                    <!--</executions>-->
-                    <!--</plugin>-->
                     <plugin>
                         <groupId>org.apache.maven.plugins</groupId>
                         <artifactId>maven-compiler-plugin</artifactId>

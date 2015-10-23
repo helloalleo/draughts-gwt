@@ -3,6 +3,7 @@ package online.shashki.rus.server.dao.impl;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
+import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.GameMessageDao;
 import online.shashki.rus.shared.model.GameMessage;
 
@@ -33,6 +34,7 @@ public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements GameMess
   }
 
   @Override
+  @Transactional
   public List<GameMessage> findLastMessages(int countLast, Long playerId, Long opponentId) {
     Query query = getEntityManager().createQuery(
         "SELECT m " +

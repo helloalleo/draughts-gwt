@@ -5,8 +5,10 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.GameDao;
+import online.shashki.rus.shared.model.Friend;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.Player;
+import online.shashki.rus.shared.model.key.FriendId;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -22,13 +24,17 @@ public class GameService {
 
   private final Provider<GameDao> gameDaoProvider;
   private final PlayerService playerService;
+  private final FriendService friendService;
   private final GameDao gameDao;
 
   @Inject
   public GameService(Provider<GameDao> gameDaoProvider,
-                     PlayerService playerService, GameDao gameDao) {
+                     PlayerService playerService,
+                     FriendService friendService,
+                     GameDao gameDao) {
     this.gameDaoProvider = gameDaoProvider;
     this.playerService = playerService;
+    this.friendService = friendService;
     this.gameDao = gameDao;
   }
 
@@ -55,6 +61,24 @@ public class GameService {
       gameDaoProvider.get().create(game);
     } else {
       gameDaoProvider.get().edit(game);
+      Player player;
+      if (game.getPlayerWhite() != null) {
+        player = playerService.find(game.getPlayerWhite().getId());
+      } else {
+        return null;
+      }
+      Player friendOf;
+      if (game.getPlayerBlack() != null) {
+        friendOf = playerService.find(game.getPlayerBlack().getId());
+      } else {
+        return null;
+      }
+      final FriendId friendPk = new FriendId()
+          .setFriend(player)
+          .setFriendOf(friendOf);
+      Friend friend = new Friend()
+          .setPk(friendPk);
+      friendService.saveOrCreate(friend);
     }
     return game;
   }

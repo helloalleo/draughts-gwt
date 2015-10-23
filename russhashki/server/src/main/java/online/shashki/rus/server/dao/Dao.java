@@ -1,6 +1,6 @@
 package online.shashki.rus.server.dao;
 
-import online.shashki.rus.shared.model.PersistableObject;
+import online.shashki.rus.shared.model.BasePersistableObject;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * Date: 15.11.14
  * Time: 16:58
  */
-public interface Dao<E extends PersistableObject> {
+public interface Dao<E extends BasePersistableObject> {
   void create(E entity);
 
   void edit(E entity);

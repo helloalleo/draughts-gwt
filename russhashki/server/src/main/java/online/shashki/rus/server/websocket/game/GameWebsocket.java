@@ -112,7 +112,7 @@ public class GameWebsocket {
     player = playerService.find(playerId);
 
     player.setOnline(true);
-    playerService.saveOrCreate(null, player, true);
+    playerService.saveOrCreateOnServer(player);
 
     peers.put(player, session);
     System.out.println("Register new player: " + player.getId() + " " + session.getId());
@@ -135,7 +135,7 @@ public class GameWebsocket {
 
     player.setOnline(false);
     player.setPlaying(false);
-    playerService.saveOrCreate(null, player, true);
+    playerService.saveOrCreateOnServer(player);
 
     System.out.println("Disconnected: " + player.getId() + " " + session.getId());
     peers.values().remove(session);
@@ -203,7 +203,7 @@ public class GameWebsocket {
     List<Player> playerList = playerService.findAll();
     gameMessage.setPlayerList(playerList);
     gameMessageService.saveOrCreate(gameMessage);
-    for (Session s : session.getOpenSessions()) {
+    for (Session s : peers.values()) {
       if (s.isOpen()) {
         sendMessage(s, gameMessage);
       }

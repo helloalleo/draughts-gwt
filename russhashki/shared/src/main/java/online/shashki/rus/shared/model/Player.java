@@ -6,6 +6,7 @@ import online.shashki.rus.shared.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
 import java.util.Set;
 
 /**
@@ -54,16 +55,16 @@ public class Player extends PersistableObjectImpl {
   @Enumerated(EnumType.STRING)
   private AuthProvider authProvider;
 
-//  @GwtTransient
-//  @JsonIgnore
-//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.friendOf", cascade = CascadeType.ALL, orphanRemoval = true)
-//  private Set<FriendEntity> friends;
+  @GwtTransient
+  @JsonIgnore
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.friendOf", orphanRemoval = true)
+  private Set<Friend> friends = new HashSet<>();
 
-//  @GwtTransient
-//  @JsonIgnore
-//  @Column(name = "fiends_of")
-//  @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.friend", cascade = CascadeType.ALL, orphanRemoval = true)
-//  private Set<FriendEntity> friendOf;
+  @GwtTransient
+  @JsonIgnore
+  @Column(name = "fiends_of")
+  @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.friend", orphanRemoval = true)
+  private Set<Friend> friendOf = new HashSet<>();
 
   @GwtTransient
   @JsonIgnore
@@ -124,6 +125,24 @@ public class Player extends PersistableObjectImpl {
   private String googleSub;
 
   public Player() {
+  }
+
+  public Set<Friend> getFriends() {
+    return friends;
+  }
+
+  public Player setFriends(Set<Friend> friends) {
+    this.friends = friends;
+    return this;
+  }
+
+  public Set<Friend> getFriendOf() {
+    return friendOf;
+  }
+
+  public Player setFriendOf(Set<Friend> friendOf) {
+    this.friendOf = friendOf;
+    return this;
   }
 
   public String getSessionId() {
@@ -388,10 +407,13 @@ public class Player extends PersistableObjectImpl {
     return this;
   }
 
+  public String getGoogleSub() {
+    return googleSub;
+  }
+
   public enum AuthProvider {
     VK,
     FACEBOOK,
-    GOOGLE,
-    WINDOWS
+    GOOGLE
   }
 }

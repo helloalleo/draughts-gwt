@@ -11,6 +11,7 @@ import com.google.web.bindery.event.shared.HandlerRegistration;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.model.Move;
+import online.shashki.rus.shared.util.StringUtils;
 import online.shashki.rus.shashki.util.Operator;
 import online.shashki.rus.shashki.util.PossibleOperators;
 
@@ -34,8 +35,8 @@ public class Board extends Layer {
   private boolean turn;
   private int rows;
   private int cols;
-  private final double removeDraughtFade = 400;
-  private final double moveDraughtDuration = 800;
+  private final double removeDraughtFade = 200;
+  private final double moveDraughtDuration = 200;
   private boolean emulate = false; // эмулировать шашки
   private HashMap<String, Integer> alphMap;
   // стек ходов шашек, когда они становятся дамками
@@ -993,6 +994,11 @@ public class Board extends Layer {
     this.emulate = emulate;
   }
 
+  /**
+   * Функция перемещает шашку игрока на заданные координаты
+   * @param clickX
+   * @param clickY
+   */
   public void moveDraught(double clickX, double clickY) {
     Draught selectedDraught = Draught.getSelectedDraught();
     if (selectedDraught != null && !highlightedSquares.isEmpty()) {
@@ -1026,7 +1032,10 @@ public class Board extends Layer {
         SHLog.debug("END SQUARE " + endSquare);
         eventBus.fireEvent(new NotationStrokeEvent(stroke, isWhite()));
 
-        final Move move = MoveFactory.createMoveFromStroke(stroke);
+        final Move move = MoveFactory.createMoveFromStroke(stroke)
+            .setTitle(stroke.toNotation(isWhite()))
+            .setHashTags(StringUtils.getHashes(getComment()));
+
         eventBus.fireEvent(new PlayMoveMessageEvent(move));
         moveMyStack.push(stroke);
         SHLog.debug("MOVE DRAUGHT " + stroke.toString());
@@ -1141,5 +1150,9 @@ public class Board extends Layer {
       return null;
     }
     return moveOpponentStack.lastElement();
+  }
+
+  public String getComment() {
+    return "sdfsd #dsffsd, sdfdsf #123";
   }
 }

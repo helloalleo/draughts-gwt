@@ -43,7 +43,7 @@ public class AuthUtils {
         || !player.getSessionId().equals(session.getId())) {
       player.setSessionId(session.getId());
     }
-    playerService.saveOrCreate(req.getSession(), player, true);
+    playerService.saveOrCreateOnServer(player);
 
     if (!newPlayer) {
       player.setVisitCounter(player.getVisitCounter() + 1);

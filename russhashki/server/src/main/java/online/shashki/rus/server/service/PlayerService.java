@@ -3,9 +3,7 @@ package online.shashki.rus.server.service;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.PlayerDao;
-import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.shared.model.Player;
 
 import javax.servlet.http.HttpSession;
@@ -21,19 +19,21 @@ public class PlayerService {
     this.playerDaoProvider = playerDaoProvider;
   }
 
-  public Player saveOrCreate(HttpSession session, Player player) {
-    return saveOrCreate(session, player, false);
+  public Player saveOrCreate(Player player) {
+    return saveOrCreate(player, false);
   }
 
-  @Transactional
-  public Player saveOrCreate(HttpSession session, Player player, boolean serverSide) {
-    final Player currentProfile = getLoggedInUser(session);
-    if (currentProfile == null && player != null && player.getId() == null) {
+  public Player saveOrCreateOnServer(Player player) {
+    return saveOrCreate(player, true);
+  }
+
+  private Player saveOrCreate(Player player, boolean serverSide) {
+    if (player != null && player.getId() == null) {
       playerDaoProvider.get().create(player);
       return player;
     }
 
-    if (!(AuthUtils.isAuthenticated(session) || serverSide)) {
+    if (!serverSide) {
       return null;
     }
 

@@ -34,6 +34,17 @@ public class Move extends PersistableObjectImpl {
   @ElementCollection
   private Set<MoveFlags> moveFlags = new HashSet<>();
 
+  private String title;
+
+  private String comment;
+
+  @Column(name = "hash_tags")
+  @ElementCollection
+  private Set<String> hashTags = new HashSet<>();
+
+  @Column(columnDefinition = "TEXT")
+  private String screenshot;
+
   public Move() {
   }
 
@@ -118,6 +129,42 @@ public class Move extends PersistableObjectImpl {
     return this;
   }
 
+  public String getTitle() {
+    return title;
+  }
+
+  public Move setTitle(String title) {
+    this.title = title;
+    return this;
+  }
+
+  public String getComment() {
+    return comment;
+  }
+
+  public Move setComment(String comment) {
+    this.comment = comment;
+    return this;
+  }
+
+  public String getScreenshot() {
+    return screenshot;
+  }
+
+  public Move setScreenshot(String screenshot) {
+    this.screenshot = screenshot;
+    return this;
+  }
+
+  public Set<String> getHashTags() {
+    return hashTags;
+  }
+
+  public Move setHashTags(Set<String> hashTags) {
+    this.hashTags = hashTags;
+    return this;
+  }
+
   @Override
   public String toString() {
     return "Move{" +
@@ -129,6 +176,7 @@ public class Move extends PersistableObjectImpl {
         ", moveFlags=" + moveFlags +
         '}';
   }
+
 
  public enum MoveFlags {
     CANCEL_MOVE, // ход отменяется
