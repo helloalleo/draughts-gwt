@@ -13,8 +13,8 @@ import java.util.ResourceBundle;
 @Singleton
 public class ServerConfiguration {
 
-  private final String notFoundError;
-  private final String serverError;
+  private final String notFoundErrorUrl;
+  private final String serverErrorUrl;
   private final String context;
   private final String vkRedirectUri;
   private final String vkClientId;
@@ -33,13 +33,19 @@ public class ServerConfiguration {
   private String fbApiOAuthPath;
   private String loginUrl;
   private String homeUrl;
+  private String googleClientId;
+  private String googleScope;
+  private String googleRedirectUri;
+  private String googleApiVersion;
+  private String googleClientSecret;
+  private String googleApiUserInfo;
 
   public ServerConfiguration() {
     ResourceBundle resourceBundle = ResourceBundle.getBundle("ServerConfiguration");
 
     context = resourceBundle.getString("context");
-    serverError = resourceBundle.getString("server_error");
-    notFoundError = resourceBundle.getString("not_found_error");
+    serverErrorUrl = resourceBundle.getString("server_error_url");
+    notFoundErrorUrl = resourceBundle.getString("not_found_error_url");
     loginUrl = resourceBundle.getString("login");
     homeUrl = resourceBundle.getString("home");
 
@@ -61,14 +67,21 @@ public class ServerConfiguration {
     fbClientSecret = resourceBundle.getString("fb_client_secret");
     fbScope = resourceBundle.getString("fb_scope");
     fbApiVersion = resourceBundle.getString("fb_api_version");
+
+    // Google API Data
+    googleRedirectUri = resourceBundle.getString("google_redirect_uri");
+    googleApiUserInfo = resourceBundle.getString("google_api_user_info");
+    googleClientId = resourceBundle.getString("google_client_id");
+    googleClientSecret = resourceBundle.getString("google_client_secret");
+    googleScope = resourceBundle.getString("google_scope");
   }
 
-  public String getNotFoundError() {
-    return notFoundError;
+  public String getNotFoundErrorUrl() {
+    return notFoundErrorUrl;
   }
 
-  public String getServerError() {
-    return serverError;
+  public String getServerErrorUrl() {
+    return serverErrorUrl;
   }
 
   public String getContext() {
@@ -142,5 +155,25 @@ public class ServerConfiguration {
 
   public String getHomeUrl() {
     return homeUrl;
+  }
+
+  public String getGoogleClientId() {
+    return googleClientId;
+  }
+
+  public String getGoogleScope() {
+    return googleScope;
+  }
+
+  public String getGoogleRedirectUri() {
+    return googleRedirectUri;
+  }
+
+  public String getGoogleClientSecret() {
+    return googleClientSecret;
+  }
+
+  public String getGoogleApiUserInfo() {
+    return googleApiUserInfo;
   }
 }

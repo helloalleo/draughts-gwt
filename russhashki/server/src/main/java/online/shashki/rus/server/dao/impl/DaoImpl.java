@@ -4,6 +4,8 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.Dao;
 import online.shashki.rus.shared.model.PersistableObject;
+import online.shashki.rus.shared.model.Player;
+import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -83,5 +85,33 @@ public abstract class DaoImpl<E extends PersistableObject> implements Dao<E> {
     cq.select(qb.count(cq.from(entityClass)));
     cq.where(/*your stuff*/);
     return getEntityManager().createQuery(cq).getSingleResult();
+  }
+
+  protected Player findByParam(String entity, String[] params, Object[] values) throws IllegalArgumentException {
+    if (StringUtils.isEmpty(entity)) {
+      throw new IllegalArgumentException("Illegal entity parameter");
+    }
+    if (params.length != values.length) {
+      throw new IllegalArgumentException("Length of params and values must be equal");
+    }
+
+    String hql = "FROM " + entity + " WHERE ";
+    for (int i = 0; i < params.length; i++) {
+      if (i != 0) {
+        hql += " AND ";
+      }
+      hql += " " + params[i] + " = :" + params[i] + " ";
+    }
+
+    Query query = getEntityManager().createQuery(hql);
+    for (int i = 0; i < params.length; i++) {
+      query.setParameter(params[i], values[i]);
+    }
+
+    List result = query.getResultList();
+    if (result.isEmpty()) {
+      return null;
+    }
+    return (Player) result.get(0);
   }
 }

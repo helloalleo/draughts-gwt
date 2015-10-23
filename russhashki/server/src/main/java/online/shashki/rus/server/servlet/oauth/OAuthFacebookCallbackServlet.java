@@ -27,10 +27,8 @@ import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
-import java.util.Date;
 import java.util.logging.Logger;
 
 /**
@@ -75,28 +73,24 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
       log.info("Request Token Uri: " + request.getLocationUri());
       OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
       OAuthAccessTokenResponse response = oAuthClient.accessToken(request, OAuthJSONAccessTokenResponse.class);
-      System.out.println(response.getBody());
 
       String accessToken = response.getAccessToken();
 
       if (StringUtils.isEmpty(accessToken)) {
-        resp.sendRedirect(config.getServerError());
+        resp.sendRedirect(config.getServerErrorUrl());
         return;
       }
 
       OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(config.getFbApiGraph() + "/me?fields=id,name,email")
           .setAccessToken(accessToken)
           .buildQueryMessage();
-      System.out.println(bearerClientRequest.getLocationUri());
 
       OAuthResourceResponse resourceResponse = oAuthClient.resource(bearerClientRequest,
           OAuth.HttpMethod.GET,
           OAuthResourceResponse.class);
 
-      System.out.println(resourceResponse.getBody());
-
       if (resourceResponse.getResponseCode() != 200) {
-        resp.sendRedirect(config.getServerError());
+        resp.sendRedirect(config.getServerErrorUrl());
         return;
       }
 
@@ -105,8 +99,8 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
       JsonObject responseObject = jsonReader.readObject();
       String user_id = responseObject.getString("id");
       if (StringUtils.isNoneEmpty(user_id)) {
-        System.out.println(user_id);
         Player player = playerService.findByFbId(user_id);
+        boolean newPlayer = player == null;
         if (player == null) {
           player = new Player();
           player.setFbId(user_id);
@@ -121,24 +115,9 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
           }
           String email = responseObject.getString("email");
           player.setEmail(email);
-        } else {
-          player.setVisitCounter(player.getVisitCounter() + 1);
         }
 
-        player.setLastVisited(new Date());
-        player.setLoggedIn(true);
-        player.setPlaying(false);
-        player.setOnline(false);
-
-        HttpSession session = req.getSession();
-        if (player.getSessionId() == null
-            || !player.getSessionId().equals(session.getId())) {
-          player.setSessionId(session.getId());
-        }
-        playerService.saveOrCreate(req.getSession(), player, true);
-
-        AuthUtils.login(req);
-        resp.sendRedirect(config.getHomeUrl());
+        AuthUtils.processUserAndRedirect(playerService, config, req, resp, player, newPlayer);
       }
     } catch (OAuthSystemException | OAuthProblemException e) {
       log.severe(e.getLocalizedMessage());

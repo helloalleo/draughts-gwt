@@ -7,8 +7,7 @@ import online.shashki.rus.server.dao.PlayerDao;
 import online.shashki.rus.shared.model.Player;
 
 import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.List;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,11 +18,13 @@ import java.util.List;
 public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
 
   private final Provider<EntityManager> entityManagerProvider;
+  private final Logger log;
 
   @Inject
-  public PlayerDaoImpl(TypeLiteral<Player> type, Provider<EntityManager> entityManagerProvider) {
+  public PlayerDaoImpl(TypeLiteral<Player> type, Provider<EntityManager> entityManagerProvider, Logger log) {
     super(type);
     this.entityManagerProvider = entityManagerProvider;
+    this.log = log;
   }
 
   @Override
@@ -31,56 +32,53 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
     return entityManagerProvider.get();
   }
 
-//  @Override
-//  public List<Shashist> findAll() {
-//    Query query = getEntityManager().createQuery("SELECT sh FROM Shashist sh " +
-//        "JOIN FETCH sh.blackRoleGames " +
-//        "JOIN FETCH sh.whiteRoleGames");
-//    return query.getResultList();
-//  }
-
   @Override
-  public Player findByVkId(String uid) {
-    Query query = getEntityManager().createQuery("FROM Player " +
-            "WHERE vkId = :vkId");
-    query.setParameter("vkId", uid);
-    List list = query.getResultList();
-    return list.isEmpty() ? null : (Player) list.get(0);
+  public Player findByVkId(String vkId) {
+    try {
+      return findByParam("Player", new String[]{"vkId"}, new String[]{vkId});
+    } catch (IllegalArgumentException e) {
+      log.severe(e.getLocalizedMessage());
+      return null;
+    }
   }
 
   @Override
   public Player findBySessionId(String sessionId) {
-    Query query = getEntityManager().createQuery("FROM Player " +
-            "WHERE sessionId = :sessionId");
-    query.setParameter("sessionId", sessionId);
-    List result = query.getResultList();
-    if (result.isEmpty()) {
+    try {
+      return findByParam("Player", new String[]{"sessionId"}, new String[]{sessionId});
+    } catch (IllegalArgumentException e) {
+      log.severe(e.getLocalizedMessage());
       return null;
     }
-    return (Player) result.get(0);
   }
 
   @Override
   public Player findById(Long playerId) {
-    Query query = getEntityManager().createQuery("FROM Player " +
-            "WHERE id = :playerId");
-    query.setParameter("playerId", playerId);
-    List result = query.getResultList();
-    if (result.isEmpty()) {
+    try {
+      return findByParam("Player", new String[]{"id"}, new Long[]{playerId});
+    } catch (IllegalArgumentException e) {
+      log.severe(e.getLocalizedMessage());
       return null;
     }
-    return (Player) result.get(0);
   }
 
   @Override
   public Player findByFbId(String user_id) {
-    Query query = getEntityManager().createQuery("FROM Player " +
-            "WHERE fbId = :fbId");
-    query.setParameter("fbId", user_id);
-    List result = query.getResultList();
-    if (result.isEmpty()) {
+    try {
+      return findByParam("Player", new String[]{"fbId"}, new String[]{user_id});
+    } catch (IllegalArgumentException e) {
+      log.severe(e.getLocalizedMessage());
       return null;
     }
-    return (Player) result.get(0);
+  }
+
+  @Override
+  public Player findByGoogleSub(String sub) {
+    try {
+      return findByParam("Player", new String[]{"googleSub"}, new String[]{sub});
+    } catch (IllegalArgumentException e) {
+      log.severe(e.getLocalizedMessage());
+      return null;
+    }
   }
 }

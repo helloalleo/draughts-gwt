@@ -118,6 +118,11 @@ public class Player extends PersistableObjectImpl {
   @Column(name = "fb_id")
   private String fbId;
 
+  @GwtTransient
+  @JsonIgnore
+  @Column(name = "google_sub")
+  private String googleSub;
+
   public Player() {
   }
 
@@ -376,6 +381,11 @@ public class Player extends PersistableObjectImpl {
 
   public String getFbId() {
     return fbId;
+  }
+
+  public Player setGoogleSub(String googleSub) {
+    this.googleSub = googleSub;
+    return this;
   }
 
   public enum AuthProvider {

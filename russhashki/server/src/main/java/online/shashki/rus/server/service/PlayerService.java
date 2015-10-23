@@ -79,4 +79,8 @@ public class PlayerService {
   public Player findByFbId(String user_id) {
     return playerDaoProvider.get().findByFbId(user_id);
   }
+
+  public Player findByGoogleSub(String sub) {
+    return playerDaoProvider.get().findByGoogleSub(sub);
+  }
 }
