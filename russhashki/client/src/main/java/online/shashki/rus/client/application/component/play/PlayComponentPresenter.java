@@ -59,14 +59,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
     getView().setUiHandlers(this);
     getView().initNotationPanel(eventBus);
-
-    addRegisteredHandler(ReceivedPlayerListEvent.TYPE, new ReceivedPlayerListEventHandler() {
-          @Override
-          public void onReceivedPlayerList(ReceivedPlayerListEvent event) {
-            getView().setPlayerList(event.getPlayerList());
-          }
-        }
-    );
   }
 
   @Override
@@ -101,7 +93,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
             String.valueOf(white ? messages.white() : messages.black())));
         gameMessage.setData(String.valueOf(white));
 
-        eventBus.fireEvent(new GameMessageEvent(gameMessage));
+        fireEvent(new GameMessageEvent(gameMessage));
       }
     });
   }
@@ -132,15 +124,15 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   public void proposeDraw() {
     GameMessage gameMessage = createGameMessage();
     gameMessage.setMessageType(GameMessage.MessageType.PLAY_PROPOSE_DRAW);
-    eventBus.fireEvent(new GameMessageEvent(gameMessage));
+    fireEvent(new GameMessageEvent(gameMessage));
   }
 
   @Override
   public void playerSurrendered() {
     GameMessage gameMessage = createGameMessage();
     gameMessage.setMessageType(GameMessage.MessageType.PLAY_SURRENDER);
-    eventBus.fireEvent(new GameMessageEvent(gameMessage));
-    eventBus.fireEvent(new ClearPlayComponentEvent());
+    fireEvent(new GameMessageEvent(gameMessage));
+    fireEvent(new ClearPlayComponentEvent());
   }
 
   @Override
@@ -154,7 +146,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     Move move = MoveFactory.createMoveFromStroke(stroke);
     gameMessage.setMove(move);
 
-    eventBus.fireEvent(new GameMessageEvent(gameMessage));
+    fireEvent(new GameMessageEvent(gameMessage));
   }
 
   private GameMessage createGameMessage() {
@@ -166,13 +158,13 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   public void bindEvents() {
-    eventBus.addHandler(ReceivedPlayerListEvent.TYPE, new ReceivedPlayerListEventHandler() {
+    addRegisteredHandler(ReceivedPlayerListEvent.TYPE, new ReceivedPlayerListEventHandler() {
       @Override
       public void onReceivedPlayerList(ReceivedPlayerListEvent event) {
         if (!event.getPlayerList().contains(gameWebsocket.getOpponent()) && gameWebsocket.getGame() != null) {
           Game game = gameWebsocket.getGame();
           final Game.GameEnds gameEnd = gameWebsocket.isPlayerHasWhiteColor() ? Game.GameEnds.BLACK_LEFT : Game.GameEnds.WHITE_LEFT;
-          eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
+          fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
             @Override
             public void onFailure(Throwable throwable) {
               ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
@@ -188,21 +180,21 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       }
     });
 
-    eventBus.addHandler(ConnectedToPlayEvent.TYPE, new ConnectedToPlayEventHandler() {
+    addRegisteredHandler(ConnectedToPlayEvent.TYPE, new ConnectedToPlayEventHandler() {
       @Override
       public void onConnectedToPlay(ConnectedToPlayEvent event) {
         getView().toggleInPlayButton();
       }
     });
 
-    eventBus.addHandler(DisconnectFromPlayEvent.TYPE, new DisconnectFromPlayEventHandler() {
+    addRegisteredHandler(DisconnectFromPlayEvent.TYPE, new DisconnectFromPlayEventHandler() {
       @Override
       public void onDisconnectFromPlay(DisconnectFromPlayEvent event) {
         getView().setUpViewOnDisconnectFromServer();
       }
     });
 
-    eventBus.addHandler(StartPlayEvent.TYPE, new StartPlayEventHandler() {
+    addRegisteredHandler(StartPlayEvent.TYPE, new StartPlayEventHandler() {
       @Override
       public void onStartPlay(StartPlayEvent event) {
         getView().hideInviteDialog();
@@ -215,21 +207,21 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       }
     });
 
-    eventBus.addHandler(RejectPlayEvent.TYPE, new RejectPlayEventHandler() {
+    addRegisteredHandler(RejectPlayEvent.TYPE, new RejectPlayEventHandler() {
       @Override
       public void onRejectPlay(RejectPlayEvent event) {
         getView().hideInviteDialog();
       }
     });
 
-    eventBus.addHandler(TurnChangeEvent.TYPE, new TurnChangeEventHandler() {
+    addRegisteredHandler(TurnChangeEvent.TYPE, new TurnChangeEventHandler() {
       @Override
       public void onTurnChange(TurnChangeEvent event) {
         getView().updateTurn(event.isMyTurn());
       }
     });
 
-    eventBus.addHandler(CheckWinnerEvent.TYPE, new CheckWinnerEventHandler() {
+    addRegisteredHandler(CheckWinnerEvent.TYPE, new CheckWinnerEventHandler() {
       @Override
       public void onCheckWinner(CheckWinnerEvent event) {
         getView().setBeatenMy(CHECKERS_ON_DESK_INIT - getView().getMyDraughtsSize());
@@ -255,7 +247,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         if (gameEnd == null) {
           return;
         }
-        eventBus.fireEvent(new GameOverEvent(endGame, gameEnd, new AsyncCallback<Game>() {
+        fireEvent(new GameOverEvent(endGame, gameEnd, new AsyncCallback<Game>() {
           @Override
           public void onFailure(Throwable caught) {
             ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), caught).show();
@@ -268,12 +260,12 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       }
     });
 
-    eventBus.addHandler(ClearPlayComponentEvent.TYPE, new ClearPlayComponentEventHandler() {
+    addRegisteredHandler(ClearPlayComponentEvent.TYPE, new ClearPlayComponentEventHandler() {
       @Override
       public void onClearPlayComponent(ClearPlayComponentEvent event) {
-        eventBus.fireEvent(new ClearNotationEvent());
-        eventBus.fireEvent(new UpdatePlayerListEvent());
-        eventBus.fireEvent(new RemovePlayMoveOpponentHandlerEvent());
+        fireEvent(new ClearNotationEvent());
+        fireEvent(new UpdatePlayerListEvent());
+        fireEvent(new RemovePlayMoveOpponentHandlerEvent());
 
         gameWebsocket.setOpponent(null);
         getView().setOpponent(null);
@@ -284,14 +276,14 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       }
     });
 
-    eventBus.addHandler(HideInviteDialogBoxEvent.TYPE, new HideInviteDialogBoxEventHandler() {
+    addRegisteredHandler(HideInviteDialogBoxEvent.TYPE, new HideInviteDialogBoxEventHandler() {
       @Override
       public void onHideInviteDialogBox(HideInviteDialogBoxEvent event) {
         getView().hideInviteDialog();
       }
     });
 
-    eventBus.addHandler(GameOverEvent.TYPE, new GameOverEventHandler() {
+    addRegisteredHandler(GameOverEvent.TYPE, new GameOverEventHandler() {
       @Override
       public void onGameOver(GameOverEvent event) {
         Game game = event.getGame();
@@ -300,7 +292,23 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         game.setPartyNotation(NotationPanel.getNotation());
         game.setEndGameScreenshot(getView().takeScreenshot());
         gamesDelegate.withCallback(event.getAsyncCallback()).saveOrCreate(game);
-        eventBus.fireEvent(new ClearPlayComponentEvent());
+
+        GameMessage gameMessage = new GameMessage();
+        gameMessage.setSender(gameWebsocket.getPlayer());
+        gameMessage.setReceiver(gameWebsocket.getOpponent());
+        SHLog.debug("CALLBACK MESSAGE " + gameMessage);
+        gameMessage.setMessageType(GameMessage.MessageType.PLAY_CALLBACK);
+        fireEvent(new GameMessageEvent(gameMessage));
+
+        fireEvent(new ClearPlayComponentEvent());
+        fireEvent(new UpdatePlayShowPanelEvent());
+      }
+    });
+
+    addRegisteredHandler(PlayCallbackEvent.TYPE, new PlayCallbackEventHandler() {
+      @Override
+      public void onPlayCallback(PlayCallbackEvent event) {
+        fireEvent(new UpdatePlayShowPanelEvent());
       }
     });
   }

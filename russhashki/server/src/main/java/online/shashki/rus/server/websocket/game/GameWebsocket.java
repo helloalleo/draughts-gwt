@@ -80,6 +80,7 @@ public class GameWebsocket {
       case PLAY_ACCEPT_DRAW:
       case PLAY_CANCEL_MOVE:
       case PLAY_CANCEL_MOVE_RESPONSE:
+      case PLAY_CALLBACK:
       case CHAT_PRIVATE_MESSAGE:
         handleChatPrivateMessage(gameMessage);
         break;
@@ -200,7 +201,7 @@ public class GameWebsocket {
   private void updatePlayerList(Session session) {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
-    List<Player> playerList = playerService.findAll();
+    List<Player> playerList = playerService.findLoggedIn();
     gameMessage.setPlayerList(playerList);
     gameMessageService.saveOrCreate(gameMessage);
     for (Session s : peers.values()) {

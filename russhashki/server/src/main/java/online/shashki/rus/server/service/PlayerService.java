@@ -33,10 +33,6 @@ public class PlayerService {
       return player;
     }
 
-    if (!serverSide) {
-      return null;
-    }
-
     if (player == null) {
       return null;
     }
@@ -82,5 +78,9 @@ public class PlayerService {
 
   public Player findByGoogleSub(String sub) {
     return playerDaoProvider.get().findByGoogleSub(sub);
+  }
+
+  public List<Player> findLoggedIn() {
+    return playerDaoProvider.get().findLoggedIn();
   }
 }

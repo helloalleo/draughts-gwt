@@ -8,6 +8,8 @@ import online.shashki.rus.server.dao.PlayerDao;
 import online.shashki.rus.shared.model.Player;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
+import java.util.List;
 import java.util.logging.Logger;
 
 /**
@@ -86,5 +88,15 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
       log.severe(e.getLocalizedMessage());
       return null;
     }
+  }
+
+  @Override
+  @Transactional
+  public List<Player> findLoggedIn() {
+    String hql = "SELECT p " +
+        "FROM Player p " +
+        "WHERE p.loggedIn = true";
+    Query query = getEntityManager().createQuery(hql);
+    return query.getResultList();
   }
 }

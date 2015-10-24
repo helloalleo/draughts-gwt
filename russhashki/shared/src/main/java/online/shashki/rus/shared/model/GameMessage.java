@@ -178,6 +178,7 @@ public class GameMessage extends PersistableObjectImpl {
     PLAY_ACCEPT_DRAW,
     PLAY_END,
     PLAY_SURRENDER,
+    PLAY_CALLBACK,
     PLAYER_REGISTER
   }
 }

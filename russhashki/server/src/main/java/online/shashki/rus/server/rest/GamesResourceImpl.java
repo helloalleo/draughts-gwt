@@ -1,9 +1,9 @@
 package online.shashki.rus.server.rest;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.servlet.RequestScoped;
 import online.shashki.rus.server.service.GameService;
+import online.shashki.rus.server.utils.AuthUtils;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.rest.GamesResource;
 
@@ -21,13 +21,13 @@ import java.util.List;
 public class GamesResourceImpl implements GamesResource {
 
   private final GameService gameService;
-  private final Provider<HttpServletRequest> requestProvider;
+  private final HttpServletRequest request;
 
   @Inject
   public GamesResourceImpl(GameService gameService,
-                           Provider<HttpServletRequest> requestProvider) {
+                           HttpServletRequest request) {
     this.gameService = gameService;
-    this.requestProvider = requestProvider;
+    this.request = request;
   }
 
   @Override
@@ -37,7 +37,7 @@ public class GamesResourceImpl implements GamesResource {
 
   @Override
   public List<Game> getLoggedInUserGames(@DefaultValue(DEFAULT_OFFSET) int offset, @DefaultValue(DEFAULT_LIMIT) int limit) {
-    return gameService.findUserGames(requestProvider.get().getSession(), offset, limit);
+    return gameService.findUserGames(request.getSession(), offset, limit);
   }
 
   @Override
@@ -47,6 +47,9 @@ public class GamesResourceImpl implements GamesResource {
 
   @Override
   public Game saveOrCreate(Game game) {
+    if (!AuthUtils.isAuthenticated(request.getSession())) {
+      throw new RuntimeException("Unauthorized");
+    }
     return gameService.saveOrCreate(game);
   }
 

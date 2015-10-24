@@ -16,6 +16,7 @@ import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.model.Game;
 import org.gwtbootstrap3.client.ui.Column;
 import org.gwtbootstrap3.client.ui.Row;
+import org.gwtbootstrap3.client.ui.html.Hr;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -109,6 +110,7 @@ public class PlayShowPanel extends Composite {
       row.add(column);
     }
     playRowList.add(row);
+    playRowList.add(new Hr());
   }
 
   public void moreGameOnPanel() {

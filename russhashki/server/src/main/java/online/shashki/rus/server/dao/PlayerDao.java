@@ -2,6 +2,8 @@ package online.shashki.rus.server.dao;
 
 import online.shashki.rus.shared.model.Player;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -19,4 +21,6 @@ public interface PlayerDao extends Dao<Player> {
   Player findByFbId(String user_id);
 
   Player findByGoogleSub(String sub);
+
+  List<Player> findLoggedIn();
 }

@@ -159,8 +159,8 @@ public class GameWebsocket implements WebSocketCallback {
         game.setPlayStartDate(new Date());
         game.setPlayerWhite(isWhite() ? connectionSession.getPlayer() : connectionSession.getOpponent());
         game.setPlayerBlack(isWhite() ? connectionSession.getOpponent() : connectionSession.getPlayer());
-        SHLog.debug(game.getPlayerWhite().getPublicName() + " PLAYER WHITE");
-        SHLog.debug(game.getPlayerBlack().getPublicName() + " PLAYER BLACK");
+        SHLog.debug("PLAYER WHITE :: " + game.getPlayerWhite());
+        SHLog.debug("PLAYER BLACK :: " + game.getPlayerBlack());
         gamesDelegate.withCallback(new AsyncCallback<Game>() {
           @Override
           public void onFailure(Throwable throwable) {
@@ -220,12 +220,8 @@ public class GameWebsocket implements WebSocketCallback {
 
   @Override
   public void onMessage(String message) {
-//    MessageFactory messageFactory = GWT.create(MessageFactory.class);
-//    AutoBean<GameMessage> bean = AutoBeanCodex.decode(messageFactory, GameMessage.class, message);
-//    GameMessage gameMessage = bean.as();
-    SHLog.debug(message);
+    SHLog.debug("ON_MESSAGE :: " + message);
     GameMessage gameMessage = gameMessageMapper.read(message);
-//    GameMessage gameMessage = jsonSerialization.deserialize("json", null, message);
     switch (gameMessage.getMessageType()) {
       case USER_LIST_UPDATE:
         handleUpdatePlayerList(gameMessage.getPlayerList());
@@ -260,10 +256,17 @@ public class GameWebsocket implements WebSocketCallback {
       case PLAY_CANCEL_MOVE_RESPONSE:
         handlePlayCancelMoveResponse(gameMessage);
         break;
+      case PLAY_CALLBACK:
+        handlePlayCallback(gameMessage);
+        break;
       case CHAT_PRIVATE_MESSAGE:
         handleChatPrivateMessage(gameMessage);
         break;
     }
+  }
+
+  private void handlePlayCallback(GameMessage gameMessage) {
+    eventBus.fireEvent(new PlayCallbackEvent());
   }
 
   private void handlePlayAlreadyPlaying(GameMessage gameMessage) {
@@ -360,8 +363,9 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlaySurrender(GameMessage gameMessage) {
     Game game = connectionSession.getGame();
-    final Game.GameEnds gameEnd = connectionSession.isPlayerHasWhiteColor() ? Game.GameEnds.SURRENDER_WHITE
-        : Game.GameEnds.SURRENDER_BLACK;
+    // так как сохраняем на противоположной строне, игроки черный-белый переставлены
+    final Game.GameEnds gameEnd = connectionSession.isPlayerHasWhiteColor() ? Game.GameEnds.SURRENDER_BLACK
+        : Game.GameEnds.SURRENDER_WHITE;
     eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
       @Override
       public void onFailure(Throwable throwable) {

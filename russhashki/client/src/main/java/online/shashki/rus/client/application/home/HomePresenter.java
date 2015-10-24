@@ -16,6 +16,8 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.shashki.rus.client.application.ApplicationPresenter;
 import online.shashki.rus.client.application.component.play.PlayComponentPresenter;
 import online.shashki.rus.client.application.security.CurrentSession;
+import online.shashki.rus.client.event.UpdatePlayShowPanelEvent;
+import online.shashki.rus.client.event.UpdatePlayShowPanelEventHandler;
 import online.shashki.rus.client.place.NameTokens;
 import online.shashki.rus.client.util.AbstractAsyncCallback;
 import online.shashki.rus.client.util.SHCookies;
@@ -52,6 +54,16 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     this.playPresenter = playPresenter;
     this.gamesDelegate = gamesDelegate;
     SHCookies.setLocation(NameTokens.homePage);
+    bindEvent();
+  }
+
+  private void bindEvent() {
+    addRegisteredHandler(UpdatePlayShowPanelEvent.TYPE, new UpdatePlayShowPanelEventHandler() {
+      @Override
+      public void onUpdatePlayShowPanel(UpdatePlayShowPanelEvent event) {
+        updatePlayShowPanel();
+      }
+    });
   }
 
   @Override
@@ -66,6 +78,10 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public void prepareFromRequest(PlaceRequest request) {
     super.prepareFromRequest(request);
 
+    updatePlayShowPanel();
+  }
+
+  private void updatePlayShowPanel() {
     gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
       @Override
       public void onFailure(Throwable caught) {

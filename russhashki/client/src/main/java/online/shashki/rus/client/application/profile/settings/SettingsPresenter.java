@@ -61,7 +61,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
         SettingsPresenter.this.player.setPlayerName(result.getPlayerName());
         InfoDialogBox.setMessage(messages.profileUpdated()).show();
         if (connectionSession.isConnected()) {
-          eventBus.fireEvent(new UpdatePlayerListEvent());
+          fireEvent(new UpdatePlayerListEvent());
         }
       }
     }).saveOrCreate(player);
