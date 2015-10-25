@@ -41,6 +41,10 @@
                     <ui:msg description="Сдаться" key="surrenderButton">Сдаться</ui:msg>
                 </b:Button>
             </span>
+            <ui:msg description="Список игроков" key="playerFriendListLabel">
+                <b>Недавно играли с вами:</b>
+            </ui:msg>
+            <g:ScrollPanel ui:field="playerFriendPanel"/>
             <ui:msg description="Список игроков" key="playerListLabel">
                 <b>Список игроков:</b>
             </ui:msg>

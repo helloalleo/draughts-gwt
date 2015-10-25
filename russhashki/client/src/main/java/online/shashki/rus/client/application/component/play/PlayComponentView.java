@@ -73,10 +73,14 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   Label beatenMineDraughtsLabel;
   @UiField
   Button cancelMove;
+  @UiField
+  ScrollPanel playerFriendPanel;
   private Board board;
   private LienzoPanel lienzoPanel;
   private Player player;
+  private CellList<Player> playerFriendCellList;
   private CellList<Player> playerCellList;
+  private SingleSelectionModel<Player> playerFriendSelectionModel;
   private SingleSelectionModel<Player> playerSelectionModel;
   private NotationPanel notationPanel;
   private InviteDialogBox inviteDialogBox;
@@ -93,6 +97,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     this.resources = resources;
 
     initEmptyDeskPanel();
+    initRecentPlayersCellList();
     initPlayersCellList();
   }
 
@@ -142,7 +147,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     if (lastOpponentMove != null && lastOpponentMove.isContinueBeat()) {
       return;
     }
-    if (board.isMyTurn() && !(lastStroke != null && lastStroke.isContinueBeat())) {
+    if (board.isMyTurn() && !(lastStroke == null || lastStroke.isContinueBeat()) || lastStroke == null) {
       InfoDialogBox.setMessage(messages.youDontMove()).show();
       return;
     }
@@ -182,6 +187,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     }
     lienzoPanel.setBackgroundLayer(initDeskRect);
     shashki.add(lienzoPanel);
+
+    cancelMove.setEnabled(false);
   }
 
   @Override
@@ -206,6 +213,44 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       String playerListHeight = lienzoPanel.getHeight() - 105 + "px";
       playerCellList.setHeight(playerListHeight);
     }
+  }
+
+  private void initRecentPlayersCellList() {
+    playerFriendCellList = new CellList<>(new AbstractCell<Player>() {
+      @Override
+      public void render(Context context, Player value, SafeHtmlBuilder sb) {
+        if (value != null) {
+          if (value.isLoggedIn()) {
+            org.gwtbootstrap3.client.ui.Image img;
+            String playerPublicName = value.getPublicName();
+            SHLog.debug("CELL LIST userPublicName " + playerPublicName);
+            SHLog.debug("CELL LIST Player " + player);
+            if (player.getId().equals(value.getId())) {
+              sb.appendEscaped(playerPublicName);
+            } else {
+              // TODO: не показывать статус. Пусть играют с теми кого знают либо наугад
+              if (value.isPlaying()) {
+                img = new org.gwtbootstrap3.client.ui.Image(resources.images().playingIconImage().getSafeUri());
+                img.setTitle(playerPublicName + messages.playingTitle());
+              } else {
+                if (value.isOnline()) {
+                  img = new org.gwtbootstrap3.client.ui.Image(resources.images().onlineIconImage().getSafeUri());
+                  img.setTitle(playerPublicName + messages.onlineTitle());
+                } else {
+                  img = new org.gwtbootstrap3.client.ui.Image(resources.images().offlineIconImage().getSafeUri());
+                  img.setTitle(playerPublicName + messages.offlineTitle());
+                }
+              }
+              sb.appendHtmlConstant(img.getElement().getString());
+              sb.appendEscaped(" " + playerPublicName);
+            }
+          }
+        }
+      }
+    });
+    playerFriendSelectionModel = new SingleSelectionModel<>();
+    playerFriendCellList.setSelectionModel(playerFriendSelectionModel);
+    playerFriendPanel.add(playerFriendCellList);
   }
 
   private void initPlayersCellList() {
@@ -247,6 +292,13 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
+  public void setPlayerFriendList(List<Player> playerList) {
+    SHLog.debug("setPlayerFriendList " + playerList);
+    playerFriendCellList.setRowCount(0);
+    playerFriendCellList.setRowData(playerList);
+  }
+
+  @Override
   public void setPlayerList(List<Player> playerList) {
     SHLog.debug("setPlayerList " + playerList);
     playerCellList.setRowCount(0);
@@ -272,6 +324,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playButton.addStyleName("btn-danger");
     playButton.setIcon(IconType.REFRESH);
     playButton.setText(messages.reconnect());
+    cancelMove.setEnabled(false);
 
     playerCellList.setRowData(new ArrayList<Player>());
     turnLabel.setHTML(messages.youDisconnected());
@@ -324,6 +377,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     lienzoPanel.add(board);
     lienzoPanel.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     updateTurn(getUiHandlers().isMyTurn());
+    cancelMove.setEnabled(true);
     hidePlayButtonAndShowPlayingButtons();
   }
 

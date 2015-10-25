@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DialogBox;
+import online.shashki.rus.client.resources.AppResources;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 
 /**
@@ -16,12 +17,16 @@ import online.shashki.rus.shared.locale.ShashkiMessages;
  */
 public class BasicDialogBox extends DialogBox {
   protected static ShashkiMessages messages = GWT.create(ShashkiMessages.class);
+  protected AppResources resources = GWT.create(AppResources.class);
 
   protected int WIDTH = 400;
   protected int HEIGHT = 60;
 
   public BasicDialogBox() {
     setAnimationEnabled(true);
+
+    getElement().addClassName(resources.style().dialogBox());
+
     addHandler(new KeyPressHandler() {
       @Override
       public void onKeyPress(KeyPressEvent keyPressEvent) {

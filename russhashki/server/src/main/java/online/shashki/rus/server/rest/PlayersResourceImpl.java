@@ -8,6 +8,7 @@ import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shared.rest.PlayersResource;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @RequestScoped
 public class PlayersResourceImpl implements PlayersResource {
@@ -29,5 +30,11 @@ public class PlayersResourceImpl implements PlayersResource {
       throw new RuntimeException("Unauthorized");
     }
     return playerService.saveOrCreate(player);
+  }
+
+  @Override
+  public List<Player> getPlayerFriendList(Long playerId) {
+    return playerService.findFriends(playerId);
+
   }
 }

@@ -96,8 +96,8 @@ public class Board extends Layer {
         final Move move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
         final Stroke mirror = stroke.mirror();
-        eventBus.fireEvent(new NotationCancelStrokeEvent(mirror));
-        moveMyCanceled(stroke);
+        eventBus.fireEvent(new NotationCancelStrokeEvent(stroke));
+        moveMyCanceled(mirror);
       }
     });
 

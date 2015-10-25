@@ -54,6 +54,6 @@ public interface AppResources extends ClientBundle {
 
     String inside();
 
-//    String insideFullHeight();
+    String dialogBox();
   }
 }

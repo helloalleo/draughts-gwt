@@ -184,6 +184,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       @Override
       public void onConnectedToPlay(ConnectedToPlayEvent event) {
         getView().toggleInPlayButton();
+        updatePlayerFriendList();
       }
     });
 
@@ -311,10 +312,33 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         fireEvent(new UpdatePlayShowPanelEvent());
       }
     });
+
+    addRegisteredHandler(UpdatePlayerFriendListEvent.TYPE, new UpdatePlayerFriendListEventHandler() {
+      @Override
+      public void onUpdatePlayerFriendList(UpdatePlayerFriendListEvent event) {
+        updatePlayerFriendList();
+      }
+    });
+  }
+
+  private void updatePlayerFriendList() {
+    playersDelegate.withCallback(new AsyncCallback<List<Player>>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        ErrorDialogBox.setMessage(caught).show();
+      }
+
+      @Override
+      public void onSuccess(List<Player> result) {
+        getView().setPlayerFriendList(result);
+      }
+    }).getPlayerFriendList(gameWebsocket.getPlayer().getId());
   }
 
   interface MyView extends View, HasUiHandlers<PlayComponentUiHandlers> {
     void initNotationPanel(EventBus eventBus);
+
+    void setPlayerFriendList(List<Player> playerList);
 
     void setPlayerList(List<Player> playerList);
 

@@ -4,10 +4,13 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import online.shashki.rus.server.dao.PlayerDao;
+import online.shashki.rus.shared.model.Friend;
 import online.shashki.rus.shared.model.Player;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.Set;
 
 @Singleton
 public class PlayerService {
@@ -82,5 +85,14 @@ public class PlayerService {
 
   public List<Player> findLoggedIn() {
     return playerDaoProvider.get().findLoggedIn();
+  }
+
+  public List<Player> findFriends(Long playerId) {
+    Set<Friend> friends = playerDaoProvider.get().findFriends(playerId);
+    List<Player> playerList = new ArrayList<>(friends.size());
+    for (Friend friend : friends) {
+      playerList.add(friend.getPk().getFriend());
+    }
+    return playerList;
   }
 }
