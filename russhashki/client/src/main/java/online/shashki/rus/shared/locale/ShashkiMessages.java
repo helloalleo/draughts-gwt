@@ -191,4 +191,6 @@ public interface ShashkiMessages extends Messages {
   String newGameButtonText();
 
   String playListButtonText();
+
+  String playerOffline();
 }

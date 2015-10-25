@@ -78,6 +78,10 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       InfoDialogBox.setMessage(messages.selectAnotherPlayerItsYou()).show();
       return;
     }
+    if (!opponent.isOnline()) {
+      InfoDialogBox.setMessage(messages.playerOffline());
+      return;
+    }
     getView().setOpponent(opponent);
 
     getView().showInviteDialog(new ClickHandler() {
@@ -177,6 +181,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
           }));
         }
         getView().setPlayerList(event.getPlayerList());
+        fireEvent(new UpdatePlayerFriendListEvent());
       }
     });
 
@@ -184,7 +189,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       @Override
       public void onConnectedToPlay(ConnectedToPlayEvent event) {
         getView().toggleInPlayButton();
-        updatePlayerFriendList();
       }
     });
 

@@ -17,6 +17,7 @@ import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.CellList;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -82,6 +83,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private CellList<Player> playerCellList;
   private SingleSelectionModel<Player> playerFriendSelectionModel;
   private SingleSelectionModel<Player> playerSelectionModel;
+  private Player selectedPlayer;
+  private boolean prevSelected = false;
   private NotationPanel notationPanel;
   private InviteDialogBox inviteDialogBox;
   private boolean opponentColor;
@@ -108,7 +111,13 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         getUiHandlers().refreshConnectionToServer();
         break;
       case PLAY:
-        getUiHandlers().startPlayWith(playerSelectionModel.getSelectedObject());
+        Player selectedPlayer = null;
+        if (playerSelectionModel.getSelectedObject() != null) {
+          selectedPlayer = playerSelectionModel.getSelectedObject();
+        } else if (playerFriendSelectionModel.getSelectedObject() != null) {
+          selectedPlayer = playerFriendSelectionModel.getSelectedObject();
+        }
+        getUiHandlers().startPlayWith(selectedPlayer);
         break;
     }
   }
@@ -223,8 +232,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
           if (value.isLoggedIn()) {
             org.gwtbootstrap3.client.ui.Image img;
             String playerPublicName = value.getPublicName();
-            SHLog.debug("CELL LIST userPublicName " + playerPublicName);
-            SHLog.debug("CELL LIST Player " + player);
             if (player.getId().equals(value.getId())) {
               sb.appendEscaped(playerPublicName);
             } else {
@@ -251,6 +258,13 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playerFriendSelectionModel = new SingleSelectionModel<>();
     playerFriendCellList.setSelectionModel(playerFriendSelectionModel);
     playerFriendPanel.add(playerFriendCellList);
+    playerFriendSelectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+      @Override
+      public void onSelectionChange(SelectionChangeEvent event) {
+        selectedPlayer = playerFriendSelectionModel.getSelectedObject();
+        resetPlayerSelection(playerSelectionModel, playerFriendSelectionModel);
+      }
+    });
   }
 
   private void initPlayersCellList() {
@@ -261,8 +275,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
           if (value.isLoggedIn()) {
             org.gwtbootstrap3.client.ui.Image img;
             String playerPublicName = value.getPublicName();
-            SHLog.debug("CELL LIST userPublicName " + playerPublicName);
-            SHLog.debug("CELL LIST Player " + player);
             if (player.getId().equals(value.getId())) {
               sb.appendEscaped(playerPublicName);
             } else {
@@ -289,6 +301,26 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playerSelectionModel = new SingleSelectionModel<>();
     playerCellList.setSelectionModel(playerSelectionModel);
     playerPanel.add(playerCellList);
+    playerSelectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
+      @Override
+      public void onSelectionChange(SelectionChangeEvent event) {
+        resetPlayerSelection(playerFriendSelectionModel, playerSelectionModel);
+      }
+    });
+  }
+
+  private void resetPlayerSelection(SingleSelectionModel<Player> prevSelectionModel,
+                                    SingleSelectionModel<Player> currentSelectionModel) {
+    final Player selectedObject = prevSelectionModel.getSelectedObject();
+    if (selectedObject == null) {
+      return;
+    }
+    if (prevSelected) {
+      prevSelected = false;
+      return;
+    }
+    prevSelected = true;
+    prevSelectionModel.setSelected(selectedObject, false);
   }
 
   @Override
