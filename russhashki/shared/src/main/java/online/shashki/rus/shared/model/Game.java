@@ -37,7 +37,7 @@ public class Game extends PersistableObjectImpl {
   private String partyNotation;
 
   @Column(name = "end_game_screenshot", columnDefinition = "TEXT")
-  public String endGameScreenshot;
+  private String endGameScreenshot;
 
   public Game() {
   }

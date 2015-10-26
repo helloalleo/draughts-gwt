@@ -32,7 +32,7 @@ public class AuthUtils {
 
   public static void processUserAndRedirectToHomePage(PlayerService playerService, ServerConfiguration config,
                                                       HttpServletRequest req, HttpServletResponse resp,
-                                                      Player player, boolean newPlayer) throws IOException {
+                                                      Player player) throws IOException {
     player.setLastVisited(new Date());
     player.setLoggedIn(true);
     player.setPlaying(false);
@@ -43,11 +43,10 @@ public class AuthUtils {
         || !player.getSessionId().equals(session.getId())) {
       player.setSessionId(session.getId());
     }
-    playerService.saveOrCreateOnServer(player);
+    player.setVisitCounter(player.getVisitCounter() + 1);
 
-    if (!newPlayer) {
-      player.setVisitCounter(player.getVisitCounter() + 1);
-    }
+    Rating.calcPlayerRating(player);
+    playerService.saveOrCreateOnServer(player);
 
     AuthUtils.login(req);
     resp.sendRedirect(config.getHomeUrl());

@@ -95,7 +95,6 @@ public class OAuthVKCallbackServlet extends HttpServlet {
       }
 
       Player player = playerService.findByVkId(user_id);
-      boolean newPlayer = player == null;
       if (player == null) {
         final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes());
         JsonReader jsonReader = Json.createReader(inBody);
@@ -115,7 +114,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         }
       }
 
-      AuthUtils.processUserAndRedirectToHomePage(playerService, config, req, resp, player, newPlayer);
+      AuthUtils.processUserAndRedirectToHomePage(playerService, config, req, resp, player);
     } catch (OAuthSystemException | OAuthProblemException e) {
       log.severe(e.getLocalizedMessage());
     }

@@ -5,6 +5,7 @@ import online.shashki.rus.shared.model.key.FriendId;
 import javax.persistence.*;
 import javax.validation.constraints.Null;
 import java.io.Serializable;
+import java.util.Objects;
 
 /**
  * Created with IntelliJ IDEA.
@@ -21,27 +22,19 @@ public class Friend implements BasePersistableObject {
 
   @EmbeddedId
   private FriendId pk = new FriendId();
-  @Null
   private boolean favorite;
 
   @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-
     Friend friend = (Friend) o;
-
-    if (favorite != friend.favorite) return false;
-    if (!pk.equals(friend.pk)) return false;
-
-    return true;
+    return Objects.equals(pk, friend.pk);
   }
 
   @Override
   public int hashCode() {
-    int result = pk.hashCode();
-    result = 31 * result + (favorite ? 1 : 0);
-    return result;
+    return Objects.hash(pk);
   }
 
   public boolean isFavorite() {

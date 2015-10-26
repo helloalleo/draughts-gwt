@@ -37,10 +37,14 @@
 
         <commons-lang3.version>3.4</commons-lang3.version>
 
-        <hibernate-entitymanager.version>4.3.10.Final</hibernate-entitymanager.version>
-
         <jukito.version>1.4.1</jukito.version>
         <junit.version>4.12</junit.version>
+
+        <!--Maven-->
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
+
+        <target.jdk>1.8</target.jdk>
     </properties>
 
     <dependencyManagement>
@@ -173,6 +177,11 @@
 
         <!-- Import the JPA API, we use provided scope as the API is included in JBoss WildFly -->
         <dependency>
+            <groupId>org.hibernate</groupId>
+            <artifactId>hibernate-core</artifactId>
+            <version>${hibernate.version}</version>
+        </dependency>
+        <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
             <artifactId>hibernate-jpa-2.1-api</artifactId>
             <version>1.0.0.Final</version>
@@ -180,7 +189,7 @@
         <dependency>
             <groupId>org.hibernate</groupId>
             <artifactId>hibernate-entitymanager</artifactId>
-            <version>${hibernate-entitymanager.version}</version>
+            <version>${hibernate.version}</version>
         </dependency>
 
         <!--OAuth 2.0-->

@@ -12,7 +12,7 @@ import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
 import online.shashki.rus.client.event.UpdatePlayerListEvent;
 import online.shashki.rus.client.util.SHLog;
-import online.shashki.rus.client.websocket.ConnectionSession;
+import online.shashki.rus.client.websocket.PlaySession;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shared.rest.PlayersResource;
@@ -23,22 +23,21 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
   private final ShashkiMessages messages;
   private final EventBus eventBus;
   private final ResourceDelegate<PlayersResource> playersDelegate;
-  private final ConnectionSession connectionSession;
+  private final PlaySession playSession;
   private Player player;
 
-  @Inject
   SettingsPresenter(
       EventBus eventBus,
       MyView view,
       ShashkiMessages messages,
       ResourceDelegate<PlayersResource> playersDelegate,
-      ConnectionSession connectionSession,
+      PlaySession playSession,
       Player player) {
     super(eventBus, view);
 
     this.eventBus = eventBus;
     this.playersDelegate = playersDelegate;
-    this.connectionSession = connectionSession;
+    this.playSession = playSession;
     this.player = player;
     this.messages = messages;
 
@@ -60,7 +59,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
       public void onSuccess(Player result) {
         SettingsPresenter.this.player.setPlayerName(result.getPlayerName());
         InfoDialogBox.setMessage(messages.profileUpdated()).show();
-        if (connectionSession.isConnected()) {
+        if (playSession.isConnected()) {
           fireEvent(new UpdatePlayerListEvent());
         }
       }
@@ -81,23 +80,23 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
     private final ViewFactory viewFactory;
     private final ShashkiMessages messages;
     private final ResourceDelegate<PlayersResource> playersDelegate;
-    private final ConnectionSession connectionSession;
+    private final PlaySession playSession;
 
     @Inject
     FactoryImpl(EventBus eventBus,
                 ViewFactory viewFactory,
                 ShashkiMessages messages,
                 ResourceDelegate<PlayersResource> playersDelegate,
-                ConnectionSession connectionSession) {
+                PlaySession playSession) {
       this.eventBus = eventBus;
       this.viewFactory = viewFactory;
       this.messages = messages;
       this.playersDelegate = playersDelegate;
-      this.connectionSession = connectionSession;
+      this.playSession = playSession;
     }
 
     public SettingsPresenter create(Player player) {
-      return new SettingsPresenter(eventBus, viewFactory.create(), messages, playersDelegate, connectionSession, player);
+      return new SettingsPresenter(eventBus, viewFactory.create(), messages, playersDelegate, playSession, player);
     }
   }
 

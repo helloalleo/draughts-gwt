@@ -4,6 +4,7 @@ import com.fasterxml.jackson.databind.ObjectMapper;
 import online.shashki.rus.shared.model.GameMessage;
 
 import java.io.*;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,23 +14,7 @@ import java.io.*;
  */
 public class Utils {
 
-//  public static final HttpTransport HTTP_TRANSPORT = new NetHttpTransport();
-//  public static final JsonFactory JSON_FACTORY = new JacksonFactory();
-
-//  public static AuthorizationCodeFlow getFlow(ClientSecrets secrets,
-//                                              List<String> scopes) throws IOException {
-//    return new AuthorizationCodeFlow.Builder(BearerToken.authorizationHeaderAccessMethod(),
-//        HTTP_TRANSPORT,
-//        JSON_FACTORY,
-//        new GenericUrl(secrets.getTokenUri()),
-//        new ClientParametersAuthentication(secrets.getClientId(), secrets.getClientSecret()),
-//        secrets.getClientId(),
-//        secrets.getAuthUri())
-//        .setCredentialDataStore(StoredCredential.getDefaultDataStore(new FileDataStoreFactory(
-//            new File(ConfigHelper.CREDENTIAL_STORE_FILE_PATH))))
-//        .setScopes(scopes)
-//        .build();
-//  }
+  public static final Logger log = Logger.getAnonymousLogger();
 
   public static String inputStreamToString(InputStream inputStream) throws IOException {
     InputStreamReader inputStreamReader = new InputStreamReader(inputStream);
@@ -43,7 +28,7 @@ public class Utils {
     try {
       objectMapper.writeValue(stringWriter, message);
     } catch (IOException e) {
-      e.printStackTrace();
+      log.severe(e.getLocalizedMessage());
       return "";
     }
     return stringWriter.toString();

@@ -8,9 +8,7 @@ import online.shashki.rus.shared.model.Friend;
 import online.shashki.rus.shared.model.Player;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 @Singleton
 public class PlayerService {
@@ -52,9 +50,7 @@ public class PlayerService {
 
   public Player getLoggedInUser(HttpSession session) {
     if (session != null) {
-      final Player bySessionId = playerDaoProvider.get().findBySessionId(session.getId());
-      System.out.println(bySessionId);
-      return bySessionId;
+      return playerDaoProvider.get().findBySessionId(session.getId());
     }
     return null;
   }
@@ -88,11 +84,23 @@ public class PlayerService {
   }
 
   public List<Player> findFriends(Long playerId) {
-    Set<Friend> friends = playerDaoProvider.get().findFriends(playerId);
+    List<Friend> friends = new ArrayList<>(playerDaoProvider.get().findFriends(playerId));
+    Collections.sort(friends, new Comparator<Friend>() {
+      @Override
+      public int compare(Friend o1, Friend o2) {
+        return -Boolean.valueOf(o1.isFavorite()).compareTo(o2.isFavorite());
+      }
+    });
     List<Player> playerList = new ArrayList<>(friends.size());
     for (Friend friend : friends) {
       playerList.add(friend.getPk().getFriend());
     }
+    Collections.sort(playerList, new Comparator<Player>() {
+      @Override
+      public int compare(Player o1, Player o2) {
+        return -Integer.valueOf(o1.getRating()).compareTo(o2.getRating());
+      }
+    });
     return playerList;
   }
 }

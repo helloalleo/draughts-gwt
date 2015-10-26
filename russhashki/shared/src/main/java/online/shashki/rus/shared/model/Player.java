@@ -42,12 +42,27 @@ public class Player extends PersistableObjectImpl {
   @Column(name = "player_name")
   private String playerName;
 
+  private int rating = 0;
+
   @GwtTransient
   @JsonIgnore
-  @Column(name = "include_in_rating")
-  private boolean includeInRating;
+  @Column(name = "game_played")
+  private int gamePlayed = 0;
 
-  private int rating;
+  @GwtTransient
+  @JsonIgnore
+  @Column(name = "game_win")
+  private int gameWin = 0;
+
+  @GwtTransient
+  @JsonIgnore
+  @Column(name = "game_lose")
+  private int gameLose = 0;
+
+  @GwtTransient
+  @JsonIgnore
+  @Column(name = "game_draw")
+  private int gameDraw = 0;
 
   @GwtTransient
   @JsonIgnore
@@ -78,7 +93,6 @@ public class Player extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
-
   @OneToMany(mappedBy = "receiverGame")
   private Set<GameMessage> receivedGameMessages;
 
@@ -101,6 +115,7 @@ public class Player extends PersistableObjectImpl {
   private boolean loggedIn;
   private boolean playing;
   private boolean online;
+
   @GwtTransient
   @JsonIgnore
   @Column(name = "register_date")
@@ -112,7 +127,7 @@ public class Player extends PersistableObjectImpl {
   @GwtTransient
   @JsonIgnore
   @Column(name = "visit_counter")
-  private int visitCounter;
+  private int visitCounter = 0;
 
   @GwtTransient
   @JsonIgnore
@@ -200,22 +215,6 @@ public class Player extends PersistableObjectImpl {
   public void setAuthProvider(AuthProvider authProvider) {
     this.authProvider = authProvider;
   }
-
-//  public Set<FriendEntity> getFriends() {
-//    return friends;
-//  }
-//
-//  public void setFriends(Set<FriendEntity> friends) {
-//    this.friends = friends;
-//  }
-//
-//  public Set<FriendEntity> getFriendOf() {
-//    return friendOf;
-//  }
-//
-//  public void setFriendOf(Set<FriendEntity> friendOf) {
-//    this.friendOf = friendOf;
-//  }
 
   public Set<GameMessage> getReceivedPlayerMessages() {
     return receivedPlayerMessages;
@@ -313,12 +312,39 @@ public class Player extends PersistableObjectImpl {
     this.blackRoleGames = blackRoleGames;
   }
 
-  public boolean isIncludeInRating() {
-    return includeInRating;
+  public int getGamePlayed() {
+    return gamePlayed;
   }
 
-  public Player setIncludeInRating(boolean includeInRating) {
-    this.includeInRating = includeInRating;
+  public Player setGamePlayed(int gamePlayed) {
+    this.gamePlayed = gamePlayed;
+    return this;
+  }
+
+  public int getGameWin() {
+    return gameWin;
+  }
+
+  public Player setGameWin(int gameWin) {
+    this.gameWin = gameWin;
+    return this;
+  }
+
+  public int getGameLose() {
+    return gameLose;
+  }
+
+  public Player setGameLose(int gameLose) {
+    this.gameLose = gameLose;
+    return this;
+  }
+
+  public int getGameDraw() {
+    return gameDraw;
+  }
+
+  public Player setGameDraw(int gameDraw) {
+    this.gameDraw = gameDraw;
     return this;
   }
 
@@ -377,18 +403,9 @@ public class Player extends PersistableObjectImpl {
     if (profile == null) {
       return;
     }
-    if (StringUtils.isNotEmpty(profile.getSessionId())) {
-      this.sessionId = profile.getSessionId();
-    }
     this.loggedIn = profile.isLoggedIn();
     this.playing = profile.isPlaying();
     this.online = profile.isOnline();
-    if (StringUtils.isNotEmpty(profile.getFirstName())) {
-      this.firstName = profile.getFirstName();
-    }
-    if (StringUtils.isNotEmpty(profile.getLastName())) {
-      this.lastName = profile.getLastName();
-    }
     if (StringUtils.isNotEmpty(profile.getPlayerName())) {
       this.playerName = profile.getPlayerName();
     }

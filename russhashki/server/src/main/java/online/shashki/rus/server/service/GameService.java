@@ -5,6 +5,7 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.GameDao;
+import online.shashki.rus.server.utils.Rating;
 import online.shashki.rus.shared.model.Friend;
 import online.shashki.rus.shared.model.Game;
 import online.shashki.rus.shared.model.Player;
@@ -60,27 +61,66 @@ public class GameService {
     if (game.getId() == null) {
       gameDaoProvider.get().create(game);
     } else {
+      updatePlayer(game, game.getPlayerBlack().getId());
+      updatePlayer(game, game.getPlayerWhite().getId());
       gameDaoProvider.get().edit(game);
-      Player player;
-      if (game.getPlayerWhite() != null) {
-        player = playerService.find(game.getPlayerWhite().getId());
-      } else {
-        return null;
-      }
-      Player friendOf;
-      if (game.getPlayerBlack() != null) {
-        friendOf = playerService.find(game.getPlayerBlack().getId());
-      } else {
-        return null;
-      }
-      final FriendId friendPk = new FriendId()
+
+      Player friendOf = playerService.find(game.getPlayerBlack().getId());
+      Player player = playerService.find(game.getPlayerWhite().getId());
+
+      FriendId friendPk = new FriendId()
           .setFriend(player)
           .setFriendOf(friendOf);
       Friend friend = new Friend()
           .setPk(friendPk);
       friendService.saveOrCreate(friend);
+
+      friendPk = new FriendId()
+          .setFriend(friendOf)
+          .setFriendOf(player);
+      friend = new Friend()
+          .setPk(friendPk);
+      friendService.saveOrCreate(friend);
     }
     return game;
+  }
+
+  private void updatePlayer(Game game, Long playerId) {
+    Player player = playerService.find(playerId);
+    player.setGamePlayed(player.getGamePlayed() + 1);
+    final Game.GameEnds playEndStatus = game.getPlayEndStatus();
+    if (playEndStatus != null) {
+      final boolean blackWin = Game.GameEnds.BLACK_WIN.equals(playEndStatus);
+      final boolean whiteWin = Game.GameEnds.WHITE_WIN.equals(playEndStatus);
+      final boolean blackSurrender = Game.GameEnds.SURRENDER_BLACK.equals(playEndStatus);
+      final boolean whiteSurrender = Game.GameEnds.SURRENDER_WHITE.equals(playEndStatus);
+      final boolean blackLeft = Game.GameEnds.BLACK_LEFT.equals(playEndStatus);
+      final boolean whiteLeft = Game.GameEnds.WHITE_LEFT.equals(playEndStatus);
+      if (game.getPlayerBlack().getId().equals(player.getId())) {
+        if (blackWin || whiteLeft || whiteSurrender) {
+          player.setGameWin(player.getGameWin() + 1);
+        } else if (whiteWin || blackLeft || blackSurrender) {
+          player.setGameLose(player.getGameLose() + 1);
+        } else {
+          player.setGameDraw(player.getGameDraw() + 1);
+        }
+      } else {
+        if (blackWin || whiteLeft || whiteSurrender) {
+          player.setGameLose(player.getGameLose() + 1);
+        } else if (whiteWin || blackLeft || blackSurrender) {
+          player.setGameWin(player.getGameWin() + 1);
+        } else {
+          player.setGameDraw(player.getGameDraw() + 1);
+        }
+      }
+    }
+    Rating.calcPlayerRating(player);
+    playerService.saveOrCreate(player);
+  }
+
+  public boolean removeGame(Game game) {
+    gameDao.remove(game);
+    return true;
   }
 
   public Game find(Long gameId) {

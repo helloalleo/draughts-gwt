@@ -98,7 +98,6 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
       String user_id = responseObject.getString("sub");
       if (StringUtils.isNoneEmpty(user_id)) {
         Player player = playerService.findByGoogleSub(user_id);
-        boolean newPlayer = player == null;
         if (player == null) {
           player = new Player();
           player.setGoogleSub(user_id);
@@ -111,7 +110,7 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
           player.setEmail(email);
         }
 
-        AuthUtils.processUserAndRedirectToHomePage(playerService, config, req, resp, player, newPlayer);
+        AuthUtils.processUserAndRedirectToHomePage(playerService, config, req, resp, player);
       }
     } catch (OAuthSystemException | OAuthProblemException e) {
       log.severe(e.getLocalizedMessage());

@@ -41,16 +41,18 @@ public class GameWebsocket implements WebSocketCallback {
   private Player player;
   private ShashkiMessages messages;
   private ConfirmPlayDialogBox confirmPlayDialogBox;
-  private ConnectionSession connectionSession = new ConnectionSession();
+  private PlaySession playSession;
   private GameMessageMapper gameMessageMapper = GWT.create(GameMessageMapper.class);
 
   @Inject
   private GameWebsocket(EventBus eventBus,
                         CurrentSession currentSession,
+                        PlaySession playSession,
                         ResourceDelegate<PlayersResource> playersDelegate,
                         ResourceDelegate<GamesResource> gamesDelegate,
                         ShashkiMessages messages) {
     this.currentSession = currentSession;
+    this.playSession = playSession;
     this.gamesDelegate = gamesDelegate;
     this.eventBus = eventBus;
     this.messages = messages;
@@ -74,7 +76,7 @@ public class GameWebsocket implements WebSocketCallback {
         GameMessage message = createSendGameMessage();
         message.setMessageType(GameMessage.MessageType.PLAY_MOVE);
         message.setMove(event.getMove());
-        message.setGame(connectionSession.getGame());
+        message.setGame(playSession.getGame());
 
         sendGameMessage(message);
       }
@@ -100,7 +102,7 @@ public class GameWebsocket implements WebSocketCallback {
     eventBus.addHandler(ClearPlayComponentEvent.TYPE, new ClearPlayComponentEventHandler() {
       @Override
       public void onClearPlayComponent(ClearPlayComponentEvent event) {
-        connectionSession.setGame(null);
+        playSession.setGame(null);
       }
     });
   }
@@ -114,8 +116,8 @@ public class GameWebsocket implements WebSocketCallback {
 
   private GameMessage createSendGameMessage() {
     GameMessage message = GWT.create(GameMessage.class);
-    message.setSender(connectionSession.getPlayer());
-    message.setReceiver(connectionSession.getOpponent());
+    message.setSender(playSession.getPlayer());
+    message.setReceiver(playSession.getOpponent());
     return message;
   }
 
@@ -129,6 +131,12 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handleUpdatePlayerList(List<Player> playerList) {
     SHLog.debug(playerList.size() + " PLAYER LIST SIZE");
+    for (Player p : playerList) {
+      if (p.getId().equals(player.getId())) {
+        player.updateSerializable(p);
+        break;
+      }
+    }
     eventBus.fireEvent(new ReceivedPlayerListEvent(playerList));
   }
 
@@ -151,14 +159,14 @@ public class GameWebsocket implements WebSocketCallback {
           InfoDialogBox.setMessage(messages.opponentNotFound()).show();
           return;
         }
-        SHLog.debug(connectionSession.getPlayer().toString());
+        SHLog.debug(playSession.getPlayer().toString());
 
-        connectionSession.setOpponent(gameMessage.getSender());
+        playSession.setOpponent(gameMessage.getSender());
 
         Game game = GWT.create(Game.class);
         game.setPlayStartDate(new Date());
-        game.setPlayerWhite(isWhite() ? connectionSession.getPlayer() : connectionSession.getOpponent());
-        game.setPlayerBlack(isWhite() ? connectionSession.getOpponent() : connectionSession.getPlayer());
+        game.setPlayerWhite(isWhite() ? playSession.getPlayer() : playSession.getOpponent());
+        game.setPlayerBlack(isWhite() ? playSession.getOpponent() : playSession.getPlayer());
         SHLog.debug("PLAYER WHITE :: " + game.getPlayerWhite());
         SHLog.debug("PLAYER BLACK :: " + game.getPlayerBlack());
         gamesDelegate.withCallback(new AsyncCallback<Game>() {
@@ -176,7 +184,7 @@ public class GameWebsocket implements WebSocketCallback {
 
             sendGameMessage(message);
 
-            connectionSession.setGame(game);
+            playSession.setGame(game);
             eventBus.fireEvent(new StartPlayEvent(isWhite()));
           }
         }).saveOrCreate(game);
@@ -207,14 +215,14 @@ public class GameWebsocket implements WebSocketCallback {
 
     sendGameMessage(gameMessage);
 
-    connectionSession.setPlayer(player);
-    connectionSession.setConnected(true);
+    playSession.setPlayer(player);
+    playSession.setConnected(true);
     eventBus.fireEvent(new ConnectedToPlayEvent());
   }
 
   @Override
   public void onDisconnect() {
-    connectionSession.setConnected(false);
+    playSession.setConnected(false);
     eventBus.fireEvent(new DisconnectFromPlayEvent());
   }
 
@@ -315,7 +323,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlayAcceptDraw(GameMessage gameMessage) {
     if (Boolean.valueOf(gameMessage.getData())) {
-      eventBus.fireEvent(new GameOverEvent(connectionSession.getGame(), Game.GameEnds.DRAW, new AsyncCallback<Game>() {
+      eventBus.fireEvent(new GameOverEvent(playSession.getGame(), Game.GameEnds.DRAW, new AsyncCallback<Game>() {
         @Override
         public void onFailure(Throwable throwable) {
           ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
@@ -362,9 +370,9 @@ public class GameWebsocket implements WebSocketCallback {
   }
 
   private void handlePlaySurrender(GameMessage gameMessage) {
-    Game game = connectionSession.getGame();
+    Game game = playSession.getGame();
     // так как сохраняем на противоположной строне, игроки черный-белый переставлены
-    final Game.GameEnds gameEnd = connectionSession.isPlayerHasWhiteColor() ? Game.GameEnds.SURRENDER_BLACK
+    final Game.GameEnds gameEnd = playSession.isPlayerHasWhiteColor() ? Game.GameEnds.SURRENDER_BLACK
         : Game.GameEnds.SURRENDER_WHITE;
     eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
       @Override
@@ -398,10 +406,10 @@ public class GameWebsocket implements WebSocketCallback {
    */
   private void handlePlayStart(final GameMessage gameMessage) {
     final Game game = gameMessage.getGame();
-    connectionSession.setGame(game);
+    playSession.setGame(game);
     SHLog.debug(gameMessage.getData() + " RECEIVED DATA");
     boolean white = Boolean.valueOf(gameMessage.getData());
-    connectionSession.setOpponent(white ? game.getPlayerBlack() : game.getPlayerWhite());
+    playSession.setOpponent(white ? game.getPlayerBlack() : game.getPlayerWhite());
     eventBus.fireEvent(new StartPlayEvent(white));
   }
 
@@ -410,7 +418,7 @@ public class GameWebsocket implements WebSocketCallback {
   }
 
   private void handlePlayRejectInvite(GameMessage gameMessage) {
-    connectionSession.setOpponent(null);
+    playSession.setOpponent(null);
     new MyDialogBox(messages.info(),
         messages.playerRejectedPlayRequest(gameMessage.getSender().getPublicName()))
         .show();
@@ -430,7 +438,7 @@ public class GameWebsocket implements WebSocketCallback {
   }
 
   public boolean isConnected() {
-    return connectionSession.isConnected();
+    return playSession.isConnected();
   }
 
   public Player getPlayer() {
@@ -442,22 +450,22 @@ public class GameWebsocket implements WebSocketCallback {
   }
 
   public Player getOpponent() {
-    return connectionSession.getOpponent();
+    return playSession.getOpponent();
   }
 
   public Game getGame() {
-    return connectionSession.getGame();
+    return playSession.getGame();
   }
 
   public boolean isPlayerHasWhiteColor() {
-    return connectionSession.isPlayerHasWhiteColor();
+    return playSession.isPlayerHasWhiteColor();
   }
 
   public void setOpponent(Player opponent) {
-    connectionSession.setOpponent(opponent);
+    playSession.setOpponent(opponent);
   }
 
   public void setGame(Game game) {
-    connectionSession.setGame(game);
+    playSession.setGame(game);
   }
 }

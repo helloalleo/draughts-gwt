@@ -359,6 +359,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     cancelMove.setEnabled(false);
 
     playerCellList.setRowData(new ArrayList<Player>());
+    playerFriendCellList.setRowData(new ArrayList<Player>());
     turnLabel.setHTML(messages.youDisconnected());
 
     hidePlayingButtonsAndShowPlayButton();
@@ -369,8 +370,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playButton.setVisible(true);
     drawButton.setVisible(false);
     surrenderButton.setVisible(false);
-    setBeatenMy(0);
-    setBeatenOpponent(0);
+    beatenMineDraughtsLabel.setText("");
+    beatenOpponentDraughtsLabel.setText("");
   }
 
   @Override

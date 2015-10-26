@@ -21,9 +21,9 @@ public class ApiPaths {
 
   public static final String GAMES = "/games";
   public static final String PLAYERS = "/players";
-  public static final String PLAYER_FRIEND_LIST = "/player/{" + ApiParameters.ID + "}/friends";
+  public static final String PLAYER_FRIEND_LIST = "/player/friends";
   public static final String COUNT = "/count";
   public static final String LOGGED_IN_USER = "/loggedin";
 
-  public static final String PATH_ID = "/{" + ApiParameters.ID + "}";
+  public static final String PATH_ID = "/}";
 }

@@ -11,7 +11,7 @@ import online.shashki.rus.shared.model.Player;
  * Time: 20:22
  */
 @Singleton
-public class ConnectionSession {
+public class PlaySession {
   private Player player;
   private Player opponent;
   private Game game;
@@ -21,7 +21,7 @@ public class ConnectionSession {
     return player;
   }
 
-  public ConnectionSession setPlayer(Player player) {
+  public PlaySession setPlayer(Player player) {
     this.player = player;
     return this;
   }
@@ -30,7 +30,7 @@ public class ConnectionSession {
     return opponent;
   }
 
-  public ConnectionSession setOpponent(Player opponent) {
+  public PlaySession setOpponent(Player opponent) {
     this.opponent = opponent;
     return this;
   }
@@ -39,7 +39,7 @@ public class ConnectionSession {
     return game;
   }
 
-  public ConnectionSession setGame(Game game) {
+  public PlaySession setGame(Game game) {
     this.game = game;
     return this;
   }

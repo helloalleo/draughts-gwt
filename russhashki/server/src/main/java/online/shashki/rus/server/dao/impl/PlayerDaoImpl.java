@@ -97,7 +97,8 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   public List<Player> findLoggedIn() {
     String hql = "SELECT p " +
         "FROM Player p " +
-        "WHERE p.loggedIn = true";
+        "WHERE p.loggedIn = true " +
+        "ORDER BY p.rating";
     Query query = getEntityManager().createQuery(hql);
     return query.getResultList();
   }

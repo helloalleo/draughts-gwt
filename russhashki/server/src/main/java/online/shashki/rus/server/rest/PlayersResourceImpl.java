@@ -35,6 +35,5 @@ public class PlayersResourceImpl implements PlayersResource {
   @Override
   public List<Player> getPlayerFriendList(Long playerId) {
     return playerService.findFriends(playerId);
-
   }
 }

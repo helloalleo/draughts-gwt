@@ -70,6 +70,13 @@ public class GameServiceTest extends BaseTest {
     assertNotNull(game);
     game = gameService.saveOrCreate(game);
     assertNotNull(game);
+
+//    playerBlack = playerService.find(playerBlack.getId());
+    assertEquals(1, playerBlack.getGameLose());
+//    playerWhite = playerService.find(playerWhite.getId());
+    assertEquals(1, playerWhite.getGameWin());
+
+    gameService.removeGame(game);
   }
 
   @Test
