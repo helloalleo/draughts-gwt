@@ -9,6 +9,7 @@ import java.util.List;
 @Path(ApiPaths.PLAYERS)
 @Produces(MediaType.APPLICATION_JSON)
 public interface PlayersResource {
+
   @POST
   Player saveOrCreate(Player game);
 

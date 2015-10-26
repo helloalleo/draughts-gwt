@@ -134,12 +134,27 @@ public class GameWebsocket {
     }
     player = playerService.find(player.getId());
 
+    if (player.isPlaying()) {
+      Game game = gameService.findUserGames(player.getId(), 0, 1).get(0);
+      final boolean isPlayerHasWhiteColor = game.getPlayerWhite().getId().equals(player.getId());
+      GameMessage gameMessage = new GameMessage();
+      final Player secondPlayer = isPlayerHasWhiteColor ? game.getPlayerBlack() : game.getPlayerWhite();
+
+      secondPlayer.setPlaying(false);
+      playerService.saveOrCreateOnServer(secondPlayer);
+
+      gameMessage.setReceiver(secondPlayer);
+      gameMessage.setMessageType(GameMessage.MessageType.PLAY_END);
+      Session receiverSession = peers.get(secondPlayer);
+      sendMessage(receiverSession, gameMessage);
+    }
+
     player.setOnline(false);
     player.setPlaying(false);
     playerService.saveOrCreateOnServer(player);
 
     System.out.println("Disconnected: " + player.getId() + " " + session.getId());
-    peers.values().remove(session);
+    peers.remove(player);
     updatePlayerList(session);
   }
 
@@ -154,9 +169,9 @@ public class GameWebsocket {
       return;
     }
     Player player = null;
-    for (Player sh : peers.keySet()) {
-      if (receiver.getId().equals(sh.getId())) {
-        player = sh;
+    for (Player p : peers.keySet()) {
+      if (receiver.getId().equals(p.getId())) {
+        player = p;
         break;
       }
     }

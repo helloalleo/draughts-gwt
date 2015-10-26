@@ -165,23 +165,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     addRegisteredHandler(ReceivedPlayerListEvent.TYPE, new ReceivedPlayerListEventHandler() {
       @Override
       public void onReceivedPlayerList(ReceivedPlayerListEvent event) {
-        if (!event.getPlayerList().contains(gameWebsocket.getOpponent()) && gameWebsocket.getGame() != null) {
-          Game game = gameWebsocket.getGame();
-          final Game.GameEnds gameEnd = gameWebsocket.isPlayerHasWhiteColor() ? Game.GameEnds.BLACK_LEFT : Game.GameEnds.WHITE_LEFT;
-          fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
-            @Override
-            public void onFailure(Throwable throwable) {
-              ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
-            }
-
-            @Override
-            public void onSuccess(Game aVoid) {
-              InfoDialogBox.setMessage(messages.opponentLeftGame()).show();
-            }
-          }));
-        }
         getView().setPlayerList(event.getPlayerList());
-        fireEvent(new UpdatePlayerFriendListEvent());
+        updatePlayerFriendList();
       }
     });
 
@@ -203,12 +188,19 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       @Override
       public void onStartPlay(StartPlayEvent event) {
         getView().hideInviteDialog();
-
-        SHLog.debug(event.isWhite() + " START PLAY AT INVITER");
-        SHLog.debug("PLAYER " + gameWebsocket.getPlayer());
-        SHLog.debug("OPPONENT " + gameWebsocket.getOpponent());
-
         getView().startPlay(event.isWhite());
+        gameWebsocket.getPlayer().setPlaying(true);
+        playersDelegate.withCallback(new AsyncCallback<Player>() {
+          @Override
+          public void onFailure(Throwable caught) {
+            ErrorDialogBox.setMessage(caught).show();
+          }
+
+          @Override
+          public void onSuccess(Player result) {
+            fireEvent(new UpdatePlayerListEvent());
+          }
+        }).saveOrCreate(gameWebsocket.getPlayer());
       }
     });
 
@@ -269,7 +261,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       @Override
       public void onClearPlayComponent(ClearPlayComponentEvent event) {
         fireEvent(new ClearNotationEvent());
-        fireEvent(new UpdatePlayerListEvent());
+        fireEvent(new UpdateAllPlayerListEvent());
         fireEvent(new RemovePlayMoveOpponentHandlerEvent());
 
         gameWebsocket.setOpponent(null);

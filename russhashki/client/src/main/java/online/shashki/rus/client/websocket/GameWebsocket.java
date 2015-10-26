@@ -1,6 +1,7 @@
 package online.shashki.rus.client.websocket;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.gwt.websockets.client.WebSocket;
 import com.google.gwt.websockets.client.WebSocketCallback;
@@ -86,9 +87,15 @@ public class GameWebsocket implements WebSocketCallback {
       @Override
       public void onUpdatePlayerList(UpdatePlayerListEvent event) {
         SHLog.debug("UPDATE PLAYER LIST");
-        GameMessage message = createSendGameMessage();
-        message.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
-        sendGameMessage(message);
+        updatePlayerListMessage();
+      }
+    });
+
+    eventBus.addHandler(UpdateAllPlayerListEvent.TYPE, new UpdateAllPlayerListEventHandler() {
+      @Override
+      public void onUpdateAllPlayerList(UpdateAllPlayerListEvent event) {
+        updatePlayerListMessage();
+        eventBus.fireEvent(new UpdatePlayerFriendListEvent());
       }
     });
 
@@ -105,6 +112,12 @@ public class GameWebsocket implements WebSocketCallback {
         playSession.setGame(null);
       }
     });
+  }
+
+  private void updatePlayerListMessage() {
+    GameMessage message = createSendGameMessage();
+    message.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
+    sendGameMessage(message);
   }
 
   private void removeHandlers() {
@@ -267,9 +280,30 @@ public class GameWebsocket implements WebSocketCallback {
       case PLAY_CALLBACK:
         handlePlayCallback(gameMessage);
         break;
+      case PLAY_END:
+        handlePlayEndGame(gameMessage);
+        break;
       case CHAT_PRIVATE_MESSAGE:
         handleChatPrivateMessage(gameMessage);
         break;
+    }
+  }
+
+  private void handlePlayEndGame(GameMessage gameMessage) {
+    if (getGame() != null) {
+      Game game = getGame();
+      final Game.GameEnds gameEnd = isPlayerHasWhiteColor() ? Game.GameEnds.BLACK_LEFT : Game.GameEnds.WHITE_LEFT;
+      eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
+        @Override
+        public void onFailure(Throwable throwable) {
+          ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
+        }
+
+        @Override
+        public void onSuccess(Game aVoid) {
+          InfoDialogBox.setMessage(messages.opponentLeftGame()).show();
+        }
+      }));
     }
   }
 
@@ -407,7 +441,6 @@ public class GameWebsocket implements WebSocketCallback {
   private void handlePlayStart(final GameMessage gameMessage) {
     final Game game = gameMessage.getGame();
     playSession.setGame(game);
-    SHLog.debug(gameMessage.getData() + " RECEIVED DATA");
     boolean white = Boolean.valueOf(gameMessage.getData());
     playSession.setOpponent(white ? game.getPlayerBlack() : game.getPlayerWhite());
     eventBus.fireEvent(new StartPlayEvent(white));
@@ -432,6 +465,7 @@ public class GameWebsocket implements WebSocketCallback {
   }
 
   public void reconnect() {
+    Window.alert("RECONNECT");
     removeHandlers();
     webSocket.close();
     webSocket.connect(configuration.playerWebsocketUrl());

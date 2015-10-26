@@ -50,7 +50,12 @@ public class GameService {
     if (loggedInUser == null) {
       throw new RuntimeException("Not authorized");
     }
-    return gameDaoProvider.get().findUserGames(loggedInUser.getId(), offset, limit);
+    return findUserGames(loggedInUser.getId(), offset, limit);
+  }
+
+  @Transactional
+  public List<Game> findUserGames(Long playerId, int offset, int limit) {
+    return gameDaoProvider.get().findUserGames(playerId, offset, limit);
   }
 
   public Long getGamesCount() {
@@ -65,22 +70,38 @@ public class GameService {
       updatePlayer(game, game.getPlayerWhite().getId());
       gameDaoProvider.get().edit(game);
 
-      Player friendOf = playerService.find(game.getPlayerBlack().getId());
-      Player player = playerService.find(game.getPlayerWhite().getId());
-
-      FriendId friendPk = new FriendId()
-          .setFriend(player)
-          .setFriendOf(friendOf);
-      Friend friend = new Friend()
-          .setPk(friendPk);
-      friendService.saveOrCreate(friend);
-
-      friendPk = new FriendId()
-          .setFriend(friendOf)
-          .setFriendOf(player);
-      friend = new Friend()
-          .setPk(friendPk);
-      friendService.saveOrCreate(friend);
+      Player playerBlack = playerService.find(game.getPlayerBlack().getId());
+      Player playerWhite = playerService.find(game.getPlayerWhite().getId());
+      boolean playerWhiteIsPlayerBlack = false;
+      for (Friend friend : playerBlack.getFriendOf()) {
+        if (playerWhite.getFriends().contains(friend)) {
+          playerWhiteIsPlayerBlack = true;
+          break;
+        }
+      }
+      if (!playerWhiteIsPlayerBlack) {
+        FriendId friendPk = new FriendId()
+            .setFriend(playerWhite)
+            .setFriendOf(playerBlack);
+        Friend friend = new Friend()
+            .setPk(friendPk);
+        friendService.saveOrCreate(friend);
+      }
+      boolean playerBlackIsPlayerWhite = false;
+      for (Friend friend : playerWhite.getFriendOf()) {
+        if (playerBlack.getFriends().contains(friend)) {
+          playerBlackIsPlayerWhite = true;
+          break;
+        }
+      }
+      if (!playerBlackIsPlayerWhite) {
+        FriendId friendPk = new FriendId()
+            .setFriend(playerBlack)
+            .setFriendOf(playerWhite);
+        Friend friend = new Friend()
+            .setPk(friendPk);
+        friendService.saveOrCreate(friend);
+      }
     }
     return game;
   }

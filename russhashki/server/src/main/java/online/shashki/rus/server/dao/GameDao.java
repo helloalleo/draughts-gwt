@@ -11,6 +11,7 @@ import java.util.List;
  * Time: 17:33
  */
 public interface GameDao extends Dao<Game> {
+
   Game findLazyFalse(Long id);
 
   List<Game> findRange(int start, int length);
