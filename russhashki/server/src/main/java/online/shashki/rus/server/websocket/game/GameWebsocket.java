@@ -147,6 +147,12 @@ public class GameWebsocket {
       gameMessage.setMessageType(GameMessage.MessageType.PLAY_END);
       Session receiverSession = peers.get(secondPlayer);
       sendMessage(receiverSession, gameMessage);
+
+      gameMessage = new GameMessage();
+      gameMessage.setSender(player);
+      gameMessage.setReceiver(secondPlayer);
+      gameMessage.setMessageType(GameMessage.MessageType.PLAY_CALLBACK);
+      sendMessage(receiverSession, gameMessage);
     }
 
     player.setOnline(false);

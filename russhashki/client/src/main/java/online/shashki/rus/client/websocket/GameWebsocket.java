@@ -308,6 +308,7 @@ public class GameWebsocket implements WebSocketCallback {
   }
 
   private void handlePlayCallback(GameMessage gameMessage) {
+    // получается в PlayComponentPresenter
     eventBus.fireEvent(new PlayCallbackEvent());
   }
 
