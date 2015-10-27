@@ -3,8 +3,6 @@ package online.shashki.rus.shared.model;
 import online.shashki.rus.shared.model.key.FriendId;
 
 import javax.persistence.*;
-import javax.validation.constraints.Null;
-import java.io.Serializable;
 import java.util.Objects;
 
 /**
@@ -20,9 +18,29 @@ import java.util.Objects;
     @AssociationOverride(name = "pk.friendOf", joinColumns = @JoinColumn(name = "friend_of_id", insertable = false, updatable = false))})
 public class Friend implements BasePersistableObject {
 
+  @Id
+  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  private Long id;
+
   @EmbeddedId
   private FriendId pk = new FriendId();
   private boolean favorite;
+
+  public Friend() {
+  }
+
+  public Long getId() {
+    return id;
+  }
+
+  public Friend setId(Long id) {
+    this.id = id;
+    return this;
+  }
+
+  public void setFriendId(Long friendId) {
+    this.id = friendId;
+  }
 
   @Override
   public boolean equals(Object o) {

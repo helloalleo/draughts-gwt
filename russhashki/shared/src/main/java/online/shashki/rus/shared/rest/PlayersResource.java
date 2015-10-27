@@ -12,7 +12,7 @@ import java.util.List;
 public interface PlayersResource {
 
   @POST
-  Player saveOrCreate(Player game);
+  Player saveOrCreate(Player player);
 
   @GET
   @Path(ApiPaths.PLAYER_FRIEND_LIST)

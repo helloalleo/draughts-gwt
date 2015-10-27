@@ -48,3 +48,11 @@ SELECT
 FROM player player0_ LEFT OUTER JOIN friend friends1_ ON player0_.id = friends1_.friend_of_id
   INNER JOIN player player2_ ON friends1_.friend_id = player2_.id
 WHERE player0_.id = 2;
+
+SELECT
+  friend0_.friend_id    AS friend_i3_2_0_,
+  friend0_.friend_of_id AS friend_o4_2_0_,
+  friend0_.id           AS id1_2_0_,
+  friend0_.favorite     AS favorite2_2_0_
+FROM friend friend0_
+WHERE friend0_.friend_id = 2 AND friend0_.friend_of_id = 1 AND friend0_.id = null;

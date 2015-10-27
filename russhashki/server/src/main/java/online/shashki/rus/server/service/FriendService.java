@@ -21,16 +21,21 @@ public class FriendService {
     this.friendDaoProvider = gameDaoProvider;
   }
 
-  public void saveOrCreate(Friend friend) {
+  public Friend saveOrCreate(Friend friend) {
     if (friend == null) {
-      return;
+      return null;
     }
 
     logger.info("New friend: " + friend.toString());
-    if (friend.getPk() == null) {
+    if (friend.getId() == null) {
       friendDaoProvider.get().create(friend);
     } else {
       friendDaoProvider.get().edit(friend);
     }
+    return friend;
+  }
+
+  public Friend findById(Long friendId) {
+    return friendDaoProvider.get().find(friendId);
   }
 }

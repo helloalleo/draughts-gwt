@@ -2,9 +2,7 @@ package online.shashki.rus.shared.model.key;//package online.shashki.rus.clnt.on
 
 import online.shashki.rus.shared.model.Player;
 
-import javax.persistence.Embeddable;
-import javax.persistence.FetchType;
-import javax.persistence.ManyToOne;
+import javax.persistence.*;
 import java.io.Serializable;
 
 /**
@@ -20,6 +18,9 @@ public class FriendId implements Serializable {
   private Player friend;
   @ManyToOne(fetch = FetchType.EAGER)
   private Player friendOf;
+
+  public FriendId() {
+  }
 
   public Player getFriend() {
     return friend;
