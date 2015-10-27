@@ -1,6 +1,7 @@
 package online.shashki.rus.shared.locale;
 
 import com.google.gwt.i18n.client.Messages;
+import com.google.gwt.safehtml.shared.SafeHtml;
 
 /**
  * Created with IntelliJ IDEA.
@@ -193,4 +194,14 @@ public interface ShashkiMessages extends Messages {
   String playListButtonText();
 
   String playerOffline();
+
+  String you();
+
+  String rating(int rating);
+
+  String addToFavorite();
+
+  String removeFromFavorite();
+
+  SafeHtml connectToServer();
 }

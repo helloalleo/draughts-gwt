@@ -5,16 +5,20 @@ import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.client.core.shape.Text;
 import com.ait.lienzo.client.widget.LienzoPanel;
 import com.ait.lienzo.shared.core.types.DataURLType;
-import com.google.gwt.cell.client.AbstractCell;
+import com.google.gwt.cell.client.Cell;
+import com.google.gwt.cell.client.FieldUpdater;
+import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
-import com.google.gwt.user.cellview.client.CellList;
+import com.google.gwt.user.cellview.client.Column;
+import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.SelectionChangeEvent;
@@ -30,13 +34,17 @@ import online.shashki.rus.client.resources.AppResources;
 import online.shashki.rus.client.resources.Variables;
 import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.locale.ShashkiMessages;
+import online.shashki.rus.shared.model.Friend;
 import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shashki.Board;
 import online.shashki.rus.shashki.BoardBackgroundLayer;
 import online.shashki.rus.shashki.Stroke;
 import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.Icon;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
 import org.gwtbootstrap3.client.ui.constants.IconType;
+import org.gwtbootstrap3.client.ui.gwt.ButtonCell;
+import org.gwtbootstrap3.client.ui.gwt.CellTable;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -65,8 +73,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @UiField
   HTMLPanel playerListColumn;
   @UiField
-  ScrollPanel playerPanel;
-  @UiField
   HTML turnLabel;
   @UiField
   Label beatenOpponentDraughtsLabel;
@@ -74,34 +80,34 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   Label beatenMineDraughtsLabel;
   @UiField
   Button cancelMove;
-  @UiField
-  ScrollPanel playerFriendPanel;
   private Board board;
   private LienzoPanel lienzoPanel;
   private Player player;
-  private CellList<Player> playerFriendCellList;
-  private CellList<Player> playerCellList;
-  private SingleSelectionModel<Player> playerFriendSelectionModel;
+  @UiField(provided = true)
+  CellTable<Friend> playerFriendCellTable;
+  @UiField(provided = true)
+  CellTable<Player> playerCellTable;
+  private SingleSelectionModel<Friend> playerFriendSelectionModel;
   private SingleSelectionModel<Player> playerSelectionModel;
-  private Player selectedPlayer;
   private boolean prevSelected = false;
   private NotationPanel notationPanel;
   private InviteDialogBox inviteDialogBox;
   private boolean opponentColor;
   private Player opponent;
+  private List<Friend> playerFriendList;
 
   @Inject
   PlayComponentView(Binder uiBinder,
                     ShashkiMessages messages,
                     AppResources resources) {
-    initWidget(uiBinder.createAndBindUi(this));
-
     this.messages = messages;
     this.resources = resources;
 
-    initEmptyDeskPanel();
     initRecentPlayersCellList();
     initPlayersCellList();
+    initWidget(uiBinder.createAndBindUi(this));
+
+    initEmptyDeskPanel();
   }
 
   @UiHandler("playButton")
@@ -115,7 +121,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         if (playerSelectionModel.getSelectedObject() != null) {
           selectedPlayer = playerSelectionModel.getSelectedObject();
         } else if (playerFriendSelectionModel.getSelectedObject() != null) {
-          selectedPlayer = playerFriendSelectionModel.getSelectedObject();
+          selectedPlayer = playerFriendSelectionModel.getSelectedObject().getPk().getFriend();
         }
         getUiHandlers().startPlayWith(selectedPlayer);
         break;
@@ -219,99 +225,136 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     if (Window.getClientWidth() > 0) {
       String notationHeight = lienzoPanel.getHeight() - 170 + "px";
       notationPanel.setHeight(notationHeight);
-      String playerListHeight = lienzoPanel.getHeight() - 105 + "px";
-      playerCellList.setHeight(playerListHeight);
     }
   }
 
   private void initRecentPlayersCellList() {
-    playerFriendCellList = new CellList<>(new AbstractCell<Player>() {
-      @Override
-      public void render(Context context, Player value, SafeHtmlBuilder sb) {
-        if (value != null) {
-          if (value.isLoggedIn()) {
-            org.gwtbootstrap3.client.ui.Image img;
-            String playerPublicName = value.getPublicName();
-            if (player.getId().equals(value.getId())) {
-              sb.appendEscaped(playerPublicName);
-            } else {
-              // TODO: не показывать статус. Пусть играют с теми кого знают либо наугад
-              if (value.isPlaying()) {
-                img = new org.gwtbootstrap3.client.ui.Image(resources.images().playingIconImage().getSafeUri());
-                img.setTitle(playerPublicName + messages.playingTitle());
-              } else {
-                if (value.isOnline()) {
-                  img = new org.gwtbootstrap3.client.ui.Image(resources.images().onlineIconImage().getSafeUri());
-                  img.setTitle(playerPublicName + messages.onlineTitle());
-                } else {
-                  img = new org.gwtbootstrap3.client.ui.Image(resources.images().offlineIconImage().getSafeUri());
-                  img.setTitle(playerPublicName + messages.offlineTitle());
-                }
-              }
-              sb.appendHtmlConstant(img.getElement().getString());
-              sb.appendEscaped(" " + playerPublicName);
-            }
-          }
-        }
-      }
-    });
+    playerFriendCellTable = new CellTable<>();
+
     playerFriendSelectionModel = new SingleSelectionModel<>();
-    playerFriendCellList.setSelectionModel(playerFriendSelectionModel);
-    playerFriendPanel.add(playerFriendCellList);
+    playerFriendCellTable.setSelectionModel(playerFriendSelectionModel);
+    final HTML connectToServer = new HTML(messages.connectToServer());
+    connectToServer.getElement().getStyle().setFontSize(12, Style.Unit.PX);
+    playerFriendCellTable.setLoadingIndicator(connectToServer);
+    playerFriendCellTable.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     playerFriendSelectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
       @Override
       public void onSelectionChange(SelectionChangeEvent event) {
-        selectedPlayer = playerFriendSelectionModel.getSelectedObject();
         resetPlayerSelection(playerSelectionModel, playerFriendSelectionModel);
       }
     });
-  }
 
-  private void initPlayersCellList() {
-    playerCellList = new CellList<>(new AbstractCell<Player>() {
+    Column<Friend, SafeHtml> statusColumn = new Column<Friend, SafeHtml>(new SafeHtmlCell()) {
       @Override
-      public void render(Context context, Player value, SafeHtmlBuilder sb) {
-        if (value != null) {
-          if (value.isLoggedIn()) {
-            org.gwtbootstrap3.client.ui.Image img;
-            String playerPublicName = value.getPublicName();
-            if (player.getId().equals(value.getId())) {
-              sb.appendEscaped(playerPublicName);
-            } else {
-              // TODO: не показывать статус. Пусть играют с теми кого знают либо наугад
-              if (value.isPlaying()) {
-                img = new org.gwtbootstrap3.client.ui.Image(resources.images().playingIconImage().getSafeUri());
-                img.setTitle(playerPublicName + messages.playingTitle());
-              } else {
-                if (value.isOnline()) {
-                  img = new org.gwtbootstrap3.client.ui.Image(resources.images().onlineIconImage().getSafeUri());
-                  img.setTitle(playerPublicName + messages.onlineTitle());
-                } else {
-                  img = new org.gwtbootstrap3.client.ui.Image(resources.images().offlineIconImage().getSafeUri());
-                  img.setTitle(playerPublicName + messages.offlineTitle());
-                }
-              }
-              sb.appendHtmlConstant(img.getElement().getString());
-              sb.appendEscaped(" " + playerPublicName);
-            }
-          }
+      public SafeHtml getValue(Friend friend) {
+        return getStatusSafeHtml(friend.getPk().getFriend());
+      }
+    };
+    playerFriendCellTable.addColumn(statusColumn);
+
+    TextColumn<Friend> publicNameColumn = new TextColumn<Friend>() {
+      @Override
+      public String getValue(Friend friend) {
+        return friend.getPk().getFriend().getPublicName();
+      }
+    };
+    playerFriendCellTable.addColumn(publicNameColumn);
+
+    final ButtonCell favoriteButtonCell = new ButtonCell();
+    final Column<Friend, String> favoriteColumn = new Column<Friend, String>(favoriteButtonCell) {
+      @Override
+      public String getValue(Friend object) {
+        return "";
+      }
+
+      @Override
+      public void render(Cell.Context context, Friend object, SafeHtmlBuilder sb) {
+        sb.appendHtmlConstant("<button type=\"button\" class=\"btn btn-link btn-large pull-right\" tabindex=\"-1\">");
+        if (object != null) {
+          Icon icon = new Icon(object.isFavorite() ? IconType.STAR : IconType.STAR_O);
+          sb.appendHtmlConstant(icon.getElement().getString());
+        }
+        sb.appendHtmlConstant("</button>");
+      }
+    };
+    favoriteColumn.setFieldUpdater(new FieldUpdater<Friend, String>() {
+      @Override
+      public void update(int index, Friend object, String value) {
+        if (object != null) {
+          object.setFavorite(!object.isFavorite());
+          playerFriendList.get(playerFriendList.indexOf(object)).setFavorite(object.isFavorite());
+          playerFriendCellTable.setRowCount(0);
+          playerFriendCellTable.setRowData(playerFriendList);
         }
       }
     });
+    playerFriendCellTable.addColumn(favoriteColumn);
+  }
+
+  private void initPlayersCellList() {
+    playerCellTable = new CellTable<>();
     playerSelectionModel = new SingleSelectionModel<>();
-    playerCellList.setSelectionModel(playerSelectionModel);
-    playerPanel.add(playerCellList);
+    playerCellTable.setSelectionModel(playerSelectionModel);
+    final HTML connectToServer = new HTML(messages.connectToServer());
+    connectToServer.getElement().getStyle().setFontSize(12, Style.Unit.PX);
+    playerCellTable.setLoadingIndicator(connectToServer);
+    playerCellTable.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     playerSelectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
       @Override
       public void onSelectionChange(SelectionChangeEvent event) {
         resetPlayerSelection(playerFriendSelectionModel, playerSelectionModel);
       }
     });
+
+    Column<Player, SafeHtml> statusColumn = new Column<Player, SafeHtml>(new SafeHtmlCell()) {
+      @Override
+      public SafeHtml getValue(Player player) {
+        return getStatusSafeHtml(player);
+      }
+    };
+    playerCellTable.addColumn(statusColumn);
+
+    TextColumn<Player> publicNameColumn = new TextColumn<Player>() {
+      @Override
+      public String getValue(Player player) {
+        return player.getPublicName();
+      }
+    };
+    playerCellTable.addColumn(publicNameColumn);
   }
 
-  private void resetPlayerSelection(SingleSelectionModel<Player> prevSelectionModel,
-                                    SingleSelectionModel<Player> currentSelectionModel) {
-    final Player selectedObject = prevSelectionModel.getSelectedObject();
+  private SafeHtml getStatusSafeHtml(Player player) {
+    if (player.getId().equals(this.player.getId())) {
+      Icon html = getIconString(IconType.USER);
+      return new SafeHtmlBuilder().appendHtmlConstant(html.getElement().getString()).toSafeHtml();
+    }
+    Image img;
+    String playerPublicName = player.getPublicName();
+    if (player.isPlaying()) {
+      img = new Image(resources.images().playingIconImage().getSafeUri());
+      img.setTitle(playerPublicName + " " + messages.playingTitle());
+    } else {
+      if (player.isOnline()) {
+        img = new Image(resources.images().onlineIconImage().getSafeUri());
+        img.setTitle(playerPublicName + " "  + messages.onlineTitle());
+      } else {
+        img = new Image(resources.images().offlineIconImage().getSafeUri());
+        img.setTitle(playerPublicName + " "  + messages.offlineTitle());
+      }
+    }
+    return new SafeHtmlBuilder().appendHtmlConstant(img.getElement().getString()).toSafeHtml();
+  }
+
+  private Icon getIconString(IconType iconType) {
+    final Icon userIcon = new Icon();
+    userIcon.getElement().addClassName("fa btn-link");
+    userIcon.getElement().addClassName(iconType.getCssName());
+    return userIcon;
+  }
+
+  private void resetPlayerSelection(SingleSelectionModel<?> prevSelectionModel,
+                                    SingleSelectionModel<?> currentSelectionModel) {
+    final Object selectedObject = prevSelectionModel.getSelectedObject();
     if (selectedObject == null) {
       return;
     }
@@ -320,21 +363,23 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       return;
     }
     prevSelected = true;
-    prevSelectionModel.setSelected(selectedObject, false);
+    ((SingleSelectionModel<Object>) prevSelectionModel).setSelected(selectedObject, false);
   }
 
   @Override
-  public void setPlayerFriendList(List<Player> playerList) {
+  public void setPlayerFriendList(List<Friend> playerList) {
     SHLog.debug("setPlayerFriendList " + playerList);
-    playerFriendCellList.setRowCount(0);
-    playerFriendCellList.setRowData(playerList);
+    playerFriendList = playerList;
+    playerFriendCellTable.setRowCount(0);
+    playerFriendCellTable.setRowData(playerList);
   }
 
   @Override
   public void setPlayerList(List<Player> playerList) {
-    SHLog.debug("setPlayerList " + playerList);
-    playerCellList.setRowCount(0);
-    playerCellList.setRowData(playerList);
+    playerList.remove(player);
+    playerList.add(0, player);
+    playerCellTable.setRowCount(0);
+    playerCellTable.setRowData(playerList);
   }
 
   @Override
@@ -358,8 +403,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playButton.setText(messages.reconnect());
     cancelMove.setEnabled(false);
 
-    playerCellList.setRowData(new ArrayList<Player>());
-    playerFriendCellList.setRowData(new ArrayList<Player>());
+    playerCellTable.setRowData(new ArrayList<Player>());
+    playerFriendCellTable.setRowData(new ArrayList<Friend>());
     turnLabel.setHTML(messages.youDisconnected());
 
     hidePlayingButtonsAndShowPlayButton();

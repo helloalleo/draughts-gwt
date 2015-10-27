@@ -1,5 +1,6 @@
 package online.shashki.rus.shared.rest;
 
+import online.shashki.rus.shared.model.Friend;
 import online.shashki.rus.shared.model.Player;
 
 import javax.ws.rs.*;
@@ -15,5 +16,5 @@ public interface PlayersResource {
 
   @GET
   @Path(ApiPaths.PLAYER_FRIEND_LIST)
-  List<Player> getPlayerFriendList(@QueryParam(ApiParameters.ID) Long playerId);
+  List<Friend> getPlayerFriendList(@QueryParam(ApiParameters.ID) Long playerId);
 }

@@ -5,6 +5,7 @@ import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shashki.Stroke;
 
 interface PlayComponentUiHandlers extends UiHandlers {
+
   void startPlayWith(Player opponent);
 
   void refreshConnectionToServer();

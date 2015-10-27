@@ -1,5 +1,6 @@
 package online.shashki.rus.server.dao;
 
+import online.shashki.rus.shared.model.Friend;
 import online.shashki.rus.shared.model.Player;
 
 import java.util.List;
@@ -24,5 +25,5 @@ public interface PlayerDao extends Dao<Player> {
 
   List<Player> findLoggedIn();
 
-  List<Player> findFriends(Long playerId);
+  List<Friend> findFriends(Long playerId);
 }

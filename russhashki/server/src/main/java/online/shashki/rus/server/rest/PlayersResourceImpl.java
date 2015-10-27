@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 import online.shashki.rus.server.service.PlayerService;
 import online.shashki.rus.server.utils.AuthUtils;
+import online.shashki.rus.shared.model.Friend;
 import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shared.rest.PlayersResource;
 
@@ -33,7 +34,7 @@ public class PlayersResourceImpl implements PlayersResource {
   }
 
   @Override
-  public List<Player> getPlayerFriendList(Long playerId) {
+  public List<Friend> getPlayerFriendList(Long playerId) {
     return playerService.findFriends(playerId);
   }
 }

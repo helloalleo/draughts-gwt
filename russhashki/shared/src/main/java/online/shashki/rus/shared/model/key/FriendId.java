@@ -16,9 +16,9 @@ import java.io.Serializable;
 @Embeddable
 public class FriendId implements Serializable {
 
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   private Player friend;
-  @ManyToOne(fetch = FetchType.LAZY)
+  @ManyToOne(fetch = FetchType.EAGER)
   private Player friendOf;
 
   public Player getFriend() {

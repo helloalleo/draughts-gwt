@@ -17,10 +17,7 @@ import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.client.websocket.GameWebsocket;
 import online.shashki.rus.shared.locale.ShashkiMessages;
-import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.model.GameMessage;
-import online.shashki.rus.shared.model.Move;
-import online.shashki.rus.shared.model.Player;
+import online.shashki.rus.shared.model.*;
 import online.shashki.rus.shared.rest.GamesResource;
 import online.shashki.rus.shared.rest.PlayersResource;
 import online.shashki.rus.shashki.MoveFactory;
@@ -318,14 +315,14 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   private void updatePlayerFriendList() {
-    playersDelegate.withCallback(new AsyncCallback<List<Player>>() {
+    playersDelegate.withCallback(new AsyncCallback<List<Friend>>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();
       }
 
       @Override
-      public void onSuccess(List<Player> result) {
+      public void onSuccess(List<Friend> result) {
         getView().setPlayerFriendList(result);
       }
     }).getPlayerFriendList(gameWebsocket.getPlayer().getId());
@@ -334,7 +331,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   interface MyView extends View, HasUiHandlers<PlayComponentUiHandlers> {
     void initNotationPanel(EventBus eventBus);
 
-    void setPlayerFriendList(List<Player> playerList);
+    void setPlayerFriendList(List<Friend> playerList);
 
     void setPlayerList(List<Player> playerList);
 

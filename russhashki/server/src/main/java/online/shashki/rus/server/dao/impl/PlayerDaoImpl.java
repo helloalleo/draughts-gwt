@@ -5,6 +5,7 @@ import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.PlayerDao;
+import online.shashki.rus.shared.model.Friend;
 import online.shashki.rus.shared.model.Player;
 
 import javax.persistence.EntityManager;
@@ -94,22 +95,25 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   @Transactional
   public List<Player> findLoggedIn() {
     String hql = "SELECT p " +
-        "FROM Player p " +
-        "WHERE p.loggedIn = true " +
-        "ORDER BY p.rating DESC";
+        " FROM Player p " +
+        " WHERE p.loggedIn = true " +
+        " ORDER BY p.online DESC";
     Query query = getEntityManager().createQuery(hql);
     return query.getResultList();
   }
 
   @Override
   @Transactional
-  public List<Player> findFriends(Long playerId) {
-    String hql = "SELECT f.pk.friend " +
-        "FROM Player p " +
-        "LEFT JOIN p.friends f " +
-        "WHERE p.id = :playerId";
+  public List<Friend> findFriends(Long playerId) {
+    String hql = "SELECT f " +
+        " FROM Player p " +
+        " LEFT JOIN p.friends f " +
+        " WHERE p.id = :playerId " +
+        "   AND f.pk.friend.loggedIn = true " +
+        " ORDER BY f.favorite DESC, f.pk.friend.online DESC";
     Query query = getEntityManager().createQuery(hql);
     query.setParameter("playerId", playerId);
-    return (List<Player>) query.getResultList();
+    query.setMaxResults(10);
+    return (List<Friend>) query.getResultList();
   }
 }

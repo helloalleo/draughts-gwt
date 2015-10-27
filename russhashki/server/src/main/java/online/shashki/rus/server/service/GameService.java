@@ -89,7 +89,7 @@ public class GameService {
       }
       boolean playerBlackIsPlayerWhite = false;
       for (Friend friend : playerWhite.getFriendOf()) {
-        if (playerBlack.getFriends().contains(friend)) {
+        if (!playerBlack.getFriends().contains(friend)) {
           playerBlackIsPlayerWhite = true;
           break;
         }

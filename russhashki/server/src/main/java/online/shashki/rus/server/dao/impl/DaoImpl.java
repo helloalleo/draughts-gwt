@@ -95,7 +95,7 @@ public abstract class DaoImpl<E extends BasePersistableObject> implements Dao<E>
       throw new IllegalArgumentException("Length of params and values must be equal");
     }
 
-    String hql = "FROM " + entity + " WHERE ";
+    String hql = " FROM " + entity + " WHERE ";
     for (int i = 0; i < params.length; i++) {
       if (i != 0) {
         hql += " AND ";

@@ -4,12 +4,11 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import online.shashki.rus.server.dao.PlayerDao;
+import online.shashki.rus.shared.model.Friend;
 import online.shashki.rus.shared.model.Player;
 
 import javax.servlet.http.HttpSession;
-import java.util.LinkedHashMap;
 import java.util.List;
-import java.util.Map;
 
 @Singleton
 public class PlayerService {
@@ -84,8 +83,7 @@ public class PlayerService {
     return playerDaoProvider.get().findLoggedIn();
   }
 
-  public List<Player> findFriends(Long playerId) {
-    Map<Player, Boolean> playerFavoriteMap = new LinkedHashMap<>();
+  public List<Friend> findFriends(Long playerId) {
     return playerDaoProvider.get().findFriends(playerId);
   }
 }
