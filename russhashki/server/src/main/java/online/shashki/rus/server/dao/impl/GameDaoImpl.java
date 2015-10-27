@@ -49,10 +49,11 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
   @Transactional
   public List<Game> findRange(int start, int length) {
     String hql = "SELECT g " +
-        "FROM Game g " +
-        "JOIN FETCH g.playerWhite " +
-        "JOIN FETCH g.playerBlack " +
-        "ORDER BY g.playFinishDate DESC";
+        " FROM Game g " +
+        " JOIN FETCH g.playerWhite " +
+        " JOIN FETCH g.playerBlack " +
+        " WHERE g.playFinishDate IS NOT NULL " +
+        " ORDER BY g.playFinishDate DESC";
     Query query = getEntityManager().createQuery(hql);
     query.setFirstResult(start);
     query.setMaxResults(length);
@@ -63,12 +64,13 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
   @Transactional
   public List<Game> findUserGames(Long userId, int start, int length) {
     String hql = "SELECT g " +
-        "FROM Game g " +
-        "JOIN FETCH g.playerWhite white " +
-        "JOIN FETCH g.playerBlack black " +
-        "WHERE white.id = :userId " +
-        "   OR black.id = :userId " +
-        "ORDER BY g.playFinishDate DESC";
+        " FROM Game g " +
+        " JOIN FETCH g.playerWhite white " +
+        " JOIN FETCH g.playerBlack black " +
+        " WHERE (white.id = :userId " +
+        "    OR black.id = :userId) " +
+        "   AND g.playStartDate IS NOT NULL" +
+        " ORDER BY g.playStartDate DESC";
     Query query = getEntityManager().createQuery(hql);
     query.setParameter("userId", userId);
     query.setFirstResult(start);
