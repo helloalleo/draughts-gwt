@@ -179,6 +179,7 @@ public class GameMessage extends PersistableObjectImpl {
     PLAY_END,
     PLAY_SURRENDER,
     PLAY_CALLBACK,
+    NOTIFICATION_ADDED_TO_FAVORITE,
     PLAYER_REGISTER
   }
 }

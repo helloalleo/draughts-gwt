@@ -204,4 +204,14 @@ public interface ShashkiMessages extends Messages {
   String removeFromFavorite();
 
   SafeHtml connectToServer();
+
+  String youHasBeenAddedToFavorite(String publicName);
+
+  String addInFavoriteAllowedOnlyInPlay();
+
+  String youHasBeenRemovedFromFavorite(String publicName);
+
+  String notification();
+
+  String ok();
 }

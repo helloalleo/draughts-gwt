@@ -30,6 +30,7 @@ import online.shashki.rus.client.application.widget.NotationPanel;
 import online.shashki.rus.client.application.widget.dialog.ConfirmeDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InviteDialogBox;
+import online.shashki.rus.client.application.widget.growl.Growl;
 import online.shashki.rus.client.resources.AppResources;
 import online.shashki.rus.client.resources.Variables;
 import online.shashki.rus.client.util.SHLog;
@@ -112,6 +113,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @UiHandler("playButton")
   public void onConnectToServer(ClickEvent event) {
+    InfoDialogBox.setMessage("sdf").show();
     switch (playButton.getIcon()) {
       case REFRESH:
         getUiHandlers().refreshConnectionToServer();
@@ -163,7 +165,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       return;
     }
     if (board.isMyTurn() && !(lastStroke == null || lastStroke.isContinueBeat()) || lastStroke == null) {
-      InfoDialogBox.setMessage(messages.youDontMove()).show();
+      Growl.growlNotif(messages.youDontMove());
       return;
     }
     new ConfirmeDialogBox(messages.doYouWantToCancelMove()) {
@@ -282,6 +284,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       public void update(int index, Friend object, String value) {
         if (object != null) {
           object.setFavorite(!object.isFavorite());
+          getUiHandlers().saveFriend(object);
           playerFriendList.get(playerFriendList.indexOf(object)).setFavorite(object.isFavorite());
           playerFriendCellTable.setRowCount(0);
           playerFriendCellTable.setRowData(playerFriendList);

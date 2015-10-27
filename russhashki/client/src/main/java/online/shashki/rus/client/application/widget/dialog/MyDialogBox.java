@@ -3,6 +3,7 @@ package online.shashki.rus.client.application.widget.dialog;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
@@ -19,7 +20,9 @@ public class MyDialogBox extends BasicDialogBox {
   private HTML contentHTML;
 
   public MyDialogBox(String header, String content) {
-    setText(header);
+    HTML caption = new HTML(header);
+    caption.getElement().addClassName(resources.style().dialogCaption());
+    setHTML(new SafeHtmlBuilder().appendHtmlConstant(caption.getElement().getString()).toSafeHtml());
 
     ScrollPanel contentScrollPanel = new ScrollPanel();
 
@@ -31,7 +34,7 @@ public class MyDialogBox extends BasicDialogBox {
     panel.setPixelSize(WIDTH, HEIGHT);
     panel.add(contentScrollPanel);
 
-    final Button buttonClose = new Button(messages.close(), new ClickHandler() {
+    final Button buttonClose = new Button(messages.ok(), new ClickHandler() {
       @Override
       public void onClick(final ClickEvent event) {
         hide();

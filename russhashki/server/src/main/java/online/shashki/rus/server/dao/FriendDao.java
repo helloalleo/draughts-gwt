@@ -9,4 +9,6 @@ import online.shashki.rus.shared.model.Friend;
  * Time: 18:04
  */
 public interface FriendDao extends Dao<Friend> {
+
+  Friend findById(Long friendId);
 }

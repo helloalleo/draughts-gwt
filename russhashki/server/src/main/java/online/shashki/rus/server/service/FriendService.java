@@ -30,7 +30,9 @@ public class FriendService {
     if (friend.getId() == null) {
       friendDaoProvider.get().create(friend);
     } else {
-      friendDaoProvider.get().edit(friend);
+      Friend friendById = friendDaoProvider.get().findById(friend.getId());
+      friendById.setFavorite(friend.isFavorite());
+      friendDaoProvider.get().edit(friendById);
     }
     return friend;
   }

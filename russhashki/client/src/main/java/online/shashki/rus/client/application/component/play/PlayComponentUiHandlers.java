@@ -1,6 +1,7 @@
 package online.shashki.rus.client.application.component.play;
 
 import com.gwtplatform.mvp.client.UiHandlers;
+import online.shashki.rus.shared.model.Friend;
 import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shashki.Stroke;
 
@@ -19,4 +20,8 @@ interface PlayComponentUiHandlers extends UiHandlers {
   void playerSurrendered();
 
   void proposeCancelMove(Stroke lastMove);
+
+  void saveFriend(Friend friend);
+
+  boolean isPlaying();
 }

@@ -7,6 +7,7 @@ import online.shashki.rus.server.dao.FriendDao;
 import online.shashki.rus.shared.model.Friend;
 
 import javax.persistence.EntityManager;
+import javax.persistence.Query;
 
 /**
  * Created with IntelliJ IDEA.
@@ -27,5 +28,15 @@ public class FriendDaoImpl extends DaoImpl<Friend> implements FriendDao {
   @Override
   protected EntityManager getEntityManager() {
     return entityManagerProvider.get();
+  }
+
+  @Override
+  public Friend findById(Long friendId) {
+    String hql = "SELECT f " +
+        " FROM Friend f " +
+        " WHERE f.id = :friendId";
+    Query query = getEntityManager().createQuery(hql);
+    query.setParameter("friendId", friendId);
+    return (Friend) query.getSingleResult();
   }
 }

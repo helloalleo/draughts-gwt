@@ -7,7 +7,7 @@ import javax.ws.rs.Path;
 import javax.ws.rs.Produces;
 import javax.ws.rs.core.MediaType;
 
-@Path(ApiPaths.PLAYERS)
+@Path(ApiPaths.FRIENDS)
 @Produces(MediaType.APPLICATION_JSON)
 public interface FriendsResource {
 

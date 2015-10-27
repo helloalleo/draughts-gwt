@@ -13,11 +13,14 @@ import com.gwtplatform.mvp.client.View;
 import online.shashki.rus.client.application.widget.NotationPanel;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
+import online.shashki.rus.client.application.widget.growl.Growl;
 import online.shashki.rus.client.event.*;
+import online.shashki.rus.client.util.AbstractAsyncCallback;
 import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.client.websocket.GameWebsocket;
 import online.shashki.rus.shared.locale.ShashkiMessages;
 import online.shashki.rus.shared.model.*;
+import online.shashki.rus.shared.rest.FriendsResource;
 import online.shashki.rus.shared.rest.GamesResource;
 import online.shashki.rus.shared.rest.PlayersResource;
 import online.shashki.rus.shashki.MoveFactory;
@@ -36,6 +39,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ShashkiMessages messages;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final ResourceDelegate<PlayersResource> playersDelegate;
+  private final ResourceDelegate<FriendsResource> friendsDelegate;
   private final EventBus eventBus;
 
   @Inject
@@ -45,6 +49,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       ShashkiMessages messages,
       ResourceDelegate<GamesResource> gamesDelegate,
       ResourceDelegate<PlayersResource> playersDelegate,
+      ResourceDelegate<FriendsResource> friendsDelegate,
       GameWebsocket gameWebsocket) {
     super(eventBus, view);
 
@@ -53,6 +58,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     this.gameWebsocket = gameWebsocket;
     this.gamesDelegate = gamesDelegate;
     this.playersDelegate = playersDelegate;
+    this.friendsDelegate = friendsDelegate;
 
     getView().setUiHandlers(this);
     getView().initNotationPanel(eventBus);
@@ -68,15 +74,15 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   @Override
   public void startPlayWith(final Player opponent) {
     if (opponent == null) {
-      InfoDialogBox.setMessage(messages.selectPlayer()).show();
+      Growl.growlNotif(messages.selectPlayer());
       return;
     }
     if (opponent.getId().equals(gameWebsocket.getPlayer().getId())) {
-      InfoDialogBox.setMessage(messages.selectAnotherPlayerItsYou()).show();
+      Growl.growlNotif(messages.selectAnotherPlayerItsYou());
       return;
     }
     if (!opponent.isOnline()) {
-      InfoDialogBox.setMessage(messages.playerOffline());
+      Growl.growlNotif(messages.playerOffline());
       return;
     }
     getView().setOpponent(opponent);
@@ -148,6 +154,30 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     gameMessage.setMove(move);
 
     fireEvent(new GameMessageEvent(gameMessage));
+  }
+
+  @Override
+  public void saveFriend(final Friend friend) {
+    friendsDelegate.withCallback(new AbstractAsyncCallback<Friend>() {
+      @Override
+      public void onSuccess(Friend result) {
+        if (isPlaying()) {
+          GameMessage gameMessage = createGameMessage();
+          gameMessage.setMessageType(GameMessage.MessageType.NOTIFICATION_ADDED_TO_FAVORITE);
+          if (friend.isFavorite()) {
+            gameMessage.setMessage(messages.youHasBeenAddedToFavorite(gameWebsocket.getPlayer().getPublicName()));
+          } else {
+            gameMessage.setMessage(messages.youHasBeenRemovedFromFavorite(gameWebsocket.getPlayer().getPublicName()));
+          }
+          fireEvent(new GameMessageEvent(gameMessage));
+        }
+      }
+    }).saveOrCreate(friend);
+  }
+
+  @Override
+  public boolean isPlaying() {
+    return gameWebsocket.getOpponent() != null;
   }
 
   private GameMessage createGameMessage() {

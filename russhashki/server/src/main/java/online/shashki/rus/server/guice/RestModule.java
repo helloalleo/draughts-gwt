@@ -17,8 +17,10 @@
 package online.shashki.rus.server.guice;
 
 import com.google.inject.AbstractModule;
+import online.shashki.rus.server.rest.FriendsResourceImpl;
 import online.shashki.rus.server.rest.GamesResourceImpl;
 import online.shashki.rus.server.rest.PlayersResourceImpl;
+import online.shashki.rus.shared.rest.FriendsResource;
 import online.shashki.rus.shared.rest.GamesResource;
 import online.shashki.rus.shared.rest.PlayersResource;
 
@@ -28,5 +30,6 @@ public class RestModule extends AbstractModule {
   protected void configure() {
     bind(GamesResource.class).to(GamesResourceImpl.class);
     bind(PlayersResource.class).to(PlayersResourceImpl.class);
+    bind(FriendsResource.class).to(FriendsResourceImpl.class);
   }
 }

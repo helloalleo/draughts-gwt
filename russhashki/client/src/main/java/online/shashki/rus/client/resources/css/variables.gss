@@ -27,3 +27,5 @@
  * Measure
  */
 @def NAVBAR_CHANGE_DURATION     0s;
+
+@def DIALOG_BORDER_RADIUS       4px;

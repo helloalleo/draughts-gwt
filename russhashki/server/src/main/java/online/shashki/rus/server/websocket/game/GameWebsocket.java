@@ -82,6 +82,7 @@ public class GameWebsocket {
       case PLAY_CANCEL_MOVE_RESPONSE:
       case PLAY_CALLBACK:
       case CHAT_PRIVATE_MESSAGE:
+      case NOTIFICATION_ADDED_TO_FAVORITE:
         handleChatPrivateMessage(gameMessage);
         break;
     }

@@ -42,6 +42,7 @@
 
         <!--<project.artifacts.directory>out/artifacts</project.artifacts.directory>-->
         <outputDirectory>${project.basedir}/../../out/artifacts/shashki_web_exploded.war</outputDirectory>
+        <gwtbootstrap3-extras.version>0.9.1</gwtbootstrap3-extras.version>
     </properties>
 
     <dependencyManagement>
@@ -240,6 +241,13 @@
             <groupId>com.gwtplatform.extensions</groupId>
             <artifactId>dispatch-rest-delegates</artifactId>
             <version>${gwtp.extensions.version}</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.gwtbootstrap3</groupId>
+            <artifactId>gwtbootstrap3-extras</artifactId>
+            <version>${gwtbootstrap3-extras.version}</version>
+            <scope>provided</scope>
         </dependency>
     </dependencies>
 

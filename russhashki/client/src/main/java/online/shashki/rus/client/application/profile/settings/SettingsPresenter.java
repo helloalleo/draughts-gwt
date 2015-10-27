@@ -10,6 +10,7 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
+import online.shashki.rus.client.application.widget.growl.Growl;
 import online.shashki.rus.client.event.UpdateAllPlayerListEvent;
 import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.client.websocket.PlaySession;
@@ -58,7 +59,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
       @Override
       public void onSuccess(Player result) {
         SettingsPresenter.this.player.setPlayerName(result.getPlayerName());
-        InfoDialogBox.setMessage(messages.profileUpdated()).show();
+        Growl.growlNotif(messages.profileUpdated());
         if (playSession.isConnected()) {
           fireEvent(new UpdateAllPlayerListEvent());
         }

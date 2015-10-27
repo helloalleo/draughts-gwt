@@ -10,7 +10,11 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import online.shashki.rus.client.application.security.CurrentSession;
-import online.shashki.rus.client.application.widget.dialog.*;
+import online.shashki.rus.client.application.widget.dialog.ConfirmPlayDialogBox;
+import online.shashki.rus.client.application.widget.dialog.ConfirmeDialogBox;
+import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
+import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
+import online.shashki.rus.client.application.widget.growl.Growl;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.json.GameMessageMapper;
 import online.shashki.rus.client.util.SHLog;
@@ -169,7 +173,7 @@ public class GameWebsocket implements WebSocketCallback {
       @Override
       public void submitted() {
         if (gameMessage.getSender() == null) {
-          InfoDialogBox.setMessage(messages.opponentNotFound()).show();
+          Growl.growlNotif(messages.opponentNotFound());
           return;
         }
         SHLog.debug(playSession.getPlayer().toString());
@@ -286,7 +290,14 @@ public class GameWebsocket implements WebSocketCallback {
       case CHAT_PRIVATE_MESSAGE:
         handleChatPrivateMessage(gameMessage);
         break;
+      case NOTIFICATION_ADDED_TO_FAVORITE:
+        handleNotification(gameMessage);
+        break;
     }
+  }
+
+  private void handleNotification(GameMessage gameMessage) {
+    Growl.growlNotif(gameMessage.getMessage());
   }
 
   private void handlePlayEndGame(GameMessage gameMessage) {
@@ -301,7 +312,7 @@ public class GameWebsocket implements WebSocketCallback {
 
         @Override
         public void onSuccess(Game aVoid) {
-          InfoDialogBox.setMessage(messages.opponentLeftGame()).show();
+          Growl.growlNotif(messages.opponentLeftGame());
         }
       }));
     }
@@ -314,7 +325,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlayAlreadyPlaying(GameMessage gameMessage) {
     eventBus.fireEvent(new HideInviteDialogBoxEvent());
-    InfoDialogBox.setMessage(messages.playAlreadyPlaying(gameMessage.getSender().getPublicName())).show();
+    Growl.growlNotif(messages.playAlreadyPlaying(gameMessage.getSender().getPublicName()));
   }
 
   /**
@@ -328,7 +339,7 @@ public class GameWebsocket implements WebSocketCallback {
       final Move move = gameMessage.getMove();
       eventBus.fireEvent(new PlayMoveCancelEvent(move));
     } else {
-      new MyDialogBox(messages.info(), messages.playerRejectedMoveCancel(gameMessage.getSender().getPublicName()));
+      InfoDialogBox.setMessage(messages.playerRejectedMoveCancel(gameMessage.getSender().getPublicName())).show();
     }
   }
 
@@ -370,7 +381,7 @@ public class GameWebsocket implements WebSocketCallback {
       }));
     } else {
       String senderName = gameMessage.getSender().getPublicName();
-      new MyDialogBox(messages.info(), messages.playerRejectedDraw(senderName));
+      InfoDialogBox.setMessage(messages.playerRejectedDraw(senderName)).show();
     }
   }
 
@@ -417,7 +428,7 @@ public class GameWebsocket implements WebSocketCallback {
 
       @Override
       public void onSuccess(Game aVoid) {
-        new MyDialogBox(messages.info(), messages.opponentSurrendered());
+        InfoDialogBox.setMessage(messages.opponentSurrendered()).show();
       }
     }));
   }
@@ -453,9 +464,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void handlePlayRejectInvite(GameMessage gameMessage) {
     playSession.setOpponent(null);
-    new MyDialogBox(messages.info(),
-        messages.playerRejectedPlayRequest(gameMessage.getSender().getPublicName()))
-        .show();
+    Growl.growlNotif(messages.playerRejectedPlayRequest(gameMessage.getSender().getPublicName()));
     eventBus.fireEvent(new RejectPlayEvent());
   }
 
