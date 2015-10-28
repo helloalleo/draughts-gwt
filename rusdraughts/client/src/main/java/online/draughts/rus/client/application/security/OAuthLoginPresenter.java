@@ -28,7 +28,7 @@ public class OAuthLoginPresenter extends Presenter<OAuthLoginPresenter.MyView, O
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     getView().setUiHandlers(this);
-    SHCookies.setLocation(NameTokens.loginPage);
+    SHCookies.setLOCATION(NameTokens.loginPage);
 
   }
 

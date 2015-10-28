@@ -32,7 +32,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     implements HomeUiHandlers {
 
   public static final PermanentSlot<PlayComponentPresenter> SLOT_PLAY = new PermanentSlot<>();
-  public static final int INIT_SHOW_GAMES_PAGE_SIZE = 50;
+  public static final int INIT_SHOW_GAMES_PAGE_SIZE = 1;
   private final CurrentSession currentSession;
   private PlayComponentPresenter playPresenter;
   private final ResourceDelegate<GamesResource> gamesDelegate;
@@ -53,7 +53,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     this.currentSession = currentSession;
     this.playPresenter = playPresenter;
     this.gamesDelegate = gamesDelegate;
-    SHCookies.setLocation(NameTokens.homePage);
+    SHCookies.setLOCATION(NameTokens.homePage);
     bindEvent();
   }
 

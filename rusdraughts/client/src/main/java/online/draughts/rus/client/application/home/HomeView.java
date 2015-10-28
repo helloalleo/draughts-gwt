@@ -116,12 +116,12 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   }
 
   @UiHandler("moreGameOnPage")
-  public void onLessGameOnPage(ClickEvent event) {
+  public void onMoreGameOnPage(ClickEvent event) {
     playShowPanel.moreGameOnPanel();
   }
 
   @UiHandler("lessGameOnPage")
-  public void onMoreGameOnPage(ClickEvent event) {
+  public void onLessGameOnPage(ClickEvent event) {
     playShowPanel.lessGameOnPanel();
   }
 

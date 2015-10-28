@@ -179,7 +179,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   }
 
   public void highlightMenu() {
-    String nameToken = SHCookies.getLocation();
+    String nameToken = SHCookies.getLOCATION();
     if (nameToken == null || nameToken.isEmpty()) {
       return;
     }

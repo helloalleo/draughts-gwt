@@ -40,7 +40,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
     this.player = currentSession.getPlayer();
 
     getView().setUiHandlers(this);
-    SHCookies.setLocation(NameTokens.profilePage);
+    SHCookies.setLOCATION(NameTokens.profilePage);
   }
 
   @Override

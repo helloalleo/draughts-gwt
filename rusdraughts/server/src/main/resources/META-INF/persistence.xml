@@ -2,7 +2,7 @@
 <persistence xmlns="http://xmlns.jcp.org/xml/ns/persistence" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
              version="2.1"
              xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence http://xmlns.jsp.org/xml/ns/persistence/persistence_2_1.xsd">
-    <persistence-unit name="draughtPU" transaction-type="RESOURCE_LOCAL">
+    <persistence-unit name="draughtsPU" transaction-type="RESOURCE_LOCAL">
         <description>Draughts Persistence Unit</description>
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
@@ -16,7 +16,7 @@
         <properties>
             <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
             <property name="hibernate.connection.username" value="draughts"/>
-            <property name="hibernate.connection.password" value="draughts000"/>
+            <property name="hibernate.connection.password" value=""/>
             <!--<property name="hibernate.connection.url" value="jdbc:postgresql://postgres2428-draughts.mircloud.host/draughts"/>-->
             <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/draughts"/>
 

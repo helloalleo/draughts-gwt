@@ -34,7 +34,7 @@ public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> impleme
         .nameToken(token)
         .build();
 
-    SHCookies.setLocation(token);
+    SHCookies.setLOCATION(token);
     placeManager.revealPlace(placeRequest);
   }
 

@@ -40,17 +40,6 @@ public class PlayItem extends Composite {
 
     panel.addStyleName(resources.style().playItem());
     setGame(player, game);
-//    PlayerService.App.getInstance().getCurrentProfile(new AsyncCallback<Player>() {
-//      @Override
-//      public void onFailure(Throwable caught) {
-//        ErrorDialogBox.setMessage(caught).show();
-//      }
-//
-//      @Override
-//      public void onSuccess(Player result) {
-//        setGame(result, game);
-//      }
-//    });
   }
 
   public void setGame(Player player, Game game) {
