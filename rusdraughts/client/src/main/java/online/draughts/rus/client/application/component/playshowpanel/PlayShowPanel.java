@@ -30,9 +30,8 @@ public class PlayShowPanel extends Composite {
   private final int[] gameOnPanelArr = {1, 2, 3, 4, 6};
   private int gamesOnPanelCounter = 1;
   private List<Game> gameList;
-  private int panelHeight;
 
-  private final int incrementSize = 1;
+  private final int INCREMENT_SIZE = 18;
 
   private boolean updateFlag = true;
 
@@ -44,8 +43,6 @@ public class PlayShowPanel extends Composite {
     initWidget(binder.createAndBindUi(this));
 
     final String marginStr = Variables.S_MAIN_CONTAINER_MARGIN_TOP.substring(0, Variables.S_MAIN_CONTAINER_MARGIN_TOP.length() - 2);
-    panelHeight = Window.getClientHeight() - Integer.valueOf(marginStr) - 50;
-//    mainScrollPanel.setHeight(panelHeight + "px");
     Window.addWindowScrollHandler(new Window.ScrollHandler() {
       @Override
       public void onWindowScroll(Window.ScrollEvent event) {
@@ -63,7 +60,7 @@ public class PlayShowPanel extends Composite {
         SHLog.debug("half inc " + halfIncrementScrollSize);
         if (lastScrollPos >= (maxScrollTop - halfIncrementScrollSize) && updateFlag) {
           SHLog.debug("load new games");
-          final int newPageSize = gameList.size() + incrementSize;
+          final int newPageSize = gameList.size() + INCREMENT_SIZE;
           PlayShowPanel.this.homeView.getMoreGames(newPageSize);
           SHLog.debug("DISPLAYED GAMES " + gameList.size());
           lastMaxHeight = maxScrollTop;
@@ -73,27 +70,6 @@ public class PlayShowPanel extends Composite {
           updateFlag = true;
         }
       }
-//      @Override
-//      public void onScroll(Window.ScrollEvent event) {
-//        int oldScrollPos = lastScrollPos;
-//        lastScrollPos = mainScrollPanel.getVerticalScrollPosition();
-//        if (oldScrollPos >= lastScrollPos) {
-//          return;
-//        }
-//
-//        int maxScrollTop = mainScrollPanel.getWidget().getOffsetHeight() - mainScrollPanel.getOffsetHeight();
-//        int halfIncrementScrollSize = (maxScrollTop - lastMaxHeight) / 2;
-//        if (lastScrollPos >= (maxScrollTop - halfIncrementScrollSize) && updateFlag) {
-//          final int newPageSize = gameList.size() + incrementSize;
-//          PlayShowPanel.this.homeView.getMoreGames(newPageSize);
-//          SHLog.debug("DISPLAYED GAMES " + gameList.size());
-//          lastMaxHeight = maxScrollTop;
-//          updateFlag = false;
-//        }
-//        if (maxScrollTop > lastMaxHeight) {
-//          updateFlag = true;
-//        }
-//      }
     });
   }
 

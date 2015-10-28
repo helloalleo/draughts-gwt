@@ -32,7 +32,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     implements HomeUiHandlers {
 
   public static final PermanentSlot<PlayComponentPresenter> SLOT_PLAY = new PermanentSlot<>();
-  public static final int INIT_SHOW_GAMES_PAGE_SIZE = 1;
+  public static final int INIT_SHOW_GAMES_PAGE_SIZE = 36;
   private final CurrentSession currentSession;
   private PlayComponentPresenter playPresenter;
   private final ResourceDelegate<GamesResource> gamesDelegate;
