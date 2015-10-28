@@ -1,4 +1,4 @@
-package online.shashki.rus.shared.model;
+package online.draughts.rus.shared.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.user.client.rpc.GwtTransient;

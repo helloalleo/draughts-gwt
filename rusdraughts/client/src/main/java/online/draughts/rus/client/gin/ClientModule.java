@@ -1,12 +1,12 @@
-package online.shashki.rus.client.gin;
+package online.draughts.rus.client.gin;
 
 import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
-import online.shashki.rus.client.application.ApplicationModule;
-import online.shashki.rus.client.application.security.CurrentSession;
-import online.shashki.rus.client.place.NameTokens;
-import online.shashki.rus.client.websocket.WebsocketModule;
+import online.draughts.rus.client.application.ApplicationModule;
+import online.draughts.rus.client.application.security.CurrentSession;
+import online.draughts.rus.client.place.NameTokens;
+import online.draughts.rus.client.websocket.WebsocketModule;
 
 public class ClientModule extends AbstractGinModule {
   @Override

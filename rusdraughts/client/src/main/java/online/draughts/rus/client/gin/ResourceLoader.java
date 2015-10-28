@@ -14,11 +14,11 @@
  * the License.
  */
 
-package online.shashki.rus.client.gin;
+package online.draughts.rus.client.gin;
 
 import com.google.inject.Inject;
-import online.shashki.rus.client.resources.AppResources;
-import online.shashki.rus.client.resources.DialogResources;
+import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.client.resources.DialogResources;
 
 public class ResourceLoader {
   @Inject

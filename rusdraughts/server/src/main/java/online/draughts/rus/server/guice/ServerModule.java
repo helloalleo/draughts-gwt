@@ -1,4 +1,4 @@
-package online.shashki.rus.server.guice;
+package online.draughts.rus.server.guice;
 
 import com.google.inject.AbstractModule;
 

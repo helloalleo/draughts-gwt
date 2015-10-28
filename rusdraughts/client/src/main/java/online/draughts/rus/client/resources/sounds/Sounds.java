@@ -1,4 +1,4 @@
-package online.shashki.rus.client.resources.sounds;
+package online.draughts.rus.client.resources.sounds;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.DataResource;

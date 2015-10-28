@@ -1,8 +1,8 @@
-package online.shashki.rus.client.websocket;
+package online.draughts.rus.client.websocket;
 
 import com.google.inject.Singleton;
-import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.model.Player;
 
 /**
  * Created with IntelliJ IDEA.

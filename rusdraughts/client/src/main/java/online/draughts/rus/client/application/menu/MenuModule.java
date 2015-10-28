@@ -1,5 +1,5 @@
 
-package online.shashki.rus.client.application.menu;
+package online.draughts.rus.client.application.menu;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 

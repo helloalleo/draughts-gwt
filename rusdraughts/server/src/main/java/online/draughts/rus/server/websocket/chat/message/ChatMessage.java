@@ -1,4 +1,4 @@
-package online.shashki.rus.server.websocket.chat.message;
+package online.draughts.rus.server.websocket.chat.message;
 
 
 /**

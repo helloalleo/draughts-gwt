@@ -1,7 +1,7 @@
-package online.shashki.rus.server.utils;
+package online.draughts.rus.server.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import online.shashki.rus.shared.model.GameMessage;
+import online.draughts.rus.shared.model.GameMessage;
 
 import java.io.*;
 import java.util.logging.Logger;

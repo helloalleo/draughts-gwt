@@ -1,7 +1,7 @@
-package online.shashki.rus.client.application.home;
+package online.draughts.rus.client.application.home;
 
 import com.gwtplatform.mvp.client.UiHandlers;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.shared.model.Player;
 
 interface HomeUiHandlers extends UiHandlers {
 

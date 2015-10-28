@@ -1,10 +1,10 @@
-package online.shashki.rus.server.service;
+package online.draughts.rus.server.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import online.shashki.rus.server.dao.GameMessageDao;
-import online.shashki.rus.shared.model.GameMessage;
+import online.draughts.rus.server.dao.GameMessageDao;
+import online.draughts.rus.shared.model.GameMessage;
 
 import java.util.logging.Logger;
 

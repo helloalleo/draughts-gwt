@@ -14,7 +14,7 @@
  * the License.
  */
 
-package online.shashki.rus.shared.rest;
+package online.draughts.rus.shared.rest;
 
 public class ApiPaths {
   public static final String ROOT = "/rus/rest";

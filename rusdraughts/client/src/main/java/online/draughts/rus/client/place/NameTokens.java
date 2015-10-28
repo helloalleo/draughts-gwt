@@ -1,8 +1,8 @@
-package online.shashki.rus.client.place;
+package online.draughts.rus.client.place;
 
 import com.google.inject.Inject;
-import online.shashki.rus.client.util.Utils;
-import online.shashki.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.client.util.Utils;
+import online.draughts.rus.shared.locale.DraughtsMessages;
 
 public class NameTokens {
   // токены - адреса в навигации

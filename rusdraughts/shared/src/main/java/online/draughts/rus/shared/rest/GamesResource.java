@@ -1,6 +1,6 @@
-package online.shashki.rus.shared.rest;
+package online.draughts.rus.shared.rest;
 
-import online.shashki.rus.shared.model.Game;
+import online.draughts.rus.shared.model.Game;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;

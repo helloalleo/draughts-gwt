@@ -1,6 +1,6 @@
-package online.shashki.rus.server.utils;
+package online.draughts.rus.server.utils;
 
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.shared.model.Player;
 
 /**
  * Created with IntelliJ IDEA.

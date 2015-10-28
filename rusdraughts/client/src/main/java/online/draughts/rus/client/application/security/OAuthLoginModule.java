@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.security;
+package online.draughts.rus.client.application.security;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 

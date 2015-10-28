@@ -1,4 +1,4 @@
-package online.shashki.rus.server.websocket.chat;
+package online.draughts.rus.server.websocket.chat;
 
 /**
  * Created with IntelliJ IDEA.

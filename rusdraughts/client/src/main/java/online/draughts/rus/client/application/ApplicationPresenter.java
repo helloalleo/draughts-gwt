@@ -14,7 +14,7 @@
  * the License.
  */
 
-package online.shashki.rus.client.application;
+package online.draughts.rus.client.application;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -24,8 +24,8 @@ import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.Proxy;
-import online.shashki.rus.client.application.menu.MenuPresenter;
-import online.shashki.rus.client.util.SHLog;
+import online.draughts.rus.client.application.menu.MenuPresenter;
+import online.draughts.rus.client.util.SHLog;
 
 /**
  * This is the top-level presenter of the hierarchy. Other presenters reveal themselves within this presenter.

@@ -1,13 +1,13 @@
-package online.shashki.rus.client.application.widget;
+package online.draughts.rus.client.application.widget;
 
 
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.web.bindery.event.shared.EventBus;
-import online.shashki.rus.client.event.*;
-import online.shashki.rus.client.util.SHLog;
-import online.shashki.rus.shashki.Square;
-import online.shashki.rus.shashki.Stroke;
+import online.draughts.rus.client.event.*;
+import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.draughts.Square;
+import online.draughts.rus.draughts.Stroke;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,7 +24,7 @@ public class NotationPanel extends ScrollPanel {
   private static final String COUNT_SEP = ". ";
   private static final String NOTATION_WIDTH = "200px";
 
-//  private final ShashkiGinjector shashkiGinjector = ShashkiGinjector.INSTANCE;
+//  private final DraughtsGinjector draughtsGinjector = DraughtsGinjector.INSTANCE;
   private static String notation;
   private boolean cancelBite;
   private int cancelCounter;

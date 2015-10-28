@@ -1,7 +1,7 @@
-package online.shashki.rus.client.json;
+package online.draughts.rus.client.json;
 
 import com.github.nmorel.gwtjackson.client.ObjectMapper;
-import online.shashki.rus.shared.model.GameMessage;
+import online.draughts.rus.shared.model.GameMessage;
 
 /**
  * Created with IntelliJ IDEA.

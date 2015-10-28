@@ -14,15 +14,15 @@
  * the License.
  */
 
-package online.shashki.rus.server.guice;
+package online.draughts.rus.server.guice;
 
 import com.google.inject.AbstractModule;
-import online.shashki.rus.server.rest.FriendsResourceImpl;
-import online.shashki.rus.server.rest.GamesResourceImpl;
-import online.shashki.rus.server.rest.PlayersResourceImpl;
-import online.shashki.rus.shared.rest.FriendsResource;
-import online.shashki.rus.shared.rest.GamesResource;
-import online.shashki.rus.shared.rest.PlayersResource;
+import online.draughts.rus.server.rest.FriendsResourceImpl;
+import online.draughts.rus.server.rest.GamesResourceImpl;
+import online.draughts.rus.server.rest.PlayersResourceImpl;
+import online.draughts.rus.shared.rest.FriendsResource;
+import online.draughts.rus.shared.rest.GamesResource;
+import online.draughts.rus.shared.rest.PlayersResource;
 
 
 public class RestModule extends AbstractModule {

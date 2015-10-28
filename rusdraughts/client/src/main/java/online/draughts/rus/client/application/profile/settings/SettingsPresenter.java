@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.profile.settings;
+package online.draughts.rus.client.application.profile.settings;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
@@ -8,14 +8,14 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
-import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
-import online.shashki.rus.client.application.widget.growl.Growl;
-import online.shashki.rus.client.event.UpdateAllPlayerListEvent;
-import online.shashki.rus.client.util.SHLog;
-import online.shashki.rus.client.websocket.PlaySession;
-import online.shashki.rus.shared.locale.DraughtsMessages;
-import online.shashki.rus.shared.model.Player;
-import online.shashki.rus.shared.rest.PlayersResource;
+import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
+import online.draughts.rus.client.application.widget.growl.Growl;
+import online.draughts.rus.client.event.UpdateAllPlayerListEvent;
+import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.client.websocket.PlaySession;
+import online.draughts.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.rest.PlayersResource;
 
 
 public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView> implements SettingsUiHandlers {

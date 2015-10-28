@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.menu;
+package online.draughts.rus.client.application.menu;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -9,8 +9,8 @@ import com.gwtplatform.mvp.client.proxy.NavigationEvent;
 import com.gwtplatform.mvp.client.proxy.NavigationHandler;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
-import online.shashki.rus.client.application.security.CurrentSession;
-import online.shashki.rus.client.util.SHCookies;
+import online.draughts.rus.client.application.security.CurrentSession;
+import online.draughts.rus.client.util.SHCookies;
 
 public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> implements MenuUiHandlers, NavigationHandler {
   private final PlaceManager placeManager;

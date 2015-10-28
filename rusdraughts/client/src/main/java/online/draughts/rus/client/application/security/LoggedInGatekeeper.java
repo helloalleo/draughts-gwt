@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.security;
+package online.draughts.rus.client.application.security;
 
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.annotations.DefaultGatekeeper;

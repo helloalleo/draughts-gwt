@@ -1,8 +1,8 @@
-package online.shashki.rus.client.application;
+package online.draughts.rus.client.application;
 
 import com.gwtplatform.mvp.client.PreBootstrapper;
-import online.shashki.rus.client.util.DebugUtils;
-import online.shashki.rus.client.util.SHLog;
+import online.draughts.rus.client.util.DebugUtils;
+import online.draughts.rus.client.util.SHLog;
 
 /**
  * Created with IntelliJ IDEA.

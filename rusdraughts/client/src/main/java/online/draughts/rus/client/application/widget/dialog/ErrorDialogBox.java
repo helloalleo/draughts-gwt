@@ -1,8 +1,8 @@
-package online.shashki.rus.client.application.widget.dialog;
+package online.draughts.rus.client.application.widget.dialog;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
-import online.shashki.rus.client.util.SHLog;
+import online.draughts.rus.client.util.SHLog;
 
 /**
  * Created with IntelliJ IDEA.

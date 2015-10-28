@@ -1,7 +1,7 @@
-package online.shashki.rus.client.application.security;
+package online.draughts.rus.client.application.security;
 
 import com.google.inject.Singleton;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.shared.model.Player;
 
 /**
  * Created with IntelliJ IDEA.

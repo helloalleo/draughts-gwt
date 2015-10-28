@@ -1,11 +1,11 @@
-package online.shashki.rus.server.servlet;
+package online.draughts.rus.server.servlet;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.shashki.rus.server.service.GameService;
-import online.shashki.rus.server.utils.GifSequenceWriter;
-import online.shashki.rus.shared.model.Move;
-import online.shashki.rus.shared.util.StringUtils;
+import online.draughts.rus.server.service.GameService;
+import online.draughts.rus.server.utils.GifSequenceWriter;
+import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.shared.util.StringUtils;
 
 import javax.imageio.ImageIO;
 import javax.imageio.stream.ImageOutputStream;

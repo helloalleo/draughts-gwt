@@ -1,8 +1,8 @@
-package online.shashki.rus.client.event;
+package online.draughts.rus.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import online.shashki.rus.shared.model.Game;
+import online.draughts.rus.shared.model.Game;
 
 /**
  * Created with IntelliJ IDEA.

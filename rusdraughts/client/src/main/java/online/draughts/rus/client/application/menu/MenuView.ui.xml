@@ -4,8 +4,8 @@
              xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html"
         >
 
-    <ui:with field="res" type="online.shashki.rus.client.resources.AppResources"/>
-    <ui:with field="vars" type="online.shashki.rus.client.resources.Variables"/>
+    <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
+    <ui:with field="vars" type="online.draughts.rus.client.resources.Variables"/>
 
     <g:HTMLPanel ui:field="panel">
         <b:Navbar ui:field="navbar" position="FIXED_TOP">

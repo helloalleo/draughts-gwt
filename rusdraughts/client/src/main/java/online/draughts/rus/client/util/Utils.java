@@ -1,6 +1,6 @@
-package online.shashki.rus.client.util;
+package online.draughts.rus.client.util;
 
-import online.shashki.rus.client.place.NameTokens;
+import online.draughts.rus.client.place.NameTokens;
 
 /**
  * Created with IntelliJ IDEA.

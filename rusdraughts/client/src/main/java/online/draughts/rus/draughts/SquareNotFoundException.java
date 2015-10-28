@@ -1,4 +1,4 @@
-package online.shashki.rus.shashki;
+package online.draughts.rus.draughts;
 
 /**
  * Created with IntelliJ IDEA.

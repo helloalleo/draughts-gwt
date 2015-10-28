@@ -3,8 +3,8 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>online.shashki.rus</groupId>
-        <artifactId>russhashki</artifactId>
+        <groupId>online.draughts.rus</groupId>
+        <artifactId>rusdraughts</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
@@ -15,7 +15,7 @@
 
     <name>server</name>
 
-    <url>http://shashki.online</url>
+    <url>http://draughts.online</url>
 
     <properties>
         <!--Tomcat-->
@@ -95,7 +95,7 @@
     </dependencyManagement>
     <dependencies>
         <dependency>
-            <groupId>online.shashki.rus</groupId>
+            <groupId>online.draughts.rus</groupId>
             <artifactId>shared</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -301,7 +301,7 @@
                         <version>2.6</version>
                         <configuration>
                             <webappDirectory>
-                                ${project.basedir}/../../${project.artifacts.directory}/shashki_web_exploded.war
+                                ${project.basedir}/../../${project.artifacts.directory}/draughts_web_exploded.war
                             </webappDirectory>
                             <outputDirectory>
                                 ${project.basedir}/../../${project.artifacts.directory}/server.war

@@ -1,15 +1,15 @@
-package online.shashki.rus.client.application;
+package online.draughts.rus.client.application;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.rpc.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.Bootstrapper;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import online.shashki.rus.client.application.security.CurrentSession;
-import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
-import online.shashki.rus.client.util.SHLog;
-import online.shashki.rus.shared.dispatch.FetchCurrentPlayerAction;
-import online.shashki.rus.shared.dispatch.FetchCurrentPlayerResult;
+import online.draughts.rus.client.application.security.CurrentSession;
+import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
+import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.shared.dispatch.FetchCurrentPlayerAction;
+import online.draughts.rus.shared.dispatch.FetchCurrentPlayerResult;
 
 /**
  * Created with IntelliJ IDEA.

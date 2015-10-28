@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.widget.dialog;
+package online.draughts.rus.client.application.widget.dialog;
 
 import com.ait.lienzo.client.widget.LienzoPanel;
 import com.google.gwt.core.client.GWT;
@@ -9,10 +9,10 @@ import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
-import online.shashki.rus.shared.locale.DraughtsMessages;
-import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shashki.Board;
-import online.shashki.rus.shashki.BoardBackgroundLayer;
+import online.draughts.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.draughts.Board;
+import online.draughts.rus.draughts.BoardBackgroundLayer;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 
 import java.util.List;

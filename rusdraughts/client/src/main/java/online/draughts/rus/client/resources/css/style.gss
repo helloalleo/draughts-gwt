@@ -11,7 +11,7 @@ body {
     margin-top: S_MAIN_CONTAINER_MARGIN_TOP;
 }
 
-.shashkiColumn {
+.draughtsColumn {
     float: left;
 }
 

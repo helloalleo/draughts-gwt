@@ -1,4 +1,4 @@
-package online.shashki.rus.client.websocket;
+package online.draughts.rus.client.websocket;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 

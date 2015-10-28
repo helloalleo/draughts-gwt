@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.error;
+package online.draughts.rus.client.application.error;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 

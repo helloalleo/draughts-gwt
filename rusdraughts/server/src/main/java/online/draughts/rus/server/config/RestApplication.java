@@ -1,4 +1,4 @@
-package online.shashki.rus.server.config;
+package online.draughts.rus.server.config;
 
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;

@@ -1,4 +1,4 @@
-package online.shashki.rus.server.utils;//
+package online.draughts.rus.server.utils;//
 //  GifSequenceWriter.java
 //  
 //  Created by Elliot Kroo on 2009-04-25.

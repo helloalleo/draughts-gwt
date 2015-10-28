@@ -1,7 +1,7 @@
-package online.shashki.rus.client.util;
+package online.draughts.rus.client.util;
 
 import com.google.gwt.core.client.GWT;
-import online.shashki.rus.shared.config.ClientConfiguration;
+import online.draughts.rus.shared.config.ClientConfiguration;
 
 import java.util.Arrays;
 import java.util.Collections;

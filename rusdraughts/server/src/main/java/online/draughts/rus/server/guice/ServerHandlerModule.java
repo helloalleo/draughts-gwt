@@ -1,9 +1,9 @@
-package online.shashki.rus.server.guice;
+package online.draughts.rus.server.guice;
 
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchModule;
 import com.gwtplatform.dispatch.rpc.server.guice.HandlerModule;
-import online.shashki.rus.server.dispatch.FetchCurrentUserHandler;
-import online.shashki.rus.shared.dispatch.FetchCurrentPlayerAction;
+import online.draughts.rus.server.dispatch.FetchCurrentUserHandler;
+import online.draughts.rus.shared.dispatch.FetchCurrentPlayerAction;
 
 /**
  * Module which binds the handlers and configurations.

@@ -1,4 +1,4 @@
-package online.shashki.rus.server.config;
+package online.draughts.rus.server.config;
 
 /**
  * Created with IntelliJ IDEA.

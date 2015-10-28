@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.widget.dialog;
+package online.draughts.rus.client.application.widget.dialog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -6,8 +6,8 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DialogBox;
-import online.shashki.rus.client.resources.AppResources;
-import online.shashki.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.shared.locale.DraughtsMessages;
 
 /**
  * Created with IntelliJ IDEA.

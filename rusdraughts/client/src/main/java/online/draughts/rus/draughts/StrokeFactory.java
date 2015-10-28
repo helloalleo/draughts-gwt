@@ -1,6 +1,6 @@
-package online.shashki.rus.shashki;
+package online.draughts.rus.draughts;
 
-import online.shashki.rus.shared.model.Move;
+import online.draughts.rus.shared.model.Move;
 
 /**
  * Created with IntelliJ IDEA.

@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.component.play;
+package online.draughts.rus.client.application.component.play;
 
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;
@@ -26,19 +26,19 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-import online.shashki.rus.client.application.widget.NotationPanel;
-import online.shashki.rus.client.application.widget.dialog.ConfirmeDialogBox;
-import online.shashki.rus.client.application.widget.dialog.InviteDialogBox;
-import online.shashki.rus.client.application.widget.growl.Growl;
-import online.shashki.rus.client.resources.AppResources;
-import online.shashki.rus.client.resources.Variables;
-import online.shashki.rus.client.util.SHLog;
-import online.shashki.rus.shared.locale.DraughtsMessages;
-import online.shashki.rus.shared.model.Friend;
-import online.shashki.rus.shared.model.Player;
-import online.shashki.rus.shashki.Board;
-import online.shashki.rus.shashki.BoardBackgroundLayer;
-import online.shashki.rus.shashki.Stroke;
+import online.draughts.rus.client.application.widget.NotationPanel;
+import online.draughts.rus.client.application.widget.dialog.ConfirmeDialogBox;
+import online.draughts.rus.client.application.widget.dialog.InviteDialogBox;
+import online.draughts.rus.client.application.widget.growl.Growl;
+import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.client.resources.Variables;
+import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.model.Friend;
+import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.draughts.Board;
+import online.draughts.rus.draughts.BoardBackgroundLayer;
+import online.draughts.rus.draughts.Stroke;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Icon;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
@@ -57,9 +57,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @UiField
   HTMLPanel main;
   @UiField
-  HTMLPanel shashki;
+  HTMLPanel draughts;
   @UiField
-  HTMLPanel shashkiColumn;
+  HTMLPanel draughtsColumn;
   @UiField
   HTMLPanel notationColumn;
   @UiField
@@ -179,10 +179,10 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private void initEmptyDeskPanel() {
     final String mainContainerMarginTop = Variables.S_MAIN_CONTAINER_SCROLL_MARGIN_TOP;
     final String highStr = mainContainerMarginTop.substring(0, mainContainerMarginTop.length() - 2); // отсекаем строку пикселей
-    int shashkiSide = Window.getClientHeight() - Integer.valueOf(highStr);
-    shashkiColumn.setWidth(shashkiSide + "px");
+    int draughtsSide = Window.getClientHeight() - Integer.valueOf(highStr);
+    draughtsColumn.setWidth(draughtsSide + "px");
 
-    lienzoPanel = new LienzoPanel(shashkiSide, shashkiSide);
+    lienzoPanel = new LienzoPanel(draughtsSide, draughtsSide);
     int lienzoSide = lienzoPanel.getHeight() - 20;
     Layer initDeskRect = new Layer();
     Rectangle contour = new Rectangle(lienzoSide, lienzoSide);
@@ -201,7 +201,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       y += 20;
     }
     lienzoPanel.setBackgroundLayer(initDeskRect);
-    shashki.add(lienzoPanel);
+    draughts.add(lienzoPanel);
 
     cancelMove.setEnabled(false);
   }
@@ -433,7 +433,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   public void clearPlayComponent() {
     lienzoPanel.removeAll();
     board.clearDesk();
-    shashki.remove(lienzoPanel);
+    draughts.remove(lienzoPanel);
     initEmptyDeskPanel();
 
     turnLabel.setHTML(messages.playDidNotStart());

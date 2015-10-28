@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.error;
+package online.draughts.rus.client.application.error;
 
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;

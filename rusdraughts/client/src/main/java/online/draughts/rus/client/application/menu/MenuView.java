@@ -1,5 +1,5 @@
 
-package online.shashki.rus.client.application.menu;
+package online.draughts.rus.client.application.menu;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -11,11 +11,11 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-import online.shashki.rus.client.place.NameTokens;
-import online.shashki.rus.client.resources.AppResources;
-import online.shashki.rus.client.resources.Variables;
-import online.shashki.rus.client.util.SHCookies;
-import online.shashki.rus.client.util.SHLog;
+import online.draughts.rus.client.place.NameTokens;
+import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.client.resources.Variables;
+import online.draughts.rus.client.util.SHCookies;
+import online.draughts.rus.client.util.SHLog;
 import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 

@@ -1,4 +1,4 @@
-package online.shashki.rus.client.resources;
+package online.draughts.rus.client.resources;
 
 /**
  * Created with IntelliJ IDEA.

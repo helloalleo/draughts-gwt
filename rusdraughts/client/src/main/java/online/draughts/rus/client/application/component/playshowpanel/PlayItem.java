@@ -1,5 +1,5 @@
 
-package online.shashki.rus.client.application.component.playshowpanel;
+package online.draughts.rus.client.application.component.playshowpanel;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -8,11 +8,11 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
-import online.shashki.rus.client.resources.AppResources;
-import online.shashki.rus.client.util.TrUtils;
-import online.shashki.rus.shared.locale.DraughtsMessages;
-import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.client.util.TrUtils;
+import online.draughts.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.model.Player;
 import org.gwtbootstrap3.client.ui.Image;
 
 public class PlayItem extends Composite {

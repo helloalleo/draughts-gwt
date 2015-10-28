@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.profile.settings;
+package online.draughts.rus.client.application.profile.settings;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.KeyCodes;

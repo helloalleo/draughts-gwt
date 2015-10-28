@@ -1,14 +1,14 @@
-package online.shashki.rus.server.dispatch;
+package online.draughts.rus.server.dispatch;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.gwtplatform.dispatch.rpc.server.ExecutionContext;
 import com.gwtplatform.dispatch.rpc.server.actionhandler.ActionHandler;
 import com.gwtplatform.dispatch.shared.ActionException;
-import online.shashki.rus.server.dao.PlayerDao;
-import online.shashki.rus.shared.dispatch.FetchCurrentPlayerAction;
-import online.shashki.rus.shared.dispatch.FetchCurrentPlayerResult;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.server.dao.PlayerDao;
+import online.draughts.rus.shared.dispatch.FetchCurrentPlayerAction;
+import online.draughts.rus.shared.dispatch.FetchCurrentPlayerResult;
+import online.draughts.rus.shared.model.Player;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

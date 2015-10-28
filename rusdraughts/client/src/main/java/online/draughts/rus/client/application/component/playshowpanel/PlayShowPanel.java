@@ -1,5 +1,5 @@
 
-package online.shashki.rus.client.application.component.playshowpanel;
+package online.draughts.rus.client.application.component.playshowpanel;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ScrollEvent;
@@ -10,10 +10,10 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.ScrollPanel;
-import online.shashki.rus.client.application.home.HomeView;
-import online.shashki.rus.client.resources.Variables;
-import online.shashki.rus.client.util.SHLog;
-import online.shashki.rus.shared.model.Game;
+import online.draughts.rus.client.application.home.HomeView;
+import online.draughts.rus.client.resources.Variables;
+import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.shared.model.Game;
 import org.gwtbootstrap3.client.ui.Column;
 import org.gwtbootstrap3.client.ui.Row;
 import org.gwtbootstrap3.client.ui.html.Hr;

@@ -1,11 +1,11 @@
-package online.shashki.rus.server.servlet.oauth;
+package online.draughts.rus.server.servlet.oauth;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.shashki.rus.server.config.ServerConfiguration;
-import online.shashki.rus.server.service.PlayerService;
-import online.shashki.rus.server.utils.AuthUtils;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.service.PlayerService;
+import online.draughts.rus.server.utils.AuthUtils;
+import online.draughts.rus.shared.model.Player;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;

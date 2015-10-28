@@ -16,26 +16,26 @@
     <inherits name="com.google.gwt.i18n.I18N"/>
 
     <inherits name="com.google.gwt.websockets.WebSockets"/>
-    <inherits name="online.shashki.rus.RusShashkiShared"/>
+    <inherits name="online.draughts.rus.RusDraughtsShared"/>
     <inherits name="com.gwtplatform.dispatch.rpc.DispatchRpcShared"/>
     <inherits name="com.gwtplatform.dispatch.rpc.DispatchRpc"/>
     <inherits name="com.gwtplatform.dispatch.rest.delegates.ResourceDelegate"/>
     <inherits name="org.gwtbootstrap3.extras.growl.Growl"/>
 
     <extend-configuration-property name="gin.ginjector.modules"
-                                   value="online.shashki.rus.client.gin.ClientModule"/>
+                                   value="online.draughts.rus.client.gin.ClientModule"/>
 
     <!-- Specify the paths for translatable code                    -->
     <source path='client'/>
     <source path='shared'/>
-    <source path='shashki'/>
+    <source path='draughts'/>
 
     <set-configuration-property name="CssResource.enableGss" value="true"/>
     <set-configuration-property name="CssResource.legacy" value="true" />
     <set-configuration-property name="gwtp.prebootstrapper"
-                                value="online.shashki.rus.client.application.AppPreBootstrapper"/>
+                                value="online.draughts.rus.client.application.AppPreBootstrapper"/>
     <set-configuration-property name="gwtp.bootstrapper"
-                                value="online.shashki.rus.client.application.AppBootstrapper"/>
+                                value="online.draughts.rus.client.application.AppBootstrapper"/>
 
     <extend-property name="locale" values="en"/>
     <extend-property name="locale" values="ru"/>

@@ -1,8 +1,8 @@
-package online.shashki.rus.client.util;
+package online.draughts.rus.client.util;
 
 import com.google.gwt.core.client.GWT;
-import online.shashki.rus.shared.locale.DraughtsMessages;
-import online.shashki.rus.shared.model.Game;
+import online.draughts.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.model.Game;
 
 /**
  * Created with IntelliJ IDEA.

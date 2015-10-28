@@ -1,9 +1,9 @@
-package online.shashki.rus.server.config;
+package online.draughts.rus.server.config;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.shashki.rus.server.service.PlayerService;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.server.service.PlayerService;
+import online.draughts.rus.shared.model.Player;
 
 import java.util.List;
 import java.util.ResourceBundle;

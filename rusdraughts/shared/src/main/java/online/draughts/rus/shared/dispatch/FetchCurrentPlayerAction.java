@@ -1,4 +1,4 @@
-package online.shashki.rus.shared.dispatch;
+package online.draughts.rus.shared.dispatch;
 
 import com.gwtplatform.dispatch.rpc.shared.UnsecuredActionImpl;
 

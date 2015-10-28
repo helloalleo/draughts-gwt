@@ -3,11 +3,11 @@
              xmlns:b.gwt="urn:import:org.gwtbootstrap3.client.ui.gwt"
              xmlns:c="urn:import:com.google.gwt.user.cellview.client"
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
-    <ui:with field="res" type="online.shashki.rus.client.resources.AppResources"/>
+    <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
     <g:HTMLPanel ui:field="main">
-        <g:HTMLPanel ui:field="shashkiColumn" addStyleNames="{res.style.shashkiColumn}">
-            <g:HTMLPanel ui:field="shashki"/>
+        <g:HTMLPanel ui:field="draughtsColumn" addStyleNames="{res.style.draughtsColumn}">
+            <g:HTMLPanel ui:field="draughts"/>
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="notationColumn" addStyleNames="{res.style.notationColumn}">
             <ui:msg description="Ход" key="turn">

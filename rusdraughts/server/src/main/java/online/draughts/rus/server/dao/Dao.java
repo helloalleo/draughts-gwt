@@ -1,6 +1,6 @@
-package online.shashki.rus.server.dao;
+package online.draughts.rus.server.dao;
 
-import online.shashki.rus.shared.model.BasePersistableObject;
+import online.draughts.rus.shared.model.BasePersistableObject;
 
 import java.util.List;
 

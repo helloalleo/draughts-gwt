@@ -1,9 +1,9 @@
-package online.shashki.rus.client.application.component.play;
+package online.draughts.rus.client.application.component.play;
 
 import com.gwtplatform.mvp.client.UiHandlers;
-import online.shashki.rus.shared.model.Friend;
-import online.shashki.rus.shared.model.Player;
-import online.shashki.rus.shashki.Stroke;
+import online.draughts.rus.shared.model.Friend;
+import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.draughts.Stroke;
 
 interface PlayComponentUiHandlers extends UiHandlers {
 

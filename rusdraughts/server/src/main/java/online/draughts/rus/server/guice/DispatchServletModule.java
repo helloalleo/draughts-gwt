@@ -14,24 +14,24 @@
  * the License.
  */
 
-package online.shashki.rus.server.guice;
+package online.draughts.rus.server.guice;
 
 import com.google.inject.persist.PersistFilter;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import com.google.inject.servlet.ServletModule;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
-import online.shashki.rus.server.servlet.GameGiff;
-import online.shashki.rus.server.servlet.LogoutServlet;
-import online.shashki.rus.server.servlet.oauth.*;
+import online.draughts.rus.server.servlet.GameGiff;
+import online.draughts.rus.server.servlet.LogoutServlet;
+import online.draughts.rus.server.servlet.oauth.*;
 
 public class DispatchServletModule extends ServletModule {
 
-  public static final String SHASHKI64_PU = "shashki64PU";
+  public static final String DRAUGHTS_PU = "draughtsPU";
 
   @Override
   public void configureServlets() {
-    install(new JpaPersistModule(SHASHKI64_PU));
+    install(new JpaPersistModule(DRAUGHTS_PU));
     filter("/*").through(PersistFilter.class);
 
     serve("/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);

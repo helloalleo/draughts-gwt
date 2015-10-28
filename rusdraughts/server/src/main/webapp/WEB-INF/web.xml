@@ -3,13 +3,13 @@
          xmlns="http://java.sun.com/xml/ns/javaee"
          xsi:schemaLocation="http://java.sun.com/xml/ns/javaee http://java.sun.com/xml/ns/javaee/web-app_2_5.xsd"
          version="2.5">
-    <display-name>Shashki</display-name>
+    <display-name>Draughts</display-name>
 
     <!--<listener>-->
-        <!--<listener-class>online.shashki.rus.server.guice.GuiceServletConfig</listener-class>-->
+        <!--<listener-class>online.draughts.rus.server.guice.GuiceServletConfig</listener-class>-->
     <!--</listener>-->
 
-    <!--online.shashki.rus.server.guice.MyGuiceResteasyBootstrapServletContextListener-->
+    <!--online.draughts.rus.server.guice.MyGuiceResteasyBootstrapServletContextListener-->
     <listener>
         <listener-class>
             org.jboss.resteasy.plugins.guice.GuiceResteasyBootstrapServletContextListener
@@ -28,7 +28,7 @@
 
     <context-param>
         <param-name>resteasy.guice.modules</param-name>
-        <param-value>online.shashki.rus.server.guice.ServerModule</param-value>
+        <param-value>online.draughts.rus.server.guice.ServerModule</param-value>
     </context-param>
 
     <!--<context-param>-->

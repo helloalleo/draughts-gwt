@@ -1,11 +1,11 @@
-package online.shashki.rus.server.service;
+package online.draughts.rus.server.service;
 
 import com.google.inject.Inject;
-import online.shashki.rus.server.BaseTest;
-import online.shashki.rus.server.guice.DatabaseModule;
-import online.shashki.rus.server.guice.DbModule;
-import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.server.BaseTest;
+import online.draughts.rus.server.guice.DatabaseModule;
+import online.draughts.rus.server.guice.DbModule;
+import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.model.Player;
 import org.jukito.JukitoRunner;
 import org.jukito.UseModules;
 import org.junit.After;

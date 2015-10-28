@@ -14,7 +14,7 @@
  * the License.
  */
 
-package online.shashki.rus.client.resources;
+package online.draughts.rus.client.resources;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;

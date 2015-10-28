@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.widget.dialog;
+package online.draughts.rus.client.application.widget.dialog;
 
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;

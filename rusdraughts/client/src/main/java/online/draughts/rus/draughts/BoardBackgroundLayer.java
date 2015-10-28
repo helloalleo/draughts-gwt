@@ -1,4 +1,4 @@
-package online.shashki.rus.shashki;
+package online.draughts.rus.draughts;
 
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;

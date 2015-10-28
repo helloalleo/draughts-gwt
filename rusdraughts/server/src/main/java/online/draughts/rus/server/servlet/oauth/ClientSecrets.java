@@ -1,6 +1,6 @@
-package online.shashki.rus.server.servlet.oauth;
+package online.draughts.rus.server.servlet.oauth;
 
-import online.shashki.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.config.ServerConfiguration;
 
 /**
  * Created with IntelliJ IDEA.

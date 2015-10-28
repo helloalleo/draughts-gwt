@@ -1,6 +1,6 @@
-package online.shashki.rus.shared.model;
+package online.draughts.rus.shared.model;
 
-import online.shashki.rus.shared.model.key.FriendId;
+import online.draughts.rus.shared.model.key.FriendId;
 
 import javax.persistence.*;
 import java.util.Objects;

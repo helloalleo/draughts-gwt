@@ -1,14 +1,14 @@
-package online.shashki.rus.server.guice;
+package online.draughts.rus.server.guice;
 
 import com.google.inject.AbstractModule;
-import online.shashki.rus.server.dao.FriendDao;
-import online.shashki.rus.server.dao.GameDao;
-import online.shashki.rus.server.dao.GameMessageDao;
-import online.shashki.rus.server.dao.PlayerDao;
-import online.shashki.rus.server.dao.impl.FriendDaoImpl;
-import online.shashki.rus.server.dao.impl.GameDaoImpl;
-import online.shashki.rus.server.dao.impl.GameMessageDaoImpl;
-import online.shashki.rus.server.dao.impl.PlayerDaoImpl;
+import online.draughts.rus.server.dao.FriendDao;
+import online.draughts.rus.server.dao.GameDao;
+import online.draughts.rus.server.dao.GameMessageDao;
+import online.draughts.rus.server.dao.PlayerDao;
+import online.draughts.rus.server.dao.impl.FriendDaoImpl;
+import online.draughts.rus.server.dao.impl.GameDaoImpl;
+import online.draughts.rus.server.dao.impl.GameMessageDaoImpl;
+import online.draughts.rus.server.dao.impl.PlayerDaoImpl;
 
 /**
  * Created with IntelliJ IDEA.

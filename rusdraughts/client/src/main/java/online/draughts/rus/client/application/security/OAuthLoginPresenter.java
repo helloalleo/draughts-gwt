@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.security;
+package online.draughts.rus.client.application.security;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -11,9 +11,9 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.annotations.Title;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
-import online.shashki.rus.client.application.ApplicationPresenter;
-import online.shashki.rus.client.place.NameTokens;
-import online.shashki.rus.client.util.SHCookies;
+import online.draughts.rus.client.application.ApplicationPresenter;
+import online.draughts.rus.client.place.NameTokens;
+import online.draughts.rus.client.util.SHCookies;
 
 
 public class OAuthLoginPresenter extends Presenter<OAuthLoginPresenter.MyView, OAuthLoginPresenter.MyProxy>

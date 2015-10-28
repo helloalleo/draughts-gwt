@@ -1,9 +1,9 @@
-package online.shashki.rus.client.resources;
+package online.draughts.rus.client.resources;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
-import online.shashki.rus.client.resources.images.Images;
-import online.shashki.rus.client.resources.sounds.Sounds;
+import online.draughts.rus.client.resources.images.Images;
+import online.draughts.rus.client.resources.sounds.Sounds;
 
 public interface AppResources extends ClientBundle {
   Images images();
@@ -24,7 +24,7 @@ public interface AppResources extends ClientBundle {
 
     String playerSearch();
 
-    String shashkiColumn();
+    String draughtsColumn();
 
     String playerList();
 

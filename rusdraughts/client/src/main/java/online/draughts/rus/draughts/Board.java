@@ -1,4 +1,4 @@
-package online.shashki.rus.shashki;
+package online.draughts.rus.draughts;
 
 import com.ait.lienzo.client.core.animation.*;
 import com.ait.lienzo.client.core.event.NodeMouseClickEvent;
@@ -8,13 +8,13 @@ import com.ait.lienzo.client.core.event.NodeTouchEndHandler;
 import com.ait.lienzo.client.core.shape.Layer;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-import online.shashki.rus.client.application.component.play.PlayComponentView;
-import online.shashki.rus.client.event.*;
-import online.shashki.rus.client.util.SHLog;
-import online.shashki.rus.shared.model.Move;
-import online.shashki.rus.shared.util.StringUtils;
-import online.shashki.rus.shashki.util.Operator;
-import online.shashki.rus.shashki.util.PossibleOperators;
+import online.draughts.rus.client.application.component.play.PlayComponentView;
+import online.draughts.rus.client.event.*;
+import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.shared.util.StringUtils;
+import online.draughts.rus.draughts.util.Operator;
+import online.draughts.rus.draughts.util.PossibleOperators;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -43,7 +43,7 @@ public class Board extends Layer {
   // стек ходов шашек, когда они становятся дамками
   private Stack<Integer> queenStepStack = new Stack<>();
 
-  //  private ShashkiGinjector shashkiGinjector = ShashkiGinjector.INSTANCE;
+  //  private DraughtsGinjector draughtsGinjector = DraughtsGinjector.INSTANCE;
   private List<Square> highlightedSquares = new ArrayList<>();
   //  private String lastEndMove;
 //  private String lastStartMove;
@@ -257,8 +257,8 @@ public class Board extends Layer {
     int row = p.getRow();
     int col = p.getCol();
 
-    //Begin checking which moves are possible, keeping in mind that only black shashki may calcStroke up
-    //and only red shashki may calcStroke downwards
+    //Begin checking which moves are possible, keeping in mind that only black draughts may calcStroke up
+    //and only red draughts may calcStroke downwards
 
     boolean queen = p.isQueen();
     if (this.white) {

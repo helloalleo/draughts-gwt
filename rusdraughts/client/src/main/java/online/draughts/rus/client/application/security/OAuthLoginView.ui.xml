@@ -6,7 +6,7 @@
              ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
              ui:generateLocales="default">
 
-    <ui:with field="res" type="online.shashki.rus.client.resources.AppResources"/>
+    <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
     <g:HTMLPanel ui:field="loginContainer">
         <b:Row>

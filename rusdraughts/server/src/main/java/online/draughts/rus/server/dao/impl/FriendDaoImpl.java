@@ -1,10 +1,10 @@
-package online.shashki.rus.server.dao.impl;
+package online.draughts.rus.server.dao.impl;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
-import online.shashki.rus.server.dao.FriendDao;
-import online.shashki.rus.shared.model.Friend;
+import online.draughts.rus.server.dao.FriendDao;
+import online.draughts.rus.shared.model.Friend;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

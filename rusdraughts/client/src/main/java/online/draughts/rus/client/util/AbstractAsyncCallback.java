@@ -1,7 +1,7 @@
-package online.shashki.rus.client.util;
+package online.draughts.rus.client.util;
 
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
+import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 
 /**
  * Created with IntelliJ IDEA.

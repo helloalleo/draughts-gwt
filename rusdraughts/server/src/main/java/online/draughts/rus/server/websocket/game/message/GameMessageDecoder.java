@@ -1,7 +1,7 @@
-package online.shashki.rus.server.websocket.game.message;
+package online.draughts.rus.server.websocket.game.message;
 
-import online.shashki.rus.server.utils.Utils;
-import online.shashki.rus.shared.model.GameMessage;
+import online.draughts.rus.server.utils.Utils;
+import online.draughts.rus.shared.model.GameMessage;
 
 import javax.websocket.DecodeException;
 import javax.websocket.Decoder;

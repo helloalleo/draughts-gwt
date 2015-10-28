@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.profile;
+package online.draughts.rus.client.application.profile;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -11,12 +11,12 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.presenter.slots.Slot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
-import online.shashki.rus.client.application.ApplicationPresenter;
-import online.shashki.rus.client.application.profile.settings.SettingsPresenter;
-import online.shashki.rus.client.application.security.CurrentSession;
-import online.shashki.rus.client.place.NameTokens;
-import online.shashki.rus.client.util.SHCookies;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.client.application.ApplicationPresenter;
+import online.draughts.rus.client.application.profile.settings.SettingsPresenter;
+import online.draughts.rus.client.application.security.CurrentSession;
+import online.draughts.rus.client.place.NameTokens;
+import online.draughts.rus.client.util.SHCookies;
+import online.draughts.rus.shared.model.Player;
 
 
 public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, ProfilePresenter.MyProxy>

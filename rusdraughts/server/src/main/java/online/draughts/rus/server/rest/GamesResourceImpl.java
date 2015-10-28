@@ -1,11 +1,11 @@
-package online.shashki.rus.server.rest;
+package online.draughts.rus.server.rest;
 
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
-import online.shashki.rus.server.service.GameService;
-import online.shashki.rus.server.utils.AuthUtils;
-import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.rest.GamesResource;
+import online.draughts.rus.server.service.GameService;
+import online.draughts.rus.server.utils.AuthUtils;
+import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.rest.GamesResource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DefaultValue;

@@ -1,6 +1,6 @@
-package online.shashki.rus.shared.rest;
+package online.draughts.rus.shared.rest;
 
-import online.shashki.rus.shared.model.Friend;
+import online.draughts.rus.shared.model.Friend;
 
 import javax.ws.rs.POST;
 import javax.ws.rs.Path;

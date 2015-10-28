@@ -1,4 +1,4 @@
-package online.shashki.rus.shared.util;
+package online.draughts.rus.shared.util;
 
 import com.google.gwt.regexp.shared.MatchResult;
 import com.google.gwt.regexp.shared.RegExp;

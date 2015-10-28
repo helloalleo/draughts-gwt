@@ -1,4 +1,4 @@
-package online.shashki.rus.shared.config;
+package online.draughts.rus.shared.config;
 
 import com.google.gwt.i18n.client.ConstantsWithLookup;
 

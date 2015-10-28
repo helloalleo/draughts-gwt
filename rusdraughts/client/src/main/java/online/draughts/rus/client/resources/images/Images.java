@@ -1,4 +1,4 @@
-package online.shashki.rus.client.resources.images;
+package online.draughts.rus.client.resources.images;
 
 import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;

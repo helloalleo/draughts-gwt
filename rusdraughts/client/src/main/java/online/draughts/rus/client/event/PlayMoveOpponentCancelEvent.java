@@ -1,7 +1,7 @@
-package online.shashki.rus.client.event;
+package online.draughts.rus.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
-import online.shashki.rus.shared.model.Move;
+import online.draughts.rus.shared.model.Move;
 
 /**
  * Created with IntelliJ IDEA.

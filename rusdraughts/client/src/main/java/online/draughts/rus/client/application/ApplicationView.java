@@ -14,7 +14,7 @@
  * the License.
  */
 
-package online.shashki.rus.client.application;
+package online.draughts.rus.client.application;
 
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;

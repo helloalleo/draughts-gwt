@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.security;
+package online.draughts.rus.client.application.security;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.RunAsyncCallback;
@@ -10,7 +10,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
+import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 
 
 public class OAuthLoginView extends ViewWithUiHandlers<OAuthLoginUiHandlers> implements OAuthLoginPresenter.MyView {

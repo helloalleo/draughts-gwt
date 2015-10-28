@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.component.play;
+package online.draughts.rus.client.application.component.play;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 

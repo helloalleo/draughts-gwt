@@ -1,4 +1,4 @@
-package online.shashki.rus.client.event;
+package online.draughts.rus.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 

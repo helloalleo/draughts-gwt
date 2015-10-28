@@ -4,12 +4,12 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>online.shashki.rus</groupId>
-        <artifactId>russhashki</artifactId>
+        <groupId>online.draughts.rus</groupId>
+        <artifactId>rusdraughts</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
 
-    <!--<groupId>online.shashki.rus</groupId>-->
+    <!--<groupId>online.draughts.rus</groupId>-->
     <artifactId>client</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -41,7 +41,7 @@
         <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
 
         <!--<project.artifacts.directory>out/artifacts</project.artifacts.directory>-->
-        <outputDirectory>${project.basedir}/../../out/artifacts/shashki_web_exploded.war</outputDirectory>
+        <outputDirectory>${project.basedir}/../../out/artifacts/draughts_web_exploded.war</outputDirectory>
         <gwtbootstrap3-extras.version>0.9.1</gwtbootstrap3-extras.version>
     </properties>
 
@@ -125,7 +125,7 @@
         </dependency>
 
         <dependency>
-            <groupId>online.shashki.rus</groupId>
+            <groupId>online.draughts.rus</groupId>
             <artifactId>shared</artifactId>
             <version>1.0-SNAPSHOT</version>
         </dependency>
@@ -280,7 +280,7 @@
                     <extraJvmArgs>-Xmx2048m</extraJvmArgs>
 
                     <runTarget>index.html</runTarget>
-                    <module>online.shashki.rus.Application-dev</module>
+                    <module>online.draughts.rus.Application-dev</module>
                     <draftCompile>true</draftCompile>
                     <sourceLevel>${maven.compiler.source}</sourceLevel>
                     <style>${gwt.style}</style>
@@ -311,13 +311,13 @@
                             <strict>true</strict>
                             <logLevel>INFO</logLevel>
                             <runTarget>index.html</runTarget>
-                            <module>online.shashki.rus.Application</module>
+                            <module>online.draughts.rus.Application</module>
                             <draftCompile>false</draftCompile>
                             <sourceLevel>${maven.compiler.source}</sourceLevel>
                             <style>OBFUSCATED</style>
                             <outputDirectory>${outputDirectory}</outputDirectory>
                             <webappDirectory>
-                                ${project.basedir}/../../${project.artifacts.directory}/shashki_web_exploded.war
+                                ${project.basedir}/../../${project.artifacts.directory}/draughts_web_exploded.war
                             </webappDirectory>
                         </configuration>
                         <executions>

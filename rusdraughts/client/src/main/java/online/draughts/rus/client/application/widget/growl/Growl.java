@@ -1,7 +1,7 @@
-package online.shashki.rus.client.application.widget.growl;
+package online.draughts.rus.client.application.widget.growl;
 
 import com.google.gwt.core.client.GWT;
-import online.shashki.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.locale.DraughtsMessages;
 import org.gwtbootstrap3.extras.growl.client.ui.GrowlOptions;
 
 /**

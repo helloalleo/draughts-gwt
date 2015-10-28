@@ -1,4 +1,4 @@
-package online.shashki.rus.client.application.widget.dialog;//package net.rushashki.social.shashki64.client.component.widget.dialog;
+package online.draughts.rus.client.application.widget.dialog;//package net.rudraughts.social.draughts64.client.component.widget.dialog;
 //
 //import com.emitrom.lienzo.client.widget.LienzoPanel;
 //import com.github.gwtbootstrap.client.ui.ButtonGroup;
@@ -17,8 +17,8 @@ package online.shashki.rus.client.application.widget.dialog;//package net.rushas
 //import ru.checkers.RUCheckers.client.checkers.BoardBackgroundLayer;
 //import ru.checkers.RUCheckers.client.ui.RUBase;
 //import ru.checkers.RUCheckers.client.util.GameUtil;
-//import ru.checkers.RUCheckers.online.shashki.rus.shared.locale.RUCheckersConstants;
-//import ru.checkers.RUCheckers.online.shashki.rus.shared.model.Game;
+//import ru.checkers.RUCheckers.online.draughts.rus.shared.locale.RUCheckersConstants;
+//import ru.checkers.RUCheckers.online.draughts.rus.shared.model.Game;
 //
 //import java.util.Arrays;
 //import java.util.HashMap;

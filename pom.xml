@@ -3,8 +3,8 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>online.shashki</groupId>
-    <artifactId>shashki</artifactId>
+    <groupId>online.draughts</groupId>
+    <artifactId>draughts</artifactId>
     <version>1.0-SNAPSHOT</version>
 
     <packaging>pom</packaging>
@@ -30,7 +30,7 @@
 
     <modules>
         <module>websocket</module>
-        <module>russhashki</module>
+        <module>rusdraughts</module>
     </modules>
 
     <profiles>
@@ -105,7 +105,7 @@
                     <logLevel>INFO</logLevel>
 
                     <runTarget>index.html</runTarget>
-                    <module>online.shashki.rus.Application-dev</module>
+                    <module>online.draughts.rus.Application-dev</module>
                     <draftCompile>true</draftCompile>
                     <sourceLevel>1.7</sourceLevel>
                     <style>${gwt.style}</style>

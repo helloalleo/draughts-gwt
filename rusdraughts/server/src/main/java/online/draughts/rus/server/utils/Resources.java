@@ -1,4 +1,4 @@
-package online.shashki.rus.server.utils;
+package online.draughts.rus.server.utils;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,7 +9,7 @@ package online.shashki.rus.server.utils;
 //@Singleton
 public class Resources {
 
-//  @PersistenceContext(unitName = "shashki64PU")
+//  @PersistenceContext(unitName = "draughts64PU")
 //  private EntityManager entityManager;
 
 //  @Produces

@@ -1,8 +1,8 @@
-package online.shashki.rus.server.utils;
+package online.draughts.rus.server.utils;
 
-import online.shashki.rus.server.config.ServerConfiguration;
-import online.shashki.rus.server.service.PlayerService;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.service.PlayerService;
+import online.draughts.rus.shared.model.Player;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

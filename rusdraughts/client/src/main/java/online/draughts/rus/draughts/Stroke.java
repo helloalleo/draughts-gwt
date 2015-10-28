@@ -1,7 +1,7 @@
-package online.shashki.rus.shashki;
+package online.draughts.rus.draughts;
 
-import online.shashki.rus.client.util.SHLog;
-import online.shashki.rus.shared.model.Move;
+import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.shared.model.Move;
 
 import java.util.HashSet;
 import java.util.Set;

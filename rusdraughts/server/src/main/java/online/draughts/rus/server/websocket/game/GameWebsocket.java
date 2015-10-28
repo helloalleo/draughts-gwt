@@ -1,17 +1,17 @@
-package online.shashki.rus.server.websocket.game;
+package online.draughts.rus.server.websocket.game;
 
 import com.google.inject.Inject;
-import online.shashki.rus.server.guice.CustomConfigurator;
-import online.shashki.rus.server.service.GameMessageService;
-import online.shashki.rus.server.service.GameService;
-import online.shashki.rus.server.service.PlayerService;
-import online.shashki.rus.server.utils.Utils;
-import online.shashki.rus.server.websocket.game.message.GameMessageDecoder;
-import online.shashki.rus.server.websocket.game.message.GameMessageEncoder;
-import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.model.GameMessage;
-import online.shashki.rus.shared.model.Move;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.server.guice.CustomConfigurator;
+import online.draughts.rus.server.service.GameMessageService;
+import online.draughts.rus.server.service.GameService;
+import online.draughts.rus.server.service.PlayerService;
+import online.draughts.rus.server.utils.Utils;
+import online.draughts.rus.server.websocket.game.message.GameMessageDecoder;
+import online.draughts.rus.server.websocket.game.message.GameMessageEncoder;
+import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.model.GameMessage;
+import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.shared.model.Player;
 
 import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;

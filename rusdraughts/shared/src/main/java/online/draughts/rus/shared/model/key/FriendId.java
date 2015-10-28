@@ -1,6 +1,6 @@
-package online.shashki.rus.shared.model.key;//package online.shashki.rus.clnt.online.shashki.rus.shared.model.key;
+package online.draughts.rus.shared.model.key;//package online.draughts.rus.clnt.online.draughts.rus.shared.model.key;
 
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.shared.model.Player;
 
 import javax.persistence.*;
 import java.io.Serializable;

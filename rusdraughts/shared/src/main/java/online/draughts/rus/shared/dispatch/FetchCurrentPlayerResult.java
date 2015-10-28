@@ -1,7 +1,7 @@
-package online.shashki.rus.shared.dispatch;
+package online.draughts.rus.shared.dispatch;
 
 import com.gwtplatform.dispatch.rpc.shared.Result;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.shared.model.Player;
 
 /**
  * Created with IntelliJ IDEA.

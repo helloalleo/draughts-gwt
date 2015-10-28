@@ -1,4 +1,4 @@
-package online.shashki.rus.server.guice;
+package online.draughts.rus.server.guice;
 
 import com.google.inject.AbstractModule;
 import com.google.inject.Inject;
@@ -16,7 +16,7 @@ public class DatabaseModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    JpaPersistModule jpaPersistModel = new JpaPersistModule("shashki64PU");
+    JpaPersistModule jpaPersistModel = new JpaPersistModule("draughts64PU");
     install(jpaPersistModel);
     bind(JPAInitializer.class).asEagerSingleton();
   }

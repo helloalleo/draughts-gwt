@@ -1,8 +1,8 @@
-package online.shashki.rus.server.servlet.oauth;
+package online.draughts.rus.server.servlet.oauth;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.shashki.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.config.ServerConfiguration;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.common.OAuthProviderType;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;

@@ -14,7 +14,7 @@
  * the License.
  */
 
-package online.shashki.rus.client.application.home;
+package online.draughts.rus.client.application.home;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -25,15 +25,15 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-import online.shashki.rus.client.application.component.playshowpanel.PlayShowPanel;
-import online.shashki.rus.client.application.security.CurrentSession;
-import online.shashki.rus.client.util.DebugUtils;
-import online.shashki.rus.client.util.SHCookies;
-import online.shashki.rus.client.util.SHLog;
-import online.shashki.rus.shared.config.ClientConfiguration;
-import online.shashki.rus.shared.locale.DraughtsMessages;
-import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.model.Player;
+import online.draughts.rus.client.application.component.playshowpanel.PlayShowPanel;
+import online.draughts.rus.client.application.security.CurrentSession;
+import online.draughts.rus.client.util.DebugUtils;
+import online.draughts.rus.client.util.SHCookies;
+import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.shared.config.ClientConfiguration;
+import online.draughts.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.model.Player;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
 import org.gwtbootstrap3.client.ui.CheckBoxButton;

@@ -1,4 +1,4 @@
-package online.shashki.rus.server;
+package online.draughts.rus.server;
 
 import java.math.BigInteger;
 import java.security.SecureRandom;

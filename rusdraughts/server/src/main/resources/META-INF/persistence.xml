@@ -6,19 +6,19 @@
         <description>Draughts Persistence Unit</description>
         <provider>org.hibernate.jpa.HibernatePersistenceProvider</provider>
 
-        <class>online.shashki.rus.shared.model.Game</class>
-        <class>online.shashki.rus.shared.model.GameMessage</class>
-        <class>online.shashki.rus.shared.model.Move</class>
-        <class>online.shashki.rus.shared.model.Player</class>
-        <class>online.shashki.rus.shared.model.Friend</class>
+        <class>online.draughts.rus.shared.model.Game</class>
+        <class>online.draughts.rus.shared.model.GameMessage</class>
+        <class>online.draughts.rus.shared.model.Move</class>
+        <class>online.draughts.rus.shared.model.Player</class>
+        <class>online.draughts.rus.shared.model.Friend</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
-            <property name="hibernate.connection.username" value="shashki"/>
-            <property name="hibernate.connection.password" value="shashki000"/>
-            <!--<property name="hibernate.connection.url" value="jdbc:postgresql://postgres2428-shashki.mircloud.host/shashki"/>-->
-            <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/shashki"/>
+            <property name="hibernate.connection.username" value="draughts"/>
+            <property name="hibernate.connection.password" value="draughts000"/>
+            <!--<property name="hibernate.connection.url" value="jdbc:postgresql://postgres2428-draughts.mircloud.host/draughts"/>-->
+            <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/draughts"/>
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>

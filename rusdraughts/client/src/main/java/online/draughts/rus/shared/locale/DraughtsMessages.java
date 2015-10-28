@@ -1,4 +1,4 @@
-package online.shashki.rus.shared.locale;
+package online.draughts.rus.shared.locale;
 
 import com.google.gwt.i18n.client.Messages;
 import com.google.gwt.safehtml.shared.SafeHtml;

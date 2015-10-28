@@ -1,8 +1,8 @@
-package online.shashki.rus.client.util;
+package online.draughts.rus.client.util;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
-import online.shashki.rus.shared.config.ClientConfiguration;
+import online.draughts.rus.shared.config.ClientConfiguration;
 
 /**
  * Created with IntelliJ IDEA.

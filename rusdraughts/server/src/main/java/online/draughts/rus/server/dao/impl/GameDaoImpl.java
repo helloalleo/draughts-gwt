@@ -1,12 +1,12 @@
-package online.shashki.rus.server.dao.impl;
+package online.draughts.rus.server.dao.impl;
 
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
-import online.shashki.rus.server.dao.GameDao;
-import online.shashki.rus.shared.model.Game;
-import online.shashki.rus.shared.model.Move;
+import online.draughts.rus.server.dao.GameDao;
+import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.model.Move;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;

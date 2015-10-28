@@ -1,8 +1,8 @@
-package online.shashki.rus.shared.model;
+package online.draughts.rus.shared.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.user.client.rpc.GwtTransient;
-import online.shashki.rus.shared.util.StringUtils;
+import online.draughts.rus.shared.util.StringUtils;
 
 import javax.persistence.*;
 import java.util.Date;

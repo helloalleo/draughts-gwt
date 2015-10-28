@@ -1,9 +1,9 @@
-package online.shashki.rus.shashki;
+package online.draughts.rus.draughts;
 
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.shared.core.types.Color;
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import online.shashki.rus.shared.util.StringUtils;
+import online.draughts.rus.shared.util.StringUtils;
 
 import java.io.Serializable;
 

@@ -1,4 +1,4 @@
-package online.shashki.rus.server.service;
+package online.draughts.rus.server.service;
 
 import org.junit.Test;
 

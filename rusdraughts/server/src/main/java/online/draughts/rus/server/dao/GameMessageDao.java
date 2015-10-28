@@ -1,6 +1,6 @@
-package online.shashki.rus.server.dao;
+package online.draughts.rus.server.dao;
 
-import online.shashki.rus.shared.model.GameMessage;
+import online.draughts.rus.shared.model.GameMessage;
 
 import java.util.List;
 

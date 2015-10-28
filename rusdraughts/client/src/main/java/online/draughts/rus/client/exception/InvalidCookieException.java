@@ -1,4 +1,4 @@
-package online.shashki.rus.client.exception;
+package online.draughts.rus.client.exception;
 
 /**
  * Created with IntelliJ IDEA.
