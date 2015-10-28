@@ -15,7 +15,7 @@ import online.draughts.rus.client.application.ApplicationPresenter;
 import online.draughts.rus.client.application.profile.settings.SettingsPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.place.NameTokens;
-import online.draughts.rus.client.util.SHCookies;
+import online.draughts.rus.client.util.DCookies;
 import online.draughts.rus.shared.model.Player;
 
 
@@ -40,7 +40,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
     this.player = currentSession.getPlayer();
 
     getView().setUiHandlers(this);
-    SHCookies.setLOCATION(NameTokens.profilePage);
+    DCookies.setLOCATION(NameTokens.profilePage);
   }
 
   @Override

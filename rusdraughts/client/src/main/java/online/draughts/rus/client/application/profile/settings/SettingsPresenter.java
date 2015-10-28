@@ -11,7 +11,7 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.UpdateAllPlayerListEvent;
-import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.client.websocket.PlaySession;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Player;
@@ -48,7 +48,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
   @Override
   public void submitNewPlayerName(String playerName) {
     player.setPlayerName(playerName);
-    SHLog.debug("UPDATE PLAYER: " + player);
+    DTLog.debug("UPDATE PLAYER: " + player);
     playersDelegate.withCallback(new AsyncCallback<Player>() {
       @Override
       public void onFailure(Throwable caught) {

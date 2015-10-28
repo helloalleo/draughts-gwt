@@ -216,4 +216,8 @@ public interface DraughtsMessages extends Messages {
   String ok();
 
   String inviteCaption();
+
+  String playerCaption(String whitePlayer, String blackPlayer, String result);
+
+  String notationTitle();
 }

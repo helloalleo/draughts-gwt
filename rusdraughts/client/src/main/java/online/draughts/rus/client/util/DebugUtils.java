@@ -40,10 +40,10 @@ public class DebugUtils {
     }
     if (caught != null) {
       final String stacktrace = DebugUtils.getStacktraceAsString(caught);
-      SHLog.error(stacktrace, caught);
+      DTLog.error(stacktrace, caught);
     } else {
       final String message = "Error occurred, but we have no further information about the cause";
-      SHLog.debug(message);
+      DTLog.debug(message);
     }
   }
 

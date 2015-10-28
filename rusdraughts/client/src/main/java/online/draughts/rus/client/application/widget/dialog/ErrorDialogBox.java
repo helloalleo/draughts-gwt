@@ -2,7 +2,7 @@ package online.draughts.rus.client.application.widget.dialog;
 
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
-import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.client.util.DTLog;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,7 +31,7 @@ public class ErrorDialogBox extends MyDialogBox {
   }
 
   public static ErrorDialogBox setMessage(Throwable caught) {
-    SHLog.error(caught.getLocalizedMessage(), caught);
+    DTLog.error(caught.getLocalizedMessage(), caught);
     return new ErrorDialogBox(constructMessage(null, caught));
   }
 

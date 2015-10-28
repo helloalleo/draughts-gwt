@@ -7,7 +7,7 @@ import com.gwtplatform.mvp.client.Bootstrapper;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
-import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.shared.dispatch.FetchCurrentPlayerAction;
 import online.draughts.rus.shared.dispatch.FetchCurrentPlayerResult;
 
@@ -30,7 +30,7 @@ public class AppBootstrapper implements Bootstrapper {
     this.placeManager = placeManager;
     this.currentSession = currentSession;
     this.dispatch = dispatch;
-    SHLog.debug("Bootstrap constructor");
+    DTLog.debug("Bootstrap constructor");
   }
 
   @Override
@@ -45,9 +45,9 @@ public class AppBootstrapper implements Bootstrapper {
       public void onSuccess(FetchCurrentPlayerResult result) {
         currentSession.setPlayer(result.getPlayer());
         placeManager.revealCurrentPlace();
-        SHLog.debug("Is logged in? " + result.getPlayer());
+        DTLog.debug("Is logged in? " + result.getPlayer());
       }
     });
-    SHLog.info("Bootstrapped");
+    DTLog.info("Bootstrapped");
   }
 }

@@ -16,7 +16,7 @@ import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
-import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.client.websocket.GameWebsocket;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.*;
@@ -95,7 +95,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         gameMessage.setReceiver(opponent);
 
         final boolean white = getView().opponentColor();
-        SHLog.debug(white + " OPPONENT COLOR");
+        DTLog.debug(white + " OPPONENT COLOR");
         gameMessage.setMessage(messages.inviteMessage(gameWebsocket.getPlayer().getPublicName(),
             String.valueOf(white ? messages.white() : messages.black())));
         gameMessage.setData(String.valueOf(white));
@@ -113,7 +113,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       gameWebsocket.connect();
     }
     getView().setPlayer(gameWebsocket.getPlayer());
-    SHLog.debug("Set player for Play View: " + gameWebsocket.getPlayer());
+    DTLog.debug("Set player for Play View: " + gameWebsocket.getPlayer());
   }
 
   @Override
@@ -319,7 +319,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         GameMessage gameMessage = new GameMessage();
         gameMessage.setSender(gameWebsocket.getPlayer());
         gameMessage.setReceiver(gameWebsocket.getOpponent());
-        SHLog.debug("CALLBACK MESSAGE " + gameMessage);
+        DTLog.debug("CALLBACK MESSAGE " + gameMessage);
         gameMessage.setMessageType(GameMessage.MessageType.PLAY_CALLBACK);
         fireEvent(new GameMessageEvent(gameMessage));
 

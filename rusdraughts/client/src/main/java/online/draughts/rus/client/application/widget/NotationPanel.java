@@ -5,7 +5,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import online.draughts.rus.client.event.*;
-import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.draughts.Square;
 import online.draughts.rus.draughts.Stroke;
 
@@ -67,10 +67,10 @@ public class NotationPanel extends ScrollPanel {
     if (steps.length == 0) {
       notation = "";
     }
-    SHLog.debug("MOVE in NOTATION " + stroke);
+    DTLog.debug("MOVE in NOTATION " + stroke);
     // первый шаг. например, h4:f6:d4 - h4
     Square start = stroke.getStartSquare();
-    SHLog.debug("FIRST STEP " + start.toString());
+    DTLog.debug("FIRST STEP " + start.toString());
 
     if (stroke.isSimple()) {
       if (stroke.isFirst()) {
@@ -79,7 +79,7 @@ public class NotationPanel extends ScrollPanel {
         notation += MOVE_SEP + stroke.toNotation(opponentMove) + NOTATION_SEP;
       }
     } else { // взята одна или более шашек
-      SHLog.debug(stroke.isFirst() + " FIRST CONT BEAT");
+      DTLog.debug(stroke.isFirst() + " FIRST CONT BEAT");
       if (stroke.isStartBeat()) {
         if (stroke.isFirst()) {
           notation += stroke.getNumber() + COUNT_SEP + stroke.toNotation(opponentMove);
@@ -102,7 +102,7 @@ public class NotationPanel extends ScrollPanel {
     }
 
     getElement().setInnerHTML(notation);
-    SHLog.debug("Notation " + notation);
+    DTLog.debug("Notation " + notation);
     pushScroll();
   }
 
@@ -113,12 +113,12 @@ public class NotationPanel extends ScrollPanel {
   }
 
   public static String getNotation() {
-    SHLog.debug("getNotation() " + notation);
+    DTLog.debug("getNotation() " + notation);
     return notation;
   }
 
   public void cancelMove(Stroke stroke) {
-    SHLog.debug(notation);
+    DTLog.debug(notation);
     notation = notation.replaceAll(DIV_GARBAGE, "");
     if (stroke.isSimple()) {
       if (stroke.isFirst()) {

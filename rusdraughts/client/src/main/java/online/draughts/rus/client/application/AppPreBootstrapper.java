@@ -2,7 +2,7 @@ package online.draughts.rus.client.application;
 
 import com.gwtplatform.mvp.client.PreBootstrapper;
 import online.draughts.rus.client.util.DebugUtils;
-import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.client.util.DTLog;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,6 +14,6 @@ public class AppPreBootstrapper implements PreBootstrapper {
   @Override
   public void onPreBootstrap() {
     DebugUtils.initDebugAndErrorHandling();
-    SHLog.info("Error handling initialized");
+    DTLog.info("Error handling initialized");
   }
 }

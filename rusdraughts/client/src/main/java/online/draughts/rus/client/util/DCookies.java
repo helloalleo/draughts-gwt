@@ -11,7 +11,7 @@ import online.draughts.rus.shared.util.StringUtils;
  * Date: 29.09.15
  * Time: 17:31
  */
-public class SHCookies {
+public class DCookies {
 
   private static ClientConfiguration configuration = GWT.create(ClientConfiguration.class);
 
@@ -21,11 +21,11 @@ public class SHCookies {
 
   public static void setLOCATION(String nameToken) {
     Cookies.setCookie(LOCATION, nameToken);
-    SHLog.debug("set LOCATION: " + nameToken);
+    DTLog.debug("set LOCATION: " + nameToken);
   }
 
   public static String getLOCATION() {
-    SHLog.debug("get location: " + Cookies.getCookie(LOCATION));
+    DTLog.debug("get location: " + Cookies.getCookie(LOCATION));
     return Cookies.getCookie(LOCATION);
   }
 

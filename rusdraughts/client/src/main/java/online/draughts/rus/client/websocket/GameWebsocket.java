@@ -17,7 +17,7 @@ import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.json.GameMessageMapper;
-import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
@@ -90,7 +90,7 @@ public class GameWebsocket implements WebSocketCallback {
     HandlerRegistration updatePlayerListHR = eventBus.addHandler(UpdatePlayerListEvent.TYPE, new UpdatePlayerListEventHandler() {
       @Override
       public void onUpdatePlayerList(UpdatePlayerListEvent event) {
-        SHLog.debug("UPDATE PLAYER LIST");
+        DTLog.debug("UPDATE PLAYER LIST");
         updatePlayerListMessage();
       }
     });
@@ -140,14 +140,14 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void sendGameMessage(GameMessage gameMessage) {
     if (gameMessage.getMove() != null) {
-      SHLog.debug(gameMessage.getMove().toString() + " SEND MOVE");
+      DTLog.debug(gameMessage.getMove().toString() + " SEND MOVE");
     }
     String message = gameMessageMapper.write(gameMessage);
     webSocket.send(message);
   }
 
   private void handleUpdatePlayerList(List<Player> playerList) {
-    SHLog.debug(playerList.size() + " PLAYER LIST SIZE");
+    DTLog.debug(playerList.size() + " PLAYER LIST SIZE");
     for (Player p : playerList) {
       if (p.getId().equals(player.getId())) {
         player.updateSerializable(p);
@@ -176,7 +176,7 @@ public class GameWebsocket implements WebSocketCallback {
           Growl.growlNotif(messages.opponentNotFound());
           return;
         }
-        SHLog.debug(playSession.getPlayer().toString());
+        DTLog.debug(playSession.getPlayer().toString());
 
         playSession.setOpponent(gameMessage.getSender());
 
@@ -184,8 +184,8 @@ public class GameWebsocket implements WebSocketCallback {
         game.setPlayStartDate(new Date());
         game.setPlayerWhite(isWhite() ? playSession.getPlayer() : playSession.getOpponent());
         game.setPlayerBlack(isWhite() ? playSession.getOpponent() : playSession.getPlayer());
-        SHLog.debug("PLAYER WHITE :: " + game.getPlayerWhite());
-        SHLog.debug("PLAYER BLACK :: " + game.getPlayerBlack());
+        DTLog.debug("PLAYER WHITE :: " + game.getPlayerWhite());
+        DTLog.debug("PLAYER BLACK :: " + game.getPlayerBlack());
         gamesDelegate.withCallback(new AsyncCallback<Game>() {
           @Override
           public void onFailure(Throwable throwable) {
@@ -221,7 +221,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   @Override
   public void onConnect() {
-    SHLog.debug("ON_CONNECT PLAYER: " + player);
+    DTLog.debug("ON_CONNECT PLAYER: " + player);
     if (player == null) {
       InfoDialogBox.setMessage(messages.failToConnectToServer()).show();
       return;
@@ -245,7 +245,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   @Override
   public void onMessage(String message) {
-    SHLog.debug("ON_MESSAGE :: " + message);
+    DTLog.debug("ON_MESSAGE :: " + message);
     GameMessage gameMessage = gameMessageMapper.read(message);
     switch (gameMessage.getMessageType()) {
       case USER_LIST_UPDATE:
@@ -439,7 +439,7 @@ public class GameWebsocket implements WebSocketCallback {
    * @param gameMessage
    */
   private void handlePlayMove(GameMessage gameMessage) {
-    SHLog.debug(gameMessage.getMove().toString());
+    DTLog.debug(gameMessage.getMove().toString());
     // отправлем отраженный ход здесь
     final Move move = gameMessage.getMove();
     eventBus.fireEvent(new PlayMoveOpponentEvent(move));

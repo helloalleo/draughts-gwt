@@ -28,8 +28,8 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.application.component.playshowpanel.PlayShowPanel;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.util.DebugUtils;
-import online.draughts.rus.client.util.SHCookies;
-import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.client.util.DCookies;
+import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
@@ -83,8 +83,8 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @Override
   protected void onAttach() {
     super.onAttach();
-    newGameState = SHCookies.getNewGameButtonState();
-    SHLog.debug("NEW STATE " + newGameState);
+    newGameState = DCookies.getNewGameButtonState();
+    DTLog.debug("NEW STATE " + newGameState);
     if (DebugUtils.isProduction()) {
       newGameState = true;
       newGameButton.setVisible(false);
@@ -112,7 +112,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   private void toggleNewGameButton() {
     newGameState = !newGameState;
-    SHCookies.setNewGameButtonState(newGameState);
+    DCookies.setNewGameButtonState(newGameState);
   }
 
   @UiHandler("moreGameOnPage")
@@ -132,7 +132,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   @Override
   public void setShowLoggedInControls(Boolean loggedIn) {
-    SHLog.debug("LOGGED IN " + loggedIn);
+    DTLog.debug("LOGGED IN " + loggedIn);
     newGameButton.setVisible(loggedIn);
     myGameListCheckButton.setVisible(loggedIn);
     gameListLabel.setVisible(!loggedIn);
@@ -160,7 +160,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   }
 
   public void getMoreGames(int newPageSize) {
-    SHLog.debug("GET MORE GAMES " + newPageSize);
+    DTLog.debug("GET MORE GAMES " + newPageSize);
     getUiHandlers().getMoreGames(myGameListCheckButton.getValue(), newPageSize);
   }
 

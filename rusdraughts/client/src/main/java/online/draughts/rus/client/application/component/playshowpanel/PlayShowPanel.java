@@ -9,8 +9,8 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import online.draughts.rus.client.application.home.HomeView;
 import online.draughts.rus.client.resources.Variables;
-import online.draughts.rus.client.util.SHCookies;
-import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.client.util.DCookies;
+import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.shared.model.Game;
 import org.gwtbootstrap3.client.ui.Column;
 import org.gwtbootstrap3.client.ui.Row;
@@ -52,17 +52,17 @@ public class PlayShowPanel extends Composite {
         if (oldScrollPos >= lastScrollPos) {
           return;
         }
-        SHLog.debug("SCROLL POS " + lastScrollPos);
-        SHLog.debug("OLD POS " + oldScrollPos);
+        DTLog.debug("SCROLL POS " + lastScrollPos);
+        DTLog.debug("OLD POS " + oldScrollPos);
         int maxScrollTop = getOffsetHeight() - Window.getScrollTop();
-        SHLog.debug("max scroll top" + maxScrollTop);
+        DTLog.debug("max scroll top" + maxScrollTop);
         int halfIncrementScrollSize = (maxScrollTop - lastMaxHeight) / 2;
-        SHLog.debug("half inc " + halfIncrementScrollSize);
+        DTLog.debug("half inc " + halfIncrementScrollSize);
         if (lastScrollPos >= (maxScrollTop - halfIncrementScrollSize) && updateFlag) {
-          SHLog.debug("load new games");
+          DTLog.debug("load new games");
           final int newPageSize = gameList.size() + INCREMENT_SIZE;
           PlayShowPanel.this.homeView.getMoreGames(newPageSize);
-          SHLog.debug("DISPLAYED GAMES " + gameList.size());
+          DTLog.debug("DISPLAYED GAMES " + gameList.size());
           lastMaxHeight = maxScrollTop;
           updateFlag = false;
         }
@@ -80,10 +80,10 @@ public class PlayShowPanel extends Composite {
 
   private void updateGameListPanel() {
     if (gameList == null || gameList.isEmpty()) {
-      SHLog.debug("EMPTY GAME LIST");
+      DTLog.debug("EMPTY GAME LIST");
       return;
     }
-    gamesOnPanelCounter = SHCookies.getGamesOnPageCounter();
+    gamesOnPanelCounter = DCookies.getGamesOnPageCounter();
     if (gamesOnPanelCounter <= 0) {
       homeView.setEnableLessGameButton(false);
     }
@@ -93,7 +93,7 @@ public class PlayShowPanel extends Composite {
     playRowList.clear();
     List<Game> rowGameList = new ArrayList<>();
     final int gameInRow = gameOnPanelArr[gamesOnPanelCounter];
-    SHLog.debug("GAME IN ROW " + gameInRow + " " + gamesOnPanelCounter);
+    DTLog.debug("GAME IN ROW " + gameInRow + " " + gamesOnPanelCounter);
     for (int i = 0; i < gameList.size(); i++) {
       if ((i + 1) % gameInRow == 0) {
         rowGameList.add(gameList.get(i));
@@ -124,7 +124,7 @@ public class PlayShowPanel extends Composite {
 
   public void moreGameOnPanel() {
     gamesOnPanelCounter++;
-    SHCookies.setGamesOnPageCounter(gamesOnPanelCounter);
+    DCookies.setGamesOnPageCounter(gamesOnPanelCounter);
     if (!homeView.isEnabledLessGameButton()) {
       homeView.setEnableLessGameButton(true);
     }
@@ -136,7 +136,7 @@ public class PlayShowPanel extends Composite {
 
   public void lessGameOnPanel() {
     gamesOnPanelCounter--;
-    SHCookies.setGamesOnPageCounter(gamesOnPanelCounter);
+    DCookies.setGamesOnPageCounter(gamesOnPanelCounter);
     if (!homeView.isEnabledMoreGameButton()) {
       homeView.setEnableMoreGameButton(true);
     }

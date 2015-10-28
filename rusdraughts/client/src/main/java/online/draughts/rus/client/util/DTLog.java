@@ -12,7 +12,7 @@ import java.util.Collections;
  * Date: 25.11.14
  * Time: 8:29
  */
-public class SHLog {
+public class DTLog {
 
   private static final String DEBUG_PREFIX = "DEBUG: ";
   private static final String WARN_PREFIX = "WARN: ";

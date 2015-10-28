@@ -14,8 +14,8 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
-import online.draughts.rus.client.util.SHCookies;
-import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.client.util.DCookies;
+import online.draughts.rus.client.util.DTLog;
 import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 
@@ -55,7 +55,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
       @Override
       public void onWindowScroll(Window.ScrollEvent event) {
         if (event.getScrollTop() == 0) {
-          SHLog.debug("Scrolling");
+          DTLog.debug("Scrolling");
           navbarTopHeight();
         } else {
           navbarScrollHeight();
@@ -179,11 +179,11 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   }
 
   public void highlightMenu() {
-    String nameToken = SHCookies.getLOCATION();
+    String nameToken = DCookies.getLOCATION();
     if (nameToken == null || nameToken.isEmpty()) {
       return;
     }
-    SHLog.debug("highlight token " + nameToken);
+    DTLog.debug("highlight token " + nameToken);
     for (Widget widget : navLeft) {
       if (setActiveAnchor(nameToken, (AnchorListItem) widget)) return;
     }

@@ -1,6 +1,6 @@
 package online.draughts.rus.draughts;
 
-import online.draughts.rus.client.util.SHLog;
+import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.shared.model.Move;
 
 import java.util.HashSet;
@@ -14,8 +14,8 @@ import java.util.Set;
  */
 public class Stroke {
 
-  private static final String SIMPLE_MOVE_SEP = "-";
-  private static final String BEAT_MOVE_SEP = ":";
+  public static final String SIMPLE_MOVE_SEP = "-";
+  public static final String BEAT_MOVE_SEP = ":";
 
   private Square takenSquare;
   private Square startSquare;
@@ -58,16 +58,16 @@ public class Stroke {
   public String toNotation(boolean isWhite) {
     String notation;
     if (first && isWhite) {
-      SHLog.debug("FIRST WHITE");
+      DTLog.debug("FIRST WHITE");
       notation = getNotation(true);
     } else if (!first && isWhite) {
-      SHLog.debug("SECOND WHITE");
+      DTLog.debug("SECOND WHITE");
       notation = getNotation(true);
     } else if (first) {
-      SHLog.debug("FIRST BLACK");
+      DTLog.debug("FIRST BLACK");
       notation = getNotation(false);
     } else {
-      SHLog.debug("SECOND BLACK");
+      DTLog.debug("SECOND BLACK");
       notation = getNotation(false);
     }
     return notation;

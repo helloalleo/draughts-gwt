@@ -20,7 +20,7 @@ import online.draughts.rus.client.event.UpdatePlayShowPanelEvent;
 import online.draughts.rus.client.event.UpdatePlayShowPanelEventHandler;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
-import online.draughts.rus.client.util.SHCookies;
+import online.draughts.rus.client.util.DCookies;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.shared.rest.GamesResource;
@@ -53,7 +53,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     this.currentSession = currentSession;
     this.playPresenter = playPresenter;
     this.gamesDelegate = gamesDelegate;
-    SHCookies.setLOCATION(NameTokens.homePage);
+    DCookies.setLOCATION(NameTokens.homePage);
     bindEvent();
   }
 
