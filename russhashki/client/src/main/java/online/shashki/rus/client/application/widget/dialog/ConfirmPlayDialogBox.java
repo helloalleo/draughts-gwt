@@ -2,6 +2,8 @@ package online.shashki.rus.client.application.widget.dialog;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -23,7 +25,10 @@ public abstract class ConfirmPlayDialogBox extends BasicDialogBox {
   private String senderName;
 
   public ConfirmPlayDialogBox() {
-    setText(messages.captionGame());
+    HTML caption = new HTML(messages.captionGame());
+    caption.getElement().addClassName(resources.style().dialogCaptionInfo());
+    setHTML(new SafeHtmlBuilder().appendHtmlConstant(caption.getElement().getString()).toSafeHtml());
+
     VerticalPanel panel = new VerticalPanel();
     panel.setPixelSize(WIDTH, HEIGHT);
     panel.add(confirmLabel);

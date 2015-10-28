@@ -8,6 +8,7 @@ import online.shashki.rus.shared.model.Friend;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -38,5 +39,18 @@ public class FriendDaoImpl extends DaoImpl<Friend> implements FriendDao {
     Query query = getEntityManager().createQuery(hql);
     query.setParameter("friendId", friendId);
     return (Friend) query.getSingleResult();
+  }
+
+  @Override
+  public boolean isPlayerFriendOf(Long playerId, Long friendId) {
+    String hql = "SELECT f " +
+        " FROM Friend f " +
+        " WHERE f.pk.friend.id = :playerId " +
+        "   AND f.pk.friendOf.id = :friendId";
+    Query query = getEntityManager().createQuery(hql);
+    query.setParameter("playerId", playerId);
+    query.setParameter("friendId", friendId);
+    List result = query.getResultList();
+    return !result.isEmpty();
   }
 }

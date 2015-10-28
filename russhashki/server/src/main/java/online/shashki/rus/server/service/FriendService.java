@@ -40,4 +40,8 @@ public class FriendService {
   public Friend findById(Long friendId) {
     return friendDaoProvider.get().find(friendId);
   }
+
+  public boolean isPlayerFriendOf(Long playerId, Long friendId) {
+    return friendDaoProvider.get().isPlayerFriendOf(playerId, friendId);
+  }
 }

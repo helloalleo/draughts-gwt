@@ -56,6 +56,8 @@ public interface AppResources extends ClientBundle {
 
     String dialogBox();
 
-    String dialogCaption();
+    String dialogCaptionInfo();
+
+    String dialogCaptionError();
   }
 }

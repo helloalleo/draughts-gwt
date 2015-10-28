@@ -1,5 +1,7 @@
 package online.shashki.rus.client.application.widget.dialog;
 
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.HTML;
 import online.shashki.rus.client.util.SHLog;
 
 /**
@@ -12,6 +14,10 @@ public class ErrorDialogBox extends MyDialogBox {
 
   private ErrorDialogBox(String content) {
     super(messages.error(), content);
+
+    HTML caption = new HTML(messages.error());
+    caption.getElement().addClassName(resources.style().dialogCaptionError());
+    setHTML(new SafeHtmlBuilder().appendHtmlConstant(caption.getElement().getString()).toSafeHtml());
   }
 
   private static String constructMessage(String message, Throwable throwable) {

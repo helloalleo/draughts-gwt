@@ -161,16 +161,15 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     friendsDelegate.withCallback(new AbstractAsyncCallback<Friend>() {
       @Override
       public void onSuccess(Friend result) {
-        if (isPlaying()) {
-          GameMessage gameMessage = createGameMessage();
-          gameMessage.setMessageType(GameMessage.MessageType.NOTIFICATION_ADDED_TO_FAVORITE);
-          if (friend.isFavorite()) {
-            gameMessage.setMessage(messages.youHasBeenAddedToFavorite(gameWebsocket.getPlayer().getPublicName()));
-          } else {
-            gameMessage.setMessage(messages.youHasBeenRemovedFromFavorite(gameWebsocket.getPlayer().getPublicName()));
-          }
-          fireEvent(new GameMessageEvent(gameMessage));
+        GameMessage gameMessage = createGameMessage();
+        gameMessage.setReceiver(friend.getPk().getFriend());
+        gameMessage.setMessageType(GameMessage.MessageType.NOTIFICATION_ADDED_TO_FAVORITE);
+        if (friend.isFavorite()) {
+          gameMessage.setMessage(messages.youHasBeenAddedToFavorite(gameWebsocket.getPlayer().getPublicName()));
+        } else {
+          gameMessage.setMessage(messages.youHasBeenRemovedFromFavorite(gameWebsocket.getPlayer().getPublicName()));
         }
+        fireEvent(new GameMessageEvent(gameMessage));
       }
     }).saveOrCreate(friend);
   }

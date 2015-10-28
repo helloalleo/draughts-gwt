@@ -146,12 +146,22 @@ body {
     background: rgba(200, 200, 200, .9);
 }
 
-.dialogCaption {
+.dialogCaptionInfo {
     -moz-border-radius: DIALOG_BORDER_RADIUS;
     -ms-border-radius: DIALOG_BORDER_RADIUS;
     -webkit-border-radius: DIALOG_BORDER_RADIUS;
     border-radius: DIALOG_BORDER_RADIUS;
 
     background: lightblue;
+    font-size: 22px;
+}
+
+.dialogCaptionError {
+    -moz-border-radius: DIALOG_BORDER_RADIUS;
+    -ms-border-radius: DIALOG_BORDER_RADIUS;
+    -webkit-border-radius: DIALOG_BORDER_RADIUS;
+    border-radius: DIALOG_BORDER_RADIUS;
+
+    background: lightcoral;
     font-size: 22px;
 }

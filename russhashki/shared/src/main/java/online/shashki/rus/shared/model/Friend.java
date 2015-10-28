@@ -12,7 +12,9 @@ import java.util.Objects;
  * Time: 14:10
  */
 @Entity
-@Table(name = "friend")
+@Table(name = "friend", uniqueConstraints = {
+    @UniqueConstraint(columnNames = {"friend_id", "friend_of_id"})
+})
 @AssociationOverrides({
     @AssociationOverride(name = "pk.friend", joinColumns = @JoinColumn(name = "friend_id", insertable = false, updatable = false)),
     @AssociationOverride(name = "pk.friendOf", joinColumns = @JoinColumn(name = "friend_of_id", insertable = false, updatable = false))})

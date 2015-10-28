@@ -72,13 +72,7 @@ public class GameService {
 
       Player playerBlack = playerService.find(game.getPlayerBlack().getId());
       Player playerWhite = playerService.find(game.getPlayerWhite().getId());
-      boolean playerWhiteIsPlayerBlack = false;
-      for (Friend friend : playerBlack.getFriendOf()) {
-        if (playerWhite.getFriends().contains(friend)) {
-          playerWhiteIsPlayerBlack = true;
-          break;
-        }
-      }
+      boolean playerWhiteIsPlayerBlack = friendService.isPlayerFriendOf(playerWhite.getId(), playerBlack.getId());
       if (!playerWhiteIsPlayerBlack) {
         FriendId friendPk = new FriendId()
             .setFriend(playerWhite)
@@ -87,13 +81,7 @@ public class GameService {
             .setPk(friendPk);
         friendService.saveOrCreate(friend);
       }
-      boolean playerBlackIsPlayerWhite = false;
-      for (Friend friend : playerWhite.getFriendOf()) {
-        if (!playerBlack.getFriends().contains(friend)) {
-          playerBlackIsPlayerWhite = true;
-          break;
-        }
-      }
+      boolean playerBlackIsPlayerWhite = friendService.isPlayerFriendOf(playerBlack.getId(), playerWhite.getId());
       if (!playerBlackIsPlayerWhite) {
         FriendId friendPk = new FriendId()
             .setFriend(playerBlack)

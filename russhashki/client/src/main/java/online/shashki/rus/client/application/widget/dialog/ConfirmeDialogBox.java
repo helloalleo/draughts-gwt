@@ -2,6 +2,7 @@ package online.shashki.rus.client.application.widget.dialog;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -20,7 +21,9 @@ public abstract class ConfirmeDialogBox extends BasicDialogBox {
   private boolean confirmed;
 
   public ConfirmeDialogBox(String ask) {
-    setText(messages.confirm());
+    HTML caption = new HTML(messages.confirm());
+    caption.getElement().addClassName(resources.style().dialogCaptionInfo());
+    setHTML(new SafeHtmlBuilder().appendHtmlConstant(caption.getElement().getString()).toSafeHtml());
     setModal(true);
 
     VerticalPanel panel = new VerticalPanel();

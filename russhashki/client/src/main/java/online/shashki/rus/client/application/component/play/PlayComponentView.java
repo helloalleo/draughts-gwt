@@ -28,7 +28,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.shashki.rus.client.application.widget.NotationPanel;
 import online.shashki.rus.client.application.widget.dialog.ConfirmeDialogBox;
-import online.shashki.rus.client.application.widget.dialog.InfoDialogBox;
+import online.shashki.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.shashki.rus.client.application.widget.dialog.InviteDialogBox;
 import online.shashki.rus.client.application.widget.growl.Growl;
 import online.shashki.rus.client.resources.AppResources;
@@ -113,7 +113,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @UiHandler("playButton")
   public void onConnectToServer(ClickEvent event) {
-    InfoDialogBox.setMessage("sdf").show();
     switch (playButton.getIcon()) {
       case REFRESH:
         getUiHandlers().refreshConnectionToServer();

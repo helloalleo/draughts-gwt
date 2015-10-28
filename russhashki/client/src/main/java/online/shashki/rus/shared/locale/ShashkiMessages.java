@@ -214,4 +214,6 @@ public interface ShashkiMessages extends Messages {
   String notification();
 
   String ok();
+
+  String inviteCaption();
 }

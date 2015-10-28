@@ -11,4 +11,6 @@ import online.shashki.rus.shared.model.Friend;
 public interface FriendDao extends Dao<Friend> {
 
   Friend findById(Long friendId);
+
+  boolean isPlayerFriendOf(Long playerId, Long friendId);
 }

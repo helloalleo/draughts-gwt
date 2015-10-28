@@ -3,6 +3,7 @@ package online.shashki.rus.client.application.widget.dialog;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
@@ -32,7 +33,10 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   private Label waitMessageLabel;
 
   public InviteDialogBox(ClickHandler submitClickHandler) {
-    setText(messages.captionGame());
+    HTML caption = new HTML(messages.inviteCaption());
+    caption.getElement().addClassName(resources.style().dialogCaptionInfo());
+    setHTML(new SafeHtmlBuilder().appendHtmlConstant(caption.getElement().getString()).toSafeHtml());
+
     VerticalPanel panel = new VerticalPanel();
     panel.setPixelSize(WIDTH, HEIGHT);
 
