@@ -42,9 +42,6 @@ public class Move extends PersistableObjectImpl {
   @ElementCollection
   private Set<String> hashTags = new HashSet<>();
 
-  @Column(columnDefinition = "TEXT")
-  private String screenshot;
-
   public Move() {
   }
 
@@ -144,15 +141,6 @@ public class Move extends PersistableObjectImpl {
 
   public Move setComment(String comment) {
     this.comment = comment;
-    return this;
-  }
-
-  public String getScreenshot() {
-    return screenshot;
-  }
-
-  public Move setScreenshot(String screenshot) {
-    this.screenshot = screenshot;
     return this;
   }
 

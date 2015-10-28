@@ -6,6 +6,7 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
 import online.shashki.rus.server.dao.GameDao;
 import online.shashki.rus.shared.model.Game;
+import online.shashki.rus.shared.model.Move;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
@@ -75,6 +76,16 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
     query.setParameter("userId", userId);
     query.setFirstResult(start);
     query.setMaxResults(length);
+    return query.getResultList();
+  }
+
+  @Override
+  public List<Move> findGameMoves(Long gameId) {
+    String hql = "SELECT gm.move " +
+        " FROM GameMessage gm " +
+        " WHERE gm.game.id = :gameId";
+    Query query = getEntityManager().createQuery(hql);
+    query.setParameter("gameId", gameId);
     return query.getResultList();
   }
 }

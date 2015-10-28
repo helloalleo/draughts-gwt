@@ -8,6 +8,7 @@ import online.shashki.rus.server.dao.GameDao;
 import online.shashki.rus.server.utils.Rating;
 import online.shashki.rus.shared.model.Friend;
 import online.shashki.rus.shared.model.Game;
+import online.shashki.rus.shared.model.Move;
 import online.shashki.rus.shared.model.Player;
 import online.shashki.rus.shared.model.key.FriendId;
 
@@ -134,5 +135,9 @@ public class GameService {
 
   public Game find(Long gameId) {
     return gameDaoProvider.get().find(gameId);
+  }
+
+  public List<Move> findGameMoves(Long gameId) {
+    return gameDaoProvider.get().findGameMoves(gameId);
   }
 }

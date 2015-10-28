@@ -1,6 +1,7 @@
 package online.shashki.rus.server.dao;
 
 import online.shashki.rus.shared.model.Game;
+import online.shashki.rus.shared.model.Move;
 
 import java.util.List;
 
@@ -17,4 +18,6 @@ public interface GameDao extends Dao<Game> {
   List<Game> findRange(int start, int length);
 
   List<Game> findUserGames(Long userId, int start, int length);
+
+  List<Move> findGameMoves(Long gameId);
 }

@@ -21,6 +21,7 @@ import com.google.inject.persist.jpa.JpaPersistModule;
 import com.google.inject.servlet.ServletModule;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
+import online.shashki.rus.server.servlet.GameGiff;
 import online.shashki.rus.server.servlet.LogoutServlet;
 import online.shashki.rus.server.servlet.oauth.*;
 
@@ -41,6 +42,7 @@ public class DispatchServletModule extends ServletModule {
     serve("/OAuthFacebookCallbackServlet").with(OAuthFacebookCallbackServlet.class);
     serve("/OAuthGoogleServlet").with(OAuthGoogleServlet.class);
     serve("/OAuthGoogleCallbackServlet").with(OAuthGoogleCallbackServlet.class);
+    serve("/gameGiff").with(GameGiff.class);
 
     requestStaticInjection(CustomConfigurator.class);
   }

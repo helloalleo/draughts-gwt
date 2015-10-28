@@ -454,6 +454,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   public void startPlay(boolean white) {
     BoardBackgroundLayer backgroundLayer = initDeskPanel(white);
     board = new Board(getUiHandlers().getPlayEventBus(), backgroundLayer, 8, 8, white);
+    board.setPlayComponent(this);
     lienzoPanel.add(board);
     lienzoPanel.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     updateTurn(getUiHandlers().isMyTurn());

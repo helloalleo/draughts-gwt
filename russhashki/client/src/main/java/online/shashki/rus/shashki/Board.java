@@ -8,6 +8,7 @@ import com.ait.lienzo.client.core.event.NodeTouchEndHandler;
 import com.ait.lienzo.client.core.shape.Layer;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
+import online.shashki.rus.client.application.component.play.PlayComponentView;
 import online.shashki.rus.client.event.*;
 import online.shashki.rus.client.util.SHLog;
 import online.shashki.rus.shared.model.Move;
@@ -57,6 +58,7 @@ public class Board extends Layer {
   private BoardBackgroundLayer backgroundLayer;
 
   private EventBus eventBus;
+  private PlayComponentView playComponent;
 
   public Board(EventBus playEventBus,
                BoardBackgroundLayer backgroundLayer,
@@ -1154,5 +1156,13 @@ public class Board extends Layer {
 
   public String getComment() {
     return "sdfsd #dsffsd, sdfdsf #123";
+  }
+
+  public void setPlayComponent(PlayComponentView playComponent) {
+    this.playComponent = playComponent;
+  }
+
+  public PlayComponentView getPlayComponent() {
+    return playComponent;
   }
 }

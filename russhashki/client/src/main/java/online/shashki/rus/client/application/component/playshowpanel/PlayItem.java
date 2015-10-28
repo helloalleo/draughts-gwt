@@ -56,11 +56,15 @@ public class PlayItem extends Composite {
   public void setGame(Player player, Game game) {
     if (game.getPlayEndStatus() != null) {
       whoDidWin.setHTML(TrUtils.translateEndGame(game.getPlayEndStatus()));
+      whoDidWin.getElement().addClassName(resources.style().whoDidWin());
+      whoDidWin.getElement().addClassName("pull-right");
     }
     if (game.getPlayFinishDate() != null) {
       String date = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM)
           .format(game.getPlayFinishDate());
       playEndDate.setHTML(date);
+      playEndDate.getElement().addClassName(resources.style().playEndDate());
+      playEndDate.getElement().addClassName("pull-right");
     }
     if (game.getEndGameScreenshot() != null) {
       endGameScreenshot.setUrl(game.getEndGameScreenshot());
@@ -71,7 +75,9 @@ public class PlayItem extends Composite {
         && (player.getId().equals(game.getPlayerBlack().getId())
         || player.getId().equals(game.getPlayerWhite().getId()))) {
       whitePlayerName.setHTML(messages.white() + PLAYER_COLOR_DELIMITER + game.getPlayerWhite().getPublicName());
+      whitePlayerName.getElement().addClassName(resources.style().playItemPlayerName());
       blackPlayerName.setHTML(messages.black() + PLAYER_COLOR_DELIMITER + game.getPlayerBlack().getPublicName());
+      blackPlayerName.getElement().addClassName(resources.style().playItemPlayerName());
     }
   }
 

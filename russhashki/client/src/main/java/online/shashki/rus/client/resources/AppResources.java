@@ -59,5 +59,11 @@ public interface AppResources extends ClientBundle {
     String dialogCaptionInfo();
 
     String dialogCaptionError();
+
+    String whoDidWin();
+
+    String playEndDate();
+
+    String playItemPlayerName();
   }
 }

@@ -165,3 +165,17 @@ body {
     background: lightcoral;
     font-size: 22px;
 }
+
+.whoDidWin {
+    font-size: 12px;
+    margin-right: 12px;
+}
+
+.playEndDate {
+    font-size: 14px;
+    margin-right: 12px;
+}
+
+.playItemPlayerName {
+    font-size: 12px;
+}
