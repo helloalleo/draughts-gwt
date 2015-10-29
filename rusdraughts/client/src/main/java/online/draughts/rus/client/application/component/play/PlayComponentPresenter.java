@@ -10,7 +10,6 @@ import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
-import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
@@ -33,7 +32,7 @@ import java.util.List;
 public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresenter.MyView>
     implements PlayComponentUiHandlers {
 
-  private int CHECKERS_ON_DESK_INIT = 12;
+  private int DRAUGHTS_ON_DESK_INIT = 12;
 
   private final GameWebsocket gameWebsocket;
   private final DraughtsMessages messages;
@@ -247,8 +246,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     addRegisteredHandler(CheckWinnerEvent.TYPE, new CheckWinnerEventHandler() {
       @Override
       public void onCheckWinner(CheckWinnerEvent event) {
-        getView().setBeatenMy(CHECKERS_ON_DESK_INIT - getView().getMyDraughtsSize());
-        getView().setBeatenOpponent(CHECKERS_ON_DESK_INIT - getView().getOpponentDraughtsSize());
+        getView().setBeatenMy(DRAUGHTS_ON_DESK_INIT - getView().getMyDraughtsSize());
+        getView().setBeatenOpponent(DRAUGHTS_ON_DESK_INIT - getView().getOpponentDraughtsSize());
         final Game endGame = gameWebsocket.getGame();
         Game.GameEnds gameEnd = null;
         if (0 == getView().getMyDraughtsSize()) {

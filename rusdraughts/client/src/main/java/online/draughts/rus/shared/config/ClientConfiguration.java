@@ -20,4 +20,8 @@ public interface ClientConfiguration extends ConstantsWithLookup {
   String site_url();
 
   String production();
+
+  String initShowGamesPageSize();
+
+  String incrementPlayShowSize();
 }

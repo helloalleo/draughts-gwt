@@ -7,5 +7,7 @@ interface HomeUiHandlers extends UiHandlers {
 
   void getMoreGames(boolean myGames, int newPageSize);
 
+  void updatePlayShowPanel(boolean myGames);
+
   Player getPlayer();
 }

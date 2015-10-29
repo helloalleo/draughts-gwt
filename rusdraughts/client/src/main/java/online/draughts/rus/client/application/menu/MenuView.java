@@ -14,7 +14,7 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
-import online.draughts.rus.client.util.DCookies;
+import online.draughts.rus.client.util.DTCookies;
 import online.draughts.rus.client.util.DTLog;
 import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.constants.IconType;
@@ -179,7 +179,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   }
 
   public void highlightMenu() {
-    String nameToken = DCookies.getLOCATION();
+    String nameToken = DTCookies.getLocation();
     if (nameToken == null || nameToken.isEmpty()) {
       return;
     }

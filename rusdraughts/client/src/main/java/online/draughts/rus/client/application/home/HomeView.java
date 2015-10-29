@@ -28,7 +28,7 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.application.component.playshowpanel.PlayShowPanel;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
-import online.draughts.rus.client.util.DCookies;
+import online.draughts.rus.client.util.DTCookies;
 import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.client.util.DebugUtils;
 import online.draughts.rus.shared.config.ClientConfiguration;
@@ -47,6 +47,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   private static Binder binder = GWT.create(Binder.class);
   private final DraughtsMessages messages;
   private final CurrentSession currentSession;
+  private boolean isMyGames;
 
   @UiField
   SimplePanel play;
@@ -72,9 +73,11 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
            ClientConfiguration config,
            DraughtsMessages messages,
            PlayShowPanelFactory playShowPanelFactory) {
-    this.playShowPanel = new PlayShowPanel(this, playShowPanelFactory);
+    this.playShowPanel = new PlayShowPanel(this, playShowPanelFactory, config);
     initWidget(binder.createAndBindUi(this));
 
+    isMyGames = DTCookies.isMyGames();
+    myGameListCheckButton.setValue(isMyGames);
     this.currentSession = currentSession;
     this.messages = messages;
     bindSlot(HomePresenter.SLOT_PLAY, play);
@@ -83,7 +86,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @Override
   protected void onAttach() {
     super.onAttach();
-    newGameState = DCookies.getNewGameButtonState();
+    newGameState = DTCookies.getNewGameButtonState();
     DTLog.debug("NEW STATE " + newGameState);
     if (DebugUtils.isProduction()) {
       newGameState = true;
@@ -112,7 +115,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   private void toggleNewGameButton() {
     newGameState = !newGameState;
-    DCookies.setNewGameButtonState(newGameState);
+    DTCookies.setNewGameButtonState(newGameState);
   }
 
   @UiHandler("moreGameOnPage")
@@ -127,7 +130,10 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   @UiHandler("myGameListCheckButton")
   public void onMyGameList(ClickEvent event) {
-    getUiHandlers().getMoreGames(myGameListCheckButton.getValue(), HomePresenter.INIT_SHOW_GAMES_PAGE_SIZE);
+    final Boolean value = myGameListCheckButton.getValue();
+    DTCookies.setMyGames(value);
+    isMyGames = value;
+    getUiHandlers().updatePlayShowPanel(value);
   }
 
   @Override
@@ -139,8 +145,18 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   }
 
   @Override
-  public void setGames(List<Game> gameList) {
-    playShowPanel.setGames(gameList);
+  public int setGames(List<Game> gameList) {
+    return playShowPanel.setGames(gameList);
+  }
+
+  @Override
+  public int addGames(List<Game> games) {
+    return playShowPanel.addGames(games);
+  }
+
+  @Override
+  public boolean isMyGames() {
+    return isMyGames;
   }
 
   public void setEnableMoreGameButton(boolean enable) {

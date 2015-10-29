@@ -13,7 +13,7 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import online.draughts.rus.client.application.ApplicationPresenter;
 import online.draughts.rus.client.place.NameTokens;
-import online.draughts.rus.client.util.DCookies;
+import online.draughts.rus.client.util.DTCookies;
 
 
 public class OAuthLoginPresenter extends Presenter<OAuthLoginPresenter.MyView, OAuthLoginPresenter.MyProxy>
@@ -28,7 +28,7 @@ public class OAuthLoginPresenter extends Presenter<OAuthLoginPresenter.MyView, O
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     getView().setUiHandlers(this);
-    DCookies.setLOCATION(NameTokens.loginPage);
+    DTCookies.setLocation(NameTokens.loginPage);
 
   }
 

@@ -1,5 +1,7 @@
 package online.draughts.rus.shared.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gwt.user.client.rpc.GwtTransient;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 import javax.persistence.*;
@@ -42,6 +44,8 @@ public class Game extends PersistableObjectImpl {
   private String endGameScreenshot;
 
   // удаление выполняется вручную
+  @GwtTransient
+  @JsonIgnore
   @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
   private Set<GameMessage> gameMessages = new HashSet<>();
 

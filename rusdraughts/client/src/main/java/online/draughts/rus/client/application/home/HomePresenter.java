@@ -20,7 +20,8 @@ import online.draughts.rus.client.event.UpdatePlayShowPanelEvent;
 import online.draughts.rus.client.event.UpdatePlayShowPanelEventHandler;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
-import online.draughts.rus.client.util.DCookies;
+import online.draughts.rus.client.util.DTCookies;
+import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.shared.rest.GamesResource;
@@ -32,10 +33,12 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     implements HomeUiHandlers {
 
   public static final PermanentSlot<PlayComponentPresenter> SLOT_PLAY = new PermanentSlot<>();
-  public static final int INIT_SHOW_GAMES_PAGE_SIZE = 36;
+  public static int INIT_SHOW_GAMES_PAGE_SIZE;
   private final CurrentSession currentSession;
+  private final ClientConfiguration config;
   private PlayComponentPresenter playPresenter;
   private final ResourceDelegate<GamesResource> gamesDelegate;
+  private int gamesOffset = 0;
 
   @Inject
   HomePresenter(
@@ -43,17 +46,20 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       MyView view,
       MyProxy proxy,
       CurrentSession currentSession,
+      ClientConfiguration config,
       PlayComponentPresenter playPresenter,
       ResourceDelegate<PlayersResource> playersDelegate,
       ResourceDelegate<GamesResource> gamesDelegate) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
+    this.config = config;
+    INIT_SHOW_GAMES_PAGE_SIZE = Integer.valueOf(config.initShowGamesPageSize());
     getView().setUiHandlers(this);
 
     this.currentSession = currentSession;
     this.playPresenter = playPresenter;
     this.gamesDelegate = gamesDelegate;
-    DCookies.setLOCATION(NameTokens.homePage);
+    DTCookies.setLocation(NameTokens.homePage);
     bindEvent();
   }
 
@@ -61,7 +67,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     addRegisteredHandler(UpdatePlayShowPanelEvent.TYPE, new UpdatePlayShowPanelEventHandler() {
       @Override
       public void onUpdatePlayShowPanel(UpdatePlayShowPanelEvent event) {
-        updatePlayShowPanel();
+        updatePlayShowPanel(getView().isMyGames());
       }
     });
   }
@@ -78,23 +84,39 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public void prepareFromRequest(PlaceRequest request) {
     super.prepareFromRequest(request);
 
-    updatePlayShowPanel();
+    updatePlayShowPanel(DTCookies.isMyGames());
   }
 
-  private void updatePlayShowPanel() {
-    gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        super.onFailure(caught);
-        getProxy().manualRevealFailed();
-      }
+  public void updatePlayShowPanel(boolean myGames) {
+    if (myGames) {
+      gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
+        @Override
+        public void onFailure(Throwable caught) {
+          super.onFailure(caught);
+          getProxy().manualRevealFailed();
+        }
 
-      @Override
-      public void onSuccess(List<Game> result) {
-        getView().setGames(result);
-        getProxy().manualReveal(HomePresenter.this);
-      }
-    }).getGames(0, INIT_SHOW_GAMES_PAGE_SIZE);
+        @Override
+        public void onSuccess(List<Game> result) {
+          gamesOffset = getView().setGames(result);
+          getProxy().manualReveal(HomePresenter.this);
+        }
+      }).getLoggedInUserGames(0, INIT_SHOW_GAMES_PAGE_SIZE);
+    } else {
+      gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
+        @Override
+        public void onFailure(Throwable caught) {
+          super.onFailure(caught);
+          getProxy().manualRevealFailed();
+        }
+
+        @Override
+        public void onSuccess(List<Game> result) {
+          gamesOffset = getView().setGames(result);
+          getProxy().manualReveal(HomePresenter.this);
+        }
+      }).getGames(0, INIT_SHOW_GAMES_PAGE_SIZE);
+    }
   }
 
   @Override
@@ -103,16 +125,16 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
         @Override
         public void onSuccess(List<Game> result) {
-          getView().setGames(result);
+          gamesOffset = getView().addGames(result);
         }
-      }).getLoggedInUserGames(0, newPageSize);
+      }).getLoggedInUserGames(gamesOffset, newPageSize);
     } else {
       gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
         @Override
         public void onSuccess(List<Game> result) {
-          getView().setGames(result);
+          gamesOffset = getView().addGames(result);
         }
-      }).getGames(0, newPageSize);
+      }).getGames(gamesOffset, newPageSize);
     }
   }
 
@@ -142,6 +164,10 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public interface MyView extends View, HasUiHandlers<HomeUiHandlers> {
     void setShowLoggedInControls(Boolean loggedIn);
 
-    void setGames(List<Game> gameList);
+    int setGames(List<Game> games);
+
+    int addGames(List<Game> games);
+
+    boolean isMyGames();
   }
 }

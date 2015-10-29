@@ -11,20 +11,21 @@ import online.draughts.rus.shared.util.StringUtils;
  * Date: 29.09.15
  * Time: 17:31
  */
-public class DCookies {
+public class DTCookies {
 
   private static ClientConfiguration configuration = GWT.create(ClientConfiguration.class);
 
   private static final String GAMES_ON_PAGE_COUNTER = "gamesOnPage";
   private static final String LOCATION = "LOCATION"; // куки адреса страницы
   private static final String NEW_GAME_BUTTON_STATE_MAIN_PAGE = "newGameButtonState";
+  private static final String MY_GAMES = "myGames";
 
-  public static void setLOCATION(String nameToken) {
+  public static void setLocation(String nameToken) {
     Cookies.setCookie(LOCATION, nameToken);
     DTLog.debug("set LOCATION: " + nameToken);
   }
 
-  public static String getLOCATION() {
+  public static String getLocation() {
     DTLog.debug("get location: " + Cookies.getCookie(LOCATION));
     return Cookies.getCookie(LOCATION);
   }
@@ -47,5 +48,17 @@ public class DCookies {
       gamesOnPage = "0";
     }
     return Integer.valueOf(gamesOnPage);
+  }
+
+  public static void setMyGames(boolean myGames) {
+    Cookies.setCookie(MY_GAMES, String.valueOf(myGames));
+  }
+
+  public static boolean isMyGames() {
+    String myGames = Cookies.getCookie(MY_GAMES);
+    if (StringUtils.isEmpty(myGames)) {
+      myGames = Boolean.FALSE.toString();
+    }
+    return Boolean.valueOf(myGames);
   }
 }

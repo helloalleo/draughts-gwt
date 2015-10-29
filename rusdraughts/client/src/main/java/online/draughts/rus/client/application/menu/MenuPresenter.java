@@ -10,7 +10,7 @@ import com.gwtplatform.mvp.client.proxy.NavigationHandler;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.draughts.rus.client.application.security.CurrentSession;
-import online.draughts.rus.client.util.DCookies;
+import online.draughts.rus.client.util.DTCookies;
 
 public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> implements MenuUiHandlers, NavigationHandler {
   private final PlaceManager placeManager;
@@ -34,7 +34,7 @@ public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> impleme
         .nameToken(token)
         .build();
 
-    DCookies.setLOCATION(token);
+    DTCookies.setLocation(token);
     placeManager.revealPlace(placeRequest);
   }
 

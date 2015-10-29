@@ -44,11 +44,14 @@ public class PlayItem extends Composite {
   HTML playEndDate;
   @UiField
   Button playGame;
+  @UiField
+  HTML id;
 
   @Inject
   PlayItem(DraughtsPlayerFactory draughtsPlayerFactory, @Assisted Player player, @Assisted Game game) {
     initWidget(binder.createAndBindUi(this));
 
+    id.setHTML(game.getId().toString());
     this.draughtsPlayer = draughtsPlayerFactory.create(game);
     panel.addStyleName(resources.style().playItem());
     setGame(player, game);
