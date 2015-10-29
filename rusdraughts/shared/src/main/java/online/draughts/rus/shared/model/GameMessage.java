@@ -7,6 +7,7 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,13 +27,13 @@ public class GameMessage extends PersistableObjectImpl {
   @JoinColumn(name = "receiver_id")
   private Player receiver;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "sender_game_id")
-  private Player senderGame;
-
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "receiver_game_id")
-  private Player receiverGame;
+//  @ManyToOne(fetch = FetchType.LAZY)
+//  @JoinColumn(name = "sender_game_id")
+//  private Player senderGame;
+//
+//  @ManyToOne(fetch = FetchType.LAZY)
+//  @JoinColumn(name = "receiver_game_id")
+//  private Player receiverGame;
 
   private String message;
 
@@ -73,23 +74,23 @@ public class GameMessage extends PersistableObjectImpl {
     this.receiver = entity;
   }
 
-  public Player getSenderGame() {
-    return senderGame;
-  }
-
-  public GameMessage setSenderGame(Player senderGame) {
-    this.senderGame = senderGame;
-    return this;
-  }
-
-  public Player getReceiverGame() {
-    return receiverGame;
-  }
-
-  public GameMessage setReceiverGame(Player receiverGame) {
-    this.receiverGame = receiverGame;
-    return this;
-  }
+//  public Player getSenderGame() {
+//    return senderGame;
+//  }
+//
+//  public GameMessage setSenderGame(Player senderGame) {
+//    this.senderGame = senderGame;
+//    return this;
+//  }
+//
+//  public Player getReceiverGame() {
+//    return receiverGame;
+//  }
+//
+//  public GameMessage setReceiverGame(Player receiverGame) {
+//    this.receiverGame = receiverGame;
+//    return this;
+//  }
 
   public String getMessage() {
     return message;

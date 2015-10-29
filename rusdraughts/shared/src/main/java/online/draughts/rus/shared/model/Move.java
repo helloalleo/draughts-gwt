@@ -18,7 +18,7 @@ public class Move extends PersistableObjectImpl {
   private boolean first; // первый ход в паре ходов. Например, ee-aa в ee-aa bb-cc
 
   @OneToOne
-  @JoinColumn(name = "message_id", nullable = false, updatable = false)
+  @JoinColumn(name = "message_id")
   private GameMessage gameMessage;
 
   @Column(name = "start_pos")

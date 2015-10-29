@@ -6,6 +6,7 @@ import com.google.inject.Singleton;
 import online.draughts.rus.server.dao.GameMessageDao;
 import online.draughts.rus.shared.model.GameMessage;
 
+import java.util.List;
 import java.util.logging.Logger;
 
 @Singleton
@@ -32,5 +33,9 @@ public class GameMessageService {
     } else {
       gameMessageDaoProvider.get().edit(gameMessage);
     }
+  }
+
+  public List<GameMessage> findGameMessagesByGameId(Long gameId) {
+    return gameMessageDaoProvider.get().findGameMessagesByGameId(gameId);
   }
 }

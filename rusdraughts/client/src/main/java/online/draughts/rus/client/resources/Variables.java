@@ -28,7 +28,7 @@ public class Variables {
   /*Bootstrap*/
   public static final int COLUMNS_IN_LAYOUT = 12;
 
-  public static String navbarTopHeight() {
-    return S_NAVBAR_TOP_HEIGHT;
+  public static int navbarTopHeight() {
+    return Integer.valueOf(S_NAVBAR_TOP_HEIGHT.substring(0, S_NAVBAR_TOP_HEIGHT.length() - 2));
   }
 }

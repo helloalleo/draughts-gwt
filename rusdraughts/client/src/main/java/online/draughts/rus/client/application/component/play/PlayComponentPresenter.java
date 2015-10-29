@@ -312,7 +312,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         Game game = event.getGame();
         game.setPlayEndStatus(event.getGameEnd());
         game.setPlayFinishDate(new Date());
-        game.setPartyNotation(NotationPanel.getNotation());
         game.setEndGameScreenshot(getView().takeScreenshot());
         gamesDelegate.withCallback(event.getAsyncCallback()).saveOrCreate(game);
 

@@ -13,7 +13,7 @@ import java.util.List;
 public interface Dao<E extends BasePersistableObject> {
   void create(E entity);
 
-  void edit(E entity);
+  E edit(E entity);
 
   void remove(E entity);
 

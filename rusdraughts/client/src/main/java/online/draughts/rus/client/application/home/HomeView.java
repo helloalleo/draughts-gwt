@@ -27,9 +27,10 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.application.component.playshowpanel.PlayShowPanel;
 import online.draughts.rus.client.application.security.CurrentSession;
-import online.draughts.rus.client.util.DebugUtils;
+import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.util.DCookies;
 import online.draughts.rus.client.util.DTLog;
+import online.draughts.rus.client.util.DebugUtils;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
@@ -46,7 +47,6 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   private static Binder binder = GWT.create(Binder.class);
   private final DraughtsMessages messages;
   private final CurrentSession currentSession;
-  private final ClientConfiguration config;
 
   @UiField
   SimplePanel play;
@@ -70,9 +70,9 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @Inject
   HomeView(CurrentSession currentSession,
            ClientConfiguration config,
-           DraughtsMessages messages) {
-    this.config = config;
-    playShowPanel = new PlayShowPanel(this);
+           DraughtsMessages messages,
+           PlayShowPanelFactory playShowPanelFactory) {
+    this.playShowPanel = new PlayShowPanel(this, playShowPanelFactory);
     initWidget(binder.createAndBindUi(this));
 
     this.currentSession = currentSession;

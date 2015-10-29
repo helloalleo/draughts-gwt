@@ -15,7 +15,7 @@ import online.draughts.rus.shared.locale.DraughtsMessages;
  * Date: 27.12.14
  * Time: 23:17
  */
-public class BasicDialogBox extends DialogBox {
+public class BasicDialogBox extends DialogBox implements BaseDialogBox {
   protected static DraughtsMessages messages = GWT.create(DraughtsMessages.class);
   protected AppResources resources = GWT.create(AppResources.class);
 

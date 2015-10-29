@@ -179,3 +179,13 @@ body {
 .playItemPlayerName {
     font-size: 12px;
 }
+
+.dialogCaptionPlayer {
+    -moz-border-radius: DIALOG_BORDER_RADIUS;
+    -ms-border-radius: DIALOG_BORDER_RADIUS;
+    -webkit-border-radius: DIALOG_BORDER_RADIUS;
+    border-radius: DIALOG_BORDER_RADIUS;
+
+    background: lightgreen;
+    font-size: 14px;
+}

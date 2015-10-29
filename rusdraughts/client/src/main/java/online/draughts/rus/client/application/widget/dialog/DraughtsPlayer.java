@@ -1,16 +1,21 @@
 package online.draughts.rus.client.application.widget.dialog;
 
 import com.ait.lienzo.client.widget.LienzoPanel;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import com.google.inject.Inject;
+import com.google.inject.assistedinject.Assisted;
 import com.google.web.bindery.event.shared.EventBus;
+import online.draughts.rus.client.application.widget.NotationPanel;
+import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
@@ -33,16 +38,19 @@ import java.util.List;
 public class DraughtsPlayer extends DialogBox {
   private final int rows = 8;
   private final int cols = 8;
-  private final HTMLPanel notationHTMLPanel;
-  private final List<String> notationList;
-  private final Board board;
+  private final Game game;
+  private final AppResources resource;
+  private HTMLPanel notationHTMLPanel;
+  private List<String> notationList;
+  private Board board;
+  private final EventBus eventBus;
   private Button toStartButton;
   private Button prevButton;
   private Button playButton;
   private Button nextButton;
   private Button toEndButton;
   private Button closeButton;
-  private DraughtsMessages messages = GWT.create(DraughtsMessages.class);
+  private DraughtsMessages messages;
   private int side = 0;
   private int deskSide = 0;
   private int notationCursor;
@@ -55,87 +63,26 @@ public class DraughtsPlayer extends DialogBox {
   private boolean playing = false;
   private boolean atEnd = false;
   private HashMap<String, String> codeNameEndPlay;
+  private VerticalPanel mainPanel;
 
-  public DraughtsPlayer(Game game, EventBus eventBus) {
-    setText(messages.playerCaption(game.getPlayerWhite().getPublicName(), game.getPlayerBlack().getPublicName(),
+  @Inject
+  public DraughtsPlayer(DraughtsMessages messages, EventBus eventBus, AppResources resources, @Assisted Game game) {
+    this.messages = messages;
+    this.eventBus = eventBus;
+    this.game = game;
+    this.resource = resources;
+
+    getElement().addClassName(resources.style().dialogBox());
+    setAnimationEnabled(true);
+
+    HTML caption = new HTML(messages.playerCaption(game.getPlayerWhite().getPublicName(), game.getPlayerBlack().getPublicName(),
         TrUtils.translateEndGame(game.getPlayEndStatus())));
+    caption.getElement().addClassName(resources.style().dialogCaptionPlayer());
+    setHTML(new SafeHtmlBuilder().appendHtmlConstant(caption.getElement().getString()).toSafeHtml());
+
     side = getSide() - 20;
-    deskSide = side - 20;
-    closeButton = new Button(messages.close());
-    VerticalPanel verticalPanel = new VerticalPanel();
-
-    BoardBackgroundLayer boardBackground = new BoardBackgroundLayer(side, deskSide, rows, cols);
-    boardBackground.drawCoordinates(true);
-
-    HorizontalPanel checkersPanel = new HorizontalPanel();
-
-    SimplePanel deskPanel = new SimplePanel();
-    LienzoPanel lienzoPanel = new LienzoPanel(side, side);
-    lienzoPanel.setBackgroundLayer(boardBackground);
-
-    boolean myColor = true;
-    board = new Board(eventBus, boardBackground, rows, cols, myColor);
-    board.setEmulate(true);
-    lienzoPanel.add(board);
-
-    deskPanel.add(lienzoPanel);
-    checkersPanel.add(deskPanel);
-
-    VerticalPanel notationPanel = new VerticalPanel();
-
-    String partyNotation = game.getPartyNotation().trim();
-    notationList = Arrays.asList(partyNotation.split("\n"));
-    notationCursor = 0;
-    notationSubCursor = 1;
-
-    ScrollPanel notationScroll = new ScrollPanel();
-    notationHTMLPanel = new HTMLPanel("");
-    for (String n : notationList) {
-      HTML nHTML = new HTML(n + "<br />");
-      nHTML.getElement().setId(NOTATION_ITEM + notationCursor);
-      notationHTMLPanel.add(nHTML);
-      notationCursor += 1;
-    }
-    notationCursor = 0;
-    notationHTMLPanel.setWidth("160px");
-    notationHTMLPanel.setHeight(deskSide + "px");
-
-    notationScroll.add(notationHTMLPanel);
-
-    notationPanel.add(new Label(messages.notationTitle()));
-    notationPanel.add(notationScroll);
-    notationPanel.addStyleName("player-notation");
-    checkersPanel.add(notationPanel);
-
-    HorizontalPanel controlsPanel = new HorizontalPanel();
-    ButtonGroup playerControls = new ButtonGroup();
-    playerControls.add(toStartButton);
-    playerControls.add(prevButton);
-    playerControls.add(playButton);
-    playerControls.add(nextButton);
-    playerControls.add(toEndButton);
-
-    initButtons();
-
-    controlsPanel.add(playerControls);
-    controlsPanel.add(closeButton);
-    controlsPanel.setCellHorizontalAlignment(closeButton, HasAlignment.ALIGN_RIGHT);
-    controlsPanel.setWidth("100%");
-    controlsPanel.addStyleName("player-controls");
-
-    verticalPanel.add(checkersPanel);
-    verticalPanel.add(controlsPanel);
-
-    closeButton.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        hide();
-      }
-    });
-
-    verticalPanel.addStyleName("player-window");
-    add(verticalPanel);
-    center();
+    setWidth(side + "px");
+    deskSide = side - 30;
   }
 
   private void initButtons() {
@@ -149,29 +96,6 @@ public class DraughtsPlayer extends DialogBox {
       }
     });
     prevButton = new Button("", IconType.BACKWARD, new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        if (playing) {
-          playTimer.cancel();
-          playing = false;
-          playButton.setIcon(IconType.PLAY);
-        } else {
-          playTimer = new Timer() {
-            @Override
-            public void run() {
-              nextButton.click();
-              playing = true;
-              if (atEnd) {
-                cancel();
-              }
-            }
-          };
-          playTimer.scheduleRepeating(1000);
-          playButton.setIcon(IconType.PAUSE);
-        }
-      }
-    });
-    playButton = new Button("", IconType.PLAY, new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
         if (atStart) {
@@ -265,6 +189,29 @@ public class DraughtsPlayer extends DialogBox {
         }
       }
     });
+    playButton = new Button("", IconType.PLAY, new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        if (playing) {
+          playTimer.cancel();
+          playing = false;
+          playButton.setIcon(IconType.PLAY);
+        } else {
+          playTimer = new Timer() {
+            @Override
+            public void run() {
+              nextButton.click();
+              playing = true;
+              if (atEnd) {
+                cancel();
+              }
+            }
+          };
+          playTimer.scheduleRepeating(1000);
+          playButton.setIcon(IconType.PAUSE);
+        }
+      }
+    });
     nextButton = new Button("", IconType.FORWARD, new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
@@ -346,7 +293,7 @@ public class DraughtsPlayer extends DialogBox {
   public int getSide() {
     if (0 == side) {
       final int width = Window.getClientWidth();
-      final int height = Window.getClientHeight();
+      final int height = Window.getClientHeight() - Variables.navbarTopHeight() * 3;
       side = Math.min(width, height);
     }
     return side;
@@ -368,5 +315,99 @@ public class DraughtsPlayer extends DialogBox {
           break;
       }
     }
+  }
+
+  @Override
+  protected void onAttach() {
+    super.onAttach();
+    if (mainPanel != null) {
+      remove(mainPanel);
+    }
+    mainPanel = createMainPanel();
+    add(mainPanel);
+  }
+
+  @Override
+  public void show() {
+    Element elem = getElement();
+    elem.getStyle().setPropertyPx("left", 0);
+    elem.getStyle().setPropertyPx("top", 0);
+
+    final int left = (Window.getClientWidth() - getOffsetWidth()) >> 2;
+    final int top = ((Window.getClientHeight() - getOffsetHeight()) >> 2) - Variables.navbarTopHeight();
+    setPopupPosition(Math.max(Window.getScrollLeft() + left, 0), Math.max(
+        Window.getScrollTop() + top, 0));
+    super.show();
+  }
+
+  private VerticalPanel createMainPanel() {
+    closeButton = new Button(messages.ok());
+    VerticalPanel verticalPanel = new VerticalPanel();
+
+    BoardBackgroundLayer boardBackground = new BoardBackgroundLayer(side, deskSide, rows, cols);
+    boardBackground.drawCoordinates(true);
+
+    HorizontalPanel checkersPanel = new HorizontalPanel();
+
+    SimplePanel deskPanel = new SimplePanel();
+    LienzoPanel lienzoPanel = new LienzoPanel(side, side);
+    lienzoPanel.setBackgroundLayer(boardBackground);
+
+    board = new Board(eventBus, boardBackground, rows, cols, true);
+    board.setEmulate(true);
+    lienzoPanel.add(board);
+
+    deskPanel.add(lienzoPanel);
+    checkersPanel.add(deskPanel);
+
+    VerticalPanel notationPanel = new VerticalPanel();
+
+    String partyNotation = game.getNotation().trim();
+    notationList = Arrays.asList(partyNotation.split(NotationPanel.NOTATION_SEP));
+    notationCursor = 0;
+    notationSubCursor = 1;
+
+    ScrollPanel notationScroll = new ScrollPanel();
+    notationHTMLPanel = new HTMLPanel("");
+    notationCursor = 0;
+    notationHTMLPanel.setWidth("160px");
+    notationHTMLPanel.setHeight(deskSide + "px");
+
+    notationScroll.add(notationHTMLPanel);
+
+    notationPanel.add(new Label(messages.notationTitle()));
+    notationPanel.add(notationScroll);
+    notationPanel.addStyleName("player-notation");
+    checkersPanel.add(notationPanel);
+
+    initButtons();
+
+    HorizontalPanel controlsPanel = new HorizontalPanel();
+    ButtonGroup playerControls = new ButtonGroup();
+    playerControls.add(toStartButton);
+    playerControls.add(prevButton);
+    playerControls.add(playButton);
+    playerControls.add(nextButton);
+    playerControls.add(toEndButton);
+
+
+    controlsPanel.add(playerControls);
+    controlsPanel.add(closeButton);
+    controlsPanel.setCellHorizontalAlignment(closeButton, HasAlignment.ALIGN_RIGHT);
+    controlsPanel.setWidth("100%");
+    controlsPanel.addStyleName("player-controls");
+
+    verticalPanel.add(checkersPanel);
+    verticalPanel.add(controlsPanel);
+
+    closeButton.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        hide();
+      }
+    });
+
+    verticalPanel.addStyleName("player-window");
+    return verticalPanel;
   }
 }

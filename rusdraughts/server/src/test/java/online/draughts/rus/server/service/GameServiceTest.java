@@ -5,6 +5,8 @@ import online.draughts.rus.server.BaseTest;
 import online.draughts.rus.server.guice.DatabaseModule;
 import online.draughts.rus.server.guice.DbModule;
 import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.model.GameMessage;
+import online.draughts.rus.shared.model.Move;
 import online.draughts.rus.shared.model.Player;
 import org.jukito.JukitoRunner;
 import org.jukito.UseModules;
@@ -13,8 +15,8 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.util.Date;
-import java.util.List;
+import java.util.*;
+import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -66,17 +68,44 @@ public class GameServiceTest extends BaseTest {
     playerBlack = playerService.saveOrCreateOnServer(playerBlack);
 
     Game game = new Game(playerWhite, playerBlack, Game.GameEnds.BLACK_LEFT, new Date(), new Date(), "", "");
-    game = gameService.saveOrCreate(game);
-    assertNotNull(game);
+    // create
     game = gameService.saveOrCreate(game);
     assertNotNull(game);
 
-//    playerBlack = playerService.find(playerBlack.getId());
+    GameMessage gameMessage = new GameMessage();
+    gameMessage.setGame(game);
+    gameMessage.setMessageType(GameMessage.MessageType.PLAY_MOVE);
+    Move move = new Move(1, true, gameMessage, "3,4", "4,5", null,
+        new HashSet<Move.MoveFlags>() {{
+          add(Move.MoveFlags.SIMPLE_MOVE);
+        }});
+    move.setGameMessage(gameMessage);
+    gameMessage.setMove(move);
+    game.getGameMessages().add(gameMessage);
+    game = gameService.saveOrCreate(game);
+
+    gameMessage = new GameMessage();
+    gameMessage.setMessageType(GameMessage.MessageType.PLAY_MOVE);
+    gameMessage.setGame(game);
+    move = new Move(2, false, gameMessage, "4,3", "2,3", null,
+        new HashSet<Move.MoveFlags>() {{
+          add(Move.MoveFlags.SIMPLE_MOVE);
+        }});
+    move.setGameMessage(gameMessage);
+    gameMessage.setMove(move);
+    game.getGameMessages().add(gameMessage);
+    game = gameService.saveOrCreate(game);
+
+    final List<GameMessage> gameMessages = Arrays.asList(game.getGameMessages().toArray(new GameMessage[0])).stream().sorted(((o1, o2) -> o1.getId().compareTo(o2.getId()))).collect(Collectors.toList());
+    final GameMessage gameMessage1 = gameMessages.get(0);
+    final GameMessage gameMessage2 = gameMessages.get(1);
+    assertEquals("1. <span id='" + game.getId() + ":0' data='" + gameMessage1.getMove().getId() + "'>d4-c5</span> <span id='" + game.getId() + ":1' data='" + gameMessage2.getMove().getId() + "'>d4-d6</span><br>", game.getNotation());
+
+    // save
+    playerBlack = playerService.find(playerBlack.getId());
     assertEquals(1, playerBlack.getGameLose());
-//    playerWhite = playerService.find(playerWhite.getId());
+    playerWhite = playerService.find(playerWhite.getId());
     assertEquals(1, playerWhite.getGameWin());
-
-    gameService.removeGame(game);
   }
 
   @Test

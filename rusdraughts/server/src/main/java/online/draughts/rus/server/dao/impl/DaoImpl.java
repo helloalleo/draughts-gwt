@@ -9,8 +9,10 @@ import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.EntityManager;
 import javax.persistence.Query;
+import javax.persistence.Tuple;
 import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
+import javax.persistence.criteria.Path;
 import javax.persistence.criteria.Root;
 import java.util.List;
 
@@ -35,14 +37,29 @@ public abstract class DaoImpl<E extends BasePersistableObject> implements Dao<E>
   }
 
   @Transactional
-  public void edit(E entity) {
-    getEntityManager().merge(entity);
+  public E edit(E entity) {
+    return getEntityManager().merge(entity);
   }
 
   @Transactional
   public void remove(E entity) {
     getEntityManager().remove(getEntityManager().merge(entity));
   }
+
+  public boolean isExistingWithId(Long id) {
+    if (id == null) {
+      return false;
+    }
+    CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
+    CriteriaQuery<Tuple> query = builder.createTupleQuery();
+    Root<E> root = query.from(entityClass);
+    Path<Long> idPath = root.get("id");
+    query.multiselect(idPath);
+    query.where(builder.equal(root.get("id"), id));
+    List<Tuple> result = getEntityManager().createQuery(query).setMaxResults(1).getResultList();
+    return !result.isEmpty();
+  }
+
 
   @Transactional
   public E find(Object id) {

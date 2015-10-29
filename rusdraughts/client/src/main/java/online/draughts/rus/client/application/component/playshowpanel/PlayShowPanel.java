@@ -7,7 +7,9 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.inject.Inject;
 import online.draughts.rus.client.application.home.HomeView;
+import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.DCookies;
 import online.draughts.rus.client.util.DTLog;
@@ -23,6 +25,7 @@ public class PlayShowPanel extends Composite {
 
   private static Binder binder = GWT.create(Binder.class);
   private final HomeView homeView;
+  private final PlayShowPanelFactory showPanelFactory;
 
   @UiField
   HTMLPanel playRowList;
@@ -38,7 +41,9 @@ public class PlayShowPanel extends Composite {
   private int lastMaxHeight = 0;
   private int lastScrollPos = 0;
 
-  public PlayShowPanel(HomeView homeView) {
+  @Inject
+  public PlayShowPanel(HomeView homeView, PlayShowPanelFactory showPanelFactory) {
+    this.showPanelFactory = showPanelFactory;
     this.homeView = homeView;
     initWidget(binder.createAndBindUi(this));
 
@@ -115,7 +120,7 @@ public class PlayShowPanel extends Composite {
     }
     for (Game game : rowGameList) {
       Column column = new Column("MD_" + Variables.COLUMNS_IN_LAYOUT / gameInRow);
-      column.add(new PlayItem(homeView.getPlayer(), game));
+      column.add(showPanelFactory.createItem(homeView.getPlayer(), game));
       row.add(column);
     }
     playRowList.add(row);

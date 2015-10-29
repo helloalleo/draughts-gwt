@@ -65,5 +65,7 @@ public interface AppResources extends ClientBundle {
     String playEndDate();
 
     String playItemPlayerName();
+
+    String dialogCaptionPlayer();
   }
 }

@@ -16,18 +16,14 @@ import online.draughts.rus.draughts.Stroke;
  * Time: 19:32
  */
 public class NotationPanel extends ScrollPanel {
-  private static final String NOTATION_SEP = "<br>";
-  private static final String BEAT_SEP = ":";
-  private static final String MOVE_SEP = " ";
+  public static final String NOTATION_SEP = "<br>";
+  public static final String BEAT_SEP = ":";
+  public static final String MOVE_SEP = " ";
+  public static final String COUNT_SEP = ". ";
   private static final String DIV_GARBAGE = "<div[\\s\\w\\d\";:=]*></div>";
-  private static final String COUNT_SEP_REGEX = "\\. ";
-  private static final String COUNT_SEP = ". ";
   private static final String NOTATION_WIDTH = "200px";
 
-//  private final DraughtsGinjector draughtsGinjector = DraughtsGinjector.INSTANCE;
-  private static String notation;
-  private boolean cancelBite;
-  private int cancelCounter;
+  private String notation;
 
   public NotationPanel(EventBus eventBus) {
     eventBus.addHandler(NotationStrokeEvent.TYPE, new NotationStrokeEventHandler() {
@@ -106,15 +102,9 @@ public class NotationPanel extends ScrollPanel {
     pushScroll();
   }
 
-
   // код для прокрутки TextArea в конец
   public void pushScroll() {
     scrollToBottom();
-  }
-
-  public static String getNotation() {
-    DTLog.debug("getNotation() " + notation);
-    return notation;
   }
 
   public void cancelMove(Stroke stroke) {

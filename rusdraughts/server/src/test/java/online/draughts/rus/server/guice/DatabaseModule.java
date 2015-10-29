@@ -16,7 +16,7 @@ public class DatabaseModule extends AbstractModule {
 
   @Override
   protected void configure() {
-    JpaPersistModule jpaPersistModel = new JpaPersistModule("draughts64PU");
+    JpaPersistModule jpaPersistModel = new JpaPersistModule("draughtsPU");
     install(jpaPersistModel);
     bind(JPAInitializer.class).asEagerSingleton();
   }

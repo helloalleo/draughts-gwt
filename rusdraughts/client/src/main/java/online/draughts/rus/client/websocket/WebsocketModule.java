@@ -1,6 +1,6 @@
 package online.draughts.rus.client.websocket;
 
-import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
+import com.google.gwt.inject.client.AbstractGinModule;
 
 /**
  * Created with IntelliJ IDEA.
@@ -8,7 +8,7 @@ import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
  * Date: 27.09.15
  * Time: 10:46
  */
-public class WebsocketModule extends AbstractPresenterModule {
+public class WebsocketModule extends AbstractGinModule {
 
   @Override
   protected void configure() {

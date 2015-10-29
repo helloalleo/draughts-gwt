@@ -36,8 +36,7 @@ public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements GameMess
   @Override
   @Transactional
   public List<GameMessage> findLastMessages(int countLast, Long playerId, Long opponentId) {
-    Query query = getEntityManager().createQuery(
-        "SELECT m " +
+    Query query = getEntityManager().createQuery("SELECT m " +
             " FROM GameMessage m " +
             " JOIN FETCH m.sender " +
             " JOIN FETCH m.receiver " +
@@ -54,5 +53,25 @@ public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements GameMess
     List list = query.getResultList();
     Collections.reverse(list);
     return list;
+  }
+
+  @Override
+  @Transactional
+  public void removeMessagesByGameId(Long gameId) {
+    String hql = "DELETE FROM GameMessage gm " +
+        " WHERE gm.game.id = :gameId";
+    Query query = getEntityManager().createQuery(hql);
+    query.setParameter("gameId", gameId);
+    query.executeUpdate();
+  }
+
+  @Override
+  public List<GameMessage> findGameMessagesByGameId(Long gameId) {
+    String hql = "SELECT gm " +
+        " FROM GameMessage gm " +
+        " WHERE gm.game.id = :gameId";
+    Query query = getEntityManager().createQuery(hql);
+    query.setParameter("gameId", gameId);
+    return query.getResultList();
   }
 }

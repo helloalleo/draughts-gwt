@@ -4,6 +4,8 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 
 import javax.persistence.*;
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,11 +35,15 @@ public class Game extends PersistableObjectImpl {
   @Column(name = "play_finish_date")
   private Date playFinishDate;
 
-  @Column(name = "party_notation", length = 1000)
-  private String partyNotation;
+  @Column(name = "notation", length = 1000)
+  private String notation;
 
   @Column(name = "end_game_screenshot", columnDefinition = "TEXT")
   private String endGameScreenshot;
+
+  // удаление выполняется вручную
+  @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
+  private Set<GameMessage> gameMessages = new HashSet<>();
 
   public Game() {
   }
@@ -47,33 +53,15 @@ public class Game extends PersistableObjectImpl {
               GameEnds playEndStatus,
               Date playStartDate,
               Date playFinishDate,
-              String partyNotation,
+              String notation,
               String endGameScreenshot) {
     this.playerWhite = playerWhite;
     this.playerBlack = playerBlack;
     this.playEndStatus = playEndStatus;
     this.playStartDate = playStartDate;
     this.playFinishDate = playFinishDate;
-    this.partyNotation = partyNotation;
+    this.notation = notation;
     this.endGameScreenshot = endGameScreenshot;
-  }
-
-  public void copyFrom(Game game) {
-    if (game.getPlayEndStatus() !=null) {
-      setPlayEndStatus(game.getPlayEndStatus());
-    }
-    if (game.getPlayStartDate() !=null) {
-      setPlayStartDate(game.getPlayStartDate());
-    }
-    if (game.getPlayFinishDate() != null) {
-      setPlayFinishDate(game.getPlayFinishDate());
-    }
-    if (game.getPartyNotation() != null) {
-      setPartyNotation(game.getPartyNotation());
-    }
-    if (game.getEndGameScreenshot() !=null) {
-      setEndGameScreenshot(game.getEndGameScreenshot());
-    }
   }
 
   public Player getPlayerWhite() {
@@ -116,12 +104,12 @@ public class Game extends PersistableObjectImpl {
     this.playFinishDate = playEndDate;
   }
 
-  public String getPartyNotation() {
-    return partyNotation;
+  public String getNotation() {
+    return notation;
   }
 
-  public void setPartyNotation(String partyNotation) {
-    this.partyNotation = partyNotation;
+  public void setNotation(String partyNotation) {
+    this.notation = partyNotation;
   }
 
   public String getEndGameScreenshot() {
@@ -130,6 +118,15 @@ public class Game extends PersistableObjectImpl {
 
   public Game setEndGameScreenshot(String endGameScreenshot) {
     this.endGameScreenshot = endGameScreenshot;
+    return this;
+  }
+
+  public Set<GameMessage> getGameMessages() {
+    return gameMessages;
+  }
+
+  public Game setGameMessages(Set<GameMessage> gameMessages) {
+    this.gameMessages = gameMessages;
     return this;
   }
 

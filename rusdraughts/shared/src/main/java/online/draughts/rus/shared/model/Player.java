@@ -91,15 +91,15 @@ public class Player extends PersistableObjectImpl {
   @OneToMany(mappedBy = "sender")
   private Set<GameMessage> sentPlayerMessages;
 
-  @GwtTransient
-  @JsonIgnore
-  @OneToMany(mappedBy = "receiverGame")
-  private Set<GameMessage> receivedGameMessages;
-
-  @GwtTransient
-  @JsonIgnore
-  @OneToMany(mappedBy = "senderGame")
-  private Set<GameMessage> sentGameMessages;
+//  @GwtTransient
+//  @JsonIgnore
+//  @OneToMany(mappedBy = "receiverGame")
+//  private Set<GameMessage> receivedGameMessages;
+//
+//  @GwtTransient
+//  @JsonIgnore
+//  @OneToMany(mappedBy = "senderGame")
+//  private Set<GameMessage> sentGameMessages;
 
   @GwtTransient
   @JsonIgnore
@@ -232,21 +232,21 @@ public class Player extends PersistableObjectImpl {
     this.sentPlayerMessages = playerMessageEntities;
   }
 
-  public Set<GameMessage> getReceivedGameMessages() {
-    return receivedGameMessages;
-  }
-
-  public void setReceivedGameMessages(Set<GameMessage> receivedGameMessages) {
-    this.receivedGameMessages = receivedGameMessages;
-  }
-
-  public Set<GameMessage> getSentGameMessages() {
-    return sentGameMessages;
-  }
-
-  public void setSentGameMessages(Set<GameMessage> sentGameMessages) {
-    this.sentGameMessages = sentGameMessages;
-  }
+//  public Set<GameMessage> getReceivedGameMessages() {
+//    return receivedGameMessages;
+//  }
+//
+//  public void setReceivedGameMessages(Set<GameMessage> receivedGameMessages) {
+//    this.receivedGameMessages = receivedGameMessages;
+//  }
+//
+//  public Set<GameMessage> getSentGameMessages() {
+//    return sentGameMessages;
+//  }
+//
+//  public void setSentGameMessages(Set<GameMessage> sentGameMessages) {
+//    this.sentGameMessages = sentGameMessages;
+//  }
 
   public boolean isLoggedIn() {
     return loggedIn;
