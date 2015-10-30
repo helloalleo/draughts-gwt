@@ -1,6 +1,5 @@
 package online.draughts.rus.draughts;
 
-import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.shared.model.Move;
 
 import java.util.HashSet;
@@ -55,33 +54,15 @@ public class Stroke {
     return this;
   }
 
-  public String toNotation(boolean isWhite) {
-    String notation;
-    if (first && isWhite) {
-      DTLog.debug("FIRST WHITE");
-      notation = getNotation(true);
-    } else if (!first && isWhite) {
-      DTLog.debug("SECOND WHITE");
-      notation = getNotation(true);
-    } else if (first) {
-      DTLog.debug("FIRST BLACK");
-      notation = getNotation(false);
-    } else {
-      DTLog.debug("SECOND BLACK");
-      notation = getNotation(false);
-    }
-    return notation;
-  }
-
-  private String getNotation(boolean normal) {
-    final String s = startSquare.toNotation(normal);
-    final String e = endSquare.toNotation(normal);
+  public String toNotation() {
+    final String s = startSquare.toNotation();
+    final String e = endSquare.toNotation();
     return isSimple() ? s + SIMPLE_MOVE_SEP + e
         : s + BEAT_MOVE_SEP + e;
   }
 
   public String toNotationLastMove() {
-    return endSquare.toNotation(first);
+    return endSquare.toNotation();
   }
 
   public boolean isCancel() {
@@ -129,18 +110,18 @@ public class Stroke {
    *
    * @return moveDto отраженный объект
    */
-  public Stroke mirror() {
-    Stroke move = new Stroke();
+  public Stroke flip() {
+    Stroke stroke = new Stroke();
 
-    move.setStartSquare(startSquare.mirror());
-    move.setEndSquare(endSquare.mirror());
+    stroke.setStartSquare(startSquare.mirror());
+    stroke.setEndSquare(endSquare.mirror());
     if (takenSquare != null) {
-      move.setTakenSquare(takenSquare.mirror());
+      stroke.setTakenSquare(takenSquare.mirror());
     }
-    move.setMoveFlags(moveFlags);
-    move.setFirst(first);
-    move.setNumber(number);
-    return move;
+    stroke.setMoveFlags(moveFlags);
+    stroke.setFirst(first);
+    stroke.setNumber(number);
+    return stroke;
   }
 
   public Stroke setMoveFlags(Set<Move.MoveFlags> moveFlags) {
@@ -181,4 +162,17 @@ public class Stroke {
         ", number=" + number +
         '}';
   }
+
+  public Stroke mirror() {
+    Stroke stroke = new Stroke();
+
+    stroke.setStartSquare(startSquare.mirror());
+    stroke.setEndSquare(endSquare.mirror());
+    if (takenSquare != null) {
+      stroke.setTakenSquare(takenSquare.mirror());
+    }
+    stroke.setMoveFlags(moveFlags);
+    stroke.setFirst(first);
+    stroke.setNumber(number);
+    return stroke;}
 }

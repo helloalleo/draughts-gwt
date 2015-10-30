@@ -57,8 +57,8 @@
                 <b.gwt:CellTable ui:field="playerCellTable" condensed="true" striped="true" hover="true"/>
             </g:ScrollPanel>
             <b:InputGroup>
-                <b:InputGroupAddon icon="SEARCH"/>
                 <b:TextBox placeholder="Поиск игроков" autoComplete="true" addStyleNames="{res.style.playerSearch}"/>
+                <b:InputGroupAddon icon="SEARCH"/>
             </b:InputGroup>
         </g:HTMLPanel>
     </g:HTMLPanel>

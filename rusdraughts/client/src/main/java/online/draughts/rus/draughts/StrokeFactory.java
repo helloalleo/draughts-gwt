@@ -11,7 +11,8 @@ import online.draughts.rus.shared.model.Move;
 public class StrokeFactory {
 
   public static Stroke createStrokeFromMove(Move move) {
-    return new Stroke().setFirst(move.isFirst())
+    return new Stroke()
+        .setFirst(move.isFirst())
         .setNumber(move.getNumber())
         .setMoveFlags(move.getMoveFlags())
         .setStartSquare(Square.fromString(move.getStartPos()))

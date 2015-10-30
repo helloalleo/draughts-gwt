@@ -83,7 +83,8 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
   public List<Move> findGameMoves(Long gameId) {
     String hql = "SELECT gm.move " +
         " FROM GameMessage gm " +
-        " WHERE gm.game.id = :gameId";
+        " WHERE gm.game.id = :gameId " +
+        " ORDER BY gm.sentDate";
     Query query = getEntityManager().createQuery(hql);
     query.setParameter("gameId", gameId);
     return query.getResultList();

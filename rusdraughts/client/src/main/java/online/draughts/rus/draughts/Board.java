@@ -97,7 +97,7 @@ public class Board extends Layer {
       public void onPlayMove(PlayMoveCancelEvent event) {
         final Move move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
-        final Stroke mirror = stroke.mirror();
+        final Stroke mirror = stroke.flip();
         eventBus.fireEvent(new NotationCancelStrokeEvent(stroke));
         moveMyCanceled(mirror);
       }
@@ -108,7 +108,7 @@ public class Board extends Layer {
       public void onPlayMoveOpponentCancel(PlayMoveOpponentCancelEvent event) {
         final Move move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
-        final Stroke mirror = stroke.mirror();
+        final Stroke mirror = stroke.flip();
         eventBus.fireEvent(new NotationCancelStrokeEvent(mirror));
         moveOpponentCanceled(stroke);
       }
@@ -134,7 +134,7 @@ public class Board extends Layer {
         final Move move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
         DTLog.debug("PLAY MOVE STROKE " + stroke);
-        final Stroke mirror = stroke.mirror();
+        final Stroke mirror = stroke.flip();
         moveOpponent(mirror);
       }
     });
@@ -697,8 +697,7 @@ public class Board extends Layer {
     return backgroundLayer.getSquare(sRow, sCol);
   }
 
-  private Square findCaptured(Square firstStep, Square secondStep) {
-    Square captured = null;
+  private Square findCaptured(Square firstStep, Square secondStep) throws SquareNotFoundException {
     for (int n = 0; n < rows; n++) {
       for (int m = 0; m < cols; m++) {
         Square current;
@@ -713,7 +712,7 @@ public class Board extends Layer {
         }
       }
     }
-    return null;
+    throw new SquareNotFoundException();
   }
 
   /**
@@ -733,19 +732,16 @@ public class Board extends Layer {
   private void doBeatenMove(String notationStep, int stepCursor) {
     String[] steps = notationStep.split(Stroke.BEAT_MOVE_SEP);
     for (int i = 0; i < steps.length - 1; i++) {
-      Square firstSquare, secontSquare;
+      Square firstSquare, secondSquare, captured;
       try {
         firstSquare = parseStep(steps[i]);
-        secontSquare = parseStep(steps[i + 1]);
+        secondSquare = parseStep(steps[i + 1]);
+        captured = findCaptured(firstSquare, secondSquare);
       } catch (SquareNotFoundException e) {
         DTLog.error(e.getLocalizedMessage(), e);
         continue;
       }
-      Square captured = findCaptured(firstSquare, secontSquare);
-      if (null == captured) {
-        return;
-      }
-      Stroke stroke = createStroke(firstSquare, secontSquare, captured, i, steps.length - 1);
+      Stroke stroke = createStroke(firstSquare, secondSquare, i, steps.length - 1);
       doMove(stroke, stepCursor);
     }
   }
@@ -771,7 +767,7 @@ public class Board extends Layer {
       DTLog.error(e.getLocalizedMessage(), e);
       return;
     }
-    Stroke stroke = createStroke(startSquare, endSquare, null, 0, 0);
+    Stroke stroke = createStroke(startSquare, endSquare, 0, 0);
     doMove(stroke, stepCursor);
   }
 
@@ -797,13 +793,13 @@ public class Board extends Layer {
         DTLog.error(e.getLocalizedMessage(), e);
         return;
       }
-      Stroke stroke = createStroke(firstStep, secondStep, captured, i, steps.length - 1);
+      Stroke stroke = createStroke(firstStep, secondStep, i, steps.length - 1);
       myDraughtList.add(addDraught(captured.getRow(), captured.getCol(), !white));
       doMove(stroke, stepCursor);
     }
   }
 
-  private Stroke createStroke(Square firstSquare, Square secondSquare, Square captured, int pos, int steps) {
+  private Stroke createStroke(Square firstSquare, Square secondSquare, int pos, int steps) {
     Stroke stroke = new Stroke();
     stroke.setStartSquare(firstSquare);
     stroke.setEndSquare(secondSquare);
@@ -864,7 +860,7 @@ public class Board extends Layer {
     stroke.setTakenSquare(takenSquare);
 
     if (stroke.isContinueBeat()) {
-//      stroke.mirror();
+//      stroke.flip();
       DTLog.debug("MOVE CONT BEAT " + stroke.toString());
     }
 
@@ -872,7 +868,11 @@ public class Board extends Layer {
       final boolean first = isFirstMoveFlag();
       stroke.setNumber(stroke.getNumber())
           .setFirst(first);
-      eventBus.fireEvent(new NotationStrokeEvent(stroke, isWhite()));
+      Stroke strokeForNotation = stroke;
+      if (!isWhite()) {
+        strokeForNotation = stroke.mirror();
+      }
+      eventBus.fireEvent(new NotationStrokeEvent(strokeForNotation));
     }
 
     doMove(stroke); // сделать ход
@@ -1034,10 +1034,14 @@ public class Board extends Layer {
         }
 
         DTLog.debug("END SQUARE " + endSquare);
-        eventBus.fireEvent(new NotationStrokeEvent(stroke, isWhite()));
+        Stroke strokeForNotation = stroke;
+        if (!isWhite()) {
+          strokeForNotation = stroke.flip();
+        }
+        eventBus.fireEvent(new NotationStrokeEvent(strokeForNotation));
 
         final Move move = MoveFactory.createMoveFromStroke(stroke)
-            .setTitle(stroke.toNotation(isWhite()))
+            .setTitle(stroke.toNotation())
             .setHashTags(StringUtils.getHashes(getComment()));
 
         eventBus.fireEvent(new PlayMoveMessageEvent(move));
@@ -1061,7 +1065,7 @@ public class Board extends Layer {
   }
 
   /**
-   * Вычисляем является ли ход первым в полном ходе a1 b2 - а1 первый ход
+   * Вычисляем является ли ход первым в полном ходе a1-b2 b2-b3. а1-b2 первый ход
    *
    * @return
    */
@@ -1086,7 +1090,7 @@ public class Board extends Layer {
   }
 
   private void strokeCanceled(Stroke stroke) {
-    stroke = stroke.mirror();
+    stroke = stroke.flip();
 
     DTLog.debug("MOVE CANCELED " + stroke.toString());
     int startRow = stroke.getStartSquare().getRow();
@@ -1119,6 +1123,7 @@ public class Board extends Layer {
       stroke.setTakenSquare(taken);
     }
 
+    complexBeat = false;
     DTLog.debug("MOVE CANCELED 1");
     doMove(stroke);
     DTLog.debug("MOVE CANCELED 2");

@@ -14,7 +14,7 @@ public class NotationStrokeEvent extends GwtEvent<NotationStrokeEventHandler> {
   private final Stroke stroke;
   private boolean opponentStroke;
 
-  public NotationStrokeEvent(Stroke stroke, boolean opponentStroke) {
+  public NotationStrokeEvent(Stroke stroke) {
     this.stroke = stroke;
     this.opponentStroke = opponentStroke;
   }

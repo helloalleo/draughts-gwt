@@ -2,7 +2,6 @@
              xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
              xmlns:g='urn:import:com.google.gwt.user.client.ui'>
     <g:HTMLPanel ui:field="panel">
-        <g:HTML ui:field="id"/>
         <g:HTML ui:field="playEndDate"/>
         <g:HTML ui:field="whoDidWin"/>
         <b:Image ui:field="endGameScreenshot"/>

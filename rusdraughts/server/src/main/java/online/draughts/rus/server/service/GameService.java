@@ -11,7 +11,6 @@ import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Move;
 import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.shared.model.key.FriendId;
-import online.draughts.rus.shared.util.StringUtils;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -78,8 +77,6 @@ public class GameService {
       updatePlayer(game, game.getPlayerBlack().getId());
       updatePlayer(game, game.getPlayerWhite().getId());
       game = gameDaoProvider.get().edit(game);
-      createGameNotation(game);
-      game = gameDaoProvider.get().edit(game);
 
       Player playerBlack = playerService.find(game.getPlayerBlack().getId());
       Player playerWhite = playerService.find(game.getPlayerWhite().getId());
@@ -103,189 +100,6 @@ public class GameService {
       }
     }
     return game;
-  }
-
-  private void createGameNotation(Game game) {
-    List<Move> moves = findGameMoves(game.getId());
-    StringBuilder notation = new StringBuilder(moves.size());
-    int pos = 0;
-    for (Move move : moves) {
-      Stroke stroke = new Stroke(move);
-      boolean opponentMove = !move.isFirst();
-      if (stroke.isSimple()) {
-        if (stroke.isFirst()) {
-          notation.append(stroke.getNumber())
-              .append(COUNT_SEP)
-              .append(wrapStroke(stroke.toNotation(opponentMove), move, pos));
-        } else {
-          notation.append(MOVE_SEP)
-              .append(wrapStroke(stroke.toNotation(opponentMove), move, pos))
-              .append(NOTATION_SEP);
-        }
-      } else { // взята одна или более шашек
-        if (stroke.isStartBeat()) {
-          if (stroke.isFirst()) {
-            notation.append(stroke.getNumber())
-                .append(COUNT_SEP)
-                .append(wrapStroke(stroke.toNotation(opponentMove), move, pos));
-          } else {
-            if (stroke.isContinueBeat()) {
-              notation.append(MOVE_SEP)
-                  .append(wrapStroke(stroke.toNotation(opponentMove), move, pos));
-            } else {
-              notation.append(MOVE_SEP)
-                  .append(wrapStroke(stroke.toNotation(opponentMove), move, pos))
-                  .append(NOTATION_SEP);
-            }
-          }
-        } else if (stroke.isStopBeat()) {
-          if (stroke.isFirst()) {
-            notation.append(BEAT_SEP)
-                .append(wrapStroke(stroke.toNotationLastMove(), move, pos))
-                .append(MOVE_SEP);
-          } else {
-            notation.append(BEAT_SEP)
-                .append(wrapStroke(stroke.toNotationLastMove(), move, pos))
-                .append(NOTATION_SEP);
-          }
-        } else if (stroke.isContinueBeat()) {
-          notation.append(BEAT_SEP)
-              .append(wrapStroke(stroke.toNotationLastMove(), move, pos));
-        }
-      }
-      pos++;
-    }
-    game.setNotation(notation.toString());
-  }
-
-  private String wrapStroke(String notationStep, Move move, int pos) {
-    return "<span id='" + move.getGameMessage().getGame().getId() + ":" + pos + "' "
-        + "data='" + move.getId() + "'>"
-        + notationStep
-        + "</span>";
-  }
-
-  private static class Square {
-    private static final String TO_SEND_SEP = ",";
-    private static final int ROWS = 8;
-    private static final int COLS = 8;
-    private String[] alph = new String[]{"a", "b", "c", "d", "e", "f", "g", "h"};
-
-    private final int row;
-    private final int col;
-
-    public Square(int row, int col) {
-      this.row = row;
-      this.col = col;
-    }
-
-    public static Square fromString(String toSendStr) {
-      if (StringUtils.isEmpty(toSendStr)) {
-        return null;
-      }
-      final String[] toSendArr = toSendStr.split(TO_SEND_SEP);
-      final Integer row = Integer.valueOf(toSendArr[0]);
-      final Integer col = Integer.valueOf(toSendArr[1]);
-      return new Square(row, col);
-    }
-
-    public String toNotation(boolean normal) {
-      if (normal) {
-        return alph[col] + String.valueOf(ROWS - row);
-      }
-      return alph[COLS - 1 - col] + String.valueOf(row + 1);
-    }
-  }
-
-  private class Stroke extends Move {
-    public static final String SIMPLE_MOVE_SEP = "-";
-    public static final String BEAT_MOVE_SEP = ":";
-
-    private Square startSquare;
-    private Square endSquare;
-    private Square takenSquare;
-
-    public Stroke(Move move) {
-      setFirst(move.isFirst());
-      setNumber(move.getNumber());
-      setMoveFlags(move.getMoveFlags());
-      setStartSquare(Square.fromString(move.getStartPos()));
-      setEndSquare(Square.fromString(move.getEndPos()));
-      setTakenSquare(Square.fromString(move.getTakenPos()));
-    }
-
-    public Square getTakenSquare() {
-      return takenSquare;
-    }
-
-    public Stroke setTakenSquare(Square takenSquare) {
-      this.takenSquare = takenSquare;
-      return this;
-    }
-
-    public Square getStartSquare() {
-      return startSquare;
-    }
-
-    public Stroke setStartSquare(Square startSquare) {
-      this.startSquare = startSquare;
-      return this;
-    }
-
-    public Square getEndSquare() {
-      return endSquare;
-    }
-
-    public Stroke setEndSquare(Square endSquare) {
-      this.endSquare = endSquare;
-      return this;
-    }
-
-    public String toNotation(boolean isWhite) {
-      String notation;
-      if (isFirst() && isWhite) {
-        notation = getNotation(true);
-      } else if (!isFirst() && isWhite) {
-        notation = getNotation(true);
-      } else if (isFirst()) {
-        notation = getNotation(false);
-      } else {
-        notation = getNotation(false);
-      }
-      return notation;
-    }
-
-    private String getNotation(boolean normal) {
-      final String s = startSquare.toNotation(normal);
-      final String e = endSquare.toNotation(normal);
-      return isSimple() ? s + SIMPLE_MOVE_SEP + e
-          : s + BEAT_MOVE_SEP + e;
-    }
-
-    public String toNotationLastMove() {
-      return endSquare.toNotation(isFirst());
-    }
-
-
-    public boolean isCancel() {
-      return getMoveFlags().contains(Move.MoveFlags.CANCEL_MOVE);
-    }
-
-    public boolean isSimple() {
-      return getMoveFlags().contains(Move.MoveFlags.SIMPLE_MOVE);
-    }
-
-    public boolean isContinueBeat() {
-      return getMoveFlags().contains(Move.MoveFlags.CONTINUE_BEAT);
-    }
-
-    public boolean isStopBeat() {
-      return getMoveFlags().contains(Move.MoveFlags.STOP_BEAT);
-    }
-
-    public boolean isStartBeat() {
-      return getMoveFlags().contains(Move.MoveFlags.START_BEAT);
-    }
   }
 
   private void updatePlayer(Game game, Long playerId) {

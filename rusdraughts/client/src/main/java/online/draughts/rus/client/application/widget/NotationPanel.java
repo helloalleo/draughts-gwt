@@ -20,17 +20,15 @@ public class NotationPanel extends ScrollPanel {
   public static final String BEAT_SEP = ":";
   public static final String MOVE_SEP = " ";
   public static final String COUNT_SEP = ". ";
-  private static final String DIV_GARBAGE = "<div[\\s\\w\\d\";:=]*></div>";
   private static final String NOTATION_WIDTH = "200px";
 
-  private String notation;
+  private static StringBuilder notation = new StringBuilder();
 
   public NotationPanel(EventBus eventBus) {
     eventBus.addHandler(NotationStrokeEvent.TYPE, new NotationStrokeEventHandler() {
       @Override
       public void onNotationStroke(NotationStrokeEvent event) {
-        NotationPanel.this.appendMove(event.getStroke(),
-            event.isOpponentStroke());
+        NotationPanel.this.appendMove(event.getStroke(), event.isOpponentStroke());
       }
     });
     eventBus.addHandler(NotationCancelStrokeEvent.TYPE, new NotationCancelStrokeEventHandler() {
@@ -42,7 +40,7 @@ public class NotationPanel extends ScrollPanel {
     eventBus.addHandler(ClearNotationEvent.TYPE, new ClearNotationEventHandler() {
       @Override
       public void onClearNotation(ClearNotationEvent event) {
-        notation = "";
+        notation = new StringBuilder();
         getElement().setInnerHTML("");
       }
     });
@@ -55,50 +53,62 @@ public class NotationPanel extends ScrollPanel {
     });
   }
 
-  public void appendMove(Stroke stroke, boolean opponentMove) {
-    notation = getElement().getInnerHTML();
-    notation = notation.replaceAll(DIV_GARBAGE, "");
+  public static String getNotation() {
+    return notation.toString();
+  }
 
-    String[] steps = notation.split(NOTATION_SEP);
-    if (steps.length == 0) {
-      notation = "";
-    }
+  public void appendMove(Stroke stroke, boolean opponentStroke) {
     DTLog.debug("MOVE in NOTATION " + stroke);
     // первый шаг. например, h4:f6:d4 - h4
     Square start = stroke.getStartSquare();
     DTLog.debug("FIRST STEP " + start.toString());
-
+    final boolean first = stroke.isFirst();
     if (stroke.isSimple()) {
-      if (stroke.isFirst()) {
-        notation += stroke.getNumber() + COUNT_SEP + stroke.toNotation(opponentMove);
+      if (first) {
+        notation.append(stroke.getNumber())
+            .append(COUNT_SEP)
+            .append(wrapSimpleStroke(stroke, true));
       } else {
-        notation += MOVE_SEP + stroke.toNotation(opponentMove) + NOTATION_SEP;
+        notation.append(MOVE_SEP)
+            .append(wrapSimpleStroke(stroke, false))
+            .append(NOTATION_SEP);
       }
     } else { // взята одна или более шашек
-      DTLog.debug(stroke.isFirst() + " FIRST CONT BEAT");
-      if (stroke.isStartBeat()) {
-        if (stroke.isFirst()) {
-          notation += stroke.getNumber() + COUNT_SEP + stroke.toNotation(opponentMove);
+      final boolean startBeat = stroke.isStartBeat();
+      final boolean continueBeat = stroke.isContinueBeat();
+      final boolean stopBeat = stroke.isStopBeat();
+      if (startBeat) {
+        if (first) {
+          notation.append(stroke.getNumber())
+              .append(COUNT_SEP)
+              .append(wrapBeatStroke(stroke, true, true, continueBeat, stopBeat));
         } else {
-          if (stroke.isContinueBeat()) {
-            notation += MOVE_SEP + stroke.toNotation(opponentMove);
+          if (continueBeat) {
+            notation.append(MOVE_SEP)
+                .append(wrapBeatStroke(stroke, false, true, true, stopBeat));
           } else {
-            notation += MOVE_SEP + stroke.toNotation(opponentMove) + NOTATION_SEP;
+            notation.append(MOVE_SEP)
+                .append(wrapBeatStroke(stroke, false, true, false, stopBeat))
+                .append(NOTATION_SEP);
           }
         }
-      } else if (stroke.isStopBeat()) {
-        if (stroke.isFirst()) {
-          notation += BEAT_SEP + stroke.toNotationLastMove() + MOVE_SEP;
+      } else if (stopBeat) {
+        if (first) {
+          notation.append(BEAT_SEP)
+              .append(wrapBeatStroke(stroke, true, false, continueBeat, true))
+              .append(MOVE_SEP);
         } else {
-          notation += BEAT_SEP + stroke.toNotationLastMove() + NOTATION_SEP;
+          notation.append(BEAT_SEP)
+              .append(wrapBeatStroke(stroke, false, false, continueBeat, true))
+              .append(NOTATION_SEP);
         }
-      } else if (stroke.isContinueBeat()) {
-        notation += BEAT_SEP + stroke.toNotationLastMove();
+      } else if (continueBeat) {
+        notation.append(BEAT_SEP)
+            .append(wrapBeatStroke(stroke, first, false, true, false));
       }
     }
 
-    getElement().setInnerHTML(notation);
-    DTLog.debug("Notation " + notation);
+    getElement().setInnerHTML(notation.toString());
     pushScroll();
   }
 
@@ -108,33 +118,59 @@ public class NotationPanel extends ScrollPanel {
   }
 
   public void cancelMove(Stroke stroke) {
-    DTLog.debug(notation);
-    notation = notation.replaceAll(DIV_GARBAGE, "");
     if (stroke.isSimple()) {
       if (stroke.isFirst()) {
-        if (stroke.getNumber() != 0) {
-          notation = notation.substring(0, notation.lastIndexOf(NOTATION_SEP)) + NOTATION_SEP;
+        if (stroke.getNumber() != 1) { // при первом ходе из нотации нужно удалить див
+          notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(NOTATION_SEP)) + NOTATION_SEP);
         } else {
-          notation = "";
+          notation = new StringBuilder();
+          getElement().setInnerHTML("");
         }
       } else {
-        notation = notation.substring(0, notation.lastIndexOf(MOVE_SEP));
+        notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(MOVE_SEP)));
       }
     } else {
       if (stroke.isFirst()) {
         if (stroke.isStartBeat()) {
-          notation = notation.substring(0, notation.lastIndexOf(NOTATION_SEP)) + NOTATION_SEP;
+          notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(NOTATION_SEP)) + NOTATION_SEP);
         } else {
-          notation = notation.substring(0, notation.lastIndexOf(BEAT_SEP));
+          notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(BEAT_SEP)));
         }
       } else {
         if (stroke.isStartBeat()) {
-          notation = notation.substring(0, notation.lastIndexOf(MOVE_SEP));
+          notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(MOVE_SEP)));
         } else {
-          notation = notation.substring(0, notation.lastIndexOf(BEAT_SEP));
+          notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(BEAT_SEP)));
         }
       }
     }
-    getElement().setInnerHTML(notation);
+    getElement().setInnerHTML(notation.toString());
+  }
+
+  private String wrapBeatStroke(Stroke stroke, boolean first, boolean startBeat, boolean continueBeat, boolean stopBeat) {
+    return wrapStroke(stroke, first, false, startBeat, continueBeat, stopBeat);
+  }
+
+  private String wrapSimpleStroke(Stroke stroke, boolean first) {
+    return wrapStroke(stroke, first, true, false, false, false);
+  }
+
+  private String wrapStroke(Stroke stroke, boolean first, boolean simple, boolean startBeat, boolean continueBeat, boolean stopBeat) {
+    if (simple) {
+      return "<span id='" + stroke.getNumber() + "' "
+          + "data-first='" + first + "'"
+          + ">"
+          + stroke.toNotation()
+          + "</span>";
+    } else {
+      return "<span id='" + stroke.getNumber() + "' "
+          + "data-first='" + first + "' "
+          + "data-startBeat='" + startBeat + "' "
+          + "data-continueBeat='" + continueBeat + "' "
+          + "data-stopBeat='" + stopBeat + "'"
+          + ">"
+          + (stroke.isStartBeat() ? stroke.toNotation() : stroke.toNotationLastMove())
+          + "</span>";
+    }
   }
 }

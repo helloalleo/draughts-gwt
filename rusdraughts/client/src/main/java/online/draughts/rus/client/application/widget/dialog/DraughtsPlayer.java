@@ -54,7 +54,6 @@ public class DraughtsPlayer extends DialogBox {
   private int side = 0;
   private int deskSide = 0;
   private int notationCursor;
-  private int notationSubCursor;
   private String NOTATION_ITEM = "notation-item-";
   private boolean atStart = false;
   private boolean firstNext = false;
@@ -64,12 +63,14 @@ public class DraughtsPlayer extends DialogBox {
   private boolean atEnd = false;
   private HashMap<String, String> codeNameEndPlay;
   private VerticalPanel mainPanel;
+  private long gameId;
 
   @Inject
   public DraughtsPlayer(DraughtsMessages messages, EventBus eventBus, AppResources resources, @Assisted Game game) {
     this.messages = messages;
     this.eventBus = eventBus;
     this.game = game;
+    this.gameId = game.getId();
     this.resource = resources;
 
     getElement().addClassName(resources.style().dialogBox());
@@ -82,7 +83,7 @@ public class DraughtsPlayer extends DialogBox {
 
     side = getSide() - 20;
     setWidth(side + "px");
-    deskSide = side - 30;
+    deskSide = side - 80;
   }
 
   private void initButtons() {
@@ -91,102 +92,14 @@ public class DraughtsPlayer extends DialogBox {
       public void onClick(ClickEvent event) {
         int playLength = notationCursor * 2 + 1;
         for (int i = playLength; i > 0; i--) {
-          prevButton.click();
+          moveBack();
         }
       }
     });
     prevButton = new Button("", IconType.BACKWARD, new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        if (atStart) {
-          return;
-        }
-        if (firstNext && 1 == notationSubCursor) {
-          notationCursor -= 1;
-        }
-        int oldNotationCursor = notationCursor;
-        firstNext = false;
-        firstPrev = true;
-        if (0 != notationCursor && 1 != notationSubCursor) {
-          notationCursor -= 1;
-        } else if (2 == notationSubCursor) {
-          atStart = true;
-          prevButton.setEnabled(false);
-          toStartButton.setEnabled(false);
-        }
-
-        Element notation = notationHTMLPanel.getElementById(NOTATION_ITEM + notationCursor);
-
-        if (null == notation) {
-          notationCursor -= 1;
-          return;
-        }
-
-        String[] subNotation = notation.getInnerText().split(" ");
-        String curStepNum = subNotation[0];
-        String curStepMiddle = subNotation[1];
-        String curStepEnd = subNotation[2];
-
-        if (atStart) {
-          notation.setInnerHTML(curStepNum + " " + curStepMiddle + " " + curStepEnd);
-
-          String step = subNotation[1];
-          board.moveEmulatedPrevWhite(step, notationCursor);
-          notationSubCursor = 1;
-          firstPrev = false;
-          return;
-        }
-
-        String step = subNotation[notationSubCursor];
-        String curStep = "<span style='background: yellow;'>" + step + "</span>";
-
-        if (notationSubCursor == 2) {
-          notation.setInnerHTML(curStepNum + " " + curStepMiddle + " " + curStep);
-        } else {
-          notation.setInnerHTML(curStepNum + " " + curStep + " " + curStepEnd);
-        }
-        if (notationSubCursor == 2) {
-          Element prevNotation = notationHTMLPanel.getElementById(NOTATION_ITEM + (notationCursor + 1));
-          String[] splitNotation = prevNotation.getInnerText().split(" ");
-          String endStep;
-          if (splitNotation.length > 2) {
-            endStep = splitNotation[2];
-          } else {
-            endStep = "";
-          }
-          prevNotation.setInnerHTML(splitNotation[0] + " " + splitNotation[1] + " " + endStep);
-        }
-
-        notationSubCursor -= 1;
-        if (notationSubCursor == 0) {
-          notationSubCursor = 2;
-        }
-
-        // перемещаем шашку на доске
-        Element notationPrev = notationHTMLPanel.getElementById(NOTATION_ITEM + oldNotationCursor);
-        if (null == notationPrev) {
-          notationCursor -= 1;
-          return;
-        }
-        subNotation = notationPrev.getInnerText().split(" ");
-        step = subNotation[notationSubCursor];
-        if (notationSubCursor == 1) {
-          board.moveEmulatedPrevWhite(step, notationCursor);
-        } else {
-          board.moveEmulatedPrevBlack(step, notationCursor);
-        }
-
-        atEnd = false;
-        playing = false;
-        if (!nextButton.isEnabled()) {
-          nextButton.setEnabled(true);
-        }
-        if (!toEndButton.isEnabled()) {
-          toEndButton.setEnabled(true);
-        }
-        if (!playButton.isEnabled()) {
-          playButton.setEnabled(true);
-        }
+        moveBack();
       }
     });
     playButton = new Button("", IconType.PLAY, new ClickHandler() {
@@ -200,7 +113,7 @@ public class DraughtsPlayer extends DialogBox {
           playTimer = new Timer() {
             @Override
             public void run() {
-              nextButton.click();
+              moveForward();
               playing = true;
               if (atEnd) {
                 cancel();
@@ -215,65 +128,7 @@ public class DraughtsPlayer extends DialogBox {
     nextButton = new Button("", IconType.FORWARD, new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        if (firstPrev && 1 == notationSubCursor) {
-          notationCursor += 1;
-        }
-        firstPrev = false;
-        atStart = false;
-        if (!prevButton.isEnabled()) {
-          prevButton.setEnabled(true);
-        }
-        if (!toStartButton.isEnabled()) {
-          toStartButton.setEnabled(true);
-        }
-
-        Element notation = notationHTMLPanel.getElementById(NOTATION_ITEM + notationCursor);
-        if (null == notation) {
-          atEnd = true;
-          playButton.setIcon(IconType.PLAY);
-          playButton.setEnabled(false);
-          nextButton.setEnabled(false);
-          toEndButton.setEnabled(false);
-          return;
-        }
-        String[] subNotation = notation.getInnerText().split(" ");
-        String curStepNum = subNotation[0];
-        String curStepMiddle = subNotation[1];
-        String curStepEnd;
-        if (subNotation.length > 2) {
-          curStepEnd = subNotation[2];
-        } else {
-          curStepEnd = "";
-        }
-        if (subNotation.length < notationSubCursor + 1) {
-          return;
-        }
-        String step = subNotation[notationSubCursor];
-        String curStep = "<span style='background: yellow;'>" + step + "</span>";
-        if (notationSubCursor == 2) {
-          notation.setInnerHTML(curStepNum + " " + curStepMiddle + " " + curStep);
-        } else {
-          notation.setInnerHTML(curStepNum + " " + curStep + " " + curStepEnd);
-        }
-
-        // перемещаем шашку на доске
-        if (notationSubCursor == 1) {
-          board.moveEmulatedNextWhite(step, notationCursor);
-        } else {
-          board.moveEmulatedNextBlack(step, notationCursor);
-        }
-
-        firstNext = true;
-        notationSubCursor += 1;
-        if (notationSubCursor == 3) {
-          notationSubCursor = 1;
-          notationCursor += 1;
-        } else if (notationSubCursor == 2 && notationCursor != 0) {
-          Element prevNotation = notationHTMLPanel.getElementById(NOTATION_ITEM + (notationCursor - 1));
-          String[] splitNotation = prevNotation.getInnerText().split(" ");
-          String endStep = splitNotation[2];
-          prevNotation.setInnerHTML(splitNotation[0] + " " + splitNotation[1] + " " + endStep);
-        }
+        moveForward();
       }
     });
     toEndButton = new Button("", IconType.FAST_FORWARD, new ClickHandler() {
@@ -288,6 +143,168 @@ public class DraughtsPlayer extends DialogBox {
 
     prevButton.setEnabled(false);
     toStartButton.setEnabled(false);
+  }
+
+  private void moveBack() {
+    if (atStart) {
+      return;
+    }
+    if (firstNext) {
+      notationCursor -= 1;
+    }
+    int oldNotationCursor = notationCursor;
+    firstNext = false;
+    firstPrev = true;
+    if (0 != notationCursor) {
+      notationCursor -= 1;
+    } else {
+      atStart = true;
+      prevButton.setEnabled(false);
+      toStartButton.setEnabled(false);
+    }
+
+    Element stroke = notationHTMLPanel.getElementById(game.getId() + ":" + notationCursor);
+
+    if (null == stroke) {
+      notationCursor -= 1;
+      return;
+    }
+
+//        String[] subNotation = notation.getInnerText().split(" ");
+//        String curStepNum = subNotation[0];
+//        String curStepMiddle = subNotation[1];
+//        String curStepEnd = subNotation[2];
+
+    if (atStart) {
+//          notation.setInnerHTML(curStepNum + " " + curStepMiddle + " " + curStepEnd);
+
+//          String step = subNotation[1];
+//          board.moveEmulatedPrevWhite(step, notationCursor);
+      firstPrev = false;
+      return;
+    }
+
+    String curStep = "<span style='background: yellow;'>" + stroke + "</span>";
+
+//    if (notationSubCursor == 2) {
+//          notation.setInnerHTML(curStepNum + " " + curStepMiddle + " " + curStep);
+//    } else {
+//          notation.setInnerHTML(curStepNum + " " + curStep + " " + curStepEnd);
+//    }
+//    if (notationSubCursor == 2) {
+      Element prevNotation = notationHTMLPanel.getElementById(NOTATION_ITEM + (notationCursor + 1));
+      String[] splitNotation = prevNotation.getInnerText().split(" ");
+      String endStep;
+      if (splitNotation.length > 2) {
+        endStep = splitNotation[2];
+      } else {
+        endStep = "";
+      }
+      prevNotation.setInnerHTML(splitNotation[0] + " " + splitNotation[1] + " " + endStep);
+//    }
+
+//    notationSubCursor -= 1;
+//    if (notationSubCursor == 0) {
+//      notationSubCursor = 2;
+//    }
+
+    // перемещаем шашку на доске
+//    Element notationPrev = notationHTMLPanel.getElementById(NOTATION_ITEM + oldNotationCursor);
+//    if (null == notationPrev) {
+//      notationCursor -= 1;
+//      return;
+//    }
+//        subNotation = notationPrev.getInnerText().split(" ");
+//        step = subNotation[notationSubCursor];
+//    if (notationSubCursor == 1) {
+//          board.moveEmulatedPrevWhite(step, notationCursor);
+//    } else {
+//          board.moveEmulatedPrevBlack(step, notationCursor);
+//    }
+
+//    atEnd = false;
+//    playing = false;
+//    if (!nextButton.isEnabled()) {
+//      nextButton.setEnabled(true);
+//    }
+//    if (!toEndButton.isEnabled()) {
+//      toEndButton.setEnabled(true);
+//    }
+//    if (!playButton.isEnabled()) {
+//      playButton.setEnabled(true);
+//    }
+  }
+
+  private void moveForward() {
+    if (firstPrev) {
+      notationCursor += 1;
+    }
+    firstPrev = false;
+    atStart = false;
+    if (!prevButton.isEnabled()) {
+      prevButton.setEnabled(true);
+    }
+    if (!toStartButton.isEnabled()) {
+      toStartButton.setEnabled(true);
+    }
+
+    Element notation = getStroke(notationCursor);
+    if (null == notation) {
+      atEnd = true;
+      playButton.setIcon(IconType.PLAY);
+      playButton.setEnabled(false);
+      nextButton.setEnabled(false);
+      toEndButton.setEnabled(false);
+      return;
+    }
+
+//    String[] subNotation = notation.getInnerText().split(" ");
+//    String curStepNum = subNotation[0];
+//    String curStepMiddle = subNotation[1];
+//    String curStepEnd;
+//    if (subNotation.length > 2) {
+//      curStepEnd = subNotation[2];
+//    } else {
+//      curStepEnd = "";
+//    }
+//    if (subNotation.length < notationSubCursor + 1) {
+//      return;
+//    }
+//    String step = subNotation[notationSubCursor];
+    final String step = notation.getInnerHTML();
+    String highlightedStep = "<span id='current' data='" + notation.getId() + "' style='background: yellow;'>" + step + "</span>";
+    notation.setInnerHTML(highlightedStep);
+//    if (notationSubCursor == 2) {
+//      notation.setInnerHTML(curStepNum + " " + curStepMiddle + " " + highlightedStep);
+//    } else {
+//      notation.setInnerHTML(curStepNum + " " + highlightedStep + " " + curStepEnd);
+//    }
+
+    // перемещаем шашку на доске
+    if (0 == notationCursor % 2) {
+      board.moveEmulatedNextBlack(step, notationCursor);
+    } else {
+      board.moveEmulatedNextWhite(step, notationCursor);
+    }
+
+    firstNext = true;
+//    notationSubCursor += 1;
+//    if (notationSubCursor == 3) {
+//      notationSubCursor = 1;
+      notationCursor += 1;
+    Element wrapperNotation = getCurrent();
+    if (!wrapperNotation.getAttribute("data").equals(notation.getId())) {
+      Element current = getStrokeById(wrapperNotation.getAttribute("data"));
+      current.setInnerHTML(wrapperNotation.getInnerHTML());
+    }
+  }
+
+  private Element getStrokeById(String id) {
+    return notationHTMLPanel.getElementById(id);
+  }
+
+  private Element getStroke(int notationCursor) {
+    return notationHTMLPanel.getElementById(String.valueOf(notationCursor));
   }
 
   public int getSide() {
@@ -364,14 +381,14 @@ public class DraughtsPlayer extends DialogBox {
 
     String partyNotation = game.getNotation().trim();
     notationList = Arrays.asList(partyNotation.split(NotationPanel.NOTATION_SEP));
-    notationCursor = 0;
-    notationSubCursor = 1;
+    notationCursor = 1;
+//    notationSubCursor = 1;
 
     ScrollPanel notationScroll = new ScrollPanel();
     notationHTMLPanel = new HTMLPanel("");
-    notationCursor = 0;
+    notationHTMLPanel.add(new HTML(game.getNotation()));
     notationHTMLPanel.setWidth("160px");
-    notationHTMLPanel.setHeight(deskSide + "px");
+    notationHTMLPanel.setHeight(side + "px");
 
     notationScroll.add(notationHTMLPanel);
 
@@ -409,5 +426,9 @@ public class DraughtsPlayer extends DialogBox {
 
     verticalPanel.addStyleName("player-window");
     return verticalPanel;
+  }
+
+  public Element getCurrent() {
+    return notationHTMLPanel.getElementById("current");
   }
 }

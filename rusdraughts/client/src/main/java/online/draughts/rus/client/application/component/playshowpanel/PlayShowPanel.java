@@ -43,7 +43,6 @@ public class PlayShowPanel extends Composite {
   private int lastMaxHeight = 0;
   private int lastScrollPos = 0;
   private HandlerRegistration scrollHandler;
-  private boolean updateFlag2;
 
   public PlayShowPanel(HomeView homeView, PlayShowPanelFactory showPanelFactory, ClientConfiguration config) {
     this.showPanelFactory = showPanelFactory;
@@ -58,6 +57,10 @@ public class PlayShowPanel extends Composite {
     return Window.addWindowScrollHandler(new Window.ScrollHandler() {
       @Override
       public void onWindowScroll(Window.ScrollEvent event) {
+        boolean newGameButtonState = DTCookies.getNewGameButtonState();
+        if (newGameButtonState) {
+          return;
+        }
         int oldScrollPos = lastScrollPos;
         lastScrollPos = Window.getScrollTop();
         // если листаем вверх
@@ -92,6 +95,8 @@ public class PlayShowPanel extends Composite {
   }
 
   private void resetGames(List<Game> gameList) {
+    lastMaxHeight = 0;
+    lastScrollPos = 0;
     resetGamesOnPanel(gameList);
   }
 

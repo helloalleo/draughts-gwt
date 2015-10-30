@@ -10,6 +10,7 @@ import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
+import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
@@ -17,13 +18,13 @@ import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.client.websocket.GameWebsocket;
+import online.draughts.rus.draughts.MoveFactory;
+import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.*;
 import online.draughts.rus.shared.rest.FriendsResource;
 import online.draughts.rus.shared.rest.GamesResource;
 import online.draughts.rus.shared.rest.PlayersResource;
-import online.draughts.rus.draughts.MoveFactory;
-import online.draughts.rus.draughts.Stroke;
 
 import java.util.Date;
 import java.util.List;
@@ -146,7 +147,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     GameMessage gameMessage = createGameMessage();
     gameMessage.setMessageType(GameMessage.MessageType.PLAY_CANCEL_MOVE);
     if (stroke.isContinueBeat()) {
-      stroke.mirror();
+      stroke.flip();
     }
     stroke.setOnCancelMove();
     Move move = MoveFactory.createMoveFromStroke(stroke);
@@ -311,6 +312,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         Game game = event.getGame();
         game.setPlayEndStatus(event.getGameEnd());
         game.setPlayFinishDate(new Date());
+        final String notation = NotationPanel.getNotation();
+        final String notationInDiv = "<div id='" + game.getId() + "'>" + notation + "</div>";
+        game.setNotation(notationInDiv);
         game.setEndGameScreenshot(getView().takeScreenshot());
         gamesDelegate.withCallback(event.getAsyncCallback()).saveOrCreate(game);
 

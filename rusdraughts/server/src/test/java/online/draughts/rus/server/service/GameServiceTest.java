@@ -61,10 +61,14 @@ public class GameServiceTest extends BaseTest {
   public void testSaveOrCreate() throws Exception {
     Player playerWhite = new Player();
     playerWhite.setPlayerName(randomString());
+    playerWhite.setOnline(true);
+    playerWhite.setLoggedIn(true);
     playerWhite = playerService.saveOrCreateOnServer(playerWhite);
 
     Player playerBlack = new Player();
     playerBlack.setPlayerName(randomString());
+    playerBlack.setOnline(true);
+    playerBlack.setLoggedIn(true);
     playerBlack = playerService.saveOrCreateOnServer(playerBlack);
 
     Game game = new Game(playerWhite, playerBlack, Game.GameEnds.BLACK_LEFT, new Date(), new Date(), "", "");
@@ -75,7 +79,7 @@ public class GameServiceTest extends BaseTest {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setGame(game);
     gameMessage.setMessageType(GameMessage.MessageType.PLAY_MOVE);
-    Move move = new Move(1, true, gameMessage, "3,4", "4,5", null,
+    Move move = new Move(1, true, gameMessage, "5,6", "4,7", null,
         new HashSet<Move.MoveFlags>() {{
           add(Move.MoveFlags.SIMPLE_MOVE);
         }});
@@ -89,7 +93,7 @@ public class GameServiceTest extends BaseTest {
     gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessage.MessageType.PLAY_MOVE);
     gameMessage.setGame(game);
-    move = new Move(2, false, gameMessage, "4,3", "2,3", null,
+    move = new Move(2, false, gameMessage, "2,1", "3,0", null,
         new HashSet<Move.MoveFlags>() {{
           add(Move.MoveFlags.SIMPLE_MOVE);
         }});

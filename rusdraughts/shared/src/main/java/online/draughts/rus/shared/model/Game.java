@@ -37,7 +37,7 @@ public class Game extends PersistableObjectImpl {
   @Column(name = "play_finish_date")
   private Date playFinishDate;
 
-  @Column(name = "notation", length = 1000)
+  @Column(name = "notation", columnDefinition = "TEXT")
   private String notation;
 
   @Column(name = "end_game_screenshot", columnDefinition = "TEXT")

@@ -73,11 +73,8 @@ public class GameWebsocket {
       case PLAY_REJECT_INVITE:
       case PLAY_ALREADY_PLAYING:
       case PLAY_START:
-      case PLAY_END:
       case PLAY_MOVE:
-      case PLAY_SURRENDER:
       case PLAY_PROPOSE_DRAW:
-      case PLAY_ACCEPT_DRAW:
       case PLAY_CANCEL_MOVE:
       case PLAY_CANCEL_MOVE_RESPONSE:
       case PLAY_CALLBACK:
@@ -85,11 +82,30 @@ public class GameWebsocket {
       case NOTIFICATION_ADDED_TO_FAVORITE:
         handleChatPrivateMessage(gameMessage);
         break;
+      case PLAY_END:
+      case PLAY_SURRENDER:
+      case PLAY_ACCEPT_DRAW:
+        handleGameOver(gameMessage);
+        break;
     }
   }
 
-  private void handlePlayMoveMessage(GameMessage gameMessage) {
+  private void handleGameOver(GameMessage gameMessage) {
+    Game game = gameMessage.getGame();
+    if (game == null) {
+      return;
+    }
 
+    Player black = playerService.find(game.getPlayerBlack().getId());
+    Player white = playerService.find(game.getPlayerWhite().getId());
+
+    black.setPlaying(false);
+    white.setPlaying(false);
+
+    playerService.saveOrCreateOnServer(black);
+    playerService.saveOrCreateOnServer(white);
+
+    handleChatPrivateMessage(gameMessage);
   }
 
   private void handleChatMessage(Session session, GameMessage message) {

@@ -121,14 +121,10 @@ public class Square implements Serializable {
 
   /**
    * переводит клетку в нотацию в зависимости от параметра нормал
-   * @param normal нужно ли отображать нотацию или нет
    * @return нотация для клетки
    */
-  public String toNotation(boolean normal) {
-    if (normal) {
-      return alph[col] + String.valueOf(BoardBackgroundLayer.ROWS - row);
-    }
-    return alph[BoardBackgroundLayer.COLS - 1 - col] + String.valueOf(row + 1);
+  public String toNotation() {
+    return alph[col] + String.valueOf(BoardBackgroundLayer.ROWS - row);
   }
 
   /**
@@ -208,7 +204,7 @@ public class Square implements Serializable {
     return shape.getY() + shape.getHeight() / 2;
   }
 
-  public Square mirror() {
+  public Square flip() {
     int row = BoardBackgroundLayer.ROWS - 1 - this.row;
     int col = BoardBackgroundLayer.COLS - 1 - this.col;
 
@@ -238,5 +234,11 @@ public class Square implements Serializable {
 
   public String getPos() {
     return row + TO_SEND_SEP + col;
+  }
+
+  public Square mirror() {
+    int col = BoardBackgroundLayer.COLS - 1 - this.col;
+    int row = BoardBackgroundLayer.ROWS - 1 - this.row;
+    return new Square(row, col);
   }
 }
