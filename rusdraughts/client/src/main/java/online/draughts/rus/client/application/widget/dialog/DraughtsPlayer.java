@@ -1,6 +1,7 @@
 package online.draughts.rus.client.application.widget.dialog;
 
 import com.ait.lienzo.client.widget.LienzoPanel;
+import com.google.gwt.dom.client.Node;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.event.dom.client.KeyCodes;
@@ -16,6 +17,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
+import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
@@ -23,9 +25,11 @@ import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.draughts.StrokeFactory;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
+import org.gwtbootstrap3.client.ui.Anchor;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
 import org.gwtbootstrap3.client.ui.constants.IconType;
+import org.gwtbootstrap3.client.ui.html.Span;
 
 /**
  * Created with IntelliJ IDEA.
@@ -50,19 +54,17 @@ public class DraughtsPlayer extends DialogBox {
   private int side = 0;
   private int deskSide = 0;
   private int notationCursor;
-  private boolean atStart = false;
+  private int prevPos = 0;
   private Timer playTimer;
   private boolean playing = false;
   private boolean atEnd = false;
   private VerticalPanel mainPanel;
-  private long gameId;
 
   @Inject
   public DraughtsPlayer(DraughtsMessages messages, EventBus eventBus, AppResources resources, @Assisted Game game) {
     this.messages = messages;
     this.eventBus = eventBus;
     this.game = game;
-    this.gameId = game.getId();
 
     getElement().addClassName(resources.style().dialogBox());
     setAnimationEnabled(true);
@@ -170,7 +172,6 @@ public class DraughtsPlayer extends DialogBox {
 
     Element notation = getStroke(notationCursor - 1);
     if (null == notation) {
-      atStart = true;
       prevButton.setEnabled(false);
       toStartButton.setEnabled(false);
       playButton.setEnabled(true);
@@ -342,7 +343,31 @@ public class DraughtsPlayer extends DialogBox {
 
     ScrollPanel notationScroll = new ScrollPanel();
     notationHTMLPanel = new HTMLPanel("");
-    notationHTMLPanel.add(new HTML(game.getNotation()));
+    final HTML notationHtml = new HTML(game.getNotation());
+    final Node gameNode = notationHtml.getElement().getFirstChild();
+    for (int i = 0; i < gameNode.getChildCount(); i++) {
+      final Node child = gameNode.getChild(i);
+      if (child.getNodeType() == Node.ELEMENT_NODE) {
+        Anchor anchor = new Anchor();
+        anchor.setHTML(child.toString());
+        anchor.addClickHandler(new ClickHandler() {
+          @Override
+          public void onClick(ClickEvent event) {
+            HTML stroke = new HTML(child.toString());
+            final Integer pos = Integer.valueOf(((Element) stroke.getElement().getFirstChild()).getId());
+            if (pos == prevPos) {
+              return;
+            }
+            prevPos = pos;
+            toMove(pos);
+          }
+        });
+        notationHTMLPanel.add(anchor);
+      } else {
+        notationHTMLPanel.add(new Span(child.getNodeValue()));
+      }
+    }
+    DTLog.debug(notationHTMLPanel.getElement().getString());
     notationHTMLPanel.setWidth("160px");
     notationHTMLPanel.setHeight(side + "px");
 
@@ -374,6 +399,19 @@ public class DraughtsPlayer extends DialogBox {
 
     verticalPanel.addStyleName("player-window");
     return verticalPanel;
+  }
+
+  private void toMove(int pos) {
+    int cursor = notationCursor;
+    if (pos >= cursor) {
+      for (int i = cursor; i <= pos; i++) {
+        moveForward();
+      }
+    } else {
+      for (int i = cursor - 1; i > pos; i--) {
+        moveBack();
+      }
+    }
   }
 
   public Element getCurrent() {
