@@ -6,6 +6,7 @@ import com.ait.lienzo.client.core.shape.Text;
 import com.ait.lienzo.client.core.types.Shadow;
 import com.ait.lienzo.shared.core.types.Color;
 import com.ait.lienzo.shared.core.types.ColorName;
+import online.draughts.rus.client.util.DTLog;
 
 import java.util.Vector;
 
@@ -148,6 +149,7 @@ public class BoardBackgroundLayer extends Layer {
       if (square == null) {
         throw new SquareNotFoundException();
       }
+      DTLog.debug("GETSQUARE :: " + square);
       return square;
     }
     throw new SquareNotFoundException();

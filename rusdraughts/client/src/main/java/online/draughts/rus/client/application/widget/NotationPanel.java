@@ -21,8 +21,16 @@ public class NotationPanel extends ScrollPanel {
   public static final String MOVE_SEP = " ";
   public static final String COUNT_SEP = ". ";
   private static final String NOTATION_WIDTH = "200px";
+  public static final String SIMPLE_MOVE_TAG = "data-simple";
+  public static final String STOP_BEAT = "data-stopbeat";
+  public static final String CONTINUE_BEAT = "data-continuebeat";
+  public static final String START_BEAT = "data-startbeat";
+  public static final String DATA_ID_ATTR = "data-id";
+  public static final String FIRST_ATTR = "data-first";
+  public static final String DATA_NUMBER = "data-number";
 
   private static StringBuilder notation = new StringBuilder();
+  private int order = 0;
 
   public NotationPanel(EventBus eventBus) {
     eventBus.addHandler(NotationStrokeEvent.TYPE, new NotationStrokeEventHandler() {
@@ -40,8 +48,7 @@ public class NotationPanel extends ScrollPanel {
     eventBus.addHandler(ClearNotationEvent.TYPE, new ClearNotationEventHandler() {
       @Override
       public void onClearNotation(ClearNotationEvent event) {
-        notation = new StringBuilder();
-        getElement().setInnerHTML("");
+        cleanNotationPanel();
       }
     });
 
@@ -107,6 +114,7 @@ public class NotationPanel extends ScrollPanel {
             .append(wrapBeatStroke(stroke, first, false, true, false));
       }
     }
+    order++;
 
     getElement().setInnerHTML(notation.toString());
     pushScroll();
@@ -123,8 +131,7 @@ public class NotationPanel extends ScrollPanel {
         if (stroke.getNumber() != 1) { // при первом ходе из нотации нужно удалить див
           notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(NOTATION_SEP)) + NOTATION_SEP);
         } else {
-          notation = new StringBuilder();
-          getElement().setInnerHTML("");
+          cleanNotationPanel();
         }
       } else {
         notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(MOVE_SEP)));
@@ -144,7 +151,14 @@ public class NotationPanel extends ScrollPanel {
         }
       }
     }
+    order--;
     getElement().setInnerHTML(notation.toString());
+  }
+
+  private void cleanNotationPanel() {
+    notation = new StringBuilder();
+    getElement().setInnerHTML("");
+    order = 0;
   }
 
   private String wrapBeatStroke(Stroke stroke, boolean first, boolean startBeat, boolean continueBeat, boolean stopBeat) {
@@ -157,17 +171,21 @@ public class NotationPanel extends ScrollPanel {
 
   private String wrapStroke(Stroke stroke, boolean first, boolean simple, boolean startBeat, boolean continueBeat, boolean stopBeat) {
     if (simple) {
-      return "<span id='" + stroke.getNumber() + "' "
+      return "<span id='" + order + "' "
+          + "data-number='" + stroke.getNumber() + "' "
+          + "data-simple='true' "
           + "data-first='" + first + "'"
           + ">"
           + stroke.toNotation()
           + "</span>";
     } else {
-      return "<span id='" + stroke.getNumber() + "' "
+      return "<span id='" + order + "' "
+          + "data-number='" + stroke.getNumber() + "' "
+          + "data-simple='false' "
           + "data-first='" + first + "' "
-          + "data-startBeat='" + startBeat + "' "
-          + "data-continueBeat='" + continueBeat + "' "
-          + "data-stopBeat='" + stopBeat + "'"
+          + "data-startbeat='" + startBeat + "' "
+          + "data-continuebeat='" + continueBeat + "' "
+          + "data-stopbeat='" + stopBeat + "'"
           + ">"
           + (stroke.isStartBeat() ? stroke.toNotation() : stroke.toNotationLastMove())
           + "</span>";

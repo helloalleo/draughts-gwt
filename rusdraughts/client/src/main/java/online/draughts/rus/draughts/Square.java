@@ -6,6 +6,8 @@ import com.fasterxml.jackson.annotation.JsonIgnore;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.io.Serializable;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -29,7 +31,16 @@ public class Square implements Serializable {
   @JsonIgnore
   private Draught occupant;
   @JsonIgnore
-  private String[] alph = new String[]{"a", "b", "c", "d", "e", "f", "g", "h"};
+  private static List<String> alph = new ArrayList<String>() {{
+    add("a");
+    add("b");
+    add("c");
+    add("d");
+    add("e");
+    add("f");
+    add("g");
+    add("h");
+  }};
 
   public Square(int row, int col) {
     this.shape = new Rectangle(0, 0);
@@ -121,10 +132,11 @@ public class Square implements Serializable {
 
   /**
    * переводит клетку в нотацию в зависимости от параметра нормал
+   *
    * @return нотация для клетки
    */
   public String toNotation() {
-    return alph[col] + String.valueOf(BoardBackgroundLayer.ROWS - row);
+    return alph.get(col) + String.valueOf(BoardBackgroundLayer.ROWS - row);
   }
 
   /**
@@ -219,14 +231,9 @@ public class Square implements Serializable {
     return shape.getAlpha();
   }
 
-  public static Square getFromPos(String pos) {
-    if (pos == null || pos.isEmpty()) {
-      return null;
-    }
-    String[] arr = pos.split(TO_SEND_SEP);
-
+  public static Square getFromPos(int row, int col) {
     try {
-      return board.getSquare(Integer.valueOf(arr[0]), Integer.valueOf(arr[1]));
+      return board.getSquare(row, col);
     } catch (SquareNotFoundException e) {
       return null;
     }
@@ -240,5 +247,20 @@ public class Square implements Serializable {
     int col = BoardBackgroundLayer.COLS - 1 - this.col;
     int row = BoardBackgroundLayer.ROWS - 1 - this.row;
     return new Square(row, col);
+  }
+
+  public static Square fromNotation(String startPos) {
+    if (StringUtils.isEmpty(startPos)) {
+      return null;
+    }
+
+    int row = alph.indexOf(String.valueOf(startPos.charAt(0)));
+    int col = 8 - Integer.valueOf(String.valueOf(startPos.charAt(1)));
+
+    try {
+      return board.getSquare(col, row);
+    } catch (SquareNotFoundException e) {
+      return null;
+    }
   }
 }

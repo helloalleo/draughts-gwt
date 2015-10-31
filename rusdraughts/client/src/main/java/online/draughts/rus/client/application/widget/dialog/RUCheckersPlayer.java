@@ -188,7 +188,7 @@ package online.draughts.rus.client.application.widget.dialog;//package net.rudra
 //          notation.setInnerHTML(curStepNum + " " + curStepMiddle + " " + curStepEnd);
 //
 //          String step = subNotation[1];
-//          board.moveEmulatedPrevWhite(step, notationCursor);
+//          board.doEmulatedMoveBack(step, notationCursor);
 //          notationSubCursor = 1;
 //          firstPrev = false;
 //          return;
@@ -228,7 +228,7 @@ package online.draughts.rus.client.application.widget.dialog;//package net.rudra
 //        subNotation = notationPrev.getInnerText().split(" ");
 //        step = subNotation[notationSubCursor];
 //        if (notationSubCursor == 1) {
-//          board.moveEmulatedPrevWhite(step, notationCursor);
+//          board.doEmulatedMoveBack(step, notationCursor);
 //        } else {
 //          board.moveEmulatedPrevBlack(step, notationCursor);
 //        }
