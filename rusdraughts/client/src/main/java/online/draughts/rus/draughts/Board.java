@@ -28,6 +28,7 @@ import java.util.Stack;
  * Time: 13:26
  */
 public class Board extends Layer {
+  public static int DRAUGHTS_ON_SIDE = 12;
   private List<Square> capturedSquares = new ArrayList<>();
   private List<Draught> myDraughtList;
   private List<Draught> opponentDraughtList;

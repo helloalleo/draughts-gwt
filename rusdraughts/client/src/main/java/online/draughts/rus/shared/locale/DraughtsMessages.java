@@ -220,4 +220,6 @@ public interface DraughtsMessages extends Messages {
   String playerCaption(String whitePlayer, String blackPlayer, String result);
 
   String notationTitle();
+
+  String draughtsBeaten();
 }

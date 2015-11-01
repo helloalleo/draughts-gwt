@@ -190,3 +190,8 @@ body {
     font-size: 14px;
     margin-bottom: 12px;
 }
+
+.emulatorDraughtsBeaten {
+    font-size: 14px;
+    font-style: italic;
+}

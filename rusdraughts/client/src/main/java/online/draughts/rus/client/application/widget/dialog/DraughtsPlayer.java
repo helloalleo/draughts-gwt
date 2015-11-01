@@ -31,6 +31,8 @@ import org.gwtbootstrap3.client.ui.ButtonGroup;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.gwtbootstrap3.client.ui.html.Span;
 
+import javax.swing.*;
+
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -41,6 +43,7 @@ public class DraughtsPlayer extends DialogBox {
   private final int rows = 8;
   private final int cols = 8;
   private final Game game;
+  private final AppResources resources;
   private HTMLPanel notationHTMLPanel;
   private Board board;
   private final EventBus eventBus;
@@ -59,12 +62,15 @@ public class DraughtsPlayer extends DialogBox {
   private boolean playing = false;
   private boolean atEnd = false;
   private VerticalPanel mainPanel;
+  private Label beatenMineDraughtsLabel = new Label();
+  private Label beatenOpponentDraughtsLabel = new Label();
 
   @Inject
   public DraughtsPlayer(DraughtsMessages messages, EventBus eventBus, AppResources resources, @Assisted Game game) {
     this.messages = messages;
     this.eventBus = eventBus;
     this.game = game;
+    this.resources = resources;
 
     getElement().addClassName(resources.style().dialogBox());
     setAnimationEnabled(true);
@@ -170,6 +176,9 @@ public class DraughtsPlayer extends DialogBox {
     Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(outerNotation, step, true);
     board.doEmulatedMoveBack(stroke, notationCursor);
 
+    setBeatenMy(Board.DRAUGHTS_ON_SIDE - board.getMyDraughts().size());
+    setBeatenOpponent(Board.DRAUGHTS_ON_SIDE - board.getOpponentDraughts().size());
+
     Element notation = getStroke(notationCursor - 1);
     if (null == notation) {
       prevButton.setEnabled(false);
@@ -216,6 +225,9 @@ public class DraughtsPlayer extends DialogBox {
 
     Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(notation, prevStep, false);
     board.doMove(stroke, notationCursor);
+
+    setBeatenMy(Board.DRAUGHTS_ON_SIDE - board.getMyDraughts().size());
+    setBeatenOpponent(Board.DRAUGHTS_ON_SIDE - board.getOpponentDraughts().size());
 
     String highlightedStep = "<span id='current' " + NotationPanel.DATA_ID_ATTR + "='" + notation.getId() + "' style='background: yellow;'>" + notation.getInnerHTML() + "</span>";
     notation.setInnerHTML(highlightedStep);
@@ -367,16 +379,25 @@ public class DraughtsPlayer extends DialogBox {
         notationHTMLPanel.add(new Span(child.getNodeValue()));
       }
     }
-    DTLog.debug(notationHTMLPanel.getElement().getString());
-    notationHTMLPanel.setWidth("160px");
-    notationHTMLPanel.setHeight(side + "px");
-
     notationScroll.add(notationHTMLPanel);
 
     notationPanel.add(new Label(messages.notationTitle()));
     notationPanel.add(notationScroll);
     notationPanel.addStyleName("player-notation");
-    checkersPanel.add(notationPanel);
+
+    VerticalPanel sidePanel = new VerticalPanel();
+    HTMLPanel restDraughts = new HTMLPanel(messages.draughtsBeaten());
+    beatenMineDraughtsLabel.getElement().addClassName(resources.style().emulatorDraughtsBeaten());
+    beatenOpponentDraughtsLabel.getElement().addClassName(resources.style().emulatorDraughtsBeaten());
+    restDraughts.add(beatenMineDraughtsLabel);
+    restDraughts.add(beatenOpponentDraughtsLabel);
+
+    notationHTMLPanel.setWidth("160px");
+    notationHTMLPanel.setHeight(side - restDraughts.getOffsetHeight() - 105 + "px");
+
+    sidePanel.add(restDraughts);
+    sidePanel.add(notationPanel);
+    checkersPanel.add(sidePanel);
 
     initButtons();
 
@@ -417,4 +438,15 @@ public class DraughtsPlayer extends DialogBox {
   public Element getCurrent() {
     return notationHTMLPanel.getElementById("current");
   }
+
+  public void setBeatenMy(int count) {
+    beatenMineDraughtsLabel.setText(count + " - " + (board.isWhite() ? messages.whites()
+        : messages.blacks()));
+  }
+
+  public void setBeatenOpponent(int count) {
+    beatenOpponentDraughtsLabel.setText(count + " - " + (board.isWhite() ? messages.blacks()
+        : messages.whites()));
+  }
+
 }
