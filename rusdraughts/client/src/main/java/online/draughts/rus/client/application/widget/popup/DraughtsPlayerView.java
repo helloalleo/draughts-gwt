@@ -2,9 +2,8 @@ package online.draughts.rus.client.application.widget.popup;
 
 import com.ait.lienzo.client.widget.LienzoPanel;
 import com.google.gwt.dom.client.Node;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.KeyCodes;
+import com.google.gwt.event.dom.client.*;
+import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Element;
@@ -24,18 +23,28 @@ import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.draughts.StrokeFactory;
+import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
 import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.TextArea;
 import org.gwtbootstrap3.client.ui.constants.IconType;
+import org.gwtbootstrap3.client.ui.html.Br;
 import org.gwtbootstrap3.client.ui.html.Span;
 
-public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUiHandlers> implements DraughtsPlayerPresenter.MyView {
+import java.util.ArrayList;
+import java.util.List;
+
+import static online.draughts.rus.client.util.Utils.format;
+
+public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUiHandlers>
+    implements DraughtsPlayerPresenter.MyView {
   private final EventBus eventBus;
   private final AppResources resources;
   private final int rows = 8;
   private final int cols = 8;
   private final Game game;
+  private final ClientConfiguration config;
   @UiField
   PopupPanel main;
   @UiField
@@ -74,13 +83,24 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   Label beatenMineDraughtsLabel;
   @UiField
   Label beatenOpponentDraughtsLabel;
+  @UiField
+  TextArea commentCurrentStrokeTextArea;
+  @UiField
+  Button commentCurrentStrokeButton;
+  @UiField
+  org.gwtbootstrap3.client.ui.Label leftSymbols;
+  private HandlerRegistration nativePreviewHandler;
+  private boolean commentHasFocus;
+  private List<Stroke> notationStrokes = new ArrayList<>();
 
   @Inject
-  DraughtsPlayerView(Binder uiBinder, EventBus eventBus, AppResources resources, DraughtsMessages messages, Game game) {
+  DraughtsPlayerView(Binder uiBinder, EventBus eventBus, AppResources resources, DraughtsMessages messages,
+                     ClientConfiguration config, Game game) {
     super(eventBus);
     this.eventBus = eventBus;
     this.resources = resources;
     this.messages = messages;
+    this.config = config;
     this.game = game;
 
     initWidget(uiBinder.createAndBindUi(this));
@@ -113,23 +133,65 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   protected void onAttach() {
     super.onAttach();
 
+    registerNativeEvents();
+    initMainPanel();
     initNotationPanel();
-    createMainPanel();
+    Window.enableScrolling(false);
+  }
+
+  @Override
+  protected void onDetach() {
+    super.onDetach();
+
+    nativePreviewHandler.removeHandler();
+    Window.enableScrolling(true);
+  }
+
+  private void registerNativeEvents() {
+    nativePreviewHandler = Event.addNativePreviewHandler(new Event.NativePreviewHandler() {
+      @Override
+      public void onPreviewNativeEvent(Event.NativePreviewEvent event) {
+        previewNativeEvent(event);
+      }
+    });
   }
 
   private void initNotationPanel() {
     final HTML notationHtml = new HTML(game.getNotation());
     final Node gameNode = notationHtml.getElement().getFirstChild();
+    if (gameNode.getChildCount() == 0) {
+      enableComments(false);
+      return;
+    }
+    int order = 0;
     for (int i = 0; i < gameNode.getChildCount(); i++) {
       final Node child = gameNode.getChild(i);
       if (child.getNodeType() == Node.ELEMENT_NODE) {
-        org.gwtbootstrap3.client.ui.Anchor anchor = new org.gwtbootstrap3.client.ui.Anchor();
-        anchor.setHTML(child.toString());
+        Element wrapperNotation = ((Element) gameNode.getChild(i - 1));
+        final Element step = ((Element) child);
+        if (NotationPanel.NOTATION_SEP_TAG.toLowerCase().equals(step.getNodeName().toLowerCase())) {
+          notationPanel.add(new Br());
+          continue;
+        }
+        // если разделитель побитых шашек
+        if (Stroke.BEAT_MOVE_SEP.equals(wrapperNotation.getNodeValue())) {
+          wrapperNotation = ((Element) gameNode.getChild(i - 2));
+        }
+        String prevStep = "";
+        if (wrapperNotation != null) {
+          prevStep = wrapperNotation.getInnerHTML();
+        }
+
+        final Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(step, prevStep, false);
+        notationStrokes.add(stroke);
+
+        Anchor anchor = new Anchor();
+        anchor.setHTML(NotationPanel.wrapStroke(stroke, order));
+        order++;
         anchor.addClickHandler(new ClickHandler() {
           @Override
           public void onClick(ClickEvent event) {
-            HTML stroke = new HTML(child.toString());
-            final Integer pos = Integer.valueOf(((Element) stroke.getElement().getFirstChild()).getId());
+            final Integer pos = stroke.getOrder();
             if (pos == prevPos) {
               return;
             }
@@ -144,13 +206,21 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     }
   }
 
-  private void createMainPanel() {
+  private void enableComments(boolean enable) {
+    if (commentCurrentStrokeTextArea.isEnabled() != enable) {
+      commentCurrentStrokeTextArea.setEnabled(enable);
+    }
+    if (commentCurrentStrokeButton.isEnabled() != enable) {
+      commentCurrentStrokeButton.setEnabled(enable);
+    }
+  }
+
+  private void initMainPanel() {
     side = getSide();
     deskSide = side - 80;
 
     BoardBackgroundLayer boardBackground = new BoardBackgroundLayer(side, deskSide, rows, cols);
     boardBackground.drawCoordinates(true);
-
 
     LienzoPanel lienzoPanel = new LienzoPanel(side, side);
     lienzoPanel.setBackgroundLayer(boardBackground);
@@ -161,6 +231,52 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
     deskPanel.add(lienzoPanel);
     initButtons();
+
+    commentCurrentStrokeTextArea.addKeyDownHandler(new KeyDownHandler() {
+      @Override
+      public void onKeyDown(KeyDownEvent event) {
+        final int left = Integer.valueOf(config.strokeCommentLength())
+            - commentCurrentStrokeTextArea.getText().length();
+        if (left <= 0) {
+          event.stopPropagation();
+          return;
+        }
+        leftSymbols.setText(left
+            + "");
+      }
+    });
+
+    commentCurrentStrokeButton.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        Element current = getCurrent();
+        if (current == null) {
+          commentCurrentStrokeTextArea.setText("");
+          enableComments(false);
+          return;
+        }
+
+        Element move = getStroke(Integer.valueOf(current.getAttribute(NotationPanel.DATA_ID_ATTR)));
+        String oldComment = move.getAttribute(NotationPanel.DATA_COMMENT_ATTR);
+        final String oComment = oldComment.length() != 0 ? (oldComment + NotationPanel.COMMENT_SEP) : "";
+        move.setAttribute(NotationPanel.DATA_COMMENT_ATTR,
+            oComment + commentCurrentStrokeTextArea.getText());
+        commentCurrentStrokeTextArea.setText("");
+      }
+    });
+
+    commentCurrentStrokeTextArea.addFocusListener(new FocusListener() {
+      @Override
+      public void onFocus(Widget sender) {
+        commentHasFocus = true;
+      }
+
+      @Override
+      public void onLostFocus(Widget sender) {
+        commentHasFocus = false;
+      }
+    });
+    enableComments(false);
   }
 
   private void initButtons() {
@@ -252,8 +368,8 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     outerNotation.setInnerHTML(currentNotation.getInnerHTML());
 
     String step = null;
-    if (Boolean.valueOf(outerNotation.getAttribute(NotationPanel.CONTINUE_BEAT))
-        || Boolean.valueOf(outerNotation.getAttribute(NotationPanel.STOP_BEAT))) {
+    if (Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_CONTINUE_BEAT_ATTR))
+        || Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_STOP_BEAT_ATTR))) {
       step = getStroke(notationCursor - 1).getInnerHTML();
     }
 
@@ -265,6 +381,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
     Element notation = getStroke(notationCursor - 1);
     if (null == notation) {
+      enableComments(false);
       prevButton.setEnabled(false);
       toStartButton.setEnabled(false);
       playButton.setEnabled(true);
@@ -273,18 +390,26 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       return;
     }
 
-    String highlightedStep = "<span id='current' data-id='" + notation.getId() + "' style='background: yellow;'>" + notation.getInnerHTML() + "</span>";
+    // выделяем текущий ход
+    String highlightedStep = highlightedStroke(notation);
     notation.setInnerHTML(highlightedStep);
   }
 
+  private String highlightedStroke(Element notation) {
+    return format("<%s id='current' %s='%s' class='%s'>%s</%s>",
+          NotationPanel.NOTATION_TAG, NotationPanel.DATA_ID_ATTR, notation.getId(),
+          resources.style().notationCurrentStyle(), notation.getInnerHTML(), NotationPanel.NOTATION_TAG);
+  }
+
   private void moveForward() {
-    if (!atEnd) {
-      if (prevButton.isEnabled()) {
-        prevButton.setEnabled(false);
-      }
-      if (toStartButton.isEnabled()) {
-        toStartButton.setEnabled(false);
-      }
+    if (atEnd) {
+      return;
+    }
+    if (prevButton.isEnabled()) {
+      prevButton.setEnabled(false);
+    }
+    if (toStartButton.isEnabled()) {
+      toStartButton.setEnabled(false);
     }
 
     Element notation = getStroke(notationCursor);
@@ -292,6 +417,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       atEnd = true;
       return;
     }
+    enableComments(true);
 
     if (!prevButton.isEnabled()) {
       prevButton.setEnabled(true);
@@ -300,6 +426,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       toStartButton.setEnabled(true);
     }
 
+    // сбрасываем выделени хода
     Element wrapperNotation = getCurrent();
     String prevStep = "";
     if (wrapperNotation != null) {
@@ -314,7 +441,9 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     setBeatenMy(Board.DRAUGHTS_ON_SIDE - board.getMyDraughts().size());
     setBeatenOpponent(Board.DRAUGHTS_ON_SIDE - board.getOpponentDraughts().size());
 
-    String highlightedStep = "<span id='current' " + NotationPanel.DATA_ID_ATTR + "='" + notation.getId() + "' style='background: yellow;'>" + notation.getInnerHTML() + "</span>";
+    // выделяем ход
+    notation = getStroke(notationCursor);
+    String highlightedStep = highlightedStroke(notation);
     notation.setInnerHTML(highlightedStep);
 
     notationCursor++;
@@ -346,24 +475,28 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     return Math.min(width, height);
   }
 
-  protected void onPreviewNativeEvent(Event.NativePreviewEvent event) {
+  protected void previewNativeEvent(Event.NativePreviewEvent event) {
     if (event.getTypeInt() == Event.ONKEYDOWN) {
       switch (event.getNativeEvent().getKeyCode()) {
         case KeyCodes.KEY_ESCAPE:
           hide();
           break;
-        case KeyCodes.KEY_LEFT:
-          moveBack();
-          break;
-        case KeyCodes.KEY_RIGHT:
-          moveForward();
-          break;
-        case KeyCodes.KEY_UP:
-          toStart();
-          break;
-        case KeyCodes.KEY_DOWN:
-          toEnd();
-          break;
+      }
+      if (!commentHasFocus) {
+        switch (event.getNativeEvent().getKeyCode()) {
+          case KeyCodes.KEY_LEFT:
+            moveBack();
+            break;
+          case KeyCodes.KEY_RIGHT:
+            moveForward();
+            break;
+          case KeyCodes.KEY_UP:
+            toStart();
+            break;
+          case KeyCodes.KEY_DOWN:
+            toEnd();
+            break;
+        }
       }
     }
   }
@@ -403,18 +536,20 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     private final EventBus eventBus;
     private final DraughtsMessages messages;
     private final AppResources resources;
+    private final ClientConfiguration config;
 
     @Inject
-    public ViewFactoryImpl(Binder binder, EventBus eventBus, DraughtsMessages messages, AppResources resources) {
+    public ViewFactoryImpl(Binder binder, EventBus eventBus, DraughtsMessages messages, AppResources resources, ClientConfiguration config) {
       this.binder = binder;
       this.eventBus = eventBus;
       this.messages = messages;
       this.resources = resources;
+      this.config = config;
     }
 
     @Override
     public DraughtsPlayerPresenter.MyView create(Game game) {
-      return new DraughtsPlayerView(binder, eventBus, resources, messages, game);
+      return new DraughtsPlayerView(binder, eventBus, resources, messages, config, game);
     }
   }
 }

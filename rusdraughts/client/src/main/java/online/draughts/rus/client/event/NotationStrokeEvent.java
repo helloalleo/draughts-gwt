@@ -12,11 +12,9 @@ import online.draughts.rus.draughts.Stroke;
 public class NotationStrokeEvent extends GwtEvent<NotationStrokeEventHandler> {
   public static Type<NotationStrokeEventHandler> TYPE = new Type<>();
   private final Stroke stroke;
-  private boolean opponentStroke;
 
   public NotationStrokeEvent(Stroke stroke) {
     this.stroke = stroke;
-    this.opponentStroke = opponentStroke;
   }
 
   public Stroke getStroke() {
@@ -29,9 +27,5 @@ public class NotationStrokeEvent extends GwtEvent<NotationStrokeEventHandler> {
 
   protected void dispatch(NotationStrokeEventHandler handler) {
     handler.onNotationStroke(this);
-  }
-
-  public boolean isOpponentStroke() {
-    return opponentStroke;
   }
 }

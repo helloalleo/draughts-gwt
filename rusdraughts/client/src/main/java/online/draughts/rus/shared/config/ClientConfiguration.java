@@ -24,4 +24,6 @@ public interface ClientConfiguration extends ConstantsWithLookup {
   String initShowGamesPageSize();
 
   String incrementPlayShowSize();
+
+  String strokeCommentLength();
 }

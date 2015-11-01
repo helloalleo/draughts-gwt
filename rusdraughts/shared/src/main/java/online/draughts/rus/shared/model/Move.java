@@ -14,7 +14,9 @@ import java.util.Set;
 @Table(name = "move")
 public class Move extends PersistableObjectImpl {
 
-  private int number;
+  private int number; // номер пары хода
+  @Column(name = "move_order")
+  private int moveOrder;
   private boolean first; // первый ход в паре ходов. Например, ee-aa в ee-aa bb-cc
 
   @OneToOne
@@ -165,8 +167,16 @@ public class Move extends PersistableObjectImpl {
         '}';
   }
 
+  public int getMoveOrder() {
+    return moveOrder;
+  }
 
- public enum MoveFlags {
+  public void setMoveOrder(int order) {
+    this.moveOrder = order;
+  }
+
+
+  public enum MoveFlags {
     CANCEL_MOVE, // ход отменяется
     SIMPLE_MOVE, // ход без взятия
     CONTINUE_BEAT, // продолжить брать

@@ -165,8 +165,8 @@ public class DraughtsPlayer1 extends DialogBox {
     outerNotation.setInnerHTML(currentNotation.getInnerHTML());
 
     String step = null;
-    if (Boolean.valueOf(outerNotation.getAttribute(NotationPanel.CONTINUE_BEAT))
-        || Boolean.valueOf(outerNotation.getAttribute(NotationPanel.STOP_BEAT))) {
+    if (Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_CONTINUE_BEAT_ATTR))
+        || Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_STOP_BEAT_ATTR))) {
       step = getStroke(notationCursor - 1).getInnerHTML();
     }
 

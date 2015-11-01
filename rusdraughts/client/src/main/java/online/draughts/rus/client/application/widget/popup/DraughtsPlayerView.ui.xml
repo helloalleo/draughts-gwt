@@ -22,24 +22,40 @@
                     <b:Column size="MD_6">
                         <g:SimplePanel ui:field="deskPanel"/>
                     </b:Column>
-                    <b:Column size="MD_4">
-                        <b:ButtonGroup addStyleNames="{res.style.playerControls}">
-                            <b:Button ui:field="toStartButton" icon="FAST_BACKWARD"/>
-                            <b:Button ui:field="prevButton" icon="BACKWARD"/>
-                            <b:Button ui:field="playButton" icon="PLAY"/>
-                            <b:Button ui:field="nextButton" icon="FORWARD"/>
-                            <b:Button ui:field="toEndButton" icon="FAST_FORWARD"/>
-                        </b:ButtonGroup>
-                        <g:Label>Сбито шашек</g:Label>
-                        <g:HTMLPanel ui:field="beatenDraughts">
-                            <g:Label ui:field="beatenMineDraughtsLabel" text="0 - Белых" addStyleNames="{res.style.emulatorDraughtsBeaten}"/>
-                            <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных" addStyleNames="{res.style.emulatorDraughtsBeaten}"/>
-                        </g:HTMLPanel>
-                        <g:Label>Нотация</g:Label>
-                        <g:ScrollPanel>
-                            <g:HTMLPanel ui:field="notationPanel"/>
-                        </g:ScrollPanel>
+                    <b:Column size="MD_6">
+                        <b:Row>
+                            <b:Column size="MD_5">
+                                <b:ButtonGroup addStyleNames="{res.style.playerControls}">
+                                    <b:Button ui:field="toStartButton" icon="FAST_BACKWARD"/>
+                                    <b:Button ui:field="prevButton" icon="BACKWARD"/>
+                                    <b:Button ui:field="playButton" icon="PLAY"/>
+                                    <b:Button ui:field="nextButton" icon="FORWARD"/>
+                                    <b:Button ui:field="toEndButton" icon="FAST_FORWARD"/>
+                                </b:ButtonGroup>
+                                <g:Label>Сбито шашек</g:Label>
+                                <g:HTMLPanel ui:field="beatenDraughts">
+                                    <g:Label ui:field="beatenMineDraughtsLabel" text="0 - Белых"
+                                             addStyleNames="{res.style.emulatorDraughtsBeaten}"/>
+                                    <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных"
+                                             addStyleNames="{res.style.emulatorDraughtsBeaten}"/>
+                                </g:HTMLPanel>
+                                <g:Label>Нотация</g:Label>
+                                <g:ScrollPanel>
+                                    <g:HTMLPanel ui:field="notationPanel"/>
+                                </g:ScrollPanel>
+                            </b:Column>
+                            <b:Column size="MD_7">
+                                <g:Label text="Все комментарии"/>
+                                <g:Label text="Комментарии к ходу"/>
+                                <g:Label text="Комментировать ход"/>
+                                <b:TextArea ui:field="commentCurrentStrokeTextArea"/>
+                                <b:Label ui:field="leftSymbols" addStyleNames="{res.style.leftSymbols}" pull="LEFT"/>
+                                <b:Button ui:field="commentCurrentStrokeButton" pull="RIGHT" icon="PENCIL" text="Комментировать"/>
+                            </b:Column>
+                        </b:Row>
                     </b:Column>
+
+
                 </b:Row>
             </g:HTMLPanel>
         </g:HTMLPanel>

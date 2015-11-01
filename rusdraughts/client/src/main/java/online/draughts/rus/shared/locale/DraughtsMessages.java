@@ -222,4 +222,6 @@ public interface DraughtsMessages extends Messages {
   String notationTitle();
 
   String draughtsBeaten();
+
+  String symbolsLeft();
 }

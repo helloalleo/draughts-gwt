@@ -5,6 +5,8 @@ import online.draughts.rus.shared.model.Move;
 import java.util.HashSet;
 import java.util.Set;
 
+import static online.draughts.rus.client.util.Utils.format;
+
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -22,7 +24,10 @@ public class Stroke {
 
   private Set<Move.MoveFlags> moveFlags = new HashSet<>();
   private boolean first;
+  private int order;
   private int number;
+  private String comment;
+  private String title;
 
   public Stroke() {
   }
@@ -57,12 +62,21 @@ public class Stroke {
   public String toNotation() {
     final String s = startSquare.toNotation();
     final String e = endSquare.toNotation();
-    return isSimple() ? s + SIMPLE_MOVE_SEP + e
-        : s + BEAT_MOVE_SEP + e;
+    return format(isSimple() ? s + SIMPLE_MOVE_SEP + e
+        : s + BEAT_MOVE_SEP + e);
   }
 
   public String toNotationLastMove() {
     return endSquare.toNotation();
+  }
+
+  public int getOrder() {
+    return order;
+  }
+
+  public Stroke setOrder(int order) {
+    this.order = order;
+    return this;
   }
 
   public boolean isCancel() {
@@ -175,4 +189,22 @@ public class Stroke {
     stroke.setFirst(first);
     stroke.setNumber(number);
     return stroke;}
+
+  public Stroke setComment(String comment) {
+    this.comment = comment;
+    return this;
+  }
+
+  public String getComment() {
+    return comment;
+  }
+
+  public Stroke setTitle(String title) {
+    this.title = title;
+    return this;
+  }
+
+  public String getTitle() {
+    return title;
+  }
 }

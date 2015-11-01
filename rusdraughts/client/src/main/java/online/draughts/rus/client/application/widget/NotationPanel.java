@@ -9,6 +9,8 @@ import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.draughts.Square;
 import online.draughts.rus.draughts.Stroke;
 
+import static online.draughts.rus.client.util.Utils.format;
+
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -16,27 +18,33 @@ import online.draughts.rus.draughts.Stroke;
  * Time: 19:32
  */
 public class NotationPanel extends ScrollPanel {
-  public static final String NOTATION_SEP = "<br>";
+  public static final String NOTATION_SEP_TAG = "br";
+  public static final String NOTATION_SEP = "<" + NOTATION_SEP_TAG + ">";
   public static final String BEAT_SEP = ":";
   public static final String MOVE_SEP = " ";
   public static final String COUNT_SEP = ". ";
   private static final String NOTATION_WIDTH = "200px";
-  public static final String SIMPLE_MOVE_TAG = "data-simple";
-  public static final String STOP_BEAT = "data-stopbeat";
-  public static final String CONTINUE_BEAT = "data-continuebeat";
-  public static final String START_BEAT = "data-startbeat";
+  public static final String DATA_SIMPLE_ATTR = "data-simple";
+  public static final String DATA_STOP_BEAT_ATTR = "data-stopbeat";
+  public static final String DATA_CONTINUE_BEAT_ATTR = "data-continuebeat";
+  public static final String DATA_START_BEAT_ATTR = "data-startbeat";
   public static final String DATA_ID_ATTR = "data-id";
-  public static final String FIRST_ATTR = "data-first";
-  public static final String DATA_NUMBER = "data-number";
+  public static final String DATA_ORDER_ATTR = "data-order";
+  public static final String DATA_FIRST_ATTR = "data-first";
+  public static final String DATA_NUMBER_ATTR = "data-number";
+  public static final String DATA_COMMENT_ATTR = "data-comment";
+  public static final String DATA_TITLE_ATTR = "data-title";
+  public static final String COMMENT_SEP = "<br>";
+  public static final String NOTATION_TAG = "span";
 
   private static StringBuilder notation = new StringBuilder();
-  private int order = 0;
+  private static int order = 0;
 
   public NotationPanel(EventBus eventBus) {
     eventBus.addHandler(NotationStrokeEvent.TYPE, new NotationStrokeEventHandler() {
       @Override
       public void onNotationStroke(NotationStrokeEvent event) {
-        NotationPanel.this.appendMove(event.getStroke(), event.isOpponentStroke());
+        NotationPanel.this.appendMove(event.getStroke());
       }
     });
     eventBus.addHandler(NotationCancelStrokeEvent.TYPE, new NotationCancelStrokeEventHandler() {
@@ -64,7 +72,7 @@ public class NotationPanel extends ScrollPanel {
     return notation.toString();
   }
 
-  public void appendMove(Stroke stroke, boolean opponentStroke) {
+  public void appendMove(Stroke stroke) {
     DTLog.debug("MOVE in NOTATION " + stroke);
     // первый шаг. например, h4:f6:d4 - h4
     Square start = stroke.getStartSquare();
@@ -74,10 +82,10 @@ public class NotationPanel extends ScrollPanel {
       if (first) {
         notation.append(stroke.getNumber())
             .append(COUNT_SEP)
-            .append(wrapSimpleStroke(stroke, true));
+            .append(wrapStroke(stroke, order));
       } else {
         notation.append(MOVE_SEP)
-            .append(wrapSimpleStroke(stroke, false))
+            .append(wrapStroke(stroke, order))
             .append(NOTATION_SEP);
       }
     } else { // взята одна или более шашек
@@ -88,30 +96,30 @@ public class NotationPanel extends ScrollPanel {
         if (first) {
           notation.append(stroke.getNumber())
               .append(COUNT_SEP)
-              .append(wrapBeatStroke(stroke, true, true, continueBeat, stopBeat));
+              .append(wrapStroke(stroke, order));
         } else {
           if (continueBeat) {
             notation.append(MOVE_SEP)
-                .append(wrapBeatStroke(stroke, false, true, true, stopBeat));
+                .append(wrapStroke(stroke, order));
           } else {
             notation.append(MOVE_SEP)
-                .append(wrapBeatStroke(stroke, false, true, false, stopBeat))
+                .append(wrapStroke(stroke, order))
                 .append(NOTATION_SEP);
           }
         }
       } else if (stopBeat) {
         if (first) {
           notation.append(BEAT_SEP)
-              .append(wrapBeatStroke(stroke, true, false, continueBeat, true))
+              .append(wrapStroke(stroke, order))
               .append(MOVE_SEP);
         } else {
           notation.append(BEAT_SEP)
-              .append(wrapBeatStroke(stroke, false, false, continueBeat, true))
+              .append(wrapStroke(stroke, order))
               .append(NOTATION_SEP);
         }
       } else if (continueBeat) {
         notation.append(BEAT_SEP)
-            .append(wrapBeatStroke(stroke, first, false, true, false));
+            .append(wrapStroke(stroke, order));
       }
     }
     order++;
@@ -161,34 +169,29 @@ public class NotationPanel extends ScrollPanel {
     order = 0;
   }
 
-  private String wrapBeatStroke(Stroke stroke, boolean first, boolean startBeat, boolean continueBeat, boolean stopBeat) {
-    return wrapStroke(stroke, first, false, startBeat, continueBeat, stopBeat);
+  public static String wrapStroke(Stroke stroke, int order) {
+    return wrapStroke(stroke, order, stroke.isFirst(), stroke.isSimple(), stroke.isStartBeat(), stroke.isContinueBeat(),
+        stroke.isStopBeat());
   }
 
-  private String wrapSimpleStroke(Stroke stroke, boolean first) {
-    return wrapStroke(stroke, first, true, false, false, false);
-  }
-
-  private String wrapStroke(Stroke stroke, boolean first, boolean simple, boolean startBeat, boolean continueBeat, boolean stopBeat) {
-    if (simple) {
-      return "<span id='" + order + "' "
-          + "data-number='" + stroke.getNumber() + "' "
-          + "data-simple='true' "
-          + "data-first='" + first + "'"
-          + ">"
-          + stroke.toNotation()
-          + "</span>";
-    } else {
-      return "<span id='" + order + "' "
-          + "data-number='" + stroke.getNumber() + "' "
-          + "data-simple='false' "
-          + "data-first='" + first + "' "
-          + "data-startbeat='" + startBeat + "' "
-          + "data-continuebeat='" + continueBeat + "' "
-          + "data-stopbeat='" + stopBeat + "'"
-          + ">"
-          + (stroke.isStartBeat() ? stroke.toNotation() : stroke.toNotationLastMove())
-          + "</span>";
-    }
+  private static String wrapStroke(Stroke stroke, int order, boolean first, boolean simple, boolean startBeat, boolean continueBeat, boolean stopBeat) {
+    String span = format("<%s id='%s' %s='%s' %s='%s' %s='%s' %s='%s' %s='' %s='' ",
+        NOTATION_TAG,
+        order,
+        DATA_ORDER_ATTR, order,
+        DATA_NUMBER_ATTR, stroke.getNumber(),
+        DATA_SIMPLE_ATTR, simple,
+        DATA_FIRST_ATTR, first,
+        DATA_TITLE_ATTR,
+        DATA_COMMENT_ATTR);
+    span += format("%s='%s' %s='%s' %s='%s'>%s</%s>",
+        DATA_START_BEAT_ATTR, startBeat,
+        DATA_CONTINUE_BEAT_ATTR, continueBeat,
+        DATA_STOP_BEAT_ATTR, stopBeat,
+        stroke.isSimple() ? stroke.toNotation()
+            : (stroke.isStartBeat() ? stroke.toNotation()
+            : stroke.toNotationLastMove()),
+        NOTATION_TAG);
+    return span;
   }
 }

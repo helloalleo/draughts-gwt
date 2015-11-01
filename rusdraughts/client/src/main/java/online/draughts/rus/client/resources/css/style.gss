@@ -203,3 +203,17 @@ body {
 .playerDismiss {
     margin-top: 3px;
 }
+
+.leftSymbols {
+    font-size: 14px;
+    margin-top: 8px;
+}
+
+.notationCurrentStyle {
+    -moz-border-radius: NOTATION_CURRENT_BORDER_RADIUS;
+    -ms-border-radius: NOTATION_CURRENT_BORDER_RADIUS;
+    -webkit-border-radius: NOTATION_CURRENT_BORDER_RADIUS;
+    border-radius: NOTATION_CURRENT_BORDER_RADIUS;
+
+    background: white;
+}

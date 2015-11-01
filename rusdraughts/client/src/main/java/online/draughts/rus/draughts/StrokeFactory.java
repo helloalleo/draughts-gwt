@@ -15,7 +15,10 @@ public class StrokeFactory {
 
   public static Stroke createStrokeFromMove(Move move) {
     return new Stroke()
+        .setTitle(move.getTitle())
+        .setComment(move.getComment())
         .setFirst(move.isFirst())
+        .setOrder(move.getMoveOrder())
         .setNumber(move.getNumber())
         .setMoveFlags(move.getMoveFlags())
         .setStartSquare(Square.fromString(move.getStartPos()))
@@ -28,12 +31,18 @@ public class StrokeFactory {
       return null;
     }
     Stroke stroke = new Stroke();
-    final Boolean first = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.FIRST_ATTR));
-    final Integer number = Integer.valueOf(outerNotation.getAttribute(NotationPanel.DATA_NUMBER));
-    final Boolean simpleMove = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.SIMPLE_MOVE_TAG));
-    final Boolean startBeat = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.START_BEAT));
-    final Boolean continueBeat = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.CONTINUE_BEAT));
-    final Boolean stopBeat = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.STOP_BEAT));
+    final Boolean first = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_FIRST_ATTR));
+    final Integer number = Integer.valueOf(outerNotation.getAttribute(NotationPanel.DATA_NUMBER_ATTR));
+    final Integer order = Integer.valueOf(outerNotation.getAttribute(NotationPanel.DATA_ORDER_ATTR));
+    final Boolean simpleMove = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_SIMPLE_ATTR));
+    final Boolean startBeat = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_START_BEAT_ATTR));
+    final Boolean continueBeat = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_CONTINUE_BEAT_ATTR));
+    final Boolean stopBeat = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_STOP_BEAT_ATTR));
+    final String title = outerNotation.getAttribute(NotationPanel.DATA_TITLE_ATTR);
+    final String comment = outerNotation.getAttribute(NotationPanel.DATA_COMMENT_ATTR);
+    stroke.setOrder(order);
+    stroke.setTitle(title);
+    stroke.setComment(comment);
     if (simpleMove) {
       stroke.setOnSimpleMove();
     }
@@ -63,7 +72,7 @@ public class StrokeFactory {
     final Square endSquare = Square.fromNotation(endPos);
     Square captured = null;
     if (!stroke.isSimple()) {
-      captured = findCaptured(startSquare, endSquare, back);
+      captured = findTaken(startSquare, endSquare, back);
     }
     stroke.setFirst(first)
         .setNumber(number)
@@ -73,7 +82,7 @@ public class StrokeFactory {
     return stroke;
   }
 
-  private static Square findCaptured(Square firstStep, Square secondStep, boolean back) {
+  private static Square findTaken(Square firstStep, Square secondStep, boolean back) {
     for (int row = 0; row < BoardBackgroundLayer.ROWS; row++) {
       for (int col = 0; col < BoardBackgroundLayer.COLS; col++) {
         Square current;

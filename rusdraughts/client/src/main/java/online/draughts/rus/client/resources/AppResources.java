@@ -73,5 +73,9 @@ public interface AppResources extends ClientBundle {
     String playerControls();
 
     String playerDismiss();
+
+    String leftSymbols();
+
+    String notationCurrentStyle();
   }
 }
