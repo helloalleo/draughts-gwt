@@ -1,4 +1,4 @@
-package online.draughts.rus.client.application.widget.dialog;
+package online.draughts.rus.client.application.widget.popup;
 
 import com.ait.lienzo.client.widget.LienzoPanel;
 import com.google.gwt.dom.client.Node;
@@ -17,7 +17,6 @@ import com.google.web.bindery.event.shared.EventBus;
 import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
-import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
@@ -31,15 +30,13 @@ import org.gwtbootstrap3.client.ui.ButtonGroup;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.gwtbootstrap3.client.ui.html.Span;
 
-import javax.swing.*;
-
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
  * Date: 23.03.14
  * Time: 16:02
  */
-public class DraughtsPlayer extends DialogBox {
+public class DraughtsPlayer1 extends DialogBox {
   private final int rows = 8;
   private final int cols = 8;
   private final Game game;
@@ -66,7 +63,7 @@ public class DraughtsPlayer extends DialogBox {
   private Label beatenOpponentDraughtsLabel = new Label();
 
   @Inject
-  public DraughtsPlayer(DraughtsMessages messages, EventBus eventBus, AppResources resources, @Assisted Game game) {
+  public DraughtsPlayer1(DraughtsMessages messages, EventBus eventBus, AppResources resources, @Assisted Game game) {
     this.messages = messages;
     this.eventBus = eventBus;
     this.game = game;
@@ -383,7 +380,6 @@ public class DraughtsPlayer extends DialogBox {
 
     notationPanel.add(new Label(messages.notationTitle()));
     notationPanel.add(notationScroll);
-    notationPanel.addStyleName("player-notation");
 
     VerticalPanel sidePanel = new VerticalPanel();
     HTMLPanel restDraughts = new HTMLPanel(messages.draughtsBeaten());
@@ -399,6 +395,8 @@ public class DraughtsPlayer extends DialogBox {
     sidePanel.add(notationPanel);
     checkersPanel.add(sidePanel);
 
+
+
     initButtons();
 
     HorizontalPanel controlsPanel = new HorizontalPanel();
@@ -413,12 +411,10 @@ public class DraughtsPlayer extends DialogBox {
     controlsPanel.add(closeButton);
     controlsPanel.setCellHorizontalAlignment(closeButton, HasAlignment.ALIGN_RIGHT);
     controlsPanel.setWidth("100%");
-    controlsPanel.addStyleName("player-controls");
 
     verticalPanel.add(checkersPanel);
     verticalPanel.add(controlsPanel);
 
-    verticalPanel.addStyleName("player-window");
     return verticalPanel;
   }
 

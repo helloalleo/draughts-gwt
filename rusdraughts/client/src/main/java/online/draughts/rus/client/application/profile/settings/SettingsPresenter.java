@@ -21,7 +21,6 @@ import online.draughts.rus.shared.rest.PlayersResource;
 public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView> implements SettingsUiHandlers {
   public static final NestedSlot SLOT_SETTINGS = new NestedSlot();
   private final DraughtsMessages messages;
-  private final EventBus eventBus;
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final PlaySession playSession;
   private Player player;
@@ -35,7 +34,6 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
       Player player) {
     super(eventBus, view);
 
-    this.eventBus = eventBus;
     this.playersDelegate = playersDelegate;
     this.playSession = playSession;
     this.player = player;

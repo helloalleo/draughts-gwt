@@ -69,5 +69,9 @@ public interface AppResources extends ClientBundle {
     String dialogCaptionPlayer();
 
     String emulatorDraughtsBeaten();
+
+    String playerControls();
+
+    String playerDismiss();
   }
 }

@@ -31,4 +31,8 @@ public class Variables {
   public static int navbarTopHeight() {
     return Integer.valueOf(S_NAVBAR_TOP_HEIGHT.substring(0, S_NAVBAR_TOP_HEIGHT.length() - 2));
   }
+
+  public static int marginTop() {
+    return Integer.valueOf(S_MAIN_CONTAINER_MARGIN_TOP.substring(0, S_MAIN_CONTAINER_MARGIN_TOP.length() - 2));
+  }
 }

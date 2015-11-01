@@ -1,0 +1,47 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
+             xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html"
+             ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+             ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
+             ui:generateLocales="default">
+
+    <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
+
+    <g:PopupPanel ui:field="main" autoHideOnHistoryEventsEnabled="true" autoHideEnabled="true"
+                  addStyleNames="{res.style.dialogBox} col-md-10">
+        <g:HTMLPanel>
+            <g:HTMLPanel>
+                <b:Button ui:field="dismiss" icon="CLOSE" pull="RIGHT" type="LINK" addStyleNames="{res.style.playerDismiss}"/>
+                <g:HTML ui:field="caption" addStyleNames="{res.style.dialogCaptionPlayer}"/>
+            </g:HTMLPanel>
+
+            <g:HTMLPanel ui:field="body">
+                <b:Row>
+                    <b:Column size="MD_6">
+                        <g:SimplePanel ui:field="deskPanel"/>
+                    </b:Column>
+                    <b:Column size="MD_4">
+                        <b:ButtonGroup addStyleNames="{res.style.playerControls}">
+                            <b:Button ui:field="toStartButton" icon="FAST_BACKWARD"/>
+                            <b:Button ui:field="prevButton" icon="BACKWARD"/>
+                            <b:Button ui:field="playButton" icon="PLAY"/>
+                            <b:Button ui:field="nextButton" icon="FORWARD"/>
+                            <b:Button ui:field="toEndButton" icon="FAST_FORWARD"/>
+                        </b:ButtonGroup>
+                        <g:Label>Сбито шашек</g:Label>
+                        <g:HTMLPanel ui:field="beatenDraughts">
+                            <g:Label ui:field="beatenMineDraughtsLabel" text="0 - Белых" addStyleNames="{res.style.emulatorDraughtsBeaten}"/>
+                            <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных" addStyleNames="{res.style.emulatorDraughtsBeaten}"/>
+                        </g:HTMLPanel>
+                        <g:Label>Нотация</g:Label>
+                        <g:ScrollPanel>
+                            <g:HTMLPanel ui:field="notationPanel"/>
+                        </g:ScrollPanel>
+                    </b:Column>
+                </b:Row>
+            </g:HTMLPanel>
+        </g:HTMLPanel>
+    </g:PopupPanel>
+</ui:UiBinder>

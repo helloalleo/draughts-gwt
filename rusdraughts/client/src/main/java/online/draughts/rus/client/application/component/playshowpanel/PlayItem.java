@@ -12,8 +12,8 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import online.draughts.rus.client.application.widget.dialog.DraughtsPlayer;
-import online.draughts.rus.client.gin.DraughtsPlayerFactory;
+import online.draughts.rus.client.application.home.HomePresenter;
+import online.draughts.rus.client.application.widget.popup.DraughtsPlayerPresenter;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.shared.locale.DraughtsMessages;
@@ -27,8 +27,8 @@ public class PlayItem extends Composite {
   private static Binder binder = GWT.create(Binder.class);
   private final DraughtsMessages messages = GWT.create(DraughtsMessages.class);
   private final AppResources resources = GWT.create(AppResources.class);
-  private final String PLAYER_COLOR_DELIMITER = ": ";
-  private final DraughtsPlayer draughtsPlayer;
+  private final static String PLAYER_COLOR_DELIMITER = ": ";
+  private DraughtsPlayerPresenter draughtsPlayer;
 
   @UiField
   HTMLPanel panel;
@@ -46,17 +46,18 @@ public class PlayItem extends Composite {
   Button playGame;
 
   @Inject
-  PlayItem(DraughtsPlayerFactory draughtsPlayerFactory, @Assisted Player player, @Assisted Game game) {
+  PlayItem(final DraughtsPlayerPresenter.Factory draughtsPlayerFactory, final HomePresenter homePresenter,
+           @Assisted Player player, @Assisted final Game game) {
     initWidget(binder.createAndBindUi(this));
 
-    this.draughtsPlayer = draughtsPlayerFactory.create(game);
     panel.addStyleName(resources.style().playItem());
     setGame(player, game);
 
     playGame.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        PlayItem.this.draughtsPlayer.show();
+        draughtsPlayer = draughtsPlayerFactory.create(game);
+        homePresenter.addToPopupSlot(draughtsPlayer);
       }
     });
   }

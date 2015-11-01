@@ -7,6 +7,7 @@ import online.draughts.rus.client.application.ApplicationModule;
 import online.draughts.rus.client.application.component.playshowpanel.PlayShowPanelModule;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.dialog.DialogModule;
+import online.draughts.rus.client.application.widget.popup.DraughtsPlayerModule;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.websocket.WebsocketModule;
 
@@ -18,6 +19,7 @@ public class ClientModule extends AbstractGinModule {
         .errorPlace(NameTokens.errorPage)
         .unauthorizedPlace(NameTokens.loginPage)
         .build());
+    install(new DraughtsPlayerModule());
     install(new DispatchModule());
     install(new ApplicationModule());
     install(new WebsocketModule());

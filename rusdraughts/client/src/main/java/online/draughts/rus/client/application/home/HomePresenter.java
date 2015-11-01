@@ -25,7 +25,6 @@ import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.shared.rest.GamesResource;
-import online.draughts.rus.shared.rest.PlayersResource;
 
 import java.util.List;
 
@@ -35,7 +34,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public static final PermanentSlot<PlayComponentPresenter> SLOT_PLAY = new PermanentSlot<>();
   public static int INIT_SHOW_GAMES_PAGE_SIZE;
   private final CurrentSession currentSession;
-  private final ClientConfiguration config;
   private PlayComponentPresenter playPresenter;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private int gamesOffset = 0;
@@ -48,11 +46,9 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       CurrentSession currentSession,
       ClientConfiguration config,
       PlayComponentPresenter playPresenter,
-      ResourceDelegate<PlayersResource> playersDelegate,
       ResourceDelegate<GamesResource> gamesDelegate) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
-    this.config = config;
     INIT_SHOW_GAMES_PAGE_SIZE = Integer.valueOf(config.initShowGamesPageSize());
     getView().setUiHandlers(this);
 
