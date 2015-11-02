@@ -217,3 +217,7 @@ body {
 
     background: white;
 }
+
+.notationStrokeStyle {
+    cursor: pointer;
+}

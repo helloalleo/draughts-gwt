@@ -35,8 +35,6 @@ import org.gwtbootstrap3.client.ui.html.Span;
 import java.util.ArrayList;
 import java.util.List;
 
-import static online.draughts.rus.client.util.Utils.format;
-
 public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUiHandlers>
     implements DraughtsPlayerPresenter.MyView {
   private final EventBus eventBus;
@@ -78,7 +76,6 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   private Timer playTimer;
   private boolean playing = false;
   private boolean atEnd = false;
-  private VerticalPanel mainPanel;
   @UiField
   Label beatenMineDraughtsLabel;
   @UiField
@@ -186,6 +183,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
         notationStrokes.add(stroke);
 
         Anchor anchor = new Anchor();
+        anchor.addStyleName(resources.style().notationStrokeStyle());
         anchor.setHTML(NotationPanel.wrapStroke(stroke, order));
         order++;
         anchor.addClickHandler(new ClickHandler() {
@@ -249,14 +247,14 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     commentCurrentStrokeButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        Element current = getCurrent();
+        Element current = getStrokeById(notationCursor);
         if (current == null) {
           commentCurrentStrokeTextArea.setText("");
           enableComments(false);
           return;
         }
 
-        Element move = getStroke(Integer.valueOf(current.getAttribute(NotationPanel.DATA_ID_ATTR)));
+        Element move = getStrokeById(Integer.valueOf(current.getAttribute(NotationPanel.DATA_ID_ATTR)));
         String oldComment = move.getAttribute(NotationPanel.DATA_COMMENT_ATTR);
         final String oComment = oldComment.length() != 0 ? (oldComment + NotationPanel.COMMENT_SEP) : "";
         move.setAttribute(NotationPanel.DATA_COMMENT_ATTR,
@@ -358,28 +356,27 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     }
 
     // получаем текущий ход
-    Element currentNotation = getCurrent();
+    Element currentNotation = getStrokeById(notationCursor - 1);
     if (currentNotation == null) {
       return;
     }
     notationCursor--;
 
-    Element outerNotation = getStrokeById(currentNotation.getAttribute(NotationPanel.DATA_ID_ATTR));
-    outerNotation.setInnerHTML(currentNotation.getInnerHTML());
+    currentNotation.removeClassName(resources.style().notationCurrentStyle());
 
     String step = null;
-    if (Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_CONTINUE_BEAT_ATTR))
-        || Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_STOP_BEAT_ATTR))) {
-      step = getStroke(notationCursor - 1).getInnerHTML();
+    if (Boolean.valueOf(currentNotation.getAttribute(NotationPanel.DATA_CONTINUE_BEAT_ATTR))
+        || Boolean.valueOf(currentNotation.getAttribute(NotationPanel.DATA_STOP_BEAT_ATTR))) {
+      step = getStrokeById(notationCursor - 1).getInnerHTML();
     }
 
-    Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(outerNotation, step, true);
+    Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(currentNotation, step, true);
     board.doEmulatedMoveBack(stroke, notationCursor);
 
     setBeatenMy(Board.DRAUGHTS_ON_SIDE - board.getMyDraughts().size());
     setBeatenOpponent(Board.DRAUGHTS_ON_SIDE - board.getOpponentDraughts().size());
 
-    Element notation = getStroke(notationCursor - 1);
+    Element notation = getStrokeById(notationCursor - 1);
     if (null == notation) {
       enableComments(false);
       prevButton.setEnabled(false);
@@ -391,14 +388,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     }
 
     // выделяем текущий ход
-    String highlightedStep = highlightedStroke(notation);
-    notation.setInnerHTML(highlightedStep);
-  }
-
-  private String highlightedStroke(Element notation) {
-    return format("<%s id='current' %s='%s' class='%s'>%s</%s>",
-          NotationPanel.NOTATION_TAG, NotationPanel.DATA_ID_ATTR, notation.getId(),
-          resources.style().notationCurrentStyle(), notation.getInnerHTML(), NotationPanel.NOTATION_TAG);
+    notation.addClassName(resources.style().notationCurrentStyle());
   }
 
   private void moveForward() {
@@ -412,7 +402,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       toStartButton.setEnabled(false);
     }
 
-    Element notation = getStroke(notationCursor);
+    Element notation = getStrokeById(notationCursor);
     if (null == notation) {
       atEnd = true;
       return;
@@ -427,12 +417,11 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     }
 
     // сбрасываем выделени хода
-    Element wrapperNotation = getCurrent();
+    Element currentNotation = getStrokeById(notationCursor - 1);
     String prevStep = "";
-    if (wrapperNotation != null) {
-      prevStep = wrapperNotation.getInnerHTML();
-      Element outerNotation = getStrokeById(wrapperNotation.getAttribute("data-id"));
-      outerNotation.setInnerHTML(wrapperNotation.getInnerHTML());
+    if (currentNotation != null) {
+      prevStep = currentNotation.getInnerHTML();
+      currentNotation.removeClassName(resources.style().notationCurrentStyle());
     }
 
     Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(notation, prevStep, false);
@@ -442,13 +431,12 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     setBeatenOpponent(Board.DRAUGHTS_ON_SIDE - board.getOpponentDraughts().size());
 
     // выделяем ход
-    notation = getStroke(notationCursor);
-    String highlightedStep = highlightedStroke(notation);
-    notation.setInnerHTML(highlightedStep);
+    notation = getStrokeById(notationCursor);
+    notation.addClassName(resources.style().notationCurrentStyle());
 
     notationCursor++;
 
-    notation = getStroke(notationCursor);
+    notation = getStrokeById(notationCursor);
     if (null == notation) {
       atEnd = true;
       playing = false;
@@ -461,12 +449,8 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     }
   }
 
-  private Element getStrokeById(String id) {
-    return notationPanel.getElementById(id);
-  }
-
-  private Element getStroke(int notationCursor) {
-    return notationPanel.getElementById(String.valueOf(notationCursor));
+  private Element getStrokeById(int id) {
+    return notationPanel.getElementById(String.valueOf(id));
   }
 
   public int getSide() {
@@ -511,10 +495,6 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     for (int i = notationCursor + 1; i > 0; i--) {
       moveBack();
     }
-  }
-
-  public Element getCurrent() {
-    return notationPanel.getElementById("current");
   }
 
   public void setBeatenMy(int count) {

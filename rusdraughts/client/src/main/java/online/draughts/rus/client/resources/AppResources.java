@@ -77,5 +77,7 @@ public interface AppResources extends ClientBundle {
     String leftSymbols();
 
     String notationCurrentStyle();
+
+    String notationStrokeStyle();
   }
 }
