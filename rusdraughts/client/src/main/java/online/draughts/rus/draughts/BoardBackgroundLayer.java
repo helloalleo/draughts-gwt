@@ -26,7 +26,7 @@ public class BoardBackgroundLayer extends Layer {
   private Rectangle boardConturRect;
   private Vector<Text> coordsTextVector = new Vector<>();
   public static final int OFFSET_X = 29;
-  private static final Color boardBackground = new Color(65, 133, 132);
+  public static final Color BOARD_BACKGROUND = new Color(65, 133, 132);
 
   public BoardBackgroundLayer(int side, int deskSide, int rows, int cols) {
     setListening(false);
@@ -44,7 +44,7 @@ public class BoardBackgroundLayer extends Layer {
 
   private void drawDesk() {
     Rectangle background = new Rectangle(deskSide + 2 * OFFSET_X, deskSide + 2 * OFFSET_X).setX(0).setY(0);
-    background.setFillColor(boardBackground);
+    background.setFillColor(BOARD_BACKGROUND);
     background.setShadow(new Shadow(ColorName.GRAY, 15, 10, 10));
     add(background);
 

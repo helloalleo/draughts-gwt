@@ -67,17 +67,17 @@ package online.draughts.rus.client.application.widget.dialog;//package net.rudra
 //    closeButton = new Button(messages.close());
 //    VerticalPanel verticalPanel = new VerticalPanel();
 //
-//    BoardBackgroundLayer boardBackground = new BoardBackgroundLayer(side, deskSide, rows, cols);
-//    boardBackground.drawCoordinates(true);
+//    BoardBackgroundLayer BOARD_BACKGROUND = new BoardBackgroundLayer(side, deskSide, rows, cols);
+//    BOARD_BACKGROUND.drawCoordinates(true);
 //
 //    HorizontalPanel checkersPanel = new HorizontalPanel();
 //
 //    SimplePanel deskPanel = new SimplePanel();
 //    LienzoPanel lienzoPanel = new LienzoPanel(side, side);
-//    lienzoPanel.setBackgroundLayer(boardBackground);
+//    lienzoPanel.setBackgroundLayer(BOARD_BACKGROUND);
 //
 //    boolean myColor = true;
-//    board = new Board(clientFactory, boardBackground, rows, cols, myColor);
+//    board = new Board(clientFactory, BOARD_BACKGROUND, rows, cols, myColor);
 //    board.setEmulate(true);
 //    lienzoPanel.add(board);
 //

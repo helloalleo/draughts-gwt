@@ -11,7 +11,6 @@ import com.ait.lienzo.client.core.shape.Circle;
 import com.ait.lienzo.client.core.shape.Group;
 import com.ait.lienzo.client.core.shape.Star;
 import com.ait.lienzo.client.core.types.Shadow;
-import com.ait.lienzo.shared.core.types.Color;
 import com.ait.lienzo.shared.core.types.ColorName;
 import com.google.gwt.dom.client.Element;
 
@@ -35,7 +34,6 @@ public class Draught extends Group {
   private Circle mainCircle = new Circle(0);
   private Circle innerCircle1 = new Circle(0);
   private Circle innerCircle2 = new Circle(0);
-  private Circle innerCircle3 = new Circle(0);
   private Star queenStar = new Star(5, 0, 0);
 
   private int rows;
@@ -67,30 +65,18 @@ public class Draught extends Group {
     add(mainCircle);
     add(innerCircle1);
     add(innerCircle2);
-    add(innerCircle3);
 
     queenStar.setFillColor(white ? ColorName.BLUE : ColorName.RED);
 
-    Circle[] circles = {mainCircle, innerCircle1, innerCircle2, innerCircle3};
+    Circle[] circles = {mainCircle, innerCircle1, innerCircle2};
 
-    int i = 0;
     for (Circle circle : circles) {
-      if (isWhite()) {
-        if (i % 2 == 0) {
-          circle.setShadow(new Shadow(ColorName.GRAY, 6, 0, 4));
-        } else {
-          circle.setShadow(new Shadow(ColorName.GRAY, 6, 0, -4));
-        }
-      } else {
-        if (i % 2 == 0) {
-          circle.setShadow(new Shadow(ColorName.BLACK, 6, 0, 4));
-        } else {
-          circle.setShadow(new Shadow(ColorName.BLACK, 6, 0, -4));
-        }
-      }
-      i++;
-      circle.setFillColor(white ? ColorName.WHITE : Color.fromColorString("#555"));
+      circle.setFillColor(ColorName.TRANSPARENT);
+      circle.setStrokeColor(white ? ColorName.WHITE : ColorName.BLACK);
+      circle.setStrokeWidth(1.4);
     }
+    mainCircle.setFillColor(white ? ColorName.WHITESMOKE : ColorName.SLATEGRAY);
+    mainCircle.setShadow(new Shadow(ColorName.BLACK, 12, 2, 2));
 
     updateShape();
 
@@ -160,8 +146,8 @@ public class Draught extends Group {
     mainCircle.setRadius(radius);
     innerCircle1.setRadius(radius - radius / 4);
     if (isQueen()) {
+      this.remove(innerCircle1);
       this.remove(innerCircle2);
-      this.remove(innerCircle3);
 
       this.add(queenStar);
       queenStar.setInnerRadius(radius - radius / 1.3);
@@ -170,16 +156,12 @@ public class Draught extends Group {
       if (!getChildNodes().contains(innerCircle2)) {
         this.add(innerCircle2);
       }
-      if (!getChildNodes().contains(innerCircle3)) {
-        this.add(innerCircle3);
-      }
 
       if (this.getChildNodes().contains(queenStar)) {
         this.remove(queenStar);
       }
 
       innerCircle2.setRadius(radius - radius / 2);
-      innerCircle3.setRadius(radius - radius / 1.3);
     }
   }
 
