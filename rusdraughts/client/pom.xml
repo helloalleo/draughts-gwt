@@ -29,18 +29,8 @@
         <lienzo-core.version>2.0.155-RC1</lienzo-core.version>
         <gwt-jackson.version>0.10.0</gwt-jackson.version>
 
-        <!-- GWT needs at least java 1.6 -->
-        <!--<maven.compiler.source>1.7</maven.compiler.source>-->
-        <!--<maven.compiler.target>1.7</maven.compiler.target>-->
-
-        <!-- maven -->
-        <!--<maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>-->
-
-        <!--<target.jdk>1.7</target.jdk>-->
-        <!--<project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>-->
         <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
 
-        <!--<project.artifacts.directory>out/artifacts</project.artifacts.directory>-->
         <outputDirectory>${project.basedir}/../../out/artifacts/draughts_web_exploded.war</outputDirectory>
         <gwtbootstrap3-extras.version>0.9.1</gwtbootstrap3-extras.version>
     </properties>

@@ -691,66 +691,11 @@ public class Board extends Layer {
     return row >= 0 && row < rows && col >= 0 && col < cols;
   }
 
-  private Square parseStep(String move) throws SquareNotFoundException {
-    int sRow = 8 - Integer.parseInt(move.substring(1, 2));
-    int sCol = alphMap.get(move.substring(0, 1));
-
-    return backgroundLayer.getSquare(sRow, sCol);
-  }
-
-//  /**
-//   * Эмулятор
-//   * @param notationStep
-//   * @param stepCursor
-//   */
-//
-//  public void moveEmulatedNextWhite(String notationStep, int stepCursor) {
-//    if (notationStep.contains(Stroke.SIMPLE_MOVE_SEP)) {
-//      doSimpleMove(notationStep, stepCursor);
-//    } else if (notationStep.contains(Stroke.BEAT_MOVE_SEP)) {
-//      doBeatenMove(notationStep, stepCursor);
-//    }
-//  }
-//
-//  private void doBeatenMove(String notationStep, int stepCursor) {
-//    String[] steps = notationStep.split(Stroke.BEAT_MOVE_SEP);
-//      Square firstSquare, secondSquare, taken;
-//      try {
-//        firstSquare = parseStep(steps[0]);
-//        secondSquare = parseStep(steps[1]);
-//        taken = findCaptured(firstSquare, secondSquare);
-//      } catch (SquareNotFoundException e) {
-//        DTLog.error(e.getLocalizedMessage(), e);
-//      }
-//      Stroke stroke = createStroke(firstSquare, secondSquare, taken, i, steps.length - 1);
-//      doMove(stroke, stepCursor);
-//  }
-//
-//  public void moveEmulatedNextBlack(String notationStep, int stepCursor) {
-//    if (notationStep.contains(Stroke.SIMPLE_MOVE_SEP)) {
-//      doSimpleMove(notationStep, stepCursor);
-//    } else if (notationStep.contains(Stroke.BEAT_MOVE_SEP)) {
-//      doBeatenMove(notationStep, stepCursor);
-//    }
-//  }
-//  private void doSimpleMove(String calcStroke, int stepCursor) {
-//    doSimpleMove(calcStroke, stepCursor, false);
-//  }
-//
-//  private void doSimpleMove(String notationStep, int stepCursor, boolean reverse) {
-//    String[] steps = notationStep.split(Stroke.SIMPLE_MOVE_SEP);
-//    Square startSquare, endSquare;
-//    try {
-//      startSquare = parseStep(steps[reverse ? 1 : 0]);
-//      endSquare = parseStep(steps[reverse ? 0 : 1]);
-//    } catch (SquareNotFoundException e) {
-//      DTLog.error(e.getLocalizedMessage(), e);
-//      return;
-//    }
-//    Stroke stroke = createStroke(startSquare, endSquare, null, 0, 0);
-//    doMove(stroke, stepCursor);
-//  }
-//
+  /**
+   * Функция используется в плеере. Назанчение добавить сбитую шашку
+   * @param stroke ход
+   * @param stepCursor курсор для дамки
+   */
   public void doEmulatedMoveBack(Stroke stroke, int stepCursor) {
     if (stroke.isSimple()) {
       Square tmp = stroke.getStartSquare();
@@ -769,56 +714,6 @@ public class Board extends Layer {
       strokeCanceled(stroke, stepCursor, true);
     }
   }
-//
-//  private void doBeatPrevMove(String notationStep, int stepCursor) {
-//    String[] steps = notationStep.split(Stroke.BEAT_MOVE_SEP);
-//    for (int i = steps.length - 1; i > 0; i--) {
-//      Square firstStep;
-//      Square secondStep;
-//      Square taken;
-//      try {
-//        firstStep = parseStep(steps[i]);
-//        secondStep = parseStep(steps[i + 1]);
-//        taken = findCaptured(firstStep, secondStep);
-//      } catch (SquareNotFoundException e) {
-//        DTLog.error(e.getLocalizedMessage(), e);
-//        return;
-//      }
-//      Stroke stroke = createStroke(firstStep, secondStep, taken, i, steps.length - 1);
-//      myDraughtList.add(addDraught(taken.getRow(), taken.getCol(), !white));
-//      doMove(stroke, stepCursor);
-//    }
-//  }
-//
-//  private Stroke createStroke(Square firstSquare, Square secondSquare, Square taken, int pos, int steps) {
-//    Stroke stroke = new Stroke();
-//    stroke.setStartSquare(firstSquare);
-//    stroke.setEndSquare(secondSquare);
-//    stroke.setTakenSquare(taken);
-//    stroke.setOnSimpleMove();
-//    if (steps != 0) {
-//      if (pos == 0) {
-//        stroke.setOnStartBeat();
-//      } else if (pos == steps) {
-//        stroke.setOnStopBeat();
-//      } else {
-//        stroke.setOnContinueBeat();
-//      }
-//    } else {
-//      stroke.setOnSimpleMove();
-//    }
-//    return stroke;
-//  }
-//
-//  public void moveEmulatedPrevBlack(String calcStroke, int stepCursor) {
-//    if (calcStroke.contains(Stroke.SIMPLE_MOVE_SEP)) {
-//      doSimpleMove(calcStroke, stepCursor, true);
-//    } else if (calcStroke.contains(Stroke.BEAT_MOVE_SEP)) {
-//      doBeatPrevMove(calcStroke, stepCursor);
-//    }
-//  }
-//
-//  // **************************************************************************************************************** //
 
   public void moveOpponent(Stroke stroke) {
     DTLog.debug("MOVE OPPONENT " + stroke.toString());
@@ -1127,7 +1022,6 @@ public class Board extends Layer {
       stroke.setTakenSquare(taken);
     }
 
-    complexBeat = false;
     DTLog.debug("MOVE CANCELED 1");
     doMove(stroke, stepCursor, back);
     DTLog.debug("MOVE CANCELED 2");

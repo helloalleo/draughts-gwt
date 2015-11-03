@@ -55,6 +55,9 @@ public class GamesResourceImpl implements GamesResource {
 
   @Override
   public Game game(Long gameId) {
+    if (!AuthUtils.isAuthenticated(request.getSession())) {
+      throw new RuntimeException("Unauthorized");
+    }
     return gameService.find(gameId);
   }
 }

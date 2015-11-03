@@ -14,12 +14,14 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
 import com.gwtplatform.mvp.client.view.PopupPositioner;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
+import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
@@ -29,16 +31,15 @@ import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.rest.GamesResource;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Column;
+import org.gwtbootstrap3.client.ui.Heading;
 import org.gwtbootstrap3.client.ui.TextArea;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.gwtbootstrap3.client.ui.html.Br;
 import org.gwtbootstrap3.client.ui.html.Span;
-
-import java.util.ArrayList;
-import java.util.List;
 
 public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUiHandlers>
     implements DraughtsPlayerPresenter.MyView {
@@ -46,11 +47,11 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   private final AppResources resources;
   private final int rows = 8;
   private final int cols = 8;
-  private final Game game;
+  private Game game;
   private final ClientConfiguration config;
-  private final CurrentSession currentSessiont;
+  private final CurrentSession currentSession;
   private final Player player;
-  private int popupHeight;
+  private final ResourceDelegate<GamesResource> gamesDelegate;
   @UiField
   PopupPanel main;
   @UiField
@@ -106,22 +107,37 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   Label logInToCommentLabel;
   @UiField
   Column draughtsDeskColumn;
+  @UiField
+  Heading allCommentsHeading;
+  @UiField
+  Heading commentsToStrokeHeading;
+  @UiField
+  Heading commentStrokeHeading;
+  @UiField
+  HTMLPanel notLoggedInCommentPanel;
+  @UiField
+  HTMLPanel loggedInCommentPanel;
   private HandlerRegistration nativePreviewHandler;
   private boolean commentHasFocus;
-  private List<Stroke> notationStrokes = new ArrayList<>();
 
   DraughtsPlayerView(Binder uiBinder, EventBus eventBus, AppResources resources, DraughtsMessages messages,
-                     ClientConfiguration config, CurrentSession currentSession, Game game) {
+                     ClientConfiguration config, CurrentSession currentSession,
+                     ResourceDelegate<GamesResource> gamesDelegate,
+                     Game game) {
     super(eventBus);
     this.eventBus = eventBus;
     this.resources = resources;
     this.messages = messages;
     this.config = config;
-    this.game = game;
-    this.currentSessiont = currentSession;
+    this.currentSession = currentSession;
     this.player = currentSession.getPlayer();
+    this.gamesDelegate = gamesDelegate;
+    this.game = game;
 
     initWidget(uiBinder.createAndBindUi(this));
+
+    loggedInCommentPanel.setVisible(currentSession.isLoggedIn());
+    notLoggedInCommentPanel.setVisible(!currentSession.isLoggedIn());
 
     HTML cap = new HTML(messages.playerCaption(game.getPlayerWhite().getPublicName(), game.getPlayerBlack().getPublicName(),
         TrUtils.translateEndGame(game.getPlayEndStatus())));
@@ -138,6 +154,18 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   protected void onAttach() {
     super.onAttach();
 
+    if (currentSession.isLoggedIn()) {
+      gamesDelegate.withCallback(new AbstractAsyncCallback<Game>() {
+        @Override
+        public void onSuccess(Game result) {
+          DraughtsPlayerView.this.game = result;
+          playerInit();
+        }
+      }).game(game.getId());
+    } else {
+      playerInit();
+    }
+
     setPopupPositioner(new PopupPositioner() {
       @Override
       protected int getLeft(int popupWidth) {
@@ -150,16 +178,21 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       }
     });
 
+    Window.enableScrolling(false);
+  }
+
+  private void playerInit() {
     registerNativeEvents();
     initMainPanel();
     initNotationPanel();
     initCommentPanel();
-    Window.enableScrolling(false);
   }
 
   private void initCommentPanel() {
-    final int height = main.getOffsetHeight() / 2 - commentCurrentStrokeTextArea.getOffsetHeight()
-        - commentCurrentStrokeButton.getOffsetHeight() - caption.getOffsetHeight();
+    final int offset = currentSession.isLoggedIn() ? loggedInCommentPanel.getOffsetHeight()
+        : notLoggedInCommentPanel.getOffsetHeight();
+    final int height = main.getOffsetHeight() / 2 - commentStrokeHeading.getOffsetHeight()
+        - caption.getOffsetHeight() - offset - 20;
     gameCommentsScroll.setHeight(height + "px");
     currentStrokeCommentScroll.setHeight(height + "px");
   }
@@ -191,24 +224,30 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     int order = 0;
     for (int i = 0; i < gameNode.getChildCount(); i++) {
       final Node child = gameNode.getChild(i);
-      if (child.getNodeType() == Node.ELEMENT_NODE) {
-        Element wrapperNotation = ((Element) gameNode.getChild(i - 1));
-        final Element step = ((Element) child);
-        if (NotationPanel.NOTATION_SEP_TAG.toLowerCase().equals(step.getNodeName().toLowerCase())) {
-          notationPanel.add(new Br());
-          continue;
-        }
-        // если разделитель побитых шашек
-        if (Stroke.BEAT_MOVE_SEP.equals(wrapperNotation.getNodeValue())) {
-          wrapperNotation = ((Element) gameNode.getChild(i - 2));
-        }
+      // если у нас не спан
+      if (!child.getNodeName().toUpperCase().equals(NotationPanel.NOTATION_A_TAG.toUpperCase())) {
+        // тогда у нас анчор, берем его содержимое
+        final Element step = ((Element) child.getFirstChild());
         String prevStep = "";
-        if (wrapperNotation != null) {
-          prevStep = wrapperNotation.getInnerHTML();
+        if (i > 0) {
+          Element wrapperNotation = ((Element) gameNode.getChild(i - 1));
+          if (NotationPanel.NOTATION_SEP_TAG.toUpperCase().equals(child.getNodeName().toUpperCase())) {
+            notationPanel.add(new Br());
+            continue;
+          }
+          // если разделитель побитых шашек
+          if (Stroke.BEAT_MOVE_SEP.equals(wrapperNotation.getNodeValue())) {
+            wrapperNotation = ((Element) gameNode.getChild(i - 2));
+          }
+          prevStep = "";
+          if (wrapperNotation != null && wrapperNotation.getInnerText().contains(Stroke.BEAT_MOVE_SEP)) {
+            prevStep = wrapperNotation.getInnerText();
+          }
         }
 
         final Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(step, prevStep, false);
-        notationStrokes.add(stroke);
+
+        addGameComment(step.getInnerText(), stroke.getTitle(), stroke.getComment());
 
         Anchor anchor = new Anchor();
         anchor.addStyleName(resources.style().notationStrokeStyle());
@@ -227,7 +266,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
         });
         notationPanel.add(anchor);
       } else {
-        notationPanel.add(new Span(child.getNodeValue()));
+        notationPanel.add(new Span(((Element) child).getInnerText()));
       }
     }
   }
@@ -329,11 +368,13 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     if (current == null) {
       current = prev;
     }
+    final String currentNotation = current.getInnerText();
 
     final String oldTitle = current.getAttribute(NotationPanel.DATA_TITLE_ATTR);
     final String oTitle = oldTitle.length() != 0 ? (oldTitle + NotationPanel.USER_COMMENT_SEP)
         : "";
-    final String newTitle = oTitle + currentSessiont.getPlayer().getSiteName();
+    final String gameTitle = currentSession.getPlayer().getSiteName();
+    final String newTitle = oTitle + gameTitle;
     if (StringUtils.isNotEmpty(newTitle)) {
       current.setAttribute(NotationPanel.DATA_TITLE_ATTR, newTitle);
     }
@@ -343,21 +384,28 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
         : "";
     String text = commentCurrentStrokeTextArea.getText().replace(config.escapeChars(), "");
     text = SimpleHtmlSanitizer.getInstance().sanitize(text).asString();
-    String gameComment = text.replace("\n", NotationPanel.COMMENT_SEP);
-    String newComment = oComment + gameComment + NotationPanel.COMMENT_SEP;
+    final String gameComment = text.replace("\n", NotationPanel.COMMENT_SEP);
+    final String newComment = oComment + gameComment + NotationPanel.COMMENT_SEP;
 
     current.setAttribute(NotationPanel.DATA_COMMENT_ATTR, newComment);
 
-    setGameComment(gameComment);
-    setStrokeComment(newTitle, newComment);
     commentCurrentStrokeTextArea.setText("");
     leftSymbolsLabel.setText(config.strokeCommentLength());
     commentCurrentStrokeTextArea.setFocus(false);
+
+    game.setNotation(notationPanel.getElement().getString());
+
+    gamesDelegate.withCallback(new AbstractAsyncCallback<Game>() {
+      @Override
+      public void onSuccess(Game result) {
+        addGameComment(currentNotation, gameTitle, gameComment);
+        setStrokeComment(newTitle, newComment);
+      }
+    }).saveOrCreate(game);
   }
 
-  private void setGameComment(String gameComment) {
-    gameComments.add(new HTML(gameComment));
-    gameCommentsScroll.scrollToBottom();
+  private void addGameComment(String currentNotation, String gameTitle, String gameComment) {
+    addComment(gameComments, gameCommentsScroll, currentNotation, gameTitle, gameComment);
   }
 
   private void initButtons() {
@@ -450,7 +498,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     String step = null;
     if (Boolean.valueOf(currentNotation.getAttribute(NotationPanel.DATA_CONTINUE_BEAT_ATTR))
         || Boolean.valueOf(currentNotation.getAttribute(NotationPanel.DATA_STOP_BEAT_ATTR))) {
-      step = getStrokeById(notationCursor - 1).getInnerHTML();
+      step = getStrokeById(notationCursor - 1).getInnerText();
     }
 
     Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(currentNotation, step, true);
@@ -503,7 +551,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     Element currentNotation = getStrokeById(notationCursor - 1);
     String prevStep = "";
     if (currentNotation != null) {
-      prevStep = currentNotation.getInnerHTML();
+      prevStep = currentNotation.getInnerText();
       currentNotation.removeClassName(resources.style().notationCurrentStyle());
     }
 
@@ -535,6 +583,10 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
   private void setStrokeComment(String title, String comment) {
     currentStrokeComment.clear();
+    addComment(currentStrokeComment, currentStrokeCommentScroll, null, title, comment);
+  }
+
+  private void addComment(HTMLPanel panel, ScrollPanel scrollPanel, String currentNotation, String title, String comment) {
     if (StringUtils.isEmpty(title) || StringUtils.isEmpty(comment)) {
       return;
     }
@@ -544,9 +596,14 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       return;
     }
     for (int i = 0; i < titles.length; i++) {
-      currentStrokeComment.add(new HTML(titles[i] + NotationPanel.TITLE_COMMENT_SEP + comments[i]));
+      if (StringUtils.isEmpty(currentNotation)) {
+        panel.add(new HTML(titles[i] + NotationPanel.TITLE_COMMENT_SEP + comments[i]));
+      } else {
+        panel.add(new HTML(titles[i] + NotationPanel.TITLE_COMMENT_SEP + currentNotation
+            + NotationPanel.TITLE_COMMENT_SEP + comments[i]));
+      }
     }
-    currentStrokeCommentScroll.scrollToBottom();
+    scrollPanel.scrollToBottom();
   }
 
   private Element getStrokeById(int id) {
@@ -612,22 +669,25 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     private final AppResources resources;
     private final ClientConfiguration config;
     private final CurrentSession currentSession;
+    private final ResourceDelegate<GamesResource> gamesDelegate;
 
     @Inject
     public ViewFactoryImpl(Binder binder, EventBus eventBus,
                            DraughtsMessages messages, AppResources resources,
-                           ClientConfiguration config, CurrentSession currentSession) {
+                           ClientConfiguration config, CurrentSession currentSession,
+                           ResourceDelegate<GamesResource> gamesDelegate) {
       this.binder = binder;
       this.eventBus = eventBus;
       this.messages = messages;
       this.resources = resources;
       this.config = config;
       this.currentSession = currentSession;
+      this.gamesDelegate = gamesDelegate;
     }
 
     @Override
     public DraughtsPlayerPresenter.MyView create(Game game) {
-      return new DraughtsPlayerView(binder, eventBus, resources, messages, config, currentSession, game);
+      return new DraughtsPlayerView(binder, eventBus, resources, messages, config, currentSession, gamesDelegate, game);
     }
   }
 }

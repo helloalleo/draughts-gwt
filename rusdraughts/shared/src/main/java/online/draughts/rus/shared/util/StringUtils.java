@@ -32,4 +32,17 @@ public class StringUtils {
     }
     return hashes;
   }
+
+  public static String join(String[] strings, String separator) {
+    StringBuilder result = new StringBuilder();
+
+    for (String s : strings) {
+      if (result.length() != 0) {
+        result.append(separator);
+      }
+      result.append(s);
+    }
+
+    return result.toString();
+  }
 }

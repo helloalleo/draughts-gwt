@@ -136,7 +136,7 @@ public class GameService {
   }
 
   public Game find(Long gameId) {
-    return gameDaoProvider.get().find(gameId);
+    return gameDaoProvider.get().findLazyFalse(gameId);
   }
 
   public List<Move> findGameMoves(Long gameId) {

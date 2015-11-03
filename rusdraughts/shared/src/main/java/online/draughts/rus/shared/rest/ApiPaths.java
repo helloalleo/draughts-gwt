@@ -26,5 +26,5 @@ public class ApiPaths {
   public static final String COUNT = "/count";
   public static final String LOGGED_IN_USER = "/loggedin";
 
-  public static final String PATH_ID = "/}";
+  public static final String PATH_ID = "/{id}";
 }

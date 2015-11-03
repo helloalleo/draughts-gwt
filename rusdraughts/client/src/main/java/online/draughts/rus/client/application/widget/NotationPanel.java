@@ -8,6 +8,7 @@ import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.draughts.Square;
 import online.draughts.rus.draughts.Stroke;
+import online.draughts.rus.shared.util.StringUtils;
 
 import static online.draughts.rus.client.util.Utils.format;
 
@@ -38,6 +39,7 @@ public class NotationPanel extends ScrollPanel {
   public static final String NOTATION_TAG = "span";
   public static final String TITLE_COMMENT_SEP = ", ";
   public static final String USER_COMMENT_SEP = ":";
+  public static final String NOTATION_A_TAG = "a";
 
   private static StringBuilder notation = new StringBuilder();
   private static int order = 0;
@@ -82,11 +84,10 @@ public class NotationPanel extends ScrollPanel {
     final boolean first = stroke.isFirst();
     if (stroke.isSimple()) {
       if (first) {
-        notation.append(stroke.getNumber())
-            .append(COUNT_SEP)
+        notation.append(wrapInSpan(String.valueOf(stroke.getNumber()), COUNT_SEP))
             .append(wrapStroke(stroke, order));
       } else {
-        notation.append(MOVE_SEP)
+        notation.append(wrapInSpan(MOVE_SEP))
             .append(wrapStroke(stroke, order))
             .append(NOTATION_SEP);
       }
@@ -96,31 +97,30 @@ public class NotationPanel extends ScrollPanel {
       final boolean stopBeat = stroke.isStopBeat();
       if (startBeat) {
         if (first) {
-          notation.append(stroke.getNumber())
-              .append(COUNT_SEP)
+          notation.append(wrapInSpan(String.valueOf(stroke.getNumber()), COUNT_SEP))
               .append(wrapStroke(stroke, order));
         } else {
           if (continueBeat) {
-            notation.append(MOVE_SEP)
+            notation.append(wrapInSpan(MOVE_SEP))
                 .append(wrapStroke(stroke, order));
           } else {
-            notation.append(MOVE_SEP)
+            notation.append(wrapInSpan(MOVE_SEP))
                 .append(wrapStroke(stroke, order))
                 .append(NOTATION_SEP);
           }
         }
       } else if (stopBeat) {
         if (first) {
-          notation.append(BEAT_SEP)
+          notation.append(wrapInSpan(BEAT_SEP))
               .append(wrapStroke(stroke, order))
-              .append(MOVE_SEP);
+              .append(wrapInSpan(MOVE_SEP));
         } else {
-          notation.append(BEAT_SEP)
+          notation.append(wrapInSpan(BEAT_SEP))
               .append(wrapStroke(stroke, order))
-              .append(NOTATION_SEP);
+              .append(wrapInSpan(NOTATION_SEP));
         }
       } else if (continueBeat) {
-        notation.append(BEAT_SEP)
+        notation.append(wrapInSpan(BEAT_SEP))
             .append(wrapStroke(stroke, order));
       }
     }
@@ -128,6 +128,10 @@ public class NotationPanel extends ScrollPanel {
 
     getElement().setInnerHTML(notation.toString());
     pushScroll();
+  }
+
+  private String wrapInSpan(String... args) {
+    return "<" + NOTATION_TAG + ">" + StringUtils.join(args, "") + "</" + NOTATION_TAG + ">";
   }
 
   // код для прокрутки TextArea в конец
@@ -138,26 +142,26 @@ public class NotationPanel extends ScrollPanel {
   public void cancelMove(Stroke stroke) {
     if (stroke.isSimple()) {
       if (stroke.isFirst()) {
-        if (stroke.getNumber() != 1) { // при первом ходе из нотации нужно удалить див
+        if (stroke.getNumber() != 1) {
           notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(NOTATION_SEP)) + NOTATION_SEP);
         } else {
           cleanNotationPanel();
         }
       } else {
-        notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(MOVE_SEP)));
+        notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(wrapInSpan(MOVE_SEP))));
       }
     } else {
       if (stroke.isFirst()) {
         if (stroke.isStartBeat()) {
           notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(NOTATION_SEP)) + NOTATION_SEP);
         } else {
-          notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(BEAT_SEP)));
+          notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(wrapInSpan(BEAT_SEP))));
         }
       } else {
         if (stroke.isStartBeat()) {
-          notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(MOVE_SEP)));
+          notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(wrapInSpan(MOVE_SEP))));
         } else {
-          notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(BEAT_SEP)));
+          notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(wrapInSpan(BEAT_SEP))));
         }
       }
     }
@@ -173,27 +177,31 @@ public class NotationPanel extends ScrollPanel {
 
   public static String wrapStroke(Stroke stroke, int order) {
     return wrapStroke(stroke, order, stroke.isFirst(), stroke.isSimple(), stroke.isStartBeat(), stroke.isContinueBeat(),
-        stroke.isStopBeat());
+        stroke.isStopBeat(), stroke.getTitle(), stroke.getComment());
   }
 
-  private static String wrapStroke(Stroke stroke, int order, boolean first, boolean simple, boolean startBeat, boolean continueBeat, boolean stopBeat) {
-    String span = format("<%s id='%s' %s='%s' %s='%s' %s='%s' %s='%s' %s='' %s='' ",
+  private static String wrapStroke(Stroke stroke, int order, boolean first, boolean simple,
+                                   boolean startBeat, boolean continueBeat, boolean stopBeat,
+                                   String title, String comment) {
+    String span = format("<%s href='#'><%s id='%s' %s='%s' %s='%s' %s='%s' %s='%s' %s=\"%s\" %s=\"%s\" ",
+        NOTATION_A_TAG,
         NOTATION_TAG,
         order,
         DATA_ORDER_ATTR, order,
         DATA_NUMBER_ATTR, stroke.getNumber(),
         DATA_SIMPLE_ATTR, simple,
         DATA_FIRST_ATTR, first,
-        DATA_TITLE_ATTR,
-        DATA_COMMENT_ATTR);
-    span += format("%s='%s' %s='%s' %s='%s'>%s</%s>",
+        DATA_TITLE_ATTR, title,
+        DATA_COMMENT_ATTR, comment);
+    span += format("%s='%s' %s='%s' %s='%s'>%s</%s></%s>",
         DATA_START_BEAT_ATTR, startBeat,
         DATA_CONTINUE_BEAT_ATTR, continueBeat,
         DATA_STOP_BEAT_ATTR, stopBeat,
         stroke.isSimple() ? stroke.toNotation()
             : (stroke.isStartBeat() ? stroke.toNotation()
             : stroke.toNotationLastMove()),
-        NOTATION_TAG);
+        NOTATION_TAG,
+        NOTATION_A_TAG);
     return span;
   }
 }

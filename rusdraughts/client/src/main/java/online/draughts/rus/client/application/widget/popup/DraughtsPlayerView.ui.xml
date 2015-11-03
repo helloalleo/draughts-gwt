@@ -45,23 +45,33 @@
                                 </g:ScrollPanel>
                             </b:Column>
                             <b:Column size="MD_8">
-                                <b:Heading size="H4" text="Все комментарии"/>
+                                <b:Heading size="H4" ui:field="allCommentsHeading" text="Все комментарии"/>
                                 <g:ScrollPanel ui:field="gameCommentsScroll">
-                                    <g:HTMLPanel ui:field="gameComments" addStyleNames="{res.style.gameCommentPanel}"/>
+                                    <g:HTMLPanel ui:field="gameComments"
+                                                 addStyleNames="{res.style.gameCommentPanel}"/>
                                 </g:ScrollPanel>
 
-                                <b:Heading size="H4" text="Комментарии к ходу"/>
+                                <b:Heading size="H4" ui:field="commentsToStrokeHeading" text="Комментарии к ходу"/>
                                 <g:ScrollPanel ui:field="currentStrokeCommentScroll">
                                     <g:HTMLPanel ui:field="currentStrokeComment"
                                                  addStyleNames="{res.style.strokeCommentPanel}"/>
                                 </g:ScrollPanel>
 
-                                <b:Heading size="H4" text="Комментировать ход"/>
-                                <g:Label ui:field="logInToCommentLabel" text="Войдите, чтобы комментировать" visible="false"
-                                        addStyleNames="{res.style.strokeCommentPanel}"/>
-                                <b:TextArea ui:field="commentCurrentStrokeTextArea"/>
-                                <b:Label ui:field="leftSymbolsLabel" addStyleNames="{res.style.leftSymbols}" pull="LEFT"/>
-                                <b:Button ui:field="commentCurrentStrokeButton" pull="RIGHT" icon="PENCIL" text="Комментировать"/>
+                                <b:Heading size="H4" ui:field="commentStrokeHeading" text="Комментировать ход"/>
+
+                                <g:HTMLPanel ui:field="notLoggedInCommentPanel" visible="true">
+                                    <g:Label ui:field="logInToCommentLabel" text="Войдите, чтобы комментировать"
+                                             visible="false"
+                                             addStyleNames="{res.style.strokeCommentPanel}"/>
+                                </g:HTMLPanel>
+                                <g:HTMLPanel ui:field="loggedInCommentPanel" visible="false">
+                                    <b:TextArea ui:field="commentCurrentStrokeTextArea"/>
+                                    <b:Label ui:field="leftSymbolsLabel" addStyleNames="{res.style.leftSymbols}"
+                                             pull="LEFT"/>
+                                    <b:Button ui:field="commentCurrentStrokeButton" pull="RIGHT" icon="PENCIL"
+                                              text="Комментировать"/>
+                                </g:HTMLPanel>
+
                             </b:Column>
                         </b:Row>
                     </b:Column>
