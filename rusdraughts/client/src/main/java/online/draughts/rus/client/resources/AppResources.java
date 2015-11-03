@@ -79,5 +79,9 @@ public interface AppResources extends ClientBundle {
     String notationCurrentStyle();
 
     String notationStrokeStyle();
+
+    String gameCommentPanel();
+
+    String strokeCommentPanel();
   }
 }

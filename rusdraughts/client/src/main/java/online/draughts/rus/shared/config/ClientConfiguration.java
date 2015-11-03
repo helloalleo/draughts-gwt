@@ -26,4 +26,6 @@ public interface ClientConfiguration extends ConstantsWithLookup {
   String incrementPlayShowSize();
 
   String strokeCommentLength();
+
+  String escapeChars();
 }

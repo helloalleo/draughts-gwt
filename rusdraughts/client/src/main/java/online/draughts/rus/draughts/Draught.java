@@ -72,7 +72,7 @@ public class Draught extends Group {
 
     for (Circle circle : circles) {
       circle.setFillColor(ColorName.TRANSPARENT);
-      circle.setStrokeColor(white ? ColorName.WHITE : ColorName.BLACK);
+      circle.setStrokeColor(white ? ColorName.ANTIQUEWHITE : ColorName.DARKSLATEGRAY);
       circle.setStrokeWidth(1.4);
     }
     mainCircle.setFillColor(white ? ColorName.WHITESMOKE : ColorName.SLATEGRAY);

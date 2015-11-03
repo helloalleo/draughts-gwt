@@ -4,7 +4,6 @@ body {
     background-color: white;
     color: black;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: large;
 }
 
 .mainContainer {
@@ -220,4 +219,12 @@ body {
 
 .notationStrokeStyle {
     cursor: pointer;
+}
+
+.gameCommentPanel {
+    font-size: 14px;
+}
+
+.strokeCommentPanel {
+    font-size: 14px;
 }

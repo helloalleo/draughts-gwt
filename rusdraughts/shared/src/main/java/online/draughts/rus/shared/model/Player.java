@@ -1,6 +1,8 @@
 package online.draughts.rus.shared.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gwt.safehtml.shared.SafeHtml;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.rpc.GwtTransient;
 import online.draughts.rus.shared.util.StringUtils;
 
@@ -374,6 +376,14 @@ public class Player extends PersistableObjectImpl {
     return getFirstName() + " " + getLastName();
   }
 
+  @JsonIgnore
+  public String getShortName() {
+    if (getPlayerName() == null) {
+      return getFirstName();
+    }
+    return getPlayerName();
+  }
+
   @Override
   public String toString() {
     return "Player{" +
@@ -426,6 +436,16 @@ public class Player extends PersistableObjectImpl {
 
   public String getGoogleSub() {
     return googleSub;
+  }
+
+  @JsonIgnore
+  public String getSiteName() {
+    return new SafeHtmlBuilder().appendHtmlConstant("<a href='")
+        .appendHtmlConstant("#player?id=")
+        .appendHtmlConstant(String.valueOf(getId()))
+        .appendHtmlConstant("'>")
+        .appendHtmlConstant(getShortName())
+        .appendHtmlConstant("</a>").toSafeHtml().asString();
   }
 
   public enum AuthProvider {

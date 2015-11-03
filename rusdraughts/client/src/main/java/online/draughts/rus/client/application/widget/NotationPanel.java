@@ -36,6 +36,8 @@ public class NotationPanel extends ScrollPanel {
   public static final String DATA_TITLE_ATTR = "data-title";
   public static final String COMMENT_SEP = "<br>";
   public static final String NOTATION_TAG = "span";
+  public static final String TITLE_COMMENT_SEP = ", ";
+  public static final String USER_COMMENT_SEP = ":";
 
   private static StringBuilder notation = new StringBuilder();
   private static int order = 0;
