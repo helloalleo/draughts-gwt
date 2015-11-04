@@ -10,20 +10,23 @@ import com.gwtplatform.mvp.client.proxy.NavigationHandler;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.draughts.rus.client.application.security.CurrentSession;
-import online.draughts.rus.client.util.DTCookies;
+import online.draughts.rus.client.util.Cookies;
 
 public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> implements MenuUiHandlers, NavigationHandler {
   private final PlaceManager placeManager;
   private final CurrentSession currentSession;
+  private final Cookies cookies;
 
   @Inject
   MenuPresenter(EventBus eventBus,
                 MyView view,
                 PlaceManager placeManager,
+                Cookies cookies,
                 CurrentSession currentSession) {
     super(eventBus, view);
     getView().setUiHandlers(this);
 
+    this.cookies = cookies;
     this.placeManager = placeManager;
     this.currentSession = currentSession;
   }
@@ -34,7 +37,7 @@ public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> impleme
         .nameToken(token)
         .build();
 
-    DTCookies.setLocation(token);
+    cookies.setLocation(token);
     placeManager.revealPlace(placeRequest);
   }
 

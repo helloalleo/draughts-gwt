@@ -28,20 +28,27 @@ import com.gwtplatform.mvp.client.ViewImpl;
  * ApplicationView} will add its content of the target inside the {@code mainContantPanel}.
  */
 public class ApplicationView extends ViewImpl implements ApplicationPresenter.MyView {
-  interface Binder extends UiBinder<Widget, ApplicationView> {
-  }
+
+  private final Widget widget;
 
   @UiField
   SimplePanel menuPanel;
   @UiField
   SimplePanel mainContentPanel;
-
   @Inject
   ApplicationView(
       Binder binder) {
-    initWidget(binder.createAndBindUi(this));
+    widget = binder.createAndBindUi(this);
 
     bindSlot(ApplicationPresenter.SLOT_MENU, menuPanel);
     bindSlot(ApplicationPresenter.SLOT_MAIN_CONTENT, mainContentPanel);
+  }
+
+  @Override
+  public Widget asWidget() {
+    return widget;
+  }
+
+  public interface Binder extends UiBinder<Widget, ApplicationView> {
   }
 }

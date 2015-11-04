@@ -1,6 +1,7 @@
 package online.draughts.rus.shared.config;
 
 import com.google.gwt.i18n.client.ConstantsWithLookup;
+import com.google.gwt.i18n.client.LocalizableResource;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,8 +10,7 @@ import com.google.gwt.i18n.client.ConstantsWithLookup;
  * Time: 16:19
  */
 public interface ClientConfiguration extends ConstantsWithLookup {
-
-  @Key("player.websocket.url")
+  @LocalizableResource.Key("player.websocket.url")
   String playerWebsocketUrl();
 
   String debug();

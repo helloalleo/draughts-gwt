@@ -14,13 +14,13 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
-import online.draughts.rus.client.util.DTCookies;
-import online.draughts.rus.client.util.DTLog;
+import online.draughts.rus.client.util.Cookies;
 import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 
 public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements MenuPresenter.MyView {
   private final Image logo;
+  private final Cookies cookies;
   @UiField
   HTMLPanel panel;
   @UiField
@@ -41,11 +41,13 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   @Inject
   MenuView(Binder binder,
            AppResources resources,
+           Cookies cookies,
            NameTokens nameTokens) {
     initWidget(binder.createAndBindUi(this));
 
     this.nameTokens = nameTokens;
     this.resources = resources;
+    this.cookies = cookies;
 
     logo = new Image(resources.images().logo());
     logo.setSize(Variables.S_LOGO_TOP_HEIGHT, Variables.S_LOGO_TOP_HEIGHT);
@@ -55,7 +57,6 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
       @Override
       public void onWindowScroll(Window.ScrollEvent event) {
         if (event.getScrollTop() == 0) {
-          DTLog.debug("Scrolling");
           navbarTopHeight();
         } else {
           navbarScrollHeight();
@@ -179,11 +180,10 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   }
 
   public void highlightMenu() {
-    String nameToken = DTCookies.getLocation();
+    String nameToken = cookies.getLocation();
     if (nameToken == null || nameToken.isEmpty()) {
       return;
     }
-    DTLog.debug("highlight token " + nameToken);
     for (Widget widget : navLeft) {
       if (setActiveAnchor(nameToken, (AnchorListItem) widget)) return;
     }

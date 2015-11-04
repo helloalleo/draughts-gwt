@@ -25,7 +25,6 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.Proxy;
 import online.draughts.rus.client.application.menu.MenuPresenter;
-import online.draughts.rus.client.util.DTLog;
 
 /**
  * This is the top-level presenter of the hierarchy. Other presenters reveal themselves within this presenter.
@@ -51,8 +50,6 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
 
 
     this.menuPresenter = menuPresenter;
-
-    DTLog.debug("application presenter");
   }
 
   @Override

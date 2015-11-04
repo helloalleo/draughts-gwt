@@ -16,7 +16,6 @@
 
 package online.draughts.rus.client.application.home;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -28,8 +27,7 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.application.component.playshowpanel.PlayShowPanel;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
-import online.draughts.rus.client.util.DTCookies;
-import online.draughts.rus.client.util.DTLog;
+import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.client.util.DebugUtils;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
@@ -44,9 +42,9 @@ import java.util.List;
 
 public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements HomePresenter.MyView {
 
-  private static Binder binder = GWT.create(Binder.class);
   private final DraughtsMessages messages;
   private final CurrentSession currentSession;
+  private final Cookies cookies;
   private boolean isMyGames;
 
   @UiField
@@ -69,14 +67,17 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   private boolean newGameState = true;
 
   @Inject
-  HomeView(CurrentSession currentSession,
+  HomeView(Binder binder,
+           CurrentSession currentSession,
            ClientConfiguration config,
            DraughtsMessages messages,
-           PlayShowPanelFactory playShowPanelFactory) {
-    this.playShowPanel = new PlayShowPanel(this, playShowPanelFactory, config);
+           PlayShowPanelFactory playShowPanelFactory,
+           Cookies cookies) {
+    this.playShowPanel = new PlayShowPanel(this, playShowPanelFactory, cookies);
     initWidget(binder.createAndBindUi(this));
 
-    isMyGames = DTCookies.isMyGames();
+    this.cookies = cookies;
+    isMyGames = cookies.isMyGames();
     myGameListCheckButton.setValue(isMyGames);
     this.currentSession = currentSession;
     this.messages = messages;
@@ -86,8 +87,8 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @Override
   protected void onAttach() {
     super.onAttach();
-    newGameState = DTCookies.getNewGameButtonState();
-    DTLog.debug("NEW STATE " + newGameState);
+    playShowPanel.postConstruct();
+    newGameState = cookies.getNewGameButtonState();
     if (DebugUtils.isProduction()) {
       newGameState = true;
       newGameButton.setVisible(false);
@@ -115,7 +116,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   private void toggleNewGameButton() {
     newGameState = !newGameState;
-    DTCookies.setNewGameButtonState(newGameState);
+    cookies.setNewGameButtonState(newGameState);
   }
 
   @UiHandler("moreGameOnPage")
@@ -131,14 +132,13 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @UiHandler("myGameListCheckButton")
   public void onMyGameList(ClickEvent event) {
     final Boolean value = myGameListCheckButton.getValue();
-    DTCookies.setMyGames(value);
+    cookies.setMyGames(value);
     isMyGames = value;
     getUiHandlers().updatePlayShowPanel(value);
   }
 
   @Override
   public void setShowLoggedInControls(Boolean loggedIn) {
-    DTLog.debug("LOGGED IN " + loggedIn);
     newGameButton.setVisible(loggedIn);
     myGameListCheckButton.setVisible(loggedIn);
     gameListLabel.setVisible(!loggedIn);
@@ -176,7 +176,6 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   }
 
   public void getMoreGames(int newPageSize) {
-    DTLog.debug("GET MORE GAMES " + newPageSize);
     getUiHandlers().getMoreGames(myGameListCheckButton.getValue(), newPageSize);
   }
 
@@ -184,6 +183,6 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     return getUiHandlers().getPlayer();
   }
 
-  interface Binder extends UiBinder<Widget, HomeView> {
+  public interface Binder extends UiBinder<Widget, HomeView> {
   }
 }

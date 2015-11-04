@@ -10,7 +10,6 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import online.draughts.rus.client.application.component.play.PlayComponentView;
 import online.draughts.rus.client.event.*;
-import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.shared.model.Move;
 import online.draughts.rus.shared.util.StringUtils;
 import online.draughts.rus.draughts.util.Operator;
@@ -134,7 +133,6 @@ public class Board extends Layer {
       public void onPlayMoveOpponent(PlayMoveOpponentEvent event) {
         final Move move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
-        DTLog.debug("PLAY MOVE STROKE " + stroke);
         final Stroke mirror = stroke.flip();
         moveOpponent(mirror);
       }
@@ -637,8 +635,6 @@ public class Board extends Layer {
         }
         complexBeat = true;
       }
-
-      DTLog.debug(takenSquare.toString());
       removeDraughtFrom(takenSquare);
     } else {
       stroke.setOnSimpleMove();
@@ -716,7 +712,6 @@ public class Board extends Layer {
   }
 
   public void moveOpponent(Stroke stroke) {
-    DTLog.debug("MOVE OPPONENT " + stroke.toString());
 
     Square startSquare, endSquare, takenSquare = null;
     try {
@@ -748,7 +743,6 @@ public class Board extends Layer {
 
     if (stroke.isContinueBeat()) {
 //      stroke.flip();
-      DTLog.debug("MOVE CONT BEAT " + stroke.toString());
     }
 
     if (!stroke.isCancel()) {
@@ -781,7 +775,6 @@ public class Board extends Layer {
    * @param back
    */
   public void doMove(Stroke stroke, final int stepCursor, boolean back) {
-    DTLog.debug("DO MOVE " + stroke.toString());
     final Draught occupant = stroke.getStartSquare().getOccupant();
 
     // вычисляем координаты для перемещения шашки относительно её центра
@@ -916,7 +909,6 @@ public class Board extends Layer {
         Stroke stroke = calcStroke(startSquare, endSquare);
 
         boolean isSimpleMove = stroke.isSimple();
-        DTLog.debug("SIMPLE MOVE " + isSimpleMove);
         if (isSimpleMove || stroke.isStopBeat()) {
           toggleTurn();
         }
@@ -925,8 +917,6 @@ public class Board extends Layer {
             selectedDraught.setQueen(true);
           }
         }
-
-        DTLog.debug("END SQUARE " + endSquare);
         Stroke strokeForNotation = stroke;
         if (!isWhite()) {
           strokeForNotation = stroke.flip();
@@ -939,7 +929,6 @@ public class Board extends Layer {
 
         eventBus.fireEvent(new PlayMoveMessageEvent(move));
         moveMyStack.push(stroke);
-        DTLog.debug("MOVE DRAUGHT " + stroke.toString());
 
         AnimationProperties props = new AnimationProperties();
         props.push(AnimationProperty.Properties.X(endSquare.getCenterX()));
@@ -990,8 +979,6 @@ public class Board extends Layer {
     if (!isEmulate()) {
       stroke = stroke.flip();
     }
-
-    DTLog.debug("MOVE CANCELED " + stroke.toString());
     int startRow = stroke.getStartSquare().getRow();
     int startCol = stroke.getStartSquare().getCol();
 
@@ -1009,8 +996,6 @@ public class Board extends Layer {
     stroke.setStartSquare(endSquare);
     stroke.setEndSquare(startSquare);
 
-    DTLog.debug("MOVE CANCELED REVERSED " + stroke.toString());
-
     Square taken = null;
     if (!stroke.isSimple()) {
       int beatenRow = stroke.getTakenSquare().getRow();
@@ -1021,14 +1006,10 @@ public class Board extends Layer {
       }
       stroke.setTakenSquare(taken);
     }
-
-    DTLog.debug("MOVE CANCELED 1");
     doMove(stroke, stepCursor, back);
-    DTLog.debug("MOVE CANCELED 2");
   }
 
   private void moveOpponentCanceled(Stroke stroke) {
-    DTLog.debug("OPPONENT CANCELED");
     strokeCanceled(stroke);
     Stroke canceled = moveOpponentStack.pop();
     if (canceled.isFirst()) {
@@ -1037,7 +1018,6 @@ public class Board extends Layer {
   }
 
   private void moveMyCanceled(Stroke stroke) {
-    DTLog.debug("MY CANCELED");
     strokeCanceled(stroke);
     Stroke canceled = moveMyStack.pop();
     if (canceled.isFirst()) {

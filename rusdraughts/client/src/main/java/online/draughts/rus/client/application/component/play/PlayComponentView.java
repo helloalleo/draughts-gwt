@@ -32,7 +32,6 @@ import online.draughts.rus.client.application.widget.dialog.InviteDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
-import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Friend;
 import online.draughts.rus.shared.model.Player;
@@ -211,8 +210,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     notationPanel = new NotationPanel(eventBus);
     notationList.add(notationPanel);
 
-    DTLog.debug("INIT NOTATION PANEL");
-
     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
       @Override
       public void execute() {
@@ -369,7 +366,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Override
   public void setPlayerFriendList(List<Friend> playerList) {
-    DTLog.debug("setPlayerFriendList " + playerList);
     playerFriendList = playerList;
     playerFriendCellTable.setRowCount(0);
     playerFriendCellTable.setRowData(playerList);

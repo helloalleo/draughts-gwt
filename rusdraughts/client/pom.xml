@@ -33,6 +33,11 @@
 
         <outputDirectory>${project.basedir}/../../out/artifacts/draughts_web_exploded.war</outputDirectory>
         <gwtbootstrap3-extras.version>0.9.1</gwtbootstrap3-extras.version>
+
+        <junit.version>4.12</junit.version>
+        <jukito.version>1.4.1</jukito.version>
+        <provided-test.scope>provided test</provided-test.scope>
+        <mockito-all.version>1.9.5</mockito-all.version>
     </properties>
 
     <dependencyManagement>
@@ -42,15 +47,40 @@
                 <groupId>com.gwtplatform</groupId>
                 <artifactId>gwtp-mvp-client</artifactId>
                 <version>${gwtp.version}</version>
-                <scope>provided</scope>
+                <scope>${provided-test.scope}</scope>
+                <!-- Not needed server-side -->
+            </dependency>
+            <dependency>
+                <groupId>com.gwtplatform</groupId>
+                <artifactId>gwtp-mvp-shared</artifactId>
+                <version>${gwtp.version}</version>
+                <scope>${provided-test.scope}</scope>
                 <!-- Not needed server-side -->
             </dependency>
             <dependency>
                 <groupId>com.gwtplatform</groupId>
                 <artifactId>gwtp-dispatch-rpc-client</artifactId>
                 <version>${gwtp.version}</version>
-                <scope>provided</scope>
+                <scope>${provided-test.scope}</scope>
                 <!-- Not needed server-side -->
+            </dependency>
+            <dependency>
+                <groupId>com.gwtplatform</groupId>
+                <artifactId>gwtp-clients-common</artifactId>
+                <version>${gwtp.version}</version>
+                <scope>${provided-test.scope}</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.gwtplatform</groupId>
+                <artifactId>gwtp-dispatch-rpc-shared</artifactId>
+                <version>${gwtp.version}</version>
+                <scope>${provided-test.scope}</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.gwtplatform</groupId>
+                <artifactId>gwtp-dispatch-common-client</artifactId>
+                <version>${gwtp.version}</version>
+                <scope>${provided-test.scope}</scope>
             </dependency>
 
             <!-- GWT dependencies -->
@@ -58,7 +88,7 @@
                 <groupId>com.google.gwt</groupId>
                 <artifactId>gwt-user</artifactId>
                 <version>${gwt.version}</version>
-                <scope>provided</scope>
+                <scope>${provided-test.scope}</scope>
             </dependency>
             <dependency>
                 <groupId>com.google.gwt</groupId>
@@ -72,24 +102,49 @@
                 <groupId>com.google.inject</groupId>
                 <artifactId>guice</artifactId>
                 <version>${guice.version}</version>
-            </dependency>
-            <dependency>
-                <groupId>com.google.inject.extensions</groupId>
-                <artifactId>guice-servlet</artifactId>
-                <version>${guice.version}</version>
+                <scope>${provided-test.scope}</scope>
             </dependency>
             <dependency>
                 <groupId>com.google.inject.extensions</groupId>
                 <artifactId>guice-assistedinject</artifactId>
                 <version>${guice.version}</version>
+                <scope>${provided-test.scope}</scope>
             </dependency>
             <dependency>
                 <groupId>com.google.gwt.inject</groupId>
                 <artifactId>gin</artifactId>
                 <version>${gin.version}</version>
-                <scope>provided</scope>
+                <scope>${provided-test.scope}</scope>
                 <!-- Not needed server-side -->
             </dependency>
+
+            <!-- Rest -->
+            <dependency>
+                <groupId>com.gwtplatform</groupId>
+                <artifactId>gwtp-dispatch-rest</artifactId>
+                <version>${gwtp.version}</version>
+                <scope>${provided-test.scope}</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.gwtplatform</groupId>
+                <artifactId>gwtp-dispatch-rest-shared</artifactId>
+                <version>${gwtp.version}</version>
+                <scope>${provided-test.scope}</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.gwtplatform.extensions</groupId>
+                <artifactId>dispatch-rest-delegates</artifactId>
+                <version>${gwtp.extensions.version}</version>
+                <scope>${provided-test.scope}</scope>
+            </dependency>
+
+            <dependency>
+                <groupId>com.gwtplatform</groupId>
+                <artifactId>gwtp-dispatch-common-shared</artifactId>
+                <version>${gwtp.version}</version>
+                <scope>${provided-test.scope}</scope>
+            </dependency>
+
 
             <!-- Testing -->
             <dependency>
@@ -102,6 +157,18 @@
                 <groupId>org.jukito</groupId>
                 <artifactId>jukito</artifactId>
                 <version>${jukito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-all</artifactId>
+                <version>${mockito-all.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.gwtplatform</groupId>
+                <artifactId>gwtp-tester</artifactId>
+                <version>${gwtp.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -152,57 +219,32 @@
             <artifactId>gwtp-mvp-client</artifactId>
         </dependency>
 
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-mvp-shared</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-dispatch-rpc-shared</artifactId>
+        </dependency>
+
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-clients-common</artifactId>
+        </dependency>
+
         <!-- DI -->
         <dependency>
             <groupId>com.google.gwt.inject</groupId>
             <artifactId>gin</artifactId>
         </dependency>
 
-        <!--OAuth 2.0-->
-        <!--<dependency>-->
-        <!--<groupId>com.google.oauth-client</groupId>-->
-        <!--<artifactId>google-oauth-client</artifactId>-->
-        <!--<version>${google-oauth-client.version}</version>-->
-        <!--<exclusions>-->
-        <!--<exclusion>-->
-        <!--<groupId>commons-codec</groupId>-->
-        <!--<artifactId>commons-codec</artifactId>-->
-        <!--</exclusion>-->
-        <!--<exclusion>-->
-        <!--<groupId>commons-logging</groupId>-->
-        <!--<artifactId>commons-logging</artifactId>-->
-        <!--</exclusion>-->
-        <!--</exclusions>-->
-        <!--</dependency>-->
-
-        <!--<dependency>-->
-        <!--<groupId>com.google.oauth-client</groupId>-->
-        <!--<artifactId>google-oauth-client-servlet</artifactId>-->
-        <!--<version>${google.oauth.version}</version>-->
-        <!--<exclusions>-->
-        <!--<exclusion>-->
-        <!--<groupId>javax.servlet</groupId>-->
-        <!--<artifactId>servlet-api</artifactId>-->
-        <!--</exclusion>-->
-        <!--<exclusion>-->
-        <!--<groupId>javax.jdo</groupId>-->
-        <!--<artifactId>jdo2-api</artifactId>-->
-        <!--</exclusion>-->
-        <!--</exclusions>-->
-        <!--</dependency>-->
-
         <dependency>
             <groupId>com.google.http-client</groupId>
             <artifactId>google-http-client-jackson2</artifactId>
             <version>${google.http.version}</version>
         </dependency>
-
-        <!--For Shared models that processed on server-->
-        <!--<dependency>-->
-        <!--<groupId>org.codehaus.jackson</groupId>-->
-        <!--<artifactId>jackson-mapper-asl</artifactId>-->
-        <!--<version>${jackson-mapper-asl.version}</version>-->
-        <!--</dependency>-->
 
         <dependency>
             <groupId>org.gwtbootstrap3</groupId>
@@ -212,25 +254,23 @@
         <dependency>
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-dispatch-rpc-client</artifactId>
-            <!--<version>${gwtp.version}</version>-->
         </dependency>
 
         <dependency>
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-dispatch-rest</artifactId>
-            <version>${gwtp.version}</version>
-            <scope>provided</scope>
         </dependency>
         <dependency>
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-dispatch-rest-shared</artifactId>
-            <version>${gwtp.version}</version>
-            <scope>compile</scope>
         </dependency>
         <dependency>
             <groupId>com.gwtplatform.extensions</groupId>
             <artifactId>dispatch-rest-delegates</artifactId>
-            <version>${gwtp.extensions.version}</version>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-dispatch-common-shared</artifactId>
         </dependency>
 
         <dependency>
@@ -238,6 +278,24 @@
             <artifactId>gwtbootstrap3-extras</artifactId>
             <version>${gwtbootstrap3-extras.version}</version>
             <scope>provided</scope>
+        </dependency>
+
+        <!-- Testing -->
+        <dependency>
+            <groupId>junit</groupId>
+            <artifactId>junit</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.jukito</groupId>
+            <artifactId>jukito</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.mockito</groupId>
+            <artifactId>mockito-all</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>com.gwtplatform</groupId>
+            <artifactId>gwtp-tester</artifactId>
         </dependency>
     </dependencies>
 
@@ -270,7 +328,7 @@
                     <extraJvmArgs>-Xmx2048m</extraJvmArgs>
 
                     <runTarget>index.html</runTarget>
-                    <module>online.draughts.rus.Application-dev</module>
+                    <module>online.draughts.rus.Application_dev</module>
                     <draftCompile>true</draftCompile>
                     <sourceLevel>${maven.compiler.source}</sourceLevel>
                     <style>${gwt.style}</style>

@@ -20,7 +20,7 @@ import online.draughts.rus.client.event.UpdatePlayShowPanelEvent;
 import online.draughts.rus.client.event.UpdatePlayShowPanelEventHandler;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
-import online.draughts.rus.client.util.DTCookies;
+import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
@@ -34,6 +34,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public static final PermanentSlot<PlayComponentPresenter> SLOT_PLAY = new PermanentSlot<>();
   public static int INIT_SHOW_GAMES_PAGE_SIZE;
   private final CurrentSession currentSession;
+  private final Cookies cookies;
   private PlayComponentPresenter playPresenter;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private int gamesOffset = 0;
@@ -46,6 +47,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       CurrentSession currentSession,
       ClientConfiguration config,
       PlayComponentPresenter playPresenter,
+      Cookies cookies,
       ResourceDelegate<GamesResource> gamesDelegate) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
@@ -55,7 +57,8 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     this.currentSession = currentSession;
     this.playPresenter = playPresenter;
     this.gamesDelegate = gamesDelegate;
-    DTCookies.setLocation(NameTokens.homePage);
+    this.cookies = cookies;
+    cookies.setLocation(NameTokens.homePage);
     bindEvent();
   }
 
@@ -80,7 +83,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public void prepareFromRequest(PlaceRequest request) {
     super.prepareFromRequest(request);
 
-    updatePlayShowPanel(DTCookies.isMyGames());
+    updatePlayShowPanel(cookies.isMyGames());
   }
 
   public void updatePlayShowPanel(boolean myGames) {

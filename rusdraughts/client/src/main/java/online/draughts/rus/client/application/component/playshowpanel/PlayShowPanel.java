@@ -11,9 +11,7 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import online.draughts.rus.client.application.home.HomeView;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.resources.Variables;
-import online.draughts.rus.client.util.DTCookies;
-import online.draughts.rus.client.util.DTLog;
-import online.draughts.rus.shared.config.ClientConfiguration;
+import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.shared.model.Game;
 import org.gwtbootstrap3.client.ui.Column;
 import org.gwtbootstrap3.client.ui.Row;
@@ -27,6 +25,7 @@ public class PlayShowPanel extends Composite {
   private static Binder binder = GWT.create(Binder.class);
   private final HomeView homeView;
   private final PlayShowPanelFactory showPanelFactory;
+  private final Cookies cookies;
   private int lastPageSize;
 
   @UiField
@@ -44,11 +43,17 @@ public class PlayShowPanel extends Composite {
   private int lastScrollPos = 0;
   private HandlerRegistration scrollHandler;
 
-  public PlayShowPanel(HomeView homeView, PlayShowPanelFactory showPanelFactory, ClientConfiguration config) {
+  public PlayShowPanel(HomeView homeView,
+                       PlayShowPanelFactory showPanelFactory,
+                       Cookies cookies) {
     this.showPanelFactory = showPanelFactory;
     this.homeView = homeView;
-    INCREMENT_SIZE = Integer.valueOf(config.incrementPlayShowSize());
+    this.cookies = cookies;
     initWidget(binder.createAndBindUi(this));
+  }
+
+  public void postConstruct() {
+    INCREMENT_SIZE = homeView.getPlayer().getIncrementPageSize();
 
     initScroll();
   }
@@ -57,7 +62,7 @@ public class PlayShowPanel extends Composite {
     return Window.addWindowScrollHandler(new Window.ScrollHandler() {
       @Override
       public void onWindowScroll(Window.ScrollEvent event) {
-        boolean newGameButtonState = DTCookies.getNewGameButtonState();
+        boolean newGameButtonState = cookies.getNewGameButtonState();
         if (newGameButtonState) {
           return;
         }
@@ -67,17 +72,12 @@ public class PlayShowPanel extends Composite {
         if (oldScrollPos >= lastScrollPos) {
           return;
         }
-        DTLog.debug("SCROLL POS " + lastScrollPos);
-        DTLog.debug("OLD POS " + oldScrollPos);
+
         int maxScrollTop = getOffsetHeight() - Window.getScrollTop();
-        DTLog.debug("max scroll top" + maxScrollTop);
         int halfIncrementScrollSize = (maxScrollTop - lastMaxHeight) / 2;
-        DTLog.debug("half inc " + halfIncrementScrollSize);
         if (lastScrollPos >= (maxScrollTop - halfIncrementScrollSize) && updateFlag) {
-          DTLog.debug("load new games");
           final int newPageSize = gameList.size() + INCREMENT_SIZE;
           PlayShowPanel.this.homeView.getMoreGames(newPageSize);
-          DTLog.debug("DISPLAYED GAMES " + gameList.size());
           lastMaxHeight = maxScrollTop;
           updateFlag = false;
         }
@@ -151,10 +151,9 @@ public class PlayShowPanel extends Composite {
 
   private void resetGamesOnPanel(List<Game> gameList) {
     if (gameList == null || gameList.isEmpty()) {
-      DTLog.debug("EMPTY GAME LIST");
       return;
     }
-    gamesOnPanelCounter = DTCookies.getGamesOnPageCounter();
+    gamesOnPanelCounter = cookies.getGamesOnPageCounter();
     if (gamesOnPanelCounter <= 0) {
       homeView.setEnableLessGameButton(false);
     }
@@ -164,7 +163,6 @@ public class PlayShowPanel extends Composite {
     playRowList.clear();
     List<Game> rowGameList = new ArrayList<>();
     final int gameInRow = gameOnPanelArr[gamesOnPanelCounter];
-    DTLog.debug("GAME IN ROW " + gameInRow + " " + gamesOnPanelCounter);
     for (int i = 0; i < gameList.size(); i++) {
       if ((i + 1) % gameInRow == 0) {
         rowGameList.add(gameList.get(i));
@@ -196,7 +194,7 @@ public class PlayShowPanel extends Composite {
 
   public void moreGameOnPanel() {
     gamesOnPanelCounter++;
-    DTCookies.setGamesOnPageCounter(gamesOnPanelCounter);
+    cookies.setGamesOnPageCounter(gamesOnPanelCounter);
     if (!homeView.isEnabledLessGameButton()) {
       homeView.setEnableLessGameButton(true);
     }
@@ -208,7 +206,7 @@ public class PlayShowPanel extends Composite {
 
   public void lessGameOnPanel() {
     gamesOnPanelCounter--;
-    DTCookies.setGamesOnPageCounter(gamesOnPanelCounter);
+    cookies.setGamesOnPageCounter(gamesOnPanelCounter);
     if (!homeView.isEnabledMoreGameButton()) {
       homeView.setEnableMoreGameButton(true);
     }

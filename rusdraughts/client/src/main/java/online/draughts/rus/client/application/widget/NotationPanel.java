@@ -5,7 +5,6 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import online.draughts.rus.client.event.*;
-import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.draughts.Square;
 import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.util.StringUtils;
@@ -77,10 +76,8 @@ public class NotationPanel extends ScrollPanel {
   }
 
   public void appendMove(Stroke stroke) {
-    DTLog.debug("MOVE in NOTATION " + stroke);
     // первый шаг. например, h4:f6:d4 - h4
     Square start = stroke.getStartSquare();
-    DTLog.debug("FIRST STEP " + start.toString());
     final boolean first = stroke.isFirst();
     if (stroke.isSimple()) {
       if (first) {

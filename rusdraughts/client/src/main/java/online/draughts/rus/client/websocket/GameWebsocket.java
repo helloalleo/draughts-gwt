@@ -17,7 +17,6 @@ import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.json.GameMessageMapper;
-import online.draughts.rus.client.util.DTLog;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
@@ -25,7 +24,6 @@ import online.draughts.rus.shared.model.GameMessage;
 import online.draughts.rus.shared.model.Move;
 import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.shared.rest.GamesResource;
-import online.draughts.rus.shared.rest.PlayersResource;
 
 import java.util.Date;
 import java.util.List;
@@ -39,7 +37,7 @@ import java.util.List;
 public class GameWebsocket implements WebSocketCallback {
 
   private final CurrentSession currentSession;
-  private ClientConfiguration configuration = GWT.create(ClientConfiguration.class);
+  private ClientConfiguration config;
   private ResourceDelegate<GamesResource> gamesDelegate;
   private WebSocket webSocket;
   private EventBus eventBus;
@@ -47,13 +45,14 @@ public class GameWebsocket implements WebSocketCallback {
   private DraughtsMessages messages;
   private ConfirmPlayDialogBox confirmPlayDialogBox;
   private PlaySession playSession;
-  private GameMessageMapper gameMessageMapper = GWT.create(GameMessageMapper.class);
+  private GameMessageMapper messageMapper;
 
   @Inject
   private GameWebsocket(EventBus eventBus,
                         CurrentSession currentSession,
                         PlaySession playSession,
-                        ResourceDelegate<PlayersResource> playersDelegate,
+                        ClientConfiguration config,
+                        GameMessageMapper messageMapper,
                         ResourceDelegate<GamesResource> gamesDelegate,
                         DraughtsMessages messages) {
     this.currentSession = currentSession;
@@ -61,6 +60,8 @@ public class GameWebsocket implements WebSocketCallback {
     this.gamesDelegate = gamesDelegate;
     this.eventBus = eventBus;
     this.messages = messages;
+    this.config = config;
+    this.messageMapper = messageMapper;
 
     bindEvents();
   }
@@ -90,7 +91,6 @@ public class GameWebsocket implements WebSocketCallback {
     HandlerRegistration updatePlayerListHR = eventBus.addHandler(UpdatePlayerListEvent.TYPE, new UpdatePlayerListEventHandler() {
       @Override
       public void onUpdatePlayerList(UpdatePlayerListEvent event) {
-        DTLog.debug("UPDATE PLAYER LIST");
         updatePlayerListMessage();
       }
     });
@@ -140,14 +140,12 @@ public class GameWebsocket implements WebSocketCallback {
 
   private void sendGameMessage(GameMessage gameMessage) {
     if (gameMessage.getMove() != null) {
-      DTLog.debug(gameMessage.getMove().toString() + " SEND MOVE");
     }
-    String message = gameMessageMapper.write(gameMessage);
+    String message = messageMapper.write(gameMessage);
     webSocket.send(message);
   }
 
   private void handleUpdatePlayerList(List<Player> playerList) {
-    DTLog.debug(playerList.size() + " PLAYER LIST SIZE");
     for (Player p : playerList) {
       if (p.getId().equals(player.getId())) {
         player.updateSerializable(p);
@@ -176,7 +174,6 @@ public class GameWebsocket implements WebSocketCallback {
           Growl.growlNotif(messages.opponentNotFound());
           return;
         }
-        DTLog.debug(playSession.getPlayer().toString());
 
         playSession.setOpponent(gameMessage.getSender());
 
@@ -184,8 +181,7 @@ public class GameWebsocket implements WebSocketCallback {
         game.setPlayStartDate(new Date());
         game.setPlayerWhite(isWhite() ? playSession.getPlayer() : playSession.getOpponent());
         game.setPlayerBlack(isWhite() ? playSession.getOpponent() : playSession.getPlayer());
-        DTLog.debug("PLAYER WHITE :: " + game.getPlayerWhite());
-        DTLog.debug("PLAYER BLACK :: " + game.getPlayerBlack());
+
         gamesDelegate.withCallback(new AsyncCallback<Game>() {
           @Override
           public void onFailure(Throwable throwable) {
@@ -221,7 +217,6 @@ public class GameWebsocket implements WebSocketCallback {
 
   @Override
   public void onConnect() {
-    DTLog.debug("ON_CONNECT PLAYER: " + player);
     if (player == null) {
       InfoDialogBox.setMessage(messages.failToConnectToServer()).show();
       return;
@@ -245,8 +240,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   @Override
   public void onMessage(String message) {
-    DTLog.debug("ON_MESSAGE :: " + message);
-    GameMessage gameMessage = gameMessageMapper.read(message);
+    GameMessage gameMessage = messageMapper.read(message);
     switch (gameMessage.getMessageType()) {
       case USER_LIST_UPDATE:
         handleUpdatePlayerList(gameMessage.getPlayerList());
@@ -439,7 +433,6 @@ public class GameWebsocket implements WebSocketCallback {
    * @param gameMessage
    */
   private void handlePlayMove(GameMessage gameMessage) {
-    DTLog.debug(gameMessage.getMove().toString());
     // отправлем отраженный ход здесь
     final Move move = gameMessage.getMove();
     eventBus.fireEvent(new PlayMoveOpponentEvent(move));
@@ -470,7 +463,7 @@ public class GameWebsocket implements WebSocketCallback {
 
   public void connect() {
     webSocket = new WebSocket(GameWebsocket.this);
-    webSocket.connect(configuration.playerWebsocketUrl());
+    webSocket.connect(config.playerWebsocketUrl());
     player = currentSession.getPlayer();
   }
 
@@ -478,7 +471,7 @@ public class GameWebsocket implements WebSocketCallback {
     Window.alert("RECONNECT");
     removeHandlers();
     webSocket.close();
-    webSocket.connect(configuration.playerWebsocketUrl());
+    webSocket.connect(config.playerWebsocketUrl());
   }
 
   public boolean isConnected() {

@@ -105,7 +105,7 @@
                     <logLevel>INFO</logLevel>
 
                     <runTarget>index.html</runTarget>
-                    <module>online.draughts.rus.Application-dev</module>
+                    <module>online.draughts.rus.Application_dev</module>
                     <draftCompile>true</draftCompile>
                     <sourceLevel>1.7</sourceLevel>
                     <style>${gwt.style}</style>

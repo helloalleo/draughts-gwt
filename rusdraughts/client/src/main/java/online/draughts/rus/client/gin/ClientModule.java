@@ -9,6 +9,10 @@ import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.dialog.DialogModule;
 import online.draughts.rus.client.application.widget.popup.DraughtsPlayerModule;
 import online.draughts.rus.client.place.NameTokens;
+import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.client.util.DTCookiesImpl;
+import online.draughts.rus.client.util.DTLogImpl;
+import online.draughts.rus.client.util.Log;
 import online.draughts.rus.client.websocket.WebsocketModule;
 
 public class ClientModule extends AbstractGinModule {
@@ -27,6 +31,8 @@ public class ClientModule extends AbstractGinModule {
     install(new PlayShowPanelModule());
 
     bind(CurrentSession.class).in(Singleton.class);
+    bind(Cookies.class).to(DTCookiesImpl.class).in(Singleton.class);
+    bind(Log.class).to(DTLogImpl.class).in(Singleton.class);
 
     // Load and inject CSS resources
     bind(ResourceLoader.class).asEagerSingleton();

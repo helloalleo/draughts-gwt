@@ -1,7 +1,6 @@
 package online.draughts.rus.shared.model;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.rpc.GwtTransient;
 import online.draughts.rus.shared.util.StringUtils;
@@ -141,7 +140,23 @@ public class Player extends PersistableObjectImpl {
   @Column(name = "google_sub")
   private String googleSub;
 
+  @Column(name = "increment_page_size")
+  private int incrementPageSize;
+
+  @GwtTransient
+  @JsonIgnore
+  private boolean subscribed;
+
   public Player() {
+  }
+
+  public boolean getSubscribed() {
+    return subscribed;
+  }
+
+  public Player setSubscribed(boolean subscribed) {
+    this.subscribed = subscribed;
+    return this;
   }
 
   public Set<Friend> getFriends() {
@@ -446,6 +461,14 @@ public class Player extends PersistableObjectImpl {
         .appendHtmlConstant("'>")
         .appendHtmlConstant(getShortName())
         .appendHtmlConstant("</a>").toSafeHtml().asString();
+  }
+
+  public int getIncrementPageSize() {
+    return incrementPageSize;
+  }
+
+  public void setIncrementPageSize(int incrimentPageSize) {
+    this.incrementPageSize = incrimentPageSize;
   }
 
   public enum AuthProvider {
