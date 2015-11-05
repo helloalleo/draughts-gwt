@@ -61,7 +61,6 @@ public class Draught extends Group {
 
     setListening(true);
 
-    setAlpha(.8);
     add(mainCircle);
     add(innerCircle1);
     add(innerCircle2);
@@ -72,7 +71,7 @@ public class Draught extends Group {
 
     for (Circle circle : circles) {
       circle.setFillColor(ColorName.TRANSPARENT);
-      circle.setStrokeColor(white ? ColorName.ANTIQUEWHITE : ColorName.DARKSLATEGRAY);
+      circle.setStrokeColor(white ? ColorName.DARKGRAY : ColorName.DARKSLATEGRAY);
       circle.setStrokeWidth(1.4);
     }
     mainCircle.setFillColor(white ? ColorName.WHITESMOKE : ColorName.SLATEGRAY);

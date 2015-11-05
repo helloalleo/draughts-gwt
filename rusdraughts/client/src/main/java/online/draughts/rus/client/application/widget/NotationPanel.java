@@ -42,8 +42,11 @@ public class NotationPanel extends ScrollPanel {
 
   private static StringBuilder notation = new StringBuilder();
   private static int order = 0;
+  private static Long gameId;
 
-  public NotationPanel(EventBus eventBus) {
+  public NotationPanel(EventBus eventBus, Long gameId) {
+    NotationPanel.gameId = gameId;
+
     eventBus.addHandler(NotationStrokeEvent.TYPE, new NotationStrokeEventHandler() {
       @Override
       public void onNotationStroke(NotationStrokeEvent event) {
@@ -72,7 +75,11 @@ public class NotationPanel extends ScrollPanel {
   }
 
   public static String getNotation() {
-    return notation.toString();
+    return wrapNotation(notation.toString());
+  }
+
+  private static String wrapNotation(String notation) {
+    return format("<div id='%s'>%s</div>", gameId, notation);
   }
 
   public void appendMove(Stroke stroke) {
@@ -82,10 +89,10 @@ public class NotationPanel extends ScrollPanel {
     if (stroke.isSimple()) {
       if (first) {
         notation.append(wrapInSpan(String.valueOf(stroke.getNumber()), COUNT_SEP))
-            .append(wrapStroke(stroke, order));
+            .append(wrapStrokeInAnchor(stroke, order));
       } else {
         notation.append(wrapInSpan(MOVE_SEP))
-            .append(wrapStroke(stroke, order))
+            .append(wrapStrokeInAnchor(stroke, order))
             .append(NOTATION_SEP);
       }
     } else { // взята одна или более шашек
@@ -95,30 +102,30 @@ public class NotationPanel extends ScrollPanel {
       if (startBeat) {
         if (first) {
           notation.append(wrapInSpan(String.valueOf(stroke.getNumber()), COUNT_SEP))
-              .append(wrapStroke(stroke, order));
+              .append(wrapStrokeInAnchor(stroke, order));
         } else {
           if (continueBeat) {
             notation.append(wrapInSpan(MOVE_SEP))
-                .append(wrapStroke(stroke, order));
+                .append(wrapStrokeInAnchor(stroke, order));
           } else {
             notation.append(wrapInSpan(MOVE_SEP))
-                .append(wrapStroke(stroke, order))
+                .append(wrapStrokeInAnchor(stroke, order))
                 .append(NOTATION_SEP);
           }
         }
       } else if (stopBeat) {
         if (first) {
           notation.append(wrapInSpan(BEAT_SEP))
-              .append(wrapStroke(stroke, order))
+              .append(wrapStrokeInAnchor(stroke, order))
               .append(wrapInSpan(MOVE_SEP));
         } else {
           notation.append(wrapInSpan(BEAT_SEP))
-              .append(wrapStroke(stroke, order))
+              .append(wrapStrokeInAnchor(stroke, order))
               .append(wrapInSpan(NOTATION_SEP));
         }
       } else if (continueBeat) {
         notation.append(wrapInSpan(BEAT_SEP))
-            .append(wrapStroke(stroke, order));
+            .append(wrapStrokeInAnchor(stroke, order));
       }
     }
     order++;
@@ -177,28 +184,30 @@ public class NotationPanel extends ScrollPanel {
         stroke.isStopBeat(), stroke.getTitle(), stroke.getComment());
   }
 
+  private static String wrapStrokeInAnchor(Stroke stroke, int order) {
+    return format("<%s id='%s'>%s</%s>", NOTATION_A_TAG, gameId, wrapStroke(stroke, order), NOTATION_A_TAG);
+  }
+
   private static String wrapStroke(Stroke stroke, int order, boolean first, boolean simple,
                                    boolean startBeat, boolean continueBeat, boolean stopBeat,
                                    String title, String comment) {
-    String span = format("<%s href='#'><%s id='%s' %s='%s' %s='%s' %s='%s' %s='%s' %s=\"%s\" %s=\"%s\" ",
-        NOTATION_A_TAG,
+    String span = format("<%s id='%s' %s='%s' %s='%s' %s='%s' %s='%s' %s=\"%s\" %s=\"%s\" ",
         NOTATION_TAG,
         order,
         DATA_ORDER_ATTR, order,
         DATA_NUMBER_ATTR, stroke.getNumber(),
         DATA_SIMPLE_ATTR, simple,
         DATA_FIRST_ATTR, first,
-        DATA_TITLE_ATTR, title,
-        DATA_COMMENT_ATTR, comment);
-    span += format("%s='%s' %s='%s' %s='%s'>%s</%s></%s>",
+        DATA_TITLE_ATTR, StringUtils.emptyIfNull(title),
+        DATA_COMMENT_ATTR, StringUtils.emptyIfNull(comment));
+    span += format("%s='%s' %s='%s' %s='%s'>%s</%s>",
         DATA_START_BEAT_ATTR, startBeat,
         DATA_CONTINUE_BEAT_ATTR, continueBeat,
         DATA_STOP_BEAT_ATTR, stopBeat,
         stroke.isSimple() ? stroke.toNotation()
             : (stroke.isStartBeat() ? stroke.toNotation()
             : stroke.toNotationLastMove()),
-        NOTATION_TAG,
-        NOTATION_A_TAG);
+        NOTATION_TAG);
     return span;
   }
 }

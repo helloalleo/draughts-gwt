@@ -45,4 +45,8 @@ public class StringUtils {
 
     return result.toString();
   }
+
+  public static String emptyIfNull(String string) {
+    return string == null ? "" : string;
+  }
 }

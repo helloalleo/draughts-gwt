@@ -6,6 +6,7 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
@@ -16,9 +17,12 @@ import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
+import online.draughts.rus.client.util.Log;
 import online.draughts.rus.client.websocket.GameWebsocket;
+import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.MoveFactory;
 import online.draughts.rus.draughts.Stroke;
+import online.draughts.rus.draughts.StrokeFactory;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.*;
 import online.draughts.rus.shared.rest.FriendsResource;
@@ -32,6 +36,7 @@ import java.util.List;
 public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresenter.MyView>
     implements PlayComponentUiHandlers {
 
+  private final Log log;
   private int DRAUGHTS_ON_DESK_INIT = 12;
 
   private final GameWebsocket gameWebsocket;
@@ -40,6 +45,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final ResourceDelegate<FriendsResource> friendsDelegate;
   private final EventBus eventBus;
+  private HandlerRegistration playMoveOpponentHR;
 
   @Inject
   PlayComponentPresenter(
@@ -49,7 +55,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       ResourceDelegate<GamesResource> gamesDelegate,
       ResourceDelegate<PlayersResource> playersDelegate,
       ResourceDelegate<FriendsResource> friendsDelegate,
-      GameWebsocket gameWebsocket) {
+      GameWebsocket gameWebsocket,
+      Log log) {
     super(eventBus, view);
 
     this.eventBus = eventBus;
@@ -58,9 +65,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     this.gamesDelegate = gamesDelegate;
     this.playersDelegate = playersDelegate;
     this.friendsDelegate = friendsDelegate;
+    this.log = log;
 
     getView().setUiHandlers(this);
-    getView().initNotationPanel(eventBus);
   }
 
   @Override
@@ -120,11 +127,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   @Override
-  public EventBus getPlayEventBus() {
-    return eventBus;
-  }
-
-  @Override
   public void proposeDraw() {
     GameMessage gameMessage = createGameMessage();
     gameMessage.setMessageType(GameMessage.MessageType.PLAY_PROPOSE_DRAW);
@@ -172,8 +174,23 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   @Override
-  public boolean isPlaying() {
-    return gameWebsocket.getOpponent() != null;
+  public void checkWinner() {
+    fireEvent(new CheckWinnerEvent());
+  }
+
+  @Override
+  public void addNotationStroke(Stroke strokeForNotation) {
+    fireEvent(new NotationStrokeEvent(strokeForNotation));
+  }
+
+  @Override
+  public void toggleTurn(boolean turn) {
+    fireEvent(new TurnChangeEvent(turn));
+  }
+
+  @Override
+  public void doPlayerMove(Move move) {
+    fireEvent(new PlayMoveMessageEvent(move));
   }
 
   private GameMessage createGameMessage() {
@@ -212,6 +229,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onStartPlay(StartPlayEvent event) {
         getView().hideInviteDialog();
         getView().startPlay(event.isWhite());
+        getView().initNotationPanel(eventBus, gameWebsocket.getGame());
+
         gameWebsocket.getPlayer().setPlaying(true);
         playersDelegate.withCallback(new AsyncCallback<Player>() {
           @Override
@@ -310,8 +329,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         game.setPlayEndStatus(event.getGameEnd());
         game.setPlayFinishDate(new Date());
         final String notation = NotationPanel.getNotation();
-        final String notationInDiv = "<div id='" + game.getId() + "'>" + notation + "</div>";
-        game.setNotation(notationInDiv);
+        game.setNotation(notation);
         game.setEndGameScreenshot(getView().takeScreenshot());
         gamesDelegate.withCallback(event.getAsyncCallback()).saveOrCreate(game);
 
@@ -339,6 +357,41 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         updatePlayerFriendList();
       }
     });
+
+    addRegisteredHandler(PlayMoveOpponentEvent.TYPE, new PlayMoveOpponentEventHandler() {
+      @Override
+      public void onPlayMoveOpponent(PlayMoveOpponentEvent event) {
+        final Move move = event.getMove();
+        final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
+        final Stroke mirror = stroke.flip();
+        getView().getBoard().moveOpponent(mirror);
+        log.debug("PLAY MOVE " + mirror.toString());
+      }
+    });
+
+    eventBus.addHandler(PlayMoveCancelEvent.TYPE, new PlayMoveCancelEventHandler() {
+      @Override
+      public void onPlayMove(PlayMoveCancelEvent event) {
+        final Move move = event.getMove();
+        final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
+        final Stroke mirror = stroke.flip();
+        eventBus.fireEvent(new NotationCancelStrokeEvent(stroke));
+        getView().getBoard().moveMyCanceled(mirror);
+      }
+    });
+
+    eventBus.addHandler(PlayMoveOpponentCancelEvent.TYPE, new PlayMoveOpponentCancelEventHandler() {
+      @Override
+      public void onPlayMoveOpponentCancel(PlayMoveOpponentCancelEvent event) {
+        final Move move = event.getMove();
+        final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
+        final Stroke mirror = stroke.flip();
+        eventBus.fireEvent(new NotationCancelStrokeEvent(mirror));
+        getView().getBoard().moveOpponentCanceled(stroke);
+      }
+    });
+
+
   }
 
   private void updatePlayerFriendList() {
@@ -356,8 +409,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   interface MyView extends View, HasUiHandlers<PlayComponentUiHandlers> {
-    void initNotationPanel(EventBus eventBus);
-
     void setPlayerFriendList(List<Friend> playerList);
 
     void setPlayerList(List<Player> playerList);
@@ -397,5 +448,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     String takeScreenshot();
 
     void setOpponent(Player opponent);
+
+    Board getBoard();
+
+    void initNotationPanel(EventBus eventBus, Game game);
   }
 }

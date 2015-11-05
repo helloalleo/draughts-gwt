@@ -1,6 +1,7 @@
 package online.draughts.rus.client.util;
 
 import com.google.gwt.user.client.Cookies;
+import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.shared.util.StringUtils;
 
 /**
@@ -21,7 +22,11 @@ public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
   }
 
   public String getLocation() {
-    return Cookies.getCookie(LOCATION);
+    String location = Cookies.getCookie(LOCATION);
+    if (StringUtils.isEmpty(location)) {
+      location = NameTokens.homePage;
+    }
+    return location;
   }
 
   public void setNewGameButtonState(boolean newGame) {
@@ -29,7 +34,11 @@ public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
   }
 
   public boolean getNewGameButtonState() {
-    return Boolean.valueOf(Cookies.getCookie(NEW_GAME_BUTTON_STATE_MAIN_PAGE));
+    String newGameState = Cookies.getCookie(NEW_GAME_BUTTON_STATE_MAIN_PAGE);
+    if (StringUtils.isEmpty(newGameState)) {
+      newGameState = Boolean.FALSE.toString();
+    }
+    return Boolean.valueOf(newGameState);
   }
 
   public void setGamesOnPageCounter(int value) {

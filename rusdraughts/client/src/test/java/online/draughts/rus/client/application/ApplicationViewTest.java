@@ -4,9 +4,6 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.tester.MockFactory;
 import com.gwtplatform.tester.MockingBinder;
-import online.draughts.rus.client.place.NameTokens;
-import online.draughts.rus.shared.model.Player;
-import online.draughts.rus.testutil.MockitoMockFactory;
 import online.draughts.rus.testutil.SimpleTestCase;
 import online.draughts.rus.testutil.ViewTestModule;
 import org.junit.Test;
@@ -33,12 +30,6 @@ public class ApplicationViewTest extends SimpleTestCase {
     @Override
     protected void configureViewTest() {
       bind(ApplicationView.Binder.class).to(MyTestBinder.class);
-      bind(MockFactory.class).to(MockitoMockFactory.class);
-      bindManyInstances(String.class, NameTokens.homePage);
-      final Player player = new Player();
-      player.setIncrementPageSize(10);
-      player.setPlayerName("test");
-      bindManyInstances(Player.class, player);
     }
   }
 

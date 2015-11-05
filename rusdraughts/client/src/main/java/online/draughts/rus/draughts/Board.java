@@ -6,14 +6,11 @@ import com.ait.lienzo.client.core.event.NodeMouseClickHandler;
 import com.ait.lienzo.client.core.event.NodeTouchEndEvent;
 import com.ait.lienzo.client.core.event.NodeTouchEndHandler;
 import com.ait.lienzo.client.core.shape.Layer;
-import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
-import online.draughts.rus.client.application.component.play.PlayComponentView;
-import online.draughts.rus.client.event.*;
-import online.draughts.rus.shared.model.Move;
-import online.draughts.rus.shared.util.StringUtils;
 import online.draughts.rus.draughts.util.Operator;
 import online.draughts.rus.draughts.util.PossibleOperators;
+import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.shared.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.HashMap;
@@ -57,15 +54,12 @@ public class Board extends Layer {
 
   private BoardBackgroundLayer backgroundLayer;
 
-  private EventBus eventBus;
-  private PlayComponentView playComponent;
+  private PlayComponent view;
 
-  public Board(EventBus playEventBus,
-               BoardBackgroundLayer backgroundLayer,
+  public Board(BoardBackgroundLayer backgroundLayer,
                int rows,
                int cols,
                boolean white) {
-    this.eventBus = playEventBus;
     this.backgroundLayer = backgroundLayer;
     this.white = white;
     turn = white;
@@ -92,28 +86,6 @@ public class Board extends Layer {
   }
 
   private void bindEvents() {
-    eventBus.addHandler(PlayMoveCancelEvent.TYPE, new PlayMoveCancelEventHandler() {
-      @Override
-      public void onPlayMove(PlayMoveCancelEvent event) {
-        final Move move = event.getMove();
-        final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
-        final Stroke mirror = stroke.flip();
-        eventBus.fireEvent(new NotationCancelStrokeEvent(stroke));
-        moveMyCanceled(mirror);
-      }
-    });
-
-    eventBus.addHandler(PlayMoveOpponentCancelEvent.TYPE, new PlayMoveOpponentCancelEventHandler() {
-      @Override
-      public void onPlayMoveOpponentCancel(PlayMoveOpponentCancelEvent event) {
-        final Move move = event.getMove();
-        final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
-        final Stroke mirror = stroke.flip();
-        eventBus.fireEvent(new NotationCancelStrokeEvent(mirror));
-        moveOpponentCanceled(stroke);
-      }
-    });
-
     addNodeMouseClickHandler(new NodeMouseClickHandler() {
       @Override
       public void onNodeMouseClick(NodeMouseClickEvent nodeMouseClickEvent) {
@@ -125,23 +97,6 @@ public class Board extends Layer {
       @Override
       public void onNodeTouchEnd(NodeTouchEndEvent nodeTouchEndEvent) {
         Board.this.moveDraught(nodeTouchEndEvent.getX(), nodeTouchEndEvent.getY());
-      }
-    });
-
-    playMoveOpponentHR = eventBus.addHandler(PlayMoveOpponentEvent.TYPE, new PlayMoveOpponentEventHandler() {
-      @Override
-      public void onPlayMoveOpponent(PlayMoveOpponentEvent event) {
-        final Move move = event.getMove();
-        final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
-        final Stroke mirror = stroke.flip();
-        moveOpponent(mirror);
-      }
-    });
-
-    eventBus.addHandler(RemovePlayMoveOpponentHandlerEvent.TYPE, new RemoveWebsocketHandlersEventHandler() {
-      @Override
-      public void onRemovePlayMoveOpponentHandler(RemovePlayMoveOpponentHandlerEvent event) {
-        playMoveOpponentHR.removeHandler();
       }
     });
   }
@@ -676,7 +631,7 @@ public class Board extends Layer {
           public void onClose(IAnimation iAnimation, IAnimationHandle iAnimationHandle) {
             remove(takenDraught);
             if (!isEmulate() && !clearDesk) {
-              eventBus.fireEvent(new CheckWinnerEvent());
+              view.checkWinner();
             }
           }
         });
@@ -753,7 +708,7 @@ public class Board extends Layer {
       if (!isWhite()) {
         strokeForNotation = stroke.mirror();
       }
-      eventBus.fireEvent(new NotationStrokeEvent(strokeForNotation));
+      view.addNotationStroke(strokeForNotation);
     }
 
     doMove(stroke); // сделать ход
@@ -865,7 +820,7 @@ public class Board extends Layer {
 
   public void toggleTurn() {
     turn = !turn;
-    eventBus.fireEvent(new TurnChangeEvent(turn));
+    view.toggleTurn(turn);
   }
 
   public List<Draught> getMyDraughts() {
@@ -921,13 +876,13 @@ public class Board extends Layer {
         if (!isWhite()) {
           strokeForNotation = stroke.flip();
         }
-        eventBus.fireEvent(new NotationStrokeEvent(strokeForNotation));
+        view.addNotationStroke(strokeForNotation);
 
         final Move move = MoveFactory.createMoveFromStroke(stroke)
             .setTitle(stroke.toNotation())
             .setHashTags(StringUtils.getHashes(getComment()));
 
-        eventBus.fireEvent(new PlayMoveMessageEvent(move));
+        view.doPlayerMove(move);
         moveMyStack.push(stroke);
 
         AnimationProperties props = new AnimationProperties();
@@ -1009,7 +964,7 @@ public class Board extends Layer {
     doMove(stroke, stepCursor, back);
   }
 
-  private void moveOpponentCanceled(Stroke stroke) {
+  public void moveOpponentCanceled(Stroke stroke) {
     strokeCanceled(stroke);
     Stroke canceled = moveOpponentStack.pop();
     if (canceled.isFirst()) {
@@ -1017,7 +972,7 @@ public class Board extends Layer {
     }
   }
 
-  private void moveMyCanceled(Stroke stroke) {
+  public void moveMyCanceled(Stroke stroke) {
     strokeCanceled(stroke);
     Stroke canceled = moveMyStack.pop();
     if (canceled.isFirst()) {
@@ -1043,11 +998,7 @@ public class Board extends Layer {
     return "sdfsd #dsffsd, sdfdsf #123";
   }
 
-  public void setPlayComponent(PlayComponentView playComponent) {
-    this.playComponent = playComponent;
-  }
-
-  public PlayComponentView getPlayComponent() {
-    return playComponent;
+  public void setView(PlayComponent view) {
+    this.view = view;
   }
 }

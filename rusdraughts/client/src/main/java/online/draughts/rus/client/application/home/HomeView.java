@@ -26,10 +26,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.application.component.playshowpanel.PlayShowPanel;
 import online.draughts.rus.client.application.security.CurrentSession;
-import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.client.util.DebugUtils;
-import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
@@ -69,11 +66,10 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @Inject
   HomeView(Binder binder,
            CurrentSession currentSession,
-           ClientConfiguration config,
            DraughtsMessages messages,
-           PlayShowPanelFactory playShowPanelFactory,
+           PlayShowPanel playShowPanel,
            Cookies cookies) {
-    this.playShowPanel = new PlayShowPanel(this, playShowPanelFactory, cookies);
+    this.playShowPanel = playShowPanel;
     initWidget(binder.createAndBindUi(this));
 
     this.cookies = cookies;
@@ -87,12 +83,8 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @Override
   protected void onAttach() {
     super.onAttach();
-    playShowPanel.postConstruct();
+    playShowPanel.postConstruct(this);
     newGameState = cookies.getNewGameButtonState();
-    if (DebugUtils.isProduction()) {
-      newGameState = true;
-      newGameButton.setVisible(false);
-    }
     if (currentSession.isLoggedIn()) {
       showControlsNewGameButton();
     }

@@ -38,7 +38,7 @@ public class ClientConfigurationImpl implements ClientConfiguration {
 
   @Override
   public String initShowGamesPageSize() {
-    return null;
+    return "10";
   }
 
   @Override

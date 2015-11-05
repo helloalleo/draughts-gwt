@@ -5,14 +5,15 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.tester.MockFactory;
 import com.gwtplatform.tester.MockingBinder;
-import online.draughts.rus.client.place.NameTokens;
-import online.draughts.rus.shared.model.Player;
-import online.draughts.rus.testutil.SimpleTestCase;
+import online.draughts.rus.testutil.ViewTestBase;
 import online.draughts.rus.testutil.ViewTestModule;
+import org.jukito.JukitoRunner;
 import org.junit.AfterClass;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
-import static org.junit.Assert.assertNotNull;
+import static org.mockito.Mockito.verify;
+
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,7 +21,8 @@ import static org.junit.Assert.assertNotNull;
  * Date: 04.11.15
  * Time: 10:57
  */
-public class HomeViewTest extends SimpleTestCase {
+@RunWith(JukitoRunner.class)
+public class HomeViewTest extends ViewTestBase {
 
   public static class Module extends ViewTestModule {
 
@@ -34,11 +36,6 @@ public class HomeViewTest extends SimpleTestCase {
     @Override
     protected void configureViewTest() {
       bind(HomeView.Binder.class).to(MyTestBinder.class);
-      bindManyInstances(String.class, NameTokens.homePage);
-      final Player player = new Player();
-      player.setIncrementPageSize(10);
-      player.setPlayerName("test");
-      bindManyInstances(Player.class, player);
     }
   }
 
@@ -52,8 +49,12 @@ public class HomeViewTest extends SimpleTestCase {
 
   @Test
   public void testHomeView() {
-    assertNotNull(homeView);
+    homeView.onNewGame(null);
+    verify(homeView.playShowPanel).setVisible(true);
+    verify(homeView.play).setVisible(false);
 
     homeView.onNewGame(null);
+    verify(homeView.playShowPanel).setVisible(false);
+    verify(homeView.play).setVisible(true);
   }
 }

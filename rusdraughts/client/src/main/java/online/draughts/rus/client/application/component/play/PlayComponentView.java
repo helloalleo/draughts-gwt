@@ -32,8 +32,11 @@ import online.draughts.rus.client.application.widget.dialog.InviteDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
+import online.draughts.rus.draughts.PlayComponent;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Friend;
+import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.model.Move;
 import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
@@ -49,7 +52,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandlers>
-    implements PlayComponentPresenter.MyView {
+    implements PlayComponentPresenter.MyView, PlayComponent {
 
   private final DraughtsMessages messages;
   private final AppResources resources;
@@ -206,8 +209,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void initNotationPanel(EventBus eventBus) {
-    notationPanel = new NotationPanel(eventBus);
+  public void initNotationPanel(EventBus eventBus, Game game) {
+    notationPanel = new NotationPanel(eventBus, game.getId());
     notationList.add(notationPanel);
 
     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
@@ -448,8 +451,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public void startPlay(boolean white) {
     BoardBackgroundLayer backgroundLayer = initDeskPanel(white);
-    board = new Board(getUiHandlers().getPlayEventBus(), backgroundLayer, 8, 8, white);
-    board.setPlayComponent(this);
+    board = new Board(backgroundLayer, 8, 8, white);
+    board.setView(this);
     lienzoPanel.add(board);
     lienzoPanel.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     updateTurn(getUiHandlers().isMyTurn());
@@ -532,6 +535,32 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public void setOpponent(Player opponent) {
     this.opponent = opponent;
+  }
+
+  @Override
+  public Board getBoard() {
+    return board;
+  }
+
+
+  @Override
+  public void checkWinner() {
+    getUiHandlers().checkWinner();
+  }
+
+  @Override
+  public void addNotationStroke(Stroke strokeForNotation) {
+    getUiHandlers().addNotationStroke(strokeForNotation);
+  }
+
+  @Override
+  public void toggleTurn(boolean turn) {
+    getUiHandlers().toggleTurn(turn);
+  }
+
+  @Override
+  public void doPlayerMove(Move move) {
+    getUiHandlers().doPlayerMove(move);
   }
 
   interface Binder extends UiBinder<Widget, PlayComponentView> {

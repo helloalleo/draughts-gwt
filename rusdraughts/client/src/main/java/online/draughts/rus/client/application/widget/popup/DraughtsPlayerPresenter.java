@@ -5,10 +5,17 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;
+import online.draughts.rus.client.event.CheckWinnerEvent;
+import online.draughts.rus.client.event.NotationStrokeEvent;
+import online.draughts.rus.client.event.PlayMoveMessageEvent;
+import online.draughts.rus.client.event.TurnChangeEvent;
+import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.model.Move;
 
 
 public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPresenter.MyView> implements DraughtsPlayerUiHandlers {
+
   private final Game game;
 
   DraughtsPlayerPresenter(
@@ -44,6 +51,26 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
     public DraughtsPlayerPresenter create(Game game) {
       return new DraughtsPlayerPresenter(eventBus, viewFactory.create(game), game);
     }
+  }
+
+  @Override
+  public void checkWinner() {
+    fireEvent(new CheckWinnerEvent());
+  }
+
+  @Override
+  public void addNotationStroke(Stroke strokeForNotation) {
+    fireEvent(new NotationStrokeEvent(strokeForNotation));
+  }
+
+  @Override
+  public void toggleTurn(boolean turn) {
+    fireEvent(new TurnChangeEvent(turn));
+  }
+
+  @Override
+  public void doPlayerMove(Move move) {
+    fireEvent(new PlayMoveMessageEvent(move));
   }
 
   public interface MyView extends PopupView, HasUiHandlers<DraughtsPlayerUiHandlers> {

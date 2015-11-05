@@ -23,13 +23,11 @@ import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.TrUtils;
-import online.draughts.rus.draughts.Board;
-import online.draughts.rus.draughts.BoardBackgroundLayer;
-import online.draughts.rus.draughts.Stroke;
-import online.draughts.rus.draughts.StrokeFactory;
+import online.draughts.rus.draughts.*;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.model.Move;
 import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.shared.rest.GamesResource;
 import online.draughts.rus.shared.util.StringUtils;
@@ -42,7 +40,7 @@ import org.gwtbootstrap3.client.ui.html.Br;
 import org.gwtbootstrap3.client.ui.html.Span;
 
 public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUiHandlers>
-    implements DraughtsPlayerPresenter.MyView {
+    implements DraughtsPlayerPresenter.MyView, PlayComponent {
   private final EventBus eventBus;
   private final AppResources resources;
   private final int rows = 8;
@@ -225,18 +223,14 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     for (int i = 0; i < gameNode.getChildCount(); i++) {
       final Node child = gameNode.getChild(i);
       // если у нас не спан
-      if (!child.getNodeName().toUpperCase().equals(NotationPanel.NOTATION_A_TAG.toUpperCase())) {
+      if (child.getNodeName().toUpperCase().equals(NotationPanel.NOTATION_A_TAG.toUpperCase())) {
         // тогда у нас анчор, берем его содержимое
         final Element step = ((Element) child.getFirstChild());
         String prevStep = "";
         if (i > 0) {
           Element wrapperNotation = ((Element) gameNode.getChild(i - 1));
-          if (NotationPanel.NOTATION_SEP_TAG.toUpperCase().equals(child.getNodeName().toUpperCase())) {
-            notationPanel.add(new Br());
-            continue;
-          }
           // если разделитель побитых шашек
-          if (Stroke.BEAT_MOVE_SEP.equals(wrapperNotation.getNodeValue())) {
+          if (Stroke.BEAT_MOVE_SEP.equals(wrapperNotation.getInnerText())) {
             wrapperNotation = ((Element) gameNode.getChild(i - 2));
           }
           prevStep = "";
@@ -247,7 +241,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
         final Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(step, prevStep, false);
 
-        addGameComment(step.getInnerText(), stroke.getTitle(), stroke.getComment());
+        addGameComment(stroke.getOrder(), step.getInnerText(), stroke.getTitle(), stroke.getComment());
 
         Anchor anchor = new Anchor();
         anchor.addStyleName(resources.style().notationStrokeStyle());
@@ -256,19 +250,24 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
         anchor.addClickHandler(new ClickHandler() {
           @Override
           public void onClick(ClickEvent event) {
-            final Integer pos = stroke.getOrder();
-            if (pos == prevPos) {
-              return;
-            }
-            prevPos = pos;
-            toMove(pos);
+            toMoveByClick(stroke.getOrder());
           }
         });
         notationPanel.add(anchor);
+      } else if (child.getNodeName().toUpperCase().equals("BR")) {
+        notationPanel.add(new Br());
       } else {
         notationPanel.add(new Span(((Element) child).getInnerText()));
       }
     }
+  }
+
+  private void toMoveByClick(int pos) {
+    if (pos == prevPos) {
+      return;
+    }
+    prevPos = pos;
+    toMove(pos);
   }
 
   private void enableComments(boolean enable) {
@@ -290,7 +289,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     LienzoPanel lienzoPanel = new LienzoPanel(side, side);
     lienzoPanel.setBackgroundLayer(boardBackground);
 
-    board = new Board(eventBus, boardBackground, rows, cols, true);
+    board = new Board(boardBackground, rows, cols, true);
     board.setEmulate(true);
     lienzoPanel.add(board);
 
@@ -369,6 +368,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       current = prev;
     }
     final String currentNotation = current.getInnerText();
+    final int order = Integer.valueOf(current.getAttribute(NotationPanel.DATA_ORDER_ATTR));
 
     final String oldTitle = current.getAttribute(NotationPanel.DATA_TITLE_ATTR);
     final String oTitle = oldTitle.length() != 0 ? (oldTitle + NotationPanel.USER_COMMENT_SEP)
@@ -398,14 +398,14 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     gamesDelegate.withCallback(new AbstractAsyncCallback<Game>() {
       @Override
       public void onSuccess(Game result) {
-        addGameComment(currentNotation, gameTitle, gameComment);
+        addGameComment(order, currentNotation, gameTitle, gameComment);
         setStrokeComment(newTitle, newComment);
       }
     }).saveOrCreate(game);
   }
 
-  private void addGameComment(String currentNotation, String gameTitle, String gameComment) {
-    addComment(gameComments, gameCommentsScroll, currentNotation, gameTitle, gameComment);
+  private void addGameComment(int order, String currentNotation, String gameTitle, String gameComment) {
+    addComment(gameComments, gameCommentsScroll, order, currentNotation, gameTitle, gameComment);
   }
 
   private void initButtons() {
@@ -583,10 +583,10 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
   private void setStrokeComment(String title, String comment) {
     currentStrokeComment.clear();
-    addComment(currentStrokeComment, currentStrokeCommentScroll, null, title, comment);
+    addComment(currentStrokeComment, currentStrokeCommentScroll, -1, null, title, comment);
   }
 
-  private void addComment(HTMLPanel panel, ScrollPanel scrollPanel, String currentNotation, String title, String comment) {
+  private void addComment(HTMLPanel panel, ScrollPanel scrollPanel, final int order, String currentNotation, String title, String comment) {
     if (StringUtils.isEmpty(title) || StringUtils.isEmpty(comment)) {
       return;
     }
@@ -599,8 +599,16 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       if (StringUtils.isEmpty(currentNotation)) {
         panel.add(new HTML(titles[i] + NotationPanel.TITLE_COMMENT_SEP + comments[i]));
       } else {
-        panel.add(new HTML(titles[i] + NotationPanel.TITLE_COMMENT_SEP + currentNotation
-            + NotationPanel.TITLE_COMMENT_SEP + comments[i]));
+        Anchor anchor = new Anchor(currentNotation);
+        anchor.addClickHandler(new ClickHandler() {
+          @Override
+          public void onClick(ClickEvent event) {
+            toMoveByClick(order);
+          }
+        });
+        panel.add(new Span(titles[i] + NotationPanel.TITLE_COMMENT_SEP));
+        panel.add(anchor);
+        panel.add(new Span(NotationPanel.TITLE_COMMENT_SEP + comments[i]));
       }
     }
     scrollPanel.scrollToBottom();
@@ -656,6 +664,26 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   public void setBeatenOpponent(int count) {
     beatenOpponentDraughtsLabel.setText(count + " - " + (board.isWhite() ? messages.blacks()
         : messages.whites()));
+  }
+
+  @Override
+  public void checkWinner() {
+    getUiHandlers().checkWinner();
+  }
+
+  @Override
+  public void addNotationStroke(Stroke strokeForNotation) {
+    getUiHandlers().addNotationStroke(strokeForNotation);
+  }
+
+  @Override
+  public void toggleTurn(boolean turn) {
+    getUiHandlers().toggleTurn(turn);
+  }
+
+  @Override
+  public void doPlayerMove(Move move) {
+    getUiHandlers().doPlayerMove(move);
   }
 
   interface Binder extends UiBinder<PopupPanel, DraughtsPlayerView> {

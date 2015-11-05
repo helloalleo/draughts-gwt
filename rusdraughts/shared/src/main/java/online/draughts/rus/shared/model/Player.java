@@ -140,9 +140,6 @@ public class Player extends PersistableObjectImpl {
   @Column(name = "google_sub")
   private String googleSub;
 
-  @Column(name = "increment_page_size")
-  private int incrementPageSize;
-
   @GwtTransient
   @JsonIgnore
   private boolean subscribed;
@@ -461,14 +458,6 @@ public class Player extends PersistableObjectImpl {
         .appendHtmlConstant("'>")
         .appendHtmlConstant(getShortName())
         .appendHtmlConstant("</a>").toSafeHtml().asString();
-  }
-
-  public int getIncrementPageSize() {
-    return incrementPageSize;
-  }
-
-  public void setIncrementPageSize(int incrimentPageSize) {
-    this.incrementPageSize = incrimentPageSize;
   }
 
   public enum AuthProvider {

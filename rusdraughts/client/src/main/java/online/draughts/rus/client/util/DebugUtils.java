@@ -13,6 +13,7 @@ import online.draughts.rus.shared.config.ClientConfiguration;
 public class DebugUtils {
 
   private static final ClientConfiguration config = GWT.create(ClientConfiguration.class);
+  private static final Log log = GWT.create(DTLogImpl.class);
 
   private DebugUtils() {
   }
@@ -40,8 +41,10 @@ public class DebugUtils {
     }
     if (caught != null) {
       final String stacktrace = DebugUtils.getStacktraceAsString(caught);
+      log.error(stacktrace, caught);
     } else {
       final String message = "Error occurred, but we have no further information about the cause";
+      log.debug(message);
     }
   }
 

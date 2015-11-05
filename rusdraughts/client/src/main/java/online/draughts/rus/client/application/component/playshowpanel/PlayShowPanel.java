@@ -1,18 +1,21 @@
 
 package online.draughts.rus.client.application.component.playshowpanel;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
+import com.google.inject.Inject;
 import online.draughts.rus.client.application.home.HomeView;
+import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.model.Player;
 import org.gwtbootstrap3.client.ui.Column;
 import org.gwtbootstrap3.client.ui.Row;
 import org.gwtbootstrap3.client.ui.html.Hr;
@@ -22,11 +25,9 @@ import java.util.List;
 
 public class PlayShowPanel extends Composite {
 
-  private static Binder binder = GWT.create(Binder.class);
-  private final HomeView homeView;
+  private HomeView homeView;
   private final PlayShowPanelFactory showPanelFactory;
   private final Cookies cookies;
-  private int lastPageSize;
 
   @UiField
   HTMLPanel playRowList;
@@ -42,18 +43,23 @@ public class PlayShowPanel extends Composite {
   private int lastMaxHeight = 0;
   private int lastScrollPos = 0;
   private HandlerRegistration scrollHandler;
+  private Player player;
 
-  public PlayShowPanel(HomeView homeView,
+  @Inject
+  public PlayShowPanel(Binder binder,
+                       CurrentSession currentSession,
+                       ClientConfiguration config,
                        PlayShowPanelFactory showPanelFactory,
                        Cookies cookies) {
     this.showPanelFactory = showPanelFactory;
-    this.homeView = homeView;
     this.cookies = cookies;
+    this.player = currentSession.getPlayer();
+    INCREMENT_SIZE = Integer.valueOf(config.incrementPlayShowSize());
     initWidget(binder.createAndBindUi(this));
   }
 
-  public void postConstruct() {
-    INCREMENT_SIZE = homeView.getPlayer().getIncrementPageSize();
+  public void postConstruct(HomeView homeView) {
+    this.homeView = homeView;
 
     initScroll();
   }
@@ -117,7 +123,7 @@ public class PlayShowPanel extends Composite {
       Row lastRow = (Row) playRowList.getWidget(playRowList.getWidgetCount() - 2);
       for (int i = 0; i < gamesInRow - filledGamesInRow; i++) {
         Column column = new Column("MD_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow);
-        final PlayItem item = showPanelFactory.createItem(homeView.getPlayer(), gameList.get(i));
+        final PlayItem item = showPanelFactory.createItem(player, gameList.get(i));
         column.add(item);
         lastRow.add(column);
 
@@ -184,7 +190,7 @@ public class PlayShowPanel extends Composite {
     }
     for (Game game : rowGameList) {
       Column column = new Column("MD_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow);
-      final PlayItem item = showPanelFactory.createItem(homeView.getPlayer(), game);
+      final PlayItem item = showPanelFactory.createItem(player, game);
       column.add(item);
       row.add(column);
     }
