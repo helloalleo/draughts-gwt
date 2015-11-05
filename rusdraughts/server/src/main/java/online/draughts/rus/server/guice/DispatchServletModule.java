@@ -36,12 +36,12 @@ public class DispatchServletModule extends ServletModule {
 
     serve("/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
     serve("/logout").with(LogoutServlet.class);
-    serve("/OAuthVKServlet").with(OAuthVKServlet.class);
-    serve("/OAuthVKCallbackServlet").with(OAuthVKCallbackServlet.class);
-    serve("/OAuthFacebookServlet").with(OAuthFacebookServlet.class);
-    serve("/OAuthFacebookCallbackServlet").with(OAuthFacebookCallbackServlet.class);
-    serve("/OAuthGoogleServlet").with(OAuthGoogleServlet.class);
-    serve("/OAuthGoogleCallbackServlet").with(OAuthGoogleCallbackServlet.class);
+    serve("/vkOAuth").with(OAuthVKServlet.class);
+    serve("/vkOAuthCallback").with(OAuthVKCallbackServlet.class);
+    serve("/fbOAuth").with(OAuthFacebookServlet.class);
+    serve("/fbOAuthCallback").with(OAuthFacebookCallbackServlet.class);
+    serve("/gOAuth").with(OAuthGoogleServlet.class);
+    serve("/gOAuthCallback").with(OAuthGoogleCallbackServlet.class);
     serve("/gameGiff").with(GameGiff.class);
 
     requestStaticInjection(CustomConfigurator.class);

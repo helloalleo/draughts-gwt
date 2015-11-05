@@ -35,7 +35,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public static int INIT_SHOW_GAMES_PAGE_SIZE;
   private final CurrentSession currentSession;
   private final Cookies cookies;
-  private final PlayComponentPresenter playPresenter;
+  final PlayComponentPresenter playPresenter;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private int gamesOffset = 0;
 
@@ -140,10 +140,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   @Override
   public Player getPlayer() {
     return currentSession.getPlayer();
-  }
-
-  public PlayComponentPresenter getPlayPresenter() {
-    return playPresenter;
   }
 
   /**

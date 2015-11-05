@@ -1,6 +1,7 @@
 package online.draughts.rus.client.gin;
 
 import online.draughts.rus.client.application.component.playshowpanel.PlayItem;
+import online.draughts.rus.client.application.component.playshowpanel.PlayShowPanel;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
 
@@ -13,4 +14,6 @@ import online.draughts.rus.shared.model.Player;
 public interface PlayShowPanelFactory {
 
   PlayItem createItem(Player player, Game game);
+
+  PlayShowPanel createShowPanel();
 }

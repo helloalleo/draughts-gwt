@@ -43,7 +43,7 @@ public class ClientConfigurationImpl implements ClientConfiguration {
 
   @Override
   public String incrementPlayShowSize() {
-    return null;
+    return "10";
   }
 
   @Override

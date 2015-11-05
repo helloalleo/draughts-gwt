@@ -24,7 +24,6 @@ import org.gwtbootstrap3.client.ui.Image;
 
 public class PlayItem extends Composite {
 
-  private static Binder binder = GWT.create(Binder.class);
   private final DraughtsMessages messages = GWT.create(DraughtsMessages.class);
   private final AppResources resources = GWT.create(AppResources.class);
   private final static String PLAYER_COLOR_DELIMITER = ": ";
@@ -46,7 +45,9 @@ public class PlayItem extends Composite {
   Button playGame;
 
   @Inject
-  PlayItem(final DraughtsPlayerPresenter.Factory draughtsPlayerFactory, final HomePresenter homePresenter,
+  PlayItem(Binder binder,
+           final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
+           final HomePresenter homePresenter,
            @Assisted Player player, @Assisted final Game game) {
     initWidget(binder.createAndBindUi(this));
 

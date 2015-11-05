@@ -8,6 +8,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import online.draughts.rus.client.application.home.HomeView;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
@@ -25,7 +26,7 @@ import java.util.List;
 
 public class PlayShowPanel extends Composite {
 
-  private HomeView homeView;
+  private final Provider<HomeView> homeViewProvider;
   private final PlayShowPanelFactory showPanelFactory;
   private final Cookies cookies;
 
@@ -50,17 +51,17 @@ public class PlayShowPanel extends Composite {
                        CurrentSession currentSession,
                        ClientConfiguration config,
                        PlayShowPanelFactory showPanelFactory,
+                       Provider<HomeView> homeViewProvider,
                        Cookies cookies) {
     this.showPanelFactory = showPanelFactory;
     this.cookies = cookies;
     this.player = currentSession.getPlayer();
     INCREMENT_SIZE = Integer.valueOf(config.incrementPlayShowSize());
+    this.homeViewProvider = homeViewProvider;
     initWidget(binder.createAndBindUi(this));
   }
 
-  public void postConstruct(HomeView homeView) {
-    this.homeView = homeView;
-
+  public void postConstruct() {
     initScroll();
   }
 
@@ -83,7 +84,7 @@ public class PlayShowPanel extends Composite {
         int halfIncrementScrollSize = (maxScrollTop - lastMaxHeight) / 2;
         if (lastScrollPos >= (maxScrollTop - halfIncrementScrollSize) && updateFlag) {
           final int newPageSize = gameList.size() + INCREMENT_SIZE;
-          PlayShowPanel.this.homeView.getMoreGames(newPageSize);
+          PlayShowPanel.this.homeViewProvider.get().getMoreGames(newPageSize);
           lastMaxHeight = maxScrollTop;
           updateFlag = false;
         }
@@ -161,10 +162,10 @@ public class PlayShowPanel extends Composite {
     }
     gamesOnPanelCounter = cookies.getGamesOnPageCounter();
     if (gamesOnPanelCounter <= 0) {
-      homeView.setEnableLessGameButton(false);
+      homeViewProvider.get().setEnableLessGameButton(false);
     }
     if (gamesOnPanelCounter >= 4) {
-      homeView.setEnableMoreGameButton(false);
+      homeViewProvider.get().setEnableMoreGameButton(false);
     }
     playRowList.clear();
     List<Game> rowGameList = new ArrayList<>();
@@ -201,27 +202,27 @@ public class PlayShowPanel extends Composite {
   public void moreGameOnPanel() {
     gamesOnPanelCounter++;
     cookies.setGamesOnPageCounter(gamesOnPanelCounter);
-    if (!homeView.isEnabledLessGameButton()) {
-      homeView.setEnableLessGameButton(true);
+    if (!homeViewProvider.get().isEnabledLessGameButton()) {
+      homeViewProvider.get().setEnableLessGameButton(true);
     }
     resetGames(gameList);
     if (gamesOnPanelCounter == gameOnPanelArr.length - 1) {
-      homeView.setEnableMoreGameButton(false);
+      homeViewProvider.get().setEnableMoreGameButton(false);
     }
   }
 
   public void lessGameOnPanel() {
     gamesOnPanelCounter--;
     cookies.setGamesOnPageCounter(gamesOnPanelCounter);
-    if (!homeView.isEnabledMoreGameButton()) {
-      homeView.setEnableMoreGameButton(true);
+    if (!homeViewProvider.get().isEnabledMoreGameButton()) {
+      homeViewProvider.get().setEnableMoreGameButton(true);
     }
     resetGames(gameList);
     if (gamesOnPanelCounter == 0) {
-      homeView.setEnableLessGameButton(false);
+      homeViewProvider.get().setEnableLessGameButton(false);
     }
   }
 
-  interface Binder extends UiBinder<HTMLPanel, PlayShowPanel> {
+  public interface Binder extends UiBinder<HTMLPanel, PlayShowPanel> {
   }
 }

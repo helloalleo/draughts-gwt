@@ -31,6 +31,7 @@
     <modules>
         <module>websocket</module>
         <module>rusdraughts</module>
+        <module>selenium</module>
     </modules>
 
     <profiles>

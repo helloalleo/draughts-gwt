@@ -43,7 +43,6 @@
         <maven.compiler.target>1.8</maven.compiler.target>
 
         <target.jdk>1.8</target.jdk>
-        <selenium.version>2.48.2</selenium.version>
     </properties>
 
     <dependencyManagement>
@@ -241,13 +240,6 @@
         <dependency>
             <groupId>org.jukito</groupId>
             <artifactId>jukito</artifactId>
-        </dependency>
-
-        <dependency>
-            <groupId>org.seleniumhq.selenium</groupId>
-            <artifactId>selenium-java</artifactId>
-            <version>${selenium.version}</version>
-            <scope>test</scope>
         </dependency>
     </dependencies>
     <build>
