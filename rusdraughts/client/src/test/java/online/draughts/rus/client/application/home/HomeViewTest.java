@@ -1,16 +1,9 @@
 package online.draughts.rus.client.application.home;
 
-import online.draughts.rus.CustomGwtMockitoTestRunner;
-import online.draughts.rus.client.application.security.CurrentSession;
-import online.draughts.rus.client.gin.PlayShowPanelFactory;
+import com.google.gwt.core.client.GWT;
+import com.google.gwt.junit.client.GWTTestCase;
 import online.draughts.rus.client.resources.AppResources;
-import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import online.draughts.rus.testutil.ViewTestBase;
-import org.junit.Before;
-import org.junit.Test;
-import org.junit.runner.RunWith;
-import org.mockito.Mock;
 
 
 /**
@@ -19,29 +12,22 @@ import org.mockito.Mock;
  * Date: 04.11.15
  * Time: 10:57
  */
-@RunWith(CustomGwtMockitoTestRunner.class)
-public class HomeViewTest extends ViewTestBase {
+//@RunWith(CustomGwtMockitoTestRunner.class)
+public class HomeViewTest extends GWTTestCase {
 
   private PlayComponentView playComponentView;
 
-  @Mock
-  DraughtsMessages messages;
-  @Mock
-  AppResources resources;
-  @Mock
-  CurrentSession currentSession;
-  @Mock
-  PlayShowPanelFactory playShowPanelFactory;
-  @Mock
-  Cookies cookies;
-
-  @Before
-  public void setUp() {
+  @Override
+  public String getModuleName() {
+    return "online.draughts.rus.Application_dev";
   }
 
-  @Test
   public void testHomeView() {
-    playComponentView = new PlayComponentView(messages, resources);
+    PlayComponentView.Binder playBinder = GWT.create(PlayComponentView.Binder.class);
+    DraughtsMessages messages = GWT.create(DraughtsMessages.class);
+    AppResources resources = GWT.create(AppResources.class);
+    playComponentView = new PlayComponentView(playBinder, messages, resources);
+    assertNotNull(playComponentView);
   }
 
 //  public static class Module extends ViewTestModule {
