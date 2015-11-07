@@ -1,5 +1,5 @@
 
-package online.draughts.rus.client.application.component.playshowpanel;
+package online.draughts.rus.client.application.home;
 
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -9,7 +9,6 @@ import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
-import online.draughts.rus.client.application.home.HomeView;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.resources.Variables;

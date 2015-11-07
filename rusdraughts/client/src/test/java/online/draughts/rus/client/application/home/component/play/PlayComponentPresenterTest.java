@@ -1,6 +1,7 @@
-package online.draughts.rus.client.application.component.play;
+package online.draughts.rus.client.application.home.component.play;
 
 import com.google.inject.Inject;
+import online.draughts.rus.client.application.home.PlayComponentPresenter;
 import org.jukito.JukitoRunner;
 import org.junit.Test;
 import org.junit.runner.RunWith;

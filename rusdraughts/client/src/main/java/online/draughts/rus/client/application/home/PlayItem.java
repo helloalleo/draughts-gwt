@@ -1,5 +1,5 @@
 
-package online.draughts.rus.client.application.component.playshowpanel;
+package online.draughts.rus.client.application.home;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -12,7 +12,6 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import online.draughts.rus.client.application.home.HomePresenter;
 import online.draughts.rus.client.application.widget.popup.DraughtsPlayerPresenter;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.TrUtils;

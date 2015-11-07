@@ -4,7 +4,6 @@ import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.inject.Singleton;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
 import online.draughts.rus.client.application.ApplicationModule;
-import online.draughts.rus.client.application.component.playshowpanel.PlayShowPanelModule;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.dialog.DialogModule;
 import online.draughts.rus.client.application.widget.popup.DraughtsPlayerModule;
@@ -28,7 +27,6 @@ public class ClientModule extends AbstractGinModule {
     install(new ApplicationModule());
     install(new WebsocketModule());
     install(new DialogModule());
-    install(new PlayShowPanelModule());
 
     bind(CurrentSession.class).in(Singleton.class);
     bind(Cookies.class).to(DTCookiesImpl.class).in(Singleton.class);

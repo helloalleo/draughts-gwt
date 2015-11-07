@@ -26,7 +26,7 @@
         <guice.version>3.0</guice.version>
         <!--<google.oauth.version>1.19.0</google.oauth.version>-->
 
-        <lienzo-core.version>2.0.155-RC1</lienzo-core.version>
+        <lienzo-core.version>2.0.185-RC1</lienzo-core.version>
         <gwt-jackson.version>0.10.0</gwt-jackson.version>
 
         <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
@@ -38,6 +38,8 @@
         <jukito.version>1.4.1</jukito.version>
         <provided-test.scope>provided test</provided-test.scope>
         <mockito-all.version>1.9.5</mockito-all.version>
+        <gwt-test-utils.version>0.48-SNAPSHOT</gwt-test-utils.version>
+        <gwtmockito.version>1.1.5</gwtmockito.version>
     </properties>
 
     <dependencyManagement>
@@ -105,6 +107,12 @@
                 <scope>${provided-test.scope}</scope>
             </dependency>
             <dependency>
+                <groupId>javax.inject</groupId>
+                <artifactId>javax.inject</artifactId>
+                <version>1</version>
+                <scope>${provided-test.scope}</scope>
+            </dependency>
+            <dependency>
                 <groupId>com.google.inject.extensions</groupId>
                 <artifactId>guice-assistedinject</artifactId>
                 <version>${guice.version}</version>
@@ -169,6 +177,12 @@
                 <groupId>com.gwtplatform</groupId>
                 <artifactId>gwtp-tester</artifactId>
                 <version>${gwtp.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>com.googlecode.gwt-test-utils</groupId>
+                <artifactId>gwt-test-utils-bootstrap</artifactId>
+                <version>${gwt-test-utils.version}</version>
                 <scope>test</scope>
             </dependency>
         </dependencies>
@@ -239,6 +253,10 @@
             <groupId>com.google.gwt.inject</groupId>
             <artifactId>gin</artifactId>
         </dependency>
+        <dependency>
+            <groupId>javax.inject</groupId>
+            <artifactId>javax.inject</artifactId>
+        </dependency>
 
         <dependency>
             <groupId>com.google.http-client</groupId>
@@ -297,6 +315,12 @@
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-tester</artifactId>
         </dependency>
+        <dependency>
+            <groupId>com.google.gwt.gwtmockito</groupId>
+            <artifactId>gwtmockito</artifactId>
+            <version>${gwtmockito.version}</version>
+            <scope>test</scope>
+        </dependency>
     </dependencies>
 
     <build>
@@ -332,7 +356,9 @@
                     <draftCompile>true</draftCompile>
                     <sourceLevel>${maven.compiler.source}</sourceLevel>
                     <style>${gwt.style}</style>
-                    <webappDirectory>${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}</webappDirectory>
+                    <webappDirectory>
+                        ${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}
+                    </webappDirectory>
                 </configuration>
                 <executions>
                     <execution>

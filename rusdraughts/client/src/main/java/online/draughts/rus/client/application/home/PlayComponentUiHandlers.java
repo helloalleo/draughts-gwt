@@ -1,4 +1,4 @@
-package online.draughts.rus.client.application.component.play;
+package online.draughts.rus.client.application.home;
 
 import com.gwtplatform.mvp.client.UiHandlers;
 import online.draughts.rus.shared.model.Friend;

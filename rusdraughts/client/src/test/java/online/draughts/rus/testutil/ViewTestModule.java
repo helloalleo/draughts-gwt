@@ -8,15 +8,8 @@ import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.locale.DraughtsMessagesImpl;
 import org.jukito.JukitoModule;
 import org.jukito.TestSingleton;
-import org.junit.Before;
-import org.mockito.MockitoAnnotations;
 
 public abstract class ViewTestModule extends JukitoModule {
-
-  @Before
-  public void initMocks() {
-    MockitoAnnotations.initMocks(this);
-  }
 
   @Override
   protected void configureTest() {
@@ -30,5 +23,4 @@ public abstract class ViewTestModule extends JukitoModule {
   }
 
   protected abstract void configureViewTest();
-
 }

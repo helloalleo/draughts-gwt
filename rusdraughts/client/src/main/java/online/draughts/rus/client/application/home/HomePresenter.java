@@ -14,7 +14,6 @@ import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.draughts.rus.client.application.ApplicationPresenter;
-import online.draughts.rus.client.application.component.play.PlayComponentPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.event.UpdatePlayShowPanelEvent;
 import online.draughts.rus.client.event.UpdatePlayShowPanelEventHandler;

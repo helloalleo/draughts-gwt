@@ -1,4 +1,4 @@
-package online.draughts.rus.client.application.component.play;
+package online.draughts.rus.client.application.home;
 
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;
@@ -32,15 +32,15 @@ import online.draughts.rus.client.application.widget.dialog.InviteDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
+import online.draughts.rus.draughts.Board;
+import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
+import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Friend;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Move;
 import online.draughts.rus.shared.model.Player;
-import online.draughts.rus.draughts.Board;
-import online.draughts.rus.draughts.BoardBackgroundLayer;
-import online.draughts.rus.draughts.Stroke;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Icon;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
@@ -85,12 +85,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private Board board;
   private LienzoPanel lienzoPanel;
   private Player player;
-  @UiField(provided = true)
+  @UiField
   CellTable<Friend> playerFriendCellTable;
-  @UiField(provided = true)
+  @UiField
   CellTable<Player> playerCellTable;
-  private SingleSelectionModel<Friend> playerFriendSelectionModel;
-  private SingleSelectionModel<Player> playerSelectionModel;
+  SingleSelectionModel<Friend> playerFriendSelectionModel;
+  SingleSelectionModel<Player> playerSelectionModel;
   private boolean prevSelected = false;
   private NotationPanel notationPanel;
   private InviteDialogBox inviteDialogBox;
@@ -99,20 +99,22 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private List<Friend> playerFriendList;
 
   @Inject
-  PlayComponentView(Binder uiBinder,
+  PlayComponentView(Binder binder,
                     DraughtsMessages messages,
                     AppResources resources) {
     this.messages = messages;
     this.resources = resources;
 
-    initRecentPlayersCellList();
+    initWidget(binder.createAndBindUi(this));
+
+    initPlayerFriendsCellList();
     initPlayersCellList();
-    initWidget(uiBinder.createAndBindUi(this));
 
     initEmptyDeskPanel();
   }
 
   @UiHandler("playButton")
+  @SuppressWarnings(value = "unused")
   public void onConnectToServer(ClickEvent event) {
     switch (playButton.getIcon()) {
       case REFRESH:
@@ -131,6 +133,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @UiHandler("drawButton")
+  @SuppressWarnings(value = "unused")
   public void onDrawButton(ClickEvent event) {
     new ConfirmeDialogBox(messages.doYouWantToProposeDraw()) {
       @Override
@@ -143,6 +146,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @UiHandler("surrenderButton")
+  @SuppressWarnings(value = "unused")
   public void onSurrenderButton(ClickEvent event) {
     new ConfirmeDialogBox(messages.areYouSureYouWantSurrender()) {
       @Override
@@ -155,6 +159,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @UiHandler("cancelMove")
+  @SuppressWarnings(value = "unused")
   public void onCancelMove(ClickEvent event) {
     if (board == null) {
       return;
@@ -228,19 +233,18 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     }
   }
 
-  private void initRecentPlayersCellList() {
-    playerFriendCellTable = new CellTable<>();
-
+  private void initPlayerFriendsCellList() {
     playerFriendSelectionModel = new SingleSelectionModel<>();
     playerFriendCellTable.setSelectionModel(playerFriendSelectionModel);
-    final HTML connectToServer = new HTML(messages.connectToServer());
+    final HTML connectToServer = new HTML();
+    connectToServer.setHTML(messages.connectToServer());
     connectToServer.getElement().getStyle().setFontSize(12, Style.Unit.PX);
     playerFriendCellTable.setLoadingIndicator(connectToServer);
     playerFriendCellTable.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     playerFriendSelectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
       @Override
       public void onSelectionChange(SelectionChangeEvent event) {
-        resetPlayerSelection(playerSelectionModel, playerFriendSelectionModel);
+        resetPlayerSelection(playerSelectionModel);
       }
     });
 
@@ -293,17 +297,17 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   private void initPlayersCellList() {
-    playerCellTable = new CellTable<>();
     playerSelectionModel = new SingleSelectionModel<>();
     playerCellTable.setSelectionModel(playerSelectionModel);
-    final HTML connectToServer = new HTML(messages.connectToServer());
+    final HTML connectToServer = new HTML();
+    connectToServer.setHTML(messages.connectToServer());
     connectToServer.getElement().getStyle().setFontSize(12, Style.Unit.PX);
     playerCellTable.setLoadingIndicator(connectToServer);
     playerCellTable.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     playerSelectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
       @Override
       public void onSelectionChange(SelectionChangeEvent event) {
-        resetPlayerSelection(playerFriendSelectionModel, playerSelectionModel);
+        resetPlayerSelection(playerFriendSelectionModel);
       }
     });
 
@@ -337,10 +341,10 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     } else {
       if (player.isOnline()) {
         img = new Image(resources.images().onlineIconImage().getSafeUri());
-        img.setTitle(playerPublicName + " "  + messages.onlineTitle());
+        img.setTitle(playerPublicName + " " + messages.onlineTitle());
       } else {
         img = new Image(resources.images().offlineIconImage().getSafeUri());
-        img.setTitle(playerPublicName + " "  + messages.offlineTitle());
+        img.setTitle(playerPublicName + " " + messages.offlineTitle());
       }
     }
     return new SafeHtmlBuilder().appendHtmlConstant(img.getElement().getString()).toSafeHtml();
@@ -353,8 +357,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     return userIcon;
   }
 
-  private void resetPlayerSelection(SingleSelectionModel<?> prevSelectionModel,
-                                    SingleSelectionModel<?> currentSelectionModel) {
+  @SuppressWarnings(value = "unchecked")
+  private void resetPlayerSelection(SingleSelectionModel<?> prevSelectionModel) {
     final Object selectedObject = prevSelectionModel.getSelectedObject();
     if (selectedObject == null) {
       return;

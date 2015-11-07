@@ -1,7 +1,7 @@
 package online.draughts.rus.client.gin;
 
-import online.draughts.rus.client.application.component.playshowpanel.PlayItem;
-import online.draughts.rus.client.application.component.playshowpanel.PlayShowPanel;
+import online.draughts.rus.client.application.home.PlayItem;
+import online.draughts.rus.client.application.home.PlayShowPanel;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
 

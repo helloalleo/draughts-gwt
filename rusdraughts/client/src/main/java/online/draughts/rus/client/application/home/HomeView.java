@@ -24,7 +24,6 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
-import online.draughts.rus.client.application.component.playshowpanel.PlayShowPanel;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.util.Cookies;
@@ -43,7 +42,6 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   private final DraughtsMessages messages;
   private final CurrentSession currentSession;
   private final Cookies cookies;
-  private final Widget widget;
   private boolean isMyGames;
 
   @UiField
@@ -63,7 +61,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @UiField
   Strong gameListLabel;
 
-  private boolean newGameState = true;
+  private boolean newGameState = false;
 
   @Inject
   HomeView(Binder binder,
@@ -72,7 +70,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
            PlayShowPanelFactory playShowPanelFactory,
            Cookies cookies) {
     this.playShowPanel = playShowPanelFactory.createShowPanel();
-    widget = binder.createAndBindUi(this);
+    initWidget(binder.createAndBindUi(this));
 
     this.cookies = cookies;
     isMyGames = cookies.isMyGames();
@@ -80,11 +78,6 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     this.currentSession = currentSession;
     this.messages = messages;
     bindSlot(HomePresenter.SLOT_PLAY, play);
-  }
-
-  @Override
-  public Widget asWidget() {
-    return widget;
   }
 
   @Override

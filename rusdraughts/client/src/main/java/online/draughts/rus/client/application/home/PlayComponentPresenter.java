@@ -1,4 +1,4 @@
-package online.draughts.rus.client.application.component.play;
+package online.draughts.rus.client.application.home;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -369,29 +369,27 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       }
     });
 
-    eventBus.addHandler(PlayMoveCancelEvent.TYPE, new PlayMoveCancelEventHandler() {
+    addRegisteredHandler(PlayMoveCancelEvent.TYPE, new PlayMoveCancelEventHandler() {
       @Override
       public void onPlayMove(PlayMoveCancelEvent event) {
         final Move move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
         final Stroke mirror = stroke.flip();
-        eventBus.fireEvent(new NotationCancelStrokeEvent(stroke));
+        fireEvent(new NotationCancelStrokeEvent(stroke));
         getView().getBoard().moveMyCanceled(mirror);
       }
     });
 
-    eventBus.addHandler(PlayMoveOpponentCancelEvent.TYPE, new PlayMoveOpponentCancelEventHandler() {
+    addRegisteredHandler(PlayMoveOpponentCancelEvent.TYPE, new PlayMoveOpponentCancelEventHandler() {
       @Override
       public void onPlayMoveOpponentCancel(PlayMoveOpponentCancelEvent event) {
         final Move move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
         final Stroke mirror = stroke.flip();
-        eventBus.fireEvent(new NotationCancelStrokeEvent(mirror));
+        fireEvent(new NotationCancelStrokeEvent(mirror));
         getView().getBoard().moveOpponentCanceled(stroke);
       }
     });
-
-
   }
 
   private void updatePlayerFriendList() {
@@ -408,7 +406,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     }).getPlayerFriendList(gameWebsocket.getPlayer().getId());
   }
 
-  interface MyView extends View, HasUiHandlers<PlayComponentUiHandlers> {
+  public interface MyView extends View, HasUiHandlers<PlayComponentUiHandlers> {
     void setPlayerFriendList(List<Friend> playerList);
 
     void setPlayerList(List<Player> playerList);

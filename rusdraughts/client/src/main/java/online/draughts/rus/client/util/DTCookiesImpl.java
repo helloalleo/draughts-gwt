@@ -36,7 +36,7 @@ public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
   public boolean getNewGameButtonState() {
     String newGameState = Cookies.getCookie(NEW_GAME_BUTTON_STATE_MAIN_PAGE);
     if (StringUtils.isEmpty(newGameState)) {
-      newGameState = Boolean.FALSE.toString();
+      newGameState = Boolean.TRUE.toString();
     }
     return Boolean.valueOf(newGameState);
   }

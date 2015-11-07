@@ -3,7 +3,7 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
              xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html"
-             xmlns:p="urn:import:online.draughts.rus.client.application.component.playshowpanel"
+             xmlns:p="urn:import:online.draughts.rus.client.application.home"
         >
 
     <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
