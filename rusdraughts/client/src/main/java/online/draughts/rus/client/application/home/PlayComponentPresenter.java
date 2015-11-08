@@ -351,12 +351,12 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       }
     });
 
-    addRegisteredHandler(UpdatePlayerFriendListEvent.TYPE, new UpdatePlayerFriendListEventHandler() {
-      @Override
-      public void onUpdatePlayerFriendList(UpdatePlayerFriendListEvent event) {
-        updatePlayerFriendList();
-      }
-    });
+//    addRegisteredHandler(UpdatePlayerFriendListEvent.TYPE, new UpdatePlayerFriendListEventHandler() {
+//      @Override
+//      public void onUpdatePlayerFriendList(UpdatePlayerFriendListEvent event) {
+//        updatePlayerFriendList();
+//      }
+//    });
 
     addRegisteredHandler(PlayMoveOpponentEvent.TYPE, new PlayMoveOpponentEventHandler() {
       @Override
@@ -393,12 +393,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   private void updatePlayerFriendList() {
-    playersDelegate.withCallback(new AsyncCallback<List<Friend>>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
-      }
-
+    playersDelegate.withCallback(new AbstractAsyncCallback<List<Friend>>() {
       @Override
       public void onSuccess(List<Friend> result) {
         getView().setPlayerFriendList(result);

@@ -16,6 +16,7 @@ import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.json.GameMessageMapper;
+import online.draughts.rus.client.util.Log;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
@@ -36,7 +37,7 @@ import java.util.List;
 public class GameWebsocket implements WebsocketListener {
 
   private final CurrentSession currentSession;
-  private ClientConfiguration config;
+  private final Log log;
   private ResourceDelegate<GamesResource> gamesDelegate;
   private Websocket websocket;
   private EventBus eventBus;
@@ -53,15 +54,17 @@ public class GameWebsocket implements WebsocketListener {
                         ClientConfiguration config,
                         GameMessageMapper messageMapper,
                         ResourceDelegate<GamesResource> gamesDelegate,
-                        DraughtsMessages messages) {
+                        DraughtsMessages messages,
+                        Log log) {
     this.currentSession = currentSession;
     this.playSession = playSession;
     this.gamesDelegate = gamesDelegate;
     this.eventBus = eventBus;
     this.messages = messages;
-    this.config = config;
     this.messageMapper = messageMapper;
+    this.log = log;
 
+    websocket = new Websocket(config.playerWebsocketUrl());
     websocket.addListener(this);
     bindEvents();
   }
@@ -99,7 +102,7 @@ public class GameWebsocket implements WebsocketListener {
       @Override
       public void onUpdateAllPlayerList(UpdateAllPlayerListEvent event) {
         updatePlayerListMessage();
-        eventBus.fireEvent(new UpdatePlayerFriendListEvent());
+//        eventBus.fireEvent(new UpdatePlayerFriendListEvent());
       }
     });
 
@@ -230,6 +233,7 @@ public class GameWebsocket implements WebsocketListener {
 
   @Override
   public void onMessage(String message) {
+    log.info("ON MESSAGE :: " + message);
     GameMessage gameMessage = messageMapper.read(message);
     switch (gameMessage.getMessageType()) {
       case USER_LIST_UPDATE:
@@ -451,7 +455,6 @@ public class GameWebsocket implements WebsocketListener {
   }
 
   public void connect() {
-    websocket = new Websocket(config.playerWebsocketUrl());
     websocket.open();
     player = currentSession.getPlayer();
   }
