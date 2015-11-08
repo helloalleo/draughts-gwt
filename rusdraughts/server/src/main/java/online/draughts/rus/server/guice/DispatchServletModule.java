@@ -21,6 +21,7 @@ import com.google.inject.persist.jpa.JpaPersistModule;
 import com.google.inject.servlet.ServletModule;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
+import online.draughts.rus.server.config.CustomConfigurator;
 import online.draughts.rus.server.servlet.GameGiff;
 import online.draughts.rus.server.servlet.LogoutServlet;
 import online.draughts.rus.server.servlet.oauth.*;

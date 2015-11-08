@@ -29,7 +29,7 @@ import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Move;
 import online.draughts.rus.shared.model.Player;
-import online.draughts.rus.shared.rest.GamesResource;
+import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Column;

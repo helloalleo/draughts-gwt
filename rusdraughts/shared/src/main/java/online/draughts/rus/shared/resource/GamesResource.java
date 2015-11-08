@@ -1,4 +1,4 @@
-package online.draughts.rus.shared.rest;
+package online.draughts.rus.shared.resource;
 
 import online.draughts.rus.shared.model.Game;
 

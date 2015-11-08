@@ -19,7 +19,7 @@
 
     <properties>
         <!--Tomcat-->
-        <tomcat.version>7.0.61</tomcat.version>
+        <tomcat.version>8.0.28</tomcat.version>
 
         <guice.version>4.0</guice.version>
         <guicy-resteasy.version>1.2</guicy-resteasy.version>
@@ -109,12 +109,12 @@
             <artifactId>tomcat</artifactId>
             <version>${tomcat.version}</version>
             <type>pom</type>
-            <scope>import</scope>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
             <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat7-websocket</artifactId>
+            <artifactId>tomcat-websocket</artifactId>
             <version>${tomcat.version}</version>
             <scope>provided</scope>
         </dependency>

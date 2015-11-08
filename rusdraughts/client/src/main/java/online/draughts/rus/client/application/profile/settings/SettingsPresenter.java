@@ -16,7 +16,7 @@ import online.draughts.rus.client.websocket.PlaySession;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Player;
-import online.draughts.rus.shared.rest.PlayersResource;
+import online.draughts.rus.shared.resource.PlayersResource;
 
 
 public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView> implements SettingsUiHandlers {

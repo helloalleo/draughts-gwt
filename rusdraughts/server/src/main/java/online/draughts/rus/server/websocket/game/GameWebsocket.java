@@ -1,7 +1,7 @@
 package online.draughts.rus.server.websocket.game;
 
 import com.google.inject.Inject;
-import online.draughts.rus.server.guice.CustomConfigurator;
+import online.draughts.rus.server.config.CustomConfigurator;
 import online.draughts.rus.server.service.GameMessageService;
 import online.draughts.rus.server.service.GameService;
 import online.draughts.rus.server.service.PlayerService;

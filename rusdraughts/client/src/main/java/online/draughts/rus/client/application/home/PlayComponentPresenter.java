@@ -25,9 +25,9 @@ import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.draughts.StrokeFactory;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.*;
-import online.draughts.rus.shared.rest.FriendsResource;
-import online.draughts.rus.shared.rest.GamesResource;
-import online.draughts.rus.shared.rest.PlayersResource;
+import online.draughts.rus.shared.resource.FriendsResource;
+import online.draughts.rus.shared.resource.GamesResource;
+import online.draughts.rus.shared.resource.PlayersResource;
 
 import java.util.Date;
 import java.util.List;

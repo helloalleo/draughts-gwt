@@ -1,4 +1,4 @@
-package online.draughts.rus.server.guice;
+package online.draughts.rus.server.config;
 
 import com.google.inject.Inject;
 import com.google.inject.Injector;
@@ -8,8 +8,8 @@ import javax.websocket.server.ServerEndpointConfig;
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
- * Date: 20.10.15
- * Time: 17:31
+ * Date: 08.11.15
+ * Time: 19:36
  */
 public class CustomConfigurator extends ServerEndpointConfig.Configurator {
 

@@ -23,7 +23,7 @@ import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.GameMessage;
 import online.draughts.rus.shared.model.Move;
 import online.draughts.rus.shared.model.Player;
-import online.draughts.rus.shared.rest.GamesResource;
+import online.draughts.rus.shared.resource.GamesResource;
 
 import java.util.Date;
 import java.util.List;

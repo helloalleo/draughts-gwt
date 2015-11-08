@@ -1,11 +1,11 @@
-package online.draughts.rus.server.rest;
+package online.draughts.rus.server.resource;
 
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 import online.draughts.rus.server.service.FriendService;
 import online.draughts.rus.server.utils.AuthUtils;
 import online.draughts.rus.shared.model.Friend;
-import online.draughts.rus.shared.rest.FriendsResource;
+import online.draughts.rus.shared.resource.FriendsResource;
 
 import javax.servlet.http.HttpServletRequest;
 

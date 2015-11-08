@@ -23,7 +23,7 @@ import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
-import online.draughts.rus.shared.rest.GamesResource;
+import online.draughts.rus.shared.resource.GamesResource;
 
 import java.util.List;
 

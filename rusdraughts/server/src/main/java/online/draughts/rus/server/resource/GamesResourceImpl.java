@@ -1,11 +1,11 @@
-package online.draughts.rus.server.rest;
+package online.draughts.rus.server.resource;
 
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 import online.draughts.rus.server.service.GameService;
 import online.draughts.rus.server.utils.AuthUtils;
 import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.rest.GamesResource;
+import online.draughts.rus.shared.resource.GamesResource;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.ws.rs.DefaultValue;

@@ -17,12 +17,12 @@
 package online.draughts.rus.server.guice;
 
 import com.google.inject.AbstractModule;
-import online.draughts.rus.server.rest.FriendsResourceImpl;
-import online.draughts.rus.server.rest.GamesResourceImpl;
-import online.draughts.rus.server.rest.PlayersResourceImpl;
-import online.draughts.rus.shared.rest.FriendsResource;
-import online.draughts.rus.shared.rest.GamesResource;
-import online.draughts.rus.shared.rest.PlayersResource;
+import online.draughts.rus.server.resource.FriendsResourceImpl;
+import online.draughts.rus.server.resource.GamesResourceImpl;
+import online.draughts.rus.server.resource.PlayersResourceImpl;
+import online.draughts.rus.shared.resource.FriendsResource;
+import online.draughts.rus.shared.resource.GamesResource;
+import online.draughts.rus.shared.resource.PlayersResource;
 
 
 public class RestModule extends AbstractModule {

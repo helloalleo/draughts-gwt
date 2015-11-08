@@ -14,7 +14,7 @@
  * the License.
  */
 
-package online.draughts.rus.shared.rest;
+package online.draughts.rus.shared.resource;
 
 public class ApiPaths {
   public static final String ROOT = "/rus/rest";

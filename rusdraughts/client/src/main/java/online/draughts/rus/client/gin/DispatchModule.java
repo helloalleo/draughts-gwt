@@ -5,7 +5,7 @@ import com.gwtplatform.dispatch.rest.client.RestApplicationPath;
 import com.gwtplatform.dispatch.rest.client.gin.RestDispatchAsyncModule;
 import com.gwtplatform.dispatch.rpc.client.gin.RpcDispatchAsyncModule;
 import com.gwtplatform.dispatch.shared.SecurityCookie;
-import online.draughts.rus.shared.rest.ApiPaths;
+import online.draughts.rus.shared.resource.ApiPaths;
 
 /**
  * Created with IntelliJ IDEA.
