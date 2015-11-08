@@ -25,7 +25,7 @@ import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.resource.PlayersResource;
 
 
-public class RestModule extends AbstractModule {
+public class ResourceModule extends AbstractModule {
   @Override
   protected void configure() {
     bind(GamesResource.class).to(GamesResourceImpl.class);

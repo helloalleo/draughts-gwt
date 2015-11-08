@@ -15,12 +15,12 @@
 
     <inherits name="com.google.gwt.i18n.I18N"/>
 
-    <inherits name="com.google.gwt.websockets.WebSockets"/>
     <inherits name="online.draughts.rus.RusDraughtsShared"/>
     <inherits name="com.gwtplatform.dispatch.rpc.DispatchRpcShared"/>
     <inherits name="com.gwtplatform.dispatch.rpc.DispatchRpc"/>
     <inherits name="com.gwtplatform.dispatch.rest.delegates.ResourceDelegate"/>
     <inherits name="org.gwtbootstrap3.extras.growl.Growl"/>
+    <inherits name="com.sksamuel.gwt.GwtWebsockets"/>
 
     <extend-configuration-property name="gin.ginjector.modules"
                                    value="online.draughts.rus.client.gin.ClientModule"/>

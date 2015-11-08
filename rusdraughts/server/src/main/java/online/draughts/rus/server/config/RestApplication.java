@@ -1,5 +1,7 @@
 package online.draughts.rus.server.config;
 
+import online.draughts.rus.shared.resource.ApiPaths;
+
 import javax.ws.rs.ApplicationPath;
 import javax.ws.rs.core.Application;
 
@@ -9,6 +11,6 @@ import javax.ws.rs.core.Application;
  * Date: 15.10.15
  * Time: 7:36
  */
-@ApplicationPath("/rest")
+@ApplicationPath(ApiPaths.RESOURCE)
 public class RestApplication extends Application {
 }

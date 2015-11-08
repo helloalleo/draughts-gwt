@@ -3,12 +3,11 @@ package online.draughts.rus.client.websocket;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import com.google.gwt.websockets.client.WebSocket;
-import com.google.gwt.websockets.client.WebSocketCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
+import com.sksamuel.gwt.websockets.Websocket;
+import com.sksamuel.gwt.websockets.WebsocketListener;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.dialog.ConfirmPlayDialogBox;
 import online.draughts.rus.client.application.widget.dialog.ConfirmeDialogBox;
@@ -34,12 +33,12 @@ import java.util.List;
  * Date: 07.12.14
  * Time: 11:39
  */
-public class GameWebsocket implements WebSocketCallback {
+public class GameWebsocket implements WebsocketListener {
 
   private final CurrentSession currentSession;
   private ClientConfiguration config;
   private ResourceDelegate<GamesResource> gamesDelegate;
-  private WebSocket webSocket;
+  private Websocket websocket;
   private EventBus eventBus;
   private Player player;
   private DraughtsMessages messages;
@@ -63,20 +62,21 @@ public class GameWebsocket implements WebSocketCallback {
     this.config = config;
     this.messageMapper = messageMapper;
 
+    websocket.addListener(this);
     bindEvents();
   }
 
   private void bindEvents() {
-    HandlerRegistration gameMessageHR = eventBus.addHandler(GameMessageEvent.TYPE, new GameMessageEventHandler() {
+    eventBus.addHandler(GameMessageEvent.TYPE, new GameMessageEventHandler() {
       @Override
       public void onPlayerMessage(GameMessageEvent event) {
-        GameMessage gameMessage = (GameMessage) event.getGameMessage();
+        GameMessage gameMessage = event.getGameMessage();
 
         sendGameMessage(gameMessage);
       }
     });
 
-    HandlerRegistration playMoveHR = eventBus.addHandler(PlayMoveMessageEvent.TYPE, new PlayMoveMessageEventHandler() {
+    eventBus.addHandler(PlayMoveMessageEvent.TYPE, new PlayMoveMessageEventHandler() {
       @Override
       public void onPlayMoveMessage(PlayMoveMessageEvent event) {
         GameMessage message = createSendGameMessage();
@@ -88,7 +88,7 @@ public class GameWebsocket implements WebSocketCallback {
       }
     });
 
-    HandlerRegistration updatePlayerListHR = eventBus.addHandler(UpdatePlayerListEvent.TYPE, new UpdatePlayerListEventHandler() {
+    eventBus.addHandler(UpdatePlayerListEvent.TYPE, new UpdatePlayerListEventHandler() {
       @Override
       public void onUpdatePlayerList(UpdatePlayerListEvent event) {
         updatePlayerListMessage();
@@ -103,12 +103,12 @@ public class GameWebsocket implements WebSocketCallback {
       }
     });
 
-    eventBus.addHandler(RemovePlayMoveOpponentHandlerEvent.TYPE, new RemoveWebsocketHandlersEventHandler() {
-      @Override
-      public void onRemovePlayMoveOpponentHandler(RemovePlayMoveOpponentHandlerEvent event) {
-        removeHandlers();
-      }
-    });
+//    eventBus.addHandler(RemovePlayMoveOpponentHandlerEvent.TYPE, new RemoveWebsocketHandlersEventHandler() {
+//      @Override
+//      public void onRemovePlayMoveOpponentHandler(RemovePlayMoveOpponentHandlerEvent event) {
+//        removeHandlers();
+//      }
+//    });
 
     eventBus.addHandler(ClearPlayComponentEvent.TYPE, new ClearPlayComponentEventHandler() {
       @Override
@@ -124,13 +124,6 @@ public class GameWebsocket implements WebSocketCallback {
     sendGameMessage(message);
   }
 
-  private void removeHandlers() {
-//    playMoveHR.removeHandler();
-//    updatePlayerListHR.removeHandler();
-//    connectToPlayHR.removeHandler();
-//    gameMessageHR.removeHandler();
-  }
-
   private GameMessage createSendGameMessage() {
     GameMessage message = GWT.create(GameMessage.class);
     message.setSender(playSession.getPlayer());
@@ -139,10 +132,8 @@ public class GameWebsocket implements WebSocketCallback {
   }
 
   private void sendGameMessage(GameMessage gameMessage) {
-    if (gameMessage.getMove() != null) {
-    }
     String message = messageMapper.write(gameMessage);
-    webSocket.send(message);
+    websocket.send(message);
   }
 
   private void handleUpdatePlayerList(List<Player> playerList) {
@@ -158,7 +149,6 @@ public class GameWebsocket implements WebSocketCallback {
   /**
    * Начало игры на стороне приглашенного
    *
-   * @param gameMessage
    */
   private void handlePlayInvite(final GameMessage gameMessage) {
     if (confirmPlayDialogBox != null && confirmPlayDialogBox.isShowing()) {
@@ -216,7 +206,7 @@ public class GameWebsocket implements WebSocketCallback {
   }
 
   @Override
-  public void onConnect() {
+  public void onOpen() {
     if (player == null) {
       InfoDialogBox.setMessage(messages.failToConnectToServer()).show();
       return;
@@ -233,7 +223,7 @@ public class GameWebsocket implements WebSocketCallback {
   }
 
   @Override
-  public void onDisconnect() {
+  public void onClose() {
     playSession.setConnected(false);
     eventBus.fireEvent(new DisconnectFromPlayEvent());
   }
@@ -294,6 +284,7 @@ public class GameWebsocket implements WebSocketCallback {
     Growl.growlNotif(gameMessage.getMessage());
   }
 
+  @SuppressWarnings("unused")
   private void handlePlayEndGame(GameMessage gameMessage) {
     if (getGame() != null) {
       Game game = getGame();
@@ -312,6 +303,7 @@ public class GameWebsocket implements WebSocketCallback {
     }
   }
 
+  @SuppressWarnings("unused")
   private void handlePlayCallback(GameMessage gameMessage) {
     // получается в PlayComponentPresenter
     eventBus.fireEvent(new PlayCallbackEvent());
@@ -325,7 +317,6 @@ public class GameWebsocket implements WebSocketCallback {
   /**
    * Обработчик ответа на отмену хода. Если оппонент подтвердил, тогда перемещаем его шашку.
    *
-   * @param gameMessage
    */
   private void handlePlayCancelMoveResponse(GameMessage gameMessage) {
     boolean isAcceptedCancelMove = Boolean.valueOf(gameMessage.getData());
@@ -341,7 +332,6 @@ public class GameWebsocket implements WebSocketCallback {
    * Вопрос на строне оппонента о том, что ему предлагается отменить ход. Если он соглашается, то он двигает шашку
    * оппонента
    *
-   * @param gameMessage
    */
   private void handlePlayCancelMove(final GameMessage gameMessage) {
     new ConfirmeDialogBox(messages.playerProposesCancelMove(gameMessage.getSender().getPublicName())) {
@@ -409,6 +399,7 @@ public class GameWebsocket implements WebSocketCallback {
     return message;
   }
 
+  @SuppressWarnings("unused")
   private void handlePlaySurrender(GameMessage gameMessage) {
     Game game = playSession.getGame();
     // так как сохраняем на противоположной строне, игроки черный-белый переставлены
@@ -430,7 +421,6 @@ public class GameWebsocket implements WebSocketCallback {
   /**
    * Обрабатываем ход оппонента
    *
-   * @param gameMessage
    */
   private void handlePlayMove(GameMessage gameMessage) {
     // отправлем отраженный ход здесь
@@ -441,7 +431,6 @@ public class GameWebsocket implements WebSocketCallback {
   /**
    * Начало игры на стороне приглашающего
    *
-   * @param gameMessage
    */
   private void handlePlayStart(final GameMessage gameMessage) {
     final Game game = gameMessage.getGame();
@@ -462,16 +451,15 @@ public class GameWebsocket implements WebSocketCallback {
   }
 
   public void connect() {
-    webSocket = new WebSocket(GameWebsocket.this);
-    webSocket.connect(config.playerWebsocketUrl());
+    websocket = new Websocket(config.playerWebsocketUrl());
+    websocket.open();
     player = currentSession.getPlayer();
   }
 
   public void reconnect() {
     Window.alert("RECONNECT");
-    removeHandlers();
-    webSocket.close();
-    webSocket.connect(config.playerWebsocketUrl());
+    websocket.close();
+    websocket.open();
   }
 
   public boolean isConnected() {
