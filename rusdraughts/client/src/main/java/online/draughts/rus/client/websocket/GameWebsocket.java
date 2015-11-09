@@ -48,14 +48,14 @@ public class GameWebsocket implements WebsocketListener {
   private GameMessageMapper messageMapper;
 
   @Inject
-  private GameWebsocket(EventBus eventBus,
-                        CurrentSession currentSession,
-                        PlaySession playSession,
-                        ClientConfiguration config,
-                        GameMessageMapper messageMapper,
-                        ResourceDelegate<GamesResource> gamesDelegate,
-                        DraughtsMessages messages,
-                        Log log) {
+  public GameWebsocket(EventBus eventBus,
+                       CurrentSession currentSession,
+                       PlaySession playSession,
+                       ClientConfiguration config,
+                       GameMessageMapper messageMapper,
+                       ResourceDelegate<GamesResource> gamesDelegate,
+                       DraughtsMessages messages,
+                       Log log) {
     this.currentSession = currentSession;
     this.playSession = playSession;
     this.gamesDelegate = gamesDelegate;
@@ -151,7 +151,6 @@ public class GameWebsocket implements WebsocketListener {
 
   /**
    * Начало игры на стороне приглашенного
-   *
    */
   private void handlePlayInvite(final GameMessage gameMessage) {
     if (confirmPlayDialogBox != null && confirmPlayDialogBox.isShowing()) {
@@ -320,7 +319,6 @@ public class GameWebsocket implements WebsocketListener {
 
   /**
    * Обработчик ответа на отмену хода. Если оппонент подтвердил, тогда перемещаем его шашку.
-   *
    */
   private void handlePlayCancelMoveResponse(GameMessage gameMessage) {
     boolean isAcceptedCancelMove = Boolean.valueOf(gameMessage.getData());
@@ -335,7 +333,6 @@ public class GameWebsocket implements WebsocketListener {
   /**
    * Вопрос на строне оппонента о том, что ему предлагается отменить ход. Если он соглашается, то он двигает шашку
    * оппонента
-   *
    */
   private void handlePlayCancelMove(final GameMessage gameMessage) {
     new ConfirmeDialogBox(messages.playerProposesCancelMove(gameMessage.getSender().getPublicName())) {
@@ -424,7 +421,6 @@ public class GameWebsocket implements WebsocketListener {
 
   /**
    * Обрабатываем ход оппонента
-   *
    */
   private void handlePlayMove(GameMessage gameMessage) {
     // отправлем отраженный ход здесь
@@ -434,7 +430,6 @@ public class GameWebsocket implements WebsocketListener {
 
   /**
    * Начало игры на стороне приглашающего
-   *
    */
   private void handlePlayStart(final GameMessage gameMessage) {
     final Game game = gameMessage.getGame();

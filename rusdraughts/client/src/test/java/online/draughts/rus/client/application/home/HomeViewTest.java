@@ -2,8 +2,20 @@ package online.draughts.rus.client.application.home;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.junit.client.GWTTestCase;
+import com.google.web.bindery.event.shared.SimpleEventBus;
+import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
+import online.draughts.rus.client.application.security.CurrentSession;
+import online.draughts.rus.client.json.GameMessageMapper;
 import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.client.util.Log;
+import online.draughts.rus.client.websocket.GameWebsocket;
+import online.draughts.rus.client.websocket.PlaySession;
+import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.resource.FriendsResource;
+import online.draughts.rus.shared.resource.GamesResource;
+import online.draughts.rus.shared.resource.PlayersResource;
 
 
 /**
@@ -16,6 +28,7 @@ import online.draughts.rus.shared.locale.DraughtsMessages;
 public class HomeViewTest extends GWTTestCase {
 
   private PlayComponentView playComponentView;
+  private PlayComponentPresenter playComponentPresenter;
 
   @Override
   public String getModuleName() {
@@ -28,6 +41,27 @@ public class HomeViewTest extends GWTTestCase {
     AppResources resources = GWT.create(AppResources.class);
     playComponentView = new PlayComponentView(playBinder, messages, resources);
     assertNotNull(playComponentView);
+
+    SimpleEventBus eventBus = new SimpleEventBus();
+    ResourceDelegate<GamesResource> gamesResource = GWT.create(ResourceDelegate.class);
+    ResourceDelegate<PlayersResource> playersResource = GWT.create(ResourceDelegate.class);
+    ResourceDelegate<FriendsResource> friendsResource = GWT.create(ResourceDelegate.class);
+    CurrentSession currentSession = GWT.create(CurrentSession.class);
+    PlaySession playSession = GWT.create(PlaySession.class);
+    ClientConfiguration config = GWT.create(ClientConfiguration.class);
+    GameMessageMapper mapper = GWT.create(GameMessageMapper.class);
+    Log log = GWT.create(Log.class);
+    GameWebsocket gameWebsocket = new GameWebsocket(eventBus, currentSession, playSession, config, mapper, gamesResource,
+        messages, log);
+    assertNotNull(gameWebsocket);
+
+    playComponentPresenter = new PlayComponentPresenter(eventBus, playComponentView, messages,
+        gamesResource, playersResource, friendsResource, gameWebsocket, log);
+    assertNotNull(playComponentPresenter);
+
+    playComponentView.onConnectToServer(null);
+    Player opponent = playComponentView.playerCellTable.getVisibleItem(0);
+    assertNotNull(opponent);
   }
 
 //  public static class Module extends ViewTestModule {

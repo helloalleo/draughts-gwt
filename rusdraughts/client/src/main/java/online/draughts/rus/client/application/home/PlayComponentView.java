@@ -97,6 +97,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private boolean opponentColor;
   private Player opponent;
   private List<Friend> playerFriendList;
+  private boolean refreshConnectionToServer = true;
 
   @Inject
   PlayComponentView(Binder binder,
@@ -116,20 +117,18 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @UiHandler("playButton")
   @SuppressWarnings(value = "unused")
   public void onConnectToServer(ClickEvent event) {
-    switch (playButton.getIcon()) {
-      case REFRESH:
-        getUiHandlers().refreshConnectionToServer();
-        break;
-      case PLAY:
-        Player selectedPlayer = null;
-        if (playerSelectionModel.getSelectedObject() != null) {
-          selectedPlayer = playerSelectionModel.getSelectedObject();
-        } else if (playerFriendSelectionModel.getSelectedObject() != null) {
-          selectedPlayer = playerFriendSelectionModel.getSelectedObject().getPk().getFriend();
-        }
-        getUiHandlers().startPlayWith(selectedPlayer);
-        break;
+    if (refreshConnectionToServer) {
+      getUiHandlers().refreshConnectionToServer();
+    } else {
+      Player selectedPlayer = null;
+      if (playerSelectionModel.getSelectedObject() != null) {
+        selectedPlayer = playerSelectionModel.getSelectedObject();
+      } else if (playerFriendSelectionModel.getSelectedObject() != null) {
+        selectedPlayer = playerFriendSelectionModel.getSelectedObject().getPk().getFriend();
+      }
+      getUiHandlers().startPlayWith(selectedPlayer);
     }
+    refreshConnectionToServer = !refreshConnectionToServer;
   }
 
   @UiHandler("drawButton")
