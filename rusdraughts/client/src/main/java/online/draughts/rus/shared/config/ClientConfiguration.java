@@ -13,13 +13,7 @@ public interface ClientConfiguration extends ConstantsWithLookup {
   @LocalizableResource.Key("player.websocket.url")
   String playerWebsocketUrl();
 
-  String debug();
-
   String level();
-
-  String site_url();
-
-  String production();
 
   String initShowGamesPageSize();
 

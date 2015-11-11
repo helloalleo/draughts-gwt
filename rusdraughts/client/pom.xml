@@ -36,7 +36,7 @@
 
         <junit.version>4.12</junit.version>
         <jukito.version>1.4.1</jukito.version>
-        <provided-test.scope>provided test</provided-test.scope>
+        <provided-test.scope>provided</provided-test.scope>
         <mockito-all.version>1.9.5</mockito-all.version>
         <gwt-test-utils.version>0.48-SNAPSHOT</gwt-test-utils.version>
         <gwtmockito.version>1.1.5</gwtmockito.version>
@@ -374,6 +374,34 @@
 
     <profiles>
         <profile>
+            <id>dev</id>
+            <!-- The development profile is active by default -->
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!--
+                    Specifies the build.profile.id property that must be equal than the name of
+                    the directory that contains the profile specific configuration file.
+                    Because the name of the directory that contains the configuration file of the
+                    development profile is dev, we must set the value of the build.profile.id
+                    property to dev.
+                -->
+                <build.profile.id>dev</build.profile.id>
+            </properties>
+
+            <build>
+                <filters>
+                    <!--
+                        Ensures that the config.properties file is always loaded from the
+                        configuration directory of the active Maven profile. 
+                    -->
+                    <filter>profiles/${build.profile.id}/config.properties</filter>
+                </filters>
+            </build>
+        </profile>
+
+        <profile>
             <id>release</id>
             <build>
                 <plugins>
@@ -405,7 +433,25 @@
                         </executions>
                     </plugin>
                 </plugins>
+
+                <filters>
+                    <!--
+                        Ensures that the config.properties file is always loaded from the
+                        configuration directory of the active Maven profile. 
+                    -->
+                    <filter>${project.basedir}/src/main/java/online/draughts/rus/shared/config/profiles/${build.profile.id}/config.properties</filter>
+                </filters>
             </build>
+            <properties>
+                <!--
+                    Specifies the build.profile.id property that must be equal than the name of
+                    the directory that contains the profile specific configuration file.
+                    Because the name of the directory that contains the configuration file of the
+                    production profile is prod, we must set the value of the build.profile.id
+                    property to prod.
+                -->
+                <build.profile.id>prod</build.profile.id>
+            </properties>
         </profile>
     </profiles>
 </project>

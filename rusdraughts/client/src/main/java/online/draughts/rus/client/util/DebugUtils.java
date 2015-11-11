@@ -18,14 +18,6 @@ public class DebugUtils {
   private DebugUtils() {
   }
 
-  public static boolean isProduction() {
-    return Boolean.valueOf(config.production());
-  }
-
-  public static boolean isNotProduction() {
-    return !isProduction();
-  }
-
   public static void initDebugAndErrorHandling() {
     GWT.setUncaughtExceptionHandler(new GWT.UncaughtExceptionHandler() {
       public void onUncaughtException(final Throwable tracepoint) {

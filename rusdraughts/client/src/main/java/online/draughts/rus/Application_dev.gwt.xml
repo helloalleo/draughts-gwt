@@ -3,6 +3,8 @@
         "http://gwtproject.org/doctype/2.7.0/gwt-module.dtd">
 <module rename-to='Application'>
     <inherits name='online.draughts.rus.Application'/>
+    <inherits name="com.google.gwt.user.Debug"/>
+
     <collapse-all-properties />
     <set-property name="compiler.stackMode" value="emulated"/>
     <set-configuration-property name="compiler.emulatedStack.recordLineNumbers"

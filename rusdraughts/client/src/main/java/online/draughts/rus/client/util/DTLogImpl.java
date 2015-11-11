@@ -33,13 +33,7 @@ public class DTLogImpl implements Log {
   private ClientConfiguration configuration = GWT.create(ClientConfiguration.class);
 
   private void log(String prefix, String message, Throwable e) {
-    if (Boolean.valueOf(configuration.debug())) {
-      if (e == null) {
-        GWT.log(prefix + message);
-      } else {
-        GWT.log(prefix + message, e);
-      }
-    }
+    GWT.log(prefix + message, e);
   }
 
   public void error(String message, Throwable e) {
