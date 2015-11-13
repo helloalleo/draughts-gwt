@@ -12,6 +12,6 @@ public class WebsocketModule extends AbstractGinModule {
 
   @Override
   protected void configure() {
-    bind(GameWebsocket.class).asEagerSingleton();
+    bind(ClientWebsocket.class).asEagerSingleton();
   }
 }

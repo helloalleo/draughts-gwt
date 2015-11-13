@@ -8,7 +8,7 @@ import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.json.GameMessageMapper;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.Log;
-import online.draughts.rus.client.websocket.GameWebsocket;
+import online.draughts.rus.client.websocket.ClientWebsocket;
 import online.draughts.rus.client.websocket.PlaySession;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
@@ -51,12 +51,12 @@ public class HomeViewTest extends GWTTestCase {
     ClientConfiguration config = GWT.create(ClientConfiguration.class);
     GameMessageMapper mapper = GWT.create(GameMessageMapper.class);
     Log log = GWT.create(Log.class);
-    GameWebsocket gameWebsocket = new GameWebsocket(eventBus, currentSession, playSession, config, mapper, gamesResource,
+    ClientWebsocket clientWebsocket = new ClientWebsocket(eventBus, currentSession, playSession, config, mapper, gamesResource,
         messages, log);
-    assertNotNull(gameWebsocket);
+    assertNotNull(clientWebsocket);
 
     playComponentPresenter = new PlayComponentPresenter(eventBus, playComponentView, messages,
-        gamesResource, playersResource, friendsResource, gameWebsocket, log);
+        gamesResource, playersResource, friendsResource, clientWebsocket, log);
     assertNotNull(playComponentPresenter);
 
     playComponentView.onConnectToServer(null);

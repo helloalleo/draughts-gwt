@@ -15,10 +15,10 @@
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
             <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
-            <property name="hibernate.connection.username" value="draughts"/>
-            <property name="hibernate.connection.password" value=""/>
+            <property name="hibernate.connection.username" value="${db.user}"/>
+            <property name="hibernate.connection.password" value="${db.passwd}"/>
             <!--<property name="hibernate.connection.url" value="jdbc:postgresql://postgres2428-draughts.mircloud.host/draughts"/>-->
-            <property name="hibernate.connection.url" value="jdbc:postgresql://localhost:5432/draughts"/>
+            <property name="hibernate.connection.url" value="${db.url}"/>
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>

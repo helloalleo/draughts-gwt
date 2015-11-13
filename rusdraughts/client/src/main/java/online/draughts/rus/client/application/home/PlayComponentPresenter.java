@@ -18,7 +18,7 @@ import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Log;
-import online.draughts.rus.client.websocket.GameWebsocket;
+import online.draughts.rus.client.websocket.ClientWebsocket;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.MoveFactory;
 import online.draughts.rus.draughts.Stroke;
@@ -39,7 +39,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final Log log;
   private int DRAUGHTS_ON_DESK_INIT = 12;
 
-  private final GameWebsocket gameWebsocket;
+  private final ClientWebsocket clientWebsocket;
   private final DraughtsMessages messages;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final ResourceDelegate<PlayersResource> playersDelegate;
@@ -55,13 +55,13 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       ResourceDelegate<GamesResource> gamesDelegate,
       ResourceDelegate<PlayersResource> playersDelegate,
       ResourceDelegate<FriendsResource> friendsDelegate,
-      GameWebsocket gameWebsocket,
+      ClientWebsocket clientWebsocket,
       Log log) {
     super(eventBus, view);
 
     this.eventBus = eventBus;
     this.messages = messages;
-    this.gameWebsocket = gameWebsocket;
+    this.clientWebsocket = clientWebsocket;
     this.gamesDelegate = gamesDelegate;
     this.playersDelegate = playersDelegate;
     this.friendsDelegate = friendsDelegate;
@@ -83,7 +83,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       Growl.growlNotif(messages.selectPlayer());
       return;
     }
-    if (opponent.getId().equals(gameWebsocket.getPlayer().getId())) {
+    if (opponent.getId().equals(clientWebsocket.getPlayer().getId())) {
       Growl.growlNotif(messages.selectAnotherPlayerItsYou());
       return;
     }
@@ -101,7 +101,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         gameMessage.setReceiver(opponent);
 
         final boolean white = getView().opponentColor();
-        gameMessage.setMessage(messages.inviteMessage(gameWebsocket.getPlayer().getPublicName(),
+        gameMessage.setMessage(messages.inviteMessage(clientWebsocket.getPlayer().getPublicName(),
             String.valueOf(white ? messages.white() : messages.black())));
         gameMessage.setData(String.valueOf(white));
 
@@ -112,18 +112,18 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   @Override
   public void refreshConnectionToServer() {
-    if (gameWebsocket.isConnected()) {
-      gameWebsocket.reconnect();
+    if (clientWebsocket.isConnected()) {
+      clientWebsocket.reconnect();
     } else {
-      gameWebsocket.connect();
+      clientWebsocket.connect();
     }
-    getView().setPlayer(gameWebsocket.getPlayer());
+    getView().setPlayer(clientWebsocket.getPlayer());
   }
 
   @Override
   public boolean isMyTurn() {
-    return gameWebsocket.getGame().getPlayerWhite().getId()
-        .equals(gameWebsocket.getPlayer().getId());
+    return clientWebsocket.getGame().getPlayerWhite().getId()
+        .equals(clientWebsocket.getPlayer().getId());
   }
 
   @Override
@@ -164,9 +164,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         gameMessage.setReceiver(friend.getPk().getFriend());
         gameMessage.setMessageType(GameMessage.MessageType.NOTIFICATION_ADDED_TO_FAVORITE);
         if (friend.isFavorite()) {
-          gameMessage.setMessage(messages.youHasBeenAddedToFavorite(gameWebsocket.getPlayer().getPublicName()));
+          gameMessage.setMessage(messages.youHasBeenAddedToFavorite(clientWebsocket.getPlayer().getPublicName()));
         } else {
-          gameMessage.setMessage(messages.youHasBeenRemovedFromFavorite(gameWebsocket.getPlayer().getPublicName()));
+          gameMessage.setMessage(messages.youHasBeenRemovedFromFavorite(clientWebsocket.getPlayer().getPublicName()));
         }
         fireEvent(new GameMessageEvent(gameMessage));
       }
@@ -195,9 +195,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   private GameMessage createGameMessage() {
     GameMessage gameMessage = GWT.create(GameMessage.class);
-    gameMessage.setSender(gameWebsocket.getPlayer());
-    gameMessage.setReceiver(gameWebsocket.getOpponent());
-    gameMessage.setGame(gameWebsocket.getGame());
+    gameMessage.setSender(clientWebsocket.getPlayer());
+    gameMessage.setReceiver(clientWebsocket.getOpponent());
+    gameMessage.setGame(clientWebsocket.getGame());
     return gameMessage;
   }
 
@@ -229,9 +229,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onStartPlay(StartPlayEvent event) {
         getView().hideInviteDialog();
         getView().startPlay(event.isWhite());
-        getView().initNotationPanel(eventBus, gameWebsocket.getGame());
+        getView().initNotationPanel(eventBus, clientWebsocket.getGame());
 
-        gameWebsocket.getPlayer().setPlaying(true);
+        clientWebsocket.getPlayer().setPlaying(true);
         playersDelegate.withCallback(new AsyncCallback<Player>() {
           @Override
           public void onFailure(Throwable caught) {
@@ -242,7 +242,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
           public void onSuccess(Player result) {
             fireEvent(new UpdatePlayerListEvent());
           }
-        }).saveOrCreate(gameWebsocket.getPlayer());
+        }).saveOrCreate(clientWebsocket.getPlayer());
       }
     });
 
@@ -265,7 +265,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onCheckWinner(CheckWinnerEvent event) {
         getView().setBeatenMy(DRAUGHTS_ON_DESK_INIT - getView().getMyDraughtsSize());
         getView().setBeatenOpponent(DRAUGHTS_ON_DESK_INIT - getView().getOpponentDraughtsSize());
-        final Game endGame = gameWebsocket.getGame();
+        final Game endGame = clientWebsocket.getGame();
         Game.GameEnds gameEnd = null;
         if (0 == getView().getMyDraughtsSize()) {
           InfoDialogBox.setMessage(messages.youLose()).show();
@@ -306,9 +306,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         fireEvent(new UpdateAllPlayerListEvent());
         fireEvent(new RemovePlayMoveOpponentHandlerEvent());
 
-        gameWebsocket.setOpponent(null);
+        clientWebsocket.setOpponent(null);
         getView().setOpponent(null);
-        gameWebsocket.setGame(null);
+        clientWebsocket.setGame(null);
 
         getView().clearPlayComponent();
         getView().hidePlayingButtonsAndShowPlayButton();
@@ -334,8 +334,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         gamesDelegate.withCallback(event.getAsyncCallback()).saveOrCreate(game);
 
         GameMessage gameMessage = new GameMessage();
-        gameMessage.setSender(gameWebsocket.getPlayer());
-        gameMessage.setReceiver(gameWebsocket.getOpponent());
+        gameMessage.setSender(clientWebsocket.getPlayer());
+        gameMessage.setReceiver(clientWebsocket.getOpponent());
         gameMessage.setMessageType(GameMessage.MessageType.PLAY_CALLBACK);
         fireEvent(new GameMessageEvent(gameMessage));
 
@@ -398,7 +398,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onSuccess(List<Friend> result) {
         getView().setPlayerFriendList(result);
       }
-    }).getPlayerFriendList(gameWebsocket.getPlayer().getId());
+    }).getPlayerFriendList(clientWebsocket.getPlayer().getId());
   }
 
   public interface MyView extends View, HasUiHandlers<PlayComponentUiHandlers> {

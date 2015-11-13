@@ -27,7 +27,7 @@ import com.gwtplatform.mvp.client.proxy.Proxy;
 import online.draughts.rus.client.application.menu.MenuPresenter;
 
 /**
- * This is the top-level presenter of the hierarchy. Other presenters reveal themselves within this presenter.
+ * This is the top-logLevel presenter of the hierarchy. Other presenters reveal themselves within this presenter.
  * <p>
  * The goal of this sample is to show how to use nested presenters. These can be useful to decouple multiple presenters
  * that need to be displayed on the screen simultaneously.

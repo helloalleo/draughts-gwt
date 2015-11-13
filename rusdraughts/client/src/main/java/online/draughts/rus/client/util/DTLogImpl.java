@@ -30,7 +30,7 @@ public class DTLogImpl implements Log {
   private final LogLevels infoLevel = new LogLevels(INFO_LEVEL_NAME, 4);
   private final LogLevels prodLevel = new LogLevels(PROD_LEVEL_NAME, 5);
 
-  private ClientConfiguration configuration = GWT.create(ClientConfiguration.class);
+  private ClientConfiguration config = GWT.create(ClientConfiguration.class);
 
   private void log(String prefix, String message, Throwable e) {
     GWT.log(prefix + message, e);
@@ -72,7 +72,8 @@ public class DTLogImpl implements Log {
   }
 
   private boolean showLog(int level) {
-    switch (configuration.level()) {
+    GWT.log(config.logLevel());
+    switch (config.logLevel()) {
       case DEBUG_LEVEL_NAME:
         return Arrays.asList(1, 2, 3, 4).contains(level);
       case WARN_LEVEL_NAME:

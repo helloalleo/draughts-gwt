@@ -24,7 +24,7 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
 
 /**
- * This is the top-level view of the application. Every time another presenter wants to reveal itself, {@link
+ * This is the top-logLevel view of the application. Every time another presenter wants to reveal itself, {@link
  * ApplicationView} will add its content of the target inside the {@code mainContantPanel}.
  */
 public class ApplicationView extends ViewImpl implements ApplicationPresenter.MyView {

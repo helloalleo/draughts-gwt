@@ -19,7 +19,7 @@
 
     <properties>
         <!--Tomcat-->
-        <tomcat.version>8.0.28</tomcat.version>
+        <tomcat.version>7.0.61</tomcat.version>
 
         <guice.version>4.0</guice.version>
         <guicy-resteasy.version>1.2</guicy-resteasy.version>
@@ -114,8 +114,16 @@
 
         <dependency>
             <groupId>org.apache.tomcat</groupId>
-            <artifactId>tomcat-websocket</artifactId>
+            <artifactId>tomcat-catalina</artifactId>
             <version>${tomcat.version}</version>
+            <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.apache.tomcat</groupId>
+            <artifactId>tomcat7-websocket</artifactId>
+            <version>${tomcat.version}</version>
+            <scope>provided</scope>
         </dependency>
 
         <dependency>
@@ -275,6 +283,13 @@
                 </executions>
             </plugin>
         </plugins>
+
+        <resources>
+            <resource>
+                <directory>src/main/resources</directory>
+                <filtering>true</filtering>
+            </resource>
+        </resources>
     </build>
 
     <profiles>
@@ -301,7 +316,7 @@
                         Ensures that the config.properties file is always loaded from the
                         configuration directory of the active Maven profile. 
                     -->
-                    <filter>profiles/${build.profile.id}/config.properties</filter>
+                    <filter>${project.basedir}/src/main/resources/profiles/${build.profile.id}/config.properties</filter>
                 </filters>
             </build>
         </profile>
