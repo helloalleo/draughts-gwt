@@ -119,6 +119,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   public void onConnectToServer(ClickEvent event) {
     if (refreshConnectionToServer) {
       getUiHandlers().refreshConnectionToServer();
+      refreshConnectionToServer = !refreshConnectionToServer;
     } else {
       Player selectedPlayer = null;
       if (playerSelectionModel.getSelectedObject() != null) {
@@ -128,7 +129,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       }
       getUiHandlers().startPlayWith(selectedPlayer);
     }
-    refreshConnectionToServer = !refreshConnectionToServer;
   }
 
   @UiHandler("drawButton")

@@ -175,8 +175,6 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
         return Window.getScrollTop() + Variables.marginTop();
       }
     });
-
-    Window.enableScrolling(false);
   }
 
   private void playerInit() {
@@ -219,6 +217,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       enableComments(false);
       return;
     }
+    notationPanel.getElement().setAttribute("id", String.valueOf(game.getId()));
     int order = 0;
     for (int i = 0; i < gameNode.getChildCount(); i++) {
       final Node child = gameNode.getChild(i);

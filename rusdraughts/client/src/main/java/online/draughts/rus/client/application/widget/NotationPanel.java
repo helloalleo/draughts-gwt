@@ -40,7 +40,7 @@ public class NotationPanel extends ScrollPanel {
   public static final String USER_COMMENT_SEP = ":";
   public static final String NOTATION_A_TAG = "a";
 
-  private static StringBuilder notation = new StringBuilder();
+  static StringBuilder notation = new StringBuilder();
   private static int order = 0;
   private static Long gameId;
 
@@ -173,7 +173,7 @@ public class NotationPanel extends ScrollPanel {
     getElement().setInnerHTML(notation.toString());
   }
 
-  private void cleanNotationPanel() {
+  void cleanNotationPanel() {
     notation = new StringBuilder();
     getElement().setInnerHTML("");
     order = 0;
@@ -185,7 +185,7 @@ public class NotationPanel extends ScrollPanel {
   }
 
   private static String wrapStrokeInAnchor(Stroke stroke, int order) {
-    return format("<%s id='%s'>%s</%s>", NOTATION_A_TAG, gameId, wrapStroke(stroke, order), NOTATION_A_TAG);
+    return format("<%s>%s</%s>", NOTATION_A_TAG, wrapStroke(stroke, order), NOTATION_A_TAG);
   }
 
   private static String wrapStroke(Stroke stroke, int order, boolean first, boolean simple,

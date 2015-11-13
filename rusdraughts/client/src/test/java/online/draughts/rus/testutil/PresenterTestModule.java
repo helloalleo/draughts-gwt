@@ -1,6 +1,9 @@
 package online.draughts.rus.testutil;
 
+import com.ait.lienzo.client.core.shape.Rectangle;
 import com.google.gwt.junit.GWTMockUtilities;
+import com.google.gwt.user.client.ui.UIObject;
+import com.google.gwt.user.client.Element;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.testing.CountingEventBus;
 import com.gwtplatform.mvp.client.AutobindDisable;
@@ -23,6 +26,9 @@ public abstract class PresenterTestModule extends JukitoModule {
     bind(EventBus.class).to(CountingEventBus.class).in(TestSingleton.class);
     bind(DraughtsMessages.class).to(DraughtsMessagesImpl.class).in(TestSingleton.class);
 
+    forceMock(UIObject.class);
+    forceMock(Element.class);
+    forceMock(Rectangle.class);
     configurePresenterTest();
 
     bind(AutobindDisable.class).toInstance(new AutobindDisable(true));

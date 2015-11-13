@@ -45,7 +45,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final ResourceDelegate<FriendsResource> friendsDelegate;
   private final EventBus eventBus;
-  private HandlerRegistration playMoveOpponentHR;
 
   @Inject
   PlayComponentPresenter(

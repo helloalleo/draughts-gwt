@@ -3,6 +3,7 @@ package online.draughts.rus.draughts;
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.shared.core.types.Color;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gwt.core.client.GWT;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.io.Serializable;
@@ -43,14 +44,15 @@ public class Square implements Serializable {
   }};
 
   public Square(int row, int col) {
-    this.shape = new Rectangle(0, 0);
+    if (GWT.isClient()) {
+      this.shape = new Rectangle(0, 0);
+      this.shape.setFillColor(boardBackground);
+    }
     this.row = row;
     this.col = col;
 
     this.occupied = false;
     this.occupant = null;
-
-    this.shape.setFillColor(boardBackground);
   }
 
   public Square() {
@@ -249,13 +251,13 @@ public class Square implements Serializable {
     return new Square(row, col);
   }
 
-  public static Square fromNotation(String startPos) {
-    if (StringUtils.isEmpty(startPos)) {
+  public static Square fromNotation(String pos) {
+    if (StringUtils.isEmpty(pos)) {
       return null;
     }
 
-    int row = alph.indexOf(String.valueOf(startPos.charAt(0)));
-    int col = 8 - Integer.valueOf(String.valueOf(startPos.charAt(1)));
+    int row = alph.indexOf(String.valueOf(pos.charAt(0)));
+    int col = 8 - Integer.valueOf(String.valueOf(pos.charAt(1)));
 
     try {
       return board.getSquare(col, row);
