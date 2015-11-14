@@ -445,7 +445,9 @@ public class ClientWebsocket implements WebsocketListener {
 
   private void handlePlayRejectInvite(GameMessage gameMessage) {
     playSession.setOpponent(null);
-    Growl.growlNotif(messages.playerRejectedPlayRequest(gameMessage.getSender().getPublicName()));
+    InfoDialogBox
+        .setMessage(messages.playerRejectedPlayRequest(gameMessage.getSender().getPublicName()))
+        .show();
     eventBus.fireEvent(new RejectPlayEvent());
   }
 

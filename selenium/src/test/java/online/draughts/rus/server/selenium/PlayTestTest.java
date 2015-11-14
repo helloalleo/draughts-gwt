@@ -6,16 +6,18 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.openqa.selenium.By;
+import org.openqa.selenium.Keys;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
-import org.openqa.selenium.firefox.internal.ProfilesIni;
-import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.io.File;
+
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotNull;
 
 /**
  * Created with IntelliJ IDEA.
@@ -26,23 +28,28 @@ import static org.junit.Assert.assertEquals;
 @RunWith(JUnit4.class)
 public class PlayTestTest {
 
-  private static String siteUrl = "http://localhost:8080/rus";
-  private final String gwtDebug = "gwt-debug-";
-  private WebDriver vkFFDriver;
-  private WebDriver fbSFDriver;
+  private static final String OPPONENT = "WebDriver2";
+  private static final long WAIT = 60;
+  private static final String siteUrl = "http://localhost:8080/rus";
+  private static final String gwtDebug = "gwt-debug-";
+  private WebDriver vkFFDriverLynx;
+  private WebDriver vkFFDriverP10n;
 
   @Before
   public void setUp() {
-    ProfilesIni profileObj = new ProfilesIni();
-    FirefoxProfile defaultFFProfile = profileObj.getProfile("0qo4ubi7");
-    vkFFDriver = new FirefoxDriver(defaultFFProfile);
-    fbSFDriver = new SafariDriver();
+    File profDir = new File("/Users/alekspo/Library/Application Support/Firefox/Profiles/p7ws5dyp.WebDriver2");
+    FirefoxProfile profile = new FirefoxProfile(profDir);
+    vkFFDriverP10n = new FirefoxDriver(profile);
+
+    profDir = new File("/Users/alekspo/Library/Application Support/Firefox/Profiles/se57dh3q.WebDriver1");
+    profile = new FirefoxProfile(profDir);
+    vkFFDriverLynx = new FirefoxDriver(profile);
   }
 
   @After
   public void tearDown() {
-//    vkFFDriver.quit();
-//    fbSFDriver.quit();
+//    vkFFDriverLynx.quit();
+//    vkFFDriverP10n.quit();
   }
 
   @Test
@@ -50,93 +57,131 @@ public class PlayTestTest {
     Runnable vkRunnable = new Runnable() {
       @Override
       public void run() {
-        logginInVk();
-        connectToServer(vkFFDriver);
+        logInVkLynx();
+        connectToServer(vkFFDriverLynx);
+        inviteToPlay(vkFFDriverLynx);
       }
     };
     Runnable fbRunnable = new Runnable() {
       @Override
       public void run() {
-        loginInFb();
-        connectToServer(fbSFDriver);
+        logInVkP10n();
+        connectToServer(vkFFDriverP10n);
       }
     };
 
-    new Thread(vkRunnable).start();
-    Thread fbThread = new Thread(fbRunnable);
-    fbThread.start();
+    new Thread(fbRunnable).start();
+    Thread vkThread = new Thread(vkRunnable);
+    vkThread.start();
     try {
-      fbThread.join();
+      vkThread.join();
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
   }
 
-  private void connectToServer(WebDriver driver) {
-    new WebDriverWait(driver, 5).until(new ExpectedCondition<Boolean>() {
+  private void acceptInvite(WebDriver driver) {
+    System.out.println("ACCEPT INVITE");
+    final String yesExp = "//button[contains(text(), 'Да')]";
+    webDriverWait(driver, WAIT, new ExpectedCondition<Boolean>() {
       @Override
       public Boolean apply(WebDriver webDriver) {
-        return webDriver.findElement(By.id(gwtDebug + "connectToServer")).isDisplayed();
+        By yesXPath = By.xpath(yesExp);
+        return webDriver.findElement(yesXPath).isDisplayed();
+      }
+    });
+    System.out.println("READY");
+    By yesXPath = By.xpath(yesExp);
+    WebElement yesButton = driver.findElement(yesXPath);
+    System.out.println(yesButton);
+    assertNotNull(yesButton);
+    yesButton.sendKeys(Keys.RETURN);
+  }
+
+  private void inviteToPlay(WebDriver driver) {
+    final String opponentPath = String.format("//div[contains(text(), '%s')]", OPPONENT);
+    new WebDriverWait(driver, WAIT).until(new ExpectedCondition<Boolean>() {
+      @Override
+      public Boolean apply(WebDriver webDriver) {
+        By opponentXPath = By.xpath(opponentPath);
+        return webDriver.findElement(opponentXPath).isDisplayed();
+      }
+    });
+    By opponentXPath = By.xpath(opponentPath);
+    WebElement opponentDiv = driver.findElement(opponentXPath);
+    assertNotNull(opponentDiv);
+    opponentDiv.click();
+
+    final String imgOpponentOnlinePath = String.format("//img[@title = '%s']", OPPONENT + " в сети");
+    new WebDriverWait(driver, WAIT).until(new ExpectedCondition<Boolean>() {
+      @Override
+      public Boolean apply(WebDriver webDriver) {
+        By imgOpponent = By.xpath(imgOpponentOnlinePath);
+        return webDriver.findElement(imgOpponent).isDisplayed();
       }
     });
 
-    WebElement connectToServer = driver.findElement(By.id(gwtDebug + "connectToServer"));
+    By playButtonId = By.id(gwtDebug + "connectToServer");
+    WebElement playButton = driver.findElement(playButtonId);
+    assertNotNull(playButton);
+    playButton.click();
+
+    final String nextExp = "//button[contains(text(), 'Далее')]";
+    webDriverWait(driver, WAIT, new ExpectedCondition<Boolean>() {
+      @Override
+      public Boolean apply(WebDriver webDriver) {
+        By nextXPath = By.xpath(nextExp);
+        return webDriver.findElement(nextXPath).isDisplayed();
+      }
+    });
+    By nextXPath = By.xpath(nextExp);
+    WebElement nextButton = driver.findElement(nextXPath);
+    assertNotNull(nextButton);
+    nextButton.sendKeys(Keys.RETURN);
+
+    acceptInvite(vkFFDriverP10n);
+  }
+
+  private void webDriverWait(WebDriver driver, long timeout, ExpectedCondition<Boolean> expectedCondition) {
+    new WebDriverWait(driver, timeout).until(expectedCondition);
+  }
+
+  private void connectToServer(WebDriver driver) {
+    new WebDriverWait(driver, WAIT).until(new ExpectedCondition<Boolean>() {
+      @Override
+      public Boolean apply(WebDriver webDriver) {
+        By connectToServerId = By.id(gwtDebug + "connectToServer");
+        return webDriver.findElement(connectToServerId).isDisplayed();
+      }
+    });
+
+    By connectToServerId = By.id(gwtDebug + "connectToServer");
+    WebElement connectToServer = driver.findElement(connectToServerId);
+    assertNotNull(connectToServer);
     connectToServer.click();
   }
 
-  private void logginInVk() {
-    // Create a new instance of the Firefox driver
-    // Notice that the remainder of the code relies on the interface,
-    // not the implementation.
-    // And now use this to visit Google
-    vkFFDriver.get(siteUrl + "/vkOAuth");
+  private void logInVkLynx() {
+    vkFFDriverLynx.get(siteUrl + "/gOAuth");
 
-    // Check the title of the page
-    assertEquals("ВКонтакте | Вход", vkFFDriver.getTitle());
-
-    WebElement emailField = vkFFDriver.findElement(By.name("email"));
-    emailField.sendKeys("aleksey.p10n@gmail.com");
-    WebElement passField = vkFFDriver.findElement(By.name("pass"));
-    passField.sendKeys("krAj8oT9Ez0binK");
-    WebElement submitButton = vkFFDriver.findElement(By.id("install_allow"));
-    submitButton.click();
-    // Google's search is rendered dynamically with JavaScript.
-    // Wait for the page to load, timeout after 10 seconds
-    (new WebDriverWait(vkFFDriver, 10)).until(new ExpectedCondition<Boolean>() {
+    (new WebDriverWait(vkFFDriverLynx, WAIT)).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver d) {
         return d.getCurrentUrl().endsWith("#!home");
       }
     });
 
-    // Should see: "cheese! - Google Search"
-    assertEquals("Шашки онлайн", vkFFDriver.getTitle());
+    assertEquals("Шашки онлайн", vkFFDriverLynx.getTitle());
   }
 
-  private void loginInFb() {
-    // Create a new instance of the Firefox driver
-    // Notice that the remainder of the code relies on the interface,
-    // not the implementation.
-    // And now use this to visit Google
-    fbSFDriver.get(siteUrl + "/fbOAuth");
+  private void logInVkP10n() {
+    vkFFDriverP10n.get(siteUrl + "/fbOAuth");
 
-    // Check the title of the page
-//    assertEquals("Войдите на Facebook | Facebook", fbSFDriver.getTitle());
-//
-//    WebElement emailField = fbSFDriver.findElement(By.id("email"));
-//    emailField.sendKeys("lynx.p9@gmail.com");
-//    WebElement passField = fbSFDriver.findElement(By.id("pass"));
-//    passField.sendKeys("123#@!ewq");
-//    WebElement submitButton = fbSFDriver.findElement(By.id("u_0_2"));
-//    submitButton.click();
-    // Google's search is rendered dynamically with JavaScript.
-    // Wait for the page to load, timeout after 10 seconds
-    (new WebDriverWait(fbSFDriver, 10)).until(new ExpectedCondition<Boolean>() {
+    (new WebDriverWait(vkFFDriverP10n, WAIT)).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver d) {
         return d.getCurrentUrl().endsWith("#!home");
       }
     });
 
-    // Should see: "cheese! - Google Search"
-    assertEquals("Шашки онлайн", fbSFDriver.getTitle());
+    assertEquals("Шашки онлайн", vkFFDriverP10n.getTitle());
   }
 }

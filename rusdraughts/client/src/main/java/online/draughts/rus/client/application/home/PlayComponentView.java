@@ -119,7 +119,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   public void onConnectToServer(ClickEvent event) {
     if (refreshConnectionToServer) {
       getUiHandlers().refreshConnectionToServer();
-      refreshConnectionToServer = !refreshConnectionToServer;
+      refreshConnectionToServer = false;
     } else {
       Player selectedPlayer = null;
       if (playerSelectionModel.getSelectedObject() != null) {
@@ -399,6 +399,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Override
   public void setUpViewOnDisconnectFromServer() {
+    refreshConnectionToServer = true;
+
     playButton.setActive(true);
     playButton.setBlock(true);
     playButton.addStyleName("btn-danger");
