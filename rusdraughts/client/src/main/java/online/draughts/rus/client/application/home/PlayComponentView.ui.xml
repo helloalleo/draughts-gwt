@@ -6,7 +6,7 @@
 
     <g:HTMLPanel ui:field="main">
         <g:HTMLPanel ui:field="draughtsColumn" addStyleNames="{res.style.draughtsColumn}">
-            <g:HTMLPanel ui:field="draughts"/>
+            <g:HTMLPanel ui:field="draughtsDesk" debugId="draughtsDesk"/>
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="notationColumn" addStyleNames="{res.style.notationColumn}">
             <ui:msg description="Ход" key="turn">

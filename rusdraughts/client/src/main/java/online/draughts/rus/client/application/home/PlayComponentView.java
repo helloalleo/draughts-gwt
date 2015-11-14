@@ -1,9 +1,11 @@
 package online.draughts.rus.client.application.home;
 
+import com.ait.lienzo.client.core.shape.Circle;
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.client.core.shape.Text;
 import com.ait.lienzo.client.widget.LienzoPanel;
+import com.ait.lienzo.shared.core.types.ColorName;
 import com.ait.lienzo.shared.core.types.DataURLType;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -12,6 +14,8 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.MouseDownEvent;
+import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -32,6 +36,7 @@ import online.draughts.rus.client.application.widget.dialog.InviteDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
+import online.draughts.rus.client.util.Log;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
@@ -56,10 +61,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   private final DraughtsMessages messages;
   private final AppResources resources;
+  private final Log log;
   @UiField
   HTMLPanel main;
   @UiField
-  HTMLPanel draughts;
+  HTMLPanel draughtsDesk;
   @UiField
   HTMLPanel draughtsColumn;
   @UiField
@@ -102,9 +108,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Inject
   PlayComponentView(Binder binder,
                     DraughtsMessages messages,
-                    AppResources resources) {
+                    AppResources resources,
+                    Log log) {
     this.messages = messages;
     this.resources = resources;
+    this.log = log;
 
     initWidget(binder.createAndBindUi(this));
 
@@ -207,7 +215,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       y += 20;
     }
     lienzoPanel.setBackgroundLayer(initDeskRect);
-    draughts.add(lienzoPanel);
+    draughtsDesk.add(lienzoPanel);
 
     cancelMove.setEnabled(false);
   }
@@ -437,7 +445,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   public void clearPlayComponent() {
     lienzoPanel.removeAll();
     board.clearDesk();
-    draughts.remove(lienzoPanel);
+    draughtsDesk.remove(lienzoPanel);
     initEmptyDeskPanel();
 
     turnLabel.setHTML(messages.playDidNotStart());
@@ -463,6 +471,21 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     updateTurn(getUiHandlers().isMyTurn());
     cancelMove.setEnabled(true);
     hidePlayButtonAndShowPlayingButtons();
+
+    lienzoPanel.addMouseDownHandler(new MouseDownHandler() {
+      @Override
+      public void onMouseDown(MouseDownEvent event) {
+        Circle circle = new Circle(5)
+            .setX(event.getX())
+            .setY(event.getY())
+            .setFillColor(ColorName.RED);
+        board.add(circle);
+        lienzoPanel.draw();
+        log.debug("POS :: " + event.getX() + ", " + event.getY());
+        log.debug("POS CLIENT :: " + event.getClientX() + ", " + event.getClientY());
+      }
+    });
+
   }
 
   @Override

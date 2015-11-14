@@ -5,17 +5,16 @@ import org.junit.Before;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
-import org.openqa.selenium.By;
-import org.openqa.selenium.Keys;
-import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.WebElement;
+import org.openqa.selenium.*;
 import org.openqa.selenium.firefox.FirefoxDriver;
 import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
 
+import static java.lang.Thread.sleep;
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
 
@@ -32,24 +31,25 @@ public class PlayTestTest {
   private static final long WAIT = 60;
   private static final String siteUrl = "http://localhost:8080/rus";
   private static final String gwtDebug = "gwt-debug-";
-  private WebDriver vkFFDriverLynx;
-  private WebDriver vkFFDriverP10n;
+  private static final int DESK_CELLS = 8;
+  private WebDriver webDriver1;
+  private WebDriver webDriver2;
 
   @Before
   public void setUp() {
     File profDir = new File("/Users/alekspo/Library/Application Support/Firefox/Profiles/p7ws5dyp.WebDriver2");
     FirefoxProfile profile = new FirefoxProfile(profDir);
-    vkFFDriverP10n = new FirefoxDriver(profile);
+    webDriver2 = new FirefoxDriver(profile);
 
     profDir = new File("/Users/alekspo/Library/Application Support/Firefox/Profiles/se57dh3q.WebDriver1");
     profile = new FirefoxProfile(profDir);
-    vkFFDriverLynx = new FirefoxDriver(profile);
+    webDriver1 = new FirefoxDriver(profile);
   }
 
   @After
   public void tearDown() {
-//    vkFFDriverLynx.quit();
-//    vkFFDriverP10n.quit();
+//    webDriver1.quit();
+//    webDriver2.quit();
   }
 
   @Test
@@ -57,16 +57,22 @@ public class PlayTestTest {
     Runnable vkRunnable = new Runnable() {
       @Override
       public void run() {
-        logInVkLynx();
-        connectToServer(vkFFDriverLynx);
-        inviteToPlay(vkFFDriverLynx);
+        loginWebDriver1();
+        try {
+          sleep(1500);
+        } catch (InterruptedException e) {
+        }
+        connectToServer(webDriver1);
+        inviteToPlay(webDriver1);
+        acceptInvite(webDriver2);
+        play();
       }
     };
     Runnable fbRunnable = new Runnable() {
       @Override
       public void run() {
-        logInVkP10n();
-        connectToServer(vkFFDriverP10n);
+        loginWebDriver2();
+        connectToServer(webDriver2);
       }
     };
 
@@ -78,6 +84,36 @@ public class PlayTestTest {
     } catch (InterruptedException e) {
       e.printStackTrace();
     }
+  }
+
+  private void play() {
+    final By canvasId = By.xpath(String.format("//div[@id='%s']/div", gwtDebug + "draughtsDesk"));
+    webDriverWait(webDriver1, WAIT, new ExpectedCondition<Boolean>() {
+      @Override
+      public Boolean apply(WebDriver driver) {
+        WebElement canvas = webDriver2.findElement(canvasId);
+        return canvas.isDisplayed();
+      }
+    });
+    WebElement canvas = webDriver1.findElement(canvasId);
+    Dimension size = canvas.getSize();
+    System.out.println(size);
+    Actions drawing = new Actions(webDriver1)
+        .moveToElement(canvas, 400, size.getHeight() - 110)
+//        .moveByOffset(posX(size, 6), posY(size, 5))
+        .click();
+    System.out.println(posX(size, 6) + ", " + posY(size, 5));
+    drawing.perform();
+  }
+
+  private int posX(Dimension size, int col) {
+    int deltaX = size.getWidth() / DESK_CELLS;
+    return deltaX * col;
+  }
+
+  private int posY(Dimension size, int row) {
+    int deltaY = size.getHeight() / DESK_CELLS;
+    return -deltaY * (DESK_CELLS - row);
   }
 
   private void acceptInvite(WebDriver driver) {
@@ -138,8 +174,6 @@ public class PlayTestTest {
     WebElement nextButton = driver.findElement(nextXPath);
     assertNotNull(nextButton);
     nextButton.sendKeys(Keys.RETURN);
-
-    acceptInvite(vkFFDriverP10n);
   }
 
   private void webDriverWait(WebDriver driver, long timeout, ExpectedCondition<Boolean> expectedCondition) {
@@ -161,27 +195,27 @@ public class PlayTestTest {
     connectToServer.click();
   }
 
-  private void logInVkLynx() {
-    vkFFDriverLynx.get(siteUrl + "/gOAuth");
+  private void loginWebDriver1() {
+    webDriver1.get(siteUrl + "/fbOAuth");
 
-    (new WebDriverWait(vkFFDriverLynx, WAIT)).until(new ExpectedCondition<Boolean>() {
+    (new WebDriverWait(webDriver1, WAIT)).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver d) {
         return d.getCurrentUrl().endsWith("#!home");
       }
     });
 
-    assertEquals("Шашки онлайн", vkFFDriverLynx.getTitle());
+    assertEquals("Шашки онлайн", webDriver1.getTitle());
   }
 
-  private void logInVkP10n() {
-    vkFFDriverP10n.get(siteUrl + "/fbOAuth");
+  private void loginWebDriver2() {
+    webDriver2.get(siteUrl + "/gOAuth");
 
-    (new WebDriverWait(vkFFDriverP10n, WAIT)).until(new ExpectedCondition<Boolean>() {
+    (new WebDriverWait(webDriver2, WAIT)).until(new ExpectedCondition<Boolean>() {
       public Boolean apply(WebDriver d) {
         return d.getCurrentUrl().endsWith("#!home");
       }
     });
 
-    assertEquals("Шашки онлайн", vkFFDriverP10n.getTitle());
+    assertEquals("Шашки онлайн", webDriver2.getTitle());
   }
 }

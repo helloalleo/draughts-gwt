@@ -45,7 +45,7 @@ body {
 
 .navbarTop {
     line-height: S_NAVBAR_TOP_LINE_HEIGHT !important;
-    height: S_NAVBAR_TOP_HEIGHT !important;
+    min-height: S_NAVBAR_TOP_HEIGHT !important;
     transition: height, line-height NAVBAR_CHANGE_DURATION ease-out;
     -ms-transition: height, line-height NAVBAR_CHANGE_DURATION ease-out;
     -moz-transition: height, line-height NAVBAR_CHANGE_DURATION ease-out;
@@ -227,4 +227,8 @@ body {
 
 .strokeCommentPanel {
     font-size: 14px;
+}
+
+.navbarHeader {
+    min-height: S_NAVBAR_TOP_HEIGHT;
 }

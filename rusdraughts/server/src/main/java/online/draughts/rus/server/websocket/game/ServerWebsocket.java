@@ -119,13 +119,15 @@ public class ServerWebsocket {
   private void handleNewPlayer(GameMessage message, Session session) {
     Player player = message.getSender();
     final Long playerId = player.getId();
-    if (!peers.isEmpty() && playerId != null) {
-      for (Player sh : peers.keySet()) {
-        if (playerId.equals(sh.getId())) {
-          return;
-        }
-      }
-    }
+//    if (!peers.isEmpty() && playerId != null) {
+//      for (Player sh : peers.keySet()) {
+//        if (playerId.equals(sh.getId())) {
+//          peers.remove(sh);
+//          peers.put(player, session);
+//          break;
+//        }
+//      }
+//    }
 
     player = playerService.find(playerId);
 

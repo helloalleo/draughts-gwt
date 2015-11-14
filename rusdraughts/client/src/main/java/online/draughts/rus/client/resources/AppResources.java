@@ -83,5 +83,7 @@ public interface AppResources extends ClientBundle {
     String gameCommentPanel();
 
     String strokeCommentPanel();
+
+    String navbarHeader();
   }
 }
