@@ -10,6 +10,7 @@ import com.ait.lienzo.shared.core.types.DataURLType;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SafeHtmlCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -36,7 +37,7 @@ import online.draughts.rus.client.application.widget.dialog.InviteDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
-import online.draughts.rus.client.util.Log;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
@@ -61,7 +62,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   private final DraughtsMessages messages;
   private final AppResources resources;
-  private final Log log;
   @UiField
   HTMLPanel main;
   @UiField
@@ -108,11 +108,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Inject
   PlayComponentView(Binder binder,
                     DraughtsMessages messages,
-                    AppResources resources,
-                    Log log) {
+                    AppResources resources) {
     this.messages = messages;
     this.resources = resources;
-    this.log = log;
 
     initWidget(binder.createAndBindUi(this));
 
@@ -471,21 +469,21 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     updateTurn(getUiHandlers().isMyTurn());
     cancelMove.setEnabled(true);
     hidePlayButtonAndShowPlayingButtons();
-
-    lienzoPanel.addMouseDownHandler(new MouseDownHandler() {
-      @Override
-      public void onMouseDown(MouseDownEvent event) {
-        Circle circle = new Circle(5)
-            .setX(event.getX())
-            .setY(event.getY())
-            .setFillColor(ColorName.RED);
-        board.add(circle);
-        lienzoPanel.draw();
-        log.debug("POS :: " + event.getX() + ", " + event.getY());
-        log.debug("POS CLIENT :: " + event.getClientX() + ", " + event.getClientY());
-      }
-    });
-
+//    if (!GWT.isClient()) {
+      lienzoPanel.addMouseDownHandler(new MouseDownHandler() {
+        @Override
+        public void onMouseDown(MouseDownEvent event) {
+          Circle circle = new Circle(5)
+              .setX(event.getX())
+              .setY(event.getY())
+              .setFillColor(ColorName.RED);
+          board.add(circle);
+          lienzoPanel.draw();
+          Logger.debug("POS :: " + event.getX() + ", " + event.getY());
+          Logger.debug("POS CLIENT :: " + event.getClientX() + ", " + event.getClientY());
+        }
+      });
+//    }
   }
 
   @Override

@@ -52,11 +52,11 @@ public class HomeViewTest extends GWTTestCase {
     GameMessageMapper mapper = GWT.create(GameMessageMapper.class);
     Log log = GWT.create(Log.class);
     ClientWebsocket clientWebsocket = new ClientWebsocket(eventBus, currentSession, playSession, config, mapper, gamesResource,
-        messages, log);
+        messages);
     assertNotNull(clientWebsocket);
 
     playComponentPresenter = new PlayComponentPresenter(eventBus, playComponentView, messages,
-        gamesResource, playersResource, friendsResource, clientWebsocket, log);
+        gamesResource, playersResource, friendsResource, clientWebsocket);
     assertNotNull(playComponentPresenter);
 
     playComponentView.onConnectToServer(null);

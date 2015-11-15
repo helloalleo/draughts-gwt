@@ -1,4 +1,4 @@
-package online.draughts.rus.server.utils;
+package online.draughts.rus.server.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
 import online.draughts.rus.shared.model.GameMessage;

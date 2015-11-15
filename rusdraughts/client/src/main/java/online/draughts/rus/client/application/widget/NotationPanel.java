@@ -19,7 +19,7 @@ import static online.draughts.rus.client.util.Utils.format;
  */
 public class NotationPanel extends ScrollPanel {
   public static final String NOTATION_SEP_TAG = "br";
-  public static final String NOTATION_SEP = "<" + NOTATION_SEP_TAG + ">";
+  public static final String NOTATION_SEP = "<" + NOTATION_SEP_TAG + "/>";
   public static final String BEAT_SEP = ":";
   public static final String MOVE_SEP = " ";
   public static final String COUNT_SEP = ". ";
@@ -28,7 +28,6 @@ public class NotationPanel extends ScrollPanel {
   public static final String DATA_STOP_BEAT_ATTR = "data-stopbeat";
   public static final String DATA_CONTINUE_BEAT_ATTR = "data-continuebeat";
   public static final String DATA_START_BEAT_ATTR = "data-startbeat";
-  public static final String DATA_ID_ATTR = "data-id";
   public static final String DATA_ORDER_ATTR = "data-order";
   public static final String DATA_FIRST_ATTR = "data-first";
   public static final String DATA_NUMBER_ATTR = "data-number";

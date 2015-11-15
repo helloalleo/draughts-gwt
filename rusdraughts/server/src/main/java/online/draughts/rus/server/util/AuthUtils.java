@@ -1,4 +1,4 @@
-package online.draughts.rus.server.utils;
+package online.draughts.rus.server.util;
 
 import online.draughts.rus.server.config.ServerConfiguration;
 import online.draughts.rus.server.service.PlayerService;

@@ -65,12 +65,6 @@ public class BoardBackgroundLayer extends Layer {
           square.updateShape(deskSide, rows, cols, OFFSET_X, OFFSET_X - 2);
           gameBoard[i][j] = square;
           add(square.getShape());
-
-          // текст для отладки
-//            Text t = new Text(i + " " + j, "sanse", 12);
-//            t.setX(square.getX() + 5);
-//            t.setY(square.getY() + 20);
-//            add(t);
         }
         // Toggle lastcolor
         lastColor = !lastColor;
@@ -126,8 +120,7 @@ public class BoardBackgroundLayer extends Layer {
         try {
           Square square = getSquare(i, j);
           square.setAlpha(1.0);
-        } catch (SquareNotFoundException e) {
-          e.printStackTrace();
+        } catch (SquareNotFoundException ignore) {
         }
       }
     }

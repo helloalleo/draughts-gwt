@@ -80,8 +80,7 @@ public class PlayShowPanel extends Composite {
         }
 
         int maxScrollTop = getOffsetHeight() - Window.getScrollTop();
-        int halfIncrementScrollSize = (maxScrollTop - lastMaxHeight) / 2;
-        if (lastScrollPos >= (maxScrollTop - halfIncrementScrollSize) && updateFlag) {
+        if (lastScrollPos >= maxScrollTop && updateFlag) {
           final int newPageSize = gameList.size() + INCREMENT_SIZE;
           PlayShowPanel.this.homeViewProvider.get().getMoreGames(newPageSize);
           lastMaxHeight = maxScrollTop;

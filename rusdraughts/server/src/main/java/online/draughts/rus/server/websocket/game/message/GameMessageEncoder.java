@@ -1,6 +1,6 @@
 package online.draughts.rus.server.websocket.game.message;
 
-import online.draughts.rus.server.utils.Utils;
+import online.draughts.rus.server.util.Utils;
 import online.draughts.rus.shared.model.GameMessage;
 
 import javax.websocket.EncodeException;

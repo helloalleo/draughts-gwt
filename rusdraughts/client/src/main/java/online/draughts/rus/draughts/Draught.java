@@ -3,16 +3,12 @@ package online.draughts.rus.draughts;
 import com.ait.lienzo.client.core.animation.AnimationProperties;
 import com.ait.lienzo.client.core.animation.AnimationProperty;
 import com.ait.lienzo.client.core.animation.AnimationTweener;
-import com.ait.lienzo.client.core.event.NodeMouseDownEvent;
-import com.ait.lienzo.client.core.event.NodeMouseDownHandler;
-import com.ait.lienzo.client.core.event.NodeTouchEndEvent;
-import com.ait.lienzo.client.core.event.NodeTouchEndHandler;
 import com.ait.lienzo.client.core.shape.Circle;
 import com.ait.lienzo.client.core.shape.Group;
 import com.ait.lienzo.client.core.shape.Star;
 import com.ait.lienzo.client.core.types.Shadow;
 import com.ait.lienzo.shared.core.types.ColorName;
-import com.google.gwt.dom.client.Element;
+import online.draughts.rus.client.util.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -24,8 +20,7 @@ public class Draught extends Group {
   private int deskSide;
   private static Draught selectedDraught;
 
-  private Element element;
-  private Board board;
+  private static Board board;
 
   private int row;
   private int col;
@@ -41,10 +36,10 @@ public class Draught extends Group {
 
   private boolean queen;
 
-  private Draught currentDraught;
   private double offsetX;
 
-  public Draught(Integer deskSide,
+  public Draught(Board board,
+                 Integer deskSide,
                  Integer rows,
                  Integer cols,
                  Integer row,
@@ -58,6 +53,7 @@ public class Draught extends Group {
     this.cols = cols;
     this.white = white;
     this.offsetX = offsetX;
+    Draught.board = board;
 
     setListening(true);
 
@@ -78,34 +74,14 @@ public class Draught extends Group {
     mainCircle.setShadow(new Shadow(ColorName.BLACK, 12, 2, 2));
 
     updateShape();
-
-    // TODO: Not Compile
-    bindHandlers();
   }
 
-  private void bindHandlers() {
-    addNodeMouseDownHandler(new NodeMouseDownHandler() {
-      @Override
-      public void onNodeMouseDown(NodeMouseDownEvent nodeMouseDownEvent) {
-        onNodeTouch((Draught) nodeMouseDownEvent.getSource());
-      }
-    });
-
-    addNodeTouchEndHandler(new NodeTouchEndHandler() {
-      @Override
-      public void onNodeTouchEnd(NodeTouchEndEvent nodeTouchEndEvent) {
-        onNodeTouch((Draught) nodeTouchEndEvent.getSource());
-      }
-    });
-  }
-
-  public void onNodeTouch(Draught draught) {
+  public void onNodeTouch() {
+    Logger.debug("TOUCH");
     if (!isValidStroke()) {
+      Logger.debug("STROKE INVALID");
       return;
     }
-
-    board = (Board) getParent();
-    currentDraught = draught;
 
     if (selectedDraught != null) {
       AnimationProperties props = new AnimationProperties();
@@ -117,12 +93,17 @@ public class Draught extends Group {
     AnimationProperties props = new AnimationProperties();
     props.push(AnimationProperty.Properties.SCALE(1.3));
 
-    currentDraught.animate(AnimationTweener.LINEAR, props, 100);
+    Logger.debug("START ANIMATE");
+    animate(AnimationTweener.LINEAR, props, 100);
+    Logger.debug("STOP ANIMATE");
 
-    selectedDraught = currentDraught;
+    selectedDraught = this;
 
+    Logger.debug("RESET DESK");
     board.resetDesk();
+    Logger.debug("HIGHLIGHT");
     board.highlightAllowedMoves(selectedDraught);
+    Logger.debug("END");
   }
 
   public boolean isWhite() {
@@ -182,12 +163,7 @@ public class Draught extends Group {
   }
 
   private boolean isValidStroke() {
-    Board board = (Board) getParent();
-    return board.isMyTurn() && isWhite() == board.isWhite() && !board.isEmulate();
-  }
-
-  private boolean isAllowed(Square newSquare) {
-    return newSquare.getAlpha() < 1.0;
+    return board.isMyTurn() && white == board.isWhite() && !board.isEmulate();
   }
 
   public void setPosition(int row, int col) {
@@ -195,12 +171,8 @@ public class Draught extends Group {
     this.col = col;
   }
 
-  public void setRow(int row) {
-    this.row = row;
-  }
-
-  public void setCol(int col) {
-    this.col = col;
+  public static Draught getSelectedDraught() {
+    return selectedDraught;
   }
 
   @Override
@@ -212,9 +184,5 @@ public class Draught extends Group {
         ", white=" + white +
         ", queen=" + queen +
         '}';
-  }
-
-  public static Draught getSelectedDraught() {
-    return selectedDraught;
   }
 }

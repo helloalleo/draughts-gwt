@@ -5,7 +5,7 @@ import online.draughts.rus.server.config.CustomConfigurator;
 import online.draughts.rus.server.service.GameMessageService;
 import online.draughts.rus.server.service.GameService;
 import online.draughts.rus.server.service.PlayerService;
-import online.draughts.rus.server.utils.Utils;
+import online.draughts.rus.server.util.Utils;
 import online.draughts.rus.server.websocket.game.message.GameMessageDecoder;
 import online.draughts.rus.server.websocket.game.message.GameMessageEncoder;
 import online.draughts.rus.shared.model.Game;

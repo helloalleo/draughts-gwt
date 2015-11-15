@@ -3,7 +3,7 @@ package online.draughts.rus.server.resource;
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 import online.draughts.rus.server.service.GameService;
-import online.draughts.rus.server.utils.AuthUtils;
+import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.resource.GamesResource;
 

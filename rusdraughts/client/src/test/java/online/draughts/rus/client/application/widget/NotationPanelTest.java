@@ -57,7 +57,7 @@ public class NotationPanelTest {
 
   private String g3_d4Notation = "<span>1. </span><a><span id='0' data-order='0' data-number='1' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>g3-h4</span></a><span> </span><a><span id='1' data-order='1' data-number='1' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>d6-e5</span></a><br><span>2. </span><a><span id='2' data-order='2' data-number='2' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>f2-g3</span></a><span> </span><a><span id='3' data-order='3' data-number='2' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>f6-g5</span></a><br><span>3. </span><a><span id='4' data-order='4' data-number='3' data-simple='false' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='true' data-stopbeat='false'>h4:f6</span></a><span>:</span><a><span id='5' data-order='5' data-number='3' data-simple='false' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='true'>d4</span></a><span> </span>";
 
-  private List<String> alph = new ArrayList<String>() {{
+  private static List<String> alph = new ArrayList<String>() {{
     add("a");
     add("b");
     add("c");
@@ -113,9 +113,9 @@ public class NotationPanelTest {
   }
 
   private Stroke createStrokeFromNotation(String notation, String step, boolean back) {
-    String stepNotation = extractXPath(notation, "/span");
+    String stepNotation = extractXPath(notation, "//span");
     if (StringUtils.isNotEmpty(step)) {
-      step = extractXPath(step, "/span");
+      step = extractXPath(step, "//span");
     }
     Stroke stroke = new Stroke();
     final Boolean first = Boolean.valueOf(extractXPath(notation, getNotationAttribute(NotationPanel.DATA_FIRST_ATTR)));
@@ -197,6 +197,6 @@ public class NotationPanelTest {
   }
 
   private String getNotationAttribute(String attrName) {
-    return "/span/@" + attrName;
+    return "//span/@" + attrName;
   }
 }

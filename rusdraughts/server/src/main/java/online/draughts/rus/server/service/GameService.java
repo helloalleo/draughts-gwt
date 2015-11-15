@@ -5,7 +5,7 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.persist.Transactional;
 import online.draughts.rus.server.dao.GameDao;
-import online.draughts.rus.server.utils.Rating;
+import online.draughts.rus.server.util.Rating;
 import online.draughts.rus.shared.model.Friend;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Move;

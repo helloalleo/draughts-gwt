@@ -16,6 +16,7 @@ import java.util.List;
  * Date: 07.12.13
  * Time: 21:07
  */
+@SuppressWarnings("GwtInconsistentSerializableClass")
 public class Square implements Serializable {
 
   @JsonIgnore
@@ -27,7 +28,7 @@ public class Square implements Serializable {
   private int row;
   private int col;
   @JsonIgnore
-  private final Color boardBackground = new Color(65, 133, 132);
+  private static final Color boardBackground = new Color(65, 133, 132);
   private boolean occupied;
   @JsonIgnore
   private Draught occupant;
@@ -53,9 +54,6 @@ public class Square implements Serializable {
 
     this.occupied = false;
     this.occupant = null;
-  }
-
-  public Square() {
   }
 
   public Square(BoardBackgroundLayer backgroundLayer, int row, int col) {
@@ -128,10 +126,6 @@ public class Square implements Serializable {
         '}';
   }
 
-  public String toSend() {
-    return String.valueOf(row) + TO_SEND_SEP + String.valueOf(col);
-  }
-
   /**
    * переводит клетку в нотацию в зависимости от параметра нормал
    *
@@ -144,8 +138,8 @@ public class Square implements Serializable {
   /**
    * Возвращает true если square на той же диагонале что и эта
    *
-   * @param square
-   * @return
+   * @param square шашка на линии с которой эта шашка
+   * @return шашка на линии с этой и переданной шашкой?
    */
   public boolean isOnLine(Square square) {
     // равенство абсолютной велечины строки и колонки говорит что мы на одной диагонали
@@ -206,8 +200,8 @@ public class Square implements Serializable {
   }
 
   public boolean contains(double x, double y) {
-    return (Math.abs(x - shape.getX()) < shape.getWidth())
-        && (Math.abs(y - shape.getY()) < shape.getHeight());
+    return (x > shape.getX()) && (x < (shape.getX() + shape.getWidth()))
+        && (y > shape.getY()) && (y < (shape.getY() + shape.getHeight()));
   }
 
   public double getCenterX() {
@@ -216,13 +210,6 @@ public class Square implements Serializable {
 
   public double getCenterY() {
     return shape.getY() + shape.getHeight() / 2;
-  }
-
-  public Square flip() {
-    int row = BoardBackgroundLayer.ROWS - 1 - this.row;
-    int col = BoardBackgroundLayer.COLS - 1 - this.col;
-
-    return new Square(row, col);
   }
 
   public void setAlpha(double alpha) {

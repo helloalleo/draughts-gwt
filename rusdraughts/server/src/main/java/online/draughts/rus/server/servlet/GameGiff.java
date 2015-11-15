@@ -3,7 +3,7 @@ package online.draughts.rus.server.servlet;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.service.GameService;
-import online.draughts.rus.server.utils.GifSequenceWriter;
+import online.draughts.rus.server.util.GifSequenceWriter;
 import online.draughts.rus.shared.model.Move;
 import online.draughts.rus.shared.util.StringUtils;
 

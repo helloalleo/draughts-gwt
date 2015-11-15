@@ -16,7 +16,6 @@ import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.json.GameMessageMapper;
-import online.draughts.rus.client.util.Log;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
@@ -37,7 +36,6 @@ import java.util.List;
 public class ClientWebsocket implements WebsocketListener {
 
   private final CurrentSession currentSession;
-  private final Log log;
   private ResourceDelegate<GamesResource> gamesDelegate;
   private Websocket websocket;
   private EventBus eventBus;
@@ -54,15 +52,13 @@ public class ClientWebsocket implements WebsocketListener {
                          ClientConfiguration config,
                          GameMessageMapper messageMapper,
                          ResourceDelegate<GamesResource> gamesDelegate,
-                         DraughtsMessages messages,
-                         Log log) {
+                         DraughtsMessages messages) {
     this.currentSession = currentSession;
     this.playSession = playSession;
     this.gamesDelegate = gamesDelegate;
     this.eventBus = eventBus;
     this.messages = messages;
     this.messageMapper = messageMapper;
-    this.log = log;
 
     websocket = new Websocket(config.playerWebsocketUrl());
     websocket.addListener(this);
@@ -232,7 +228,6 @@ public class ClientWebsocket implements WebsocketListener {
 
   @Override
   public void onMessage(String message) {
-    log.info("ON MESSAGE :: " + message);
     GameMessage gameMessage = messageMapper.read(message);
     switch (gameMessage.getMessageType()) {
       case USER_LIST_UPDATE:

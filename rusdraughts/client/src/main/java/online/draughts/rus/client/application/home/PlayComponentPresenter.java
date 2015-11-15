@@ -6,7 +6,6 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-import com.google.web.bindery.event.shared.HandlerRegistration;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
@@ -17,7 +16,6 @@ import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
-import online.draughts.rus.client.util.Log;
 import online.draughts.rus.client.websocket.ClientWebsocket;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.MoveFactory;
@@ -36,7 +34,6 @@ import java.util.List;
 public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresenter.MyView>
     implements PlayComponentUiHandlers {
 
-  private final Log log;
   private int DRAUGHTS_ON_DESK_INIT = 12;
 
   private final ClientWebsocket clientWebsocket;
@@ -54,8 +51,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       ResourceDelegate<GamesResource> gamesDelegate,
       ResourceDelegate<PlayersResource> playersDelegate,
       ResourceDelegate<FriendsResource> friendsDelegate,
-      ClientWebsocket clientWebsocket,
-      Log log) {
+      ClientWebsocket clientWebsocket) {
     super(eventBus, view);
 
     this.eventBus = eventBus;
@@ -64,7 +60,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     this.gamesDelegate = gamesDelegate;
     this.playersDelegate = playersDelegate;
     this.friendsDelegate = friendsDelegate;
-    this.log = log;
 
     getView().setUiHandlers(this);
   }
@@ -364,7 +359,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
         final Stroke mirror = stroke.flip();
         getView().getBoard().moveOpponent(mirror);
-        log.debug("PLAY MOVE " + mirror.toString());
       }
     });
 

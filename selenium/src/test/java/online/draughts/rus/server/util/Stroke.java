@@ -1,17 +1,13 @@
-package online.draughts.rus.draughts;
-
-import online.draughts.rus.shared.model.Move;
+package online.draughts.rus.server.util;
 
 import java.util.HashSet;
 import java.util.Set;
 
-import static online.draughts.rus.client.util.Utils.format;
-
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
- * Date: 07.10.15
- * Time: 15:13
+ * Date: 15.11.15
+ * Time: 14:43
  */
 public class Stroke {
 
@@ -30,6 +26,25 @@ public class Stroke {
   private String title;
 
   public Stroke() {
+  }
+
+  /**
+   * Отражает ход на доске не изменяя сам объект
+   *
+   * @return moveDto отраженный объект
+   */
+  public Stroke flip() {
+    Stroke stroke = new Stroke();
+
+    stroke.setStartSquare(startSquare.mirror());
+    stroke.setEndSquare(endSquare.mirror());
+    if (takenSquare != null) {
+      stroke.setTakenSquare(takenSquare.mirror());
+    }
+    stroke.setMoveFlags(moveFlags);
+    stroke.setFirst(first);
+    stroke.setNumber(number);
+    return stroke;
   }
 
   public Square getTakenSquare() {
@@ -57,17 +72,6 @@ public class Stroke {
   public Stroke setEndSquare(Square endSquare) {
     this.endSquare = endSquare;
     return this;
-  }
-
-  public String toNotation() {
-    final String s = startSquare.toNotation();
-    final String e = endSquare.toNotation();
-    return format(isSimple() ? s + SIMPLE_MOVE_SEP + e
-        : s + BEAT_MOVE_SEP + e);
-  }
-
-  public String toNotationLastMove() {
-    return endSquare.toNotation();
   }
 
   public int getOrder() {
@@ -117,25 +121,6 @@ public class Stroke {
 
   public void setOnStartBeat() {
     moveFlags.add(Move.MoveFlags.START_BEAT);
-  }
-
-  /**
-   * Отражает ход на доске не изменяя сам объект
-   *
-   * @return moveDto отраженный объект
-   */
-  public Stroke flip() {
-    Stroke stroke = new Stroke();
-
-    stroke.setStartSquare(startSquare.mirror());
-    stroke.setEndSquare(endSquare.mirror());
-    if (takenSquare != null) {
-      stroke.setTakenSquare(takenSquare.mirror());
-    }
-    stroke.setMoveFlags(moveFlags);
-    stroke.setFirst(first);
-    stroke.setNumber(number);
-    return stroke;
   }
 
   public Stroke setMoveFlags(Set<Move.MoveFlags> moveFlags) {

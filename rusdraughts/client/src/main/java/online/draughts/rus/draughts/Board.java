@@ -6,14 +6,13 @@ import com.ait.lienzo.client.core.event.NodeMouseClickHandler;
 import com.ait.lienzo.client.core.event.NodeTouchEndEvent;
 import com.ait.lienzo.client.core.event.NodeTouchEndHandler;
 import com.ait.lienzo.client.core.shape.Layer;
-import com.google.web.bindery.event.shared.HandlerRegistration;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.draughts.util.Operator;
 import online.draughts.rus.draughts.util.PossibleOperators;
 import online.draughts.rus.shared.model.Move;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.util.ArrayList;
-import java.util.HashMap;
 import java.util.List;
 import java.util.Stack;
 
@@ -33,10 +32,9 @@ public class Board extends Layer {
   private boolean turn;
   private int rows;
   private int cols;
-  private final double removeDraughtFade = 200;
-  private final double moveDraughtDuration = 200;
+  private static final double removeDraughtFade = 200;
+  private static final double moveDraughtDuration = 200;
   private boolean emulate = false; // эмулировать шашки
-  private HashMap<String, Integer> alphMap;
   // стек ходов шашек, когда они становятся дамками
   private Stack<Integer> queenStepStack = new Stack<>();
 
@@ -45,7 +43,6 @@ public class Board extends Layer {
   //  private String lastEndMove;
 //  private String lastStartMove;
 //  private String lastCaptured;
-  private HandlerRegistration playMoveOpponentHR;
 
   private Stack<Stroke> moveMyStack = new Stack<>();
   private Stack<Stroke> moveOpponentStack = new Stack<>();
@@ -71,17 +68,6 @@ public class Board extends Layer {
     opponentDraughtList = new ArrayList<>(rows / 2 * 3);
 
     placeDraughts();
-
-    alphMap = new HashMap<>();
-    alphMap.put("a", 0);
-    alphMap.put("b", 1);
-    alphMap.put("c", 2);
-    alphMap.put("d", 3);
-    alphMap.put("e", 4);
-    alphMap.put("f", 5);
-    alphMap.put("g", 6);
-    alphMap.put("h", 7);
-
     bindEvents();
   }
 
@@ -89,6 +75,7 @@ public class Board extends Layer {
     addNodeMouseClickHandler(new NodeMouseClickHandler() {
       @Override
       public void onNodeMouseClick(NodeMouseClickEvent nodeMouseClickEvent) {
+        Logger.debug(nodeMouseClickEvent.getX() + "," + nodeMouseClickEvent.getY());
         Board.this.moveDraught(nodeMouseClickEvent.getX(), nodeMouseClickEvent.getY());
       }
     });
@@ -115,6 +102,9 @@ public class Board extends Layer {
     // Now establish the Black side
     for (int row = 5; row < 8; row++) {
 //    for(int row = 4; row < 5; row++) {
+//      if ((row - 1) % 2 == 0) {
+//        continue;
+//      }
       for (int col = 0; col < 8; col++) {
 //      for (int col = 5; col < 6; col++) {
         if (Square.isValid(row, col)) {
@@ -142,7 +132,7 @@ public class Board extends Layer {
     try {
       Square square = backgroundLayer.getSquare(row, col);
       if (Square.isValid(row, col)) {
-        Draught draught = new Draught(
+        Draught draught = new Draught(this,
             backgroundLayer.getDeskSide(),
             rows, cols,
             row, col,
@@ -160,7 +150,7 @@ public class Board extends Layer {
   /**
    * Функция заполняет массив highlightedSquares
    *
-   * @param clickedPiece
+   * @param clickedPiece нажатая шашка
    */
   public void highlightAllowedMoves(Draught clickedPiece) {
     for (int row = 0; row < rows; row++) {
@@ -198,7 +188,6 @@ public class Board extends Layer {
    * Find all possible Squares to which this Draught can calcStroke
    *
    * @param p Draught for which moves should be found
-   * @return A List of Squares to which this Draught can calcStroke
    */
   private void highlightPossibleMoves(Draught p, Draught clickedDraught) {
     /* Possible moves include up-left, up-right, down-left, down-right
@@ -644,7 +633,8 @@ public class Board extends Layer {
 
   /**
    * Функция используется в плеере. Назанчение добавить сбитую шашку
-   * @param stroke ход
+   *
+   * @param stroke     ход
    * @param stepCursor курсор для дамки
    */
   public void doEmulatedMoveBack(Stroke stroke, int stepCursor) {
@@ -696,17 +686,13 @@ public class Board extends Layer {
 
     stroke.setTakenSquare(takenSquare);
 
-    if (stroke.isContinueBeat()) {
-//      stroke.flip();
-    }
-
     if (!stroke.isCancel()) {
       final boolean first = isFirstMoveFlag();
       stroke.setNumber(stroke.getNumber())
           .setFirst(first);
       Stroke strokeForNotation = stroke;
       if (!isWhite()) {
-        strokeForNotation = stroke.mirror();
+        strokeForNotation = stroke.flip();
       }
       view.addNotationStroke(strokeForNotation);
     }
@@ -725,9 +711,10 @@ public class Board extends Layer {
   /**
    * Функция, которая выполняет физическое перемещение шашек
    * Используется в эмуляторе
-   *  @param stroke     ход
+   *
+   * @param stroke     ход
    * @param stepCursor для дамок
-   * @param back
+   * @param back       ход назад
    */
   public void doMove(Stroke stroke, final int stepCursor, boolean back) {
     final Draught occupant = stroke.getStartSquare().getOccupant();
@@ -841,11 +828,19 @@ public class Board extends Layer {
 
   /**
    * Функция перемещает шашку игрока на заданные координаты
-   * @param clickX
-   * @param clickY
+   *
+   * @param clickX нажатие мышки X
+   * @param clickY нажатие мышки Y
    */
   public void moveDraught(double clickX, double clickY) {
-    Draught selectedDraught = Draught.getSelectedDraught();
+    Logger.debug("MOVE DRAUGHT");
+    Draught selectedDraught = findClickedDraught(clickX, clickY);
+    if (selectedDraught != null) {
+      selectedDraught.onNodeTouch();
+    } else {
+      selectedDraught = Draught.getSelectedDraught();
+    }
+    Logger.debug("SELECTED");
     if (selectedDraught != null && !highlightedSquares.isEmpty()) {
       Square endSquare = null, startSquare = null;
       try {
@@ -901,10 +896,26 @@ public class Board extends Layer {
     }
   }
 
+  private Draught findClickedDraught(double clickX, double clickY) {
+    final Square square;
+    try {
+      square = getSquare(clickX, clickY);
+    } catch (SquareNotFoundException e) {
+      return null;
+    }
+    for (Draught draught : myDraughtList) {
+      final Square current = Square.getFromPos(draught.getRow(), draught.getCol());
+      if (square == current) {
+        return square.getOccupant();
+      }
+    }
+    return null;
+  }
+
   /**
    * Вычисляем является ли ход первым в полном ходе a1-b2 b2-b3. а1-b2 первый ход
    *
-   * @return
+   * @return первый ход?
    */
   private boolean isFirstMoveFlag() {
     if (isWhite()) {
