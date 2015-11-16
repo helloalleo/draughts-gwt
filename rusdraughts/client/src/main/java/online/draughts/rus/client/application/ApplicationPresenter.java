@@ -48,7 +48,6 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
       MenuPresenter menuPresenter) {
     super(eventBus, view, proxy, RevealType.Root);
 
-
     this.menuPresenter = menuPresenter;
   }
 
