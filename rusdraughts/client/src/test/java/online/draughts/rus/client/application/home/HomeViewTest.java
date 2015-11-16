@@ -1,13 +1,14 @@
 package online.draughts.rus.client.application.home;
 
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.junit.client.GWTTestCase;
+import com.google.gwt.user.client.ui.RootPanel;
+import com.google.gwtmockito.WithClassesToStub;
 import com.google.web.bindery.event.shared.SimpleEventBus;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
+import online.draughts.rus.CustomGwtMockitoTestRunner;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.json.GameMessageMapper;
 import online.draughts.rus.client.resources.AppResources;
-import online.draughts.rus.client.util.Log;
 import online.draughts.rus.client.websocket.ClientWebsocket;
 import online.draughts.rus.client.websocket.PlaySession;
 import online.draughts.rus.shared.config.ClientConfiguration;
@@ -16,6 +17,10 @@ import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.shared.resource.FriendsResource;
 import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.resource.PlayersResource;
+import org.junit.Test;
+import org.junit.runner.RunWith;
+
+import static org.junit.Assert.assertNotNull;
 
 
 /**
@@ -24,17 +29,14 @@ import online.draughts.rus.shared.resource.PlayersResource;
  * Date: 04.11.15
  * Time: 10:57
  */
-//@RunWith(CustomGwtMockitoTestRunner.class)
-public class HomeViewTest extends GWTTestCase {
+@RunWith(CustomGwtMockitoTestRunner.class)
+@WithClassesToStub(RootPanel.class)
+public class HomeViewTest {
 
   private PlayComponentView playComponentView;
   private PlayComponentPresenter playComponentPresenter;
 
-  @Override
-  public String getModuleName() {
-    return "online.draughts.rus.Application_dev";
-  }
-
+  @Test
   public void testHomeView() {
     PlayComponentView.Binder playBinder = GWT.create(PlayComponentView.Binder.class);
     DraughtsMessages messages = GWT.create(DraughtsMessages.class);
@@ -50,7 +52,6 @@ public class HomeViewTest extends GWTTestCase {
     PlaySession playSession = GWT.create(PlaySession.class);
     ClientConfiguration config = GWT.create(ClientConfiguration.class);
     GameMessageMapper mapper = GWT.create(GameMessageMapper.class);
-    Log log = GWT.create(Log.class);
     ClientWebsocket clientWebsocket = new ClientWebsocket(eventBus, currentSession, playSession, config, mapper, gamesResource,
         messages);
     assertNotNull(clientWebsocket);

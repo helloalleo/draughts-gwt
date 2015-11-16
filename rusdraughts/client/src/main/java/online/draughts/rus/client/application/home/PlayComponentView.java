@@ -470,19 +470,19 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     cancelMove.setEnabled(true);
     hidePlayButtonAndShowPlayingButtons();
 //    if (!GWT.isClient()) {
-      lienzoPanel.addMouseDownHandler(new MouseDownHandler() {
-        @Override
-        public void onMouseDown(MouseDownEvent event) {
-          Circle circle = new Circle(5)
-              .setX(event.getX())
-              .setY(event.getY())
-              .setFillColor(ColorName.RED);
-          board.add(circle);
-          lienzoPanel.draw();
-          Logger.debug("POS :: " + event.getX() + ", " + event.getY());
-          Logger.debug("POS CLIENT :: " + event.getClientX() + ", " + event.getClientY());
-        }
-      });
+//      lienzoPanel.addMouseDownHandler(new MouseDownHandler() {
+//        @Override
+//        public void onMouseDown(MouseDownEvent event) {
+//          Circle circle = new Circle(5)
+//              .setX(event.getX())
+//              .setY(event.getY())
+//              .setFillColor(ColorName.RED);
+//          board.add(circle);
+//          lienzoPanel.draw();
+//          Logger.debug("POS :: " + event.getX() + ", " + event.getY());
+//          Logger.debug("POS CLIENT :: " + event.getClientX() + ", " + event.getClientY());
+//        }
+//      });
 //    }
   }
 
