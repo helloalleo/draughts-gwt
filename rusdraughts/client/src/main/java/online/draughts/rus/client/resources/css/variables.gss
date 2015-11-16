@@ -1,4 +1,4 @@
-@provide 'variables';
+@provide "variables";
 
 /**
  * Colors
@@ -9,6 +9,9 @@
 @def C_PANEL_MEDIUM             eval("online.draughts.rus.client.resources.Variables.C_PANEL_MEDIUM");
 @def C_MESSAGEBOX               eval("online.draughts.rus.client.resources.Variables.C_MESSAGEBOX");
 @def C_TITLE                    eval("online.draughts.rus.client.resources.Variables.C_TITLE");
+@def C_NAVBAR                   eval("online.draughts.rus.client.resources.Variables.C_NAVBAR");
+@def C_NAVBAR_ACTIVE_ITEM       eval("online.draughts.rus.client.resources.Variables.C_NAVBAR_ACTIVE_ITEM");
+@def C_NAVBAR_COLOR             eval("online.draughts.rus.client.resources.Variables.C_NAVBAR_COLOR");
 
 /**
  * Sizes
@@ -24,7 +27,7 @@
 @def S_LOGO_SCROLL_HEIGHT           eval("online.draughts.rus.client.resources.Variables.S_LOGO_SCROLL_HEIGHT");
 
 /**
- * Measure
+ * Measures
  */
 @def NAVBAR_CHANGE_DURATION             0s;
 

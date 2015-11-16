@@ -1,7 +1,10 @@
 @require "variables";
+@require "mixins";
+
+@external active;
 
 body {
-    background-color: white;
+    background-color: #fffffe;
     color: black;
     font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
 }
@@ -35,6 +38,7 @@ body {
     display: table;
 }
 
+/* NAVBAR */
 .xLargeFont {
     font-size: x-large;
 }
@@ -44,40 +48,55 @@ body {
 }
 
 .navbarTop {
-    line-height: S_NAVBAR_TOP_LINE_HEIGHT !important;
-    min-height: S_NAVBAR_TOP_HEIGHT !important;
-    transition: height, line-height NAVBAR_CHANGE_DURATION ease-out;
-    -ms-transition: height, line-height NAVBAR_CHANGE_DURATION ease-out;
-    -moz-transition: height, line-height NAVBAR_CHANGE_DURATION ease-out;
-    -webkit-transition: height, line-height NAVBAR_CHANGE_DURATION ease-out;
+@mixin trans(NAVBAR_CHANGE_DURATION);
+@mixin height_and_line(S_NAVBAR_TOP_LINE_HEIGHT, S_NAVBAR_TOP_HEIGHT);
+@mixin navbarCommon(C_NAVBAR);
 }
 
 .navbarScroll {
-    line-height: S_NAVBAR_SCROLL_LINE_HEIGHT !important;
-    height: S_NAVBAR_SCROLL_HEIGHT !important;
-    transition: height, line-height NAVBAR_CHANGE_DURATION ease-out;
-    -ms-transition: height, line-height NAVBAR_CHANGE_DURATION ease-out;
-    -moz-transition: height, line-height NAVBAR_CHANGE_DURATION ease-out;
-    -webkit-transition: height, line-height NAVBAR_CHANGE_DURATION ease-out;
+@mixin trans(NAVBAR_CHANGE_DURATION);
+@mixin height_and_line(S_NAVBAR_SCROLL_LINE_HEIGHT, S_NAVBAR_SCROLL_HEIGHT);
+@mixin navbarCommon(C_NAVBAR);
+}
+
+.navbarElemTop {
+@mixin trans(NAVBAR_CHANGE_DURATION);
+@mixin height_and_line(S_NAVBAR_TOP_LINE_HEIGHT, S_NAVBAR_TOP_HEIGHT);
+@mixin navbarCommon(C_NAVBAR);
+}
+
+.navbarTop li.active a {
+    background: C_NAVBAR_ACTIVE_ITEM !important;
+}
+
+.navbarTop li a {
+    color: C_NAVBAR_COLOR !important;
+}
+
+.navbarScroll li.active a {
+    background: C_NAVBAR_ACTIVE_ITEM !important;
+}
+
+.navbarScroll li a {
+    color: C_NAVBAR_COLOR !important;
+}
+
+.navbarElemScroll {
+@mixin trans(NAVBAR_CHANGE_DURATION);
+@mixin height_and_line(S_NAVBAR_SCROLL_LINE_HEIGHT, S_NAVBAR_SCROLL_HEIGHT);
 }
 
 .logoTop {
-    height: S_LOGO_TOP_HEIGHT !important;
-    width: S_LOGO_TOP_HEIGHT !important;
-    transition: height, width NAVBAR_CHANGE_DURATION ease-out;
-    -ms-transition: height, width NAVBAR_CHANGE_DURATION ease-out;
-    -moz-transition: height, width NAVBAR_CHANGE_DURATION ease-out;
-    -webkit-transition: height, width NAVBAR_CHANGE_DURATION ease-out;
+@mixin size(S_LOGO_TOP_HEIGHT, S_LOGO_TOP_HEIGHT);
+@mixin trans(NAVBAR_CHANGE_DURATION);
 }
 
 .logoScroll {
-    height: S_LOGO_SCROLL_HEIGHT !important;
-    width: S_LOGO_SCROLL_HEIGHT !important;
-    transition: height, width NAVBAR_CHANGE_DURATION ease-out;
-    -ms-transition: height, width NAVBAR_CHANGE_DURATION ease-out;
-    -moz-transition: height, width NAVBAR_CHANGE_DURATION ease-out;
-    -webkit-transition: height, width NAVBAR_CHANGE_DURATION ease-out;
+@mixin size(S_LOGO_SCROLL_HEIGHT, S_LOGO_SCROLL_HEIGHT);
+@mixin trans(NAVBAR_CHANGE_DURATION);
 }
+
+/* END NAVBAR*/
 
 .playItem {
     background-color: #ddd;
@@ -130,9 +149,9 @@ body {
 }
 
 /*.insideFullHeight {*/
-    /*height: 100%;*/
-    /*margin-top: 0;*/
-    /*margin-bottom: 0;*/
+/*height: 100%;*/
+/*margin-top: 0;*/
+/*margin-bottom: 0;*/
 /*}*/
 
 .dialogBox {
@@ -227,8 +246,4 @@ body {
 
 .strokeCommentPanel {
     font-size: 14px;
-}
-
-.navbarHeader {
-    min-height: S_NAVBAR_TOP_HEIGHT;
 }

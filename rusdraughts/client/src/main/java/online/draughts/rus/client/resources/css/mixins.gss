@@ -1,0 +1,22 @@
+@provide "mixins";
+
+@defmixin trans(DURATION) {
+    transition: height, line-height DURATION ease-out;
+    -ms-transition: height, line-height DURATION ease-out;
+    -moz-transition: height, line-height DURATION ease-out;
+    -webkit-transition: height, line-height DURATION ease-out;
+}
+
+@defmixin height_and_line(LINE_HEIGHT, HEIGHT) {
+    line-height: LINE_HEIGHT !important;
+    min-height: HEIGHT !important;
+}
+
+@defmixin size(WIDTH, HEIGHT) {
+    width: WIDTH !important;
+    height: HEIGHT !important;
+}
+
+@defmixin navbarCommon(BGCOLOR) {
+    background: BGCOLOR;
+}

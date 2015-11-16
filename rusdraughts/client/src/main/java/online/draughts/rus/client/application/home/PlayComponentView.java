@@ -35,6 +35,7 @@ import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.application.widget.dialog.ConfirmeDialogBox;
 import online.draughts.rus.client.application.widget.dialog.InviteDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
+import online.draughts.rus.client.gin.NotationPanelFactory;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.Logger;
@@ -62,6 +63,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   private final DraughtsMessages messages;
   private final AppResources resources;
+  private final NotationPanelFactory notationPanelFactory;
   @UiField
   HTMLPanel main;
   @UiField
@@ -108,9 +110,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Inject
   PlayComponentView(Binder binder,
                     DraughtsMessages messages,
-                    AppResources resources) {
+                    AppResources resources,
+                    NotationPanelFactory notationPanelFactory) {
     this.messages = messages;
     this.resources = resources;
+    this.notationPanelFactory = notationPanelFactory;
 
     initWidget(binder.createAndBindUi(this));
 
@@ -219,8 +223,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void initNotationPanel(EventBus eventBus, Game game) {
-    notationPanel = new NotationPanel(eventBus, game.getId());
+  public void initNotationPanel(Long gameId) {
+    if (notationPanel != null) {
+      notationList.remove(notationPanel);
+    }
+    notationPanel = notationPanelFactory.createNotationPanel(gameId);
     notationList.add(notationPanel);
 
     Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {

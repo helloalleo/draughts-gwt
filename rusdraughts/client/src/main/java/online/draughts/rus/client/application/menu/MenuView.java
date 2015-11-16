@@ -27,8 +27,6 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   NavbarNav navLeft;
   @UiField
   NavbarNav navRight;
-  //  @UiField
-//  Image logoImg;
   @UiField
   NavbarBrand brand;
   @UiField
@@ -76,21 +74,14 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   }
 
   private void setLinkChildHeight(Element element, boolean top) {
-//    if (top) {
-//      element.addClassName(resources.style().navbarTop());
-//      element.removeClassName(resources.style().navbarScroll());
-//    } else {
-//      element.addClassName(resources.style().navbarScroll());
-//      element.removeClassName(resources.style().navbarTop());
-//    }
     for (int i = 0; i < element.getChildCount(); i++) {
       final Element child = (Element) element.getChild(i);
       if (top) {
-        child.addClassName(resources.style().navbarTop());
-        child.removeClassName(resources.style().navbarScroll());
+        child.addClassName(resources.style().navbarElemTop());
+        child.removeClassName(resources.style().navbarElemScroll());
       } else {
-        child.addClassName(resources.style().navbarScroll());
-        child.removeClassName(resources.style().navbarTop());
+        child.addClassName(resources.style().navbarElemScroll());
+        child.removeClassName(resources.style().navbarElemTop());
       }
     }
   }

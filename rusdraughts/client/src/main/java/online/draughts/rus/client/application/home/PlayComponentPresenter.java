@@ -41,7 +41,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final ResourceDelegate<FriendsResource> friendsDelegate;
-  private final EventBus eventBus;
 
   @Inject
   PlayComponentPresenter(
@@ -54,7 +53,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       ClientWebsocket clientWebsocket) {
     super(eventBus, view);
 
-    this.eventBus = eventBus;
     this.messages = messages;
     this.clientWebsocket = clientWebsocket;
     this.gamesDelegate = gamesDelegate;
@@ -223,7 +221,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onStartPlay(StartPlayEvent event) {
         getView().hideInviteDialog();
         getView().startPlay(event.isWhite());
-        getView().initNotationPanel(eventBus, clientWebsocket.getGame());
+        getView().initNotationPanel(clientWebsocket.getGame().getId());
 
         clientWebsocket.getPlayer().setPlaying(true);
         playersDelegate.withCallback(new AsyncCallback<Player>() {
@@ -437,6 +435,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
     Board getBoard();
 
-    void initNotationPanel(EventBus eventBus, Game game);
+    void initNotationPanel(Long gameId);
   }
 }

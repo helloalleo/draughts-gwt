@@ -9,7 +9,7 @@
     <g:HTMLPanel ui:field="panel">
         <b:Navbar ui:field="navbar" position="FIXED_TOP">
             <b:Container>
-                <b:NavbarHeader addStyleNames="{res.style.navbarHeader}">
+                <b:NavbarHeader>
                     <b:NavbarBrand ui:field="brand" href="#!home"/>
                     <b:NavbarCollapseButton dataTarget="#navbar-collapse"/>
                 </b:NavbarHeader>

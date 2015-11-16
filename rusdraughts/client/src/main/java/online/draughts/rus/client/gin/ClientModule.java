@@ -1,6 +1,7 @@
 package online.draughts.rus.client.gin;
 
 import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.gwt.inject.client.assistedinject.GinFactoryModuleBuilder;
 import com.google.inject.Singleton;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
 import online.draughts.rus.client.application.ApplicationModule;
@@ -27,6 +28,8 @@ public class ClientModule extends AbstractGinModule {
     install(new ApplicationModule());
     install(new WebsocketModule());
     install(new DialogModule());
+
+    install(new GinFactoryModuleBuilder().build(NotationPanelFactory.class));
 
     bind(CurrentSession.class).in(Singleton.class);
     bind(Cookies.class).to(DTCookiesImpl.class).in(Singleton.class);

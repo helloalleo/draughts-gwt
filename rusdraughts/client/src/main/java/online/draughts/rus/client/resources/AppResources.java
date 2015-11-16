@@ -13,7 +13,7 @@ public interface AppResources extends ClientBundle {
   @Source("css/normalize.gss")
   Normalize normalize();
 
-  @Source({"css/variables.gss", "css/style.gss"})
+  @Source({"css/variables.gss", "css/mixins.gss", "css/style.gss"})
   Style style();
 
   interface Normalize extends CssResource {
@@ -84,6 +84,8 @@ public interface AppResources extends ClientBundle {
 
     String strokeCommentPanel();
 
-    String navbarHeader();
+    String navbarElemTop();
+
+    String navbarElemScroll();
   }
 }
