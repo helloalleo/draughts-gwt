@@ -6,6 +6,7 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.google.web.bindery.event.shared.EventBus;
+import com.google.web.bindery.event.shared.HandlerRegistration;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.util.StringUtils;
@@ -43,24 +44,27 @@ public class NotationPanel extends ScrollPanel {
   static StringBuilder notation = new StringBuilder();
   private static int order = 0;
   private static Long gameId;
+  private final HandlerRegistration appendMoveHadnlerRegistration;
+  private final HandlerRegistration cancelMoveHandlerRegistration;
+  private final HandlerRegistration cleanNotationHandlerRegistration;
 
   @Inject
   public NotationPanel(EventBus eventBus, @Assisted Long gameId) {
     NotationPanel.gameId = gameId;
 
-    eventBus.addHandler(NotationStrokeEvent.TYPE, new NotationStrokeEventHandler() {
+    appendMoveHadnlerRegistration = eventBus.addHandler(NotationStrokeEvent.TYPE, new NotationStrokeEventHandler() {
       @Override
       public void onNotationStroke(NotationStrokeEvent event) {
         NotationPanel.this.appendMove(event.getStroke());
       }
     });
-    eventBus.addHandler(NotationCancelStrokeEvent.TYPE, new NotationCancelStrokeEventHandler() {
+    cancelMoveHandlerRegistration = eventBus.addHandler(NotationCancelStrokeEvent.TYPE, new NotationCancelStrokeEventHandler() {
       @Override
       public void onNotationCancelStroke(NotationCancelStrokeEvent event) {
         NotationPanel.this.cancelMove(event.getStroke());
       }
     });
-    eventBus.addHandler(ClearNotationEvent.TYPE, new ClearNotationEventHandler() {
+    cleanNotationHandlerRegistration = eventBus.addHandler(ClearNotationEvent.TYPE, new ClearNotationEventHandler() {
       @Override
       public void onClearNotation(ClearNotationEvent event) {
         cleanNotationPanel();
@@ -177,6 +181,9 @@ public class NotationPanel extends ScrollPanel {
     notation = new StringBuilder();
     getElement().setInnerHTML("");
     order = 0;
+    appendMoveHadnlerRegistration.removeHandler();
+    cancelMoveHandlerRegistration.removeHandler();
+    cleanNotationHandlerRegistration.removeHandler();
   }
 
   public static String wrapStroke(Stroke stroke, int order) {
