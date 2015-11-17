@@ -125,7 +125,7 @@ public class NotationPanel extends ScrollPanel {
         } else {
           notation.append(wrapInSpan(BEAT_SEP))
               .append(wrapStrokeInAnchor(stroke, order))
-              .append(wrapInSpan(NOTATION_SEP));
+              .append(NOTATION_SEP);
         }
       } else if (continueBeat) {
         notation.append(wrapInSpan(BEAT_SEP))

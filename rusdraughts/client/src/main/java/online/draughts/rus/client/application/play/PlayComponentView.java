@@ -236,7 +236,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   private void alignNotationPanel() {
     if (Window.getClientWidth() > 0) {
-      String notationHeight = lienzoPanel.getHeight() - infoHTMLPanel.getOffsetHeight() - 20 + "px";
+      String notationHeight = lienzoPanel.getHeight() - infoHTMLPanel.getOffsetHeight() - 40 + "px";
       notationPanel.setHeight(notationHeight);
     }
   }
@@ -472,21 +472,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     updateTurn(getUiHandlers().isMyTurn());
     cancelMove.setEnabled(true);
     hidePlayButtonAndShowPlayingButtons();
-//    if (!GWT.isClient()) {
-//      lienzoPanel.addMouseDownHandler(new MouseDownHandler() {
-//        @Override
-//        public void onMouseDown(MouseDownEvent event) {
-//          Circle circle = new Circle(5)
-//              .setX(event.getX())
-//              .setY(event.getY())
-//              .setFillColor(ColorName.RED);
-//          board.add(circle);
-//          lienzoPanel.draw();
-//          Logger.debug("POS :: " + event.getX() + ", " + event.getY());
-//          Logger.debug("POS CLIENT :: " + event.getClientX() + ", " + event.getClientY());
-//        }
-//      });
-//    }
   }
 
   @Override

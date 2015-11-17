@@ -343,13 +343,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       }
     });
 
-//    addRegisteredHandler(UpdatePlayerFriendListEvent.TYPE, new UpdatePlayerFriendListEventHandler() {
-//      @Override
-//      public void onUpdatePlayerFriendList(UpdatePlayerFriendListEvent event) {
-//        updatePlayerFriendList();
-//      }
-//    });
-
     addRegisteredHandler(PlayMoveOpponentEvent.TYPE, new PlayMoveOpponentEventHandler() {
       @Override
       public void onPlayMoveOpponent(PlayMoveOpponentEvent event) {

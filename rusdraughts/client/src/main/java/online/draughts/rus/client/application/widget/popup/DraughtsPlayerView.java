@@ -39,12 +39,12 @@ import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.gwtbootstrap3.client.ui.html.Br;
 import org.gwtbootstrap3.client.ui.html.Span;
 
+@SuppressWarnings("deprecation")
 public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUiHandlers>
     implements DraughtsPlayerPresenter.MyView, PlayComponent {
-  private final EventBus eventBus;
   private final AppResources resources;
-  private final int rows = 8;
-  private final int cols = 8;
+  private static final int rows = 8;
+  private static final int cols = 8;
   private Game game;
   private final ClientConfiguration config;
   private final CurrentSession currentSession;
@@ -76,8 +76,6 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   HTMLPanel beatenDraughts;
   private Board board;
   private DraughtsMessages messages;
-  private int side = 0;
-  private int deskSide = 0;
   private int notationCursor;
   private int prevPos = -1;
   private Timer playTimer;
@@ -115,6 +113,12 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   HTMLPanel notLoggedInCommentPanel;
   @UiField
   HTMLPanel loggedInCommentPanel;
+  @UiField
+  ScrollPanel notationScroll;
+  @UiField
+  HTMLPanel notationInfoPanel;
+  @UiField
+  HTMLPanel notationHTMLPanel;
   private HandlerRegistration nativePreviewHandler;
   private boolean commentHasFocus;
 
@@ -123,7 +127,6 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
                      ResourceDelegate<GamesResource> gamesDelegate,
                      Game game) {
     super(eventBus);
-    this.eventBus = eventBus;
     this.resources = resources;
     this.messages = messages;
     this.config = config;
@@ -231,10 +234,10 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
           // если разделитель побитых шашек
           if (Stroke.BEAT_MOVE_SEP.equals(wrapperNotation.getInnerText())) {
             wrapperNotation = ((Element) gameNode.getChild(i - 2));
-          }
-          prevStep = "";
-          if (wrapperNotation != null && wrapperNotation.getInnerText().contains(Stroke.BEAT_MOVE_SEP)) {
-            prevStep = wrapperNotation.getInnerText();
+            prevStep = "";
+            if (wrapperNotation != null) {
+              prevStep = wrapperNotation.getInnerText();
+            }
           }
         }
 
@@ -259,6 +262,9 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
         notationPanel.add(new Span(((Element) child).getInnerText()));
       }
     }
+
+    int side = draughtsDeskColumn.getOffsetWidth();
+    notationScroll.setHeight((side - notationInfoPanel.getOffsetHeight() - 60) + "px");
   }
 
   private void toMoveByClick(int pos) {
@@ -279,8 +285,8 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   }
 
   private void initMainPanel() {
-    side = draughtsDeskColumn.getOffsetWidth();
-    deskSide = side - 80;
+    int side = draughtsDeskColumn.getOffsetWidth();
+    int deskSide = side - 80;
 
     BoardBackgroundLayer boardBackground = new BoardBackgroundLayer(side, deskSide, rows, cols);
     boardBackground.drawCoordinates(true);

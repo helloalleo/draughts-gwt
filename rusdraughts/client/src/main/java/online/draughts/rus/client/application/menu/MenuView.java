@@ -18,6 +18,7 @@ import online.draughts.rus.client.util.Cookies;
 import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 
+@SuppressWarnings("deprecation")
 public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements MenuPresenter.MyView {
   private final Image logo;
   private final Cookies cookies;
@@ -35,6 +36,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   private AnchorListItem prevAnchor;
   private NameTokens nameTokens;
   private AppResources resources;
+  private AnchorListItem scrollToTop;
 
   @Inject
   MenuView(Binder binder,
@@ -50,6 +52,15 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     logo = new Image(resources.images().logo());
     logo.setSize(Variables.S_LOGO_TOP_HEIGHT, Variables.S_LOGO_TOP_HEIGHT);
     brand.add(logo);
+
+    scrollToTop = new AnchorListItem();
+    scrollToTop.setIcon(IconType.ARROW_CIRCLE_UP);
+    scrollToTop.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        Window.scrollTo(0, 0);
+      }
+    });
 
     Window.addWindowScrollHandler(new Window.ScrollHandler() {
       @Override
@@ -128,6 +139,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     setLinkHeight(navbarScrollHeight);
     logo.addStyleName(resources.style().logoScroll());
     logo.removeStyleName(resources.style().logoTop());
+    navRight.insert(scrollToTop, 0);
   }
 
   private void navbarTopHeight() {
@@ -137,6 +149,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     setLinkHeight(navbarTopHeight);
     logo.addStyleName(resources.style().logoTop());
     logo.removeStyleName(resources.style().logoScroll());
+    navRight.remove(scrollToTop);
   }
 
   private AnchorListItem createAnchor(final NameTokens.Link link) {
