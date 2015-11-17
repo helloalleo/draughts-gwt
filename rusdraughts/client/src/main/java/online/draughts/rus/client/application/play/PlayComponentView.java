@@ -1,4 +1,4 @@
-package online.draughts.rus.client.application.home;
+package online.draughts.rus.client.application.play;
 
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;

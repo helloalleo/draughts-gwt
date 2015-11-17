@@ -5,6 +5,7 @@
     <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
     <g:HTMLPanel ui:field="panel">
+        <b:Anchor ui:field="gameIdAnchor" icon="PLAY_CIRCLE"/>
         <g:HTMLPanel ui:field="whoAndWhenDidWin" addStyleNames="{res.style.whoAndWhenDidWin} pull-right">
             <g:HTML ui:field="playEndDate" addStyleNames="{res.style.playEndDate}"/>
             <g:HTML ui:field="whoDidWin" addStyleNames="{res.style.whoDidWin}"/>
@@ -12,6 +13,5 @@
         <b:Image ui:field="endGameScreenshot"/>
         <g:HTML ui:field="whitePlayerName"/>
         <g:HTML ui:field="blackPlayerName"/>
-        <b:Button ui:field="playGame" icon="PLAY_CIRCLE" addStyleNames="btn-link"/>
     </g:HTMLPanel>
 </ui:UiBinder>

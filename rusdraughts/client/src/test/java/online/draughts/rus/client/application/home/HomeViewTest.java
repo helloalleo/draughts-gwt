@@ -17,8 +17,6 @@ import org.junit.runner.RunWith;
 @WithClassesToStub(RootPanel.class)
 public class HomeViewTest {
 
-  private PlayComponentView playComponentView;
-  private PlayComponentPresenter playComponentPresenter;
 
   @Test
   public void testHomeView() {

@@ -11,9 +11,6 @@ public interface Cookies {
   void setLocation(String nameToken);
   String getLocation();
 
-  void setNewGameButtonState(boolean newGame);
-  boolean getNewGameButtonState();
-
   void setGamesOnPageCounter(int value);
   int getGamesOnPageCounter();
 

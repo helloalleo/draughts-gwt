@@ -9,18 +9,17 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.annotations.Title;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.draughts.rus.client.application.ApplicationPresenter;
+import online.draughts.rus.client.application.play.PlayComponentPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.event.UpdatePlayShowPanelEvent;
 import online.draughts.rus.client.event.UpdatePlayShowPanelEventHandler;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
@@ -31,11 +30,10 @@ import java.util.List;
 public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter.MyProxy>
     implements HomeUiHandlers {
 
-  public static final PermanentSlot<PlayComponentPresenter> SLOT_PLAY = new PermanentSlot<>();
+  public static final PermanentSlot<PlayComponentPresenter> SLOT_SHOW_PLAY_PANEL = new PermanentSlot<>();
   public static int INIT_SHOW_GAMES_PAGE_SIZE;
   private final CurrentSession currentSession;
   private final Cookies cookies;
-  final PlayComponentPresenter playPresenter;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private int gamesOffset = 0;
 
@@ -46,17 +44,14 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       MyProxy proxy,
       CurrentSession currentSession,
       ClientConfiguration config,
-      PlayComponentPresenter playPresenter,
       Cookies cookies,
       ResourceDelegate<GamesResource> gamesDelegate) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     INIT_SHOW_GAMES_PAGE_SIZE = getIncrementPlaysOnPage(config, cookies);
-    Logger.debug(INIT_SHOW_GAMES_PAGE_SIZE);
     getView().setUiHandlers(this);
 
     this.currentSession = currentSession;
-    this.playPresenter = playPresenter;
     this.gamesDelegate = gamesDelegate;
     this.cookies = cookies;
     cookies.setLocation(NameTokens.homePage);
@@ -65,9 +60,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
   public static int getIncrementPlaysOnPage(ClientConfiguration config, Cookies cookies) {
     int gamesOnPageCounter = cookies.getGamesOnPageCounter();
-    Logger.debug(gamesOnPageCounter);
     int gamesOnPage = PlayShowPanel.GAMES_ON_PAGE[PlayShowPanel.GAMES_ON_PAGE.length - gamesOnPageCounter - 1];
-    Logger.debug(gamesOnPage);
     return Integer.valueOf(config.initShowGamesPageSize()) / gamesOnPage;
   }
 
@@ -84,7 +77,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   protected void onBind() {
     super.onBind();
 
-    setInSlot(SLOT_PLAY, playPresenter);
     getView().setShowLoggedInControls(currentSession.isLoggedIn());
   }
 
@@ -154,7 +146,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   /**
    * {@link HomePresenter}'s proxy.
    */
-  @Title("Главная")
   @ProxyCodeSplit
   @NameToken(NameTokens.homePage)
   @NoGatekeeper

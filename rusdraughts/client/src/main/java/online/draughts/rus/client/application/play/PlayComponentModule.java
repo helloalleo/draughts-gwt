@@ -1,4 +1,4 @@
-package online.draughts.rus.client.application.home;
+package online.draughts.rus.client.application.play;
 
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 

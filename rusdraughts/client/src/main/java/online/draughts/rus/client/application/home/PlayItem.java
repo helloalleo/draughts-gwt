@@ -18,13 +18,14 @@ import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
-import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.Anchor;
 import org.gwtbootstrap3.client.ui.Image;
 
 import java.util.Date;
 
 public class PlayItem extends Composite {
 
+  public static final String GAME_ID = "-game";
   private final DraughtsMessages messages = GWT.create(DraughtsMessages.class);
   private final AppResources resources = GWT.create(AppResources.class);
   private final static String PLAYER_COLOR_DELIMITER = ": ";
@@ -44,9 +45,9 @@ public class PlayItem extends Composite {
   @UiField
   HTML playEndDate;
   @UiField
-  Button playGame;
-  @UiField
   HTMLPanel whoAndWhenDidWin;
+  @UiField
+  Anchor gameIdAnchor;
 
   @Inject
   PlayItem(Binder binder,
@@ -59,19 +60,19 @@ public class PlayItem extends Composite {
 
     this.gamesInRow = gamesInRow;
     panel.addStyleName(resources.style().playItem());
-    setGame(player, game);
+    setGame(homePresenter, draughtsPlayerFactory, player, game);
+  }
 
-    playGame.addClickHandler(new ClickHandler() {
+  public void setGame(final HomePresenter homePresenter, final DraughtsPlayerPresenter.Factory draughtsPlayerFactory, Player player, final Game game) {
+    gameIdAnchor.setId(game.getId() + GAME_ID);
+    gameIdAnchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
         draughtsPlayer = draughtsPlayerFactory.create(game);
         homePresenter.addToPopupSlot(draughtsPlayer);
       }
     });
-  }
-
-  public void setGame(Player player, Game game) {
-    // todo идентификатор игры в качестве анчора
+    gameIdAnchor.setText(String.valueOf(game.getId()));
     if (game.getPlayEndStatus() != null) {
       whoDidWin.setHTML(TrUtils.translateEndGame(game.getPlayEndStatus()));
     }

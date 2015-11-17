@@ -8,7 +8,6 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.testing.CountingEventBus;
 import com.gwtplatform.mvp.client.AutobindDisable;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import online.draughts.rus.shared.locale.DraughtsMessagesImpl;
 import org.jukito.JukitoModule;
 import org.jukito.TestSingleton;
 
@@ -24,7 +23,6 @@ public abstract class PresenterTestModule extends JukitoModule {
   protected void configureTest() {
     GWTMockUtilities.disarm();
     bind(EventBus.class).to(CountingEventBus.class).in(TestSingleton.class);
-    bind(DraughtsMessages.class).to(DraughtsMessagesImpl.class).in(TestSingleton.class);
 
     forceMock(UIObject.class);
     forceMock(Element.class);

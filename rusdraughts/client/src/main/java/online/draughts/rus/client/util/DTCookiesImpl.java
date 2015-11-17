@@ -14,7 +14,6 @@ public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
 
   private final String GAMES_ON_PAGE_COUNTER = "gamesOnPage";
   private final String LOCATION = "LOCATION"; // куки адреса страницы
-  private final String NEW_GAME_BUTTON_STATE_MAIN_PAGE = "newGameButtonState";
   private final String MY_GAMES = "myGames";
 
   public void setLocation(String nameToken) {
@@ -27,18 +26,6 @@ public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
       location = NameTokens.homePage;
     }
     return location;
-  }
-
-  public void setNewGameButtonState(boolean newGame) {
-    Cookies.setCookie(NEW_GAME_BUTTON_STATE_MAIN_PAGE, String.valueOf(newGame));
-  }
-
-  public boolean getNewGameButtonState() {
-    String newGameState = Cookies.getCookie(NEW_GAME_BUTTON_STATE_MAIN_PAGE);
-    if (StringUtils.isEmpty(newGameState)) {
-      newGameState = Boolean.TRUE.toString();
-    }
-    return Boolean.valueOf(newGameState);
   }
 
   public void setGamesOnPageCounter(int value) {
