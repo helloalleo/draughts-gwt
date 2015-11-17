@@ -92,16 +92,6 @@ public class Player extends PersistableObjectImpl {
   @OneToMany(mappedBy = "sender")
   private Set<GameMessage> sentPlayerMessages;
 
-//  @GwtTransient
-//  @JsonIgnore
-//  @OneToMany(mappedBy = "receiverGame")
-//  private Set<GameMessage> receivedGameMessages;
-//
-//  @GwtTransient
-//  @JsonIgnore
-//  @OneToMany(mappedBy = "senderGame")
-//  private Set<GameMessage> sentGameMessages;
-
   @GwtTransient
   @JsonIgnore
   @OneToMany(mappedBy = "playerWhite")
@@ -144,6 +134,10 @@ public class Player extends PersistableObjectImpl {
   @JsonIgnore
   private boolean subscribed;
 
+  @GwtTransient
+  @JsonIgnore
+  private boolean banned;
+
   public Player() {
   }
 
@@ -171,6 +165,19 @@ public class Player extends PersistableObjectImpl {
 
   public Player setFriendOf(Set<Friend> friendOf) {
     this.friendOf = friendOf;
+    return this;
+  }
+
+  public boolean isSubscribed() {
+    return subscribed;
+  }
+
+  public boolean isBanned() {
+    return banned;
+  }
+
+  public Player setBanned(boolean active) {
+    this.banned = active;
     return this;
   }
 

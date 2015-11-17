@@ -1,12 +1,11 @@
 package online.draughts.rus.client.application;
 
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.gwtplatform.dispatch.rpc.shared.DispatchAsync;
 import com.gwtplatform.mvp.client.Bootstrapper;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import online.draughts.rus.client.application.security.CurrentSession;
-import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
+import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.shared.dispatch.FetchCurrentPlayerAction;
 import online.draughts.rus.shared.dispatch.FetchCurrentPlayerResult;
 
@@ -28,20 +27,17 @@ public class AppBootstrapper implements Bootstrapper {
                          DispatchAsync dispatch) {
     this.placeManager = placeManager;
     this.currentSession = currentSession;
-    this.dispatch = dispatch;  }
+    this.dispatch = dispatch;
+  }
 
   @Override
   public void onBootstrap() {
-    dispatch.execute(new FetchCurrentPlayerAction(), new AsyncCallback<FetchCurrentPlayerResult>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
-      }
-
+    dispatch.execute(new FetchCurrentPlayerAction(), new AbstractAsyncCallback<FetchCurrentPlayerResult>() {
       @Override
       public void onSuccess(FetchCurrentPlayerResult result) {
         currentSession.setPlayer(result.getPlayer());
-        placeManager.revealCurrentPlace();      }
+        placeManager.revealCurrentPlace();
+      }
     });
   }
 }

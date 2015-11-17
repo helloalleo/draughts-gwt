@@ -35,6 +35,9 @@ public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayer
   public FetchCurrentPlayerResult execute(FetchCurrentPlayerAction fetchCurrentPlayerAction, ExecutionContext executionContext) throws ActionException {
     HttpSession session = requestProvider.get().getSession();
     final Player bySessionId = playerDaoProvider.get().findBySessionId(session.getId());
+    if (bySessionId != null && bySessionId.isBanned()) {
+      return new FetchCurrentPlayerResult(null);
+    }
     return new FetchCurrentPlayerResult(bySessionId);
   }
 

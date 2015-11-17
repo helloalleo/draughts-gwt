@@ -325,21 +325,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         game.setEndGameScreenshot(getView().takeScreenshot());
         gamesDelegate.withCallback(event.getAsyncCallback()).saveOrCreate(game);
 
-        GameMessage gameMessage = new GameMessage();
-        gameMessage.setSender(clientWebsocket.getPlayer());
-        gameMessage.setReceiver(clientWebsocket.getOpponent());
-        gameMessage.setMessageType(GameMessage.MessageType.PLAY_CALLBACK);
-        fireEvent(new GameMessageEvent(gameMessage));
-
         fireEvent(new ClearPlayComponentEvent());
-        fireEvent(new UpdatePlayShowPanelEvent());
-      }
-    });
-
-    addRegisteredHandler(PlayCallbackEvent.TYPE, new PlayCallbackEventHandler() {
-      @Override
-      public void onPlayCallback(PlayCallbackEvent event) {
-        fireEvent(new UpdatePlayShowPanelEvent());
       }
     });
 

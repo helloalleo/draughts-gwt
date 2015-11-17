@@ -48,7 +48,9 @@ public class AuthUtils {
     Rating.calcPlayerRating(player);
     playerService.saveOrCreateOnServer(player);
 
-    AuthUtils.login(req);
+    if (!player.isBanned()) {
+      AuthUtils.login(req);
+    }
     resp.sendRedirect(config.getHomeUrl());
   }
 }

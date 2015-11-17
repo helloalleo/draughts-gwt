@@ -69,7 +69,6 @@ public class OAuthVKCallbackServlet extends HttpServlet {
           .setCode(code)
           .buildQueryMessage();
 
-      log.info("Request Token Uri: " + request.getLocationUri());
       OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
       OAuthAccessTokenResponse response = oAuthClient.accessToken(request, OAuthJSONAccessTokenResponse.class);
       String accessToken = response.getAccessToken();

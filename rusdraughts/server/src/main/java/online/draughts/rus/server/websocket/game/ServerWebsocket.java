@@ -75,7 +75,6 @@ public class ServerWebsocket {
       case PLAY_PROPOSE_DRAW:
       case PLAY_CANCEL_MOVE:
       case PLAY_CANCEL_MOVE_RESPONSE:
-      case PLAY_CALLBACK:
       case CHAT_PRIVATE_MESSAGE:
       case NOTIFICATION_ADDED_TO_FAVORITE:
         handleChatPrivateMessage(gameMessage);
@@ -162,12 +161,6 @@ public class ServerWebsocket {
       gameMessage.setReceiver(secondPlayer);
       gameMessage.setMessageType(GameMessage.MessageType.PLAY_END);
       Session receiverSession = peers.get(secondPlayer);
-      sendMessage(receiverSession, gameMessage);
-
-      gameMessage = new GameMessage();
-      gameMessage.setSender(player);
-      gameMessage.setReceiver(secondPlayer);
-      gameMessage.setMessageType(GameMessage.MessageType.PLAY_CALLBACK);
       sendMessage(receiverSession, gameMessage);
     }
 

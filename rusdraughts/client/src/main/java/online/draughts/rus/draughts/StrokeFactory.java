@@ -11,6 +11,7 @@ import online.draughts.rus.shared.util.StringUtils;
  * Date: 07.10.15
  * Time: 16:49
  */
+@SuppressWarnings("deprecation")
 public class StrokeFactory {
 
   public static Stroke createStrokeFromMove(Move move) {

@@ -98,17 +98,8 @@ public class ClientWebsocket implements WebsocketListener {
       @Override
       public void onUpdateAllPlayerList(UpdateAllPlayerListEvent event) {
         updatePlayerListMessage();
-//        eventBus.fireEvent(new UpdatePlayerFriendListEvent());
       }
     });
-
-//    eventBus.addHandler(RemovePlayMoveOpponentHandlerEvent.TYPE, new RemoveWebsocketHandlersEventHandler() {
-//      @Override
-//      public void onRemovePlayMoveOpponentHandler(RemovePlayMoveOpponentHandlerEvent event) {
-//        removeHandlers();
-//      }
-//    });
-
     eventBus.addHandler(ClearPlayComponentEvent.TYPE, new ClearPlayComponentEventHandler() {
       @Override
       public void onClearPlayComponent(ClearPlayComponentEvent event) {
@@ -263,9 +254,6 @@ public class ClientWebsocket implements WebsocketListener {
       case PLAY_CANCEL_MOVE_RESPONSE:
         handlePlayCancelMoveResponse(gameMessage);
         break;
-      case PLAY_CALLBACK:
-        handlePlayCallback(gameMessage);
-        break;
       case PLAY_END:
         handlePlayEndGame(gameMessage);
         break;
@@ -299,12 +287,6 @@ public class ClientWebsocket implements WebsocketListener {
         }
       }));
     }
-  }
-
-  @SuppressWarnings("unused")
-  private void handlePlayCallback(GameMessage gameMessage) {
-    // получается в PlayComponentPresenter
-    eventBus.fireEvent(new PlayCallbackEvent());
   }
 
   private void handlePlayAlreadyPlaying(GameMessage gameMessage) {
