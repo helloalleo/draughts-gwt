@@ -30,7 +30,7 @@ public class AuthUtils {
     req.getSession().setAttribute("isAuthenticated", true);
   }
 
-  public static void processUserAndRedirectToHomePage(PlayerService playerService, ServerConfiguration config,
+  public static void processUserAndRedirectToPlayPage(PlayerService playerService, ServerConfiguration config,
                                                       HttpServletRequest req, HttpServletResponse resp,
                                                       Player player) throws IOException {
     player.setLastVisited(new Date());
@@ -51,6 +51,6 @@ public class AuthUtils {
     if (!player.isBanned()) {
       AuthUtils.login(req);
     }
-    resp.sendRedirect(config.getHomeUrl());
+    resp.sendRedirect(config.getPlayUrl());
   }
 }

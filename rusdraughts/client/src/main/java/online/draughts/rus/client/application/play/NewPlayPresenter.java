@@ -7,10 +7,12 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
+import com.gwtplatform.mvp.client.annotations.Title;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import online.draughts.rus.client.application.ApplicationPresenter;
 import online.draughts.rus.client.place.NameTokens;
+import online.draughts.rus.client.util.Cookies;
 
 
 public class NewPlayPresenter extends Presenter<NewPlayPresenter.MyView, NewPlayPresenter.MyProxy>
@@ -22,10 +24,14 @@ public class NewPlayPresenter extends Presenter<NewPlayPresenter.MyView, NewPlay
       EventBus eventBus,
       MyView view,
       MyProxy proxy,
+      Cookies cookies,
       PlayComponentPresenter playComponentPresenter) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     getView().setUiHandlers(this);
+
+    cookies.setLocation(NameTokens.playPage);
+
     setInSlot(SLOT_NEWPLAY, playComponentPresenter);
   }
 

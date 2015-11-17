@@ -116,7 +116,7 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
           player.setEmail(email);
         }
 
-        AuthUtils.processUserAndRedirectToHomePage(playerService, config, req, resp, player);
+        AuthUtils.processUserAndRedirectToPlayPage(playerService, config, req, resp, player);
       }
     } catch (OAuthSystemException | OAuthProblemException e) {
       log.severe(e.getLocalizedMessage());

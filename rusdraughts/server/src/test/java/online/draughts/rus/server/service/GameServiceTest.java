@@ -82,7 +82,7 @@ public class GameServiceTest extends BaseTest {
     Move move = new Move(1, true, gameMessage, "5,6", "4,7", null,
         new HashSet<Move.MoveFlags>() {{
           add(Move.MoveFlags.SIMPLE_MOVE);
-        }});
+        }}, null);
     move.setGameMessage(gameMessage);
     gameMessage.setMove(move);
     game.getGameMessages().add(gameMessage);
@@ -96,7 +96,7 @@ public class GameServiceTest extends BaseTest {
     move = new Move(2, false, gameMessage, "2,1", "3,0", null,
         new HashSet<Move.MoveFlags>() {{
           add(Move.MoveFlags.SIMPLE_MOVE);
-        }});
+        }}, null);
     move.setGameMessage(gameMessage);
     gameMessage.setMove(move);
     game.getGameMessages().add(gameMessage);

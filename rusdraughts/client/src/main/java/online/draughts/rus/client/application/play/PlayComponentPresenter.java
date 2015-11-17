@@ -182,6 +182,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   @Override
   public void doPlayerMove(Move move) {
+    if (clientWebsocket.getPlayer().isSubscribed()) {
+      move.setScreenshot(getView().takeScreenshot());
+    }
     fireEvent(new PlayMoveMessageEvent(move));
   }
 

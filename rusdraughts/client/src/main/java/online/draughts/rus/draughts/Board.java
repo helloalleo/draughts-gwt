@@ -833,14 +833,12 @@ public class Board extends Layer {
    * @param clickY нажатие мышки Y
    */
   public void moveDraught(double clickX, double clickY) {
-    Logger.debug("MOVE DRAUGHT");
     Draught selectedDraught = findClickedDraught(clickX, clickY);
     if (selectedDraught != null) {
       selectedDraught.onNodeTouch();
     } else {
       selectedDraught = Draught.getSelectedDraught();
     }
-    Logger.debug("SELECTED");
     if (selectedDraught != null && !highlightedSquares.isEmpty()) {
       Square endSquare = null, startSquare = null;
       try {
@@ -876,7 +874,6 @@ public class Board extends Layer {
         final Move move = MoveFactory.createMoveFromStroke(stroke)
             .setTitle(stroke.toNotation())
             .setHashTags(StringUtils.getHashes(getComment()));
-
         view.doPlayerMove(move);
         moveMyStack.push(stroke);
 

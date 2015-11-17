@@ -32,7 +32,7 @@ import java.util.*;
 public class ServerWebsocket {
 
   private static Map<Player, Session> peers = Collections.synchronizedMap(new HashMap<Player, Session>());
-  private final long MAX_IDLE_TIMEOUT = 1000 * 60 * 15;
+  private static final long MAX_IDLE_TIMEOUT = 1000 * 60 * 15;
   private PlayerService playerService;
   private GameMessageService gameMessageService;
   private GameService gameService;

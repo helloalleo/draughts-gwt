@@ -1,5 +1,7 @@
 package online.draughts.rus.shared.model;
 
+import com.google.gwt.user.client.rpc.GwtTransient;
+
 import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
@@ -44,11 +46,15 @@ public class Move extends PersistableObjectImpl {
   @ElementCollection
   private Set<String> hashTags = new HashSet<>();
 
+  @GwtTransient
+  @Column(columnDefinition = "TEXT")
+  private String screenshot;
+
   public Move() {
   }
 
   public Move(int number, boolean first, GameMessage gameMessage, String startPos, String endPos, String takenPos,
-              Set<MoveFlags> moveFlags) {
+              Set<MoveFlags> moveFlags, String screenshot) {
     this.number = number;
     this.first = first;
     this.moveFlags = moveFlags;
@@ -58,11 +64,13 @@ public class Move extends PersistableObjectImpl {
     this.startPos = startPos;
     this.endPos = endPos;
     this.takenPos = takenPos;
+
+    this.screenshot = screenshot;
   }
 
   public Move(Move move) {
     this(move.getNumber(), move.isFirst(), move.getGameMessage(), move.getStartPos(), move.getEndPos(),
-        move.getTakenPos(), move.getMoveFlags());
+        move.getTakenPos(), move.getMoveFlags(), move.getScreenshot());
   }
 
   public GameMessage getGameMessage() {
@@ -175,6 +183,14 @@ public class Move extends PersistableObjectImpl {
     this.moveOrder = order;
   }
 
+  public String getScreenshot() {
+    return screenshot;
+  }
+
+  public Move setScreenshot(String screenshot) {
+    this.screenshot = screenshot;
+    return this;
+  }
 
   public enum MoveFlags {
     CANCEL_MOVE, // ход отменяется

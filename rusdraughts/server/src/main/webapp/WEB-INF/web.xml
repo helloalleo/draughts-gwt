@@ -31,16 +31,16 @@
         <param-value>online.draughts.rus.server.guice.ServerModule</param-value>
     </context-param>
 
-    <!--<context-param>-->
-        <!--<param-name>resteasy.guice.stage</param-name>-->
-        <!--<param-value>PRODUCTION</param-value>-->
-    <!--</context-param>-->
+    <context-param>
+        <param-name>resteasy.guice.stage</param-name>
+        <param-value>PRODUCTION</param-value>
+    </context-param>
 
-    <!--<context-param>-->
-        <!--<param-name>resteasy.scan</param-name>-->
-        <!--<param-value>false</param-value>-->
-    <!--</context-param>-->
-
+    <context-param>
+        <param-name>org.apache.tomcat.websocket.textBufferSize</param-name>
+        <param-value>524288</param-value>
+    </context-param>
+    
     <!-- this should be the same URL pattern as the servlet-mapping property -->
     <context-param>
         <param-name>resteasy.servlet.mapping.prefix</param-name>

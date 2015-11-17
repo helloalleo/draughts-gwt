@@ -130,8 +130,6 @@ public class Player extends PersistableObjectImpl {
   @Column(name = "google_sub")
   private String googleSub;
 
-  @GwtTransient
-  @JsonIgnore
   private boolean subscribed;
 
   @GwtTransient

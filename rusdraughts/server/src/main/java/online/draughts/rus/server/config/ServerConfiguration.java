@@ -45,6 +45,7 @@ public class ServerConfiguration {
   private String googleApiUserInfo;
 
   private final PlayerService playerService;
+  private String playUrl;
 
   @Inject
   public ServerConfiguration(PlayerService playerService) {
@@ -58,6 +59,7 @@ public class ServerConfiguration {
     notFoundErrorUrl = resourceBundle.getString("not_found_error_url");
     loginUrl = resourceBundle.getString("login");
     homeUrl = resourceBundle.getString("home");
+    playUrl = resourceBundle.getString("play");
 
     // VK API Data
     vkRedirectUri = resourceBundle.getString("vk_redirect_uri");
@@ -195,5 +197,9 @@ public class ServerConfiguration {
       player.setLoggedIn(false);
       playerService.saveOrCreateOnServer(player);
     }
+  }
+
+  public String getPlayUrl() {
+    return playUrl;
   }
 }

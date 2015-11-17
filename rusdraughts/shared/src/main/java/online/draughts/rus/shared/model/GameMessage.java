@@ -7,7 +7,6 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import javax.persistence.*;
 import java.util.Date;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * Created with IntelliJ IDEA.
@@ -73,24 +72,6 @@ public class GameMessage extends PersistableObjectImpl {
   public void setReceiver(Player entity) {
     this.receiver = entity;
   }
-
-//  public Player getSenderGame() {
-//    return senderGame;
-//  }
-//
-//  public GameMessage setSenderGame(Player senderGame) {
-//    this.senderGame = senderGame;
-//    return this;
-//  }
-//
-//  public Player getReceiverGame() {
-//    return receiverGame;
-//  }
-//
-//  public GameMessage setReceiverGame(Player receiverGame) {
-//    this.receiverGame = receiverGame;
-//    return this;
-//  }
 
   public String getMessage() {
     return message;

@@ -78,7 +78,7 @@ public class ClientWebsocket implements WebsocketListener {
     eventBus.addHandler(PlayMoveMessageEvent.TYPE, new PlayMoveMessageEventHandler() {
       @Override
       public void onPlayMoveMessage(PlayMoveMessageEvent event) {
-        GameMessage message = createSendGameMessage();
+        GameMessage message = createGameMessage();
         message.setMessageType(GameMessage.MessageType.PLAY_MOVE);
         message.setMove(event.getMove());
         message.setGame(playSession.getGame());
@@ -109,12 +109,12 @@ public class ClientWebsocket implements WebsocketListener {
   }
 
   private void updatePlayerListMessage() {
-    GameMessage message = createSendGameMessage();
+    GameMessage message = createGameMessage();
     message.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
     sendGameMessage(message);
   }
 
-  private GameMessage createSendGameMessage() {
+  private GameMessage createGameMessage() {
     GameMessage message = GWT.create(GameMessage.class);
     message.setSender(playSession.getPlayer());
     message.setReceiver(playSession.getOpponent());
@@ -141,7 +141,7 @@ public class ClientWebsocket implements WebsocketListener {
    */
   private void handlePlayInvite(final GameMessage gameMessage) {
     if (confirmPlayDialogBox != null && confirmPlayDialogBox.isShowing()) {
-      GameMessage message = createSendGameMessage(gameMessage);
+      GameMessage message = createGameMessage(gameMessage);
       message.setMessageType(GameMessage.MessageType.PLAY_ALREADY_PLAYING);
       sendGameMessage(message);
       return;
@@ -169,7 +169,7 @@ public class ClientWebsocket implements WebsocketListener {
 
           @Override
           public void onSuccess(Game game) {
-            GameMessage message = createSendGameMessage(gameMessage);
+            GameMessage message = createGameMessage(gameMessage);
             message.setMessageType(GameMessage.MessageType.PLAY_START);
             message.setGame(game);
             message.setData(String.valueOf(!isWhite()));
@@ -184,7 +184,7 @@ public class ClientWebsocket implements WebsocketListener {
 
       @Override
       public void canceled() {
-        GameMessage message = createSendGameMessage(gameMessage);
+        GameMessage message = createGameMessage(gameMessage);
         message.setMessageType(GameMessage.MessageType.PLAY_REJECT_INVITE);
 
         sendGameMessage(message);
@@ -315,7 +315,7 @@ public class ClientWebsocket implements WebsocketListener {
     new ConfirmeDialogBox(messages.playerProposesCancelMove(gameMessage.getSender().getPublicName())) {
       @Override
       public void procConfirm() {
-        GameMessage returnGameMessage = createSendGameMessage(gameMessage);
+        GameMessage returnGameMessage = createGameMessage(gameMessage);
         returnGameMessage.setMessageType(GameMessage.MessageType.PLAY_CANCEL_MOVE_RESPONSE);
         returnGameMessage.setMove(gameMessage.getMove());
         if (isConfirmed()) {
@@ -352,7 +352,7 @@ public class ClientWebsocket implements WebsocketListener {
     new ConfirmeDialogBox(messages.playerProposesDraw(senderName)) {
       @Override
       public void procConfirm() {
-        GameMessage message = createSendGameMessage(gameMessage);
+        GameMessage message = createGameMessage(gameMessage);
         message.setMessageType(GameMessage.MessageType.PLAY_ACCEPT_DRAW);
 
         if (isConfirmed()) {
@@ -370,7 +370,7 @@ public class ClientWebsocket implements WebsocketListener {
     };
   }
 
-  private GameMessage createSendGameMessage(GameMessage gameMessage) {
+  private GameMessage createGameMessage(GameMessage gameMessage) {
     GameMessage message = GWT.create(GameMessage.class);
     message.setSender(gameMessage.getReceiver());
     message.setReceiver(gameMessage.getSender());
