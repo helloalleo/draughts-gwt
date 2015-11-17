@@ -4,12 +4,14 @@
     <modelVersion>4.0.0</modelVersion>
 
     <parent>
-        <groupId>online.draughts.rus</groupId>
-        <artifactId>rusdraughts</artifactId>
+        <groupId>online.draughts</groupId>
+        <artifactId>draughts</artifactId>
         <version>1.0-SNAPSHOT</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
 
-    <!--<groupId>online.draughts.rus</groupId>-->
+
+    <groupId>online.draughts.rus</groupId>
     <artifactId>client</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
@@ -350,7 +352,8 @@
                     <logLevel>INFO</logLevel>
 
                     <extraJvmArgs>-Xmx2048m</extraJvmArgs>
-
+                    <bindAddress>0.0.0.0</bindAddress>
+                    <warSourceDirectory>${project.basedir}/out/artifacts/draughts_dev.war</warSourceDirectory>
                     <runTarget>index.html</runTarget>
                     <module>online.draughts.rus.Application_dev</module>
                     <draftCompile>true</draftCompile>
@@ -362,6 +365,7 @@
                 </configuration>
                 <executions>
                     <execution>
+                        <phase>compile</phase>
                         <goals>
                             <goal>resources</goal>
                             <goal>compile</goal>

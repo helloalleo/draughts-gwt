@@ -50,19 +50,25 @@ body {
 .navbarTop {
 @mixin trans(NAVBAR_CHANGE_DURATION);
 @mixin height_and_line(S_NAVBAR_TOP_LINE_HEIGHT, S_NAVBAR_TOP_HEIGHT);
-@mixin navbarCommon(C_NAVBAR);
+@mixin navbarCommon(C_NAVBAR, C_NAVBAR_BORDER);
 }
 
 .navbarScroll {
 @mixin trans(NAVBAR_CHANGE_DURATION);
 @mixin height_and_line(S_NAVBAR_SCROLL_LINE_HEIGHT, S_NAVBAR_SCROLL_HEIGHT);
-@mixin navbarCommon(C_NAVBAR);
+@mixin navbarCommon(C_NAVBAR, C_NAVBAR_BORDER);
 }
 
 .navbarElemTop {
 @mixin trans(NAVBAR_CHANGE_DURATION);
 @mixin height_and_line(S_NAVBAR_TOP_LINE_HEIGHT, S_NAVBAR_TOP_HEIGHT);
-@mixin navbarCommon(C_NAVBAR);
+@mixin navbarCommon(C_NAVBAR, C_NAVBAR_BORDER);
+}
+
+.navbarElemScroll {
+@mixin trans(NAVBAR_CHANGE_DURATION);
+@mixin height_and_line(S_NAVBAR_SCROLL_LINE_HEIGHT, S_NAVBAR_SCROLL_HEIGHT);
+@mixin navbarCommon(C_NAVBAR, C_NAVBAR_BORDER);
 }
 
 .navbarTop li.active a {
@@ -79,11 +85,6 @@ body {
 
 .navbarScroll li a {
     color: C_NAVBAR_COLOR !important;
-}
-
-.navbarElemScroll {
-@mixin trans(NAVBAR_CHANGE_DURATION);
-@mixin height_and_line(S_NAVBAR_SCROLL_LINE_HEIGHT, S_NAVBAR_SCROLL_HEIGHT);
 }
 
 .logoTop {
@@ -187,11 +188,13 @@ body {
 .whoDidWin {
     font-size: 12px;
     margin-right: 12px;
+    float: right;
 }
 
 .playEndDate {
     font-size: 14px;
     margin-right: 12px;
+    float: right;
 }
 
 .playItemPlayerName {
@@ -246,4 +249,8 @@ body {
 
 .strokeCommentPanel {
     font-size: 14px;
+}
+
+.whoAndWhenDidWin {
+    max-width: 300px;
 }

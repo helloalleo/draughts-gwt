@@ -13,13 +13,11 @@ import java.util.List;
 @Singleton
 public class PlayerService {
   private final Provider<PlayerDao> playerDaoProvider;
-  private final FriendService friendService;
 
   @Inject
   PlayerService(
-      Provider<PlayerDao> playerDaoProvider, FriendService friendService) {
+      Provider<PlayerDao> playerDaoProvider) {
     this.playerDaoProvider = playerDaoProvider;
-    this.friendService = friendService;
   }
 
   public Player saveOrCreate(Player player) {

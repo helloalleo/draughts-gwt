@@ -87,5 +87,7 @@ public interface AppResources extends ClientBundle {
     String navbarElemTop();
 
     String navbarElemScroll();
+
+    String whoAndWhenDidWin();
   }
 }

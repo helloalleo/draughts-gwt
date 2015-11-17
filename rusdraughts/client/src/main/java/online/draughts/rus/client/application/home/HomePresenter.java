@@ -20,6 +20,7 @@ import online.draughts.rus.client.event.UpdatePlayShowPanelEventHandler;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
@@ -50,7 +51,8 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       ResourceDelegate<GamesResource> gamesDelegate) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
-    INIT_SHOW_GAMES_PAGE_SIZE = Integer.valueOf(config.initShowGamesPageSize());
+    INIT_SHOW_GAMES_PAGE_SIZE = getIncrementPlaysOnPage(config, cookies);
+    Logger.debug(INIT_SHOW_GAMES_PAGE_SIZE);
     getView().setUiHandlers(this);
 
     this.currentSession = currentSession;
@@ -59,6 +61,14 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     this.cookies = cookies;
     cookies.setLocation(NameTokens.homePage);
     bindEvent();
+  }
+
+  public static int getIncrementPlaysOnPage(ClientConfiguration config, Cookies cookies) {
+    int gamesOnPageCounter = cookies.getGamesOnPageCounter();
+    Logger.debug(gamesOnPageCounter);
+    int gamesOnPage = PlayShowPanel.GAMES_ON_PAGE[PlayShowPanel.GAMES_ON_PAGE.length - gamesOnPageCounter - 1];
+    Logger.debug(gamesOnPage);
+    return Integer.valueOf(config.initShowGamesPageSize()) / gamesOnPage;
   }
 
   private void bindEvent() {

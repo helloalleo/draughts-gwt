@@ -9,24 +9,31 @@
             <g:HTMLPanel ui:field="draughtsDesk" debugId="draughtsDesk"/>
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="notationColumn" addStyleNames="{res.style.notationColumn}">
-            <ui:msg description="Ход" key="turn">
-                <b>Ход:</b>
-            </ui:msg>
-            <g:HTML ui:field="turnLabel" text="Игра не началась">
-                <ui:attribute name="text"/>
-            </g:HTML>
-            <ui:msg description="Сбито шашек" key="beatDraughts">
-                <b>Сбито шашек:</b>
-            </ui:msg>
-            <g:Label ui:field="beatenMineDraughtsLabel" text="0 - Белых"/>
-            <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных"/>
-            <b:Button ui:field="cancelMove" text="Отменить ход" addStyleNames="btn btn-default btn-block">
-                <ui:attribute name="text"/>
-            </b:Button>
-            <ui:msg description="Нотация" key="notationList">
-                <b>Нотация:</b>
-            </ui:msg>
-            <g:HTMLPanel ui:field="notationList"/>
+            <g:HTMLPanel ui:field="infoHTMLPanel">
+                <ui:msg description="Ход" key="turn">
+                    <b>Ход:</b>
+                </ui:msg>
+                <g:HTML ui:field="turnLabel" text="Игра не началась">
+                    <ui:attribute name="text"/>
+                </g:HTML>
+                <br/>
+                <ui:msg description="Сбито шашек" key="beatDraughts">
+                    <b>Сбито шашек:</b>
+                </ui:msg>
+                <g:Label ui:field="beatenMineDraughtsLabel" text="0 - Белых"/>
+                <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных"/>
+                <br/>
+                <b:Button ui:field="cancelMove" text="Отменить ход" addStyleNames="btn btn-default btn-block">
+                    <ui:attribute name="text"/>
+                </b:Button>
+                <br/>
+            </g:HTMLPanel>
+            <g:HTMLPanel ui:field="notationHTMLPanel">
+                <ui:msg description="Нотация" key="notationList">
+                    <b>Нотация:</b>
+                </ui:msg>
+                <g:HTMLPanel ui:field="notationList"/>
+            </g:HTMLPanel>
         </g:HTMLPanel>
         <g:HTMLPanel ui:field="playerListColumn" addStyleNames="{res.style.playerList}">
             <span>

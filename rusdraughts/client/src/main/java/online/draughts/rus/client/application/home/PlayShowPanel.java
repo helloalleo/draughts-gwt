@@ -32,7 +32,7 @@ public class PlayShowPanel extends Composite {
   @UiField
   HTMLPanel playRowList;
 
-  private final int[] gameOnPanelArr = {1, 2, 3, 4, 6};
+  public static final int[] GAMES_ON_PAGE = {1, 2, 3, 4, 6};
   private int gamesOnPanelCounter = 1;
   private List<Game> gameList;
 
@@ -55,7 +55,7 @@ public class PlayShowPanel extends Composite {
     this.showPanelFactory = showPanelFactory;
     this.cookies = cookies;
     this.player = currentSession.getPlayer();
-    INCREMENT_SIZE = Integer.valueOf(config.incrementPlayShowSize());
+    INCREMENT_SIZE = HomePresenter.getIncrementPlaysOnPage(config, cookies);
     this.homeViewProvider = homeViewProvider;
     initWidget(binder.createAndBindUi(this));
   }
@@ -81,7 +81,7 @@ public class PlayShowPanel extends Composite {
 
         int maxScrollTop = getOffsetHeight() - Window.getScrollTop();
         if (lastScrollPos >= maxScrollTop && updateFlag) {
-          final int newPageSize = gameList.size() + INCREMENT_SIZE;
+          final int newPageSize = INCREMENT_SIZE;
           PlayShowPanel.this.homeViewProvider.get().getMoreGames(newPageSize);
           lastMaxHeight = maxScrollTop;
           updateFlag = false;
@@ -114,7 +114,7 @@ public class PlayShowPanel extends Composite {
       return 0;
     }
 
-    final int gamesInRow = gameOnPanelArr[gamesOnPanelCounter];
+    final int gamesInRow = GAMES_ON_PAGE[gamesOnPanelCounter];
     int filledGamesInRow = this.gameList.size() % gamesInRow;
     int offsetRow = 0;
     // в начале дополняем существующую строку
@@ -122,7 +122,7 @@ public class PlayShowPanel extends Composite {
       Row lastRow = (Row) playRowList.getWidget(playRowList.getWidgetCount() - 2);
       for (int i = 0; i < gamesInRow - filledGamesInRow; i++) {
         Column column = new Column("MD_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow);
-        final PlayItem item = showPanelFactory.createItem(player, gameList.get(i));
+        final PlayItem item = showPanelFactory.createItem(gamesInRow, player, gameList.get(i));
         column.add(item);
         lastRow.add(column);
 
@@ -167,7 +167,7 @@ public class PlayShowPanel extends Composite {
     }
     playRowList.clear();
     List<Game> rowGameList = new ArrayList<>();
-    final int gameInRow = gameOnPanelArr[gamesOnPanelCounter];
+    final int gameInRow = GAMES_ON_PAGE[gamesOnPanelCounter];
     for (int i = 0; i < gameList.size(); i++) {
       if ((i + 1) % gameInRow == 0) {
         rowGameList.add(gameList.get(i));
@@ -189,7 +189,7 @@ public class PlayShowPanel extends Composite {
     }
     for (Game game : rowGameList) {
       Column column = new Column("MD_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow);
-      final PlayItem item = showPanelFactory.createItem(player, game);
+      final PlayItem item = showPanelFactory.createItem(gamesInRow, player, game);
       column.add(item);
       row.add(column);
     }
@@ -204,7 +204,7 @@ public class PlayShowPanel extends Composite {
       homeViewProvider.get().setEnableLessGameButton(true);
     }
     resetGames(gameList);
-    if (gamesOnPanelCounter == gameOnPanelArr.length - 1) {
+    if (gamesOnPanelCounter == GAMES_ON_PAGE.length - 1) {
       homeViewProvider.get().setEnableMoreGameButton(false);
     }
   }

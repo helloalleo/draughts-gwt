@@ -13,7 +13,7 @@ import online.draughts.rus.shared.model.Player;
  */
 public interface PlayShowPanelFactory {
 
-  PlayItem createItem(Player player, Game game);
+  PlayItem createItem(int gamesInRow, Player player, Game game);
 
   PlayShowPanel createShowPanel();
 }

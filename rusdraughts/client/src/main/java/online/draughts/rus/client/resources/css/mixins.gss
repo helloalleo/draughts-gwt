@@ -17,6 +17,7 @@
     height: HEIGHT !important;
 }
 
-@defmixin navbarCommon(BGCOLOR) {
+@defmixin navbarCommon(BGCOLOR, BORDER_COLOR) {
     background: BGCOLOR;
+    border-color: BORDER_COLOR;
 }

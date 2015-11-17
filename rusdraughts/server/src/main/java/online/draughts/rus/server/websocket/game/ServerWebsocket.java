@@ -48,7 +48,6 @@ public class ServerWebsocket {
 
   @OnOpen
   public void onOpen(Session session) {
-    System.out.println("New connection " + session.getId());
     session.setMaxIdleTimeout(MAX_IDLE_TIMEOUT);
   }
 
@@ -58,7 +57,6 @@ public class ServerWebsocket {
       return;
     }
 
-    System.out.println(gameMessage.toString());
     switch (gameMessage.getMessageType()) {
       case PLAYER_REGISTER:
         handleNewPlayer(gameMessage, session);
@@ -135,7 +133,6 @@ public class ServerWebsocket {
     playerService.saveOrCreateOnServer(player);
 
     peers.put(player, session);
-    System.out.println("Register new player: " + player.getId() + " " + session.getId());
     updatePlayerList(session);
   }
 
@@ -178,7 +175,6 @@ public class ServerWebsocket {
     player.setPlaying(false);
     playerService.saveOrCreateOnServer(player);
 
-    System.out.println("Disconnected: " + player.getId() + " " + session.getId());
     peers.remove(player);
     updatePlayerList(session);
   }

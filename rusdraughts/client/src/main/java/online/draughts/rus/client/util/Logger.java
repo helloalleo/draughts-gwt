@@ -23,6 +23,10 @@ public class Logger {
     getInstance().log.debug(message);
   }
 
+  public static void debug(int msg) {
+    debug(String.valueOf(msg));
+  }
+
   /**
    * SingletonHolder is loaded on the first execution of Singleton.getInstance()
    * or the first access to SingletonHolder.INSTANCE, not before.

@@ -21,11 +21,14 @@ import online.draughts.rus.shared.model.Player;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Image;
 
+import java.util.Date;
+
 public class PlayItem extends Composite {
 
   private final DraughtsMessages messages = GWT.create(DraughtsMessages.class);
   private final AppResources resources = GWT.create(AppResources.class);
   private final static String PLAYER_COLOR_DELIMITER = ": ";
+  private final int gamesInRow;
   private DraughtsPlayerPresenter draughtsPlayer;
 
   @UiField
@@ -42,14 +45,19 @@ public class PlayItem extends Composite {
   HTML playEndDate;
   @UiField
   Button playGame;
+  @UiField
+  HTMLPanel whoAndWhenDidWin;
 
   @Inject
   PlayItem(Binder binder,
            final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
            final HomePresenter homePresenter,
-           @Assisted Player player, @Assisted final Game game) {
+           @Assisted int gamesInRow,
+           @Assisted Player player,
+           @Assisted final Game game) {
     initWidget(binder.createAndBindUi(this));
 
+    this.gamesInRow = gamesInRow;
     panel.addStyleName(resources.style().playItem());
     setGame(player, game);
 
@@ -63,17 +71,30 @@ public class PlayItem extends Composite {
   }
 
   public void setGame(Player player, Game game) {
+    // todo идентификатор игры в качестве анчора
     if (game.getPlayEndStatus() != null) {
       whoDidWin.setHTML(TrUtils.translateEndGame(game.getPlayEndStatus()));
-      whoDidWin.getElement().addClassName(resources.style().whoDidWin());
-      whoDidWin.getElement().addClassName("pull-right");
     }
-    if (game.getPlayFinishDate() != null) {
-      String date = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM)
-          .format(game.getPlayFinishDate());
+    final Date playFinishDate = game.getPlayFinishDate();
+    if (playFinishDate != null) {
+      final DateTimeFormat dateTimeFromat;
+      switch (gamesInRow) {
+        case 2:
+          dateTimeFromat = DateTimeFormat.getFormat("EEEE, dd MMMM yyyy, HH:mm:ss");
+          break;
+        case 4:
+          dateTimeFromat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
+          break;
+        case 6:
+          dateTimeFromat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT);
+          break;
+        default:
+          dateTimeFromat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
+          break;
+      }
+      String date = DateTimeFormat.getFormat(dateTimeFromat.getPattern())
+          .format(playFinishDate);
       playEndDate.setHTML(date);
-      playEndDate.getElement().addClassName(resources.style().playEndDate());
-      playEndDate.getElement().addClassName("pull-right");
     }
     if (game.getEndGameScreenshot() != null) {
       endGameScreenshot.setUrl(game.getEndGameScreenshot());

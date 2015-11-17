@@ -1,22 +1,17 @@
 package online.draughts.rus.client.application.home;
 
-import com.ait.lienzo.client.core.shape.Circle;
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.client.core.shape.Text;
 import com.ait.lienzo.client.widget.LienzoPanel;
-import com.ait.lienzo.shared.core.types.ColorName;
 import com.ait.lienzo.shared.core.types.DataURLType;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SafeHtmlCell;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.event.dom.client.MouseDownEvent;
-import com.google.gwt.event.dom.client.MouseDownHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -29,7 +24,6 @@ import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.inject.Inject;
-import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.application.widget.dialog.ConfirmeDialogBox;
@@ -38,14 +32,12 @@ import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.gin.NotationPanelFactory;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
 import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Friend;
-import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Move;
 import online.draughts.rus.shared.model.Player;
 import org.gwtbootstrap3.client.ui.Button;
@@ -97,6 +89,10 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   CellTable<Friend> playerFriendCellTable;
   @UiField
   CellTable<Player> playerCellTable;
+  @UiField
+  HTMLPanel infoHTMLPanel;
+  @UiField
+  HTMLPanel notationHTMLPanel;
   SingleSelectionModel<Friend> playerFriendSelectionModel;
   SingleSelectionModel<Player> playerSelectionModel;
   private boolean prevSelected = false;
@@ -240,7 +236,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   private void alignNotationPanel() {
     if (Window.getClientWidth() > 0) {
-      String notationHeight = lienzoPanel.getHeight() - 170 + "px";
+      String notationHeight = lienzoPanel.getHeight() - infoHTMLPanel.getOffsetHeight() - 20 + "px";
       notationPanel.setHeight(notationHeight);
     }
   }
