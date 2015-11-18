@@ -26,14 +26,6 @@ public class GameMessage extends PersistableObjectImpl {
   @JoinColumn(name = "receiver_id")
   private Player receiver;
 
-//  @ManyToOne(fetch = FetchType.LAZY)
-//  @JoinColumn(name = "sender_game_id")
-//  private Player senderGame;
-//
-//  @ManyToOne(fetch = FetchType.LAZY)
-//  @JoinColumn(name = "receiver_game_id")
-//  private Player receiverGame;
-
   private String message;
 
   @Enumerated(EnumType.STRING)

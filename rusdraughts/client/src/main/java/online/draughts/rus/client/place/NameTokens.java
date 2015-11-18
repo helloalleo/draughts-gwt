@@ -33,7 +33,7 @@ public class NameTokens {
   }
 
   public Link[] getLeftLinks() {
-    return new Link[]{homeLink, playLink};
+    return new Link[]{homeLink};
   }
 
   public Link[] getRightLinks() {
@@ -46,6 +46,10 @@ public class NameTokens {
 
   public Link[] getProfileLinks() {
     return new Link[]{settingsLink};
+  }
+
+  public Link[] getLeftAuthLinks() {
+    return new Link[]{homeLink, playLink};
   }
 
   public static class Link {

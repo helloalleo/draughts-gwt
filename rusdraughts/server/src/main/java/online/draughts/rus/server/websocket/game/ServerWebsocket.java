@@ -1,10 +1,13 @@
 package online.draughts.rus.server.websocket.game;
 
 import com.google.inject.Inject;
+import com.google.inject.Provider;
+import com.google.inject.name.Named;
 import online.draughts.rus.server.config.CustomConfigurator;
 import online.draughts.rus.server.service.GameMessageService;
 import online.draughts.rus.server.service.GameService;
 import online.draughts.rus.server.service.PlayerService;
+import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.server.util.Utils;
 import online.draughts.rus.server.websocket.game.message.GameMessageDecoder;
 import online.draughts.rus.server.websocket.game.message.GameMessageEncoder;
@@ -17,6 +20,7 @@ import javax.websocket.*;
 import javax.websocket.server.ServerEndpoint;
 import java.io.IOException;
 import java.util.*;
+import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -33,17 +37,23 @@ public class ServerWebsocket {
 
   private static Map<Player, Session> peers = Collections.synchronizedMap(new HashMap<Player, Session>());
   private static final long MAX_IDLE_TIMEOUT = 1000 * 60 * 15;
-  private PlayerService playerService;
-  private GameMessageService gameMessageService;
-  private GameService gameService;
+  private final PlayerService playerService;
+  private final GameMessageService gameMessageService;
+  private final GameService gameService;
+  private final Provider<Boolean> authProvider;
+  private final Logger logger;
 
   @Inject
   ServerWebsocket(PlayerService playerService,
                   GameService gameService,
-                  GameMessageService gameMessageService) {
+                  GameMessageService gameMessageService,
+                  @Named(AuthUtils.AUTHENTICATED) Provider<Boolean> authProvider,
+                  Logger logger) {
     this.playerService = playerService;
     this.gameService = gameService;
     this.gameMessageService = gameMessageService;
+    this.authProvider = authProvider;
+    this.logger = logger;
   }
 
   @OnOpen
@@ -57,6 +67,13 @@ public class ServerWebsocket {
       return;
     }
 
+    // проверка что пользователь аутентифицирован на сайте
+//    if (authProvider.get()) {
+//      logger.info("Unauthorized access: " + gameMessage);
+//      return;
+//    }
+
+    // разбор сообщения
     switch (gameMessage.getMessageType()) {
       case PLAYER_REGISTER:
         handleNewPlayer(gameMessage, session);
@@ -116,16 +133,6 @@ public class ServerWebsocket {
   private void handleNewPlayer(GameMessage message, Session session) {
     Player player = message.getSender();
     final Long playerId = player.getId();
-//    if (!peers.isEmpty() && playerId != null) {
-//      for (Player sh : peers.keySet()) {
-//        if (playerId.equals(sh.getId())) {
-//          peers.remove(sh);
-//          peers.put(player, session);
-//          break;
-//        }
-//      }
-//    }
-
     player = playerService.find(playerId);
 
     player.setOnline(true);

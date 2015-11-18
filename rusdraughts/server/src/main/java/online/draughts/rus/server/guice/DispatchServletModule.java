@@ -16,15 +16,25 @@
 
 package online.draughts.rus.server.guice;
 
+import com.google.inject.Key;
+import com.google.inject.Provides;
+import com.google.inject.name.Named;
+import com.google.inject.name.Names;
 import com.google.inject.persist.PersistFilter;
 import com.google.inject.persist.jpa.JpaPersistModule;
 import com.google.inject.servlet.ServletModule;
+import com.google.inject.servlet.SessionScoped;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
 import online.draughts.rus.server.config.CustomConfigurator;
 import online.draughts.rus.server.servlet.GameGiff;
 import online.draughts.rus.server.servlet.LogoutServlet;
 import online.draughts.rus.server.servlet.oauth.*;
+import online.draughts.rus.server.util.AuthUtils;
+
+import javax.servlet.*;
+import javax.servlet.http.HttpServletRequest;
+import java.io.IOException;
 
 public class DispatchServletModule extends ServletModule {
 
@@ -34,6 +44,7 @@ public class DispatchServletModule extends ServletModule {
   public void configureServlets() {
     install(new JpaPersistModule(DRAUGHTS_PU));
     filter("/*").through(PersistFilter.class);
+    filter("/*").through(createUserIdScopingFilter());
 
     serve("/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
     serve("/logout").with(LogoutServlet.class);
@@ -46,5 +57,38 @@ public class DispatchServletModule extends ServletModule {
     serve("/gameGiff").with(GameGiff.class);
 
     requestStaticInjection(CustomConfigurator.class);
+  }
+
+  protected Filter createUserIdScopingFilter() {
+    return new Filter() {
+      @Override
+      public void doFilter(
+          ServletRequest request, ServletResponse response, FilterChain chain)
+          throws IOException, ServletException {
+        HttpServletRequest httpRequest = (HttpServletRequest) request;
+        if (httpRequest != null) {
+          Boolean authenticated = Boolean.valueOf(httpRequest.getParameter(AuthUtils.AUTHENTICATED));
+          httpRequest.setAttribute(
+              Key.get(Boolean.class, Names.named(AuthUtils.AUTHENTICATED)).toString(),
+              authenticated);
+          chain.doFilter(request, response);
+        }
+      }
+
+      @Override
+      public void init(FilterConfig filterConfig) throws ServletException {
+      }
+
+      @Override
+      public void destroy() {
+      }
+    };
+  }
+
+  @Provides
+  @Named(AuthUtils.AUTHENTICATED)
+  @SessionScoped
+  Boolean provideAuthenticated() {
+    throw new IllegalStateException("user id must be manually seeded");
   }
 }

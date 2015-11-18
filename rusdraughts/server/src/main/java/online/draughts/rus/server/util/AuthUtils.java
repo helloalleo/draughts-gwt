@@ -18,12 +18,18 @@ import java.util.Date;
  */
 public class AuthUtils {
 
-  public static Boolean isAuthenticated(HttpSession session) {
+  public static final String AUTHENTICATED = "isAuthenticated";
+
+  public static boolean isAuthenticated(HttpSession session) {
     if (session == null) {
       return false;
     }
-    Object isAuth = session.getAttribute("isAuthenticated");
+    Object isAuth = session.getAttribute(AUTHENTICATED);
     return isAuth == null ? Boolean.FALSE : (Boolean) isAuth;
+  }
+
+  public static boolean isNotAuthenticated(HttpSession session) {
+    return !isAuthenticated(session);
   }
 
   public static void login(HttpServletRequest req) {

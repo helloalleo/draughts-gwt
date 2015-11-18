@@ -104,9 +104,16 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   }
 
   private void setLinks() {
-    for (final NameTokens.Link link : nameTokens.getLeftLinks()) {
-      final AnchorListItem anchor = createAnchor(link);
-      navLeft.add(anchor);
+    if (getUiHandlers().isLoggedIn()) {
+      for (final NameTokens.Link link : nameTokens.getLeftAuthLinks()) {
+        final AnchorListItem anchor = createAnchor(link);
+        navLeft.add(anchor);
+      }
+    } else {
+      for (final NameTokens.Link link : nameTokens.getLeftLinks()) {
+        final AnchorListItem anchor = createAnchor(link);
+        navLeft.add(anchor);
+      }
     }
 
     if (getUiHandlers().isLoggedIn()) {
