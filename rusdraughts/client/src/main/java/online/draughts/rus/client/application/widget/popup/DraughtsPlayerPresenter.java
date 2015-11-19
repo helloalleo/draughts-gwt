@@ -7,7 +7,7 @@ import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import online.draughts.rus.client.event.CheckWinnerEvent;
 import online.draughts.rus.client.event.NotationStrokeEvent;
-import online.draughts.rus.client.event.PlayMoveMessageEvent;
+import online.draughts.rus.client.event.PlayMovePlayerMessageEvent;
 import online.draughts.rus.client.event.TurnChangeEvent;
 import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.model.Game;
@@ -70,7 +70,7 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
 
   @Override
   public void doPlayerMove(Move move) {
-    fireEvent(new PlayMoveMessageEvent(move));
+    fireEvent(new PlayMovePlayerMessageEvent(move));
   }
 
   public interface MyView extends PopupView, HasUiHandlers<DraughtsPlayerUiHandlers> {

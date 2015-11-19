@@ -16,7 +16,6 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 import static org.junit.Assert.assertEquals;
 import static org.junit.Assert.assertNotNull;
@@ -78,7 +77,7 @@ public class GameServiceTest extends BaseTest {
 
     GameMessage gameMessage = new GameMessage();
     gameMessage.setGame(game);
-    gameMessage.setMessageType(GameMessage.MessageType.PLAY_MOVE);
+    gameMessage.setMessageType(GameMessage.MessageType.PLAY_OPPONENT_MOVE);
     Move move = new Move(1, true, gameMessage, "5,6", "4,7", null,
         new HashSet<Move.MoveFlags>() {{
           add(Move.MoveFlags.SIMPLE_MOVE);
@@ -91,7 +90,7 @@ public class GameServiceTest extends BaseTest {
     game = gameService.saveOrCreate(game);
 
     gameMessage = new GameMessage();
-    gameMessage.setMessageType(GameMessage.MessageType.PLAY_MOVE);
+    gameMessage.setMessageType(GameMessage.MessageType.PLAY_OPPONENT_MOVE);
     gameMessage.setGame(game);
     move = new Move(2, false, gameMessage, "2,1", "3,0", null,
         new HashSet<Move.MoveFlags>() {{
@@ -102,7 +101,13 @@ public class GameServiceTest extends BaseTest {
     game.getGameMessages().add(gameMessage);
     game = gameService.saveOrCreate(game);
 
-    final List<GameMessage> gameMessages = Arrays.asList(game.getGameMessages().toArray(new GameMessage[0])).stream().sorted(((o1, o2) -> o1.getId().compareTo(o2.getId()))).collect(Collectors.toList());
+    final List<GameMessage> gameMessages = Arrays.asList(game.getGameMessages().toArray(new GameMessage[0]));
+    Collections.sort(gameMessages, new Comparator<GameMessage>() {
+      @Override
+      public int compare(GameMessage o1, GameMessage o2) {
+        return o1.getId().compareTo(o2.getId());
+      }
+    });
     final GameMessage gameMessage1 = gameMessages.get(0);
     final GameMessage gameMessage2 = gameMessages.get(1);
     assertEquals("1. <span id='" + game.getId() + ":0' data='" + gameMessage1.getMove().getId() + "'>d4-c5</span> <span id='" + game.getId() + ":1' data='" + gameMessage2.getMove().getId() + "'>d4-d6</span><br>", game.getNotation());

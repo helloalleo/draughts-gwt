@@ -22,7 +22,7 @@ public class Utils {
     return bufferedReader.readLine();
   }
 
-  public static String serializeGameMessageToJson(GameMessage message) {
+  public static String serializeToJson(Object message) {
     ObjectMapper objectMapper = new ObjectMapper();
     StringWriter stringWriter = new StringWriter();
     try {
@@ -34,8 +34,8 @@ public class Utils {
     return stringWriter.toString();
   }
 
-  public static GameMessage deserializeGameMessageFromJson(String json) throws IOException {
+  public static GameMessage deserializeFromJson(String json, Class clazz) throws IOException {
     ObjectMapper objectMapper = new ObjectMapper();
-    return objectMapper.readValue(json, GameMessage.class);
+    return (GameMessage) objectMapper.readValue(json, clazz);
   }
 }

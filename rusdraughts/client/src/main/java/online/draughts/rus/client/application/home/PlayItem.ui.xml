@@ -11,7 +11,7 @@
             <g:HTML ui:field="whoDidWin" addStyleNames="{res.style.whoDidWin}"/>
         </g:HTMLPanel>
         <b:Image ui:field="endGameScreenshot"/>
-        <g:HTML ui:field="whitePlayerName"/>
-        <g:HTML ui:field="blackPlayerName"/>
+        <g:HTML ui:field="whitePlayerName" addStyleNames="{res.style.playItemPlayerName}"/>
+        <g:HTML ui:field="blackPlayerName" addStyleNames="{res.style.playItemPlayerName}"/>
     </g:HTMLPanel>
 </ui:UiBinder>

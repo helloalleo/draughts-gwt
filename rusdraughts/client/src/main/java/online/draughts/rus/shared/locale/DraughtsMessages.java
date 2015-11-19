@@ -226,4 +226,6 @@ public interface DraughtsMessages extends Messages {
   String symbolsLeft();
 
   String gameNotFound();
+
+  String alreadyConnected();
 }

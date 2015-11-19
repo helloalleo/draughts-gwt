@@ -102,14 +102,8 @@ public class PlayItem extends Composite {
       endGameScreenshot.setResponsive(true);
     }
 
-    if (player != null
-        && (player.getId().equals(game.getPlayerBlack().getId())
-        || player.getId().equals(game.getPlayerWhite().getId()))) {
-      whitePlayerName.setHTML(messages.white() + PLAYER_COLOR_DELIMITER + game.getPlayerWhite().getPublicName());
-      whitePlayerName.getElement().addClassName(resources.style().playItemPlayerName());
-      blackPlayerName.setHTML(messages.black() + PLAYER_COLOR_DELIMITER + game.getPlayerBlack().getPublicName());
-      blackPlayerName.getElement().addClassName(resources.style().playItemPlayerName());
-    }
+    whitePlayerName.setHTML(messages.white() + PLAYER_COLOR_DELIMITER + game.getPlayerWhite().getPublicName());
+    blackPlayerName.setHTML(messages.black() + PLAYER_COLOR_DELIMITER + game.getPlayerBlack().getPublicName());
   }
 
   interface Binder extends UiBinder<HTMLPanel, PlayItem> {

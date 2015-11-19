@@ -21,7 +21,7 @@ import static org.junit.Assert.assertEquals;
 @RunWith(JUnit4.class)
 public class LoginTest {
 
-  private static String siteUrl = "http://localhost:8080/rus";
+  private static String siteUrl = "http://localhost:8080/";
 
   @Test
   public void oauthGoogle() {

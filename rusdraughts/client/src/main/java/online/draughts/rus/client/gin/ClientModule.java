@@ -13,7 +13,7 @@ import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.client.util.DTCookiesImpl;
 import online.draughts.rus.client.util.DTLogImpl;
 import online.draughts.rus.client.util.Log;
-import online.draughts.rus.client.websocket.WebsocketModule;
+import online.draughts.rus.client.channel.WebsocketModule;
 
 public class ClientModule extends AbstractGinModule {
   @Override

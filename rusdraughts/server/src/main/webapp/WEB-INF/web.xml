@@ -5,11 +5,6 @@
          version="2.5">
     <display-name>Draughts</display-name>
 
-    <!--<listener>-->
-        <!--<listener-class>online.draughts.rus.server.guice.GuiceServletConfig</listener-class>-->
-    <!--</listener>-->
-
-    <!--online.draughts.rus.server.guice.MyGuiceResteasyBootstrapServletContextListener-->
     <listener>
         <listener-class>
             org.jboss.resteasy.plugins.guice.GuiceResteasyBootstrapServletContextListener
@@ -36,11 +31,6 @@
         <param-value>PRODUCTION</param-value>
     </context-param>
 
-    <context-param>
-        <param-name>org.apache.tomcat.websocket.textBufferSize</param-name>
-        <param-value>524288</param-value>
-    </context-param>
-    
     <!-- this should be the same URL pattern as the servlet-mapping property -->
     <context-param>
         <param-name>resteasy.servlet.mapping.prefix</param-name>

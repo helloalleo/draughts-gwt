@@ -16,15 +16,15 @@
                         <b:Icon type="SIGN_IN" size="TIMES5" addStyleNames="{res.style.alignHorizontal}"/>
                     </b:Column>
                     <b:Column size="MD_3">
-                        <b:Anchor href="/rus/vkOAuth" icon="VK" iconSize="TIMES5"
+                        <b:Anchor href="/vkOAuth" icon="VK" iconSize="TIMES5"
                                   addStyleNames="{res.style.alignHorizontal}"/>
                     </b:Column>
                     <b:Column size="MD_3">
-                        <b:Anchor href="/rus/fbOAuth" icon="FACEBOOK_OFFICIAL" iconSize="TIMES5"
+                        <b:Anchor href="/fbOAuth" icon="FACEBOOK_OFFICIAL" iconSize="TIMES5"
                                   addStyleNames="{res.style.alignHorizontal}"/>
                     </b:Column>
                     <b:Column size="MD_3">
-                        <b:Anchor href="/rus/gOAuth" icon="GOOGLE" iconSize="TIMES5"
+                        <b:Anchor href="/gOAuth" icon="GOOGLE" iconSize="TIMES5"
                                   addStyleNames="{res.style.alignHorizontal}"/>
                     </b:Column>
                 </b:Row>

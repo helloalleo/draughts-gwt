@@ -657,7 +657,6 @@ public class Board extends Layer {
   }
 
   public void moveOpponent(Stroke stroke) {
-
     Square startSquare, endSquare, takenSquare = null;
     try {
       startSquare = getSquare(stroke.getStartSquare().getRow(), stroke.getStartSquare().getCol());
@@ -871,12 +870,6 @@ public class Board extends Layer {
         }
         view.addNotationStroke(strokeForNotation);
 
-        final Move move = MoveFactory.createMoveFromStroke(stroke)
-            .setTitle(stroke.toNotation())
-            .setHashTags(StringUtils.getHashes(getComment()));
-        view.doPlayerMove(move);
-        moveMyStack.push(stroke);
-
         AnimationProperties props = new AnimationProperties();
         props.push(AnimationProperty.Properties.X(endSquare.getCenterX()));
         props.push(AnimationProperty.Properties.Y(endSquare.getCenterY()));
@@ -889,6 +882,12 @@ public class Board extends Layer {
         selectedDraught.animate(AnimationTweener.LINEAR, props, 100);
 
         backgroundLayer.resetDeskDrawing();
+
+        final Move move = MoveFactory.createMoveFromStroke(stroke)
+            .setTitle(stroke.toNotation())
+            .setHashTags(StringUtils.getHashes(getComment()));
+        view.doPlayerMove(move);
+        moveMyStack.push(stroke);
       }
     }
   }

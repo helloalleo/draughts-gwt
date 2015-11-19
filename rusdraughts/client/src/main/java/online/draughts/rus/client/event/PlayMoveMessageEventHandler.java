@@ -9,5 +9,5 @@ import com.google.gwt.event.shared.EventHandler;
  * Time: 10:25
  */
 public interface PlayMoveMessageEventHandler extends EventHandler {
-  void onPlayMoveMessage(PlayMoveMessageEvent event);
+  void onPlayMoveMessage(PlayMovePlayerMessageEvent event);
 }

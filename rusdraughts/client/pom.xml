@@ -202,11 +202,11 @@
             <artifactId>gwt-user</artifactId>
         </dependency>
 
-        <!--WebSockets-->
+        <!--Channel -->
         <dependency>
-            <groupId>com.sksamuel.gwt</groupId>
-            <artifactId>gwt-websockets</artifactId>
-            <version>1.0.4</version>
+            <groupId>no.eirikb</groupId>
+            <artifactId>gwt-channel-api</artifactId>
+            <version>0.3</version>
         </dependency>
 
         <!--Lienzo-->
@@ -352,12 +352,12 @@
                     <logLevel>INFO</logLevel>
 
                     <extraJvmArgs>-Xmx2048m</extraJvmArgs>
-                    <bindAddress>0.0.0.0</bindAddress>
                     <warSourceDirectory>${project.basedir}/out/artifacts/draughts_dev.war</warSourceDirectory>
                     <runTarget>index.html</runTarget>
                     <module>online.draughts.rus.Application_dev</module>
                     <draftCompile>true</draftCompile>
                     <sourceLevel>${maven.compiler.source}</sourceLevel>
+                    <bindAddress>0.0.0.0</bindAddress>
                     <style>${gwt.style}</style>
                     <webappDirectory>
                         ${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}
@@ -428,33 +428,6 @@
     </build>
 
     <profiles>
-        <profile>
-            <id>dev</id>
-            <!-- The development profile is active by default -->
-            <activation>
-                <activeByDefault>true</activeByDefault>
-            </activation>
-            <properties>
-                <!--
-                    Specifies the build.profile.id property that must be equal than the name of
-                    the directory that contains the profile specific configuration file.
-                    Because the name of the directory that contains the configuration file of the
-                    development profile is dev, we must set the value of the build.profile.id
-                    property to dev.
-                -->
-                <build.profile.id>dev</build.profile.id>
-            </properties>
-
-            <build>
-                <filters>
-                    <!--
-                        Ensures that the config.properties file is always loaded from the
-                        configuration directory of the active Maven profile. 
-                    -->
-                    <filter>${project.basedir}/src/main/resources/online/draughts/rus/shared/config/profiles/${build.profile.id}/config.properties</filter>
-                </filters>
-            </build>
-        </profile>
 
         <profile>
             <id>release</id>
@@ -488,25 +461,7 @@
                         </executions>
                     </plugin>
                 </plugins>
-
-                <filters>
-                    <!--
-                        Ensures that the config.properties file is always loaded from the
-                        configuration directory of the active Maven profile. 
-                    -->
-                    <filter>${project.basedir}/src/main/java/online/draughts/rus/shared/config/profiles/${build.profile.id}/config.properties</filter>
-                </filters>
             </build>
-            <properties>
-                <!--
-                    Specifies the build.profile.id property that must be equal than the name of
-                    the directory that contains the profile specific configuration file.
-                    Because the name of the directory that contains the configuration file of the
-                    production profile is prod, we must set the value of the build.profile.id
-                    property to prod.
-                -->
-                <build.profile.id>prod</build.profile.id>
-            </properties>
         </profile>
     </profiles>
 </project>

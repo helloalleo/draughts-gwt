@@ -56,7 +56,7 @@ public class PlayTest {
   }};
   private static final String OPPONENT = "WebDriver2";
   private static final long WAIT = 120;
-  private static final String siteUrl = "http://localhost:8080/rus";
+  private static final String siteUrl = "http://localhost:8080/";
   private static final String gwtDebug = "gwt-debug-";
   private static final int DESK_CELLS = 8;
   private static final int CANVAS_OFFSET_X = 70;

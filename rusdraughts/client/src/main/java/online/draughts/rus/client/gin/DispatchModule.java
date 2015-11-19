@@ -1,6 +1,8 @@
 package online.draughts.rus.client.gin;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.inject.client.AbstractGinModule;
+import com.google.inject.Provides;
 import com.gwtplatform.dispatch.rest.client.RestApplicationPath;
 import com.gwtplatform.dispatch.rest.client.gin.RestDispatchAsyncModule;
 import com.gwtplatform.dispatch.rpc.client.gin.RpcDispatchAsyncModule;
@@ -20,13 +22,21 @@ public class DispatchModule extends AbstractGinModule {
   @Override
   protected void configure() {
     install(new RestDispatchAsyncModule.Builder()
-//        .interceptorRegistry(RestInterceptorRegistry.class)
         .build());
     install(new RpcDispatchAsyncModule.Builder()
-//        .interceptorRegistry(RpcInterceptorRegistry.class)
         .build());
 
     bindConstant().annotatedWith(SecurityCookie.class).to(JSESSIONID);
-    bindConstant().annotatedWith(RestApplicationPath.class).to(ApiPaths.ROOT);
+  }
+
+  @Provides
+  @RestApplicationPath
+  String getApplicationPath() {
+    String baseUrl = GWT.getHostPageBaseURL();
+    if (baseUrl.endsWith("/")) {
+      baseUrl = baseUrl.substring(0, baseUrl.length() - 1);
+    }
+
+    return baseUrl + ApiPaths.RESOURCE;
   }
 }

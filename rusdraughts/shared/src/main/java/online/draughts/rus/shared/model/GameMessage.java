@@ -145,7 +145,7 @@ public class GameMessage extends PersistableObjectImpl {
     PLAY_REJECT_INVITE,
     PLAY_ALREADY_PLAYING,
     PLAY_START,
-    PLAY_MOVE,
+    PLAY_OPPONENT_MOVE,
     PLAY_CANCEL_MOVE,
     PLAY_CANCEL_MOVE_RESPONSE,
     PLAY_PROPOSE_DRAW,
@@ -153,6 +153,7 @@ public class GameMessage extends PersistableObjectImpl {
     PLAY_END,
     PLAY_SURRENDER,
     NOTIFICATION_ADDED_TO_FAVORITE,
-    PLAYER_REGISTER
+    CHANNEL_CLOSE,
+    PLAYER_REGISTER;
   }
 }

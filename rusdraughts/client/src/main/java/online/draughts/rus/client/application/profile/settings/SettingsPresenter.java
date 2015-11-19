@@ -12,7 +12,7 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.UpdateAllPlayerListEvent;
-import online.draughts.rus.client.websocket.PlaySession;
+import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Player;

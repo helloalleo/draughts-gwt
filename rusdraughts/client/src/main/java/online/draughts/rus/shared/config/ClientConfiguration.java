@@ -10,8 +10,6 @@ import com.google.gwt.i18n.client.LocalizableResource;
  * Time: 16:19
  */
 public interface ClientConfiguration extends ConstantsWithLookup {
-  @LocalizableResource.Key("player.websocket.url")
-  String playerWebsocketUrl();
 
   @LocalizableResource.Key("log.level")
   String logLevel();
