@@ -14,7 +14,7 @@
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>
-            <property name="hibernate.connection.driver_class" value="org.postgresql.Driver"/>
+            <property name="hibernate.connection.driver_class" value="com.mysql.jdbc.Driver"/>
             <property name="hibernate.connection.username" value="${db.user}"/>
             <property name="hibernate.connection.password" value="${db.passwd}"/>
             <!--<property name="hibernate.connection.url" value="jdbc:postgresql://postgres2428-draughts.mircloud.host/draughts"/>-->
@@ -22,7 +22,7 @@
 
             <property name="hibernate.hbm2ddl.auto" value="update"/>
             <property name="hibernate.show_sql" value="true"/>
-            <property name="hibernate.dialect" value="org.hibernate.dialect.PostgreSQL9Dialect"/>
+            <property name="hibernate.dialect" value="org.hibernate.dialect.MySQL5InnoDBDialect"/>
         </properties>
     </persistence-unit>
 </persistence>

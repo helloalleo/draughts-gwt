@@ -16,7 +16,6 @@
                 <g:HTML ui:field="turnLabel" text="Игра не началась">
                     <ui:attribute name="text"/>
                 </g:HTML>
-                <br/>
                 <ui:msg description="Сбито шашек" key="beatDraughts">
                     <b>Сбито шашек:</b>
                 </ui:msg>

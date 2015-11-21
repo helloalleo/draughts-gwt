@@ -23,6 +23,7 @@ import java.util.Stack;
  * Time: 13:26
  */
 public class Board extends Layer {
+  private static final double ANIMATION_DURATION = 50;
   public static int DRAUGHTS_ON_SIDE = 12;
   private List<Square> capturedSquares = new ArrayList<>();
   private List<Draught> myDraughtList;
@@ -620,7 +621,7 @@ public class Board extends Layer {
           public void onClose(IAnimation iAnimation, IAnimationHandle iAnimationHandle) {
             remove(takenDraught);
             if (!isEmulate() && !clearDesk) {
-              view.checkWinner();
+              getView().checkWinner();
             }
           }
         });
@@ -693,7 +694,7 @@ public class Board extends Layer {
       if (!isWhite()) {
         strokeForNotation = stroke.flip();
       }
-      view.addNotationStroke(strokeForNotation);
+      getView().addNotationStroke(strokeForNotation);
     }
 
     doMove(stroke); // сделать ход
@@ -806,7 +807,7 @@ public class Board extends Layer {
 
   public void toggleTurn() {
     turn = !turn;
-    view.toggleTurn(turn);
+    getView().toggleTurn(turn);
   }
 
   public List<Draught> getMyDraughts() {
@@ -853,7 +854,7 @@ public class Board extends Layer {
       if (highlightedSquares.contains(endSquare) && startSquare != null && startSquare.isOnLine(endSquare)
           && endSquare != null) {
         // получаем флаги передвижения и взятую шашку
-        Stroke stroke = calcStroke(startSquare, endSquare);
+        final Stroke stroke = calcStroke(startSquare, endSquare);
 
         boolean isSimpleMove = stroke.isSimple();
         if (isSimpleMove || stroke.isStopBeat()) {
@@ -868,26 +869,42 @@ public class Board extends Layer {
         if (!isWhite()) {
           strokeForNotation = stroke.flip();
         }
-        view.addNotationStroke(strokeForNotation);
+        getView().addNotationStroke(strokeForNotation);
 
         AnimationProperties props = new AnimationProperties();
         props.push(AnimationProperty.Properties.X(endSquare.getCenterX()));
         props.push(AnimationProperty.Properties.Y(endSquare.getCenterY()));
 
-        selectedDraught.animate(AnimationTweener.LINEAR, props, 100);
+        final AnimationCallback animationCallback = new AnimationCallback();
+        selectedDraught.animate(AnimationTweener.LINEAR, props, ANIMATION_DURATION, new IAnimationCallback() {
+          @Override
+          public void onStart(IAnimation animation, IAnimationHandle handle) {
+          }
+
+          @Override
+          public void onFrame(IAnimation animation, IAnimationHandle handle) {
+          }
+
+          @Override
+          public void onClose(IAnimation animation, IAnimationHandle handle) {
+            final Move move = MoveFactory.createMoveFromStroke(stroke)
+                .setTitle(stroke.toNotation())
+                .setHashTags(StringUtils.getHashes(getComment()));
+
+            if (getView().getPlayer().isSubscribed() || getView().getOpponent().isSubscribed()) {
+              move.setScreenshot(getView().takeScreenshot());
+            }
+            backgroundLayer.resetDeskDrawing();
+
+            getView().doPlayerMove(move);
+            moveMyStack.push(stroke);
+          }
+        });
 
         props = new AnimationProperties();
         props.push(AnimationProperty.Properties.SCALE(1.0));
 
-        selectedDraught.animate(AnimationTweener.LINEAR, props, 100);
-
-        backgroundLayer.resetDeskDrawing();
-
-        final Move move = MoveFactory.createMoveFromStroke(stroke)
-            .setTitle(stroke.toNotation())
-            .setHashTags(StringUtils.getHashes(getComment()));
-        view.doPlayerMove(move);
-        moveMyStack.push(stroke);
+        selectedDraught.animate(AnimationTweener.LINEAR, props, ANIMATION_DURATION);
       }
     }
   }
@@ -1007,5 +1024,9 @@ public class Board extends Layer {
 
   public void setView(PlayComponent view) {
     this.view = view;
+  }
+
+  public PlayComponent getView() {
+    return view;
   }
 }

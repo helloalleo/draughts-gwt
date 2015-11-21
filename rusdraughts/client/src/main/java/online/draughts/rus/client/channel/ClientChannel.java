@@ -220,7 +220,6 @@ public class ClientChannel implements ChannelListener {
 
     sendGameMessage(gameMessage);
 
-    playSession.setPlayer(player);
     playSession.setConnected(true);
     eventBus.fireEvent(new ConnectedToPlayEvent());
   }
@@ -317,9 +316,10 @@ public class ClientChannel implements ChannelListener {
 
   @SuppressWarnings("unused")
   private void handlePlayEndGame(GameMessage gameMessage) {
-    if (getGame() != null) {
-      Game game = getGame();
-      final Game.GameEnds gameEnd = isPlayerHasWhiteColor() ? Game.GameEnds.BLACK_LEFT : Game.GameEnds.WHITE_LEFT;
+    if (playSession.getGame() != null) {
+      Game game = playSession.getGame();
+      final Game.GameEnds gameEnd = playSession.isPlayerHasWhiteColor()
+          ? Game.GameEnds.BLACK_LEFT : Game.GameEnds.WHITE_LEFT;
       eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
         @Override
         public void onFailure(Throwable throwable) {
@@ -474,40 +474,10 @@ public class ClientChannel implements ChannelListener {
 
   public void connect() {
     player = currentSession.getPlayer();
+    playSession.setPlayer(player);
+
     channel = new Channel(String.valueOf(player.getId()));
     channel.addChannelListener(this);
     channel.join();
-  }
-
-  public boolean isConnected() {
-    return playSession.isConnected();
-  }
-
-  public Player getPlayer() {
-    return player;
-  }
-
-  public void setPlayer(Player player) {
-    this.player = player;
-  }
-
-  public Player getOpponent() {
-    return playSession.getOpponent();
-  }
-
-  public Game getGame() {
-    return playSession.getGame();
-  }
-
-  public boolean isPlayerHasWhiteColor() {
-    return playSession.isPlayerHasWhiteColor();
-  }
-
-  public void setOpponent(Player opponent) {
-    playSession.setOpponent(opponent);
-  }
-
-  public void setGame(Game game) {
-    playSession.setGame(game);
   }
 }

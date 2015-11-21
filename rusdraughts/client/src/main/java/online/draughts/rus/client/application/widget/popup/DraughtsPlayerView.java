@@ -691,6 +691,21 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     getUiHandlers().doPlayerMove(move);
   }
 
+  @Override
+  public Player getPlayer() {
+    throw new RuntimeException("Not implemented");
+  }
+
+  @Override
+  public Player getOpponent() {
+    throw new RuntimeException("Not implemented");
+  }
+
+  @Override
+  public String takeScreenshot() {
+    throw new RuntimeException("Not implemented");
+  }
+
   interface Binder extends UiBinder<PopupPanel, DraughtsPlayerView> {
   }
 

@@ -21,7 +21,7 @@ import java.util.Objects;
 public class Friend implements BasePersistableObject {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.SEQUENCE)
+  @GeneratedValue(strategy = GenerationType.TABLE)
   private Long id;
 
   @EmbeddedId

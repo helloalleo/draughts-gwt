@@ -27,7 +27,7 @@
         <guicy-resteasy.version>1.2</guicy-resteasy.version>
 
         <!--PostgreSQL-->
-        <postgresql.version>9.3-1102-jdbc41</postgresql.version>
+        <!--<postgresql.version>9.3-1102-jdbc41</postgresql.version>-->
 
         <!--RESTEasy-->
         <jersey.version>1.19</jersey.version>
@@ -45,6 +45,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
 
         <target.jdk>1.7</target.jdk>
+        <mysql-connector-java.version>5.1.34</mysql-connector-java.version>
     </properties>
 
     <prerequisites>
@@ -172,10 +173,15 @@
         </dependency>
 
         <!--Postgresql-->
+        <!--<dependency>-->
+            <!--<groupId>org.postgresql</groupId>-->
+            <!--<artifactId>postgresql</artifactId>-->
+            <!--<version>${postgresql.version}</version>-->
+        <!--</dependency>-->
         <dependency>
-            <groupId>org.postgresql</groupId>
-            <artifactId>postgresql</artifactId>
-            <version>${postgresql.version}</version>
+            <groupId>mysql</groupId>
+            <artifactId>mysql-connector-java</artifactId>
+            <version>${mysql-connector-java.version}</version>
         </dependency>
 
         <!--Json Processing-->

@@ -29,9 +29,11 @@ import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.application.widget.dialog.ConfirmeDialogBox;
 import online.draughts.rus.client.application.widget.dialog.InviteDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
+import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.gin.NotationPanelFactory;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
@@ -56,6 +58,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private final DraughtsMessages messages;
   private final AppResources resources;
   private final NotationPanelFactory notationPanelFactory;
+  private final PlaySession playSession;
   @UiField
   HTMLPanel main;
   @UiField
@@ -107,10 +110,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   PlayComponentView(Binder binder,
                     DraughtsMessages messages,
                     AppResources resources,
+                    PlaySession playSession,
                     NotationPanelFactory notationPanelFactory) {
     this.messages = messages;
     this.resources = resources;
     this.notationPanelFactory = notationPanelFactory;
+    this.playSession = playSession;
 
     initWidget(binder.createAndBindUi(this));
 
@@ -126,6 +131,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     if (refreshConnectionToServer) {
       getUiHandlers().refreshConnectionToServer();
       refreshConnectionToServer = false;
+      player = playSession.getPlayer();
+      Logger.debug("PLAYER :: " + player);
     } else {
       Player selectedPlayer = null;
       if (playerSelectionModel.getSelectedObject() != null) {
@@ -395,11 +402,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void setPlayer(Player player) {
-    this.player = player;
-  }
-
-  @Override
   public void toggleInPlayButton() {
     playButton.setType(ButtonType.DEFAULT);
     playButton.setIcon(IconType.PLAY);
@@ -575,6 +577,16 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public void doPlayerMove(Move move) {
     getUiHandlers().doPlayerMove(move);
+  }
+
+  @Override
+  public Player getPlayer() {
+    return playSession.getPlayer();
+  }
+
+  @Override
+  public Player getOpponent() {
+    return playSession.getOpponent();
   }
 
   interface Binder extends UiBinder<Widget, PlayComponentView> {

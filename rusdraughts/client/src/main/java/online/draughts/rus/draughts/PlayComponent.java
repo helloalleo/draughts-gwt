@@ -1,6 +1,7 @@
 package online.draughts.rus.draughts;
 
 import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.shared.model.Player;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,4 +17,10 @@ public interface PlayComponent {
   void toggleTurn(boolean turn);
 
   void doPlayerMove(Move move);
+
+  Player getPlayer();
+
+  Player getOpponent();
+
+  String takeScreenshot();
 }

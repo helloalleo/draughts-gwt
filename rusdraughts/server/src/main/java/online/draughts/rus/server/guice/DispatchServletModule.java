@@ -55,7 +55,7 @@ public class DispatchServletModule extends ServletModule {
     serve("/fbOAuthCallback").with(OAuthFacebookCallbackServlet.class);
     serve("/gOAuth").with(OAuthGoogleServlet.class);
     serve("/gOAuthCallback").with(OAuthGoogleCallbackServlet.class);
-    serve("/gameGiff").with(GameGiff.class);
+    serve("/getGame").with(GameGiff.class);
   }
 
   protected Filter createUserIdScopingFilter() {
