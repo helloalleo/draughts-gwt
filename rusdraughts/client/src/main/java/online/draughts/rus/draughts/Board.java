@@ -891,9 +891,9 @@ public class Board extends Layer {
                 .setTitle(stroke.toNotation())
                 .setHashTags(StringUtils.getHashes(getComment()));
 
-            if (getView().getPlayer().isSubscribed() || getView().getOpponent().isSubscribed()) {
-              move.setScreenshot(getView().takeScreenshot());
-            }
+//            if (isWhite() && getView().getPlayer().isSubscribed() || getView().getOpponent().isSubscribed()) {
+//              move.setScreenshot(getView().takeScreenshot());
+//            }
             backgroundLayer.resetDeskDrawing();
 
             getView().doPlayerMove(move);
