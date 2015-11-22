@@ -4,6 +4,7 @@
     <version>1</version>
     <threadsafe>true</threadsafe>
     <sessions-enabled>true</sessions-enabled>
+    <use-google-connector-j>true</use-google-connector-j>
 
     <!-- Configure java.util.logging -->
     <system-properties>

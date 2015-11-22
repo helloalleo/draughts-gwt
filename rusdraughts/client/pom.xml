@@ -352,7 +352,6 @@
                     <logLevel>INFO</logLevel>
 
                     <extraJvmArgs>-Xmx2048m</extraJvmArgs>
-                    <warSourceDirectory>${project.basedir}/out/artifacts/draughts_dev.war</warSourceDirectory>
                     <runTarget>index.html</runTarget>
                     <module>online.draughts.rus.Application_dev</module>
                     <draftCompile>true</draftCompile>
@@ -362,6 +361,9 @@
                     <webappDirectory>
                         ${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}
                     </webappDirectory>
+                    <outputDirectory>
+                        ${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}
+                    </outputDirectory>
                 </configuration>
                 <executions>
                     <execution>
@@ -397,26 +399,6 @@
                     </execution>
                 </executions>
             </plugin>
-
-            <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>build-helper-maven-plugin</artifactId>
-                <version>1.9.1</version>
-                <executions>
-                    <execution>
-                        <id>add-source-gwt</id>
-                        <phase>validate</phase>
-                        <goals>
-                            <goal>add-source</goal>
-                        </goals>
-                        <configuration>
-                            <sources>
-                                <source>${project.build.directory}/gwt-extra</source>
-                            </sources>
-                        </configuration>
-                    </execution>
-                </executions>
-            </plugin>
         </plugins>
 
         <resources>
@@ -447,7 +429,7 @@
                             <style>OBFUSCATED</style>
                             <outputDirectory>${outputDirectory}</outputDirectory>
                             <webappDirectory>
-                                ${project.basedir}/../../${project.artifacts.directory}/draughts_web_exploded.war
+                                ${project.basedir}/../../rusdraughts/server/target/rus
                             </webappDirectory>
                         </configuration>
                         <executions>

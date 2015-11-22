@@ -20,6 +20,7 @@
     <url>http://draughts.online</url>
 
     <properties>
+        <app.version>1</app.version>
         <appengine.version>1.9.28</appengine.version>
         <gcloud.plugin.version>2.0.9.74.v20150814</gcloud.plugin.version>
 
@@ -49,7 +50,7 @@
     </properties>
 
     <!--<prerequisites>-->
-        <!--<maven>3.1.0</maven>-->
+    <!--<maven>3.1.0</maven>-->
     <!--</prerequisites>-->
 
     <dependencyManagement>
@@ -148,6 +149,12 @@
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-dispatch-rpc-server-guice</artifactId>
             <version>${gwtp.version}</version>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.gwt</groupId>
+                    <artifactId>gwt-user</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <dependency>
@@ -173,9 +180,9 @@
 
         <!--Postgresql-->
         <!--<dependency>-->
-            <!--<groupId>org.postgresql</groupId>-->
-            <!--<artifactId>postgresql</artifactId>-->
-            <!--<version>${postgresql.version}</version>-->
+        <!--<groupId>org.postgresql</groupId>-->
+        <!--<artifactId>postgresql</artifactId>-->
+        <!--<version>${postgresql.version}</version>-->
         <!--</dependency>-->
         <dependency>
             <groupId>mysql</groupId>
@@ -204,8 +211,8 @@
         </dependency>
         <dependency>
             <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>1.0.0.Final</version>
+            <artifactId>hibernate-jpa-2.0-api</artifactId>
+            <version>1.0.1.Final</version>
         </dependency>
         <dependency>
             <groupId>org.hibernate</groupId>
@@ -224,6 +231,12 @@
         <dependency>
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-dispatch-rpc-server</artifactId>
+            <exclusions>
+                <exclusion>
+                    <groupId>com.google.gwt</groupId>
+                    <artifactId>gwt-user</artifactId>
+                </exclusion>
+            </exclusions>
         </dependency>
 
         <!-- REST -->
@@ -277,8 +290,9 @@
             <scope>test</scope>
         </dependency>
     </dependencies>
+
     <build>
-        <finalName>rus</finalName>
+        <finalName>draughts</finalName>
         <plugins>
             <plugin>
                 <groupId>org.codehaus.mojo</groupId>
@@ -315,17 +329,6 @@
                     <webappDirectory>
                         ${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}
                     </webappDirectory>
-                    <webResources>
-                        <resource>
-                            <!-- this is relative to the pom.xml directory -->
-                            <directory>${project.build.directory}/generated-sources/appengine-endpoints</directory>
-                            <!-- the list has a default value of ** -->
-                            <includes>
-                                <include>WEB-INF/*.discovery</include>
-                                <include>WEB-INF/*.api</include>
-                            </includes>
-                        </resource>
-                    </webResources>
                 </configuration>
                 <executions>
                     <execution>
@@ -342,6 +345,7 @@
                 <artifactId>appengine-maven-plugin</artifactId>
                 <version>${appengine.version}</version>
                 <configuration>
+                    <enableJarSplitting>true</enableJarSplitting>
                     <enableJarClasses>false</enableJarClasses>
                     <version>${app.version}</version>
                     <!-- Comment in the below snippet to bind to all IPs instead of just localhost -->
@@ -403,7 +407,8 @@
                         Ensures that the config.properties file is always loaded from the
                         configuration directory of the active Maven profile. 
                     -->
-                    <filter>${project.basedir}/src/main/resources/profiles/${build.profile.id}/config.properties</filter>
+                    <filter>${project.basedir}/src/main/resources/profiles/${build.profile.id}/config.properties
+                    </filter>
                 </filters>
             </build>
         </profile>
@@ -412,48 +417,15 @@
             <id>release</id>
             <build>
                 <finalName>rus</finalName>
-                <plugins>
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-compiler-plugin</artifactId>
-                        <version>${maven-compiler-plugin.version}</version>
-                        <configuration>
-                            <source>${target.jdk}</source>
-                            <target>${target.jdk}</target>
-                            <encoding>${project.build.sourceEncoding}</encoding>
-                        </configuration>
-                    </plugin>
-
-                    <plugin>
-                        <groupId>org.apache.maven.plugins</groupId>
-                        <artifactId>maven-war-plugin</artifactId>
-                        <version>2.6</version>
-                        <configuration>
-                            <webappDirectory>
-                                ${project.basedir}/../../${project.artifacts.directory}/draughts_web_exploded.war
-                            </webappDirectory>
-                            <outputDirectory>
-                                ${project.basedir}/../../${project.artifacts.directory}/server.war
-                            </outputDirectory>
-                        </configuration>
-                        <executions>
-                            <execution>
-                                <id>war</id>
-                                <phase>package</phase>
-                                <goals>
-                                    <goal>war</goal>
-                                </goals>
-                            </execution>
-                        </executions>
-                    </plugin>
-                </plugins>
 
                 <filters>
                     <!--
                         Ensures that the config.properties file is always loaded from the
                         configuration directory of the active Maven profile. 
                     -->
-                    <filter>${project.basedir}/src/main/resources/profiles/${build.profile.id}/config.properties</filter>
+                    <filter>
+                        ${project.basedir}/src/main/resources/profiles/${build.profile.id}/config.properties
+                    </filter>
                 </filters>
             </build>
             <properties>
