@@ -166,7 +166,7 @@ public class PlayShowPanel extends Composite {
     if (filledGamesInRow != 0) {
       Row lastRow = (Row) playRowList.getWidget(playRowList.getWidgetCount() - 2);
       for (int i = 0; i < gamesInRow - filledGamesInRow; i++) {
-        Column column = new Column("MD_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow);
+        Column column = new Column(getSize(gamesInRow));
         final PlayItem item = showPanelFactory.createItem(gamesInRow, player, gameList.get(i));
         column.add(item);
         lastRow.add(column);
@@ -197,6 +197,12 @@ public class PlayShowPanel extends Composite {
 
     this.gameList.addAll(gameList);
     return this.gameList.size();
+  }
+
+  private String getSize(int gamesInRow) {
+    return "MD_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow
+        + " " + "SM_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow
+        + " " + "XS_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow;
   }
 
   private void resetGamesOnPanel(List<Game> gameList) {
@@ -233,7 +239,7 @@ public class PlayShowPanel extends Composite {
       gamesInRow = 2;
     }
     for (Game game : rowGameList) {
-      Column column = new Column("MD_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow);
+      Column column = new Column(getSize(gamesInRow));
       final PlayItem item = showPanelFactory.createItem(gamesInRow, player, game);
       column.add(item);
       row.add(column);

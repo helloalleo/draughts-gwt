@@ -29,6 +29,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 /**
@@ -94,7 +95,7 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
         return;
       }
 
-      final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes());
+      final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes(StandardCharsets.UTF_8));
       JsonReader jsonReader = Json.createReader(inBody);
       JsonObject responseObject = jsonReader.readObject();
       String user_id = responseObject.getString("id");

@@ -15,6 +15,8 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.draughts.rus.client.application.ApplicationPresenter;
 import online.draughts.rus.client.application.play.PlayComponentPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
+import online.draughts.rus.client.event.ReceivedPlayerListEvent;
+import online.draughts.rus.client.event.ReceivedPlayerListEventHandler;
 import online.draughts.rus.client.event.UpdatePlayShowPanelEvent;
 import online.draughts.rus.client.event.UpdatePlayShowPanelEventHandler;
 import online.draughts.rus.client.place.NameTokens;
@@ -24,6 +26,7 @@ import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.shared.resource.GamesResource;
+import online.draughts.rus.shared.resource.PlayersResource;
 
 import java.util.List;
 
@@ -35,6 +38,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   private final CurrentSession currentSession;
   private final Cookies cookies;
   private final ResourceDelegate<GamesResource> gamesDelegate;
+  private final ResourceDelegate<PlayersResource> playersDelegate;
   private int gamesOffset = 0;
 
   @Inject
@@ -45,7 +49,8 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       CurrentSession currentSession,
       ClientConfiguration config,
       Cookies cookies,
-      ResourceDelegate<GamesResource> gamesDelegate) {
+      ResourceDelegate<GamesResource> gamesDelegate,
+      ResourceDelegate<PlayersResource> playersDelegate) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     INIT_SHOW_GAMES_PAGE_SIZE = getIncrementPlaysOnPage(config, cookies);
@@ -53,6 +58,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
     this.currentSession = currentSession;
     this.gamesDelegate = gamesDelegate;
+    this.playersDelegate = playersDelegate;
     this.cookies = cookies;
     cookies.setLocation(NameTokens.homePage);
     bindEvent();
@@ -71,6 +77,15 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         updatePlayShowPanel(getView().isMyGames());
       }
     });
+
+    addRegisteredHandler(ReceivedPlayerListEvent.TYPE, new ReceivedPlayerListEventHandler() {
+      @Override
+      public void onReceivedPlayerList(ReceivedPlayerListEvent event) {
+        if (event.getPlayerList() != null) {
+          getView().updateOnlinePlayerCounter(event.getPlayerList().size());
+        }
+      }
+    });
   }
 
   @Override
@@ -78,6 +93,18 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     super.onBind();
 
     getView().setShowLoggedInControls(currentSession.isLoggedIn());
+    playersDelegate.withCallback(new AbstractAsyncCallback<Integer>() {
+      @Override
+      public void onSuccess(Integer result) {
+        getView().updateTotalPlayersCounter(result);
+      }
+    }).totalPlayers();
+    playersDelegate.withCallback(new AbstractAsyncCallback<Integer>() {
+      @Override
+      public void onSuccess(Integer result) {
+        getView().updateOnlinePlayerCounter(result);
+      }
+    }).onlinePlayers();
   }
 
   @Override
@@ -168,5 +195,9 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     int addGames(List<Game> games);
 
     boolean isMyGames();
+
+    void updateOnlinePlayerCounter(int size);
+
+    void updateTotalPlayersCounter(Integer result);
   }
 }

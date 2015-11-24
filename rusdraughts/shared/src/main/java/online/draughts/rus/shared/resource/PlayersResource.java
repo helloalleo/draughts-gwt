@@ -17,4 +17,12 @@ public interface PlayersResource {
   @GET
   @Path(ApiPaths.PLAYER_FRIEND_LIST)
   List<Friend> getPlayerFriendList(@QueryParam(ApiParameters.ID) Long playerId);
+
+  @GET
+  @Path(ApiPaths.PLAYERS_TOTAL)
+  Integer totalPlayers();
+
+  @GET
+  @Path(ApiPaths.PLAYERS_ONLINE)
+  Integer onlinePlayers();
 }

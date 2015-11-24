@@ -116,4 +116,23 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
     query.setMaxResults(10);
     return (List<Friend>) query.getResultList();
   }
+
+  @Override
+  public List<Player> findAll() {
+    String hql = "SELECT p " +
+        " FROM Player p " +
+        " WHERE p.banned = false";
+    Query query = getEntityManager().createQuery(hql);
+    return (List<Player>) query.getResultList();
+  }
+
+  @Override
+  public List<Player> findOnline() {
+    String hql = "SELECT p " +
+        " FROM Player p " +
+        " WHERE p.online = true " +
+        "    OR p.playing = true";
+    Query query = getEntityManager().createQuery(hql);
+    return (List<Player>) query.getResultList();
+  }
 }

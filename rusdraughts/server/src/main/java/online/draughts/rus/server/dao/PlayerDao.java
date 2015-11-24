@@ -26,4 +26,8 @@ public interface PlayerDao extends Dao<Player> {
   List<Player> findLoggedIn();
 
   List<Friend> findFriends(Long playerId);
+
+  List<Player> findAll();
+
+  List<Player> findOnline();
 }

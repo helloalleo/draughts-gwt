@@ -1,9 +1,11 @@
 package online.draughts.rus.client.application.play;
 
+import com.ait.lienzo.client.core.shape.Circle;
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.client.core.shape.Text;
 import com.ait.lienzo.client.widget.LienzoPanel;
+import com.ait.lienzo.shared.core.types.ColorName;
 import com.ait.lienzo.shared.core.types.DataURLType;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
@@ -203,7 +205,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
     lienzoPanel = new LienzoPanel(draughtsSide, draughtsSide);
     int lienzoSide = lienzoPanel.getHeight() - 20;
-    Layer initDeskRect = new Layer();
+    final Layer initDeskRect = new Layer();
     Rectangle contour = new Rectangle(lienzoSide, lienzoSide);
     contour.setX(1);
     contour.setY(1);
@@ -221,7 +223,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     }
     lienzoPanel.setBackgroundLayer(initDeskRect);
     draughtsDesk.add(lienzoPanel);
-
     cancelMove.setEnabled(false);
   }
 
@@ -474,6 +475,18 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     updateTurn(getUiHandlers().isMyTurn());
     cancelMove.setEnabled(true);
     hidePlayButtonAndShowPlayingButtons();
+
+    lienzoPanel.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        Circle circle = new Circle(2)
+            .setX(event.getX())
+            .setY(event.getY())
+            .setFillColor(ColorName.RED);
+        board.add(circle);
+        lienzoPanel.draw();
+      }
+    });
   }
 
   @Override

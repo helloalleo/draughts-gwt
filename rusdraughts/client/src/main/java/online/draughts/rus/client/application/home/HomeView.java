@@ -32,6 +32,7 @@ import online.draughts.rus.shared.model.Player;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
 import org.gwtbootstrap3.client.ui.CheckBoxButton;
+import org.gwtbootstrap3.client.ui.html.Span;
 import org.gwtbootstrap3.client.ui.html.Strong;
 
 import java.util.List;
@@ -56,6 +57,10 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   SimplePanel playShowSimplePanel;
   @UiField
   HTMLPanel main;
+  @UiField
+  Span totalPlayersSpan;
+  @UiField
+  Span onlinePlayersSpan;
 
   @Inject
   HomeView(Binder binder,
@@ -118,6 +123,16 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   @Override
   public boolean isMyGames() {
     return isMyGames;
+  }
+
+  @Override
+  public void updateOnlinePlayerCounter(int size) {
+    onlinePlayersSpan.setText(String.valueOf(size));
+  }
+
+  @Override
+  public void updateTotalPlayersCounter(Integer result) {
+    totalPlayersSpan.setText(String.valueOf(result));
   }
 
   public void setEnableMoreGameButton(boolean enable) {

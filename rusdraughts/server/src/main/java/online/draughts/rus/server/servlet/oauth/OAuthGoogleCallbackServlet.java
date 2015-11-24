@@ -30,6 +30,7 @@ import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
 /**
@@ -74,6 +75,7 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
       OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
       OAuthAccessTokenResponse response = oAuthClient.accessToken(request, OAuthJSONAccessTokenResponse.class);
       String accessToken = response.getAccessToken();
+      System.out.println(response);
 
       if (StringUtils.isEmpty(accessToken)) {
         resp.sendRedirect(config.getServerErrorUrl());
@@ -92,7 +94,7 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
         return;
       }
 
-      final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes());
+      final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes(StandardCharsets.UTF_8));
       JsonReader jsonReader = Json.createReader(inBody);
       JsonObject responseObject = jsonReader.readObject();
       String user_id = responseObject.getString("sub");

@@ -21,6 +21,8 @@ public class ApiPaths {
 
   public static final String GAMES = "/games";
   public static final String PLAYERS = "/players";
+  public static final String PLAYERS_TOTAL = "/total";
+  public static final String PLAYERS_ONLINE = "/online";
   public static final String FRIENDS = "/friends";
   public static final String PLAYER_FRIEND_LIST = "/player/friends";
   public static final String COUNT = "/count";

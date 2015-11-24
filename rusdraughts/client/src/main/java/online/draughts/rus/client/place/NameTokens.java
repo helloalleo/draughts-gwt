@@ -6,6 +6,7 @@ import online.draughts.rus.shared.locale.DraughtsMessages;
 public class NameTokens {
   // токены - адреса в навигации
   public static final String homePage = "!home";
+  public static final String learnPage = "!learn";
   public static final String playPage = "!play";
   public static final String loginPage = "!login";
   public static final String profilePage = "!profile";
@@ -16,6 +17,7 @@ public class NameTokens {
 
   // ссылки - название и токен
   private final Link homeLink;
+  private final Link learnLink;
   private final Link loginLink;
   private final Link logoutLink;
   private final Link profileLink;
@@ -25,6 +27,7 @@ public class NameTokens {
   @Inject
   public NameTokens(DraughtsMessages messages) {
     homeLink = new Link(homePage, messages.home());
+    learnLink = new Link(learnPage, messages.learn());
     playLink = new Link(playPage, messages.play());
     loginLink = new Link(loginPage, messages.login());
     logoutLink = new Link(logoutPage, messages.logout());
@@ -33,7 +36,7 @@ public class NameTokens {
   }
 
   public Link[] getLeftLinks() {
-    return new Link[]{homeLink};
+    return new Link[]{homeLink, learnLink};
   }
 
   public Link[] getRightLinks() {
@@ -49,7 +52,7 @@ public class NameTokens {
   }
 
   public Link[] getLeftAuthLinks() {
-    return new Link[]{homeLink, playLink};
+    return new Link[]{homeLink, playLink, learnLink};
   }
 
   public static class Link {

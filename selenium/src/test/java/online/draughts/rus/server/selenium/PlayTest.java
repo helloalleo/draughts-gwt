@@ -44,6 +44,7 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(JUnit4.class)
 public class PlayTest {
 
+  private static final String NEXT_PAGE = "#!play";
   private static List<String> alph = new ArrayList<String>() {{
     add("a");
     add("b");
@@ -56,14 +57,15 @@ public class PlayTest {
   }};
   private static final String OPPONENT = "WebDriver2";
   private static final long WAIT = 120;
-  private static final String siteUrl = "http://localhost:8080/";
-  private static final String gwtDebug = "gwt-debug-";
+  private static final String SITE_URL = "http://localhost:8080/";
+  private static final String GWT_DEBUG = "gwt-debug-";
   private static final int DESK_CELLS = 8;
   private static final int CANVAS_OFFSET_X = 70;
   private static final int CANVAS_OFFSET_Y = 90;
   private static final String NOTATION1 = "<div id='288'><span>1. </span><a><span id='0' data-order='0' data-number='1' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>g3-h4</span></a><span> </span><a><span id='1' data-order='1' data-number='1' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>d6-e5</span></a><br/><span>2. </span><a><span id='2' data-order='2' data-number='2' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>f2-g3</span></a><span> </span><a><span id='3' data-order='3' data-number='2' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>f6-g5</span></a><br/><span>3. </span><a><span id='4' data-order='4' data-number='3' data-simple='false' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='true' data-stopbeat='false'>h4:f6</span></a><span>:</span><a><span id='5' data-order='5' data-number='3' data-simple='false' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='true'>d4</span></a><span> </span><span> </span><a><span id='6' data-order='6' data-number='3' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>e7-d6</span></a><br/><span>4. </span><a><span id='7' data-order='7' data-number='4' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>d4-c5</span></a><span> </span><a><span id='8' data-order='8' data-number='4' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='true' data-stopbeat='false'>b6:d4</span></a><span>:</span><a><span id='9' data-order='9' data-number='4' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='true' data-stopbeat='false'>f2</span></a><span>:</span><a><span id='10' data-order='10' data-number='4' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='true'>h4</span></a><span><br/></span><span>5. </span><a><span id='11' data-order='11' data-number='5' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>h2-g3</span></a><span> </span><a><span id='12' data-order='12' data-number='5' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='false' data-stopbeat='true'>h4:f2</span></a><br/><span>6. </span><a><span id='13' data-order='13' data-number='6' data-simple='false' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='false' data-stopbeat='true'>e1:g3</span></a><span> </span><a><span id='14' data-order='14' data-number='6' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>d6-e5</span></a><br/><span>7. </span><a><span id='15' data-order='15' data-number='7' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>c3-b4</span></a><span> </span><a><span id='16' data-order='16' data-number='6' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>a7-b6</span></a><br/><span>8. </span><a><span id='17' data-order='17' data-number='8' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>g3-f4</span></a><span> </span><a><span id='18' data-order='18' data-number='7' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='false' data-stopbeat='true'>e5:g3</span></a><br/><span>9. </span><a><span id='19' data-order='19' data-number='9' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>g1-f2</span></a><span> </span><a><span id='20' data-order='20' data-number='8' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='true' data-stopbeat='false'>g3:e1</span></a><span>:</span><a><span id='21' data-order='21' data-number='8' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='true' data-stopbeat='false'>c3</span></a><span>:</span><a><span id='22' data-order='22' data-number='8' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='true'>a5</span></a><span><br/></span><span>10. </span><a><span id='23' data-order='23' data-number='10' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>c1-d2</span></a><span> </span><a><span id='24' data-order='24' data-number='9' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='false' data-stopbeat='true'>a5:e1</span></a><br/><span>11. </span><a><span id='25' data-order='25' data-number='11' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>a3-b4</span></a><span> </span><a><span id='26' data-order='26' data-number='10' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='false' data-stopbeat='true'>e1:a5</span></a><br/><span>12. </span><a><span id='27' data-order='27' data-number='12' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>b2-a3</span></a><span> </span><a><span id='28' data-order='28' data-number='10' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>b6-c5</span></a><br/><span>13. </span><a><span id='29' data-order='29' data-number='13' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>a1-b2</span></a><span> </span><a><span id='30' data-order='30' data-number='11' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>c7-d6</span></a><br/><span>14. </span><a><span id='31' data-order='31' data-number='14' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>a3-b4</span></a><span> </span><a><span id='32' data-order='32' data-number='12' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='true' data-stopbeat='false'>c5:a3</span></a><span>:</span><a><span id='33' data-order='33' data-number='12' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='true'>c1</span></a><span><br/></span></div>";
   private static final String NOTATION_BUG1 = "<div id='307'><span>1. </span><a><span id='0' data-order='0' data-number='1' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>g3-h4</span></a><span> </span><a><span id='1' data-order='1' data-number='1' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>d6-e5</span></a><br/><span>2. </span><a><span id='2' data-order='2' data-number='2' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>f2-g3</span></a><span> </span><a><span id='3' data-order='3' data-number='2' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>f6-g5</span></a><br/><span>3. </span><a><span id='4' data-order='4' data-number='3' data-simple='false' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='true' data-stopbeat='false'>h4:f6</span></a><span>:</span><a><span id='5' data-order='5' data-number='3' data-simple='false' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='true'>d4</span></a><span> </span><span> </span><a><span id='6' data-order='6' data-number='3' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>c7-d6</span></a><br/><span>4. </span><a><span id='7' data-order='7' data-number='4' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>d4-c5</span></a><span> </span><a><span id='8' data-order='8' data-number='4' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='true' data-stopbeat='false'>b6:d4</span></a><span>:</span><a><span id='9' data-order='9' data-number='4' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='true' data-stopbeat='false'>f2</span></a><span>:</span><a><span id='10' data-order='10' data-number='4' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='true'>h4</span></a><br/><span>5. </span><a><span id='11' data-order='11' data-number='5' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>h2-g3</span></a><span> </span><a><span id='12' data-order='12' data-number='5' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='false' data-stopbeat='true'>h4:f2</span></a><br/><span>6. </span><a><span id='13' data-order='13' data-number='6' data-simple='false' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='false' data-stopbeat='true'>e1:g3</span></a><span> </span><a><span id='14' data-order='14' data-number='6' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>d6-c5</span></a><br/><span>7. </span><a><span id='15' data-order='15' data-number='7' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>a3-b4</span></a><span> </span><a><span id='16' data-order='16' data-number='7' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='false' data-stopbeat='true'>c5:a3</span></a><br/><span>8. </span><a><span id='17' data-order='17' data-number='8' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>d2-e3</span></a><span> </span><a><span id='18' data-order='18' data-number='8' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>g7-f6</span></a><br/><span>9. </span><a><span id='19' data-order='19' data-number='9' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>e3-f4</span></a><span> </span><a><span id='20' data-order='20' data-number='9' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>e7-d6</span></a><br/><span>10. </span><a><span id='21' data-order='21' data-number='10' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>c1-d2</span></a><span> </span><a><span id='22' data-order='22' data-number='8' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='true' data-stopbeat='false'>a3:c1</span></a><span>:</span><a><span id='23' data-order='23' data-number='8' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='true' data-stopbeat='false'>f4</span></a></div>";
-  private static final String TEST_NOTATION = NOTATION_BUG1;
+  private static final String NOTATION_BUG2 = "<div id='1'><span>1. </span><a><span id='0' data-order='0' data-number='1' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>g3-h4</span></a><span> </span><a><span id='1' data-order='1' data-number='1' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>d6-e5</span></a><br/><span>2. </span><a><span id='2' data-order='2' data-number='2' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>f2-g3</span></a><span> </span><a><span id='3' data-order='3' data-number='2' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>f6-g5</span></a><br/><span>3. </span><a><span id='4' data-order='4' data-number='3' data-simple='false' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='true' data-stopbeat='false'>h4:f6</span></a><span>:</span><a><span id='5' data-order='5' data-number='3' data-simple='false' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='true'>d4</span></a><span> </span><span> </span><a><span id='6' data-order='6' data-number='3' data-simple='true' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>c7-d6</span></a><br/><span>4. </span><a><span id='7' data-order='7' data-number='4' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>d4-c5</span></a><span> </span><a><span id='8' data-order='8' data-number='5' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='true' data-continuebeat='true' data-stopbeat='false'>b6:d4</span></a><span>:</span><a><span id='9' data-order='9' data-number='5' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='true' data-stopbeat='false'>f2</span></a><span>:</span><a><span id='10' data-order='10' data-number='5' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='true'>h4</span></a><br/><span>5. </span><a><span id='11' data-order='11' data-number='5' data-simple='true' data-first='true' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='false'>h2-g3</span></a><span>:</span><a><span id='12' data-order='12' data-number='5' data-simple='false' data-first='false' data-title=\"\" data-comment=\"\" data-startbeat='false' data-continuebeat='false' data-stopbeat='true'>f2</span></a><br/></div>";
+  private static final String TEST_NOTATION = NOTATION_BUG2;
 
   private WebDriver webDriver1;
   private WebDriver webDriver2;
@@ -90,7 +92,7 @@ public class PlayTest {
     Runnable vkRunnable = new Runnable() {
       @Override
       public void run() {
-        loginWebDriver1();
+        loginWebDriver(webDriver1, "fbOAuth");
         try {
           sleep(1500);
         } catch (InterruptedException e) {
@@ -104,7 +106,7 @@ public class PlayTest {
     Runnable fbRunnable = new Runnable() {
       @Override
       public void run() {
-        loginWebDriver2();
+        loginWebDriver(webDriver2, "gOAuth");
         connectToServer(webDriver2);
       }
     };
@@ -122,7 +124,7 @@ public class PlayTest {
   private void play1() {
     ((JavascriptExecutor) webDriver1).executeScript("scroll(0,0)");
     ((JavascriptExecutor) webDriver2).executeScript("scroll(0,0)");
-    final By canvasId = By.xpath(String.format("//div[@id='%s']/div", gwtDebug + "draughtsDesk"));
+    final By canvasId = By.xpath(String.format("//div[@id='%s']/div", GWT_DEBUG + "draughtsDesk"));
     new WebDriverWait(webDriver1, WAIT).until(ExpectedConditions.elementToBeClickable(canvasId));
     List<Stroke> steps = new ArrayList<>();
     String prevStroke = "";
@@ -210,7 +212,7 @@ public class PlayTest {
     assertNotNull(opponentDiv);
     opponentDiv.click();
 
-    By playButtonId = By.id(gwtDebug + "connectToServer");
+    By playButtonId = By.id(GWT_DEBUG + "connectToServer");
     WebElement playButton = driver.findElement(playButtonId);
     assertNotNull(playButton);
     playButton.click();
@@ -227,39 +229,24 @@ public class PlayTest {
     new WebDriverWait(driver, WAIT).until(new ExpectedCondition<Boolean>() {
       @Override
       public Boolean apply(WebDriver webDriver) {
-        By connectToServerId = By.id(gwtDebug + "connectToServer");
+        By connectToServerId = By.id(GWT_DEBUG + "connectToServer");
         return webDriver.findElement(connectToServerId).isDisplayed();
       }
     });
 
-    By connectToServerId = By.id(gwtDebug + "connectToServer");
+    By connectToServerId = By.id(GWT_DEBUG + "connectToServer");
     WebElement connectToServer = driver.findElement(connectToServerId);
     assertNotNull(connectToServer);
     connectToServer.click();
   }
 
-  private void loginWebDriver1() {
-    webDriver1.get(siteUrl + "/fbOAuth");
+  private void loginWebDriver(WebDriver webDriver, String oauthUrl) {
+    webDriver.get(SITE_URL + oauthUrl);
 
-    (new WebDriverWait(webDriver1, WAIT)).until(new ExpectedCondition<Boolean>() {
-      public Boolean apply(WebDriver d) {
-        return d.getCurrentUrl().endsWith("#!home");
-      }
-    });
+    (new WebDriverWait(webDriver, WAIT)).until(ExpectedConditions.urlMatches(".*" + NEXT_PAGE));
+    webDriver.get(SITE_URL + NEXT_PAGE);
 
     assertEquals("Шашки онлайн", webDriver1.getTitle());
-  }
-
-  private void loginWebDriver2() {
-    webDriver2.get(siteUrl + "/gOAuth");
-
-    (new WebDriverWait(webDriver2, WAIT)).until(new ExpectedCondition<Boolean>() {
-      public Boolean apply(WebDriver d) {
-        return d.getCurrentUrl().endsWith("#!home");
-      }
-    });
-
-    assertEquals("Шашки онлайн", webDriver2.getTitle());
   }
 
   private String extractXPath(String notation, String path) {

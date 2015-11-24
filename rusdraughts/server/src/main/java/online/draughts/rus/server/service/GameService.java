@@ -32,19 +32,17 @@ public class GameService {
   private final PlayerService playerService;
   private final FriendService friendService;
   private final GameDao gameDao;
-  private final GameMessageService gameMessageService;
 
   @Inject
-  public GameService(Provider<GameDao> gameDaoProvider,
-                     PlayerService playerService,
-                     FriendService friendService,
-                     GameDao gameDao,
-                     GameMessageService gameMessageService) {
+  public GameService(
+      Provider<GameDao> gameDaoProvider,
+      PlayerService playerService,
+      FriendService friendService,
+      GameDao gameDao) {
     this.gameDaoProvider = gameDaoProvider;
     this.playerService = playerService;
     this.friendService = friendService;
     this.gameDao = gameDao;
-    this.gameMessageService = gameMessageService;
   }
 
   @Transactional
@@ -63,6 +61,10 @@ public class GameService {
 
   @Transactional
   public List<Game> findUserGames(Long playerId, int offset, int limit) {
+    final Player player = playerService.find(playerId);
+    if (player == null) {
+      throw new RuntimeException("Player not found");
+    }
     return gameDaoProvider.get().findUserGames(playerId, offset, limit);
   }
 

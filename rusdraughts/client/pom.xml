@@ -339,44 +339,6 @@
             </plugin>
 
             <plugin>
-                <groupId>org.codehaus.mojo</groupId>
-                <artifactId>gwt-maven-plugin</artifactId>
-                <version>${gwt.version}</version>
-                <configuration>
-                    <strict>true</strict>
-
-                    <testTimeOut>180</testTimeOut>
-                    <mode>htmlunit</mode>
-                    <includes>**/*GwtTest.java</includes>
-
-                    <logLevel>INFO</logLevel>
-
-                    <extraJvmArgs>-Xmx2048m</extraJvmArgs>
-                    <runTarget>index.html</runTarget>
-                    <module>online.draughts.rus.Application_dev</module>
-                    <draftCompile>true</draftCompile>
-                    <sourceLevel>${maven.compiler.source}</sourceLevel>
-                    <bindAddress>0.0.0.0</bindAddress>
-                    <style>${gwt.style}</style>
-                    <webappDirectory>
-                        ${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}
-                    </webappDirectory>
-                    <outputDirectory>
-                        ${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}
-                    </outputDirectory>
-                </configuration>
-                <executions>
-                    <execution>
-                        <phase>compile</phase>
-                        <goals>
-                            <goal>resources</goal>
-                            <goal>compile</goal>
-                        </goals>
-                    </execution>
-                </executions>
-            </plugin>
-
-            <plugin>
                 <groupId>org.apache.maven.plugins</groupId>
                 <artifactId>maven-resources-plugin</artifactId>
                 <version>2.7</version>
@@ -410,7 +372,51 @@
     </build>
 
     <profiles>
+        <profile>
+            <id>dev</id>
 
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.codehaus.mojo</groupId>
+                        <artifactId>gwt-maven-plugin</artifactId>
+                        <version>${gwt.version}</version>
+                        <configuration>
+                            <strict>true</strict>
+
+                            <testTimeOut>180</testTimeOut>
+                            <mode>htmlunit</mode>
+                            <includes>**/*GwtTest.java</includes>
+
+                            <logLevel>INFO</logLevel>
+
+                            <extraJvmArgs>-Xmx2048m</extraJvmArgs>
+                            <runTarget>index.html</runTarget>
+                            <module>online.draughts.rus.Application_dev</module>
+                            <draftCompile>true</draftCompile>
+                            <sourceLevel>${maven.compiler.source}</sourceLevel>
+                            <bindAddress>0.0.0.0</bindAddress>
+                            <style>${gwt.style}</style>
+                            <webappDirectory>
+                                ${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}
+                            </webappDirectory>
+                        </configuration>
+                        <executions>
+                            <execution>
+                                <phase>compile</phase>
+                                <goals>
+                                    <goal>resources</goal>
+                                    <goal>compile</goal>
+                                </goals>
+                            </execution>
+                        </executions>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
         <profile>
             <id>release</id>
             <build>
@@ -429,7 +435,7 @@
                             <style>OBFUSCATED</style>
                             <outputDirectory>${outputDirectory}</outputDirectory>
                             <webappDirectory>
-                                ${project.basedir}/../../rusdraughts/server/target/rus
+                                ${project.basedir}/../../${project.artifacts.directory}/${project.prodOutput.directory}
                             </webappDirectory>
                         </configuration>
                         <executions>

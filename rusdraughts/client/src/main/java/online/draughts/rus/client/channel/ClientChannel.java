@@ -73,6 +73,9 @@ public class ClientChannel implements ChannelListener {
     Window.addWindowClosingHandler(new Window.ClosingHandler() {
       @Override
       public void onWindowClosing(Window.ClosingEvent event) {
+        if (channel == null) {
+          return;
+        }
         sendSimpleMessage(GameMessage.MessageType.CHANNEL_CLOSE);
       }
     });

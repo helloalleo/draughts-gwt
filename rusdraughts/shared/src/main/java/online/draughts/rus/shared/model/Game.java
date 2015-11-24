@@ -40,7 +40,8 @@ public class Game extends PersistableObjectImpl {
   @Column(name = "notation", columnDefinition = "TEXT")
   private String notation;
 
-  @Column(name = "end_game_screenshot", columnDefinition = "TEXT")
+  @Lob
+  @Column(name = "end_game_screenshot")
   private String endGameScreenshot;
 
   // удаление выполняется вручную

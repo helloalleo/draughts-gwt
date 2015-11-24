@@ -8,10 +8,10 @@
     <g:SimplePanel ui:field="main">
         <g:HTMLPanel>
             <b:Row>
-                <b:Column size="MD_2">
+                <b:Column size="XS_3 SM_3 MD_3 LG_3">
                     <b:NavPills ui:field="navProfile" stacked="true"/>
                 </b:Column>
-                <b:Column size="MD_10">
+                <b:Column size="XS_9 SM_9 MD_9 LG_9">
                     <g:SimplePanel ui:field="subcontent"/>
                 </b:Column>
             </b:Row>

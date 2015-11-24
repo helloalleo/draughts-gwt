@@ -89,5 +89,13 @@ public interface AppResources extends ClientBundle {
     String navbarElemScroll();
 
     String whoAndWhenDidWin();
+
+    String hrMiddle();
+
+    String hrInfo();
+
+    String playersStatus();
+
+    String hrDelimiter();
   }
 }

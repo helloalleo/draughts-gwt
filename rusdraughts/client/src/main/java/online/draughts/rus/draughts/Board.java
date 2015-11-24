@@ -39,16 +39,11 @@ public class Board extends Layer {
   // стек ходов шашек, когда они становятся дамками
   private Stack<Integer> queenStepStack = new Stack<>();
 
-  //  private DraughtsGinjector draughtsGinjector = DraughtsGinjector.INSTANCE;
   private List<Square> highlightedSquares = new ArrayList<>();
-  //  private String lastEndMove;
-//  private String lastStartMove;
-//  private String lastCaptured;
 
   private Stack<Stroke> moveMyStack = new Stack<>();
   private Stack<Stroke> moveOpponentStack = new Stack<>();
   private int moveCounter = 0;
-  private boolean complexBeat = false;
 
   private BoardBackgroundLayer backgroundLayer;
 
@@ -565,20 +560,17 @@ public class Board extends Layer {
       }
 
       stroke.setTakenSquare(takenSquare);
-      if (jumpMoves.isEmpty()) {
+      Stroke prev = moveMyStack.peek();
+      if (jumpMoves.isEmpty()) { // если нет шашек которые бьются дальше
         stroke.setOnStopBeat();
-
-        if (!complexBeat) {
+        if (prev.isSimple()) {
           stroke.setOnStartBeat();
-        } else {
-          complexBeat = false;
         }
       } else {
         stroke.setOnContinueBeat();
-        if (!complexBeat) {
+        if (prev.isSimple()) {
           stroke.setOnStartBeat();
         }
-        complexBeat = true;
       }
       removeDraughtFrom(takenSquare);
     } else {
@@ -991,7 +983,7 @@ public class Board extends Layer {
   public void moveOpponentCanceled(Stroke stroke) {
     strokeCanceled(stroke);
     Stroke canceled = moveOpponentStack.pop();
-    if (canceled.isFirst()) {
+    if (isCancelFirstMove(canceled)) {
       moveCounter--;
     }
   }
@@ -999,9 +991,18 @@ public class Board extends Layer {
   public void moveMyCanceled(Stroke stroke) {
     strokeCanceled(stroke);
     Stroke canceled = moveMyStack.pop();
-    if (canceled.isFirst()) {
+    if (isCancelFirstMove(canceled)) {
       moveCounter--;
     }
+  }
+
+  /**
+   * Отменяем первый ход? Тот который стоит за номером
+   * @param canceled отменяемы ход
+   * @return отменяем ли первый ход
+   */
+  private boolean isCancelFirstMove(Stroke canceled) {
+    return canceled.isFirst() && canceled.isStartBeat();
   }
 
   public Stroke getLastMove() {

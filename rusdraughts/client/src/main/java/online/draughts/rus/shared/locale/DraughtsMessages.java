@@ -228,4 +228,6 @@ public interface DraughtsMessages extends Messages {
   String gameNotFound();
 
   String alreadyConnected();
+
+  String learn();
 }

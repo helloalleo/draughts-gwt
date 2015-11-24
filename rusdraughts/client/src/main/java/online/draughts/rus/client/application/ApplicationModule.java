@@ -19,6 +19,7 @@ package online.draughts.rus.client.application;
 import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import online.draughts.rus.client.application.error.ErrorModule;
 import online.draughts.rus.client.application.home.HomeModule;
+import online.draughts.rus.client.application.learn.LearnModule;
 import online.draughts.rus.client.application.menu.MenuModule;
 import online.draughts.rus.client.application.play.NewPlayModule;
 import online.draughts.rus.client.application.profile.ProfileModule;
@@ -27,6 +28,7 @@ import online.draughts.rus.client.application.security.OAuthLoginModule;
 public class ApplicationModule extends AbstractPresenterModule {
   @Override
   protected void configure() {
+    install(new LearnModule());
     install(new NewPlayModule());
     install(new ProfileModule());
     install(new ErrorModule());

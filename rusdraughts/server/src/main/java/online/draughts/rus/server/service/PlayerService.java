@@ -86,4 +86,12 @@ public class PlayerService {
   public List<Friend> findFriends(Long playerId) {
     return playerDaoProvider.get().findFriends(playerId);
   }
+
+  public Integer totalPlayers() {
+    return playerDaoProvider.get().findAll().size();
+  }
+
+  public Integer onlinePlayers() {
+    return playerDaoProvider.get().findOnline().size();
+  }
 }

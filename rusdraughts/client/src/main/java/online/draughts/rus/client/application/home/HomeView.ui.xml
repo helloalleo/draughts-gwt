@@ -14,7 +14,25 @@
             <b:Button ui:field="moreGameOnPage" size="LARGE" icon="ANGLE_LEFT" title="Показать меньше на странице"/>
             <b:Button ui:field="lessGameOnPage" size="LARGE" icon="ANGLE_RIGHT" title="Показать больше на странице"/>
         </b:ButtonGroup>
-        <hr/>
+        <g:HTMLPanel addStyleNames="{res.style.hrInfo}">
+            <b:Row>
+                <b:Column size="XS_10 SM_10 MD_10 LG_10">
+                    <b.html:Span addStyleNames="{res.style.hrMiddle}"/>
+                </b:Column>
+
+                <b:Column size="XS_2 SM_2 MD_2 LG_2">
+                    <g:HTMLPanel addStyleNames="{res.style.playersStatus}">
+                        <b.html:Span>Всего</b.html:Span>
+                        <b.html:Span ui:field="totalPlayersSpan"/>
+                        <b.html:Span addStyleNames="{res.style.hrDelimiter}"/>
+                        <b.html:Span>Онлайн</b.html:Span>
+                        <b.html:Span ui:field="onlinePlayersSpan"/>
+                    </g:HTMLPanel>
+
+                </b:Column>
+            </b:Row>
+        </g:HTMLPanel>
+
         <g:SimplePanel ui:field="playShowSimplePanel"/>
     </g:HTMLPanel>
 </ui:UiBinder>
