@@ -71,7 +71,7 @@
                                              addStyleNames="{res.style.strokeCommentPanel}"/>
                                 </g:HTMLPanel>
                                 <g:HTMLPanel ui:field="loggedInCommentPanel" visible="false">
-                                    <b:TextArea ui:field="commentCurrentStrokeTextArea"/>
+                                    <b:TextArea ui:field="commentCurrentStrokeTextArea" maxLength="250"/>
                                     <b:Label ui:field="leftSymbolsLabel" addStyleNames="{res.style.leftSymbols}"
                                              pull="LEFT"/>
                                     <b:Button ui:field="commentCurrentStrokeButton" pull="RIGHT" icon="PENCIL"

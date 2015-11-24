@@ -7,24 +7,25 @@ import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.annotations.Title;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import online.draughts.rus.client.application.ApplicationPresenter;
+import online.draughts.rus.client.application.play.messanger.MessengerPresenter;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.Cookies;
 
 
-public class NewPlayPresenter extends Presenter<NewPlayPresenter.MyView, NewPlayPresenter.MyProxy>
-    implements NewPlayUiHandlers {
+public class PlayPresenter extends Presenter<PlayPresenter.MyView, PlayPresenter.MyProxy>
+    implements PlayUiHandlers {
   public static final PermanentSlot<PlayComponentPresenter> SLOT_NEWPLAY = new PermanentSlot<>();
 
   @Inject
-  NewPlayPresenter(
+  PlayPresenter(
       EventBus eventBus,
       MyView view,
       MyProxy proxy,
       Cookies cookies,
+      MessengerPresenter messengerPresenter,
       PlayComponentPresenter playComponentPresenter) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
@@ -33,13 +34,14 @@ public class NewPlayPresenter extends Presenter<NewPlayPresenter.MyView, NewPlay
     cookies.setLocation(NameTokens.playPage);
 
     setInSlot(SLOT_NEWPLAY, playComponentPresenter);
+    addToPopupSlot(messengerPresenter);
   }
 
-  interface MyView extends View, HasUiHandlers<NewPlayUiHandlers> {
+  interface MyView extends View, HasUiHandlers<PlayUiHandlers> {
   }
 
   @ProxyCodeSplit
   @NameToken(NameTokens.playPage)
-  interface MyProxy extends ProxyPlace<NewPlayPresenter> {
+  interface MyProxy extends ProxyPlace<PlayPresenter> {
   }
 }

@@ -1,7 +1,7 @@
 @require "variables";
 @require "mixins";
 
-@external active;
+@external active panel-body panel-heading;
 
 body {
     background-color: #fffffe;
@@ -156,30 +156,20 @@ body {
 /*}*/
 
 .dialogBox {
-    -moz-border-radius: DIALOG_BORDER_RADIUS;
-    -ms-border-radius: DIALOG_BORDER_RADIUS;
-    -webkit-border-radius: DIALOG_BORDER_RADIUS;
-    border-radius: DIALOG_BORDER_RADIUS;
-
+@mixin radius(DIALOG_BORDER_RADIUS);
     padding: 10px;
     background: rgba(200, 200, 200, .9);
 }
 
 .dialogCaptionInfo {
-    -moz-border-radius: DIALOG_BORDER_RADIUS;
-    -ms-border-radius: DIALOG_BORDER_RADIUS;
-    -webkit-border-radius: DIALOG_BORDER_RADIUS;
-    border-radius: DIALOG_BORDER_RADIUS;
+@mixin radius(DIALOG_BORDER_RADIUS);
 
     background: lightblue;
     font-size: 22px;
 }
 
 .dialogCaptionError {
-    -moz-border-radius: DIALOG_BORDER_RADIUS;
-    -ms-border-radius: DIALOG_BORDER_RADIUS;
-    -webkit-border-radius: DIALOG_BORDER_RADIUS;
-    border-radius: DIALOG_BORDER_RADIUS;
+@mixin radius(DIALOG_BORDER_RADIUS);
 
     background: lightcoral;
     font-size: 22px;
@@ -202,10 +192,7 @@ body {
 }
 
 .dialogCaptionPlayer {
-    -moz-border-radius: DIALOG_BORDER_RADIUS;
-    -ms-border-radius: DIALOG_BORDER_RADIUS;
-    -webkit-border-radius: DIALOG_BORDER_RADIUS;
-    border-radius: DIALOG_BORDER_RADIUS;
+@mixin radius(DIALOG_BORDER_RADIUS);
 
     background: lightgreen;
     font-size: 14px;
@@ -231,10 +218,7 @@ body {
 }
 
 .notationCurrentStyle {
-    -moz-border-radius: NOTATION_CURRENT_BORDER_RADIUS;
-    -ms-border-radius: NOTATION_CURRENT_BORDER_RADIUS;
-    -webkit-border-radius: NOTATION_CURRENT_BORDER_RADIUS;
-    border-radius: NOTATION_CURRENT_BORDER_RADIUS;
+@mixin radius(NOTATION_CURRENT_BORDER_RADIUS);
 
     background: white;
 }
@@ -279,4 +263,47 @@ body {
     line-height: 40px;
     color: #aaa;
     font-style: italic;
+}
+
+.popupMessenger {
+    z-index: 10;
+    position: fixed !important;
+}
+
+/* Messenger */
+
+
+.messenger {
+@mixin radius(MESSENGER_BORDER_RADIUS);
+@mixin shadow(0, 0, 8px, 1px, #555);
+}
+
+.messenger .panel-body {
+    padding: 5px;
+}
+
+.messenger .panel-heading {
+    padding: 5px;
+    max-height: 40px;
+}
+
+.messenger .panel-heading button {
+    color: black;
+    margin-top: -3px;
+    outline: none;
+}
+
+.messenger .panel-heading h4 {
+    margin: 5px 0 5px;
+}
+
+.messengerMessages {
+    min-height: 200px;
+    min-width: 300px;
+}
+
+.messengerMessage {
+    resize: none;
+    margin-bottom: 4px;
+    max-height: 35px;
 }

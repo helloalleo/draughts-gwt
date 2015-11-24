@@ -16,15 +16,11 @@ import online.draughts.rus.shared.model.Move;
 
 public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPresenter.MyView> implements DraughtsPlayerUiHandlers {
 
-  private final Game game;
-
   DraughtsPlayerPresenter(
       EventBus eventBus,
-      MyView view,
-      Game game) {
+      MyView view) {
     super(eventBus, view);
 
-    this.game = game;
     getView().setUiHandlers(this);
   }
 
@@ -49,7 +45,7 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
     }
 
     public DraughtsPlayerPresenter create(Game game) {
-      return new DraughtsPlayerPresenter(eventBus, viewFactory.create(game), game);
+      return new DraughtsPlayerPresenter(eventBus, viewFactory.create(game));
     }
   }
 

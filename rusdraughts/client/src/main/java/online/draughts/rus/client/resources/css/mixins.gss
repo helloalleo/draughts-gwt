@@ -21,3 +21,16 @@
     background: BGCOLOR;
     border-color: BORDER_COLOR;
 }
+
+@defmixin radius(RADIUS) {
+    -moz-border-radius: RADIUS;
+    -ms-border-radius: RADIUS;
+    -webkit-border-radius: RADIUS;
+    border-radius: RADIUS;
+}
+
+@defmixin shadow(OFFSET_X, OFFSET_Y, BLUR, STRETCH, COLOR) {
+    -webkit-box-shadow: OFFSET_X OFFSET_Y BLUR STRETCH COLOR;
+    -moz-box-shadow: OFFSET_X OFFSET_Y BLUR STRETCH COLOR;
+    box-shadow: OFFSET_X OFFSET_Y BLUR STRETCH COLOR;
+}

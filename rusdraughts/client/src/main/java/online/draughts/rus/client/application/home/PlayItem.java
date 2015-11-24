@@ -1,7 +1,6 @@
 
 package online.draughts.rus.client.application.home;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -17,7 +16,6 @@ import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.model.Player;
 import org.gwtbootstrap3.client.ui.Anchor;
 import org.gwtbootstrap3.client.ui.Image;
 
@@ -26,8 +24,7 @@ import java.util.Date;
 public class PlayItem extends Composite {
 
   public static final String GAME_ID = "-game";
-  private final DraughtsMessages messages = GWT.create(DraughtsMessages.class);
-  private final AppResources resources = GWT.create(AppResources.class);
+  private final DraughtsMessages messages;
   private final static String PLAYER_COLOR_DELIMITER = ": ";
   private final int gamesInRow;
   private DraughtsPlayerPresenter draughtsPlayer;
@@ -53,17 +50,20 @@ public class PlayItem extends Composite {
   PlayItem(Binder binder,
            final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
            final HomePresenter homePresenter,
+           DraughtsMessages messages,
+           AppResources resources,
            @Assisted int gamesInRow,
-           @Assisted Player player,
            @Assisted final Game game) {
+    this.messages = messages;
     initWidget(binder.createAndBindUi(this));
 
     this.gamesInRow = gamesInRow;
     panel.addStyleName(resources.style().playItem());
-    setGame(homePresenter, draughtsPlayerFactory, player, game);
+    setGame(homePresenter, draughtsPlayerFactory, game);
   }
 
-  public void setGame(final HomePresenter homePresenter, final DraughtsPlayerPresenter.Factory draughtsPlayerFactory, Player player, final Game game) {
+  public void setGame(final HomePresenter homePresenter, final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
+                      final Game game) {
     gameIdAnchor.setId(game.getId() + GAME_ID);
     gameIdAnchor.addClickHandler(new ClickHandler() {
       @Override

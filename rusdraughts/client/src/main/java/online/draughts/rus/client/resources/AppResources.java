@@ -97,5 +97,13 @@ public interface AppResources extends ClientBundle {
     String playersStatus();
 
     String hrDelimiter();
+
+    String messenger();
+
+    String popupMessenger();
+
+    String messengerMessages();
+
+    String messengerMessage();
   }
 }

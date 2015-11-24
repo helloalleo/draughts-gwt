@@ -9,17 +9,17 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import javax.inject.Inject;
 
 
-public class NewPlayView extends ViewWithUiHandlers<NewPlayUiHandlers> implements NewPlayPresenter.MyView {
+public class PlayView extends ViewWithUiHandlers<PlayUiHandlers> implements PlayPresenter.MyView {
   @UiField
   SimplePanel main;
 
   @Inject
-  NewPlayView(Binder uiBinder) {
+  PlayView(Binder uiBinder) {
     initWidget(uiBinder.createAndBindUi(this));
 
-    bindSlot(NewPlayPresenter.SLOT_NEWPLAY, main);
+    bindSlot(PlayPresenter.SLOT_NEWPLAY, main);
   }
 
-  interface Binder extends UiBinder<Widget, NewPlayView> {
+  interface Binder extends UiBinder<Widget, PlayView> {
   }
 }

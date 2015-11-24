@@ -11,7 +11,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.resources.Variables;
@@ -20,7 +19,6 @@ import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Column;
@@ -53,14 +51,11 @@ public class PlayShowPanel extends Composite {
 
   private int lastMaxHeight = 0;
   private int lastScrollPos = 0;
-  private HandlerRegistration scrollHandler;
-  private Player player;
   private boolean blockScroll;
 
   @Inject
   public PlayShowPanel(Binder binder,
                        PlaceManager placeManager,
-                       CurrentSession currentSession,
                        ClientConfiguration config,
                        PlayShowPanelFactory showPanelFactory,
                        Provider<HomeView> homeViewProvider,
@@ -69,7 +64,6 @@ public class PlayShowPanel extends Composite {
                        Cookies cookies) {
     this.showPanelFactory = showPanelFactory;
     this.cookies = cookies;
-    this.player = currentSession.getPlayer();
     this.placeManager = placeManager;
     INCREMENT_SIZE = HomePresenter.getIncrementPlaysOnPage(config, cookies);
     this.homeViewProvider = homeViewProvider;
@@ -167,7 +161,7 @@ public class PlayShowPanel extends Composite {
       Row lastRow = (Row) playRowList.getWidget(playRowList.getWidgetCount() - 2);
       for (int i = 0; i < gamesInRow - filledGamesInRow; i++) {
         Column column = new Column(getSize(gamesInRow));
-        final PlayItem item = showPanelFactory.createItem(gamesInRow, player, gameList.get(i));
+        final PlayItem item = showPanelFactory.createItem(gamesInRow, gameList.get(i));
         column.add(item);
         lastRow.add(column);
 
@@ -240,7 +234,7 @@ public class PlayShowPanel extends Composite {
     }
     for (Game game : rowGameList) {
       Column column = new Column(getSize(gamesInRow));
-      final PlayItem item = showPanelFactory.createItem(gamesInRow, player, game);
+      final PlayItem item = showPanelFactory.createItem(gamesInRow, game);
       column.add(item);
       row.add(column);
     }

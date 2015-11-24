@@ -3,7 +3,6 @@ package online.draughts.rus.client.gin;
 import online.draughts.rus.client.application.home.PlayItem;
 import online.draughts.rus.client.application.home.PlayShowPanel;
 import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.model.Player;
 
 /**
  * Created with IntelliJ IDEA.
@@ -13,7 +12,7 @@ import online.draughts.rus.shared.model.Player;
  */
 public interface PlayShowPanelFactory {
 
-  PlayItem createItem(int gamesInRow, Player player, Game game);
+  PlayItem createItem(int gamesInRow, Game game);
 
   PlayShowPanel createShowPanel();
 }
