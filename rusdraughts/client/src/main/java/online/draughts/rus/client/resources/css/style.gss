@@ -278,5 +278,5 @@ body {
 .playersStatus {
     line-height: 40px;
     color: #aaa;
-    font-style: italic;;
+    font-style: italic;
 }

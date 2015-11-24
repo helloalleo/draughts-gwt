@@ -22,8 +22,8 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.google.inject.persist.PersistFilter;
 import com.google.inject.persist.jpa.JpaPersistModule;
+import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletModule;
-import com.google.inject.servlet.SessionScoped;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
 import online.draughts.rus.server.channel.ServerChannel;
@@ -66,7 +66,7 @@ public class DispatchServletModule extends ServletModule {
           throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         if (httpRequest != null) {
-          Boolean authenticated = Boolean.valueOf(httpRequest.getParameter(AuthUtils.AUTHENTICATED));
+          Boolean authenticated = (Boolean) httpRequest.getSession().getAttribute(AuthUtils.AUTHENTICATED);
           httpRequest.setAttribute(
               Key.get(Boolean.class, Names.named(AuthUtils.AUTHENTICATED)).toString(),
               authenticated);
@@ -86,8 +86,8 @@ public class DispatchServletModule extends ServletModule {
 
   @Provides
   @Named(AuthUtils.AUTHENTICATED)
-  @SessionScoped
+  @RequestScoped
   Boolean provideAuthenticated() {
-    throw new IllegalStateException("user id must be manually seeded");
+    return false;
   }
 }
