@@ -105,5 +105,23 @@ public interface AppResources extends ClientBundle {
     String messengerMessages();
 
     String messengerMessage();
+
+    String messageOuter();
+
+    String myMessageInner();
+
+    String messengerMessagesScroll();
+
+    String myMessageTime();
+
+    String friendMessageInner();
+
+    String messageInner();
+
+    String messageTime();
+
+    String friendMessageTime();
+
+    String cellWithButton();
   }
 }

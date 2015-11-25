@@ -20,11 +20,17 @@ public class ApiPaths {
   public static final String RESOURCE = "/resource";
 
   public static final String GAMES = "/games";
+
   public static final String PLAYERS = "/players";
   public static final String PLAYERS_TOTAL = "/total";
   public static final String PLAYERS_ONLINE = "/online";
+
   public static final String FRIENDS = "/friends";
   public static final String PLAYER_FRIEND_LIST = "/player/friends";
+
+  public static final String MESSAGES = "/messages";
+  public static final String LAST = "/messages/last";
+
   public static final String COUNT = "/count";
   public static final String LOGGED_IN_USER = "/loggedin";
 

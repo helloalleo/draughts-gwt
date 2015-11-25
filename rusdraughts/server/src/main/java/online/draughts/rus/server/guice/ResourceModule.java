@@ -18,9 +18,11 @@ package online.draughts.rus.server.guice;
 
 import com.google.inject.AbstractModule;
 import online.draughts.rus.server.resource.FriendsResourceImpl;
+import online.draughts.rus.server.resource.GameMessagesResourceImpl;
 import online.draughts.rus.server.resource.GamesResourceImpl;
 import online.draughts.rus.server.resource.PlayersResourceImpl;
 import online.draughts.rus.shared.resource.FriendsResource;
+import online.draughts.rus.shared.resource.GameMessagesResource;
 import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.resource.PlayersResource;
 
@@ -29,6 +31,7 @@ public class ResourceModule extends AbstractModule {
   @Override
   protected void configure() {
     bind(GamesResource.class).to(GamesResourceImpl.class);
+    bind(GameMessagesResource.class).to(GameMessagesResourceImpl.class);
     bind(PlayersResource.class).to(PlayersResourceImpl.class);
     bind(FriendsResource.class).to(FriendsResourceImpl.class);
   }

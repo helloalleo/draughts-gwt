@@ -22,9 +22,9 @@ public class GameMessageService {
     this.gameMessageDaoProvider = gameDaoProvider;
   }
 
-  public void saveOrCreate(GameMessage gameMessage) {
+  public GameMessage saveOrCreate(GameMessage gameMessage) {
     if (gameMessage == null) {
-      return;
+      return null;
     }
 
     logger.info("New message: " + gameMessage.toString());
@@ -33,9 +33,14 @@ public class GameMessageService {
     } else {
       gameMessageDaoProvider.get().edit(gameMessage);
     }
+    return gameMessage;
   }
 
   public List<GameMessage> findGameMessagesByGameId(Long gameId) {
     return gameMessageDaoProvider.get().findGameMessagesByGameId(gameId);
+  }
+
+  public List<GameMessage> findLastMessages(Integer countLast, Long playerId, Long opponentId) {
+    return gameMessageDaoProvider.get().findLastMessages(countLast, playerId, opponentId);
   }
 }

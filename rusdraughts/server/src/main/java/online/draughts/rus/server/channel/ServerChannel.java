@@ -60,6 +60,9 @@ public class ServerChannel extends ChannelServer {
 
   @Override
   public void onMessage(String token, String channelName, String message) {
+    if (!authProvider.get()) {
+      throw new RuntimeException("Access denied");
+    }
     if (StringUtils.isEmpty(message)) {
       return;
     }
@@ -73,12 +76,6 @@ public class ServerChannel extends ChannelServer {
     if (gameMessage == null) {
       return;
     }
-
-    // проверка что пользователь аутентифицирован на сайте
-//    if (authProvider.get()) {
-//      logger.info("Unauthorized access: " + gameMessage);
-//      return;
-//    }
 
     // разбор сообщения
     switch (gameMessage.getMessageType()) {
@@ -196,11 +193,11 @@ public class ServerChannel extends ChannelServer {
       return;
     }
 
-    saveGameMessage(message);
+    message = saveGameMessage(message);
     sendMessage(receiverChannel, message);
   }
 
-  private void saveGameMessage(GameMessage message) {
+  private GameMessage saveGameMessage(GameMessage message) {
     Player playerReceiver = playerService.find(message.getReceiver().getId());
     Player playerSender = playerService.find(message.getSender().getId());
     Game game = message.getGame() != null ? gameService.find(message.getGame().getId()) : null;
@@ -224,6 +221,7 @@ public class ServerChannel extends ChannelServer {
     gameMessage.setSentDate(new Date());
 
     gameMessageService.saveOrCreate(gameMessage);
+    return gameMessage;
   }
 
   private void updatePlayerList() {

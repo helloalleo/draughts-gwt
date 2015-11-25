@@ -20,9 +20,13 @@
                     </b:Row>
                 </b:PanelHeader>
                 <b:PanelBody ui:field="messengerBody">
-                    <g:HTMLPanel ui:field="messages" addStyleNames="{res.style.messengerMessages}"/>
-                    <b:TextArea ui:field="message" addStyleNames="{res.style.messengerMessage}" maxLength="250" placeholder="Введите сообщение"/>
+                    <g:ScrollPanel ui:field="messengerMessagesScroll" addStyleNames="{res.style.messengerMessagesScroll}">
+                        <g:HTMLPanel ui:field="messengerMessages" addStyleNames="{res.style.messengerMessages}"/>
+                    </g:ScrollPanel>
                 </b:PanelBody>
+                <b:PanelFooter>
+                    <b:TextArea ui:field="messengerMessage" addStyleNames="{res.style.messengerMessage}" maxLength="250"/>
+                </b:PanelFooter>
             </b:Panel>
         </g:HTMLPanel>
     </g:PopupPanel>

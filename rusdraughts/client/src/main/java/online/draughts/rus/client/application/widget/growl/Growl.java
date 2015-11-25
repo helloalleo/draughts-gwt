@@ -15,13 +15,12 @@ public class Growl {
   public static final DraughtsMessages messages = GWT.create(DraughtsMessages.class);
 
   public static void growlNotif(String message) {
-    growl(messages.notification(), " " + message);
+    growl(message);
   }
 
-  private static void growl(String notification, String message) {
+  private static void growl(String message) {
     GrowlOptions growlOptions = new GrowlOptions();
     growlOptions.setAllowDismiss(false);
-    org.gwtbootstrap3.extras.growl.client.ui.Growl.growl(notification, message, growlOptions);
+    org.gwtbootstrap3.extras.growl.client.ui.Growl.growl("", message, growlOptions);
   }
-
 }

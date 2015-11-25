@@ -10,7 +10,6 @@ import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import online.draughts.rus.client.application.ApplicationPresenter;
-import online.draughts.rus.client.application.play.messanger.MessengerPresenter;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.Cookies;
 
@@ -25,7 +24,6 @@ public class PlayPresenter extends Presenter<PlayPresenter.MyView, PlayPresenter
       MyView view,
       MyProxy proxy,
       Cookies cookies,
-      MessengerPresenter messengerPresenter,
       PlayComponentPresenter playComponentPresenter) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
@@ -34,7 +32,6 @@ public class PlayPresenter extends Presenter<PlayPresenter.MyView, PlayPresenter
     cookies.setLocation(NameTokens.playPage);
 
     setInSlot(SLOT_NEWPLAY, playComponentPresenter);
-    addToPopupSlot(messengerPresenter);
   }
 
   interface MyView extends View, HasUiHandlers<PlayUiHandlers> {

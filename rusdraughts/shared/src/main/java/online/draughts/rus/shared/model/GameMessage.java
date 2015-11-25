@@ -1,7 +1,5 @@
 package online.draughts.rus.shared.model;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.gwt.user.client.rpc.GwtTransient;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 import javax.persistence.*;
@@ -26,6 +24,7 @@ public class GameMessage extends PersistableObjectImpl {
   @JoinColumn(name = "receiver_id")
   private Player receiver;
 
+  @Lob
   private String message;
 
   @Enumerated(EnumType.STRING)
@@ -34,8 +33,6 @@ public class GameMessage extends PersistableObjectImpl {
 
   private String data;
 
-  @GwtTransient
-  @JsonIgnore
   @Column(name = "sent_date")
   private Date sentDate;
 

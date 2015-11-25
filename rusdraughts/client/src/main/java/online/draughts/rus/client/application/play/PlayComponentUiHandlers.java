@@ -29,4 +29,6 @@ interface PlayComponentUiHandlers extends UiHandlers {
   void toggleTurn(boolean turn);
 
   void doPlayerMove(Move move);
+
+  void writeToFriend(Player friend);
 }

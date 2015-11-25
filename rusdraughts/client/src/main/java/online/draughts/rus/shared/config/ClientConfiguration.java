@@ -21,4 +21,6 @@ public interface ClientConfiguration extends ConstantsWithLookup {
   String strokeCommentLength();
 
   String escapeChars();
+
+  String lastGameMessagesLoad();
 }

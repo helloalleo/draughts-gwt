@@ -106,7 +106,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private boolean opponentColor;
   private Player opponent;
   private List<Friend> playerFriendList;
-  private boolean refreshConnectionToServer = true;
 
   @Inject
   PlayComponentView(Binder binder,
@@ -127,14 +126,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     initEmptyDeskPanel();
   }
 
-  @UiHandler("playButton")
   @SuppressWarnings(value = "unused")
+  @UiHandler("playButton")
   public void onConnectToServer(ClickEvent event) {
-    if (refreshConnectionToServer) {
+    if (IconType.REFRESH.equals(playButton.getIcon())) {
       getUiHandlers().refreshConnectionToServer();
-      refreshConnectionToServer = false;
       player = playSession.getPlayer();
-      Logger.debug("PLAYER :: " + player);
     } else {
       Player selectedPlayer = null;
       if (playerSelectionModel.getSelectedObject() != null) {
@@ -146,8 +143,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     }
   }
 
-  @UiHandler("drawButton")
   @SuppressWarnings(value = "unused")
+  @UiHandler("drawButton")
   public void onDrawButton(ClickEvent event) {
     new ConfirmeDialogBox(messages.doYouWantToProposeDraw()) {
       @Override
@@ -159,8 +156,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     };
   }
 
-  @UiHandler("surrenderButton")
   @SuppressWarnings(value = "unused")
+  @UiHandler("surrenderButton")
   public void onSurrenderButton(ClickEvent event) {
     new ConfirmeDialogBox(messages.areYouSureYouWantSurrender()) {
       @Override
@@ -270,6 +267,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         return getStatusSafeHtml(friend.getPk().getFriend());
       }
     };
+    statusColumn.setCellStyleNames(resources.style().cellWithButton());
     playerFriendCellTable.addColumn(statusColumn);
 
     TextColumn<Friend> publicNameColumn = new TextColumn<Friend>() {
@@ -278,6 +276,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         return friend.getPk().getFriend().getPublicName();
       }
     };
+    publicNameColumn.setCellStyleNames(resources.style().cellWithButton());
     playerFriendCellTable.addColumn(publicNameColumn);
 
     final ButtonCell favoriteButtonCell = new ButtonCell();
@@ -333,6 +332,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         return getStatusSafeHtml(player);
       }
     };
+    statusColumn.setCellStyleNames(resources.style().cellWithButton());
     playerCellTable.addColumn(statusColumn);
 
     TextColumn<Player> publicNameColumn = new TextColumn<Player>() {
@@ -341,7 +341,30 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         return player.getPublicName();
       }
     };
+    publicNameColumn.setCellStyleNames(resources.style().cellWithButton());
     playerCellTable.addColumn(publicNameColumn);
+
+    final ButtonCell writeButtonCell = new ButtonCell(ButtonType.LINK, IconType.PENCIL);
+    final Column<Player, String> writeColumn = new Column<Player, String>(writeButtonCell) {
+      @Override
+      public String getValue(Player object) {
+        return "";
+      }
+
+      @Override
+      public void render(Cell.Context context, Player object, SafeHtmlBuilder sb) {
+        if (!object.getId().equals(player.getId())) {
+          super.render(context, object, sb);
+        }
+      }
+    };
+    writeColumn.setFieldUpdater(new FieldUpdater<Player, String>() {
+      @Override
+      public void update(int index, Player object, String value) {
+        getUiHandlers().writeToFriend(object);
+      }
+    });
+    playerCellTable.addColumn(writeColumn);
   }
 
   private SafeHtml getStatusSafeHtml(Player player) {
@@ -411,8 +434,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Override
   public void setUpViewOnDisconnectFromServer() {
-    refreshConnectionToServer = true;
-
     playButton.setActive(true);
     playButton.setBlock(true);
     playButton.addStyleName("btn-danger");

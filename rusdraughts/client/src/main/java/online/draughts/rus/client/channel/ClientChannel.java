@@ -264,9 +264,7 @@ public class ClientChannel implements ChannelListener {
       }
     }
 
-    switch (gameMessage.getMessageType())
-
-    {
+    switch (gameMessage.getMessageType()) {
       case USER_LIST_UPDATE:
         handleUpdatePlayerList(gameMessage.getPlayerList());
         break;
@@ -464,7 +462,7 @@ public class ClientChannel implements ChannelListener {
   }
 
   private void handleChatPrivateMessage(GameMessage gameMessage) {
-    eventBus.fireEvent(new ChatMessageEvent(gameMessage.getMessage()));
+    eventBus.fireEvent(new ChatMessageEvent(gameMessage));
   }
 
   private void handlePlayRejectInvite(GameMessage gameMessage) {

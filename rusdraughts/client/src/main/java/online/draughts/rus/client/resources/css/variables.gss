@@ -13,6 +13,8 @@
 @def C_NAVBAR_ACTIVE_ITEM       eval("online.draughts.rus.client.resources.Variables.C_NAVBAR_ACTIVE_ITEM");
 @def C_NAVBAR_COLOR             eval("online.draughts.rus.client.resources.Variables.C_NAVBAR_COLOR");
 @def C_NAVBAR_BORDER            eval("online.draughts.rus.client.resources.Variables.C_NAVBAR_BORDER");
+@def C_MY_MESSAGE               #dfe7ff;
+@def C_FRIEND_MESSAGE           #ffe2e2;
 
 /**
  * Sizes
@@ -35,3 +37,4 @@
 @def DIALOG_BORDER_RADIUS               4px;
 @def MESSENGER_BORDER_RADIUS            4px;
 @def NOTATION_CURRENT_BORDER_RADIUS     4px;
+@def RADIUS                             4px;

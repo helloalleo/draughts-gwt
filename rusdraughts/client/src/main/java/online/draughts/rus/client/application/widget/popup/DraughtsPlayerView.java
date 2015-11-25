@@ -4,6 +4,7 @@ import com.ait.lienzo.client.widget.LienzoPanel;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.HandlerRegistration;
+import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SimpleHtmlSanitizer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -390,7 +391,8 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     String text = commentCurrentStrokeTextArea.getText().replace(config.escapeChars(), "");
     text = SimpleHtmlSanitizer.getInstance().sanitize(text).asString();
     final String gameComment = text.replace("\n", NotationPanel.COMMENT_SEP);
-    final String newComment = oComment + gameComment + NotationPanel.COMMENT_SEP;
+    final String s = oComment + gameComment + NotationPanel.COMMENT_SEP;
+    final String newComment = new SafeHtmlBuilder().appendEscapedLines(s).toSafeHtml().asString();
 
     current.setAttribute(NotationPanel.DATA_COMMENT_ATTR, newComment);
 

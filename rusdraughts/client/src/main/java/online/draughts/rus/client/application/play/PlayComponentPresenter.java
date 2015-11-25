@@ -10,6 +10,7 @@ import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
+import online.draughts.rus.client.application.play.messanger.MessengerPresenter;
 import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
@@ -35,6 +36,8 @@ import java.util.List;
 public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresenter.MyView>
     implements PlayComponentUiHandlers {
 
+  private final MessengerPresenter.Factory messengerFactory;
+  private final PlayView playView;
   private int DRAUGHTS_ON_DESK_INIT = 12;
 
   private final ClientChannel clientChannel;
@@ -53,7 +56,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       ResourceDelegate<GamesResource> gamesDelegate,
       ResourceDelegate<PlayersResource> playersDelegate,
       ResourceDelegate<FriendsResource> friendsDelegate,
-      ClientChannel clientChannel) {
+      MessengerPresenter.Factory messengerFactory,
+      ClientChannel clientChannel,
+      PlayView playView) {
     super(eventBus, view);
 
     this.messages = messages;
@@ -62,6 +67,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     this.gamesDelegate = gamesDelegate;
     this.playersDelegate = playersDelegate;
     this.friendsDelegate = friendsDelegate;
+    this.messengerFactory = messengerFactory;
+    this.playView = playView;
 
     getView().setUiHandlers(this);
   }
@@ -186,6 +193,11 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   @Override
   public void doPlayerMove(Move move) {
     fireEvent(new PlayMovePlayerMessageEvent(move));
+  }
+
+  @Override
+  public void writeToFriend(Player friend) {
+    addToPopupSlot(messengerFactory.create(playView, friend));
   }
 
   private GameMessage createGameMessage() {

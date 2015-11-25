@@ -1,7 +1,7 @@
 @require "variables";
 @require "mixins";
 
-@external active panel-body panel-heading;
+@external active panel-body panel-heading panel-footer;
 
 body {
     background-color: #fffffe;
@@ -272,10 +272,9 @@ body {
 
 /* Messenger */
 
-
 .messenger {
 @mixin radius(MESSENGER_BORDER_RADIUS);
-@mixin shadow(0, 0, 8px, 1px, #555);
+@mixin shadow(0, 0, 8 px, 1 px, #555);
 }
 
 .messenger .panel-body {
@@ -285,6 +284,10 @@ body {
 .messenger .panel-heading {
     padding: 5px;
     max-height: 40px;
+}
+
+.messenger .panel-footer {
+    padding: 5px;
 }
 
 .messenger .panel-heading button {
@@ -300,10 +303,62 @@ body {
 .messengerMessages {
     min-height: 200px;
     min-width: 300px;
+    max-height: 200px;
+    max-width: 300px;
+    margin-right: 15px !important;
 }
 
 .messengerMessage {
     resize: none;
-    margin-bottom: 4px;
     max-height: 35px;
+}
+
+.myMessageInner {
+    float: right;
+    background: C_MY_MESSAGE;
+}
+
+.friendMessageInner {
+    float: left;
+    margin-right: 8px;
+    margin-bottom: 8px;
+    background: C_FRIEND_MESSAGE;
+}
+
+.messageInner {
+    padding: 2px;
+@mixin radius(RADIUS);
+}
+
+.myMessageTime {
+    background: C_MY_MESSAGE;
+}
+
+.messageTime {
+    padding: 2px;
+
+@mixin radius(RADIUS);
+}
+
+.friendMessageTime {
+    background: C_FRIEND_MESSAGE;
+    float: left;
+}
+
+.messengerMessagesScroll {
+    /*padding: 6px;*/
+    /*height: 200px;*/
+    /*overflow-x: hidden;*/
+}
+
+.messageOuter {
+    overflow: hidden;
+    display: block;
+    width: 100%;
+}
+
+/* End Messenger */
+
+.cellWithButton div {
+    line-height: 2;
 }
