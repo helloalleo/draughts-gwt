@@ -357,6 +357,14 @@ body {
     width: 100%;
 }
 
+.newMessageCircle {
+    background: #ea0000;
+    padding-left: 4px;
+    padding-right: 4px;
+    color: gainsboro;
+@mixin radius(16px);
+}
+
 /* End Messenger */
 
 .cellWithButton div {

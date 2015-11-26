@@ -386,6 +386,18 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         }
         return "";
       }
+
+      @Override
+      public void render(Cell.Context context, Player object, SafeHtmlBuilder sb) {
+        final Integer unreadMsg = unreadMessagesMap.get(object.getId());
+        sb.appendHtmlConstant("<span class=\""
+            + (unreadMsg != null ? resources.style().newMessageCircle() : "") + "\" " +
+            ">");
+        if (unreadMsg != null) {
+          sb.append(unreadMsg);
+        }
+        sb.appendHtmlConstant("</span>");
+      }
     };
     newMessagesColumn.setCellStyleNames(resources.style().cellWithButton());
     playerCellTable.addColumn(newMessagesColumn);

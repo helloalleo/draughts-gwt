@@ -123,5 +123,7 @@ public interface AppResources extends ClientBundle {
     String friendMessageTime();
 
     String cellWithButton();
+
+    String newMessageCircle();
   }
 }
