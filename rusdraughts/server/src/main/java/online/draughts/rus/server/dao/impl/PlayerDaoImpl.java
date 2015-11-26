@@ -40,7 +40,7 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   @Transactional
   public Player findByVkId(String vkId) {
     try {
-      return findByParam("Player", new String[]{"vkId"}, new String[]{vkId});
+      return (Player) findByParam("Player", new String[]{"vkId"}, new String[]{vkId});
     } catch (IllegalArgumentException e) {
       log.severe(e.getLocalizedMessage());
       return null;
@@ -51,7 +51,7 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   @Transactional
   public Player findBySessionId(String sessionId) {
     try {
-      return findByParam("Player", new String[]{"sessionId"}, new String[]{sessionId});
+      return (Player) findByParam("Player", new String[]{"sessionId"}, new String[]{sessionId});
     } catch (IllegalArgumentException e) {
       log.severe(e.getLocalizedMessage());
       return null;
@@ -62,7 +62,7 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   @Transactional
   public Player findById(Long playerId) {
     try {
-      return findByParam("Player", new String[]{"id"}, new Long[]{playerId});
+      return (Player) findByParam("Player", new String[]{"id"}, new Long[]{playerId});
     } catch (IllegalArgumentException e) {
       log.severe(e.getLocalizedMessage());
       return null;
@@ -73,7 +73,7 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   @Transactional
   public Player findByFbId(String user_id) {
     try {
-      return findByParam("Player", new String[]{"fbId"}, new String[]{user_id});
+      return (Player) findByParam("Player", new String[]{"fbId"}, new String[]{user_id});
     } catch (IllegalArgumentException e) {
       log.severe(e.getLocalizedMessage());
       return null;
@@ -84,7 +84,7 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   @Transactional
   public Player findByGoogleSub(String sub) {
     try {
-      return findByParam("Player", new String[]{"googleSub"}, new String[]{sub});
+      return (Player) findByParam("Player", new String[]{"googleSub"}, new String[]{sub});
     } catch (IllegalArgumentException e) {
       log.severe(e.getLocalizedMessage());
       return null;

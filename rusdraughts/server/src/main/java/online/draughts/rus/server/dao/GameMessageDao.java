@@ -14,7 +14,5 @@ public interface GameMessageDao extends Dao<GameMessage> {
 
   List<GameMessage> findLastMessages(int countLast, Long playerId, Long opponentId);
 
-  void removeMessagesByGameId(Long gameId);
-
   List<GameMessage> findGameMessagesByGameId(Long gameId);
 }

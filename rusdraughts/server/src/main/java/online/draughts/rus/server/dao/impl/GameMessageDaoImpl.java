@@ -56,16 +56,6 @@ public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements GameMess
   }
 
   @Override
-  @Transactional
-  public void removeMessagesByGameId(Long gameId) {
-    String hql = "DELETE FROM GameMessage gm " +
-        " WHERE gm.game.id = :gameId";
-    Query query = getEntityManager().createQuery(hql);
-    query.setParameter("gameId", gameId);
-    query.executeUpdate();
-  }
-
-  @Override
   public List<GameMessage> findGameMessagesByGameId(Long gameId) {
     String hql = "SELECT gm " +
         " FROM GameMessage gm " +

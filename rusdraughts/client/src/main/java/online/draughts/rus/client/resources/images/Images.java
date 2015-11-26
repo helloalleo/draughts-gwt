@@ -27,4 +27,7 @@ public interface Images extends ClientBundle {
 
   @Source("img/white-win.png")
   ImageResource whiteWin();
+
+  @Source("img/me.jpg")
+  ImageResource me();
 }

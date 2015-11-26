@@ -4,7 +4,6 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
 import online.draughts.rus.server.dao.Dao;
 import online.draughts.rus.shared.model.BasePersistableObject;
-import online.draughts.rus.shared.model.Player;
 import org.apache.commons.lang3.StringUtils;
 
 import javax.persistence.EntityManager;
@@ -104,7 +103,7 @@ public abstract class DaoImpl<E extends BasePersistableObject> implements Dao<E>
     return getEntityManager().createQuery(cq).getSingleResult();
   }
 
-  protected Player findByParam(String entity, String[] params, Object[] values) throws IllegalArgumentException {
+  protected Object findByParam(String entity, String[] params, Object[] values) throws IllegalArgumentException {
     if (StringUtils.isEmpty(entity)) {
       throw new IllegalArgumentException("Illegal entity parameter");
     }
@@ -129,6 +128,6 @@ public abstract class DaoImpl<E extends BasePersistableObject> implements Dao<E>
     if (result.isEmpty()) {
       return null;
     }
-    return (Player) result.get(0);
+    return result.get(0);
   }
 }

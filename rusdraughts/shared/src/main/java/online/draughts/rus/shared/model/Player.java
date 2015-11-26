@@ -6,9 +6,7 @@ import com.google.gwt.user.client.rpc.GwtTransient;
 import online.draughts.rus.shared.util.StringUtils;
 
 import javax.persistence.*;
-import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -106,6 +104,15 @@ public class Player extends PersistableObjectImpl {
   private boolean loggedIn;
   private boolean playing;
   private boolean online;
+
+  @GwtTransient
+  @JsonIgnore
+  @ElementCollection(targetClass = Integer.class)
+  @MapKeyClass(Long.class)
+  @MapKeyColumn(name="name")
+  @CollectionTable(name = "unreaded_messages", joinColumns = @JoinColumn(name="id"))
+  @Column(name = "value")
+  private Map<Long, Integer> friendUnreadMessagesMap = new HashMap<>();
 
   @GwtTransient
   @JsonIgnore
@@ -251,22 +258,6 @@ public class Player extends PersistableObjectImpl {
     this.sentPlayerMessages = playerMessageEntities;
   }
 
-//  public Set<GameMessage> getReceivedGameMessages() {
-//    return receivedGameMessages;
-//  }
-//
-//  public void setReceivedGameMessages(Set<GameMessage> receivedGameMessages) {
-//    this.receivedGameMessages = receivedGameMessages;
-//  }
-//
-//  public Set<GameMessage> getSentGameMessages() {
-//    return sentGameMessages;
-//  }
-//
-//  public void setSentGameMessages(Set<GameMessage> sentGameMessages) {
-//    this.sentGameMessages = sentGameMessages;
-//  }
-
   public boolean isLoggedIn() {
     return loggedIn;
   }
@@ -289,6 +280,15 @@ public class Player extends PersistableObjectImpl {
 
   public void setOnline(boolean online) {
     this.online = online;
+  }
+
+  public Map<Long, Integer> getFriendUnreadMessagesMap() {
+    return friendUnreadMessagesMap;
+  }
+
+  public Player setFriendUnreadMessagesMap(Map<Long, Integer> friendUnreadMessagesMap) {
+    this.friendUnreadMessagesMap = friendUnreadMessagesMap;
+    return this;
   }
 
   public Date getRegisterDate() {
@@ -389,12 +389,12 @@ public class Player extends PersistableObjectImpl {
   }
 
   @JsonIgnore
-  public String getFullName() {
+  private String getFullName() {
     return getFirstName() + " " + getLastName();
   }
 
   @JsonIgnore
-  public String getShortName() {
+  private String getShortName() {
     if (getPlayerName() == null) {
       return getFirstName();
     }

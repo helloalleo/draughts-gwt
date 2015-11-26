@@ -25,4 +25,9 @@ public interface PlayersResource {
   @GET
   @Path(ApiPaths.PLAYERS_ONLINE)
   Integer onlinePlayers();
+
+  @POST
+  @Path(ApiPaths.RESET_UNREAD)
+  void resetUnreadMessages(@QueryParam(ApiParameters.PLAYER_ID) Long playerId,
+                           @QueryParam(ApiParameters.FRIEND_ID) Long friendId);
 }

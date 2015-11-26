@@ -48,6 +48,7 @@ public class AuthUtils {
     if (player.getSessionId() == null
         || !player.getSessionId().equals(session.getId())) {
       player.setSessionId(session.getId());
+      player.setRegisterDate(new Date());
     }
     player.setVisitCounter(player.getVisitCounter() + 1);
 

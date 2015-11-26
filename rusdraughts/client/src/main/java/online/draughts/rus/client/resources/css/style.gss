@@ -360,5 +360,5 @@ body {
 /* End Messenger */
 
 .cellWithButton div {
-    line-height: 2;
+    line-height: 2.4;
 }

@@ -13,4 +13,5 @@ public class ApiParameters {
   public static final String OFFSET = "offset";
   public static final String PLAYER_ID = "playerId";
   public static final String OPPONENT_ID = "opponentId";
+  public static final String FRIEND_ID = "friendId";
 }

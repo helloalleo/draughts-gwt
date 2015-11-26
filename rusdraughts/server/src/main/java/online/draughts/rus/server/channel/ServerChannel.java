@@ -38,6 +38,8 @@ public class ServerChannel extends ChannelServer {
   private final GameMessageService gameMessageService;
   private final GameService gameService;
   private final Provider<Boolean> authProvider;
+  //  private final Map<Long, Queue<GameMessage>> playerChatMessageQueue
+//      = Collections.synchronizedMap(new HashMap<Long, Queue<GameMessage>>());
   private final Logger logger;
 
   @Inject
@@ -66,25 +68,21 @@ public class ServerChannel extends ChannelServer {
     if (StringUtils.isEmpty(message)) {
       return;
     }
-    GameMessage gameMessage;
+    GameMessage gameMessage = null;
     try {
       gameMessage = Utils.deserializeFromJson(message, GameMessage.class);
     } catch (IOException e) {
       logger.severe(e.getLocalizedMessage());
-      return;
     }
     if (gameMessage == null) {
       return;
     }
 
-    // разбор сообщения
+    // обработка сообщений
     switch (gameMessage.getMessageType()) {
       case PLAYER_REGISTER:
-        handleNewPlayer(gameMessage, token);
+        handlePlayerConnect(gameMessage, token);
         break;
-//      case CHAT_MESSAGE:
-//        handleChatMessage(session, gameMessage);
-//        break;
       case USER_LIST_UPDATE:
         updatePlayerList();
         break;
@@ -129,15 +127,7 @@ public class ServerChannel extends ChannelServer {
     handleChatPrivateMessage(gameMessage);
   }
 
-//  private void handleChatMessage(Session session, GameMessage message) {
-//    for (Session s : session.getOpenSessions()) {
-//      if (s.isOpen()) {
-//        sendMessage(s, message);
-//      }
-//    }
-//  }
-
-  private void handleNewPlayer(GameMessage message, String token) {
+  private void handlePlayerConnect(GameMessage message, String token) {
     Player player = message.getSender();
     final Long playerId = player.getId();
     player = playerService.find(playerId);
@@ -145,8 +135,16 @@ public class ServerChannel extends ChannelServer {
     player.setOnline(true);
     playerService.saveOrCreateOnServer(player);
 
-    channelTokenPeers.put(String.valueOf(playerId), token);
+    final String channel = String.valueOf(playerId);
+    channelTokenPeers.put(channel, token);
     updatePlayerList();
+
+//    if (player.getUnreadMessages() != 0) {
+//      Queue<GameMessage> messageQueue = playerChatMessageQueue.get(playerId);
+//      for (GameMessage gameMessage : messageQueue) {
+//        sendMessage(channel, gameMessage);
+//      }
+//    }
   }
 
   public void onClose(String chanelName) {
@@ -178,23 +176,33 @@ public class ServerChannel extends ChannelServer {
     updatePlayerList();
   }
 
-  public void onError(Throwable throwable) {
-    throwable.printStackTrace();
-  }
-
   private void handleChatPrivateMessage(GameMessage message) {
     Player receiver = message.getReceiver();
     if (receiver == null) {
       return;
     }
-    final String receiverChannel = String.valueOf(receiver.getId());
-    String token = channelTokenPeers.get(receiverChannel);
-    if (token == null) {
+    Player sender = message.getSender();
+    if (sender == null) {
       return;
     }
 
+    final String receiverChannel = String.valueOf(receiver.getId());
+
     message = saveGameMessage(message);
-    sendMessage(receiverChannel, message);
+    if (GameMessage.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
+      // если получатель не имеет сообщений от данного отправителя, тогда инициализируем Map и увеличиваем счетчика
+      // на единицу
+      receiver = playerService.find(receiver.getId());
+      if (!receiver.getFriendUnreadMessagesMap().containsKey(sender.getId())) {
+        receiver.getFriendUnreadMessagesMap().put(sender.getId(), 0);
+      }
+      final Integer unreadMessages = receiver.getFriendUnreadMessagesMap().get(sender.getId());
+      receiver.getFriendUnreadMessagesMap().put(sender.getId(), unreadMessages + 1);
+      playerService.saveOrCreateOnServer(receiver);
+    }
+    if (receiver.isOnline()) {
+      sendMessage(receiverChannel, message);
+    }
   }
 
   private GameMessage saveGameMessage(GameMessage message) {

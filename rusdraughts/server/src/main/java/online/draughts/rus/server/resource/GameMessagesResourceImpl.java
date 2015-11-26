@@ -7,6 +7,7 @@ import online.draughts.rus.shared.model.GameMessage;
 import online.draughts.rus.shared.resource.GameMessagesResource;
 
 import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -28,5 +29,10 @@ public class GameMessagesResourceImpl implements GameMessagesResource {
   @Override
   public List<GameMessage> findLastMessages(Integer countLast, Long playerId, Long opponentId) {
     return gameMessageService.findLastMessages(countLast, playerId, opponentId);
+  }
+
+  @Override
+  public Map<Long, Integer> findUnreadMessages(Long playerId) {
+    return gameMessageService.findUnreadMessages(playerId);
   }
 }

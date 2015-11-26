@@ -38,6 +38,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   private AppResources resources;
   private AnchorListItem scrollToTop;
 
+  @SuppressWarnings("SuspiciousNameCombination")
   @Inject
   MenuView(Binder binder,
            AppResources resources,
@@ -118,14 +119,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
 
     if (getUiHandlers().isLoggedIn()) {
       for (NameTokens.Link link : nameTokens.getRightAuthLinks()) {
-        AnchorListItem anchor;
-        if (link.token.equals(NameTokens.logoutPage)) {
-          anchor = new AnchorListItem(link.name);
-          anchor.setIcon(IconType.SIGN_OUT);
-          anchor.setHref(link.token);
-        } else {
-          anchor = createAnchor(link);
-        }
+        AnchorListItem anchor = createAnchor(link);
         navRight.add(anchor);
       }
     } else {
@@ -161,16 +155,8 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
 
   private AnchorListItem createAnchor(final NameTokens.Link link) {
     final AnchorListItem anchor = new AnchorListItem(link.name);
-    switch (link.token) {
-      case NameTokens.homePage:
-        break;
-      case NameTokens.profilePage:
-        anchor.setIcon(IconType.USER);
-        break;
-      case NameTokens.loginPage:
-        anchor.setIcon(IconType.SIGN_IN);
-        break;
-    }
+    anchor.setHref(link.href);
+    anchor.setIcon(link.iconType);
     anchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {

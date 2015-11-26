@@ -51,4 +51,9 @@ public class PlayersResourceImpl implements PlayersResource {
   public Integer onlinePlayers() {
     return playerService.onlinePlayers();
   }
+
+  @Override
+  public void resetUnreadMessages(Long playerId, Long friendId) {
+    playerService.resetUnreadMessages(playerId, friendId);
+  }
 }

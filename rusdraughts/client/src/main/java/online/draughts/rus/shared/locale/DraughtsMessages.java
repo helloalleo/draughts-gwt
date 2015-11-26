@@ -230,4 +230,6 @@ public interface DraughtsMessages extends Messages {
   String alreadyConnected();
 
   String learn();
+
+  String newMessageFrom(String sender);
 }

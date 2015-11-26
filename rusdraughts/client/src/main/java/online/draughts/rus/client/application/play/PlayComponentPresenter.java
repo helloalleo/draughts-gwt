@@ -1,6 +1,7 @@
 package online.draughts.rus.client.application.play;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.rpc.AsyncCallback;
@@ -11,6 +12,7 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import online.draughts.rus.client.application.play.messanger.MessengerPresenter;
+import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
@@ -26,11 +28,13 @@ import online.draughts.rus.draughts.StrokeFactory;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.model.*;
 import online.draughts.rus.shared.resource.FriendsResource;
+import online.draughts.rus.shared.resource.GameMessagesResource;
 import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.resource.PlayersResource;
 
 import java.util.Date;
 import java.util.List;
+import java.util.Map;
 
 
 public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresenter.MyView>
@@ -38,6 +42,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   private final MessengerPresenter.Factory messengerFactory;
   private final PlayView playView;
+  private final ResourceDelegate<GameMessagesResource> gameMessagesDelegate;
+  private final CurrentSession currentSession;
   private int DRAUGHTS_ON_DESK_INIT = 12;
 
   private final ClientChannel clientChannel;
@@ -46,16 +52,19 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final ResourceDelegate<FriendsResource> friendsDelegate;
+  private MessengerPresenter currentMessenger;
 
   @Inject
   PlayComponentPresenter(
       EventBus eventBus,
       MyView view,
       PlaySession playSession,
+      CurrentSession currentSession,
       DraughtsMessages messages,
       ResourceDelegate<GamesResource> gamesDelegate,
       ResourceDelegate<PlayersResource> playersDelegate,
       ResourceDelegate<FriendsResource> friendsDelegate,
+      ResourceDelegate<GameMessagesResource> gameMessagesDelegate,
       MessengerPresenter.Factory messengerFactory,
       ClientChannel clientChannel,
       PlayView playView) {
@@ -64,10 +73,12 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     this.messages = messages;
     this.clientChannel = clientChannel;
     this.playSession = playSession;
+    this.currentSession = currentSession;
     this.gamesDelegate = gamesDelegate;
     this.playersDelegate = playersDelegate;
     this.friendsDelegate = friendsDelegate;
     this.messengerFactory = messengerFactory;
+    this.gameMessagesDelegate = gameMessagesDelegate;
     this.playView = playView;
 
     getView().setUiHandlers(this);
@@ -120,6 +131,16 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       return;
     }
     clientChannel.connect();
+    updateUnreadMessages();
+  }
+
+  private void updateUnreadMessages() {
+    gameMessagesDelegate.withCallback(new AbstractAsyncCallback<Map<Long, Integer>>() {
+      @Override
+      public void onSuccess(Map<Long, Integer> result) {
+        getView().setUnreadMessagesMap(result);
+      }
+    }).findUnreadMessages(currentSession.getPlayer().getId());
   }
 
   @Override
@@ -197,7 +218,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   @Override
   public void writeToFriend(Player friend) {
-    addToPopupSlot(messengerFactory.create(playView, friend));
+    currentMessenger = messengerFactory.create(playView, friend);
+    addToPopupSlot(currentMessenger);
+    playersDelegate.withoutCallback().resetUnreadMessages(currentSession.getPlayer().getId(), friend.getId());
   }
 
   private GameMessage createGameMessage() {
@@ -213,7 +236,12 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       @Override
       public void onReceivedPlayerList(ReceivedPlayerListEvent event) {
         getView().setPlayerList(event.getPlayerList());
-        updatePlayerFriendList();
+        Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+          @Override
+          public void execute() {
+            updatePlayerFriendList();
+          }
+        });
       }
     });
 
@@ -375,6 +403,16 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         getView().getBoard().moveOpponentCanceled(stroke);
       }
     });
+
+    addRegisteredHandler(ChatMessageEvent.TYPE, new ChatMessageEventHandler() {
+      @Override
+      public void onChatMessage(ChatMessageEvent event) {
+        if (currentMessenger == null || !currentMessenger.isVisible()) {
+          Growl.growlNotif(messages.newMessageFrom(event.getMessage().getSender().getPublicName()));
+          updateUnreadMessages();
+        }
+      }
+    });
   }
 
   private void updatePlayerFriendList() {
@@ -428,5 +466,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     Board getBoard();
 
     void initNotationPanel(Long gameId);
+
+    void setUnreadMessagesMap(Map<Long, Integer> result);
   }
 }

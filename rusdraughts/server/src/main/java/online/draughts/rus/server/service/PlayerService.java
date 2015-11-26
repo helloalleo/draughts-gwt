@@ -94,4 +94,10 @@ public class PlayerService {
   public Integer onlinePlayers() {
     return playerDaoProvider.get().findOnline().size();
   }
+
+  public void resetUnreadMessages(Long playerId, Long friendId) {
+    Player player = playerDaoProvider.get().find(playerId);
+    player.getFriendUnreadMessagesMap().remove(friendId);
+    playerDaoProvider.get().edit(player);
+  }
 }

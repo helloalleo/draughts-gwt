@@ -12,6 +12,8 @@ import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
+import com.google.gwt.dom.client.TableCellElement;
+import com.google.gwt.dom.client.TableRowElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtml;
@@ -53,6 +55,7 @@ import org.gwtbootstrap3.client.ui.gwt.CellTable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Map;
 
 public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandlers>
     implements PlayComponentPresenter.MyView, PlayComponent {
@@ -106,6 +109,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private boolean opponentColor;
   private Player opponent;
   private List<Friend> playerFriendList;
+  private Map<Long, Integer> unreadMessagesMap;
+  private List<Player> playerList;
 
   @Inject
   PlayComponentView(Binder binder,
@@ -239,6 +244,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     });
   }
 
+  @Override
+  public void setUnreadMessagesMap(Map<Long, Integer> result) {
+    this.unreadMessagesMap = result;
+    setPlayerList(playerList);
+  }
+
   private void alignNotationPanel() {
     if (Window.getClientWidth() > 0) {
       String notationHeight = lienzoPanel.getHeight() - infoHTMLPanel.getOffsetHeight() - 40 + "px";
@@ -361,10 +372,23 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     writeColumn.setFieldUpdater(new FieldUpdater<Player, String>() {
       @Override
       public void update(int index, Player object, String value) {
+        unreadMessagesMap.remove(object.getId());
         getUiHandlers().writeToFriend(object);
       }
     });
     playerCellTable.addColumn(writeColumn);
+
+    TextColumn<Player> newMessagesColumn = new TextColumn<Player>() {
+      @Override
+      public String getValue(Player player) {
+        if (unreadMessagesMap.containsKey(player.getId())) {
+          return String.valueOf(unreadMessagesMap.get(player.getId()));
+        }
+        return "";
+      }
+    };
+    newMessagesColumn.setCellStyleNames(resources.style().cellWithButton());
+    playerCellTable.addColumn(newMessagesColumn);
   }
 
   private SafeHtml getStatusSafeHtml(Player player) {
@@ -419,6 +443,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Override
   public void setPlayerList(List<Player> playerList) {
+    this.playerList = playerList;
     playerList.remove(player);
     playerList.add(0, player);
     playerCellTable.setRowCount(0);
