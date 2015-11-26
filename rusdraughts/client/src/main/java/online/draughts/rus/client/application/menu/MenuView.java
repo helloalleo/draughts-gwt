@@ -155,7 +155,9 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
 
   private AnchorListItem createAnchor(final NameTokens.Link link) {
     final AnchorListItem anchor = new AnchorListItem(link.name);
-    anchor.setHref(link.href);
+    if (link.href != null) {
+      anchor.setHref(link.href);
+    }
     anchor.setIcon(link.iconType);
     anchor.addClickHandler(new ClickHandler() {
       @Override

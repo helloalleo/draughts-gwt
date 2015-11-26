@@ -11,7 +11,7 @@ public class NameTokens {
   public static final String playPage = "!play";
   public static final String loginPage = "!login";
   public static final String profilePage = "!profile";
-  public static final String lovePage = "!lovePage";
+  public static final String lovePage = "!love";
 
   public static final String errorPage = "!error";
   public static final String settingsPage = "!settings";
@@ -29,14 +29,14 @@ public class NameTokens {
 
   @Inject
   public NameTokens(DraughtsMessages messages) {
-    homeLink = new Link(homePage, messages.home(), "", IconType.HOME);
-    learnLink = new Link(learnPage, messages.learn(), "", null);
-    playLink = new Link(playPage, messages.play(), "", IconType.PLAY_CIRCLE_O);
-    loveLink = new Link(lovePage, "", "", IconType.HEART_O);
-    loginLink = new Link(loginPage, "", messages.login(), IconType.SIGN_IN);
-    logoutLink = new Link(logoutPage, messages.logout(), logoutPage, IconType.SIGN_OUT);
-    profileLink = new Link(profilePage, messages.profile(), "", IconType.USER);
-    settingsLink = new Link(settingsPage, messages.settings(), "", IconType.GEAR);
+    homeLink = new Link(homePage, messages.home(), null, IconType.HOME);
+    learnLink = new Link(learnPage, messages.learn(), null, null);
+    playLink = new Link(playPage, messages.play(), null, IconType.PLAY_CIRCLE_O);
+    loveLink = new Link(lovePage, "", null, IconType.HEART_O);
+    loginLink = new Link(loginPage, messages.login(), null, IconType.SIGN_IN);
+    logoutLink = new Link(null, messages.logout(), logoutPage, IconType.SIGN_OUT);
+    profileLink = new Link(profilePage, messages.profile(), null, IconType.USER);
+    settingsLink = new Link(settingsPage, messages.settings(), null, IconType.GEAR);
   }
 
   public static String getLovePage() {

@@ -11,6 +11,7 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import online.draughts.rus.client.application.ApplicationPresenter;
 import online.draughts.rus.client.place.NameTokens;
+import online.draughts.rus.client.util.Cookies;
 
 
 public class LearnPresenter extends Presenter<LearnPresenter.MyView, LearnPresenter.MyProxy> {
@@ -20,8 +21,11 @@ public class LearnPresenter extends Presenter<LearnPresenter.MyView, LearnPresen
   LearnPresenter(
       EventBus eventBus,
       MyView view,
-      MyProxy proxy) {
+      MyProxy proxy,
+      Cookies cookies) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
+
+    cookies.setLocation(NameTokens.learnPage);
   }
 
   interface MyView extends View {

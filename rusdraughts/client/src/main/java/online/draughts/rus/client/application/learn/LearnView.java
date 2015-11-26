@@ -11,15 +11,15 @@ import javax.inject.Inject;
 
 public class LearnView extends ViewImpl implements LearnPresenter.MyView {
 
+  @UiField
+  SimplePanel main;
+
   @Inject
   LearnView(Binder uiBinder) {
     initWidget(uiBinder.createAndBindUi(this));
 
     bindSlot(LearnPresenter.SLOT_LEARNRUSSIANDRAUGHTS, main);
   }
-
-  @UiField
-  SimplePanel main;
 
   interface Binder extends UiBinder<Widget, LearnView> {
   }
