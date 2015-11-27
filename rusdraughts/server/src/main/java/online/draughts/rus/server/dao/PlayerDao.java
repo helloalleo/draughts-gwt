@@ -23,8 +23,6 @@ public interface PlayerDao extends Dao<Player> {
 
   Player findByGoogleSub(String sub);
 
-  List<Player> findLoggedIn();
-
   List<Friend> findFriends(Long playerId);
 
   List<Player> findAll();

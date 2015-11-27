@@ -541,8 +541,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
             .setX(event.getX())
             .setY(event.getY())
             .setFillColor(ColorName.RED);
-        board.add(circle);
-        lienzoPanel.draw();
+//        board.add(circle);
+//        lienzoPanel.draw();
       }
     });
   }

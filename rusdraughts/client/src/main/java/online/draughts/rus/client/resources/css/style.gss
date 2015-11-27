@@ -336,6 +336,7 @@ body {
 
 .messageTime {
     padding: 2px;
+    color: darkgray;
 
 @mixin radius(RADIUS);
 }

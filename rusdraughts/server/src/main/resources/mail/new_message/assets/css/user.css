@@ -1,0 +1,33 @@
+div.custom-navbar{
+  background:#418584;
+  height:70px;
+}
+
+div.col-md-11.l-heading{
+  color:white;
+}
+
+div.col-md-11.l-heading h1{
+  color:white;
+  margin:.42em;
+}
+
+@media (max-width:991px) {
+  div.col-md-1.col-sm-1{
+    margin-top:16px;
+  }
+}
+
+@media (max-width:767px) {
+  div.col-md-11.col-sm-11.col-xs-10.l-heading h1{
+    font-size:28px;
+    margin-top:18px;
+  }
+}
+
+@media (max-width:767px) {
+  div.col-md-1.col-sm-1.col-xs-2{
+    margin-top:20px;
+  }
+}
+

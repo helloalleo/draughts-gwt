@@ -1,5 +1,6 @@
 package online.draughts.rus.shared.model;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.user.client.rpc.GwtTransient;
 
 import javax.persistence.*;
@@ -21,6 +22,8 @@ public class Move extends PersistableObjectImpl {
   private int moveOrder;
   private boolean first; // первый ход в паре ходов. Например, ee-aa в ee-aa bb-cc
 
+  @GwtTransient
+  @JsonIgnore
   @OneToOne
   @JoinColumn(name = "message_id")
   private GameMessage gameMessage;

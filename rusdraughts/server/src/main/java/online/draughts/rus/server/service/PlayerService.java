@@ -79,10 +79,6 @@ public class PlayerService {
     return playerDaoProvider.get().findByGoogleSub(sub);
   }
 
-  public List<Player> findLoggedIn() {
-    return playerDaoProvider.get().findLoggedIn();
-  }
-
   public List<Friend> findFriends(Long playerId) {
     return playerDaoProvider.get().findFriends(playerId);
   }

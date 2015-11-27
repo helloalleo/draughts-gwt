@@ -93,17 +93,6 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
 
   @Override
   @Transactional
-  public List<Player> findLoggedIn() {
-    String hql = "SELECT p " +
-        " FROM Player p " +
-        " WHERE p.loggedIn = true " +
-        " ORDER BY p.online DESC";
-    Query query = getEntityManager().createQuery(hql);
-    return query.getResultList();
-  }
-
-  @Override
-  @Transactional
   public List<Friend> findFriends(Long playerId) {
     String hql = "SELECT f " +
         " FROM Player p " +
@@ -121,7 +110,8 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   public List<Player> findAll() {
     String hql = "SELECT p " +
         " FROM Player p " +
-        " WHERE p.banned = false";
+        " WHERE p.banned = false" +
+        " ORDER BY p.online DESC";
     Query query = getEntityManager().createQuery(hql);
     return (List<Player>) query.getResultList();
   }
@@ -130,8 +120,9 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   public List<Player> findOnline() {
     String hql = "SELECT p " +
         " FROM Player p " +
-        " WHERE p.online = true " +
-        "    OR p.playing = true";
+        " WHERE (p.online = true " +
+        "    OR p.playing = true)" +
+        "  AND p.banned = false";
     Query query = getEntityManager().createQuery(hql);
     return (List<Player>) query.getResultList();
   }

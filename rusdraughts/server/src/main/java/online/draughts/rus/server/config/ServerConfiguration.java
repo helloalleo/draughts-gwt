@@ -46,6 +46,7 @@ public class ServerConfiguration {
 
   private final PlayerService playerService;
   private String playUrl;
+  private boolean debug;
 
   @Inject
   public ServerConfiguration(PlayerService playerService) {
@@ -60,6 +61,7 @@ public class ServerConfiguration {
     loginUrl = resourceBundle.getString("login");
     homeUrl = resourceBundle.getString("home");
     playUrl = resourceBundle.getString("play");
+    debug = Boolean.valueOf(resourceBundle.getString("debug"));
 
     // VK API Data
     vkRedirectUri = resourceBundle.getString("vk_redirect_uri");
@@ -201,5 +203,9 @@ public class ServerConfiguration {
 
   public String getPlayUrl() {
     return playUrl;
+  }
+
+  public boolean isDebug() {
+    return debug;
   }
 }

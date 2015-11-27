@@ -65,18 +65,6 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
   public void onCollapseMessenger(ClickEvent clickEvent) {
     getUiHandlers().resetOpponent();
     hide();
-//    if (collapseMessengerButton.getIcon().equals(IconType.CLOSE)) {
-//      messengerBody.setVisible(false);
-//      collapseMessengerButton.setIcon(IconType.SQUARE_O);
-//      ((Column) messengerHeading.getParent()).setSize("MD_8");
-//      ((Column) collapseMessengerButton.getParent()).setSize("MD_4");
-//    } else {
-//      messengerBody.setVisible(true);
-//      collapseMessengerButton.setIcon(IconType.CLOSE);
-//      ((Column) messengerHeading.getParent()).setSize("MD_10");
-//      ((Column) collapseMessengerButton.getParent()).setSize("MD_2");
-//    }
-//    showAndReposition();
   }
 
   @UiHandler("messengerMessage")
@@ -148,6 +136,16 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
       @Override
       protected int getTop(int popupHeight) {
         return Window.getClientHeight() - popupHeight;
+      }
+    });
+  }
+
+  @Override
+  public void setMessageFocus() {
+    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+      @Override
+      public void execute() {
+        messengerMessage.setFocus(true);
       }
     });
   }

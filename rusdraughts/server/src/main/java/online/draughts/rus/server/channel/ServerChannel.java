@@ -10,6 +10,7 @@ import com.google.inject.name.Named;
 import no.eirikb.gwtchannelapi.server.ChannelServer;
 import online.draughts.rus.server.service.GameMessageService;
 import online.draughts.rus.server.service.GameService;
+import online.draughts.rus.server.service.MailService;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.server.util.Utils;
@@ -38,20 +39,21 @@ public class ServerChannel extends ChannelServer {
   private final GameMessageService gameMessageService;
   private final GameService gameService;
   private final Provider<Boolean> authProvider;
-  //  private final Map<Long, Queue<GameMessage>> playerChatMessageQueue
-//      = Collections.synchronizedMap(new HashMap<Long, Queue<GameMessage>>());
   private final Logger logger;
+  private final MailService mailService;
 
   @Inject
   ServerChannel(PlayerService playerService,
                 GameService gameService,
                 GameMessageService gameMessageService,
                 @Named(AuthUtils.AUTHENTICATED) Provider<Boolean> authProvider,
-                Logger logger) {
+                Logger logger,
+                MailService mailService) {
     this.playerService = playerService;
     this.gameService = gameService;
     this.gameMessageService = gameMessageService;
     this.authProvider = authProvider;
+    this.mailService = mailService;
     this.logger = logger;
   }
 
@@ -199,6 +201,11 @@ public class ServerChannel extends ChannelServer {
       final Integer unreadMessages = receiver.getFriendUnreadMessagesMap().get(sender.getId());
       receiver.getFriendUnreadMessagesMap().put(sender.getId(), unreadMessages + 1);
       playerService.saveOrCreateOnServer(receiver);
+
+      if (!(receiver.isOnline() || receiver.isPlaying() || receiver.isLoggedIn())
+          && StringUtils.isNotEmpty(receiver.getEmail())) {
+        mailService.sendNotificationMail(message.getMessage(), receiver, sender);
+      }
     }
     if (receiver.isOnline()) {
       sendMessage(receiverChannel, message);
@@ -235,7 +242,7 @@ public class ServerChannel extends ChannelServer {
   private void updatePlayerList() {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
-    List<Player> playerList = playerService.findLoggedIn();
+    List<Player> playerList = playerService.findAll();
     gameMessage.setPlayerList(playerList);
     gameMessageService.saveOrCreate(gameMessage);
     for (String channelName : channelTokenPeers.keySet()) {

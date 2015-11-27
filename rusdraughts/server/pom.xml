@@ -268,6 +268,19 @@
             <version>2.4.5</version>
         </dependency>
 
+        <!--Mail-->
+        <dependency>
+            <groupId>javax.mail</groupId>
+            <artifactId>mail</artifactId>
+            <version>1.4.7</version>
+        </dependency>
+
+        <dependency>
+            <groupId>javax.activation</groupId>
+            <artifactId>activation</artifactId>
+            <version>1.1.1</version>
+        </dependency>
+
         <!--  Test Dependencies  -->
         <dependency>
             <groupId>junit</groupId>
@@ -321,24 +334,24 @@
             </plugin>
 
             <!--<plugin>-->
-                <!--<groupId>org.apache.maven.plugins</groupId>-->
-                <!--<artifactId>maven-war-plugin</artifactId>-->
-                <!--<version>2.6</version>-->
-                <!--<configuration>-->
-                    <!--<webXml>${project.build.directory}/generated-sources/appengine-endpoints/WEB-INF/web.xml</webXml>-->
-                    <!--<webappDirectory>-->
-                        <!--${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}-->
-                    <!--</webappDirectory>-->
-                <!--</configuration>-->
-                <!--<executions>-->
-                    <!--<execution>-->
-                        <!--<id>war</id>-->
-                        <!--<phase>package</phase>-->
-                        <!--<goals>-->
-                            <!--<goal>war</goal>-->
-                        <!--</goals>-->
-                    <!--</execution>-->
-                <!--</executions>-->
+            <!--<groupId>org.apache.maven.plugins</groupId>-->
+            <!--<artifactId>maven-war-plugin</artifactId>-->
+            <!--<version>2.6</version>-->
+            <!--<configuration>-->
+            <!--<webXml>${project.build.directory}/generated-sources/appengine-endpoints/WEB-INF/web.xml</webXml>-->
+            <!--<webappDirectory>-->
+            <!--${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}-->
+            <!--</webappDirectory>-->
+            <!--</configuration>-->
+            <!--<executions>-->
+            <!--<execution>-->
+            <!--<id>war</id>-->
+            <!--<phase>package</phase>-->
+            <!--<goals>-->
+            <!--<goal>war</goal>-->
+            <!--</goals>-->
+            <!--</execution>-->
+            <!--</executions>-->
             <!--</plugin>-->
             <plugin>
                 <groupId>com.google.appengine</groupId>
@@ -408,7 +421,8 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <version>2.6</version>
                         <configuration>
-                            <webXml>${project.build.directory}/generated-sources/appengine-endpoints/WEB-INF/web.xml</webXml>
+                            <webXml>${project.build.directory}/generated-sources/appengine-endpoints/WEB-INF/web.xml
+                            </webXml>
                             <webappDirectory>
                                 ${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}
                             </webappDirectory>
@@ -446,7 +460,8 @@
                         <artifactId>maven-war-plugin</artifactId>
                         <version>2.6</version>
                         <configuration>
-                            <webXml>${project.build.directory}/generated-sources/appengine-endpoints/WEB-INF/web.xml</webXml>
+                            <webXml>${project.build.directory}/generated-sources/appengine-endpoints/WEB-INF/web.xml
+                            </webXml>
                             <webappDirectory>
                                 ${project.basedir}/../../${project.artifacts.directory}/${project.prodOutput.directory}
                             </webappDirectory>
