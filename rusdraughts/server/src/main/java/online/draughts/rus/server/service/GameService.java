@@ -7,10 +7,10 @@ import com.google.inject.persist.Transactional;
 import online.draughts.rus.server.dao.GameDao;
 import online.draughts.rus.server.dao.GameMessageDao;
 import online.draughts.rus.server.util.Rating;
-import online.draughts.rus.shared.model.Friend;
-import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.model.Move;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.server.domain.Friend;
+import online.draughts.rus.server.domain.Game;
+import online.draughts.rus.server.domain.Move;
+import online.draughts.rus.server.domain.Player;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;

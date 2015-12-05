@@ -1,8 +1,7 @@
-package online.draughts.rus.shared.model;
+package online.draughts.rus.server.domain;
 
 
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Ignore;

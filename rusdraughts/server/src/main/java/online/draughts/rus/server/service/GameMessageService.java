@@ -4,8 +4,8 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.dao.GameMessageDao;
-import online.draughts.rus.shared.model.GameMessage;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.server.domain.GameMessage;
+import online.draughts.rus.server.domain.Player;
 
 import java.util.HashMap;
 import java.util.List;

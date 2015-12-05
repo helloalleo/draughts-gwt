@@ -1,6 +1,6 @@
 package online.draughts.rus.server.util;
 
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.server.domain.Player;
 
 /**
  * Created with IntelliJ IDEA.

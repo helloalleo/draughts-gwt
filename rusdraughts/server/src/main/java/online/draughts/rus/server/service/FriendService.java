@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.dao.FriendDao;
-import online.draughts.rus.shared.model.Friend;
+import online.draughts.rus.server.domain.Friend;
 
 import java.util.logging.Logger;
 

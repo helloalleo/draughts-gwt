@@ -10,7 +10,7 @@ import online.draughts.rus.server.dao.PlayerDao;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.shared.dispatch.FetchCurrentPlayerAction;
 import online.draughts.rus.shared.dispatch.FetchCurrentPlayerResult;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.server.domain.Player;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpSession;

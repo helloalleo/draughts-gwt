@@ -8,7 +8,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.service.GameService;
 import online.draughts.rus.server.util.GaeGifSequenceWriter;
-import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.server.domain.Move;
 import online.draughts.rus.shared.util.StringUtils;
 import org.apache.commons.codec.binary.Base64;
 

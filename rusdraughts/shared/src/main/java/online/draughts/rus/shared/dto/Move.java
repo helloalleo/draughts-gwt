@@ -1,11 +1,7 @@
-package online.draughts.rus.shared.model;
+package online.draughts.rus.shared.dto;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.core.shared.GwtIncompatible;
-import com.google.gwt.user.client.rpc.GwtTransient;
-import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -16,16 +12,11 @@ import java.util.Set;
  * Date: 01.09.15
  * Time: 21:45
  */
-@Entity
-public class Move extends PersistableObjectImpl {
+public class Move {
 
   private int number; // номер пары хода
   private int moveOrder;
   private boolean first; // первый ход в паре ходов. Например, ee-aa в ee-aa bb-cc
-
-  @GwtTransient
-  @JsonIgnore
-  private Ref<GameMessage> gameMessage;
 
   private String startPos;
 
@@ -41,42 +32,24 @@ public class Move extends PersistableObjectImpl {
 
   private Set<String> hashTags = new HashSet<>();
 
-  @GwtTransient
-  private String screenshot;
-
   public Move() {
   }
 
-  @GwtIncompatible
-  public Move(int number, boolean first, GameMessage gameMessage, String startPos, String endPos, String takenPos,
-              Set<MoveFlags> moveFlags, String screenshot) {
+  public Move(int number, boolean first, String startPos, String endPos, String takenPos,
+              Set<MoveFlags> moveFlags) {
     this.number = number;
     this.first = first;
     this.moveFlags = moveFlags;
 
-    this.gameMessage = Ref.create(gameMessage);
-
     this.startPos = startPos;
     this.endPos = endPos;
     this.takenPos = takenPos;
-
-    this.screenshot = screenshot;
   }
 
   @GwtIncompatible
   public Move(Move move) {
-    this(move.getNumber(), move.isFirst(), move.getGameMessage(), move.getStartPos(), move.getEndPos(),
-        move.getTakenPos(), move.getMoveFlags(), move.getScreenshot());
-  }
-
-  public GameMessage getGameMessage() {
-    return gameMessage.get();
-  }
-
-  @GwtIncompatible
-  public Move setGameMessage(GameMessage gameMessage) {
-    this.gameMessage = Ref.create(gameMessage);
-    return this;
+    this(move.getNumber(), move.isFirst(), move.getStartPos(), move.getEndPos(),
+        move.getTakenPos(), move.getMoveFlags());
   }
 
   public int getNumber() {
@@ -178,15 +151,6 @@ public class Move extends PersistableObjectImpl {
 
   public void setMoveOrder(int order) {
     this.moveOrder = order;
-  }
-
-  public String getScreenshot() {
-    return screenshot;
-  }
-
-  public Move setScreenshot(String screenshot) {
-    this.screenshot = screenshot;
-    return this;
   }
 
   public enum MoveFlags {

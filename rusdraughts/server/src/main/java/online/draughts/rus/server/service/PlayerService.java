@@ -5,8 +5,8 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.dao.FriendDao;
 import online.draughts.rus.server.dao.PlayerDao;
-import online.draughts.rus.shared.model.Friend;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.server.domain.Friend;
+import online.draughts.rus.server.domain.Player;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;

@@ -5,8 +5,8 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
 import com.googlecode.objectify.cmd.Query;
 import online.draughts.rus.server.dao.GameMessageDao;
-import online.draughts.rus.shared.model.GameMessage;
-import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.server.domain.GameMessage;
+import online.draughts.rus.server.domain.Move;
 
 import java.util.ArrayList;
 import java.util.List;

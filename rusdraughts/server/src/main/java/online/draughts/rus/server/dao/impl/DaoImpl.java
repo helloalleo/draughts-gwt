@@ -3,7 +3,7 @@ package online.draughts.rus.server.dao.impl;
 import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
 import online.draughts.rus.server.dao.Dao;
-import online.draughts.rus.shared.model.BasePersistableObject;
+import online.draughts.rus.server.domain.BasePersistableObject;
 
 import java.util.List;
 

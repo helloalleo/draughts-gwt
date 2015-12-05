@@ -4,7 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.config.ServerConfiguration;
 import online.draughts.rus.server.service.PlayerService;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.server.domain.Player;
 
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;

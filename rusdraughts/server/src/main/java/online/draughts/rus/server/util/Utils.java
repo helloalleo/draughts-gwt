@@ -1,7 +1,7 @@
 package online.draughts.rus.server.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import online.draughts.rus.shared.model.GameMessage;
+import online.draughts.rus.server.domain.GameMessage;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;

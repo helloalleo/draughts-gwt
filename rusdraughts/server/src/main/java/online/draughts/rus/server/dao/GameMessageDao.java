@@ -1,7 +1,7 @@
 package online.draughts.rus.server.dao;
 
-import online.draughts.rus.shared.model.GameMessage;
-import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.server.domain.GameMessage;
+import online.draughts.rus.server.domain.Move;
 
 import java.util.List;
 

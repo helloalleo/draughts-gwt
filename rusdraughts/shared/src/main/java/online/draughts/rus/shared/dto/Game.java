@@ -1,4 +1,4 @@
-package online.draughts.rus.shared.model;
+package online.draughts.rus.shared.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.user.client.rpc.GwtTransient;
@@ -17,12 +17,11 @@ import java.util.Set;
  * Date: 31.12.14
  * Time: 16:18
  */
-@Entity
-public class Game extends PersistableObjectImpl {
+public class Game {
 
-  private Ref<Player> playerWhite;
+  private Player playerWhite;
 
-  private Ref<Player> playerBlack;
+  private Player playerBlack;
 
   private GameEnds playEndStatus;
 
@@ -34,23 +33,18 @@ public class Game extends PersistableObjectImpl {
 
   private String endGameScreenshot;
 
-  @GwtTransient
-  @JsonIgnore
-  @Load
-  private Set<Ref<GameMessage>> gameMessages = new HashSet<>();
-
   public Game() {
   }
 
-  public Game(Player playerWhiteId,
-              Player playerBlackId,
+  public Game(Player playerWhite,
+              Player playerBlack,
               GameEnds playEndStatus,
               Date playStartDate,
               Date playFinishDate,
               String notation,
               String endGameScreenshot) {
-    this.playerWhite = Ref.create(playerWhiteId);
-    this.playerBlack = Ref.create(playerBlackId);
+    this.playerWhite = playerWhite;
+    this.playerBlack = playerBlack;
     this.playEndStatus = playEndStatus;
     this.playStartDate = playStartDate;
     this.playFinishDate = playFinishDate;
@@ -59,19 +53,19 @@ public class Game extends PersistableObjectImpl {
   }
 
   public Player getPlayerWhite() {
-    return playerWhite.get();
+    return playerWhite;
   }
 
   public void setPlayerWhite(Player playerWhite) {
-    this.playerWhite = Ref.create(playerWhite);
+    this.playerWhite = playerWhite;
   }
 
   public Player getPlayerBlack() {
-    return playerBlack.get();
+    return playerBlack;
   }
 
   public void setPlayerBlack(Player playerBlack) {
-    this.playerBlack = Ref.create(playerBlack);
+    this.playerBlack = playerBlack;
   }
 
   public GameEnds getPlayEndStatus() {
@@ -113,10 +107,6 @@ public class Game extends PersistableObjectImpl {
   public Game setEndGameScreenshot(String endGameScreenshot) {
     this.endGameScreenshot = endGameScreenshot;
     return this;
-  }
-
-  public Set<Ref<GameMessage>> getGameMessages() {
-    return gameMessages;
   }
 
   public enum GameEnds implements IsSerializable {

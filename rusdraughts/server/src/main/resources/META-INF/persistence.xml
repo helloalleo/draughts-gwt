@@ -8,11 +8,11 @@
         <description>Draughts Persistence Unit</description>
         <provider>org.datanucleus.store.appengine.jpa.DatastorePersistenceProvider</provider>
 
-        <class>online.draughts.rus.shared.model.Game</class>
-        <class>online.draughts.rus.shared.model.GameMessage</class>
-        <class>online.draughts.rus.shared.model.Move</class>
-        <class>online.draughts.rus.shared.model.Player</class>
-        <class>online.draughts.rus.shared.model.Friend</class>
+        <class>online.draughts.rus.server.domain.Game</class>
+        <class>online.draughts.rus.server.domain.GameMessage</class>
+        <class>online.draughts.rus.server.domain.Move</class>
+        <class>online.draughts.rus.server.domain.Player</class>
+        <class>online.draughts.rus.server.domain.Friend</class>
 
         <exclude-unlisted-classes>true</exclude-unlisted-classes>
         <properties>

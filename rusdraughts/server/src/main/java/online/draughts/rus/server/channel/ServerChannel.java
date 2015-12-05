@@ -15,10 +15,10 @@ import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.server.util.Utils;
 import online.draughts.rus.shared.channel.Chunk;
-import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.model.GameMessage;
-import online.draughts.rus.shared.model.Move;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.server.domain.Game;
+import online.draughts.rus.server.domain.GameMessage;
+import online.draughts.rus.server.domain.Move;
+import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.io.IOException;

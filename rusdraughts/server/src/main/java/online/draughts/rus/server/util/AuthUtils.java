@@ -2,7 +2,7 @@ package online.draughts.rus.server.util;
 
 import online.draughts.rus.server.config.ServerConfiguration;
 import online.draughts.rus.server.service.PlayerService;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.server.domain.Player;
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;

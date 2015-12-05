@@ -1,8 +1,5 @@
-package online.draughts.rus.shared.model;
+package online.draughts.rus.server.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.rpc.GwtTransient;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Stringify;
@@ -19,16 +16,10 @@ import java.util.*;
 @Entity
 public class Player extends PersistableObjectImpl {
 
-  @GwtTransient
-  @JsonIgnore
   private String sessionId;
 
-  @GwtTransient
-  @JsonIgnore
   private String vkId;
 
-  @GwtTransient
-  @JsonIgnore
   private String email;
 
   private String firstName;
@@ -39,81 +30,45 @@ public class Player extends PersistableObjectImpl {
 
   private int rating = 0;
 
-  @GwtTransient
-  @JsonIgnore
   private int gamePlayed = 0;
 
-  @GwtTransient
-  @JsonIgnore
   private int gameWin = 0;
 
-  @GwtTransient
-  @JsonIgnore
   private int gameLose = 0;
 
-  @GwtTransient
-  @JsonIgnore
   private int gameDraw = 0;
 
-  @GwtTransient
-  @JsonIgnore
   private AuthProvider authProvider;
 
-  @GwtTransient
-  @JsonIgnore
   private Set<Ref<Friend>> friends = new HashSet<>();
 
-  @GwtTransient
-  @JsonIgnore
   private Set<Ref<Friend>> friendOf = new HashSet<>();
 
-  @GwtTransient
-  @JsonIgnore
   private Set<Ref<GameMessage>> receivedPlayerMessages;
 
-  @GwtTransient
-  @JsonIgnore
   private Set<Ref<GameMessage>> sentPlayerMessages;
 
-  @GwtTransient
-  @JsonIgnore
   private Set<Ref<Game>> whiteRoleGames;
 
-  @GwtTransient
-  @JsonIgnore
   private Set<Ref<Game>> blackRoleGames;
 
   private boolean loggedIn;
   private boolean playing;
   private boolean online;
 
-  @GwtTransient
-  @JsonIgnore
   @Stringify(LongStringifier.class)
   private Map<Long, Integer> friendUnreadMessagesMap = new HashMap<>();
 
-  @GwtTransient
-  @JsonIgnore
   private Date registerDate;
-  @GwtTransient
-  @JsonIgnore
   private Date lastVisited;
-  @GwtTransient
-  @JsonIgnore
   private int visitCounter = 0;
 
-  @GwtTransient
-  @JsonIgnore
   private String fbId;
 
-  @GwtTransient
-  @JsonIgnore
   private String googleSub;
 
   private boolean subscribed;
 
-  @GwtTransient
-  @JsonIgnore
   private boolean active;
 
   public Player() {
@@ -123,9 +78,8 @@ public class Player extends PersistableObjectImpl {
     return subscribed;
   }
 
-  public Player setSubscribed(boolean subscribed) {
+  public void setSubscribed(boolean subscribed) {
     this.subscribed = subscribed;
-    return this;
   }
 
   public boolean isSubscribed() {
@@ -136,9 +90,8 @@ public class Player extends PersistableObjectImpl {
     return active;
   }
 
-  public Player setActive(boolean active) {
+  public void setActive(boolean active) {
     this.active = active;
-    return this;
   }
 
   public String getSessionId() {
@@ -225,15 +178,6 @@ public class Player extends PersistableObjectImpl {
     return friendUnreadMessagesMap;
   }
 
-  public Player setFriendUnreadMessagesMap(Map<Long, Integer> friendUnreadMessagesMap) {
-    this.friendUnreadMessagesMap = friendUnreadMessagesMap;
-    return this;
-  }
-
-  public Date getRegisterDate() {
-    return registerDate;
-  }
-
   public void setRegisterDate(Date registerDate) {
     this.registerDate = registerDate;
   }
@@ -258,48 +202,7 @@ public class Player extends PersistableObjectImpl {
     return gamePlayed;
   }
 
-  public Player setGamePlayed(int gamePlayed) {
-    this.gamePlayed = gamePlayed;
-    return this;
-  }
 
-  public int getGameWin() {
-    return gameWin;
-  }
-
-  public Player setGameWin(int gameWin) {
-    this.gameWin = gameWin;
-    return this;
-  }
-
-  public int getGameLose() {
-    return gameLose;
-  }
-
-  public Player setGameLose(int gameLose) {
-    this.gameLose = gameLose;
-    return this;
-  }
-
-  public int getGameDraw() {
-    return gameDraw;
-  }
-
-  public Player setGameDraw(int gameDraw) {
-    this.gameDraw = gameDraw;
-    return this;
-  }
-
-  public int getRating() {
-    return rating;
-  }
-
-  public Player setRating(int rating) {
-    this.rating = rating;
-    return this;
-  }
-
-  @JsonIgnore
   public String getPublicName() {
     if (getPlayerName() == null) {
       String fullName = getFullName().trim();
@@ -311,12 +214,10 @@ public class Player extends PersistableObjectImpl {
     return getPlayerName();
   }
 
-  @JsonIgnore
   private String getFullName() {
     return getFirstName() + " " + getLastName();
   }
 
-  @JsonIgnore
   private String getShortName() {
     if (getPlayerName() == null) {
       return getFirstName();
@@ -371,23 +272,12 @@ public class Player extends PersistableObjectImpl {
     return fbId;
   }
 
-  public Player setGoogleSub(String googleSub) {
+  public void setGoogleSub(String googleSub) {
     this.googleSub = googleSub;
-    return this;
   }
 
   public String getGoogleSub() {
     return googleSub;
-  }
-
-  @JsonIgnore
-  public String getSiteName() {
-    return new SafeHtmlBuilder().appendHtmlConstant("<a href='")
-        .appendHtmlConstant("#player?id=")
-        .appendHtmlConstant(String.valueOf(getId()))
-        .appendHtmlConstant("'>")
-        .appendHtmlConstant(getShortName())
-        .appendHtmlConstant("</a>").toSafeHtml().asString();
   }
 
   public enum AuthProvider {

@@ -1,6 +1,6 @@
 package online.draughts.rus.server.dao;
 
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.server.domain.Player;
 
 import java.util.List;
 

@@ -6,7 +6,7 @@ import com.google.inject.name.Named;
 import com.google.inject.servlet.RequestScoped;
 import online.draughts.rus.server.service.GameService;
 import online.draughts.rus.server.util.AuthUtils;
-import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.shared.resource.GamesResource;
 
 import javax.servlet.http.HttpServletRequest;

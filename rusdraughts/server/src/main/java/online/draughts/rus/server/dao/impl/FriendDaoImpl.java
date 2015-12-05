@@ -3,7 +3,7 @@ package online.draughts.rus.server.dao.impl;
 import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
 import online.draughts.rus.server.dao.FriendDao;
-import online.draughts.rus.shared.model.Friend;
+import online.draughts.rus.server.domain.Friend;
 
 import java.util.List;
 

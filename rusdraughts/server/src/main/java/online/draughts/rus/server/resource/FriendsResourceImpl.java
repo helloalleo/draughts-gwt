@@ -6,7 +6,7 @@ import com.google.inject.name.Named;
 import com.google.inject.servlet.RequestScoped;
 import online.draughts.rus.server.service.FriendService;
 import online.draughts.rus.server.util.AuthUtils;
-import online.draughts.rus.shared.model.Friend;
+import online.draughts.rus.server.domain.Friend;
 import online.draughts.rus.shared.resource.FriendsResource;
 
 import javax.servlet.http.HttpServletRequest;

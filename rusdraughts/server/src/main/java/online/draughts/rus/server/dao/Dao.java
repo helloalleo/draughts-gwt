@@ -1,6 +1,6 @@
 package online.draughts.rus.server.dao;
 
-import online.draughts.rus.shared.model.BasePersistableObject;
+import online.draughts.rus.server.domain.BasePersistableObject;
 
 import java.util.List;
 

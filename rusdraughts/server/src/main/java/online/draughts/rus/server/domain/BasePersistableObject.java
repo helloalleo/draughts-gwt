@@ -1,4 +1,4 @@
-package online.draughts.rus.shared.model;
+package online.draughts.rus.server.domain;
 
 import java.io.Serializable;
 
