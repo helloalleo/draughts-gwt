@@ -3,7 +3,6 @@ package online.draughts.rus.shared.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.user.client.rpc.GwtTransient;
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.googlecode.objectify.Key;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Load;
@@ -21,9 +20,9 @@ import java.util.Set;
 @Entity
 public class Game extends PersistableObjectImpl {
 
-  private Key<Player> playerWhite;
+  private Ref<Player> playerWhite;
 
-  private Key<Player> playerBlack;
+  private Ref<Player> playerBlack;
 
   private GameEnds playEndStatus;
 
@@ -43,15 +42,15 @@ public class Game extends PersistableObjectImpl {
   public Game() {
   }
 
-  public Game(Long playerWhiteId,
-              Long playerBlackId,
+  public Game(Player playerWhiteId,
+              Player playerBlackId,
               GameEnds playEndStatus,
               Date playStartDate,
               Date playFinishDate,
               String notation,
               String endGameScreenshot) {
-    this.playerWhite = Key.create(Player.class, playerWhiteId);
-    this.playerBlack = Key.create(Player.class, playerBlackId);
+    this.playerWhite = Ref.create(playerWhiteId);
+    this.playerBlack = Ref.create(playerBlackId);
     this.playEndStatus = playEndStatus;
     this.playStartDate = playStartDate;
     this.playFinishDate = playFinishDate;
@@ -59,20 +58,20 @@ public class Game extends PersistableObjectImpl {
     this.endGameScreenshot = endGameScreenshot;
   }
 
-  public Key<Player> getPlayerWhite() {
-    return playerWhite;
+  public Player getPlayerWhite() {
+    return playerWhite.get();
   }
 
-  public void setPlayerWhite(Long playerWhite) {
-    this.playerWhite = Key.create(Player.class, playerWhite);
+  public void setPlayerWhite(Player playerWhite) {
+    this.playerWhite = Ref.create(playerWhite);
   }
 
-  public Key<Player> getPlayerBlack() {
-    return playerBlack;
+  public Player getPlayerBlack() {
+    return playerBlack.get();
   }
 
-  public void setPlayerBlack(Long playerBlack) {
-    this.playerBlack = Key.create(Player.class, playerBlack);
+  public void setPlayerBlack(Player playerBlack) {
+    this.playerBlack = Ref.create(playerBlack);
   }
 
   public GameEnds getPlayEndStatus() {

@@ -97,7 +97,7 @@ public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements GameMess
         .list();
     List<Move> moves = new ArrayList<>(gameMessages.size());
     for (GameMessage gameMessage : gameMessages) {
-      moves.add(gameMessage.getMove().get());
+      moves.add(gameMessage.getMove());
     }
     return moves;
   }

@@ -184,7 +184,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       @Override
       public void onSuccess(Friend result) {
         GameMessage gameMessage = createGameMessage();
-        gameMessage.setReceiver(friend.getPk().getFriend());
+        gameMessage.setReceiver(friend.getFriendOf());
         gameMessage.setMessageType(GameMessage.MessageType.NOTIFICATION_ADDED_TO_FAVORITE);
         if (friend.isFavorite()) {
           gameMessage.setMessage(messages.youHasBeenAddedToFavorite(playSession.getPlayer().getPublicName()));

@@ -162,7 +162,7 @@ public class ServerChannel extends ChannelServer {
       secondPlayer.setPlaying(false);
       playerService.saveOrCreate(secondPlayer);
 
-      gameMessage.setReceiver(secondPlayer.getId());
+      gameMessage.setReceiver(secondPlayer);
       gameMessage.setMessageType(GameMessage.MessageType.PLAY_END);
       sendMessage(String.valueOf(secondPlayer.getId()), gameMessage);
     }
@@ -198,7 +198,7 @@ public class ServerChannel extends ChannelServer {
 
     if (message.getGame() != null) {
       Game game = gameService.find(message.getGame().getId());
-      gameMessage.setGame(game.getId());
+      gameMessage.setGame(game);
     }
 
     gameMessage.setMessageType(message.getMessageType());
@@ -207,12 +207,12 @@ public class ServerChannel extends ChannelServer {
 
 
     if (message.getMove() != null) {
-      gameMessage.setMove(new Move(message.getMove().get()));
-//      gameMessage.getMove().setGameMessage(gameMessage);
+      gameMessage.setMove(new Move(message.getMove()));
+      gameMessage.getMove().setGameMessage(gameMessage);
     }
 
-    gameMessage.setReceiver(playerReceiver.getId());
-    gameMessage.setSender(playerSender.getId());
+    gameMessage.setReceiver(playerReceiver);
+    gameMessage.setSender(playerSender);
 
     gameMessage.setSentDate(new Date());
 

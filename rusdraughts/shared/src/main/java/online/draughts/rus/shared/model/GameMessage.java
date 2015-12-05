@@ -19,9 +19,9 @@ import java.util.List;
 @Entity
 public class GameMessage extends PersistableObjectImpl {
 
-  private Key<Player> sender;
+  private Ref<Player> sender;
 
-  private Key<Player> receiver;
+  private Ref<Player> receiver;
 
   private String message;
 
@@ -33,25 +33,25 @@ public class GameMessage extends PersistableObjectImpl {
 
   private Ref<Move> move;
 
-  private Key<Game> game;
+  private Ref<Game> game;
 
   @Ignore
   private List<Player> playerList;
 
-  public Key<Player> getSender() {
-    return sender;
+  public Player getSender() {
+    return sender.get();
   }
 
-  public void setSender(Long senderId) {
-    this.sender = Key.create(Player.class, senderId);
+  public void setSender(Player sender) {
+    this.sender = Ref.create(sender);
   }
 
-  public Key<Player> getReceiver() {
-    return receiver;
+  public Player getReceiver() {
+    return receiver.get();
   }
 
-  public void setReceiver(Long receiverId) {
-    this.receiver = Key.create(Player.class, receiverId);
+  public void setReceiver(Player receiver) {
+    this.receiver = Ref.create(receiver);
   }
 
   public String getMessage() {
@@ -86,20 +86,20 @@ public class GameMessage extends PersistableObjectImpl {
     this.messageType = messageType;
   }
 
-  public Ref<Move> getMove() {
-    return move;
+  public Move getMove() {
+    return move.get();
   }
 
   public void setMove(Move move) {
     this.move = Ref.create(move);
   }
 
-  public Key<Game> getGame() {
-    return game;
+  public Game getGame() {
+    return game.get();
   }
 
-  public void setGame(Long gameId) {
-    this.game = Key.create(Game.class, gameId);
+  public void setGame(Game game) {
+    this.game = Ref.create(game);
   }
 
   public void setPlayerList(List<Player> playerList) {

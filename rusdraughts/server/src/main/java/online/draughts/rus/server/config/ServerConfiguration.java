@@ -2,7 +2,9 @@ package online.draughts.rus.server.config;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.googlecode.objectify.ObjectifyService;
 import online.draughts.rus.server.service.PlayerService;
+import online.draughts.rus.shared.model.*;
 
 import java.util.ResourceBundle;
 
@@ -90,7 +92,11 @@ public class ServerConfiguration {
   }
 
   private void registerObjectifyEntities() {
-
+    ObjectifyService.register(Move.class);
+    ObjectifyService.register(GameMessage.class);
+    ObjectifyService.register(Game.class);
+    ObjectifyService.register(Friend.class);
+    ObjectifyService.register(Player.class);
   }
 
   public String getNotFoundErrorUrl() {

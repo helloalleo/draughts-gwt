@@ -2,8 +2,9 @@ package online.draughts.rus.shared.model;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.google.gwt.core.shared.GwtIncompatible;
 import com.google.gwt.user.client.rpc.GwtTransient;
-import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 
 import java.util.HashSet;
@@ -24,7 +25,7 @@ public class Move extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
-  private Key<GameMessage> gameMessage;
+  private Ref<GameMessage> gameMessage;
 
   private String startPos;
 
@@ -46,13 +47,14 @@ public class Move extends PersistableObjectImpl {
   public Move() {
   }
 
-  public Move(int number, boolean first, Long gameMessageId, String startPos, String endPos, String takenPos,
+  @GwtIncompatible
+  public Move(int number, boolean first, GameMessage gameMessage, String startPos, String endPos, String takenPos,
               Set<MoveFlags> moveFlags, String screenshot) {
     this.number = number;
     this.first = first;
     this.moveFlags = moveFlags;
 
-    this.gameMessage = Key.create(GameMessage.class, gameMessageId);
+    this.gameMessage = Ref.create(gameMessage);
 
     this.startPos = startPos;
     this.endPos = endPos;
@@ -61,17 +63,19 @@ public class Move extends PersistableObjectImpl {
     this.screenshot = screenshot;
   }
 
+  @GwtIncompatible
   public Move(Move move) {
-    this(move.getNumber(), move.isFirst(), move.getGameMessage().getId(), move.getStartPos(), move.getEndPos(),
+    this(move.getNumber(), move.isFirst(), move.getGameMessage(), move.getStartPos(), move.getEndPos(),
         move.getTakenPos(), move.getMoveFlags(), move.getScreenshot());
   }
 
-  public Key<GameMessage> getGameMessage() {
-    return gameMessage;
+  public GameMessage getGameMessage() {
+    return gameMessage.get();
   }
 
-  public Move setGameMessage(Long gameMessageId) {
-    this.gameMessage = Key.create(GameMessage.class, gameMessageId);
+  @GwtIncompatible
+  public Move setGameMessage(GameMessage gameMessage) {
+    this.gameMessage = Ref.create(gameMessage);
     return this;
   }
 

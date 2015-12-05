@@ -5,6 +5,8 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.rpc.GwtTransient;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Stringify;
+import online.draughts.rus.shared.util.LongStringifier;
 
 import java.util.*;
 
@@ -87,6 +89,7 @@ public class Player extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
+  @Stringify(LongStringifier.class)
   private Map<Long, Integer> friendUnreadMessagesMap = new HashMap<>();
 
   @GwtTransient

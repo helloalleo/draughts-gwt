@@ -142,7 +142,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       if (playerSelectionModel.getSelectedObject() != null) {
         selectedPlayer = playerSelectionModel.getSelectedObject();
       } else if (playerFriendSelectionModel.getSelectedObject() != null) {
-        selectedPlayer = playerFriendSelectionModel.getSelectedObject().getPk().getFriend();
+        selectedPlayer = playerFriendSelectionModel.getSelectedObject().getFriendOf();
       }
       getUiHandlers().startPlayWith(selectedPlayer);
     }
@@ -284,7 +284,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     TextColumn<Friend> publicNameColumn = new TextColumn<Friend>() {
       @Override
       public String getValue(Friend friend) {
-        return friend.getPk().getFriend().getPublicName();
+        return friend.getFriendOf().getPublicName();
       }
     };
     publicNameColumn.setCellStyleNames(resources.style().cellWithButton());

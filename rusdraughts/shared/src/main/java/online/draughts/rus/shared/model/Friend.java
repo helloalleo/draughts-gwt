@@ -1,7 +1,7 @@
 package online.draughts.rus.shared.model;
 
 
-import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
 
@@ -19,8 +19,8 @@ public class Friend implements BasePersistableObject {
   @Id
   private String id;
 
-  private Key<Player> friend;
-  private Key<Player> friendOf;
+  private Ref<Player> friend;
+  private Ref<Player> friendOf;
 
   private boolean favorite;
 
@@ -39,20 +39,20 @@ public class Friend implements BasePersistableObject {
     this.id = id;
   }
 
-  public Key<Player> getFriend() {
-    return friend;
+  public Player getFriend() {
+    return friend.get();
   }
 
-  public void setFriend(Long friendId) {
-    this.friend = Key.create(Player.class, friendId);
+  public void setFriend(Player friend) {
+    this.friend = Ref.create(friend);
   }
 
-  public Key<Player> getFriendOf() {
-    return friendOf;
+  public Player getFriendOf() {
+    return friendOf.get();
   }
 
-  public void setFriendOf(Long friendOfId) {
-    this.friendOf = Key.create(Player.class, friendOfId);
+  public void setFriendOf(Player friendOf) {
+    this.friendOf = Ref.create(friendOf);
   }
 
   @Override

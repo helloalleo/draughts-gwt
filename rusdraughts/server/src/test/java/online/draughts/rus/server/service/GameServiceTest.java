@@ -71,19 +71,19 @@ public class GameServiceTest extends BaseTest {
     playerBlack.setLoggedIn(true);
     playerBlack = playerService.saveOrCreate(playerBlack);
 
-    Game game = new Game(playerWhite.getId(), playerBlack.getId(), Game.GameEnds.BLACK_LEFT, new Date(), new Date(), "", "");
+    Game game = new Game(playerWhite, playerBlack, Game.GameEnds.BLACK_LEFT, new Date(), new Date(), "", "");
     // create
     game = gameService.saveOrCreate(game);
     assertNotNull(game.getId());
 
     GameMessage gameMessage = new GameMessage();
-    gameMessage.setGame(game.getId());
+    gameMessage.setGame(game);
     gameMessage.setMessageType(GameMessage.MessageType.PLAY_OPPONENT_MOVE);
-    Move move = new Move(1, true, gameMessage.getId(), "5,6", "4,7", null,
+    Move move = new Move(1, true, gameMessage, "5,6", "4,7", null,
         new HashSet<Move.MoveFlags>() {{
           add(Move.MoveFlags.SIMPLE_MOVE);
         }}, null);
-    move.setGameMessage(gameMessage.getId());
+    move.setGameMessage(gameMessage);
     gameMessage.setMove(move);
     game.getGameMessages().add(Ref.create(gameMessage));
 
@@ -92,12 +92,12 @@ public class GameServiceTest extends BaseTest {
 
     gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessage.MessageType.PLAY_OPPONENT_MOVE);
-    gameMessage.setGame(game.getId());
-    move = new Move(2, false, gameMessage.getId(), "2,1", "3,0", null,
+    gameMessage.setGame(game);
+    move = new Move(2, false, gameMessage, "2,1", "3,0", null,
         new HashSet<Move.MoveFlags>() {{
           add(Move.MoveFlags.SIMPLE_MOVE);
         }}, null);
-    move.setGameMessage(gameMessage.getId());
+    move.setGameMessage(gameMessage);
     gameMessage.setMove(move);
     game.getGameMessages().add(Ref.create(gameMessage));
     game = gameService.saveOrCreate(game);
@@ -111,7 +111,7 @@ public class GameServiceTest extends BaseTest {
     });
     final GameMessage gameMessage1 = gameMessages.get(0);
     final GameMessage gameMessage2 = gameMessages.get(1);
-    assertEquals("1. <span id='" + game.getId() + ":0' data='" + gameMessage1.getMove().get().getId() + "'>d4-c5</span> <span id='" + game.getId() + ":1' data='" + gameMessage2.getMove().get().getId() + "'>d4-d6</span><br>", game.getNotation());
+    assertEquals("1. <span id='" + game.getId() + ":0' data='" + gameMessage1.getMove().getId() + "'>d4-c5</span> <span id='" + game.getId() + ":1' data='" + gameMessage2.getMove().getId() + "'>d4-d6</span><br>", game.getNotation());
 
     // save
     playerBlack = playerService.find(playerBlack.getId());

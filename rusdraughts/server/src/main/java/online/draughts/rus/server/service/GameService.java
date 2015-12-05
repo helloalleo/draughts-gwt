@@ -14,6 +14,7 @@ import online.draughts.rus.shared.model.Player;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+import java.util.Objects;
 
 /**
  * Created with IntelliJ IDEA.
@@ -83,16 +84,16 @@ public class GameService {
       boolean playerWhiteIsFriendOfPlayerBlack = friendService.isPlayerFriendOf(playerWhite.getId(), playerBlack.getId());
       if (!playerWhiteIsFriendOfPlayerBlack) {
         Friend friend = new Friend(playerWhite.getId(), playerBlack.getId());
-        friend.setFriend(playerWhite.getId());
-        friend.setFriendOf(playerBlack.getId());
+        friend.setFriend(playerWhite);
+        friend.setFriendOf(playerBlack);
 
         friendService.saveOrCreate(friend);
       }
       boolean playerBlackIsFriendOfPlayerWhite = friendService.isPlayerFriendOf(playerBlack.getId(), playerWhite.getId());
       if (!playerBlackIsFriendOfPlayerWhite) {
         Friend friend = new Friend(playerBlack.getId(), playerWhite.getId());
-        friend.setFriend(playerBlack.getId());
-        friend.setFriendOf(playerWhite.getId());
+        friend.setFriend(playerBlack);
+        friend.setFriendOf(playerWhite);
 
         friendService.saveOrCreate(friend);
       }
@@ -111,7 +112,7 @@ public class GameService {
       final boolean whiteSurrender = Game.GameEnds.SURRENDER_WHITE.equals(playEndStatus);
       final boolean blackLeft = Game.GameEnds.BLACK_LEFT.equals(playEndStatus);
       final boolean whiteLeft = Game.GameEnds.WHITE_LEFT.equals(playEndStatus);
-      if (game.getPlayerBlack().getId() == player.getId()) {
+      if (Objects.equals(game.getPlayerBlack().getId(), player.getId())) {
         if (blackWin || whiteLeft || whiteSurrender) {
           player.setGameWin(player.getGameWin() + 1);
         } else if (whiteWin || blackLeft || blackSurrender) {
