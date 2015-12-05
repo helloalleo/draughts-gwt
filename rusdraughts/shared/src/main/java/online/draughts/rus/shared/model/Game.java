@@ -3,8 +3,11 @@ package online.draughts.rus.shared.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.user.client.rpc.GwtTransient;
 import com.google.gwt.user.client.rpc.IsSerializable;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Load;
 
-import javax.persistence.*;
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
@@ -16,52 +19,39 @@ import java.util.Set;
  * Time: 16:18
  */
 @Entity
-@Table(name = "game")
 public class Game extends PersistableObjectImpl {
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "player_white_id")
-  private Player playerWhite;
+  private Key<Player> playerWhite;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "player_black_id")
-  private Player playerBlack;
+  private Key<Player> playerBlack;
 
-  @Column(name = "play_end_status")
-  @Enumerated(EnumType.STRING)
   private GameEnds playEndStatus;
 
-  @Column(name = "play_start_date")
   private Date playStartDate;
 
-  @Column(name = "play_finish_date")
   private Date playFinishDate;
 
-  @Column(name = "notation", columnDefinition = "TEXT")
   private String notation;
 
-  @Lob
-  @Column(name = "end_game_screenshot")
   private String endGameScreenshot;
 
-  // удаление выполняется вручную
   @GwtTransient
   @JsonIgnore
-  @OneToMany(mappedBy = "game", cascade = CascadeType.ALL)
-  private Set<GameMessage> gameMessages = new HashSet<>();
+  @Load
+  private Set<Ref<GameMessage>> gameMessages = new HashSet<>();
 
   public Game() {
   }
 
-  public Game(Player playerWhite,
-              Player playerBlack,
+  public Game(Long playerWhiteId,
+              Long playerBlackId,
               GameEnds playEndStatus,
               Date playStartDate,
               Date playFinishDate,
               String notation,
               String endGameScreenshot) {
-    this.playerWhite = playerWhite;
-    this.playerBlack = playerBlack;
+    this.playerWhite = Key.create(Player.class, playerWhiteId);
+    this.playerBlack = Key.create(Player.class, playerBlackId);
     this.playEndStatus = playEndStatus;
     this.playStartDate = playStartDate;
     this.playFinishDate = playFinishDate;
@@ -69,20 +59,20 @@ public class Game extends PersistableObjectImpl {
     this.endGameScreenshot = endGameScreenshot;
   }
 
-  public Player getPlayerWhite() {
+  public Key<Player> getPlayerWhite() {
     return playerWhite;
   }
 
-  public void setPlayerWhite(Player playerWhite) {
-    this.playerWhite = playerWhite;
+  public void setPlayerWhite(Long playerWhite) {
+    this.playerWhite = Key.create(Player.class, playerWhite);
   }
 
-  public Player getPlayerBlack() {
+  public Key<Player> getPlayerBlack() {
     return playerBlack;
   }
 
-  public void setPlayerBlack(Player playerBlack) {
-    this.playerBlack = playerBlack;
+  public void setPlayerBlack(Long playerBlack) {
+    this.playerBlack = Key.create(Player.class, playerBlack);
   }
 
   public GameEnds getPlayEndStatus() {
@@ -126,13 +116,8 @@ public class Game extends PersistableObjectImpl {
     return this;
   }
 
-  public Set<GameMessage> getGameMessages() {
+  public Set<Ref<GameMessage>> getGameMessages() {
     return gameMessages;
-  }
-
-  public Game setGameMessages(Set<GameMessage> gameMessages) {
-    this.gameMessages = gameMessages;
-    return this;
   }
 
   public enum GameEnds implements IsSerializable {

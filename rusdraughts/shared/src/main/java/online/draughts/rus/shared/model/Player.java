@@ -3,9 +3,9 @@ package online.draughts.rus.shared.model;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.rpc.GwtTransient;
-import online.draughts.rus.shared.util.StringUtils;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Entity;
 
-import javax.persistence.*;
 import java.util.*;
 
 /**
@@ -15,133 +15,103 @@ import java.util.*;
  * Time: 0:36
  */
 @Entity
-@Table(name = "player")
 public class Player extends PersistableObjectImpl {
 
   @GwtTransient
   @JsonIgnore
-  @Column(name = "session_id")
   private String sessionId;
 
   @GwtTransient
   @JsonIgnore
-  @Column(name = "vk_id")
   private String vkId;
 
   @GwtTransient
   @JsonIgnore
   private String email;
 
-  @Column(name = "first_name")
   private String firstName;
 
-  @Column(name = "last_name")
   private String lastName;
 
-  @Column(name = "player_name")
   private String playerName;
 
   private int rating = 0;
 
   @GwtTransient
   @JsonIgnore
-  @Column(name = "game_played")
   private int gamePlayed = 0;
 
   @GwtTransient
   @JsonIgnore
-  @Column(name = "game_win")
   private int gameWin = 0;
 
   @GwtTransient
   @JsonIgnore
-  @Column(name = "game_lose")
   private int gameLose = 0;
 
   @GwtTransient
   @JsonIgnore
-  @Column(name = "game_draw")
   private int gameDraw = 0;
 
   @GwtTransient
   @JsonIgnore
-  @Column(name = "auth_provider")
-  @Enumerated(EnumType.STRING)
   private AuthProvider authProvider;
 
   @GwtTransient
   @JsonIgnore
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.friendOf", orphanRemoval = true)
-  private Set<Friend> friends = new HashSet<>();
+  private Set<Ref<Friend>> friends = new HashSet<>();
 
   @GwtTransient
   @JsonIgnore
-  @Column(name = "fiends_of")
-  @OneToMany(fetch = FetchType.LAZY, mappedBy = "pk.friend", orphanRemoval = true)
-  private Set<Friend> friendOf = new HashSet<>();
+  private Set<Ref<Friend>> friendOf = new HashSet<>();
 
   @GwtTransient
   @JsonIgnore
-  @OneToMany(mappedBy = "receiver")
-  private Set<GameMessage> receivedPlayerMessages;
+  private Set<Ref<GameMessage>> receivedPlayerMessages;
 
   @GwtTransient
   @JsonIgnore
-  @OneToMany(mappedBy = "sender")
-  private Set<GameMessage> sentPlayerMessages;
+  private Set<Ref<GameMessage>> sentPlayerMessages;
 
   @GwtTransient
   @JsonIgnore
-  @OneToMany(mappedBy = "playerWhite")
-  private Set<Game> whiteRoleGames;
+  private Set<Ref<Game>> whiteRoleGames;
 
   @GwtTransient
   @JsonIgnore
-  @OneToMany(mappedBy = "playerBlack")
-  private Set<Game> blackRoleGames;
+  private Set<Ref<Game>> blackRoleGames;
 
-  @Column(name = "logged_in")
   private boolean loggedIn;
   private boolean playing;
   private boolean online;
 
   @GwtTransient
   @JsonIgnore
-  @ElementCollection(targetClass = Integer.class)
-  @MapKeyClass(Long.class)
-  @MapKeyColumn(name="name")
-  @CollectionTable(name = "unreaded_messages", joinColumns = @JoinColumn(name="id"))
-  @Column(name = "value")
   private Map<Long, Integer> friendUnreadMessagesMap = new HashMap<>();
 
   @GwtTransient
   @JsonIgnore
-  @Column(name = "register_date")
   private Date registerDate;
   @GwtTransient
   @JsonIgnore
-  @Column(name = "last_visited")
   private Date lastVisited;
   @GwtTransient
   @JsonIgnore
-  @Column(name = "visit_counter")
   private int visitCounter = 0;
 
   @GwtTransient
   @JsonIgnore
-  @Column(name = "fb_id")
   private String fbId;
 
   @GwtTransient
   @JsonIgnore
-  @Column(name = "google_sub")
   private String googleSub;
 
   private boolean subscribed;
 
   @GwtTransient
   @JsonIgnore
-  private boolean banned;
+  private boolean active;
 
   public Player() {
   }
@@ -155,34 +125,16 @@ public class Player extends PersistableObjectImpl {
     return this;
   }
 
-  public Set<Friend> getFriends() {
-    return friends;
-  }
-
-  public Player setFriends(Set<Friend> friends) {
-    this.friends = friends;
-    return this;
-  }
-
-  public Set<Friend> getFriendOf() {
-    return friendOf;
-  }
-
-  public Player setFriendOf(Set<Friend> friendOf) {
-    this.friendOf = friendOf;
-    return this;
-  }
-
   public boolean isSubscribed() {
     return subscribed;
   }
 
-  public boolean isBanned() {
-    return banned;
+  public boolean isActive() {
+    return active;
   }
 
-  public Player setBanned(boolean active) {
-    this.banned = active;
+  public Player setActive(boolean active) {
+    this.active = active;
     return this;
   }
 
@@ -242,22 +194,6 @@ public class Player extends PersistableObjectImpl {
     this.authProvider = authProvider;
   }
 
-  public Set<GameMessage> getReceivedPlayerMessages() {
-    return receivedPlayerMessages;
-  }
-
-  public void setReceivedPlayerMessages(Set<GameMessage> playerMessageEntities) {
-    this.receivedPlayerMessages = playerMessageEntities;
-  }
-
-  public Set<GameMessage> getSentPlayerMessages() {
-    return sentPlayerMessages;
-  }
-
-  public void setSentPlayerMessages(Set<GameMessage> playerMessageEntities) {
-    this.sentPlayerMessages = playerMessageEntities;
-  }
-
   public boolean isLoggedIn() {
     return loggedIn;
   }
@@ -313,22 +249,6 @@ public class Player extends PersistableObjectImpl {
 
   public void setVisitCounter(int visitCounter) {
     this.visitCounter = visitCounter;
-  }
-
-  public Set<Game> getWhiteRoleGames() {
-    return whiteRoleGames;
-  }
-
-  public void setWhiteRoleGames(Set<Game> whiteRoleGames) {
-    this.whiteRoleGames = whiteRoleGames;
-  }
-
-  public Set<Game> getBlackRoleGames() {
-    return blackRoleGames;
-  }
-
-  public void setBlackRoleGames(Set<Game> blackRoleGames) {
-    this.blackRoleGames = blackRoleGames;
   }
 
   public int getGamePlayed() {
@@ -424,18 +344,20 @@ public class Player extends PersistableObjectImpl {
   /**
    * Обновляем только сеарилизуемые поля
    *
-   * @param profile
+   * @param player
    */
-  public void updateSerializable(Player profile) {
-    if (profile == null) {
+  public void updateSerializable(Player player) {
+    if (player == null) {
       return;
     }
-    this.loggedIn = profile.isLoggedIn();
-    this.playing = profile.isPlaying();
-    this.online = profile.isOnline();
-    if (StringUtils.isNotEmpty(profile.getPlayerName())) {
-      this.playerName = profile.getPlayerName();
-    }
+    this.loggedIn = player.loggedIn;
+    this.playing = player.playing;
+    this.online = player.online;
+    this.playerName = player.playerName;
+    this.lastVisited = player.lastVisited;
+    this.sessionId = player.sessionId;
+    this.registerDate = player.registerDate;
+    this.visitCounter = player.visitCounter;
   }
 
   public void setFbId(String fbId) {

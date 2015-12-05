@@ -5,7 +5,9 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.config.ServerConfiguration;
 import online.draughts.rus.server.util.Utils;
+import online.draughts.rus.shared.model.GameMessage;
 import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.util.StringUtils;
 
 import javax.mail.*;
 import javax.mail.internet.*;
@@ -26,11 +28,15 @@ public class MailService {
   private final ServerConfiguration config;
   private final Logger logger;
 
+  private final PlayerService playerService;
+
   @Inject
   public MailService(ServerConfiguration config,
-                     Logger logger) {
+                     Logger logger,
+                     PlayerService playerService) {
     this.config = config;
     this.logger = logger;
+    this.playerService = playerService;
   }
 
   public void sendNotificationMail(String msg, Player receiver, Player sender) {
@@ -99,6 +105,23 @@ public class MailService {
       logger.log(Level.SEVERE, e.toString());
     } catch (UnsupportedEncodingException e) {
       e.printStackTrace();
+    }
+  }
+
+  public void sendNotification(GameMessage message, long senderId, Player receiver) {
+    // если получатель не имеет сообщений от данного отправителя, тогда инициализируем Map и увеличиваем счетчика
+    // на единицу
+    if (!receiver.getFriendUnreadMessagesMap().containsKey(senderId)) {
+      receiver.getFriendUnreadMessagesMap().put(senderId, 0);
+    }
+    final Integer unreadMessages = receiver.getFriendUnreadMessagesMap().get(senderId);
+    receiver.getFriendUnreadMessagesMap().put(senderId, unreadMessages + 1);
+    playerService.saveOrCreate(receiver);
+
+    if (!(receiver.isOnline() || receiver.isPlaying() || receiver.isLoggedIn())
+        && StringUtils.isNotEmpty(receiver.getEmail())) {
+      Player sender = playerService.find(senderId);
+      sendNotificationMail(message.getMessage(), receiver, sender);
     }
   }
 }

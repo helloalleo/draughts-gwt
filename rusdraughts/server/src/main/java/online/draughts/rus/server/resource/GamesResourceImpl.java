@@ -51,7 +51,7 @@ public class GamesResourceImpl implements GamesResource {
   }
 
   @Override
-  public Long getGamesCount() {
+  public Integer getGamesCount() {
     return gameService.getGamesCount();
   }
 

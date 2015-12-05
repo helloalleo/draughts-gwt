@@ -1,9 +1,7 @@
 package online.draughts.rus.shared.model;
 
-import javax.persistence.GeneratedValue;
-import javax.persistence.GenerationType;
-import javax.persistence.Id;
-import javax.persistence.MappedSuperclass;
+import com.googlecode.objectify.annotation.Id;
+
 import java.util.Objects;
 
 /**
@@ -12,11 +10,9 @@ import java.util.Objects;
  * Date: 15.11.14
  * Time: 16:03
  */
-@MappedSuperclass
 public class PersistableObjectImpl implements PersistableObject {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.IDENTITY)
   private Long id;
 
   @Override

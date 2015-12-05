@@ -36,7 +36,7 @@ public class LogoutServlet extends HttpServlet {
       player.setOnline(false);
       player.setPlaying(false);
       player.setLoggedIn(false);
-      playerService.saveOrCreateOnServer(player);
+      playerService.saveOrCreate(player);
     }
 
     request.getSession().invalidate();

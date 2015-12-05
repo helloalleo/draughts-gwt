@@ -3,9 +3,7 @@ package online.draughts.rus.server.config;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.service.PlayerService;
-import online.draughts.rus.shared.model.Player;
 
-import java.util.List;
 import java.util.ResourceBundle;
 
 /**
@@ -51,6 +49,7 @@ public class ServerConfiguration {
   @Inject
   public ServerConfiguration(PlayerService playerService) {
     this.playerService = playerService;
+    registerObjectifyEntities();
     resetUserStatuses();
 
     ResourceBundle resourceBundle = ResourceBundle.getBundle("ServerConfiguration");
@@ -88,6 +87,10 @@ public class ServerConfiguration {
     googleClientId = resourceBundle.getString("google_client_id");
     googleClientSecret = resourceBundle.getString("google_client_secret");
     googleScope = resourceBundle.getString("google_scope");
+  }
+
+  private void registerObjectifyEntities() {
+
   }
 
   public String getNotFoundErrorUrl() {
@@ -192,13 +195,13 @@ public class ServerConfiguration {
 
   private void resetUserStatuses() {
     // сбрасываем всех пользователей как не залогиненных при старте контейнера
-    final List<Player> playerList = playerService.findAll();
-    for (Player player : playerList) {
-      player.setOnline(false);
-      player.setPlaying(false);
-      player.setLoggedIn(false);
-      playerService.saveOrCreateOnServer(player);
-    }
+//    final List<Player> playerList = playerService.findAll();
+//    for (Player player : playerList) {
+//      player.setOnline(false);
+//      player.setPlaying(false);
+//      player.setLoggedIn(false);
+//      playerService.saveOrCreate(player);
+//    }
   }
 
   public String getPlayUrl() {

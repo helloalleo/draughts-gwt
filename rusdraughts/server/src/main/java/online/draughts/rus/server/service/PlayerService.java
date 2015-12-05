@@ -3,6 +3,7 @@ package online.draughts.rus.server.service;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
+import online.draughts.rus.server.dao.FriendDao;
 import online.draughts.rus.server.dao.PlayerDao;
 import online.draughts.rus.shared.model.Friend;
 import online.draughts.rus.shared.model.Player;
@@ -13,24 +14,19 @@ import java.util.List;
 @Singleton
 public class PlayerService {
   private final Provider<PlayerDao> playerDaoProvider;
+  private final Provider<FriendDao> friendDaoProvider;
 
   @Inject
   PlayerService(
-      Provider<PlayerDao> playerDaoProvider) {
+      Provider<PlayerDao> playerDaoProvider,
+      Provider<FriendDao> friendDaoProvider) {
     this.playerDaoProvider = playerDaoProvider;
+    this.friendDaoProvider = friendDaoProvider;
   }
 
   public Player saveOrCreate(Player player) {
-    return saveOrCreate(player, false);
-  }
-
-  public Player saveOrCreateOnServer(Player player) {
-    return saveOrCreate(player, true);
-  }
-
-  private Player saveOrCreate(Player player, boolean serverSide) {
     if (player != null && player.getId() == null) {
-      playerDaoProvider.get().create(player);
+      playerDaoProvider.get().save(player);
       return player;
     }
 
@@ -38,11 +34,11 @@ public class PlayerService {
       return null;
     }
 
-    Player playerById = playerDaoProvider.get().findById(player.getId());
+    Player playerById = playerDaoProvider.get().find(player.getId());
 
     if (playerById != null) {
       playerById.updateSerializable(player);
-      playerDaoProvider.get().edit(playerById);
+      playerDaoProvider.get().save(playerById);
       return playerById;
     }
     return null;
@@ -80,7 +76,7 @@ public class PlayerService {
   }
 
   public List<Friend> findFriends(Long playerId) {
-    return playerDaoProvider.get().findFriends(playerId);
+    return friendDaoProvider.get().findFriends(playerId);
   }
 
   public Integer totalPlayers() {
@@ -94,6 +90,6 @@ public class PlayerService {
   public void resetUnreadMessages(Long playerId, Long friendId) {
     Player player = playerDaoProvider.get().find(playerId);
     player.getFriendUnreadMessagesMap().remove(friendId);
-    playerDaoProvider.get().edit(player);
+    playerDaoProvider.get().save(player);
   }
 }

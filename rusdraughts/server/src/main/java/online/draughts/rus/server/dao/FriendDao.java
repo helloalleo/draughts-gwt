@@ -2,6 +2,8 @@ package online.draughts.rus.server.dao;
 
 import online.draughts.rus.shared.model.Friend;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -10,7 +12,9 @@ import online.draughts.rus.shared.model.Friend;
  */
 public interface FriendDao extends Dao<Friend> {
 
-  Friend findById(Long friendId);
+  List<Friend> getPlayerFriends(Long playerId, Long friendId);
 
-  boolean isPlayerFriendOf(Long playerId, Long friendId);
+  List<Friend> findFriends(Long playerId);
+
+  Friend find(String id);
 }

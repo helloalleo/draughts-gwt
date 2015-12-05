@@ -1,7 +1,6 @@
 package online.draughts.rus.server.dao;
 
 import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.model.Move;
 
 import java.util.List;
 
@@ -13,11 +12,7 @@ import java.util.List;
  */
 public interface GameDao extends Dao<Game> {
 
-  Game findLazyFalse(Long id);
-
   List<Game> findRange(int start, int length);
 
   List<Game> findUserGames(Long userId, int start, int length);
-
-  List<Move> findGameMoves(Long gameId);
 }

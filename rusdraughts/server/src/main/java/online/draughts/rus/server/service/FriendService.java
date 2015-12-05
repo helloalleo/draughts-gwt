@@ -28,11 +28,11 @@ public class FriendService {
 
     logger.info("New friend: " + friend.toString());
     if (friend.getId() == null) {
-      friendDaoProvider.get().create(friend);
+      friendDaoProvider.get().save(friend);
     } else {
-      Friend friendById = friendDaoProvider.get().findById(friend.getId());
+      Friend friendById = friendDaoProvider.get().find(friend.getId());
       friendById.setFavorite(friend.isFavorite());
-      friendDaoProvider.get().edit(friendById);
+      friendDaoProvider.get().save(friendById);
     }
     return friend;
   }
@@ -42,6 +42,6 @@ public class FriendService {
   }
 
   public boolean isPlayerFriendOf(Long playerId, Long friendId) {
-    return friendDaoProvider.get().isPlayerFriendOf(playerId, friendId);
+    return !friendDaoProvider.get().getPlayerFriends(playerId, friendId).isEmpty();
   }
 }

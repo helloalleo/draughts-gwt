@@ -112,10 +112,8 @@ public class ServerChannel extends ChannelServer {
   }
 
   private void handleGameOver(GameMessage gameMessage) {
-    Game game = gameMessage.getGame();
-    if (game == null) {
-      return;
-    }
+    long gameId = gameMessage.getGame().getId();
+    Game game = gameService.find(gameId);
 
     Player black = playerService.find(game.getPlayerBlack().getId());
     Player white = playerService.find(game.getPlayerWhite().getId());
@@ -123,21 +121,19 @@ public class ServerChannel extends ChannelServer {
     black.setPlaying(false);
     white.setPlaying(false);
 
-    playerService.saveOrCreateOnServer(black);
-    playerService.saveOrCreateOnServer(white);
+    playerService.saveOrCreate(black);
+    playerService.saveOrCreate(white);
 
     handleChatPrivateMessage(gameMessage);
   }
 
   private void handlePlayerConnect(GameMessage message, String token) {
-    Player player = message.getSender();
-    final Long playerId = player.getId();
-    player = playerService.find(playerId);
+    Player player = playerService.find(message.getSender().getId());
 
     player.setOnline(true);
-    playerService.saveOrCreateOnServer(player);
+    playerService.saveOrCreate(player);
 
-    final String channel = String.valueOf(playerId);
+    final String channel = String.valueOf(player.getId());
     channelTokenPeers.put(channel, token);
     updatePlayerList();
 
@@ -158,54 +154,37 @@ public class ServerChannel extends ChannelServer {
 
     if (player.isPlaying()) {
       Game game = gameService.findUserGames(player.getId(), 0, 1).get(0);
-      final boolean isPlayerHasWhiteColor = game.getPlayerWhite().getId().equals(player.getId());
+      final boolean isPlayerHasWhiteColor = game.getPlayerWhite().getId() == player.getId();
       GameMessage gameMessage = new GameMessage();
-      final Player secondPlayer = isPlayerHasWhiteColor ? game.getPlayerBlack() : game.getPlayerWhite();
+      final long secondPlayerId = isPlayerHasWhiteColor ? game.getPlayerBlack().getId() : game.getPlayerWhite().getId();
+      Player secondPlayer = playerService.find(secondPlayerId);
 
       secondPlayer.setPlaying(false);
-      playerService.saveOrCreateOnServer(secondPlayer);
+      playerService.saveOrCreate(secondPlayer);
 
-      gameMessage.setReceiver(secondPlayer);
+      gameMessage.setReceiver(secondPlayer.getId());
       gameMessage.setMessageType(GameMessage.MessageType.PLAY_END);
       sendMessage(String.valueOf(secondPlayer.getId()), gameMessage);
     }
 
     player.setOnline(false);
     player.setPlaying(false);
-    playerService.saveOrCreateOnServer(player);
+    playerService.saveOrCreate(player);
 
     channelTokenPeers.remove(chanelName);
     updatePlayerList();
   }
 
   private void handleChatPrivateMessage(GameMessage message) {
-    Player receiver = message.getReceiver();
-    if (receiver == null) {
-      return;
-    }
-    Player sender = message.getSender();
-    if (sender == null) {
-      return;
-    }
+    long receiverId = message.getReceiver().getId();
+    long senderId = message.getSender().getId();
 
-    final String receiverChannel = String.valueOf(receiver.getId());
+    final String receiverChannel = String.valueOf(receiverId);
 
+    Player receiver = playerService.find(receiverId);
     message = saveGameMessage(message);
     if (GameMessage.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
-      // если получатель не имеет сообщений от данного отправителя, тогда инициализируем Map и увеличиваем счетчика
-      // на единицу
-      receiver = playerService.find(receiver.getId());
-      if (!receiver.getFriendUnreadMessagesMap().containsKey(sender.getId())) {
-        receiver.getFriendUnreadMessagesMap().put(sender.getId(), 0);
-      }
-      final Integer unreadMessages = receiver.getFriendUnreadMessagesMap().get(sender.getId());
-      receiver.getFriendUnreadMessagesMap().put(sender.getId(), unreadMessages + 1);
-      playerService.saveOrCreateOnServer(receiver);
-
-      if (!(receiver.isOnline() || receiver.isPlaying() || receiver.isLoggedIn())
-          && StringUtils.isNotEmpty(receiver.getEmail())) {
-        mailService.sendNotificationMail(message.getMessage(), receiver, sender);
-      }
+      mailService.sendNotification(message, senderId, receiver);
     }
     if (receiver.isOnline()) {
       sendMessage(receiverChannel, message);
@@ -215,23 +194,25 @@ public class ServerChannel extends ChannelServer {
   private GameMessage saveGameMessage(GameMessage message) {
     Player playerReceiver = playerService.find(message.getReceiver().getId());
     Player playerSender = playerService.find(message.getSender().getId());
-    Game game = message.getGame() != null ? gameService.find(message.getGame().getId()) : null;
-
     GameMessage gameMessage = new GameMessage();
+
+    if (message.getGame() != null) {
+      Game game = gameService.find(message.getGame().getId());
+      gameMessage.setGame(game.getId());
+    }
 
     gameMessage.setMessageType(message.getMessageType());
     gameMessage.setData(message.getData());
     gameMessage.setMessage(message.getMessage());
 
-    gameMessage.setGame(game);
 
     if (message.getMove() != null) {
-      gameMessage.setMove(new Move(message.getMove()));
-      gameMessage.getMove().setGameMessage(gameMessage);
+      gameMessage.setMove(new Move(message.getMove().get()));
+//      gameMessage.getMove().setGameMessage(gameMessage);
     }
 
-    gameMessage.setReceiver(playerReceiver);
-    gameMessage.setSender(playerSender);
+    gameMessage.setReceiver(playerReceiver.getId());
+    gameMessage.setSender(playerSender.getId());
 
     gameMessage.setSentDate(new Date());
 

@@ -275,7 +275,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     Column<Friend, SafeHtml> statusColumn = new Column<Friend, SafeHtml>(new SafeHtmlCell()) {
       @Override
       public SafeHtml getValue(Friend friend) {
-        return getStatusSafeHtml(friend.getPk().getFriend());
+        return getStatusSafeHtml(friend.getFriendOf());
       }
     };
     statusColumn.setCellStyleNames(resources.style().cellWithButton());

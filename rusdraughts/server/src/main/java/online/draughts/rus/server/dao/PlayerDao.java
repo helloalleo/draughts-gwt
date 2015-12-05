@@ -1,6 +1,5 @@
 package online.draughts.rus.server.dao;
 
-import online.draughts.rus.shared.model.Friend;
 import online.draughts.rus.shared.model.Player;
 
 import java.util.List;
@@ -17,13 +16,9 @@ public interface PlayerDao extends Dao<Player> {
 
   Player findBySessionId(String sessionId);
 
-  Player findById(Long playerId);
-
   Player findByFbId(String user_id);
 
   Player findByGoogleSub(String sub);
-
-  List<Friend> findFriends(Long playerId);
 
   List<Player> findAll();
 

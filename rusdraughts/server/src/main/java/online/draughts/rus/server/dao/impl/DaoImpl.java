@@ -4,16 +4,10 @@ import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
 import online.draughts.rus.server.dao.Dao;
 import online.draughts.rus.shared.model.BasePersistableObject;
-import org.apache.commons.lang3.StringUtils;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import javax.persistence.Tuple;
-import javax.persistence.criteria.CriteriaBuilder;
-import javax.persistence.criteria.CriteriaQuery;
-import javax.persistence.criteria.Path;
-import javax.persistence.criteria.Root;
 import java.util.List;
+
+import static com.googlecode.objectify.ObjectifyService.ofy;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,109 +19,37 @@ public abstract class DaoImpl<E extends BasePersistableObject> implements Dao<E>
   private Class<E> entityClass;
 
   public DaoImpl(TypeLiteral<E> type) {
+    //noinspection unchecked
     this.entityClass = (Class<E>) type.getRawType();
   }
 
-  protected abstract EntityManager getEntityManager();
-
-  @Transactional
-  public void create(E entity) {
-    getEntityManager().persist(entity);
+  public Class<E> getEntityClass() {
+    return entityClass;
   }
 
-  @Transactional
-  public E edit(E entity) {
-    return getEntityManager().merge(entity);
+  public E save(E entity) {
+    return ofy().load().key(ofy().save().entity(entity).now()).now();
   }
 
-  @Transactional
-  public void remove(E entity) {
-    getEntityManager().remove(getEntityManager().merge(entity));
-  }
-
-  public boolean isExistingWithId(Long id) {
-    if (id == null) {
-      return false;
-    }
-    CriteriaBuilder builder = getEntityManager().getCriteriaBuilder();
-    CriteriaQuery<Tuple> query = builder.createTupleQuery();
-    Root<E> root = query.from(entityClass);
-    Path<Long> idPath = root.get("id");
-    query.multiselect(idPath);
-    query.where(builder.equal(root.get("id"), id));
-    List<Tuple> result = getEntityManager().createQuery(query).setMaxResults(1).getResultList();
-    return !result.isEmpty();
-  }
-
-
-  @Transactional
-  public E find(Object id) {
+  public E find(Long id) {
     if (id == null) {
       return null;
     }
-    return getEntityManager().find(entityClass, id);
+    return ofy().load().type(entityClass).id(id).now();
   }
 
   @Transactional
   public List<E> findAll() {
-    CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
-    cq.select(cq.from(entityClass));
-    return getEntityManager().createQuery(cq).getResultList();
-  }
-
-  @Transactional
-  public List<E> findPublishedAll() {
-    CriteriaBuilder cb = getEntityManager().getCriteriaBuilder();
-    CriteriaQuery<E> cq = cb.createQuery(entityClass);
-    Root<E> root = cq.from(entityClass);
-    cq.select(root).where(cb.equal(root.get("published"), true));
-    return getEntityManager().createQuery(cq).getResultList();
+    return ofy().load().type(entityClass).list();
   }
 
   @Transactional
   public List<E> findRange(int start, int length) {
-    CriteriaQuery cq = getEntityManager().getCriteriaBuilder().createQuery();
-    cq.select(cq.from(entityClass));
-    Query q = getEntityManager().createQuery(cq);
-    q.setMaxResults(length);
-    q.setFirstResult(start);
-    return q.getResultList();
+    return ofy().load().type(entityClass).offset(start).limit(length).list();
   }
 
   @Transactional
-  public Long countAll() {
-    CriteriaBuilder qb = getEntityManager().getCriteriaBuilder();
-    CriteriaQuery<Long> cq = qb.createQuery(Long.class);
-    cq.select(qb.count(cq.from(entityClass)));
-    cq.where(/*your stuff*/);
-    return getEntityManager().createQuery(cq).getSingleResult();
-  }
-
-  protected Object findByParam(String entity, String[] params, Object[] values) throws IllegalArgumentException {
-    if (StringUtils.isEmpty(entity)) {
-      throw new IllegalArgumentException("Illegal entity parameter");
-    }
-    if (params.length != values.length) {
-      throw new IllegalArgumentException("Length of params and values must be equal");
-    }
-
-    String hql = " FROM " + entity + " WHERE ";
-    for (int i = 0; i < params.length; i++) {
-      if (i != 0) {
-        hql += " AND ";
-      }
-      hql += " " + params[i] + " = :" + params[i] + " ";
-    }
-
-    Query query = getEntityManager().createQuery(hql);
-    for (int i = 0; i < params.length; i++) {
-      query.setParameter(params[i], values[i]);
-    }
-
-    List result = query.getResultList();
-    if (result.isEmpty()) {
-      return null;
-    }
-    return result.get(0);
+  public Integer countAll() {
+    return ofy().load().type(entityClass).count();
   }
 }

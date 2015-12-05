@@ -1,16 +1,17 @@
 package online.draughts.rus.server.dao.impl;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
+import com.googlecode.objectify.cmd.Query;
 import online.draughts.rus.server.dao.GameMessageDao;
 import online.draughts.rus.shared.model.GameMessage;
+import online.draughts.rus.shared.model.Move;
 
-import javax.persistence.EntityManager;
-import javax.persistence.Query;
-import java.util.Collections;
+import java.util.ArrayList;
 import java.util.List;
+
+import static com.googlecode.objectify.ObjectifyService.ofy;
 
 /**
  * Created with IntelliJ IDEA.
@@ -20,48 +21,84 @@ import java.util.List;
  */
 public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements GameMessageDao {
 
-  private final Provider<EntityManager> entityManagerProvider;
-
   @Inject
-  public GameMessageDaoImpl(TypeLiteral<GameMessage> type, Provider<EntityManager> entityManagerProvider) {
+  public GameMessageDaoImpl(TypeLiteral<GameMessage> type) {
     super(type);
-    this.entityManagerProvider = entityManagerProvider;
-  }
-
-  @Override
-  protected EntityManager getEntityManager() {
-    return entityManagerProvider.get();
   }
 
   @Override
   @Transactional
   public List<GameMessage> findLastMessages(int countLast, Long playerId, Long opponentId) {
-    Query query = getEntityManager().createQuery("SELECT m " +
-            " FROM GameMessage m " +
-            " JOIN FETCH m.sender " +
-            " JOIN FETCH m.receiver " +
-            " WHERE ((m.sender.id = :senderId AND m.receiver.id = :receiverId) " +
-            " OR (m.receiver.id = :senderId AND m.sender.id = :receiverId)) " +
-            " AND m.messageType = :messageType " +
-            " ORDER BY m.sentDate DESC");
-    query.setParameter("senderId", playerId);
-    query.setParameter("receiverId", opponentId);
-    query.setParameter("messageType", GameMessage.MessageType.CHAT_PRIVATE_MESSAGE);
+//    Query query = getEntityManager().createQuery("SELECT m " +
+//            " FROM GameMessage m " +
+//            " JOIN FETCH m.sender " +
+//            " JOIN FETCH m.receiver " +
+//            " WHERE ((m.sender.id = :senderId AND m.receiver.id = :receiverId) " +
+//            " OR (m.receiver.id = :senderId AND m.sender.id = :receiverId)) " +
+//            " AND m.messageType = :messageType " +
+//            " ORDER BY m.sentDate DESC");
+//    query.setParameter("senderId", playerId);
+//    query.setParameter("receiverId", opponentId);
+//    query.setParameter("messageType", GameMessage.MessageType.CHAT_PRIVATE_MESSAGE);
+//
+//    query.setMaxResults(countLast);
+//
+//    List list = query.getResultList();
+//    Collections.reverse(list);
+//    return list;
 
-    query.setMaxResults(countLast);
+    Query<GameMessage> query =ofy().load().type(getEntityClass())
+        .filter("messageType", GameMessage.MessageType.CHAT_PRIVATE_MESSAGE)
+        .order("sentDate")
+        .orderKey(true);
 
-    List list = query.getResultList();
-    Collections.reverse(list);
-    return list;
+    List<GameMessage> playerMessages = query
+        .filter("sender.id", playerId)
+        .filter("receiver.id", opponentId)
+        .list();
+
+    List<GameMessage> friendMessages = query
+        .filter("sender.id", opponentId)
+        .filter("receiver.id", playerId)
+        .list();
+
+    playerMessages.addAll(friendMessages);
+    return playerMessages;
   }
 
   @Override
   public List<GameMessage> findGameMessagesByGameId(Long gameId) {
-    String hql = "SELECT gm " +
-        " FROM GameMessage gm " +
-        " WHERE gm.game.id = :gameId";
-    Query query = getEntityManager().createQuery(hql);
-    query.setParameter("gameId", gameId);
-    return query.getResultList();
+//    String hql = "SELECT gm " +
+//        " FROM GameMessage gm " +
+//        " WHERE gm.game.id = :gameId";
+//    Query query = getEntityManager().createQuery(hql);
+//    query.setParameter("gameId", gameId);
+//    return query.getResultList();
+
+    return ofy().load().type(getEntityClass())
+        .filter("game.id", gameId)
+        .list();
+  }
+
+  @Override
+  public List<Move> findGameMoves(Long gameId) {
+//    String hql = "SELECT gm.move " +
+//        " FROM GameMessage gm " +
+//        " WHERE gm.game.id = :gameId " +
+//        " ORDER BY gm.sentDate";
+//    Query query = getEntityManager().createQuery(hql);
+//    query.setParameter("gameId", gameId);
+//    return query.getResultList();
+
+    List<GameMessage> gameMessages = ofy().load().type(getEntityClass())
+        .filter("game.id", gameId)
+        .order("sentDate")
+        .orderKey(true)
+        .list();
+    List<Move> moves = new ArrayList<>(gameMessages.size());
+    for (GameMessage gameMessage : gameMessages) {
+      moves.add(gameMessage.getMove().get());
+    }
+    return moves;
   }
 }

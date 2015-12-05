@@ -1,6 +1,8 @@
 package online.draughts.rus.server.guice;
 
 import com.google.inject.AbstractModule;
+import com.google.inject.Singleton;
+import com.googlecode.objectify.ObjectifyFilter;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,5 +17,7 @@ public class ServerModule extends AbstractModule {
     install(new DispatchServletModule());
     install(new DbModule());
     install(new ServerHandlerModule());
+
+    bind(ObjectifyFilter.class).in(Singleton.class);
   }
 }

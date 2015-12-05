@@ -1,8 +1,10 @@
 package online.draughts.rus.shared.model;
 
-import online.draughts.rus.shared.model.key.FriendId;
 
-import javax.persistence.*;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Id;
+
 import java.util.Objects;
 
 /**
@@ -12,36 +14,45 @@ import java.util.Objects;
  * Time: 14:10
  */
 @Entity
-@Table(name = "friend", uniqueConstraints = {
-    @UniqueConstraint(columnNames = {"friend_id", "friend_of_id"})
-})
-@AssociationOverrides({
-    @AssociationOverride(name = "pk.friend", joinColumns = @JoinColumn(name = "friend_id", insertable = false, updatable = false)),
-    @AssociationOverride(name = "pk.friendOf", joinColumns = @JoinColumn(name = "friend_of_id", insertable = false, updatable = false))})
 public class Friend implements BasePersistableObject {
 
   @Id
-  @GeneratedValue(strategy = GenerationType.TABLE)
-  private Long id;
+  private String id;
 
-  @EmbeddedId
-  private FriendId pk = new FriendId();
+  private Key<Player> friend;
+  private Key<Player> friendOf;
+
   private boolean favorite;
 
   public Friend() {
   }
 
-  public Long getId() {
+  public Friend(Long friendId, Long friendOfId) {
+    this.id = friendId + "::" + friendOfId;
+  }
+
+  public String getId() {
     return id;
   }
 
-  public Friend setId(Long id) {
+  public void setId(String id) {
     this.id = id;
-    return this;
   }
 
-  public void setFriendId(Long friendId) {
-    this.id = friendId;
+  public Key<Player> getFriend() {
+    return friend;
+  }
+
+  public void setFriend(Long friendId) {
+    this.friend = Key.create(Player.class, friendId);
+  }
+
+  public Key<Player> getFriendOf() {
+    return friendOf;
+  }
+
+  public void setFriendOf(Long friendOfId) {
+    this.friendOf = Key.create(Player.class, friendOfId);
   }
 
   @Override
@@ -49,12 +60,12 @@ public class Friend implements BasePersistableObject {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
     Friend friend = (Friend) o;
-    return Objects.equals(pk, friend.pk);
+    return Objects.equals(id, friend.id);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(pk);
+    return Objects.hash(id);
   }
 
   public boolean isFavorite() {
@@ -63,15 +74,6 @@ public class Friend implements BasePersistableObject {
 
   public Friend setFavorite(boolean favorite) {
     this.favorite = favorite;
-    return this;
-  }
-
-  public FriendId getPk() {
-    return pk;
-  }
-
-  public Friend setPk(FriendId pk) {
-    this.pk = pk;
     return this;
   }
 }

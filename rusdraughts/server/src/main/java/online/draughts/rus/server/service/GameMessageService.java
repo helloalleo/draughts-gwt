@@ -34,11 +34,7 @@ public class GameMessageService {
     }
 
     logger.info("New message: " + gameMessage.toString());
-    if (gameMessage.getId() == null) {
-      gameMessageDaoProvider.get().create(gameMessage);
-    } else {
-      gameMessageDaoProvider.get().edit(gameMessage);
-    }
+    gameMessageDaoProvider.get().save(gameMessage);
     return gameMessage;
   }
 

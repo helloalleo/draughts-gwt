@@ -1,9 +1,11 @@
 package online.draughts.rus.shared.model;
 
+
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.user.client.rpc.GwtTransient;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.annotation.Entity;
 
-import javax.persistence.*;
 import java.util.HashSet;
 import java.util.Set;
 
@@ -14,55 +16,43 @@ import java.util.Set;
  * Time: 21:45
  */
 @Entity
-@Table(name = "move")
 public class Move extends PersistableObjectImpl {
 
   private int number; // номер пары хода
-  @Column(name = "move_order")
   private int moveOrder;
   private boolean first; // первый ход в паре ходов. Например, ee-aa в ee-aa bb-cc
 
   @GwtTransient
   @JsonIgnore
-  @OneToOne
-  @JoinColumn(name = "message_id")
-  private GameMessage gameMessage;
+  private Key<GameMessage> gameMessage;
 
-  @Column(name = "start_pos")
   private String startPos;
 
-  @Column(name = "end_pos")
   private String endPos;
 
-  @Column(name = "taken_pos")
   private String takenPos;
 
-  @Column(name = "move_flags")
-  @ElementCollection
   private Set<MoveFlags> moveFlags = new HashSet<>();
 
   private String title;
 
   private String comment;
 
-  @Column(name = "hash_tags")
-  @ElementCollection
   private Set<String> hashTags = new HashSet<>();
 
   @GwtTransient
-  @Column(columnDefinition = "TEXT")
   private String screenshot;
 
   public Move() {
   }
 
-  public Move(int number, boolean first, GameMessage gameMessage, String startPos, String endPos, String takenPos,
+  public Move(int number, boolean first, Long gameMessageId, String startPos, String endPos, String takenPos,
               Set<MoveFlags> moveFlags, String screenshot) {
     this.number = number;
     this.first = first;
     this.moveFlags = moveFlags;
 
-    this.gameMessage = gameMessage;
+    this.gameMessage = Key.create(GameMessage.class, gameMessageId);
 
     this.startPos = startPos;
     this.endPos = endPos;
@@ -72,16 +62,16 @@ public class Move extends PersistableObjectImpl {
   }
 
   public Move(Move move) {
-    this(move.getNumber(), move.isFirst(), move.getGameMessage(), move.getStartPos(), move.getEndPos(),
+    this(move.getNumber(), move.isFirst(), move.getGameMessage().getId(), move.getStartPos(), move.getEndPos(),
         move.getTakenPos(), move.getMoveFlags(), move.getScreenshot());
   }
 
-  public GameMessage getGameMessage() {
+  public Key<GameMessage> getGameMessage() {
     return gameMessage;
   }
 
-  public Move setGameMessage(GameMessage gameMessage) {
-    this.gameMessage = gameMessage;
+  public Move setGameMessage(Long gameMessageId) {
+    this.gameMessage = Key.create(GameMessage.class, gameMessageId);
     return this;
   }
 

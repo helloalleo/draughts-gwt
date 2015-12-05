@@ -1,6 +1,7 @@
 package online.draughts.rus.server.dao;
 
 import online.draughts.rus.shared.model.GameMessage;
+import online.draughts.rus.shared.model.Move;
 
 import java.util.List;
 
@@ -15,4 +16,6 @@ public interface GameMessageDao extends Dao<GameMessage> {
   List<GameMessage> findLastMessages(int countLast, Long playerId, Long opponentId);
 
   List<GameMessage> findGameMessagesByGameId(Long gameId);
+
+  List<Move> findGameMoves(Long gameId);
 }

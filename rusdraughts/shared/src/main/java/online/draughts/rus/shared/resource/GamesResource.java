@@ -26,7 +26,7 @@ public interface GamesResource {
 
   @GET
   @Path(ApiPaths.COUNT)
-  Long getGamesCount();
+  Integer getGamesCount();
 
   @POST
   Game saveOrCreate(Game game);

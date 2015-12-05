@@ -53,9 +53,9 @@ public class AuthUtils {
     player.setVisitCounter(player.getVisitCounter() + 1);
 
     Rating.calcPlayerRating(player);
-    playerService.saveOrCreateOnServer(player);
+    playerService.saveOrCreate(player);
 
-    if (!player.isBanned()) {
+    if (!player.isActive()) {
       AuthUtils.login(req);
     }
     resp.sendRedirect(config.getPlayUrl());

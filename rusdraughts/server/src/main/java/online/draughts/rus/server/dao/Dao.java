@@ -11,19 +11,14 @@ import java.util.List;
  * Time: 16:58
  */
 public interface Dao<E extends BasePersistableObject> {
-  void create(E entity);
 
-  E edit(E entity);
+  E save(E entity);
 
-  void remove(E entity);
-
-  E find(Object id);
+  E find(Long id);
 
   List<E> findAll();
 
-  List<E> findPublishedAll();
-
   List<E> findRange(int start, int length);
 
-  Long countAll();
+  Integer countAll();
 }

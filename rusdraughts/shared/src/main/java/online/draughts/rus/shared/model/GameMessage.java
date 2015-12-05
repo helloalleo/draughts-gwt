@@ -1,8 +1,12 @@
 package online.draughts.rus.shared.model;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
 
-import javax.persistence.*;
+import com.google.gwt.user.client.rpc.IsSerializable;
+import com.googlecode.objectify.Key;
+import com.googlecode.objectify.Ref;
+import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Ignore;
+
 import java.util.Date;
 import java.util.List;
 
@@ -13,53 +17,41 @@ import java.util.List;
  * Time: 15:49
  */
 @Entity
-@Table(name = "game_message")
 public class GameMessage extends PersistableObjectImpl {
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "sender_id")
-  private Player sender;
+  private Key<Player> sender;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "receiver_id")
-  private Player receiver;
+  private Key<Player> receiver;
 
-  @Lob
   private String message;
 
-  @Enumerated(EnumType.STRING)
-  @Column(name = "message_type")
   private MessageType messageType;
 
   private String data;
 
-  @Column(name = "sent_date")
   private Date sentDate;
 
-  @OneToOne(mappedBy = "gameMessage", cascade = CascadeType.ALL)
-  private Move move;
+  private Ref<Move> move;
 
-  @ManyToOne(fetch = FetchType.LAZY)
-  @JoinColumn(name = "game_id")
-  private Game game;
+  private Key<Game> game;
 
-  @Transient
+  @Ignore
   private List<Player> playerList;
 
-  public Player getSender() {
+  public Key<Player> getSender() {
     return sender;
   }
 
-  public void setSender(Player entity) {
-    this.sender = entity;
+  public void setSender(Long senderId) {
+    this.sender = Key.create(Player.class, senderId);
   }
 
-  public Player getReceiver() {
+  public Key<Player> getReceiver() {
     return receiver;
   }
 
-  public void setReceiver(Player entity) {
-    this.receiver = entity;
+  public void setReceiver(Long receiverId) {
+    this.receiver = Key.create(Player.class, receiverId);
   }
 
   public String getMessage() {
@@ -94,20 +86,20 @@ public class GameMessage extends PersistableObjectImpl {
     this.messageType = messageType;
   }
 
-  public Move getMove() {
+  public Ref<Move> getMove() {
     return move;
   }
 
   public void setMove(Move move) {
-    this.move = move;
+    this.move = Ref.create(move);
   }
 
-  public Game getGame() {
+  public Key<Game> getGame() {
     return game;
   }
 
-  public void setGame(Game entity) {
-    this.game = entity;
+  public void setGame(Long gameId) {
+    this.game = Key.create(Game.class, gameId);
   }
 
   public void setPlayerList(List<Player> playerList) {
