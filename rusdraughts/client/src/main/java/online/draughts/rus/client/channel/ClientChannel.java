@@ -19,11 +19,11 @@ import online.draughts.rus.client.json.ChunkMapper;
 import online.draughts.rus.client.json.GameMessageMapper;
 import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.channel.Chunk;
+import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.dto.GameMessageDto;
+import online.draughts.rus.shared.dto.MoveDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.model.GameMessage;
-import online.draughts.rus.shared.model.Move;
-import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.util.StringUtils;
 
@@ -43,7 +43,7 @@ public class ClientChannel implements ChannelListener {
   private final CurrentSession currentSession;
   private ResourceDelegate<GamesResource> gamesDelegate;
   private EventBus eventBus;
-  private Player player;
+  private PlayerDto player;
   private Channel channel;
   private DraughtsMessages messages;
   private ConfirmPlayDialogBox confirmPlayDialogBox;
@@ -76,13 +76,13 @@ public class ClientChannel implements ChannelListener {
         if (channel == null) {
           return;
         }
-        sendSimpleMessage(GameMessage.MessageType.CHANNEL_CLOSE);
+        sendSimpleMessage(GameMessageDto.MessageType.CHANNEL_CLOSE);
       }
     });
   }
 
-  private void sendSimpleMessage(GameMessage.MessageType channelClose) {
-    GameMessage gameMessage = createGameMessage();
+  private void sendSimpleMessage(GameMessageDto.MessageType channelClose) {
+    GameMessageDto gameMessage = createGameMessage();
     gameMessage.setMessageType(channelClose);
     sendGameMessage(gameMessage);
   }
@@ -91,7 +91,7 @@ public class ClientChannel implements ChannelListener {
     eventBus.addHandler(GameMessageEvent.TYPE, new GameMessageEventHandler() {
       @Override
       public void onPlayerMessage(GameMessageEvent event) {
-        GameMessage gameMessage = event.getGameMessage();
+        GameMessageDto gameMessage = event.getGameMessage();
 
         sendGameMessage(gameMessage);
       }
@@ -101,8 +101,8 @@ public class ClientChannel implements ChannelListener {
     eventBus.addHandler(PlayMovePlayerMessageEvent.TYPE, new PlayMoveMessageEventHandler() {
       @Override
       public void onPlayMoveMessage(PlayMovePlayerMessageEvent event) {
-        GameMessage message = createGameMessage();
-        message.setMessageType(GameMessage.MessageType.PLAY_OPPONENT_MOVE);
+        GameMessageDto message = createGameMessage();
+        message.setMessageType(GameMessageDto.MessageType.PLAY_OPPONENT_MOVE);
         message.setMove(event.getMove());
         message.setGame(playSession.getGame());
 
@@ -113,14 +113,14 @@ public class ClientChannel implements ChannelListener {
     eventBus.addHandler(UpdatePlayerListEvent.TYPE, new UpdatePlayerListEventHandler() {
       @Override
       public void onUpdatePlayerList(UpdatePlayerListEvent event) {
-        sendSimpleMessage(GameMessage.MessageType.USER_LIST_UPDATE);
+        sendSimpleMessage(GameMessageDto.MessageType.USER_LIST_UPDATE);
       }
     });
 
     eventBus.addHandler(UpdateAllPlayerListEvent.TYPE, new UpdateAllPlayerListEventHandler() {
       @Override
       public void onUpdateAllPlayerList(UpdateAllPlayerListEvent event) {
-        sendSimpleMessage(GameMessage.MessageType.USER_LIST_UPDATE);
+        sendSimpleMessage(GameMessageDto.MessageType.USER_LIST_UPDATE);
       }
     });
     eventBus.addHandler(ClearPlayComponentEvent.TYPE, new ClearPlayComponentEventHandler() {
@@ -131,22 +131,23 @@ public class ClientChannel implements ChannelListener {
     });
   }
 
-  private GameMessage createGameMessage() {
-    GameMessage message = GWT.create(GameMessage.class);
+  private GameMessageDto createGameMessage() {
+    GameMessageDto message = GWT.create(GameMessageDto.class);
     message.setSender(playSession.getPlayer());
     message.setReceiver(playSession.getOpponent());
     return message;
   }
 
-  private void sendGameMessage(GameMessage gameMessage) {
+  private void sendGameMessage(GameMessageDto gameMessage) {
     String message = messageMapper.write(gameMessage);
     channel.send(message);
   }
 
-  private void handleUpdatePlayerList(List<Player> playerList) {
-    for (Player p : playerList) {
+  private void handleUpdatePlayerDtoList(List<PlayerDto> playerList) {
+    for (PlayerDto p : playerList) {
       if (p.getId().equals(player.getId())) {
-        player.updateSerializable(p);
+        // TODO Обновить поля?
+        player = p;
         break;
       }
     }
@@ -156,10 +157,10 @@ public class ClientChannel implements ChannelListener {
   /**
    * Начало игры на стороне приглашенного
    */
-  private void handlePlayInvite(final GameMessage gameMessage) {
+  private void handlePlayInvite(final GameMessageDto gameMessage) {
     if (confirmPlayDialogBox != null && confirmPlayDialogBox.isShowing()) {
-      GameMessage message = createGameMessage(gameMessage);
-      message.setMessageType(GameMessage.MessageType.PLAY_ALREADY_PLAYING);
+      GameMessageDto message = createGameMessage(gameMessage);
+      message.setMessageType(GameMessageDto.MessageType.PLAY_ALREADY_PLAYING);
       sendGameMessage(message);
       return;
     }
@@ -173,21 +174,21 @@ public class ClientChannel implements ChannelListener {
 
         playSession.setOpponent(gameMessage.getSender());
 
-        Game game = GWT.create(Game.class);
+        GameDto game = GWT.create(GameDto.class);
         game.setPlayStartDate(new Date());
         game.setPlayerWhite(isWhite() ? playSession.getPlayer() : playSession.getOpponent());
         game.setPlayerBlack(isWhite() ? playSession.getOpponent() : playSession.getPlayer());
 
-        gamesDelegate.withCallback(new AsyncCallback<Game>() {
+        gamesDelegate.withCallback(new AsyncCallback<GameDto>() {
           @Override
           public void onFailure(Throwable throwable) {
             ErrorDialogBox.setMessage(messages.failToStartGame(), throwable).show();
           }
 
           @Override
-          public void onSuccess(Game game) {
-            GameMessage message = createGameMessage(gameMessage);
-            message.setMessageType(GameMessage.MessageType.PLAY_START);
+          public void onSuccess(GameDto game) {
+            GameMessageDto message = createGameMessage(gameMessage);
+            message.setMessageType(GameMessageDto.MessageType.PLAY_START);
             message.setGame(game);
             message.setData(String.valueOf(!isWhite()));
 
@@ -196,19 +197,18 @@ public class ClientChannel implements ChannelListener {
             playSession.setGame(game);
             eventBus.fireEvent(new StartPlayEvent(isWhite()));
           }
-        }).saveOrCreate(game);
+        }).save(game);
       }
 
       @Override
       public void canceled() {
-        GameMessage message = createGameMessage(gameMessage);
-        message.setMessageType(GameMessage.MessageType.PLAY_REJECT_INVITE);
+        GameMessageDto message = createGameMessage(gameMessage);
+        message.setMessageType(GameMessageDto.MessageType.PLAY_REJECT_INVITE);
 
         sendGameMessage(message);
       }
     };
-    confirmPlayDialogBox.show(gameMessage.getMessage(), gameMessage.getSender(),
-        Boolean.valueOf(gameMessage.getData()));
+    confirmPlayDialogBox.show(gameMessage.getMessage(), Boolean.valueOf(gameMessage.getData()));
   }
 
   @Override
@@ -217,9 +217,9 @@ public class ClientChannel implements ChannelListener {
       InfoDialogBox.setMessage(messages.failToConnectToServer()).show();
       return;
     }
-    GameMessage gameMessage = GWT.create(GameMessage.class);
+    GameMessageDto gameMessage = GWT.create(GameMessageDto.class);
     gameMessage.setSender(player);
-    gameMessage.setMessageType(GameMessage.MessageType.PLAYER_REGISTER);
+    gameMessage.setMessageType(GameMessageDto.MessageType.PLAYER_REGISTER);
 
     sendGameMessage(gameMessage);
 
@@ -234,7 +234,7 @@ public class ClientChannel implements ChannelListener {
 
   @Override
   public void onClose() {
-    sendSimpleMessage(GameMessage.MessageType.CHANNEL_CLOSE);
+    sendSimpleMessage(GameMessageDto.MessageType.CHANNEL_CLOSE);
 
     playSession.setConnected(false);
     eventBus.fireEvent(new DisconnectFromPlayEvent());
@@ -247,7 +247,7 @@ public class ClientChannel implements ChannelListener {
     }
     Logger.debug(message);
     Chunk chunk = chunkMapper.read(message);
-    GameMessage gameMessage;
+    GameMessageDto gameMessage;
     if (chunk.getChunksInMessage() == 1) {
       gameMessage = messageMapper.read(chunk.getMessage());
     } else {
@@ -266,7 +266,7 @@ public class ClientChannel implements ChannelListener {
 
     switch (gameMessage.getMessageType()) {
       case USER_LIST_UPDATE:
-        handleUpdatePlayerList(gameMessage.getPlayerList());
+        handleUpdatePlayerDtoList(gameMessage.getPlayerList());
         break;
       case PLAY_INVITE:
         handlePlayInvite(gameMessage);
@@ -311,31 +311,31 @@ public class ClientChannel implements ChannelListener {
 
   }
 
-  private void handleNotification(GameMessage gameMessage) {
+  private void handleNotification(GameMessageDto gameMessage) {
     Growl.growlNotif(gameMessage.getMessage());
   }
 
   @SuppressWarnings("unused")
-  private void handlePlayEndGame(GameMessage gameMessage) {
+  private void handlePlayEndGame(GameMessageDto gameMessage) {
     if (playSession.getGame() != null) {
-      Game game = playSession.getGame();
-      final Game.GameEnds gameEnd = playSession.isPlayerHasWhiteColor()
-          ? Game.GameEnds.BLACK_LEFT : Game.GameEnds.WHITE_LEFT;
-      eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
+      GameDto game = playSession.getGame();
+      final GameDto.GameEnds gameEnd = playSession.isPlayerHasWhiteColor()
+          ? GameDto.GameEnds.BLACK_LEFT : GameDto.GameEnds.WHITE_LEFT;
+      eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<GameDto>() {
         @Override
         public void onFailure(Throwable throwable) {
           ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
         }
 
         @Override
-        public void onSuccess(Game aVoid) {
+        public void onSuccess(GameDto aVoid) {
           Growl.growlNotif(messages.opponentLeftGame());
         }
       }));
     }
   }
 
-  private void handlePlayAlreadyPlaying(GameMessage gameMessage) {
+  private void handlePlayAlreadyPlaying(GameMessageDto gameMessage) {
     eventBus.fireEvent(new HideInviteDialogBoxEvent());
     Growl.growlNotif(messages.playAlreadyPlaying(gameMessage.getSender().getPublicName()));
   }
@@ -343,10 +343,10 @@ public class ClientChannel implements ChannelListener {
   /**
    * Обработчик ответа на отмену хода. Если оппонент подтвердил, тогда перемещаем его шашку.
    */
-  private void handlePlayCancelMoveResponse(GameMessage gameMessage) {
+  private void handlePlayCancelMoveResponse(GameMessageDto gameMessage) {
     boolean isAcceptedCancelMove = Boolean.valueOf(gameMessage.getData());
     if (isAcceptedCancelMove) {
-      final Move move = gameMessage.getMove();
+      final MoveDto move = gameMessage.getMove();
       eventBus.fireEvent(new PlayMoveCancelEvent(move));
     } else {
       InfoDialogBox.setMessage(messages.playerRejectedMoveCancel(gameMessage.getSender().getPublicName())).show();
@@ -357,12 +357,12 @@ public class ClientChannel implements ChannelListener {
    * Вопрос на строне оппонента о том, что ему предлагается отменить ход. Если он соглашается, то он двигает шашку
    * оппонента
    */
-  private void handlePlayCancelMove(final GameMessage gameMessage) {
+  private void handlePlayCancelMove(final GameMessageDto gameMessage) {
     new ConfirmeDialogBox(messages.playerProposesCancelMove(gameMessage.getSender().getPublicName())) {
       @Override
       public void procConfirm() {
-        GameMessage returnGameMessage = createGameMessage(gameMessage);
-        returnGameMessage.setMessageType(GameMessage.MessageType.PLAY_CANCEL_MOVE_RESPONSE);
+        GameMessageDto returnGameMessage = createGameMessage(gameMessage);
+        returnGameMessage.setMessageType(GameMessageDto.MessageType.PLAY_CANCEL_MOVE_RESPONSE);
         returnGameMessage.setMove(gameMessage.getMove());
         if (isConfirmed()) {
           returnGameMessage.setData(Boolean.TRUE.toString());
@@ -375,16 +375,16 @@ public class ClientChannel implements ChannelListener {
     };
   }
 
-  private void handlePlayAcceptDraw(GameMessage gameMessage) {
+  private void handlePlayAcceptDraw(GameMessageDto gameMessage) {
     if (Boolean.valueOf(gameMessage.getData())) {
-      eventBus.fireEvent(new GameOverEvent(playSession.getGame(), Game.GameEnds.DRAW, new AsyncCallback<Game>() {
+      eventBus.fireEvent(new GameOverEvent(playSession.getGame(), GameDto.GameEnds.DRAW, new AsyncCallback<GameDto>() {
         @Override
         public void onFailure(Throwable throwable) {
           ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
         }
 
         @Override
-        public void onSuccess(Game aVoid) {
+        public void onSuccess(GameDto aVoid) {
         }
       }));
     } else {
@@ -393,13 +393,13 @@ public class ClientChannel implements ChannelListener {
     }
   }
 
-  private void handlePlayProposeDraw(final GameMessage gameMessage) {
+  private void handlePlayProposeDraw(final GameMessageDto gameMessage) {
     String senderName = gameMessage.getSender().getPublicName();
     new ConfirmeDialogBox(messages.playerProposesDraw(senderName)) {
       @Override
       public void procConfirm() {
-        GameMessage message = createGameMessage(gameMessage);
-        message.setMessageType(GameMessage.MessageType.PLAY_ACCEPT_DRAW);
+        GameMessageDto message = createGameMessage(gameMessage);
+        message.setMessageType(GameMessageDto.MessageType.PLAY_ACCEPT_DRAW);
 
         if (isConfirmed()) {
           message.setData(Boolean.TRUE.toString());
@@ -416,27 +416,27 @@ public class ClientChannel implements ChannelListener {
     };
   }
 
-  private GameMessage createGameMessage(GameMessage gameMessage) {
-    GameMessage message = GWT.create(GameMessage.class);
+  private GameMessageDto createGameMessage(GameMessageDto gameMessage) {
+    GameMessageDto message = GWT.create(GameMessageDto.class);
     message.setSender(gameMessage.getReceiver());
     message.setReceiver(gameMessage.getSender());
     return message;
   }
 
   @SuppressWarnings("unused")
-  private void handlePlaySurrender(GameMessage gameMessage) {
-    Game game = playSession.getGame();
+  private void handlePlaySurrender(GameMessageDto gameMessage) {
+    GameDto game = playSession.getGame();
     // так как сохраняем на противоположной строне, игроки черный-белый переставлены
-    final Game.GameEnds gameEnd = playSession.isPlayerHasWhiteColor() ? Game.GameEnds.SURRENDER_BLACK
-        : Game.GameEnds.SURRENDER_WHITE;
-    eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<Game>() {
+    final GameDto.GameEnds gameEnd = playSession.isPlayerHasWhiteColor() ? GameDto.GameEnds.SURRENDER_BLACK
+        : GameDto.GameEnds.SURRENDER_WHITE;
+    eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<GameDto>() {
       @Override
       public void onFailure(Throwable throwable) {
         ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
       }
 
       @Override
-      public void onSuccess(Game aVoid) {
+      public void onSuccess(GameDto aVoid) {
         InfoDialogBox.setMessage(messages.opponentSurrendered()).show();
       }
     }));
@@ -445,27 +445,27 @@ public class ClientChannel implements ChannelListener {
   /**
    * Обрабатываем ход оппонента
    */
-  private void handlePlayMove(GameMessage gameMessage) {
-    final Move move = gameMessage.getMove();
+  private void handlePlayMove(GameMessageDto gameMessage) {
+    final MoveDto move = gameMessage.getMove();
     eventBus.fireEvent(new PlayMoveOpponentEvent(move));
   }
 
   /**
    * Начало игры на стороне приглашающего
    */
-  private void handlePlayStart(final GameMessage gameMessage) {
-    final Game game = gameMessage.getGame();
+  private void handlePlayStart(final GameMessageDto gameMessage) {
+    final GameDto game = gameMessage.getGame();
     playSession.setGame(game);
     boolean white = Boolean.valueOf(gameMessage.getData());
     playSession.setOpponent(white ? game.getPlayerBlack() : game.getPlayerWhite());
     eventBus.fireEvent(new StartPlayEvent(white));
   }
 
-  private void handleChatPrivateMessage(GameMessage gameMessage) {
+  private void handleChatPrivateMessage(GameMessageDto gameMessage) {
     eventBus.fireEvent(new ChatMessageEvent(gameMessage));
   }
 
-  private void handlePlayRejectInvite(GameMessage gameMessage) {
+  private void handlePlayRejectInvite(GameMessageDto gameMessage) {
     playSession.setOpponent(null);
     InfoDialogBox
         .setMessage(messages.playerRejectedPlayRequest(gameMessage.getSender().getPublicName()))

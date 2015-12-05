@@ -2,7 +2,7 @@ package online.draughts.rus.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
 import com.google.gwt.user.client.rpc.AsyncCallback;
-import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.dto.GameDto;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,25 +12,25 @@ import online.draughts.rus.shared.model.Game;
  */
 public class GameOverEvent extends GwtEvent<GameOverEventHandler> {
   public static Type<GameOverEventHandler> TYPE = new Type<GameOverEventHandler>();
-  private final Game game;
-  private final Game.GameEnds gameEnd;
-  private final AsyncCallback<Game> asyncCallback;
+  private final GameDto game;
+  private final GameDto.GameEnds gameEnd;
+  private final AsyncCallback<GameDto> asyncCallback;
 
-  public GameOverEvent(Game game, Game.GameEnds gameEnd, AsyncCallback<Game> asyncCallback) {
+  public GameOverEvent(GameDto game, GameDto.GameEnds gameEnd, AsyncCallback<GameDto> asyncCallback) {
     this.game = game;
     this.gameEnd = gameEnd;
     this.asyncCallback = asyncCallback;
   }
 
-  public Game getGame() {
+  public GameDto getGame() {
     return game;
   }
 
-  public Game.GameEnds getGameEnd() {
+  public GameDto.GameEnds getGameEnd() {
     return gameEnd;
   }
 
-  public AsyncCallback<Game> getAsyncCallback() {
+  public AsyncCallback<GameDto> getAsyncCallback() {
     return asyncCallback;
   }
 

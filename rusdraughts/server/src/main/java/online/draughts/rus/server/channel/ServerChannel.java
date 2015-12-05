@@ -8,6 +8,10 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import no.eirikb.gwtchannelapi.server.ChannelServer;
+import online.draughts.rus.server.domain.Game;
+import online.draughts.rus.server.domain.GameMessage;
+import online.draughts.rus.server.domain.Move;
+import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.service.GameMessageService;
 import online.draughts.rus.server.service.GameService;
 import online.draughts.rus.server.service.MailService;
@@ -15,11 +19,9 @@ import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.server.util.Utils;
 import online.draughts.rus.shared.channel.Chunk;
-import online.draughts.rus.server.domain.Game;
-import online.draughts.rus.server.domain.GameMessage;
-import online.draughts.rus.server.domain.Move;
-import online.draughts.rus.server.domain.Player;
+import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.util.StringUtils;
+import org.dozer.Mapper;
 
 import java.io.IOException;
 import java.util.*;
@@ -41,6 +43,7 @@ public class ServerChannel extends ChannelServer {
   private final Provider<Boolean> authProvider;
   private final Logger logger;
   private final MailService mailService;
+  private final Mapper mapper;
 
   @Inject
   ServerChannel(PlayerService playerService,
@@ -48,13 +51,15 @@ public class ServerChannel extends ChannelServer {
                 GameMessageService gameMessageService,
                 @Named(AuthUtils.AUTHENTICATED) Provider<Boolean> authProvider,
                 Logger logger,
-                MailService mailService) {
+                MailService mailService,
+                Mapper mapper) {
     this.playerService = playerService;
     this.gameService = gameService;
     this.gameMessageService = gameMessageService;
     this.authProvider = authProvider;
     this.mailService = mailService;
     this.logger = logger;
+    this.mapper = mapper;
   }
 
   @Override
@@ -70,16 +75,17 @@ public class ServerChannel extends ChannelServer {
     if (StringUtils.isEmpty(message)) {
       return;
     }
-    GameMessage gameMessage = null;
+    GameMessageDto gameMessageDto = null;
     try {
-      gameMessage = Utils.deserializeFromJson(message, GameMessage.class);
+      gameMessageDto = (GameMessageDto) Utils.deserializeFromJson(message, GameMessageDto.class);
     } catch (IOException e) {
       logger.severe(e.getLocalizedMessage());
     }
-    if (gameMessage == null) {
+    if (gameMessageDto == null) {
       return;
     }
 
+    GameMessage gameMessage = mapper.map(gameMessageDto, GameMessage.class);
     // обработка сообщений
     switch (gameMessage.getMessageType()) {
       case PLAYER_REGISTER:
@@ -121,8 +127,8 @@ public class ServerChannel extends ChannelServer {
     black.setPlaying(false);
     white.setPlaying(false);
 
-    playerService.saveOrCreate(black);
-    playerService.saveOrCreate(white);
+    playerService.save(black);
+    playerService.save(white);
 
     handleChatPrivateMessage(gameMessage);
   }
@@ -131,7 +137,7 @@ public class ServerChannel extends ChannelServer {
     Player player = playerService.find(message.getSender().getId());
 
     player.setOnline(true);
-    playerService.saveOrCreate(player);
+    playerService.save(player);
 
     final String channel = String.valueOf(player.getId());
     channelTokenPeers.put(channel, token);
@@ -160,7 +166,7 @@ public class ServerChannel extends ChannelServer {
       Player secondPlayer = playerService.find(secondPlayerId);
 
       secondPlayer.setPlaying(false);
-      playerService.saveOrCreate(secondPlayer);
+      playerService.save(secondPlayer);
 
       gameMessage.setReceiver(secondPlayer);
       gameMessage.setMessageType(GameMessage.MessageType.PLAY_END);
@@ -169,7 +175,7 @@ public class ServerChannel extends ChannelServer {
 
     player.setOnline(false);
     player.setPlaying(false);
-    playerService.saveOrCreate(player);
+    playerService.save(player);
 
     channelTokenPeers.remove(chanelName);
     updatePlayerList();
@@ -232,7 +238,8 @@ public class ServerChannel extends ChannelServer {
   }
 
   private void sendMessage(String channel, GameMessage message) {
-    final String serialized = Utils.serializeToJson(message);
+    GameMessageDto dto = mapper.map(message, GameMessageDto.class);
+    final String serialized = Utils.serializeToJson(dto);
     List<String> chunks = Splitter.fixedLength(1024 * 31).splitToList(serialized);
     for (int i = 0; i < chunks.size(); i++) {
       send(channel, Utils.serializeToJson(new Chunk(chunks.size(), i + 1, chunks.get(i))));

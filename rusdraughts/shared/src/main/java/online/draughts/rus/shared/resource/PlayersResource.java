@@ -1,7 +1,7 @@
 package online.draughts.rus.shared.resource;
 
-import online.draughts.rus.shared.model.Friend;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.dto.FriendDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -12,11 +12,7 @@ import java.util.List;
 public interface PlayersResource {
 
   @POST
-  Player saveOrCreate(Player player);
-
-  @GET
-  @Path(ApiPaths.PLAYER_FRIEND_LIST)
-  List<Friend> getPlayerFriendList(@QueryParam(ApiParameters.ID) Long playerId);
+  PlayerDto save(PlayerDto player);
 
   @GET
   @Path(ApiPaths.PLAYERS_TOTAL)

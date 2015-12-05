@@ -1,6 +1,6 @@
 package online.draughts.rus.draughts;
 
-import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.shared.dto.MoveDto;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,8 +15,8 @@ public class MoveFactory {
    * @param stroke ход на клиенте
    * @return перемещение для сервера
    */
-  public static Move createMoveFromStroke(Stroke stroke) {
-    Move move = new Move().setFirst(stroke.isFirst())
+  public static MoveDto createMoveFromStroke(Stroke stroke) {
+    MoveDto move = new MoveDto().setFirst(stroke.isFirst())
         .setNumber(stroke.getNumber())
         .setMoveFlags(stroke.getMoveFlags())
         .setStartPos(stroke.getStartSquare().getPos())

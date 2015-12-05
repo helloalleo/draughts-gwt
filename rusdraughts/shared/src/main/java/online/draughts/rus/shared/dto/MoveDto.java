@@ -12,7 +12,7 @@ import java.util.Set;
  * Date: 01.09.15
  * Time: 21:45
  */
-public class Move {
+public class MoveDto extends BaseDto {
 
   private int number; // номер пары хода
   private int moveOrder;
@@ -32,11 +32,11 @@ public class Move {
 
   private Set<String> hashTags = new HashSet<>();
 
-  public Move() {
+  public MoveDto() {
   }
 
-  public Move(int number, boolean first, String startPos, String endPos, String takenPos,
-              Set<MoveFlags> moveFlags) {
+  public MoveDto(int number, boolean first, String startPos, String endPos, String takenPos,
+                 Set<MoveFlags> moveFlags) {
     this.number = number;
     this.first = first;
     this.moveFlags = moveFlags;
@@ -47,7 +47,7 @@ public class Move {
   }
 
   @GwtIncompatible
-  public Move(Move move) {
+  public MoveDto(MoveDto move) {
     this(move.getNumber(), move.isFirst(), move.getStartPos(), move.getEndPos(),
         move.getTakenPos(), move.getMoveFlags());
   }
@@ -56,7 +56,7 @@ public class Move {
     return number;
   }
 
-  public Move setNumber(int number) {
+  public MoveDto setNumber(int number) {
     this.number = number;
     return this;
   }
@@ -65,7 +65,7 @@ public class Move {
     return first;
   }
 
-  public Move setFirst(boolean first) {
+  public MoveDto setFirst(boolean first) {
     this.first = first;
     return this;
   }
@@ -74,7 +74,7 @@ public class Move {
     return takenPos;
   }
 
-  public Move setTakenPos(String takenPos) {
+  public MoveDto setTakenPos(String takenPos) {
     this.takenPos = takenPos;
     return this;
   }
@@ -83,7 +83,7 @@ public class Move {
     return startPos;
   }
 
-  public Move setStartPos(String startPos) {
+  public MoveDto setStartPos(String startPos) {
     this.startPos = startPos;
     return this;
   }
@@ -92,7 +92,7 @@ public class Move {
     return endPos;
   }
 
-  public Move setEndPos(String endPos) {
+  public MoveDto setEndPos(String endPos) {
     this.endPos = endPos;
     return this;
   }
@@ -101,7 +101,7 @@ public class Move {
     return moveFlags;
   }
 
-  public Move setMoveFlags(Set<MoveFlags> moveFlags) {
+  public MoveDto setMoveFlags(Set<MoveFlags> moveFlags) {
     this.moveFlags = moveFlags;
     return this;
   }
@@ -110,7 +110,7 @@ public class Move {
     return title;
   }
 
-  public Move setTitle(String title) {
+  public MoveDto setTitle(String title) {
     this.title = title;
     return this;
   }
@@ -119,7 +119,7 @@ public class Move {
     return comment;
   }
 
-  public Move setComment(String comment) {
+  public MoveDto setComment(String comment) {
     this.comment = comment;
     return this;
   }
@@ -128,7 +128,7 @@ public class Move {
     return hashTags;
   }
 
-  public Move setHashTags(Set<String> hashTags) {
+  public MoveDto setHashTags(Set<String> hashTags) {
     this.hashTags = hashTags;
     return this;
   }

@@ -1,7 +1,7 @@
 package online.draughts.rus.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.dto.PlayerDto;
 
 import java.util.List;
 
@@ -13,13 +13,13 @@ import java.util.List;
  */
 public class ReceivedPlayerListEvent extends GwtEvent<ReceivedPlayerListEventHandler> {
   public static Type<ReceivedPlayerListEventHandler> TYPE = new Type<>();
-  private List<Player> playerList;
+  private List<PlayerDto> playerList;
 
-  public ReceivedPlayerListEvent(List<Player> playerList) {
+  public ReceivedPlayerListEvent(List<PlayerDto> playerList) {
     this.playerList = playerList;
   }
 
-  public List<Player> getPlayerList() {
+  public List<PlayerDto> getPlayerList() {
     return playerList;
   }
 

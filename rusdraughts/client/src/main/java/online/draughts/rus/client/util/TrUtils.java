@@ -1,8 +1,8 @@
 package online.draughts.rus.client.util;
 
 import com.google.gwt.core.client.GWT;
+import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import online.draughts.rus.shared.model.Game;
 
 /**
  * Created with IntelliJ IDEA.
@@ -14,7 +14,7 @@ public class TrUtils {
 
   private static DraughtsMessages messages = GWT.create(DraughtsMessages.class);
 
-  public static String translateEndGame(Game.GameEnds gameEnd) {
+  public static String translateEndGame(GameDto.GameEnds gameEnd) {
     switch (gameEnd) {
       case WHITE_WIN:
         return messages.WHITE_WIN();

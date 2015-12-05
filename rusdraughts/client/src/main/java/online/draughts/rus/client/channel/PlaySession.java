@@ -1,8 +1,8 @@
 package online.draughts.rus.client.channel;
 
 import com.google.inject.Singleton;
-import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,34 +12,34 @@ import online.draughts.rus.shared.model.Player;
  */
 @Singleton
 public class PlaySession {
-  private Player player;
-  private Player opponent;
-  private Game game;
+  private PlayerDto player;
+  private PlayerDto opponent;
+  private GameDto game;
   private boolean connected;
 
-  public Player getPlayer() {
+  public PlayerDto getPlayer() {
     return player;
   }
 
-  public PlaySession setPlayer(Player player) {
+  public PlaySession setPlayer(PlayerDto player) {
     this.player = player;
     return this;
   }
 
-  public Player getOpponent() {
+  public PlayerDto getOpponent() {
     return opponent;
   }
 
-  public PlaySession setOpponent(Player opponent) {
+  public PlaySession setOpponent(PlayerDto opponent) {
     this.opponent = opponent;
     return this;
   }
 
-  public Game getGame() {
+  public GameDto getGame() {
     return game;
   }
 
-  public PlaySession setGame(Game game) {
+  public PlaySession setGame(GameDto game) {
     this.game = game;
     return this;
   }

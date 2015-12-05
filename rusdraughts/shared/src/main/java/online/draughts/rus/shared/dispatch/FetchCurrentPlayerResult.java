@@ -1,7 +1,7 @@
 package online.draughts.rus.shared.dispatch;
 
 import com.gwtplatform.dispatch.rpc.shared.Result;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.dto.PlayerDto;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,16 +11,16 @@ import online.draughts.rus.shared.model.Player;
  */
 public class FetchCurrentPlayerResult implements Result {
 
-  private Player player;
+  private PlayerDto player;
 
   public FetchCurrentPlayerResult() {
   }
 
-  public FetchCurrentPlayerResult(Player player) {
+  public FetchCurrentPlayerResult(PlayerDto player) {
     this.player = player;
   }
 
-  public Player getPlayer() {
+  public PlayerDto getPlayer() {
     return player;
   }
 }

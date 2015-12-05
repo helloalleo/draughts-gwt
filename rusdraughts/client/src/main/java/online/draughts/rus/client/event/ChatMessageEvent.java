@@ -1,7 +1,7 @@
 package online.draughts.rus.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
-import online.draughts.rus.shared.model.GameMessage;
+import online.draughts.rus.shared.dto.GameMessageDto;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,13 +12,13 @@ import online.draughts.rus.shared.model.GameMessage;
 public class ChatMessageEvent extends GwtEvent<ChatMessageEventHandler> {
   public static Type<ChatMessageEventHandler> TYPE = new Type<>();
 
-  private GameMessage message;
+  private GameMessageDto message;
 
-  public ChatMessageEvent(GameMessage message) {
+  public ChatMessageEvent(GameMessageDto message) {
     this.message = message;
   }
 
-  public GameMessage getMessage() {
+  public GameMessageDto getMessage() {
     return message;
   }
 

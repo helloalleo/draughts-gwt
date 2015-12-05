@@ -2,7 +2,7 @@ package online.draughts.rus.draughts;
 
 import com.google.gwt.user.client.Element;
 import online.draughts.rus.client.application.widget.NotationPanel;
-import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.util.StringUtils;
 
 /**
@@ -14,7 +14,7 @@ import online.draughts.rus.shared.util.StringUtils;
 @SuppressWarnings("deprecation")
 public class StrokeFactory {
 
-  public static Stroke createStrokeFromMove(Move move) {
+  public static Stroke createStrokeFromMove(MoveDto move) {
     return new Stroke()
         .setTitle(move.getTitle())
         .setComment(move.getComment())

@@ -2,7 +2,7 @@ package online.draughts.rus.client.application.widget.popup;
 
 import com.gwtplatform.mvp.client.UiHandlers;
 import online.draughts.rus.draughts.Stroke;
-import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.shared.dto.MoveDto;
 
 interface DraughtsPlayerUiHandlers extends UiHandlers {
 
@@ -12,5 +12,5 @@ interface DraughtsPlayerUiHandlers extends UiHandlers {
 
   void toggleTurn(boolean turn);
 
-  void doPlayerMove(Move move);
+  void doPlayerMove(MoveDto move);
 }

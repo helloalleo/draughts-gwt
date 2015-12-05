@@ -1,6 +1,6 @@
 package online.draughts.rus.shared.resource;
 
-import online.draughts.rus.shared.model.Game;
+import online.draughts.rus.shared.dto.GameDto;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
@@ -14,13 +14,13 @@ public interface GamesResource {
   int LIMIT_ALL = -1;
 
   @GET
-  List<Game> getGames(
+  List<GameDto> getGames(
       @DefaultValue(DEFAULT_OFFSET) @QueryParam(ApiParameters.OFFSET) int offset,
       @DefaultValue(DEFAULT_LIMIT) @QueryParam(ApiParameters.LIMIT) int limit);
 
   @GET
   @Path(ApiPaths.LOGGED_IN_USER)
-  List<Game> getLoggedInUserGames(
+  List<GameDto> getLoggedInUserGames(
       @DefaultValue(DEFAULT_OFFSET) @QueryParam(ApiParameters.OFFSET) int offset,
       @DefaultValue(DEFAULT_LIMIT) @QueryParam(ApiParameters.LIMIT) int limit);
 
@@ -29,9 +29,9 @@ public interface GamesResource {
   Integer getGamesCount();
 
   @POST
-  Game saveOrCreate(Game game);
+  GameDto save(GameDto game);
 
   @GET
   @Path(ApiPaths.PATH_ID)
-  Game game(@PathParam(ApiParameters.ID) Long gameId);
+  GameDto game(@PathParam(ApiParameters.ID) Long gameId);
 }

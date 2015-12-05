@@ -16,14 +16,14 @@ import online.draughts.rus.client.application.profile.settings.SettingsPresenter
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.dto.PlayerDto;
 
 
 public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, ProfilePresenter.MyProxy>
     implements ProfileUiHandlers {
   public static final NestedSlot SLOT_PROFILE = new NestedSlot();
   public static final Slot<SettingsPresenter> SLOT_PROFILE_CONTENT = new Slot<>();
-  private final Player player;
+  private final PlayerDto player;
   private SettingsPresenter settingsPresenter;
   private final SettingsPresenter.Factory settingsFactory;
 

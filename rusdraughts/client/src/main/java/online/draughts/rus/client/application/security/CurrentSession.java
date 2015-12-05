@@ -1,7 +1,7 @@
 package online.draughts.rus.client.application.security;
 
 import com.google.inject.Singleton;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.dto.PlayerDto;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,17 +11,17 @@ import online.draughts.rus.shared.model.Player;
  */
 @Singleton
 public class CurrentSession {
-  private Player player;
+  private PlayerDto player;
 
   public Boolean isLoggedIn() {
     return player != null && player.isLoggedIn();
   }
 
-  public void setPlayer(Player player) {
+  public void setPlayer(PlayerDto player) {
     this.player = player;
   }
 
-  public Player getPlayer() {
+  public PlayerDto getPlayer() {
     return player;
   }
 }

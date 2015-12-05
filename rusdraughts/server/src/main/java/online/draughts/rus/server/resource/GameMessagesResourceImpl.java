@@ -3,7 +3,7 @@ package online.draughts.rus.server.resource;
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
 import online.draughts.rus.server.service.GameMessageService;
-import online.draughts.rus.server.domain.GameMessage;
+import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.resource.GameMessagesResource;
 
 import java.util.List;
@@ -27,7 +27,7 @@ public class GameMessagesResourceImpl implements GameMessagesResource {
   }
 
   @Override
-  public List<GameMessage> findLastMessages(Integer countLast, Long playerId, Long opponentId) {
+  public List<GameMessageDto> findLastMessages(Integer countLast, Long playerId, Long opponentId) {
     return gameMessageService.findLastMessages(countLast, playerId, opponentId);
   }
 

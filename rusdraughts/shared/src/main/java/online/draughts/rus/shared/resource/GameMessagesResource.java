@@ -1,6 +1,6 @@
 package online.draughts.rus.shared.resource;
 
-import online.draughts.rus.shared.model.GameMessage;
+import online.draughts.rus.shared.dto.GameMessageDto;
 
 import javax.ws.rs.GET;
 import javax.ws.rs.Path;
@@ -22,7 +22,7 @@ public interface GameMessagesResource {
 
   @GET
   @Path(ApiPaths.LAST)
-  List<GameMessage> findLastMessages(@QueryParam(ApiParameters.LIMIT) Integer countLast,
+  List<GameMessageDto> findLastMessages(@QueryParam(ApiParameters.LIMIT) Integer countLast,
                                      @QueryParam(ApiParameters.PLAYER_ID) Long playerId,
                                      @QueryParam(ApiParameters.OPPONENT_ID) Long opponentId);
 

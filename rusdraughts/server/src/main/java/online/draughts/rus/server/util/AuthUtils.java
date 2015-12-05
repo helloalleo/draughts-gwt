@@ -53,7 +53,7 @@ public class AuthUtils {
     player.setVisitCounter(player.getVisitCounter() + 1);
 
     Rating.calcPlayerRating(player);
-    playerService.saveOrCreate(player);
+    playerService.save(player);
 
     if (!player.isActive()) {
       AuthUtils.login(req);

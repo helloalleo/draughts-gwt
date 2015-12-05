@@ -17,8 +17,8 @@ import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.shared.config.ClientConfiguration;
+import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import online.draughts.rus.shared.model.Game;
 import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Column;
@@ -43,7 +43,7 @@ public class PlayShowPanel extends Composite {
 
   public static final int[] GAMES_ON_PAGE = {1, 2, 3, 4, 6};
   private int gamesOnPanelCounter = 1;
-  private List<Game> gameList;
+  private List<GameDto> gameList;
 
   private int INCREMENT_SIZE;
 
@@ -87,9 +87,9 @@ public class PlayShowPanel extends Composite {
         InfoDialogBox.setMessage(messages.gameNotFound()).show();
       } else {
         gamesDelegate.withCallback(
-            new AbstractAsyncCallback<Game>() {
+            new AbstractAsyncCallback<GameDto>() {
               @Override
-              public void onSuccess(Game result) {
+              public void onSuccess(GameDto result) {
                 if (result == null) {
                   InfoDialogBox.setMessage(messages.gameNotFound()).show();
                   return;
@@ -131,24 +131,24 @@ public class PlayShowPanel extends Composite {
     });
   }
 
-  public int setGames(List<Game> games) {
+  public int setGames(List<GameDto> games) {
     blockScroll = false;
     this.gameList = games;
     resetGames(games);
     return games.size();
   }
 
-  private void resetGames(List<Game> gameList) {
+  private void resetGames(List<GameDto> gameList) {
     lastMaxHeight = 0;
     lastScrollPos = 0;
     resetGamesOnPanel(gameList);
   }
 
-  public int addGames(List<Game> gameList) {
+  public int addGames(List<GameDto> gameList) {
     return addGamesToPanel(gameList);
   }
 
-  private int addGamesToPanel(List<Game> gameList) {
+  private int addGamesToPanel(List<GameDto> gameList) {
     if (gameList == null || gameList.isEmpty()) {
       return 0;
     }
@@ -174,7 +174,7 @@ public class PlayShowPanel extends Composite {
       }
     }
     // затем дополняем новыми полными строками
-    List<Game> rowGameList = new ArrayList<>();
+    List<GameDto> rowGameList = new ArrayList<>();
     for (int i = offsetRow; i < gameList.size(); i++) {
       if (0 == (rowGameList.size() + 1) % (gamesInRow)) {
         rowGameList.add(gameList.get(i));
@@ -199,7 +199,7 @@ public class PlayShowPanel extends Composite {
         + " " + "XS_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow;
   }
 
-  private void resetGamesOnPanel(List<Game> gameList) {
+  private void resetGamesOnPanel(List<GameDto> gameList) {
     if (gameList == null || gameList.isEmpty()) {
       return;
     }
@@ -211,7 +211,7 @@ public class PlayShowPanel extends Composite {
       homeViewProvider.get().setEnableMoreGameButton(false);
     }
     playRowList.clear();
-    List<Game> rowGameList = new ArrayList<>();
+    List<GameDto> rowGameList = new ArrayList<>();
     final int gameInRow = GAMES_ON_PAGE[gamesOnPanelCounter];
     for (int i = 0; i < gameList.size(); i++) {
       if ((i + 1) % gameInRow == 0) {
@@ -227,12 +227,12 @@ public class PlayShowPanel extends Composite {
     }
   }
 
-  private void addGameRow(List<Game> rowGameList, int gamesInRow) {
+  private void addGameRow(List<GameDto> rowGameList, int gamesInRow) {
     Row row = new Row();
     if (gamesInRow == 1) {
       gamesInRow = 2;
     }
-    for (Game game : rowGameList) {
+    for (GameDto game : rowGameList) {
       Column column = new Column(getSize(gamesInRow));
       final PlayItem item = showPanelFactory.createItem(gamesInRow, game);
       column.add(item);

@@ -7,19 +7,19 @@ package online.draughts.rus.shared.dto;
  * Date: 01.12.14
  * Time: 14:10
  */
-public class Friend {
+public class FriendDto {
 
   private String id;
 
-  private Player friend;
-  private Player friendOf;
+  private PlayerDto friend;
+  private PlayerDto friendOf;
 
   private boolean favorite;
 
-  public Friend() {
+  public FriendDto() {
   }
 
-  public Friend(Long friendId, Long friendOfId) {
+  public FriendDto(Long friendId, Long friendOfId) {
     this.id = friendId + "::" + friendOfId;
   }
 
@@ -31,19 +31,19 @@ public class Friend {
     this.id = id;
   }
 
-  public Player getFriend() {
+  public PlayerDto getFriend() {
     return friend;
   }
 
-  public void setFriend(Player friend) {
+  public void setFriend(PlayerDto friend) {
     this.friend = friend;
   }
 
-  public Player getFriendOf() {
+  public PlayerDto getFriendOf() {
     return friendOf;
   }
 
-  public void setFriendOf(Player friendOf) {
+  public void setFriendOf(PlayerDto friendOf) {
     this.friendOf = friendOf;
   }
 
@@ -51,7 +51,7 @@ public class Friend {
     return favorite;
   }
 
-  public Friend setFavorite(boolean favorite) {
+  public FriendDto setFavorite(boolean favorite) {
     this.favorite = favorite;
     return this;
   }

@@ -116,7 +116,7 @@ public class MailService {
     }
     final Integer unreadMessages = receiver.getFriendUnreadMessagesMap().get(senderId);
     receiver.getFriendUnreadMessagesMap().put(senderId, unreadMessages + 1);
-    playerService.saveOrCreate(receiver);
+    playerService.save(receiver);
 
     if (!(receiver.isOnline() || receiver.isPlaying() || receiver.isLoggedIn())
         && StringUtils.isNotEmpty(receiver.getEmail())) {

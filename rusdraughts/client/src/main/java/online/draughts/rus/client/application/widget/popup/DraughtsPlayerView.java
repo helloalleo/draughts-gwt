@@ -26,10 +26,10 @@ import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.draughts.*;
 import online.draughts.rus.shared.config.ClientConfiguration;
+import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.dto.MoveDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.model.Move;
-import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
@@ -46,10 +46,10 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   private final AppResources resources;
   private static final int rows = 8;
   private static final int cols = 8;
-  private Game game;
+  private GameDto game;
   private final ClientConfiguration config;
   private final CurrentSession currentSession;
-  private final Player player;
+  private final PlayerDto player;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   @UiField
   PopupPanel main;
@@ -126,7 +126,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   DraughtsPlayerView(Binder uiBinder, EventBus eventBus, AppResources resources, DraughtsMessages messages,
                      ClientConfiguration config, CurrentSession currentSession,
                      ResourceDelegate<GamesResource> gamesDelegate,
-                     Game game) {
+                     GameDto game) {
     super(eventBus);
     this.resources = resources;
     this.messages = messages;
@@ -157,9 +157,9 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     super.onAttach();
 
     if (currentSession.isLoggedIn()) {
-      gamesDelegate.withCallback(new AbstractAsyncCallback<Game>() {
+      gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>() {
         @Override
-        public void onSuccess(Game result) {
+        public void onSuccess(GameDto result) {
           DraughtsPlayerView.this.game = result;
           playerInit();
         }
@@ -402,13 +402,13 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
     game.setNotation(notationPanel.getElement().getString());
 
-    gamesDelegate.withCallback(new AbstractAsyncCallback<Game>() {
+    gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>() {
       @Override
-      public void onSuccess(Game result) {
+      public void onSuccess(GameDto result) {
         addGameComment(order, currentNotation, gameTitle, gameComment);
         setStrokeComment(newTitle, newComment);
       }
-    }).saveOrCreate(game);
+    }).save(game);
   }
 
   private void addGameComment(int order, String currentNotation, String gameTitle, String gameComment) {
@@ -689,17 +689,17 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   }
 
   @Override
-  public void doPlayerMove(Move move) {
+  public void doPlayerMove(MoveDto move) {
     getUiHandlers().doPlayerMove(move);
   }
 
   @Override
-  public Player getPlayer() {
+  public PlayerDto getPlayer() {
     throw new RuntimeException("Not implemented");
   }
 
   @Override
-  public Player getOpponent() {
+  public PlayerDto getOpponent() {
     throw new RuntimeException("Not implemented");
   }
 
@@ -736,7 +736,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     }
 
     @Override
-    public DraughtsPlayerPresenter.MyView create(Game game) {
+    public DraughtsPlayerPresenter.MyView create(GameDto game) {
       return new DraughtsPlayerView(binder, eventBus, resources, messages, config, currentSession, gamesDelegate, game);
     }
   }

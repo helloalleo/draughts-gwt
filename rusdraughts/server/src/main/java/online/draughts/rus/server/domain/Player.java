@@ -202,27 +202,51 @@ public class Player extends PersistableObjectImpl {
     return gamePlayed;
   }
 
+  public int getRating() {
+    return rating;
+  }
+
+  public void setRating(int rating) {
+    this.rating = rating;
+  }
+
+  public void setGamePlayed(int gamePlayed) {
+    this.gamePlayed = gamePlayed;
+  }
+
+  public int getGameWin() {
+    return gameWin;
+  }
+
+  public void setGameWin(int gameWin) {
+    this.gameWin = gameWin;
+  }
+
+  public int getGameLose() {
+    return gameLose;
+  }
+
+  public void setGameLose(int gameLose) {
+    this.gameLose = gameLose;
+  }
+
+  public int getGameDraw() {
+    return gameDraw;
+  }
+
+  public void setGameDraw(int gameDraw) {
+    this.gameDraw = gameDraw;
+  }
 
   public String getPublicName() {
     if (getPlayerName() == null) {
-      String fullName = getFullName().trim();
-      if (fullName.isEmpty()) {
-        return getEmail().split("@")[0];
-      }
-      return fullName;
+      return getFullName().trim();
     }
     return getPlayerName();
   }
 
   private String getFullName() {
     return getFirstName() + " " + getLastName();
-  }
-
-  private String getShortName() {
-    if (getPlayerName() == null) {
-      return getFirstName();
-    }
-    return getPlayerName();
   }
 
   @Override

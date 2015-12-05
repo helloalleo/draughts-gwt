@@ -14,8 +14,8 @@ import com.google.inject.assistedinject.Assisted;
 import online.draughts.rus.client.application.widget.popup.DraughtsPlayerPresenter;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.TrUtils;
+import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import online.draughts.rus.shared.model.Game;
 import org.gwtbootstrap3.client.ui.Anchor;
 import org.gwtbootstrap3.client.ui.Image;
 
@@ -53,7 +53,7 @@ public class PlayItem extends Composite {
            DraughtsMessages messages,
            AppResources resources,
            @Assisted int gamesInRow,
-           @Assisted final Game game) {
+           @Assisted final GameDto game) {
     this.messages = messages;
     initWidget(binder.createAndBindUi(this));
 
@@ -63,7 +63,7 @@ public class PlayItem extends Composite {
   }
 
   public void setGame(final HomePresenter homePresenter, final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
-                      final Game game) {
+                      final GameDto game) {
     gameIdAnchor.setId(game.getId() + GAME_ID);
     gameIdAnchor.addClickHandler(new ClickHandler() {
       @Override

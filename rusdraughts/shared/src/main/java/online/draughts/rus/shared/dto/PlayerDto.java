@@ -1,14 +1,6 @@
 package online.draughts.rus.shared.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
-import com.google.gwt.user.client.rpc.GwtTransient;
-import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Stringify;
-import online.draughts.rus.shared.util.LongStringifier;
-
-import java.util.*;
+import java.io.Serializable;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +8,7 @@ import java.util.*;
  * Date: 01.12.14
  * Time: 0:36
  */
-public class Player {
+public class PlayerDto extends BaseDto {
 
   private String firstName;
 
@@ -32,14 +24,14 @@ public class Player {
 
   private boolean subscribed;
 
-  public Player() {
+  public PlayerDto() {
   }
 
   public boolean getSubscribed() {
     return subscribed;
   }
 
-  public Player setSubscribed(boolean subscribed) {
+  public PlayerDto setSubscribed(boolean subscribed) {
     this.subscribed = subscribed;
     return this;
   }
@@ -100,9 +92,31 @@ public class Player {
     return rating;
   }
 
-  public Player setRating(int rating) {
+  public PlayerDto setRating(int rating) {
     this.rating = rating;
     return this;
+  }
+
+  public String getPublicName() {
+    if (getPlayerName() == null) {
+      return getFullName().trim();
+    }
+    return getPlayerName();
+  }
+
+  private String getFullName() {
+    return getFirstName() + " " + getLastName();
+  }
+
+  private String getShortName() {
+    if (getPlayerName() == null) {
+      return getFirstName();
+    }
+    return getPlayerName();
+  }
+
+  public String getSiteName() {
+    return "";
   }
 
   /**

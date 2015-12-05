@@ -27,8 +27,8 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
 import org.gwtbootstrap3.client.ui.CheckBoxButton;
@@ -111,12 +111,12 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   }
 
   @Override
-  public int setGames(List<Game> gameList) {
+  public int setGames(List<GameDto> gameList) {
     return playShowPanel.setGames(gameList);
   }
 
   @Override
-  public int addGames(List<Game> games) {
+  public int addGames(List<GameDto> games) {
     return playShowPanel.addGames(games);
   }
 
@@ -155,7 +155,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     getUiHandlers().getMoreGames(myGameListCheckButton.getValue(), newPageSize);
   }
 
-  public Player getPlayer() {
+  public PlayerDto getPlayer() {
     return getUiHandlers().getPlayer();
   }
 

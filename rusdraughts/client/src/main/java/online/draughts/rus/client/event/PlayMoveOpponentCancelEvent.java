@@ -1,7 +1,7 @@
 package online.draughts.rus.client.event;
 
 import com.google.gwt.event.shared.GwtEvent;
-import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.shared.dto.MoveDto;
 
 /**
  * Created with IntelliJ IDEA.
@@ -11,13 +11,13 @@ import online.draughts.rus.shared.model.Move;
  */
 public class PlayMoveOpponentCancelEvent extends GwtEvent<PlayMoveOpponentCancelEventHandler> {
   public static Type<PlayMoveOpponentCancelEventHandler> TYPE = new Type<PlayMoveOpponentCancelEventHandler>();
-  private final Move move;
+  private final MoveDto move;
 
-  public PlayMoveOpponentCancelEvent(Move move) {
+  public PlayMoveOpponentCancelEvent(MoveDto move) {
     this.move = move;
   }
 
-  public Move getMove() {
+  public MoveDto getMove() {
     return move;
   }
 

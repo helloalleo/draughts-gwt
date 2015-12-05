@@ -10,8 +10,8 @@ import online.draughts.rus.client.event.NotationStrokeEvent;
 import online.draughts.rus.client.event.PlayMovePlayerMessageEvent;
 import online.draughts.rus.client.event.TurnChangeEvent;
 import online.draughts.rus.draughts.Stroke;
-import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.dto.MoveDto;
 
 
 public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPresenter.MyView> implements DraughtsPlayerUiHandlers {
@@ -25,11 +25,11 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
   }
 
   public interface ViewFactory {
-    MyView create(Game game);
+    MyView create(GameDto game);
   }
 
   public interface Factory {
-    DraughtsPlayerPresenter create(Game game);
+    DraughtsPlayerPresenter create(GameDto game);
   }
 
   public static class FactoryImpl implements Factory {
@@ -44,7 +44,7 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
       this.viewFactory = viewFactory;
     }
 
-    public DraughtsPlayerPresenter create(Game game) {
+    public DraughtsPlayerPresenter create(GameDto game) {
       return new DraughtsPlayerPresenter(eventBus, viewFactory.create(game));
     }
   }
@@ -65,7 +65,7 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
   }
 
   @Override
-  public void doPlayerMove(Move move) {
+  public void doPlayerMove(MoveDto move) {
     fireEvent(new PlayMovePlayerMessageEvent(move));
   }
 

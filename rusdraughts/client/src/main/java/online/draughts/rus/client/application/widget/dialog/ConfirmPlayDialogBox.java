@@ -7,7 +7,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.dto.PlayerDto;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
 
@@ -20,7 +20,7 @@ import org.gwtbootstrap3.client.ui.ButtonGroup;
 public abstract class ConfirmPlayDialogBox extends BasicDialogBox {
 
   private final Label confirmLabel = new Label();
-  private String senderId;
+  private Long senderId;
   private boolean white;
   private String senderName;
 
@@ -71,17 +71,7 @@ public abstract class ConfirmPlayDialogBox extends BasicDialogBox {
     return white;
   }
 
-  public String getSenderId() {
-    return senderId;
-  }
-
-  public String getSenderName() {
-    return senderName;
-  }
-
-  public void show(String message, Player sender, boolean playWithColor) {
-    this.senderId = sender.getSessionId();
-    this.senderName = sender.getPublicName();
+  public void show(String message, boolean playWithColor) {
     this.white = playWithColor;
     show();
     confirmLabel.setText(message);

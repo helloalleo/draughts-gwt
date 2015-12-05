@@ -9,7 +9,7 @@ import com.ait.lienzo.client.core.shape.Layer;
 import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.draughts.util.Operator;
 import online.draughts.rus.draughts.util.PossibleOperators;
-import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.util.ArrayList;
@@ -879,7 +879,7 @@ public class Board extends Layer {
 
           @Override
           public void onClose(IAnimation animation, IAnimationHandle handle) {
-            final Move move = MoveFactory.createMoveFromStroke(stroke)
+            final MoveDto move = MoveFactory.createMoveFromStroke(stroke)
                 .setTitle(stroke.toNotation())
                 .setHashTags(StringUtils.getHashes(getComment()));
 

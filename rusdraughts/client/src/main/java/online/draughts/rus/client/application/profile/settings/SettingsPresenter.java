@@ -11,11 +11,11 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
-import online.draughts.rus.client.event.UpdateAllPlayerListEvent;
 import online.draughts.rus.client.channel.PlaySession;
+import online.draughts.rus.client.event.UpdateAllPlayerListEvent;
 import online.draughts.rus.shared.config.ClientConfiguration;
+import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import online.draughts.rus.shared.model.Player;
 import online.draughts.rus.shared.resource.PlayersResource;
 
 
@@ -25,7 +25,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final PlaySession playSession;
   private final ClientConfiguration config;
-  private Player player;
+  private PlayerDto player;
 
   SettingsPresenter(
       EventBus eventBus,
@@ -34,7 +34,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
       ResourceDelegate<PlayersResource> playersDelegate,
       PlaySession playSession,
       ClientConfiguration config,
-      Player player) {
+      PlayerDto player) {
     super(eventBus, view);
 
     this.playersDelegate = playersDelegate;
@@ -52,21 +52,21 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
     String name = playerName.replace(config.escapeChars(), "");
     name = SimpleHtmlSanitizer.getInstance().sanitize(name).asString();
     player.setPlayerName(name);
-    playersDelegate.withCallback(new AsyncCallback<Player>() {
+    playersDelegate.withCallback(new AsyncCallback<PlayerDto>() {
       @Override
       public void onFailure(Throwable caught) {
         ErrorDialogBox.setMessage(caught).show();
       }
 
       @Override
-      public void onSuccess(Player result) {
+      public void onSuccess(PlayerDto result) {
         SettingsPresenter.this.player.setPlayerName(result.getPlayerName());
         Growl.growlNotif(messages.profileUpdated());
         if (playSession.isConnected()) {
           fireEvent(new UpdateAllPlayerListEvent());
         }
       }
-    }).saveOrCreate(player);
+    }).save(player);
   }
 
   public interface ViewFactory {
@@ -74,7 +74,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
   }
 
   public interface Factory {
-    SettingsPresenter create(Player player);
+    SettingsPresenter create(PlayerDto player);
   }
 
   public static class FactoryImpl implements Factory {
@@ -100,7 +100,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
       this.playSession = playSession;
     }
 
-    public SettingsPresenter create(Player player) {
+    public SettingsPresenter create(PlayerDto player) {
       return new SettingsPresenter(eventBus, viewFactory.create(), messages, playersDelegate, playSession, config,
           player);
     }

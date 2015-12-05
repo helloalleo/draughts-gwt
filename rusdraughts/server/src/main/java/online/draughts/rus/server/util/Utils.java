@@ -1,7 +1,6 @@
 package online.draughts.rus.server.util;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import online.draughts.rus.server.domain.GameMessage;
 import org.apache.commons.io.IOUtils;
 
 import java.io.*;
@@ -35,9 +34,9 @@ public class Utils {
     return stringWriter.toString();
   }
 
-  public static GameMessage deserializeFromJson(String json, Class clazz) throws IOException {
+  public static Object deserializeFromJson(String json, Class clazz) throws IOException {
     ObjectMapper objectMapper = new ObjectMapper();
-    return (GameMessage) objectMapper.readValue(json, clazz);
+    return objectMapper.readValue(json, clazz);
   }
 
   public static String readFile(String path) {

@@ -1,6 +1,6 @@
 package online.draughts.rus.draughts;
 
-import online.draughts.rus.shared.model.Move;
+import online.draughts.rus.shared.dto.MoveDto;
 
 import java.util.HashSet;
 import java.util.Set;
@@ -22,7 +22,7 @@ public class Stroke {
   private Square startSquare;
   private Square endSquare;
 
-  private Set<Move.MoveFlags> moveFlags = new HashSet<>();
+  private Set<MoveDto.MoveFlags> moveFlags = new HashSet<>();
   private boolean first;
   private int order;
   private int number;
@@ -80,43 +80,43 @@ public class Stroke {
   }
 
   public boolean isCancel() {
-    return moveFlags.contains(Move.MoveFlags.CANCEL_MOVE);
+    return moveFlags.contains(MoveDto.MoveFlags.CANCEL_MOVE);
   }
 
   public boolean isSimple() {
-    return moveFlags.contains(Move.MoveFlags.SIMPLE_MOVE);
+    return moveFlags.contains(MoveDto.MoveFlags.SIMPLE_MOVE);
   }
 
   public boolean isContinueBeat() {
-    return moveFlags.contains(Move.MoveFlags.CONTINUE_BEAT);
+    return moveFlags.contains(MoveDto.MoveFlags.CONTINUE_BEAT);
   }
 
   public boolean isStopBeat() {
-    return moveFlags.contains(Move.MoveFlags.STOP_BEAT);
+    return moveFlags.contains(MoveDto.MoveFlags.STOP_BEAT);
   }
 
   public boolean isStartBeat() {
-    return moveFlags.contains(Move.MoveFlags.START_BEAT);
+    return moveFlags.contains(MoveDto.MoveFlags.START_BEAT);
   }
 
   public void setOnCancelMove() {
-    moveFlags.add(Move.MoveFlags.CANCEL_MOVE);
+    moveFlags.add(MoveDto.MoveFlags.CANCEL_MOVE);
   }
 
   public void setOnSimpleMove() {
-    moveFlags.add(Move.MoveFlags.SIMPLE_MOVE);
+    moveFlags.add(MoveDto.MoveFlags.SIMPLE_MOVE);
   }
 
   public void setOnContinueBeat() {
-    moveFlags.add(Move.MoveFlags.CONTINUE_BEAT);
+    moveFlags.add(MoveDto.MoveFlags.CONTINUE_BEAT);
   }
 
   public void setOnStopBeat() {
-    moveFlags.add(Move.MoveFlags.STOP_BEAT);
+    moveFlags.add(MoveDto.MoveFlags.STOP_BEAT);
   }
 
   public void setOnStartBeat() {
-    moveFlags.add(Move.MoveFlags.START_BEAT);
+    moveFlags.add(MoveDto.MoveFlags.START_BEAT);
   }
 
   /**
@@ -138,7 +138,7 @@ public class Stroke {
     return stroke;
   }
 
-  public Stroke setMoveFlags(Set<Move.MoveFlags> moveFlags) {
+  public Stroke setMoveFlags(Set<MoveDto.MoveFlags> moveFlags) {
     this.moveFlags = moveFlags;
     return this;
   }
@@ -161,7 +161,7 @@ public class Stroke {
     return first;
   }
 
-  public Set<Move.MoveFlags> getMoveFlags() {
+  public Set<MoveDto.MoveFlags> getMoveFlags() {
     return moveFlags;
   }
 

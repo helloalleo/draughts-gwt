@@ -14,8 +14,8 @@ import online.draughts.rus.client.event.ChatMessageEventHandler;
 import online.draughts.rus.client.event.GameMessageEvent;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.shared.config.ClientConfiguration;
-import online.draughts.rus.shared.model.GameMessage;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.dto.GameMessageDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.resource.GameMessagesResource;
 
 import java.util.Date;
@@ -24,16 +24,16 @@ import java.util.List;
 public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyView> implements MessengerUiHandlers {
 
   private final ResourceDelegate<GameMessagesResource> gameMessagesDelegate;
-  private final Player player;
+  private final PlayerDto player;
   private final ClientConfiguration config;
-  private Player opponent;
+  private PlayerDto opponent;
 
   public MessengerPresenter(final EventBus eventBus,
                             final MyView view,
                             final ResourceDelegate<GameMessagesResource> gameMessagesDelegate,
                             final ClientConfiguration config,
                             final CurrentSession currentSession,
-                            final Player opponent) {
+                            final PlayerDto opponent) {
     super(eventBus, view);
 
     this.gameMessagesDelegate = gameMessagesDelegate;
@@ -62,10 +62,10 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
   }
 
   private void getPlayerChat() {
-    gameMessagesDelegate.withCallback(new AbstractAsyncCallback<List<GameMessage>>() {
+    gameMessagesDelegate.withCallback(new AbstractAsyncCallback<List<GameMessageDto>>() {
       @Override
-      public void onSuccess(List<GameMessage> result) {
-        for (GameMessage gameMessage : result) {
+      public void onSuccess(List<GameMessageDto> result) {
+        for (GameMessageDto gameMessage : result) {
           if (gameMessage.getSender().getId().equals(player.getId())) {
             getView().addMyMessage(gameMessage.getMessage(), gameMessage.getSentDate());
           } else if (gameMessage.getSender().getId().equals(MessengerPresenter.this.opponent.getId())) {
@@ -79,8 +79,8 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
 
   @Override
   public void sendMessage(String message) {
-    GameMessage gameMessage = new GameMessage();
-    gameMessage.setMessageType(GameMessage.MessageType.CHAT_PRIVATE_MESSAGE);
+    GameMessageDto gameMessage = new GameMessageDto();
+    gameMessage.setMessageType(GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE);
     gameMessage.setMessage(message);
     gameMessage.setSender(player);
     gameMessage.setReceiver(opponent);
@@ -102,7 +102,7 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
   }
 
   public interface Factory {
-    MessengerPresenter create(PlayView playView, Player opponent);
+    MessengerPresenter create(PlayView playView, PlayerDto opponent);
   }
 
   public interface ViewFactory {
@@ -131,7 +131,7 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
     }
 
     @Override
-    public MessengerPresenter create(PlayView playView, Player opponent) {
+    public MessengerPresenter create(PlayView playView, PlayerDto opponent) {
       return new MessengerPresenter(eventBus, viewFactory.create(playView),
           gameMessagesDelegate, config, currentSession, opponent);
     }

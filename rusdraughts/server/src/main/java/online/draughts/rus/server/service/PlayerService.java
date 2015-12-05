@@ -3,45 +3,45 @@ package online.draughts.rus.server.service;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.dao.FriendDao;
 import online.draughts.rus.server.dao.PlayerDao;
-import online.draughts.rus.server.domain.Friend;
 import online.draughts.rus.server.domain.Player;
+import org.dozer.Mapper;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
 
 @Singleton
 public class PlayerService {
+
   private final Provider<PlayerDao> playerDaoProvider;
-  private final Provider<FriendDao> friendDaoProvider;
+  private final Mapper mapper;
 
   @Inject
   PlayerService(
       Provider<PlayerDao> playerDaoProvider,
-      Provider<FriendDao> friendDaoProvider) {
+      Mapper mapper) {
     this.playerDaoProvider = playerDaoProvider;
-    this.friendDaoProvider = friendDaoProvider;
+    this.mapper = mapper;
   }
 
-  public Player saveOrCreate(Player player) {
-    if (player != null && player.getId() == null) {
-      playerDaoProvider.get().save(player);
-      return player;
-    }
+  public Player save(Player player) {
+//    if (player != null && player.getId() == null) {
+    return playerDaoProvider.get().save(player);
+//    }
 
-    if (player == null) {
-      return null;
-    }
+//    if (player == null) {
+//      return null;
+//    }
+//    final Player mapped = mapper.map(player, Player.class);
 
-    Player playerById = playerDaoProvider.get().find(player.getId());
+//    Player playerById = playerDaoProvider.get().find(player.getId());
 
-    if (playerById != null) {
-      playerById.updateSerializable(player);
-      playerDaoProvider.get().save(playerById);
-      return playerById;
-    }
-    return null;
+//    if (playerById != null) {
+//      playerById.updateSerializable(player);
+//      return playerDaoProvider.get().save(mapped);
+//      return playerById;
+//    }
+//    return null;
   }
 
   public Player getLoggedInUser(HttpSession session) {
@@ -73,10 +73,6 @@ public class PlayerService {
 
   public Player findByGoogleSub(String sub) {
     return playerDaoProvider.get().findByGoogleSub(sub);
-  }
-
-  public List<Friend> findFriends(Long playerId) {
-    return friendDaoProvider.get().findFriends(playerId);
   }
 
   public Integer totalPlayers() {

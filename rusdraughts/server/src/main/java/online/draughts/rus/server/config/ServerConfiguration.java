@@ -206,7 +206,7 @@ public class ServerConfiguration {
 //      player.setOnline(false);
 //      player.setPlaying(false);
 //      player.setLoggedIn(false);
-//      playerService.saveOrCreate(player);
+//      playerService.save(player);
 //    }
   }
 

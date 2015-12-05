@@ -2,13 +2,13 @@ package online.draughts.rus.client.application.play;
 
 import com.gwtplatform.mvp.client.UiHandlers;
 import online.draughts.rus.draughts.Stroke;
-import online.draughts.rus.shared.model.Friend;
-import online.draughts.rus.shared.model.Move;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.dto.FriendDto;
+import online.draughts.rus.shared.dto.MoveDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 
 interface PlayComponentUiHandlers extends UiHandlers {
 
-  void startPlayWith(Player opponent);
+  void startPlayWith(PlayerDto opponent);
 
   void refreshConnectionToServer();
 
@@ -20,7 +20,7 @@ interface PlayComponentUiHandlers extends UiHandlers {
 
   void proposeCancelMove(Stroke lastMove);
 
-  void saveFriend(Friend friend);
+  void saveFriend(FriendDto friend);
 
   void checkWinner();
 
@@ -28,7 +28,7 @@ interface PlayComponentUiHandlers extends UiHandlers {
 
   void toggleTurn(boolean turn);
 
-  void doPlayerMove(Move move);
+  void doPlayerMove(MoveDto move);
 
-  void writeToFriend(Player friend);
+  void writeToFriend(PlayerDto friend);
 }

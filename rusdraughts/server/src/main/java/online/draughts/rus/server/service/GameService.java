@@ -3,14 +3,16 @@ package online.draughts.rus.server.service;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import com.google.inject.persist.Transactional;
 import online.draughts.rus.server.dao.GameDao;
 import online.draughts.rus.server.dao.GameMessageDao;
-import online.draughts.rus.server.util.Rating;
 import online.draughts.rus.server.domain.Friend;
 import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.server.domain.Move;
 import online.draughts.rus.server.domain.Player;
+import online.draughts.rus.server.util.Rating;
+import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.util.DozerHelper;
+import org.dozer.Mapper;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -29,6 +31,7 @@ public class GameService {
   private final PlayerService playerService;
   private final FriendService friendService;
   private final GameDao gameDao;
+  private final Mapper mapper;
 
   @Inject
   public GameService(
@@ -36,20 +39,21 @@ public class GameService {
       Provider<GameMessageDao> gameMessageDaoProvider,
       PlayerService playerService,
       FriendService friendService,
-      GameDao gameDao) {
+      GameDao gameDao,
+      Mapper mapper) {
     this.gameDaoProvider = gameDaoProvider;
     this.gameMessageDaoProvider = gameMessageDaoProvider;
     this.playerService = playerService;
     this.friendService = friendService;
     this.gameDao = gameDao;
+    this.mapper = mapper;
   }
 
-  @Transactional
-  public List<Game> findRange(int offset, int limit) {
-    return gameDao.findRange(offset, limit);
+  public List<GameDto> findRange(int offset, int limit) {
+    final List<Game> games = gameDao.findRange(offset, limit);
+    return DozerHelper.map(mapper, games, GameDto.class);
   }
 
-  @Transactional
   public List<Game> findUserGames(HttpSession session, int offset, int limit) {
     final Player loggedInUser = playerService.getLoggedInUser(session);
     if (loggedInUser == null) {
@@ -58,7 +62,6 @@ public class GameService {
     return findUserGames(loggedInUser.getId(), offset, limit);
   }
 
-  @Transactional
   public List<Game> findUserGames(Long playerId, int offset, int limit) {
     final Player player = playerService.find(playerId);
     if (player == null) {
@@ -71,34 +74,35 @@ public class GameService {
     return gameDaoProvider.get().countAll();
   }
 
-  public Game saveOrCreate(Game game) {
+  public Game save(Game game) {
+    Game mapped = mapper.map(game, Game.class);
     if (game.getId() == null) {
-      gameDaoProvider.get().save(game);
-    } else {
-      updatePlayer(game, game.getPlayerBlack().getId());
-      updatePlayer(game, game.getPlayerWhite().getId());
-      game = gameDaoProvider.get().save(game);
-
-      Player playerBlack = playerService.find(game.getPlayerBlack().getId());
-      Player playerWhite = playerService.find(game.getPlayerWhite().getId());
-      boolean playerWhiteIsFriendOfPlayerBlack = friendService.isPlayerFriendOf(playerWhite.getId(), playerBlack.getId());
-      if (!playerWhiteIsFriendOfPlayerBlack) {
-        Friend friend = new Friend(playerWhite.getId(), playerBlack.getId());
-        friend.setFriend(playerWhite);
-        friend.setFriendOf(playerBlack);
-
-        friendService.saveOrCreate(friend);
-      }
-      boolean playerBlackIsFriendOfPlayerWhite = friendService.isPlayerFriendOf(playerBlack.getId(), playerWhite.getId());
-      if (!playerBlackIsFriendOfPlayerWhite) {
-        Friend friend = new Friend(playerBlack.getId(), playerWhite.getId());
-        friend.setFriend(playerBlack);
-        friend.setFriendOf(playerWhite);
-
-        friendService.saveOrCreate(friend);
-      }
+      return gameDaoProvider.get().save(mapped);
     }
-    return game;
+
+    updatePlayer(mapped, mapped.getPlayerBlack().getId());
+    updatePlayer(mapped, mapped.getPlayerWhite().getId());
+    Game saved = gameDaoProvider.get().save(mapped);
+
+    Player playerBlack = playerService.find(game.getPlayerBlack().getId());
+    Player playerWhite = playerService.find(game.getPlayerWhite().getId());
+    boolean playerWhiteIsFriendOfPlayerBlack = friendService.isPlayerFriendOf(playerWhite.getId(), playerBlack.getId());
+    if (!playerWhiteIsFriendOfPlayerBlack) {
+      Friend friend = new Friend(playerWhite.getId(), playerBlack.getId());
+      friend.setFriend(playerWhite);
+      friend.setFriendOf(playerBlack);
+
+      friendService.save(friend);
+    }
+    boolean playerBlackIsFriendOfPlayerWhite = friendService.isPlayerFriendOf(playerBlack.getId(), playerWhite.getId());
+    if (!playerBlackIsFriendOfPlayerWhite) {
+      Friend friend = new Friend(playerBlack.getId(), playerWhite.getId());
+      friend.setFriend(playerBlack);
+      friend.setFriendOf(playerWhite);
+
+      friendService.save(friend);
+    }
+    return saved;
   }
 
   private void updatePlayer(Game game, Long playerId) {
@@ -131,7 +135,7 @@ public class GameService {
       }
     }
     Rating.calcPlayerRating(player);
-    playerService.saveOrCreate(player);
+    playerService.save(player);
   }
 
   public Game find(Long gameId) {

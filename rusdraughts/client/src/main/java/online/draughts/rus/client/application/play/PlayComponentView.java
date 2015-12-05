@@ -39,10 +39,10 @@ import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
 import online.draughts.rus.draughts.Stroke;
+import online.draughts.rus.shared.dto.FriendDto;
+import online.draughts.rus.shared.dto.MoveDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import online.draughts.rus.shared.model.Friend;
-import online.draughts.rus.shared.model.Move;
-import online.draughts.rus.shared.model.Player;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Icon;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
@@ -89,25 +89,25 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   Button cancelMove;
   private Board board;
   private LienzoPanel lienzoPanel;
-  private Player player;
+  private PlayerDto player;
   @UiField
-  CellTable<Friend> playerFriendCellTable;
+  CellTable<FriendDto> playerFriendCellTable;
   @UiField
-  CellTable<Player> playerCellTable;
+  CellTable<PlayerDto> playerCellTable;
   @UiField
   HTMLPanel infoHTMLPanel;
   @UiField
   HTMLPanel notationHTMLPanel;
-  SingleSelectionModel<Friend> playerFriendSelectionModel;
-  SingleSelectionModel<Player> playerSelectionModel;
+  SingleSelectionModel<FriendDto> playerFriendSelectionModel;
+  SingleSelectionModel<PlayerDto> playerSelectionModel;
   private boolean prevSelected = false;
   private NotationPanel notationPanel;
   private InviteDialogBox inviteDialogBox;
   private boolean opponentColor;
-  private Player opponent;
-  private List<Friend> playerFriendList;
+  private PlayerDto opponent;
+  private List<FriendDto> playerFriendList;
   private Map<Long, Integer> unreadMessagesMap;
-  private List<Player> playerList;
+  private List<PlayerDto> playerList;
 
   @Inject
   PlayComponentView(Binder binder,
@@ -135,7 +135,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       getUiHandlers().refreshConnectionToServer();
       player = playSession.getPlayer();
     } else {
-      Player selectedPlayer = null;
+      PlayerDto selectedPlayer = null;
       if (playerSelectionModel.getSelectedObject() != null) {
         selectedPlayer = playerSelectionModel.getSelectedObject();
       } else if (playerFriendSelectionModel.getSelectedObject() != null) {
@@ -269,18 +269,18 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       }
     });
 
-    Column<Friend, SafeHtml> statusColumn = new Column<Friend, SafeHtml>(new SafeHtmlCell()) {
+    Column<FriendDto, SafeHtml> statusColumn = new Column<FriendDto, SafeHtml>(new SafeHtmlCell()) {
       @Override
-      public SafeHtml getValue(Friend friend) {
+      public SafeHtml getValue(FriendDto friend) {
         return getStatusSafeHtml(friend.getFriendOf());
       }
     };
     statusColumn.setCellStyleNames(resources.style().cellWithButton());
     playerFriendCellTable.addColumn(statusColumn);
 
-    TextColumn<Friend> publicNameColumn = new TextColumn<Friend>() {
+    TextColumn<FriendDto> publicNameColumn = new TextColumn<FriendDto>() {
       @Override
-      public String getValue(Friend friend) {
+      public String getValue(FriendDto friend) {
         return friend.getFriendOf().getPublicName();
       }
     };
@@ -288,14 +288,14 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playerFriendCellTable.addColumn(publicNameColumn);
 
     final ButtonCell favoriteButtonCell = new ButtonCell();
-    final Column<Friend, String> favoriteColumn = new Column<Friend, String>(favoriteButtonCell) {
+    final Column<FriendDto, String> favoriteColumn = new Column<FriendDto, String>(favoriteButtonCell) {
       @Override
-      public String getValue(Friend object) {
+      public String getValue(FriendDto object) {
         return "";
       }
 
       @Override
-      public void render(Cell.Context context, Friend object, SafeHtmlBuilder sb) {
+      public void render(Cell.Context context, FriendDto object, SafeHtmlBuilder sb) {
         sb.appendHtmlConstant("<button type=\"button\" class=\"btn btn-link btn-large pull-right\" tabindex=\"-1\">");
         if (object != null) {
           Icon icon = new Icon(object.isFavorite() ? IconType.STAR : IconType.STAR_O);
@@ -304,9 +304,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         sb.appendHtmlConstant("</button>");
       }
     };
-    favoriteColumn.setFieldUpdater(new FieldUpdater<Friend, String>() {
+    favoriteColumn.setFieldUpdater(new FieldUpdater<FriendDto, String>() {
       @Override
-      public void update(int index, Friend object, String value) {
+      public void update(int index, FriendDto object, String value) {
         if (object != null) {
           object.setFavorite(!object.isFavorite());
           getUiHandlers().saveFriend(object);
@@ -334,18 +334,18 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       }
     });
 
-    Column<Player, SafeHtml> statusColumn = new Column<Player, SafeHtml>(new SafeHtmlCell()) {
+    Column<PlayerDto, SafeHtml> statusColumn = new Column<PlayerDto, SafeHtml>(new SafeHtmlCell()) {
       @Override
-      public SafeHtml getValue(Player player) {
+      public SafeHtml getValue(PlayerDto player) {
         return getStatusSafeHtml(player);
       }
     };
     statusColumn.setCellStyleNames(resources.style().cellWithButton());
     playerCellTable.addColumn(statusColumn);
 
-    TextColumn<Player> publicNameColumn = new TextColumn<Player>() {
+    TextColumn<PlayerDto> publicNameColumn = new TextColumn<PlayerDto>() {
       @Override
-      public String getValue(Player player) {
+      public String getValue(PlayerDto player) {
         return player.getPublicName();
       }
     };
@@ -353,31 +353,31 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playerCellTable.addColumn(publicNameColumn);
 
     final ButtonCell writeButtonCell = new ButtonCell(ButtonType.LINK, IconType.PENCIL);
-    final Column<Player, String> writeColumn = new Column<Player, String>(writeButtonCell) {
+    final Column<PlayerDto, String> writeColumn = new Column<PlayerDto, String>(writeButtonCell) {
       @Override
-      public String getValue(Player object) {
+      public String getValue(PlayerDto object) {
         return "";
       }
 
       @Override
-      public void render(Cell.Context context, Player object, SafeHtmlBuilder sb) {
+      public void render(Cell.Context context, PlayerDto object, SafeHtmlBuilder sb) {
         if (!object.getId().equals(player.getId())) {
           super.render(context, object, sb);
         }
       }
     };
-    writeColumn.setFieldUpdater(new FieldUpdater<Player, String>() {
+    writeColumn.setFieldUpdater(new FieldUpdater<PlayerDto, String>() {
       @Override
-      public void update(int index, Player object, String value) {
+      public void update(int index, PlayerDto object, String value) {
         unreadMessagesMap.remove(object.getId());
         getUiHandlers().writeToFriend(object);
       }
     });
     playerCellTable.addColumn(writeColumn);
 
-    TextColumn<Player> newMessagesColumn = new TextColumn<Player>() {
+    TextColumn<PlayerDto> newMessagesColumn = new TextColumn<PlayerDto>() {
       @Override
-      public String getValue(Player player) {
+      public String getValue(PlayerDto player) {
         if (unreadMessagesMap.containsKey(player.getId())) {
           return String.valueOf(unreadMessagesMap.get(player.getId()));
         }
@@ -385,7 +385,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       }
 
       @Override
-      public void render(Cell.Context context, Player object, SafeHtmlBuilder sb) {
+      public void render(Cell.Context context, PlayerDto object, SafeHtmlBuilder sb) {
         final Integer unreadMsg = unreadMessagesMap.get(object.getId());
         sb.appendHtmlConstant("<span class=\""
             + (unreadMsg != null ? resources.style().newMessageCircle() : "") + "\" " +
@@ -400,7 +400,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playerCellTable.addColumn(newMessagesColumn);
   }
 
-  private SafeHtml getStatusSafeHtml(Player player) {
+  private SafeHtml getStatusSafeHtml(PlayerDto player) {
     if (player.getId().equals(this.player.getId())) {
       Icon html = getIconString(IconType.USER);
       return new SafeHtmlBuilder().appendHtmlConstant(html.getElement().getString()).toSafeHtml();
@@ -444,14 +444,14 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void setPlayerFriendList(List<Friend> playerList) {
+  public void setPlayerFriendList(List<FriendDto> playerList) {
     playerFriendList = playerList;
     playerFriendCellTable.setRowCount(0);
     playerFriendCellTable.setRowData(playerList);
   }
 
   @Override
-  public void setPlayerList(List<Player> playerList) {
+  public void setPlayerList(List<PlayerDto> playerList) {
     this.playerList = playerList;
     playerList.remove(player);
     playerList.add(0, player);
@@ -475,8 +475,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playButton.setText(messages.reconnect());
     cancelMove.setEnabled(false);
 
-    playerCellTable.setRowData(new ArrayList<Player>());
-    playerFriendCellTable.setRowData(new ArrayList<Friend>());
+    playerCellTable.setRowData(new ArrayList<PlayerDto>());
+    playerFriendCellTable.setRowData(new ArrayList<FriendDto>());
     turnLabel.setHTML(messages.youDisconnected());
 
     hidePlayingButtonsAndShowPlayButton();
@@ -617,7 +617,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void setOpponent(Player opponent) {
+  public void setOpponent(PlayerDto opponent) {
     this.opponent = opponent;
   }
 
@@ -643,17 +643,17 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void doPlayerMove(Move move) {
+  public void doPlayerMove(MoveDto move) {
     getUiHandlers().doPlayerMove(move);
   }
 
   @Override
-  public Player getPlayer() {
+  public PlayerDto getPlayer() {
     return playSession.getPlayer();
   }
 
   @Override
-  public Player getOpponent() {
+  public PlayerDto getOpponent() {
     return playSession.getOpponent();
   }
 

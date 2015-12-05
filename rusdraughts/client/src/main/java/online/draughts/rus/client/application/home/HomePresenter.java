@@ -23,8 +23,8 @@ import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.shared.config.ClientConfiguration;
-import online.draughts.rus.shared.model.Game;
-import online.draughts.rus.shared.model.Player;
+import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.resource.PlayersResource;
 
@@ -116,7 +116,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
   public void updatePlayShowPanel(boolean myGames) {
     if (myGames) {
-      gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
+      gamesDelegate.withCallback(new AbstractAsyncCallback<List<GameDto>>() {
         @Override
         public void onFailure(Throwable caught) {
           super.onFailure(caught);
@@ -124,13 +124,13 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         }
 
         @Override
-        public void onSuccess(List<Game> result) {
+        public void onSuccess(List<GameDto> result) {
           gamesOffset = getView().setGames(result);
           getProxy().manualReveal(HomePresenter.this);
         }
       }).getLoggedInUserGames(0, INIT_SHOW_GAMES_PAGE_SIZE);
     } else {
-      gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
+      gamesDelegate.withCallback(new AbstractAsyncCallback<List<GameDto>>() {
         @Override
         public void onFailure(Throwable caught) {
           super.onFailure(caught);
@@ -138,7 +138,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         }
 
         @Override
-        public void onSuccess(List<Game> result) {
+        public void onSuccess(List<GameDto> result) {
           gamesOffset = getView().setGames(result);
           getProxy().manualReveal(HomePresenter.this);
         }
@@ -149,16 +149,16 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   @Override
   public void getMoreGames(boolean myGames, int newPageSize) {
     if (myGames) {
-      gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
+      gamesDelegate.withCallback(new AbstractAsyncCallback<List<GameDto>>() {
         @Override
-        public void onSuccess(List<Game> result) {
+        public void onSuccess(List<GameDto> result) {
           gamesOffset = getView().addGames(result);
         }
       }).getLoggedInUserGames(gamesOffset, newPageSize);
     } else {
-      gamesDelegate.withCallback(new AbstractAsyncCallback<List<Game>>() {
+      gamesDelegate.withCallback(new AbstractAsyncCallback<List<GameDto>>() {
         @Override
-        public void onSuccess(List<Game> result) {
+        public void onSuccess(List<GameDto> result) {
           gamesOffset = getView().addGames(result);
         }
       }).getGames(gamesOffset, newPageSize);
@@ -166,7 +166,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   }
 
   @Override
-  public Player getPlayer() {
+  public PlayerDto getPlayer() {
     return currentSession.getPlayer();
   }
 
@@ -190,9 +190,9 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   public interface MyView extends View, HasUiHandlers<HomeUiHandlers> {
     void setShowLoggedInControls(Boolean loggedIn);
 
-    int setGames(List<Game> games);
+    int setGames(List<GameDto> games);
 
-    int addGames(List<Game> games);
+    int addGames(List<GameDto> games);
 
     boolean isMyGames();
 

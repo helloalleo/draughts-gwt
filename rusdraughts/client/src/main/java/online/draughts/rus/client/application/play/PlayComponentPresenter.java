@@ -25,6 +25,7 @@ import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.MoveFactory;
 import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.draughts.StrokeFactory;
+import online.draughts.rus.shared.dto.*;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.resource.FriendsResource;
 import online.draughts.rus.shared.resource.GameMessagesResource;
@@ -91,7 +92,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   @Override
-  public void startPlayWith(final Player opponent) {
+  public void startPlayWith(final PlayerDto opponent) {
     if (opponent == null) {
       Growl.growlNotif(messages.selectPlayer());
       return;
@@ -109,8 +110,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     getView().showInviteDialog(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        GameMessage gameMessage = createGameMessage();
-        gameMessage.setMessageType(GameMessage.MessageType.PLAY_INVITE);
+        GameMessageDto gameMessage = createGameMessage();
+        gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_INVITE);
         gameMessage.setReceiver(opponent);
 
         final boolean white = getView().opponentColor();
@@ -150,41 +151,41 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   @Override
   public void proposeDraw() {
-    GameMessage gameMessage = createGameMessage();
-    gameMessage.setMessageType(GameMessage.MessageType.PLAY_PROPOSE_DRAW);
+    GameMessageDto gameMessage = createGameMessage();
+    gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_PROPOSE_DRAW);
     fireEvent(new GameMessageEvent(gameMessage));
   }
 
   @Override
   public void playerSurrendered() {
-    GameMessage gameMessage = createGameMessage();
-    gameMessage.setMessageType(GameMessage.MessageType.PLAY_SURRENDER);
+    GameMessageDto gameMessage = createGameMessage();
+    gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_SURRENDER);
     fireEvent(new GameMessageEvent(gameMessage));
     fireEvent(new ClearPlayComponentEvent());
   }
 
   @Override
   public void proposeCancelMove(Stroke stroke) {
-    GameMessage gameMessage = createGameMessage();
-    gameMessage.setMessageType(GameMessage.MessageType.PLAY_CANCEL_MOVE);
+    GameMessageDto gameMessage = createGameMessage();
+    gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_CANCEL_MOVE);
     if (stroke.isContinueBeat()) {
       stroke.flip();
     }
     stroke.setOnCancelMove();
-    Move move = MoveFactory.createMoveFromStroke(stroke);
+    MoveDto move = MoveFactory.createMoveFromStroke(stroke);
     gameMessage.setMove(move);
 
     fireEvent(new GameMessageEvent(gameMessage));
   }
 
   @Override
-  public void saveFriend(final Friend friend) {
-    friendsDelegate.withCallback(new AbstractAsyncCallback<Friend>() {
+  public void saveFriend(final FriendDto friend) {
+    friendsDelegate.withCallback(new AbstractAsyncCallback<FriendDto>() {
       @Override
-      public void onSuccess(Friend result) {
-        GameMessage gameMessage = createGameMessage();
+      public void onSuccess(FriendDto result) {
+        GameMessageDto gameMessage = createGameMessage();
         gameMessage.setReceiver(friend.getFriendOf());
-        gameMessage.setMessageType(GameMessage.MessageType.NOTIFICATION_ADDED_TO_FAVORITE);
+        gameMessage.setMessageType(GameMessageDto.MessageType.NOTIFICATION_ADDED_TO_FAVORITE);
         if (friend.isFavorite()) {
           gameMessage.setMessage(messages.youHasBeenAddedToFavorite(playSession.getPlayer().getPublicName()));
         } else {
@@ -192,7 +193,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         }
         fireEvent(new GameMessageEvent(gameMessage));
       }
-    }).saveOrCreate(friend);
+    }).save(friend);
   }
 
   @Override
@@ -211,19 +212,19 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   @Override
-  public void doPlayerMove(Move move) {
+  public void doPlayerMove(MoveDto move) {
     fireEvent(new PlayMovePlayerMessageEvent(move));
   }
 
   @Override
-  public void writeToFriend(Player friend) {
+  public void writeToFriend(PlayerDto friend) {
     currentMessenger = messengerFactory.create(playView, friend);
     addToPopupSlot(currentMessenger);
     playersDelegate.withoutCallback().resetUnreadMessages(currentSession.getPlayer().getId(), friend.getId());
   }
 
-  private GameMessage createGameMessage() {
-    GameMessage gameMessage = GWT.create(GameMessage.class);
+  private GameMessageDto createGameMessage() {
+    GameMessageDto gameMessage = GWT.create(GameMessageDto.class);
     gameMessage.setSender(playSession.getPlayer());
     gameMessage.setReceiver(playSession.getOpponent());
     gameMessage.setGame(playSession.getGame());
@@ -266,17 +267,17 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         getView().initNotationPanel(playSession.getGame().getId());
 
         playSession.getPlayer().setPlaying(true);
-        playersDelegate.withCallback(new AsyncCallback<Player>() {
+        playersDelegate.withCallback(new AsyncCallback<PlayerDto>() {
           @Override
           public void onFailure(Throwable caught) {
             ErrorDialogBox.setMessage(caught).show();
           }
 
           @Override
-          public void onSuccess(Player result) {
+          public void onSuccess(PlayerDto result) {
             fireEvent(new UpdatePlayerListEvent());
           }
-        }).saveOrCreate(playSession.getPlayer());
+        }).save(playSession.getPlayer());
       }
     });
 
@@ -299,35 +300,35 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onCheckWinner(CheckWinnerEvent event) {
         getView().setBeatenMy(DRAUGHTS_ON_DESK_INIT - getView().getMyDraughtsSize());
         getView().setBeatenOpponent(DRAUGHTS_ON_DESK_INIT - getView().getOpponentDraughtsSize());
-        final Game endGame = playSession.getGame();
-        Game.GameEnds gameEnd = null;
+        final GameDto endGame = playSession.getGame();
+        GameDto.GameEnds gameEnd = null;
         if (0 == getView().getMyDraughtsSize()) {
           InfoDialogBox.setMessage(messages.youLose()).show();
           if ((getView().isWhite())) {
-            gameEnd = Game.GameEnds.BLACK_WIN;
+            gameEnd = GameDto.GameEnds.BLACK_WIN;
           } else {
-            gameEnd = Game.GameEnds.WHITE_WIN;
+            gameEnd = GameDto.GameEnds.WHITE_WIN;
           }
         }
         if (0 == getView().getOpponentDraughtsSize()) {
           InfoDialogBox.setMessage(messages.youWon()).show();
           if (getView().isWhite()) {
-            gameEnd = Game.GameEnds.WHITE_WIN;
+            gameEnd = GameDto.GameEnds.WHITE_WIN;
           } else {
-            gameEnd = Game.GameEnds.BLACK_WIN;
+            gameEnd = GameDto.GameEnds.BLACK_WIN;
           }
         }
         if (gameEnd == null) {
           return;
         }
-        fireEvent(new GameOverEvent(endGame, gameEnd, new AsyncCallback<Game>() {
+        fireEvent(new GameOverEvent(endGame, gameEnd, new AsyncCallback<GameDto>() {
           @Override
           public void onFailure(Throwable caught) {
             ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), caught).show();
           }
 
           @Override
-          public void onSuccess(Game result) {
+          public void onSuccess(GameDto result) {
           }
         }));
       }
@@ -359,13 +360,13 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     addRegisteredHandler(GameOverEvent.TYPE, new GameOverEventHandler() {
       @Override
       public void onGameOver(GameOverEvent event) {
-        Game game = event.getGame();
+        GameDto game = event.getGame();
         game.setPlayEndStatus(event.getGameEnd());
         game.setPlayFinishDate(new Date());
         final String notation = NotationPanel.getNotation();
         game.setNotation(notation);
         game.setEndGameScreenshot(getView().takeScreenshot());
-        gamesDelegate.withCallback(event.getAsyncCallback()).saveOrCreate(game);
+        gamesDelegate.withCallback(event.getAsyncCallback()).save(game);
 
         fireEvent(new ClearPlayComponentEvent());
       }
@@ -374,7 +375,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     addRegisteredHandler(PlayMoveOpponentEvent.TYPE, new PlayMoveOpponentEventHandler() {
       @Override
       public void onPlayMoveOpponent(PlayMoveOpponentEvent event) {
-        final Move move = event.getMove();
+        final MoveDto move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
         final Stroke mirror = stroke.flip();
         getView().getBoard().moveOpponent(mirror);
@@ -384,7 +385,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     addRegisteredHandler(PlayMoveCancelEvent.TYPE, new PlayMoveCancelEventHandler() {
       @Override
       public void onPlayMove(PlayMoveCancelEvent event) {
-        final Move move = event.getMove();
+        final MoveDto move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
         final Stroke mirror = stroke.flip();
         fireEvent(new NotationCancelStrokeEvent(stroke));
@@ -395,7 +396,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     addRegisteredHandler(PlayMoveOpponentCancelEvent.TYPE, new PlayMoveOpponentCancelEventHandler() {
       @Override
       public void onPlayMoveOpponentCancel(PlayMoveOpponentCancelEvent event) {
-        final Move move = event.getMove();
+        final MoveDto move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
         final Stroke mirror = stroke.flip();
         fireEvent(new NotationCancelStrokeEvent(mirror));
@@ -415,18 +416,18 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   private void updatePlayerFriendList() {
-    playersDelegate.withCallback(new AbstractAsyncCallback<List<Friend>>() {
+    friendsDelegate.withCallback(new AbstractAsyncCallback<List<FriendDto>>() {
       @Override
-      public void onSuccess(List<Friend> result) {
+      public void onSuccess(List<FriendDto> result) {
         getView().setPlayerFriendList(result);
       }
     }).getPlayerFriendList(playSession.getPlayer().getId());
   }
 
   public interface MyView extends View, HasUiHandlers<PlayComponentUiHandlers> {
-    void setPlayerFriendList(List<Friend> playerList);
+    void setPlayerFriendList(List<FriendDto> playerList);
 
-    void setPlayerList(List<Player> playerList);
+    void setPlayerList(List<PlayerDto> playerList);
 
     void toggleInPlayButton();
 
@@ -460,7 +461,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
     String takeScreenshot();
 
-    void setOpponent(Player opponent);
+    void setOpponent(PlayerDto opponent);
 
     Board getBoard();
 

@@ -1,16 +1,19 @@
 package online.draughts.rus.shared.resource;
 
-import online.draughts.rus.shared.model.Friend;
+import online.draughts.rus.shared.dto.FriendDto;
 
-import javax.ws.rs.POST;
-import javax.ws.rs.Path;
-import javax.ws.rs.Produces;
+import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
+import java.util.List;
 
 @Path(ApiPaths.FRIENDS)
 @Produces(MediaType.APPLICATION_JSON)
 public interface FriendsResource {
 
   @POST
-  Friend saveOrCreate(Friend friend);
+  FriendDto save(FriendDto friend);
+
+  @GET
+  @Path(ApiPaths.PLAYER_FRIEND_LIST)
+  List<FriendDto> getPlayerFriendList(@QueryParam(ApiParameters.ID) Long playerId);
 }

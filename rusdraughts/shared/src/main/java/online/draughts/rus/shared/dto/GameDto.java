@@ -1,15 +1,8 @@
 package online.draughts.rus.shared.dto;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.gwt.user.client.rpc.GwtTransient;
 import com.google.gwt.user.client.rpc.IsSerializable;
-import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Load;
 
 import java.util.Date;
-import java.util.HashSet;
-import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,11 +10,11 @@ import java.util.Set;
  * Date: 31.12.14
  * Time: 16:18
  */
-public class Game {
+public class GameDto extends BaseDto {
 
-  private Player playerWhite;
+  private PlayerDto playerWhite;
 
-  private Player playerBlack;
+  private PlayerDto playerBlack;
 
   private GameEnds playEndStatus;
 
@@ -33,16 +26,16 @@ public class Game {
 
   private String endGameScreenshot;
 
-  public Game() {
+  public GameDto() {
   }
 
-  public Game(Player playerWhite,
-              Player playerBlack,
-              GameEnds playEndStatus,
-              Date playStartDate,
-              Date playFinishDate,
-              String notation,
-              String endGameScreenshot) {
+  public GameDto(PlayerDto playerWhite,
+                 PlayerDto playerBlack,
+                 GameEnds playEndStatus,
+                 Date playStartDate,
+                 Date playFinishDate,
+                 String notation,
+                 String endGameScreenshot) {
     this.playerWhite = playerWhite;
     this.playerBlack = playerBlack;
     this.playEndStatus = playEndStatus;
@@ -52,19 +45,19 @@ public class Game {
     this.endGameScreenshot = endGameScreenshot;
   }
 
-  public Player getPlayerWhite() {
+  public PlayerDto getPlayerWhite() {
     return playerWhite;
   }
 
-  public void setPlayerWhite(Player playerWhite) {
+  public void setPlayerWhite(PlayerDto playerWhite) {
     this.playerWhite = playerWhite;
   }
 
-  public Player getPlayerBlack() {
+  public PlayerDto getPlayerBlack() {
     return playerBlack;
   }
 
-  public void setPlayerBlack(Player playerBlack) {
+  public void setPlayerBlack(PlayerDto playerBlack) {
     this.playerBlack = playerBlack;
   }
 
@@ -104,7 +97,7 @@ public class Game {
     return endGameScreenshot;
   }
 
-  public Game setEndGameScreenshot(String endGameScreenshot) {
+  public GameDto setEndGameScreenshot(String endGameScreenshot) {
     this.endGameScreenshot = endGameScreenshot;
     return this;
   }
