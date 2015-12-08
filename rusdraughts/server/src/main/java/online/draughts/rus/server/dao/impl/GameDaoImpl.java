@@ -39,8 +39,9 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
 //    return query.getResultList();
     return ofy().load().type(getEntityClass())
         .filter("playFinishDate !=", null)
-        .order("playFinishDate").orderKey(true)
-        .offset(start).limit(length).list();
+        .order("-playFinishDate").orderKey(true)
+        .offset(start).limit(length)
+        .list();
   }
 
   @Override

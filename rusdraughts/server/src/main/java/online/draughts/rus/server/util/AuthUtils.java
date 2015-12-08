@@ -55,7 +55,7 @@ public class AuthUtils {
     Rating.calcPlayerRating(player);
     playerService.save(player);
 
-    if (!player.isActive()) {
+    if (player.isActive()) {
       AuthUtils.login(req);
     }
     resp.sendRedirect(config.getPlayUrl());

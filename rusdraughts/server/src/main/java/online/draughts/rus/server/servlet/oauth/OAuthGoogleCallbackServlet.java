@@ -110,6 +110,7 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
           player.setLastName(family_name);
           String email = responseObject.getString("email");
           player.setEmail(email);
+          player.setActive(true);
         }
 
         AuthUtils.processUserAndRedirectToPlayPage(playerService, config, req, resp, player);

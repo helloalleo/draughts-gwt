@@ -112,6 +112,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         if (StringUtils.isNotEmpty(email)) {
           player.setEmail(email);
         }
+        player.setActive(true);
       }
 
       AuthUtils.processUserAndRedirectToPlayPage(playerService, config, req, resp, player);

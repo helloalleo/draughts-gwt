@@ -6,6 +6,9 @@ import online.draughts.rus.shared.dto.FriendDto;
 import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 
+import java.util.List;
+import java.util.Set;
+
 interface PlayComponentUiHandlers extends UiHandlers {
 
   void startPlayWith(PlayerDto opponent);
@@ -31,4 +34,6 @@ interface PlayComponentUiHandlers extends UiHandlers {
   void doPlayerMove(MoveDto move);
 
   void writeToFriend(PlayerDto friend);
+
+  List<PlayerDto> getSortedPlayerList(Set<Long> playerIds, List<PlayerDto> playerList);
 }

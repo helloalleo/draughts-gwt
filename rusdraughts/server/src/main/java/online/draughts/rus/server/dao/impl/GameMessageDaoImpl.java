@@ -3,10 +3,12 @@ package online.draughts.rus.server.dao.impl;
 import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
+import com.googlecode.objectify.Key;
 import com.googlecode.objectify.cmd.Query;
 import online.draughts.rus.server.dao.GameMessageDao;
 import online.draughts.rus.server.domain.GameMessage;
 import online.draughts.rus.server.domain.Move;
+import online.draughts.rus.server.domain.Player;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -53,13 +55,13 @@ public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements GameMess
         .orderKey(true);
 
     List<GameMessage> playerMessages = query
-        .filter("sender.id", playerId)
-        .filter("receiver.id", opponentId)
+        .filter("sender", Key.create(Player.class, playerId))
+        .filter("receiver", Key.create(Player.class, opponentId))
         .list();
 
     List<GameMessage> friendMessages = query
-        .filter("sender.id", opponentId)
-        .filter("receiver.id", playerId)
+        .filter("sender", Key.create(Player.class, opponentId))
+        .filter("receiver", Key.create(Player.class, playerId))
         .list();
 
     playerMessages.addAll(friendMessages);

@@ -4,6 +4,7 @@ import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Stringify;
+import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.util.LongStringifier;
 
 import java.util.*;
@@ -291,18 +292,11 @@ public class Player extends PersistableObjectImpl {
    *
    * @param player
    */
-  public void updateSerializable(Player player) {
+  public void updateSerializable(PlayerDto player) {
     if (player == null) {
       return;
     }
-    this.loggedIn = player.loggedIn;
-    this.playing = player.playing;
-    this.online = player.online;
-    this.playerName = player.playerName;
-    this.lastVisited = player.lastVisited;
-    this.sessionId = player.sessionId;
-    this.registerDate = player.registerDate;
-    this.visitCounter = player.visitCounter;
+    this.playerName = player.getPlayerName();
   }
 
   public void setFbId(String fbId) {

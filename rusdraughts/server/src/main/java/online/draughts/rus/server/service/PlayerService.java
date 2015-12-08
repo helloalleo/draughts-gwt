@@ -5,6 +5,7 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.dao.PlayerDao;
 import online.draughts.rus.server.domain.Player;
+import online.draughts.rus.shared.dto.PlayerDto;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -63,8 +64,8 @@ public class PlayerService {
     return playerDaoProvider.get().findAll();
   }
 
-  public Player findByFbId(String user_id) {
-    return playerDaoProvider.get().findByFbId(user_id);
+  public Player findByFbId(String userId) {
+    return playerDaoProvider.get().findByFbId(userId);
   }
 
   public Player findByGoogleSub(String sub) {
@@ -83,5 +84,11 @@ public class PlayerService {
     Player player = playerDaoProvider.get().find(playerId);
     player.getFriendUnreadMessagesMap().remove(friendId);
     playerDaoProvider.get().save(player);
+  }
+
+  public Player saveDto(PlayerDto dto) {
+    Player player = playerDaoProvider.get().find(dto.getId());
+    player.updateSerializable(dto);
+    return playerDaoProvider.get().save(player);
   }
 }

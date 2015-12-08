@@ -7,7 +7,6 @@ import com.googlecode.objectify.cmd.Query;
 import online.draughts.rus.server.dao.PlayerDao;
 import online.draughts.rus.server.domain.Player;
 
-import java.util.Iterator;
 import java.util.List;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
@@ -28,61 +27,29 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   @Override
   @Transactional
   public Player findByVkId(String vkId) {
-    Iterator iterator = ofy().load().type(getEntityClass())
+    return ofy().load().type(getEntityClass())
         .filter("vkId", vkId)
-        .iterator();
-    if (iterator.hasNext()) {
-      return (Player) iterator.next();
-    }
-    return null;
-//    try {
-//      return (Player) findByParam("Player", new String[]{"vkId"}, new String[]{vkId});
-//    } catch (IllegalArgumentException e) {
-//      log.severe(e.getLocalizedMessage());
-//      return null;
-//    }
+        .first()
+        .now();
   }
+
 
   @Override
   @Transactional
   public Player findBySessionId(String sessionId) {
     return ofy().load().type(getEntityClass())
         .filter("sessionId", sessionId)
-        .iterator().next();
-//    try {
-//      return (Player) findByParam("Player", new String[]{"sessionId"}, new String[]{sessionId});
-//    } catch (IllegalArgumentException e) {
-//      log.severe(e.getLocalizedMessage());
-//      return null;
-//    }
+        .first()
+        .now();
   }
-
-//  @Override
-//  @Transactional
-//  public Player findById(Long playerId) {
-////    try {
-////      return (Player) findByParam("Player", new String[]{"id"}, new Long[]{playerId});
-////    } catch (IllegalArgumentException e) {
-////      log.severe(e.getLocalizedMessage());
-////      return null;
-////    }
-//    return ofy().load().type(getEntityClass())
-//        .filter("vkId", vkId)
-//        .iterator().next();
-//  }
 
   @Override
   @Transactional
   public Player findByFbId(String fbId) {
     return ofy().load().type(getEntityClass())
         .filter("fbId", fbId)
-        .iterator().next();
-//    try {
-//      return (Player) findByParam("Player", new String[]{"fbId"}, new String[]{user_id});
-//    } catch (IllegalArgumentException e) {
-//      log.severe(e.getLocalizedMessage());
-//      return null;
-//    }
+        .first()
+        .now();
   }
 
   @Override
@@ -90,27 +57,16 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   public Player findByGoogleSub(String sub) {
     return ofy().load().type(getEntityClass())
         .filter("googleSub", sub)
-        .iterator().next();
-
-//    try {
-//      return (Player) findByParam("Player", new String[]{"googleSub"}, new String[]{sub});
-//    } catch (IllegalArgumentException e) {
-//      log.severe(e.getLocalizedMessage());
-//      return null;
-//    }
+        .first()
+        .now();
   }
-
 
   @Override
   public List<Player> findAll() {
-    return ofy().load().type(getEntityClass()).filter("active", true).list();
-
-//    String hql = "SELECT p " +
-//        " FROM Player p " +
-//        " WHERE p.banned = false" +
-//        " ORDER BY p.online DESC";
-//    Query query = getEntityManager().createQuery(hql);
-//    return (List<Player>) query.getResultList();
+    return ofy().load().type(getEntityClass())
+        .filter("active", true)
+        .order("-online")
+        .list();
   }
 
   @Override
@@ -129,16 +85,4 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
     online.addAll(playing);
     return online;
   }
-
-//  @Override
-//  public List<Player> findOnline() {
-////    String hql = "SELECT p " +
-////        " FROM Player p " +
-////        " WHERE (p.online = true " +
-////        "    OR p.playing = true)" +
-////        "  AND p.banned = false";
-////    Query query = getEntityManager().createQuery(hql);
-////    return (List<Player>) query.getResultList();
-//
-//  }
 }

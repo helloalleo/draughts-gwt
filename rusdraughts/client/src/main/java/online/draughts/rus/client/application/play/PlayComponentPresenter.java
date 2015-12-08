@@ -32,9 +32,7 @@ import online.draughts.rus.shared.resource.GameMessagesResource;
 import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.resource.PlayersResource;
 
-import java.util.Date;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 
 public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresenter.MyView>
@@ -131,7 +129,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       return;
     }
     clientChannel.connect();
-    updateUnreadMessages();
   }
 
   private void updateUnreadMessages() {
@@ -220,7 +217,33 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   public void writeToFriend(PlayerDto friend) {
     currentMessenger = messengerFactory.create(playView, friend);
     addToPopupSlot(currentMessenger);
-    playersDelegate.withoutCallback().resetUnreadMessages(currentSession.getPlayer().getId(), friend.getId());
+    playersDelegate.withCallback(new AbstractAsyncCallback<Void>() {
+      @Override
+      public void onSuccess(Void result) {
+        updateUnreadMessages();
+      }
+    }).resetUnreadMessages(currentSession.getPlayer().getId(), friend.getId());
+  }
+
+  @Override
+  public List<PlayerDto> getSortedPlayerList(Set<Long> playerIds, List<PlayerDto> playerList) {
+    List<PlayerDto> workingList = new ArrayList<>(playerList);
+    List<Long> playerIdList = new ArrayList<>(playerIds);
+    Collections.sort(playerIdList, Collections.reverseOrder());
+    List<PlayerDto> playerDtos = new ArrayList<>(workingList.size());
+    for (Long aLong : playerIdList) {
+      for (PlayerDto playerDto : workingList) {
+        if (aLong.equals(playerDto.getId())) {
+          playerDtos.add(playerDto);
+          break;
+        }
+      }
+    }
+    List<PlayerDto> result = new ArrayList<>(workingList.size());
+    workingList.removeAll(playerDtos);
+    result.addAll(playerDtos);
+    result.addAll(workingList);
+    return result;
   }
 
   private GameMessageDto createGameMessage() {
@@ -249,6 +272,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       @Override
       public void onConnectedToPlay(ConnectedToPlayEvent event) {
         getView().toggleInPlayButton();
+        updateUnreadMessages();
       }
     });
 

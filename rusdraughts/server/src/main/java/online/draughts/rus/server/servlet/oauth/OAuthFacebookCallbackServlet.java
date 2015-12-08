@@ -115,6 +115,7 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
           }
           String email = responseObject.getString("email");
           player.setEmail(email);
+          player.setActive(true);
         }
 
         AuthUtils.processUserAndRedirectToPlayPage(playerService, config, req, resp, player);

@@ -378,7 +378,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     TextColumn<PlayerDto> newMessagesColumn = new TextColumn<PlayerDto>() {
       @Override
       public String getValue(PlayerDto player) {
-        if (unreadMessagesMap.containsKey(player.getId())) {
+        if (unreadMessagesMap != null && unreadMessagesMap.containsKey(player.getId())) {
           return String.valueOf(unreadMessagesMap.get(player.getId()));
         }
         return "";
@@ -386,6 +386,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
       @Override
       public void render(Cell.Context context, PlayerDto object, SafeHtmlBuilder sb) {
+        if (unreadMessagesMap == null) {
+          return;
+        }
         final Integer unreadMsg = unreadMessagesMap.get(object.getId());
         sb.appendHtmlConstant("<span class=\""
             + (unreadMsg != null ? resources.style().newMessageCircle() : "") + "\" " +
@@ -452,11 +455,18 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Override
   public void setPlayerList(List<PlayerDto> playerList) {
-    this.playerList = playerList;
-    playerList.remove(player);
-    playerList.add(0, player);
+    if (playerList == null) {
+      return;
+    }
+    if (!unreadMessagesMap.isEmpty()) {
+      this.playerList = getUiHandlers().getSortedPlayerList(unreadMessagesMap.keySet(), playerList);
+    } else {
+      this.playerList = playerList;
+    }
+    this.playerList.remove(player);
+    this.playerList.add(0, player);
     playerCellTable.setRowCount(0);
-    playerCellTable.setRowData(playerList);
+    playerCellTable.setRowData(this.playerList);
   }
 
   @Override

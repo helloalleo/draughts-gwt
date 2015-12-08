@@ -38,8 +38,7 @@ public class PlayersResourceImpl implements PlayersResource {
     if (!authProvider.get()) {
       throw new NotAuthorizedException("Access denied");
     }
-    Player entity = mapper.map(player, Player.class);
-    return mapper.map(playerService.save(entity), PlayerDto.class);
+    return mapper.map(playerService.saveDto(player), PlayerDto.class);
   }
 
   @Override
