@@ -5,9 +5,13 @@ import com.google.gwt.user.client.rpc.IsSerializable;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Ignore;
+import com.googlecode.objectify.annotation.Index;
 
 import java.util.Date;
 import java.util.List;
+
+import static online.draughts.rus.shared.util.ObjectifyUtil.getObject;
+import static online.draughts.rus.shared.util.ObjectifyUtil.setObject;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,38 +22,49 @@ import java.util.List;
 @Entity
 public class GameMessage extends PersistableObjectImpl {
 
+  @Index
   private Ref<Player> sender;
 
+  @Index
   private Ref<Player> receiver;
 
   private String message;
 
+  @Index
   private MessageType messageType;
 
   private String data;
 
+  @Index
   private Date sentDate;
 
   private Ref<Move> move;
 
+  @Index
   private Ref<Game> game;
 
   @Ignore
   private List<Player> playerList;
 
   public Player getSender() {
-    return sender.get();
+    return getObject(sender);
   }
 
   public void setSender(Player sender) {
+    if (sender == null) {
+      return;
+    }
     this.sender = Ref.create(sender);
   }
 
   public Player getReceiver() {
-    return receiver.get();
+    return getObject(receiver);
   }
 
   public void setReceiver(Player receiver) {
+    if (receiver == null) {
+      return;
+    }
     this.receiver = Ref.create(receiver);
   }
 
@@ -86,19 +101,26 @@ public class GameMessage extends PersistableObjectImpl {
   }
 
   public Move getMove() {
-    return move.get();
+    return getObject(move);
   }
 
   public void setMove(Move move) {
+    if (move == null) {
+      return;
+    }
     this.move = Ref.create(move);
   }
 
   public Game getGame() {
-    return game.get();
+    return getObject(game);
   }
 
   public void setGame(Game game) {
-    this.game = Ref.create(game);
+    setObject(this.game, game);
+//    if (game == null) {
+//      return;
+//    }
+//    this.game = Ref.create(game);
   }
 
   public void setPlayerList(List<Player> playerList) {

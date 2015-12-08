@@ -7,6 +7,7 @@ import com.googlecode.objectify.cmd.Query;
 import online.draughts.rus.server.dao.PlayerDao;
 import online.draughts.rus.server.domain.Player;
 
+import java.util.Iterator;
 import java.util.List;
 
 import static com.googlecode.objectify.ObjectifyService.ofy;
@@ -27,9 +28,13 @@ public class PlayerDaoImpl extends DaoImpl<Player> implements PlayerDao {
   @Override
   @Transactional
   public Player findByVkId(String vkId) {
-    return ofy().load().type(getEntityClass())
+    Iterator iterator = ofy().load().type(getEntityClass())
         .filter("vkId", vkId)
-        .iterator().next();
+        .iterator();
+    if (iterator.hasNext()) {
+      return (Player) iterator.next();
+    }
+    return null;
 //    try {
 //      return (Player) findByParam("Player", new String[]{"vkId"}, new String[]{vkId});
 //    } catch (IllegalArgumentException e) {

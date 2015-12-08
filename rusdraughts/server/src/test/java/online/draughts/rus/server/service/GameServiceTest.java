@@ -3,13 +3,12 @@ package online.draughts.rus.server.service;
 import com.google.inject.Inject;
 import com.googlecode.objectify.Ref;
 import online.draughts.rus.server.BaseTest;
-import online.draughts.rus.server.guice.DatabaseModule;
-import online.draughts.rus.server.guice.DbModule;
 import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.server.domain.GameMessage;
 import online.draughts.rus.server.domain.Move;
 import online.draughts.rus.server.domain.Player;
-import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.server.guice.DatabaseModule;
+import online.draughts.rus.server.guice.DbModule;
 import org.jukito.JukitoRunner;
 import org.jukito.UseModules;
 import org.junit.After;
@@ -50,7 +49,7 @@ public class GameServiceTest extends BaseTest {
 
   @Test
   public void testFindRange() throws Exception {
-    List<GameDto> games = gameService.findRange(0, 2);
+    List<Game> games = gameService.findRange(0, 2);
     assertEquals(2, games.size());
   }
 

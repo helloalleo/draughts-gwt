@@ -2,8 +2,10 @@ package online.draughts.rus.server.dao.impl;
 
 import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
+import com.googlecode.objectify.Key;
 import online.draughts.rus.server.dao.FriendDao;
 import online.draughts.rus.server.domain.Friend;
+import online.draughts.rus.server.domain.Player;
 
 import java.util.List;
 
@@ -24,39 +26,21 @@ public class FriendDaoImpl extends DaoImpl<Friend> implements FriendDao {
 
   @Override
   public List<Friend> getPlayerFriends(Long playerId, Long friendId) {
-//    String hql = "SELECT f " +
-//        " FROM Friend f " +
-//        " WHERE f.pk.friend.id = :playerId " +
-//        "   AND f.pk.friendOf.id = :friendId";
-//    Query query = getEntityManager().createQuery(hql);
-//    query.setParameter("playerId", playerId);
-//    query.setParameter("friendId", friendId);
-//    List result = query.getResultList();
-//    return !result.isEmpty();
-
+    Key playerKey = Key.create(Player.class, playerId);
+    Key friendKey = Key.create(Player.class, friendId);
     return ofy().load().type(getEntityClass())
-        .filter("pk.friend.id", playerId)
-        .filter("pk.friendOf.id", friendId)
+        .filter("friend", playerKey)
+        .filter("friendOf", friendKey)
         .list();
   }
 
   @Override
   public List<Friend> findFriends(Long playerId) {
-//    String hql = "SELECT f " +
-//        " FROM Player p " +
-//        " LEFT JOIN p.friends f " +
-//        " WHERE p.id = :playerId " +
-//        "   AND f.pk.friend.loggedIn = true " +
-//        " ORDER BY f.favorite DESC, f.pk.friend.online DESC";
-//    Query query = getEntityManager().createQuery(hql);
-//    query.setParameter("playerId", playerId);
-//    query.setMaxResults(10);
-//    return (List<Friend>) query.getResultList();
-
+    // TODO сортировать по тем кто в сети
+    Key playerKey = Key.create(Player.class, playerId);
     return ofy().load().type(getEntityClass())
-        .filter("id", playerId)
-        .filter("pk.friend", playerId)
-        .filter("loggedIn", true)
+        .filter("friend", playerKey)
+        .order("-favorite")
         .list();
   }
 
@@ -64,5 +48,4 @@ public class FriendDaoImpl extends DaoImpl<Friend> implements FriendDao {
   public Friend find(String id) {
     return ofy().load().type(getEntityClass()).id(id).now();
   }
-
 }

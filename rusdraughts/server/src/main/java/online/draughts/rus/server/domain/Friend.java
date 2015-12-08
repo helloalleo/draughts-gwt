@@ -4,6 +4,7 @@ package online.draughts.rus.server.domain;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Id;
+import com.googlecode.objectify.annotation.Index;
 
 import java.util.Objects;
 
@@ -19,9 +20,12 @@ public class Friend implements BasePersistableObject {
   @Id
   private String id;
 
+  @Index
   private Ref<Player> friend;
+  @Index
   private Ref<Player> friendOf;
 
+  @Index
   private boolean favorite;
 
   public Friend() {
@@ -44,6 +48,9 @@ public class Friend implements BasePersistableObject {
   }
 
   public void setFriend(Player friend) {
+    if (friend == null) {
+      return;
+    }
     this.friend = Ref.create(friend);
   }
 
@@ -52,6 +59,9 @@ public class Friend implements BasePersistableObject {
   }
 
   public void setFriendOf(Player friendOf) {
+    if(friendOf == null) {
+      return;
+    }
     this.friendOf = Ref.create(friendOf);
   }
 

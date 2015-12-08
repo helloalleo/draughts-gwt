@@ -37,13 +37,9 @@ import java.io.IOException;
 
 public class DispatchServletModule extends ServletModule {
 
-  public static final String DRAUGHTS_PU = "draughtsPU";
-
   @Override
   public void configureServlets() {
-//    install(new JpaPersistModule(DRAUGHTS_PU));
     filter("/*").through(ObjectifyFilter.class);
-//    filter("/*").through(PersistFilter.class);
     filter("/*").through(createUserIdScopingFilter());
 
     serve("/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);

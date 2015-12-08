@@ -1,6 +1,11 @@
 package online.draughts.rus.server.service;
 
+import online.draughts.rus.server.guice.DatabaseModule;
+import online.draughts.rus.server.guice.DbModule;
+import org.jukito.JukitoRunner;
+import org.jukito.UseModules;
 import org.junit.Test;
+import org.junit.runner.RunWith;
 
 /**
  * Created with IntelliJ IDEA.
@@ -8,6 +13,8 @@ import org.junit.Test;
  * Date: 23.10.15
  * Time: 20:39
  */
+@RunWith(JukitoRunner.class)
+@UseModules({DatabaseModule.class, DbModule.class})
 public class PlayerServiceTest {
 
   @Test

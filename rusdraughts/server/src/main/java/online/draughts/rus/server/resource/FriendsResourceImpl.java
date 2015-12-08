@@ -36,7 +36,8 @@ public class FriendsResourceImpl implements FriendsResource {
     if (!authProvider.get()) {
       throw new NotAuthorizedException("Access denied");
     }
-    return friendService.save(friend);
+    // TODO !!!
+    return new FriendDto();//friendService.save(friend);
   }
 
   @Override

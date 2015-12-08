@@ -45,7 +45,7 @@ public class GamesResourceImpl implements GamesResource {
 
   @Override
   public List<GameDto> getGames(@DefaultValue(DEFAULT_OFFSET) int offset, @DefaultValue(DEFAULT_LIMIT) int limit) {
-    return gameService.findRange(offset, limit);
+    return DozerHelper.map(mapper, gameService.findRange(offset, limit), GameDto.class);
   }
 
   @Override

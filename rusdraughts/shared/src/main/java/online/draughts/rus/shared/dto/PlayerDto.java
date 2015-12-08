@@ -1,5 +1,7 @@
 package online.draughts.rus.shared.dto;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
+
 import java.io.Serializable;
 
 /**
@@ -97,6 +99,7 @@ public class PlayerDto extends BaseDto {
     return this;
   }
 
+  @JsonIgnore
   public String getPublicName() {
     if (getPlayerName() == null) {
       return getFullName().trim();
@@ -104,10 +107,12 @@ public class PlayerDto extends BaseDto {
     return getPlayerName();
   }
 
+  @JsonIgnore
   private String getFullName() {
     return getFirstName() + " " + getLastName();
   }
 
+  @JsonIgnore
   private String getShortName() {
     if (getPlayerName() == null) {
       return getFirstName();
@@ -115,6 +120,7 @@ public class PlayerDto extends BaseDto {
     return getPlayerName();
   }
 
+  @JsonIgnore
   public String getSiteName() {
     return "";
   }

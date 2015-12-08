@@ -5,7 +5,6 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.dao.PlayerDao;
 import online.draughts.rus.server.domain.Player;
-import org.dozer.Mapper;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -14,14 +13,11 @@ import java.util.List;
 public class PlayerService {
 
   private final Provider<PlayerDao> playerDaoProvider;
-  private final Mapper mapper;
 
   @Inject
   PlayerService(
-      Provider<PlayerDao> playerDaoProvider,
-      Mapper mapper) {
+      Provider<PlayerDao> playerDaoProvider) {
     this.playerDaoProvider = playerDaoProvider;
-    this.mapper = mapper;
   }
 
   public Player save(Player player) {

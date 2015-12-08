@@ -10,9 +10,6 @@ import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.server.domain.Move;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.util.Rating;
-import online.draughts.rus.shared.dto.GameDto;
-import online.draughts.rus.shared.util.DozerHelper;
-import org.dozer.Mapper;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -31,7 +28,6 @@ public class GameService {
   private final PlayerService playerService;
   private final FriendService friendService;
   private final GameDao gameDao;
-  private final Mapper mapper;
 
   @Inject
   public GameService(
@@ -39,19 +35,16 @@ public class GameService {
       Provider<GameMessageDao> gameMessageDaoProvider,
       PlayerService playerService,
       FriendService friendService,
-      GameDao gameDao,
-      Mapper mapper) {
+      GameDao gameDao) {
     this.gameDaoProvider = gameDaoProvider;
     this.gameMessageDaoProvider = gameMessageDaoProvider;
     this.playerService = playerService;
     this.friendService = friendService;
     this.gameDao = gameDao;
-    this.mapper = mapper;
   }
 
-  public List<GameDto> findRange(int offset, int limit) {
-    final List<Game> games = gameDao.findRange(offset, limit);
-    return DozerHelper.map(mapper, games, GameDto.class);
+  public List<Game> findRange(int offset, int limit) {
+    return gameDao.findRange(offset, limit);
   }
 
   public List<Game> findUserGames(HttpSession session, int offset, int limit) {
@@ -75,14 +68,13 @@ public class GameService {
   }
 
   public Game save(Game game) {
-    Game mapped = mapper.map(game, Game.class);
     if (game.getId() == null) {
-      return gameDaoProvider.get().save(mapped);
+      return gameDaoProvider.get().save(game);
     }
 
-    updatePlayer(mapped, mapped.getPlayerBlack().getId());
-    updatePlayer(mapped, mapped.getPlayerWhite().getId());
-    Game saved = gameDaoProvider.get().save(mapped);
+    updatePlayer(game, game.getPlayerBlack().getId());
+    updatePlayer(game, game.getPlayerWhite().getId());
+    Game saved = gameDaoProvider.get().save(game);
 
     Player playerBlack = playerService.find(game.getPlayerBlack().getId());
     Player playerWhite = playerService.find(game.getPlayerWhite().getId());

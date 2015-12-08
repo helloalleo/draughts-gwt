@@ -2,6 +2,7 @@ package online.draughts.rus.server.domain;
 
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
+import com.googlecode.objectify.annotation.Index;
 import com.googlecode.objectify.annotation.Stringify;
 import online.draughts.rus.shared.util.LongStringifier;
 
@@ -16,18 +17,31 @@ import java.util.*;
 @Entity
 public class Player extends PersistableObjectImpl {
 
+  @Index
   private String sessionId;
 
+  @Index
   private String vkId;
 
+  @Index
+  private String fbId;
+
+  @Index
+  private String googleSub;
+
+  @Index
   private String email;
 
+  @Index
   private String firstName;
 
+  @Index
   private String lastName;
 
+  @Index
   private String playerName;
 
+  @Index
   private int rating = 0;
 
   private int gamePlayed = 0;
@@ -38,37 +52,40 @@ public class Player extends PersistableObjectImpl {
 
   private int gameDraw = 0;
 
+  @Index
   private AuthProvider authProvider;
 
   private Set<Ref<Friend>> friends = new HashSet<>();
 
   private Set<Ref<Friend>> friendOf = new HashSet<>();
 
-  private Set<Ref<GameMessage>> receivedPlayerMessages;
+  private Set<Ref<GameMessage>> receivedPlayerMessages = new HashSet<>();
 
-  private Set<Ref<GameMessage>> sentPlayerMessages;
+  private Set<Ref<GameMessage>> sentPlayerMessages = new HashSet<>();
 
-  private Set<Ref<Game>> whiteRoleGames;
+  private Set<Ref<Game>> whiteRoleGames = new HashSet<>();
 
-  private Set<Ref<Game>> blackRoleGames;
+  private Set<Ref<Game>> blackRoleGames = new HashSet<>();
 
   private boolean loggedIn;
   private boolean playing;
+  @Index
   private boolean online;
 
   @Stringify(LongStringifier.class)
   private Map<Long, Integer> friendUnreadMessagesMap = new HashMap<>();
 
+  @Index
   private Date registerDate;
+  @Index
   private Date lastVisited;
+  @Index
   private int visitCounter = 0;
 
-  private String fbId;
-
-  private String googleSub;
-
+  @Index
   private boolean subscribed;
 
+  @Index
   private boolean active;
 
   public Player() {

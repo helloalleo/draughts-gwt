@@ -1,11 +1,9 @@
 package online.draughts.rus.server.domain;
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.gwt.user.client.rpc.GwtTransient;
 import com.google.gwt.user.client.rpc.IsSerializable;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Load;
+import com.googlecode.objectify.annotation.Index;
 
 import java.util.Date;
 import java.util.HashSet;
@@ -20,21 +18,24 @@ import java.util.Set;
 @Entity
 public class Game extends PersistableObjectImpl {
 
+  @Index
   private Ref<Player> playerWhite;
 
+  @Index
   private Ref<Player> playerBlack;
 
+  @Index
   private GameEnds playEndStatus;
 
   private Date playStartDate;
 
+  @Index
   private Date playFinishDate;
 
   private String notation;
 
   private String endGameScreenshot;
 
-  @Load
   private Set<Ref<GameMessage>> gameMessages = new HashSet<>();
 
   public Game() {
@@ -61,6 +62,9 @@ public class Game extends PersistableObjectImpl {
   }
 
   public void setPlayerWhite(Player playerWhite) {
+    if (playerWhite == null) {
+      return;
+    }
     this.playerWhite = Ref.create(playerWhite);
   }
 
@@ -69,6 +73,9 @@ public class Game extends PersistableObjectImpl {
   }
 
   public void setPlayerBlack(Player playerBlack) {
+    if (playerBlack == null) {
+      return;
+    }
     this.playerBlack = Ref.create(playerBlack);
   }
 

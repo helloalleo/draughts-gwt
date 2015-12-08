@@ -21,11 +21,11 @@ import online.draughts.rus.server.util.Utils;
 import online.draughts.rus.shared.channel.Chunk;
 import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.util.StringUtils;
+import org.apache.log4j.Logger;
 import org.dozer.Mapper;
 
 import java.io.IOException;
 import java.util.*;
-import java.util.logging.Logger;
 
 /**
  * Created with IntelliJ IDEA.
@@ -41,7 +41,7 @@ public class ServerChannel extends ChannelServer {
   private final GameMessageService gameMessageService;
   private final GameService gameService;
   private final Provider<Boolean> authProvider;
-  private final Logger logger;
+  private final Logger logger = Logger.getLogger(ServerChannel.class);
   private final MailService mailService;
   private final Mapper mapper;
 
@@ -50,7 +50,6 @@ public class ServerChannel extends ChannelServer {
                 GameService gameService,
                 GameMessageService gameMessageService,
                 @Named(AuthUtils.AUTHENTICATED) Provider<Boolean> authProvider,
-                Logger logger,
                 MailService mailService,
                 Mapper mapper) {
     this.playerService = playerService;
@@ -58,7 +57,6 @@ public class ServerChannel extends ChannelServer {
     this.gameMessageService = gameMessageService;
     this.authProvider = authProvider;
     this.mailService = mailService;
-    this.logger = logger;
     this.mapper = mapper;
   }
 
@@ -79,7 +77,7 @@ public class ServerChannel extends ChannelServer {
     try {
       gameMessageDto = (GameMessageDto) Utils.deserializeFromJson(message, GameMessageDto.class);
     } catch (IOException e) {
-      logger.severe(e.getLocalizedMessage());
+      logger.error(e.getLocalizedMessage(), e);
     }
     if (gameMessageDto == null) {
       return;
