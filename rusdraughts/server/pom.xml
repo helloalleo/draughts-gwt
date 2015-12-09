@@ -21,7 +21,6 @@
 
     <properties>
         <app.version>1</app.version>
-        <appengine.version>1.9.28</appengine.version>
         <gcloud.plugin.version>2.0.9.74.v20150814</gcloud.plugin.version>
 
         <guice.version>4.0</guice.version>
@@ -184,11 +183,11 @@
         <!--<artifactId>postgresql</artifactId>-->
         <!--<version>${postgresql.version}</version>-->
         <!--</dependency>-->
-        <dependency>
-            <groupId>mysql</groupId>
-            <artifactId>mysql-connector-java</artifactId>
-            <version>${mysql-connector-java.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>mysql</groupId>-->
+            <!--<artifactId>mysql-connector-java</artifactId>-->
+            <!--<version>${mysql-connector-java.version}</version>-->
+        <!--</dependency>-->
 
         <!--Json Processing-->
         <dependency>
@@ -204,11 +203,11 @@
         </dependency>
 
         <!--ORM-->
-        <dependency>
-            <groupId>com.googlecode.objectify</groupId>
-            <artifactId>objectify</artifactId>
-            <version>5.1.3</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.googlecode.objectify</groupId>-->
+            <!--<artifactId>objectify</artifactId>-->
+            <!--<version>5.1.3</version>-->
+        <!--</dependency>-->
 
         <!--OAuth 2.0-->
         <dependency>

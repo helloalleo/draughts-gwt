@@ -1,6 +1,10 @@
 package online.draughts.rus.server.guice;
 
+import com.google.appengine.api.datastore.DatastoreService;
+import com.google.appengine.api.datastore.DatastoreServiceFactory;
 import com.google.inject.AbstractModule;
+import com.google.inject.Provides;
+import com.google.inject.Singleton;
 import online.draughts.rus.server.dao.FriendDao;
 import online.draughts.rus.server.dao.GameDao;
 import online.draughts.rus.server.dao.GameMessageDao;
@@ -23,5 +27,11 @@ public class DbModule extends AbstractModule {
     bind(FriendDao.class).to(FriendDaoImpl.class);
     bind(GameDao.class).to(GameDaoImpl.class);
     bind(GameMessageDao.class).to(GameMessageDaoImpl.class);
+  }
+
+  @Provides
+  @Singleton
+  public DatastoreService datastoreService() {
+    return DatastoreServiceFactory.getDatastoreService();
   }
 }

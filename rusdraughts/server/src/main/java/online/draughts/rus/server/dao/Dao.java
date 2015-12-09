@@ -1,6 +1,6 @@
 package online.draughts.rus.server.dao;
 
-import online.draughts.rus.server.domain.BasePersistableObject;
+import online.draughts.rus.server.domain.BaseModel;
 
 import java.util.List;
 
@@ -10,7 +10,7 @@ import java.util.List;
  * Date: 15.11.14
  * Time: 16:58
  */
-public interface Dao<E extends BasePersistableObject> {
+public interface Dao<E extends BaseModel> {
 
   E save(E entity);
 

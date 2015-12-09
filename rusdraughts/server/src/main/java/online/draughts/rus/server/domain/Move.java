@@ -1,15 +1,10 @@
 package online.draughts.rus.server.domain;
 
 
-import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
 import online.draughts.rus.shared.dto.MoveDto;
 
 import java.util.HashSet;
 import java.util.Set;
-
-import static online.draughts.rus.shared.util.ObjectifyUtil.getObject;
-import static online.draughts.rus.shared.util.ObjectifyUtil.setObject;
 
 /**
  * Created with IntelliJ IDEA.
@@ -17,14 +12,13 @@ import static online.draughts.rus.shared.util.ObjectifyUtil.setObject;
  * Date: 01.09.15
  * Time: 21:45
  */
-@Entity
-public class Move extends PersistableObjectImpl {
+public class Move extends ModelImpl {
 
   private int number; // номер пары хода
-  private int moveOrder;
+  private int moveOrder; // порядковый номер хода
   private boolean first; // первый ход в паре ходов. Например, ee-aa в ee-aa bb-cc
 
-  private Ref<GameMessage> gameMessage;
+  private GameMessage gameMessage;
 
   private String startPos;
 
@@ -43,15 +37,17 @@ public class Move extends PersistableObjectImpl {
   private String screenshot;
 
   public Move() {
+    super(Move.class);
   }
 
   public Move(int number, boolean first, GameMessage gameMessage, String startPos, String endPos, String takenPos,
               Set<MoveDto.MoveFlags> moveFlags, String screenshot) {
+    super(Move.class);
     this.number = number;
     this.first = first;
     this.moveFlags = moveFlags;
 
-    this.gameMessage = Ref.create(gameMessage);
+    this.gameMessage = gameMessage;
 
     this.startPos = startPos;
     this.endPos = endPos;
@@ -66,92 +62,109 @@ public class Move extends PersistableObjectImpl {
   }
 
   public GameMessage getGameMessage() {
-    return getObject(gameMessage);
+    return gameMessage;
   }
 
   public void setGameMessage(GameMessage gameMessage) {
-    this.gameMessage = setObject(gameMessage);
+    this.gameMessage = gameMessage;
+    setProperty("gameMessage", gameMessage);
   }
 
   public int getNumber() {
     return number;
   }
 
-  public Move setNumber(int number) {
+  public void setNumber(int number) {
     this.number = number;
-    return this;
+    getEntiy().setProperty("number", number);
   }
 
   public boolean isFirst() {
     return first;
   }
 
-  public Move setFirst(boolean first) {
+  public void setFirst(boolean first) {
     this.first = first;
-    return this;
+    getEntiy().setProperty("first", first);
   }
 
   public String getTakenPos() {
     return takenPos;
   }
 
-  public Move setTakenPos(String takenPos) {
+  public void setTakenPos(String takenPos) {
     this.takenPos = takenPos;
-    return this;
+    getEntiy().setProperty("takenPos", takenPos);
   }
 
   public String getStartPos() {
     return startPos;
   }
 
-  public Move setStartPos(String startPos) {
+  public void setStartPos(String startPos) {
     this.startPos = startPos;
-    return this;
+    getEntiy().setProperty("startPos", startPos);
   }
 
   public String getEndPos() {
     return endPos;
   }
 
-  public Move setEndPos(String endPos) {
+  public void setEndPos(String endPos) {
     this.endPos = endPos;
-    return this;
+    getEntiy().setProperty("endPos", endPos);
   }
 
   public Set<MoveDto.MoveFlags> getMoveFlags() {
     return moveFlags;
   }
 
-  public Move setMoveFlags(Set<MoveDto.MoveFlags> moveFlags) {
+  public void setMoveFlags(Set<MoveDto.MoveFlags> moveFlags) {
     this.moveFlags = moveFlags;
-    return this;
+    getEntiy().setProperty("moveFlags", moveFlags);
   }
 
   public String getTitle() {
     return title;
   }
 
-  public Move setTitle(String title) {
+  public void setTitle(String title) {
     this.title = title;
-    return this;
+    getEntiy().setProperty("title", title);
   }
 
   public String getComment() {
     return comment;
   }
 
-  public Move setComment(String comment) {
+  public void setComment(String comment) {
     this.comment = comment;
-    return this;
+    getEntiy().setProperty("comment", comment);
   }
 
   public Set<String> getHashTags() {
     return hashTags;
   }
 
-  public Move setHashTags(Set<String> hashTags) {
+  public void setHashTags(Set<String> hashTags) {
     this.hashTags = hashTags;
-    return this;
+  }
+
+  public int getMoveOrder() {
+    return moveOrder;
+  }
+
+  public void setMoveOrder(int order) {
+    this.moveOrder = order;
+    getEntiy().setProperty("moveOrder", order);
+  }
+
+  public String getScreenshot() {
+    return screenshot;
+  }
+
+  public void setScreenshot(String screenshot) {
+    this.screenshot = screenshot;
   }
 
   @Override
@@ -165,29 +178,4 @@ public class Move extends PersistableObjectImpl {
         ", moveFlags=" + moveFlags +
         '}';
   }
-
-  public int getMoveOrder() {
-    return moveOrder;
-  }
-
-  public void setMoveOrder(int order) {
-    this.moveOrder = order;
-  }
-
-  public String getScreenshot() {
-    return screenshot;
-  }
-
-  public Move setScreenshot(String screenshot) {
-    this.screenshot = screenshot;
-    return this;
-  }
-
-//  public enum MoveFlags {
-//    CANCEL_MOVE, // ход отменяется
-//    SIMPLE_MOVE, // ход без взятия
-//    CONTINUE_BEAT, // продолжить брать
-//    START_BEAT, // начало взятия
-//    STOP_BEAT // конец взятие
-//  }
 }

@@ -46,16 +46,16 @@
         </dependency>
 
         <!--ORM-->
-        <dependency>
-            <groupId>com.googlecode.objectify</groupId>
-            <artifactId>objectify</artifactId>
-            <version>5.1.3</version>
-        </dependency>
-        <dependency>
-            <groupId>com.googlecode.objectify</groupId>
-            <artifactId>objectify-gwt</artifactId>
-            <version>1.2.1</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>com.google.appengine</groupId>-->
+            <!--<artifactId>appengine-api-1.0-sdk</artifactId>-->
+            <!--<version>${appengine.version}</version>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.googlecode.objectify</groupId>-->
+            <!--<artifactId>objectify</artifactId>-->
+            <!--<version>5.1.3</version>-->
+        <!--</dependency>-->
 
         <!--DTO-->
         <dependency>

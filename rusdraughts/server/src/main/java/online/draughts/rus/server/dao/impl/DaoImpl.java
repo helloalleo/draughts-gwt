@@ -3,7 +3,7 @@ package online.draughts.rus.server.dao.impl;
 import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
 import online.draughts.rus.server.dao.Dao;
-import online.draughts.rus.server.domain.BasePersistableObject;
+import online.draughts.rus.server.domain.BaseModel;
 
 import java.util.List;
 
@@ -15,7 +15,7 @@ import static com.googlecode.objectify.ObjectifyService.ofy;
  * Date: 15.11.14
  * Time: 17:00
  */
-public abstract class DaoImpl<E extends BasePersistableObject> implements Dao<E> {
+public abstract class DaoImpl<E extends BaseModel> implements Dao<E> {
   private Class<E> entityClass;
 
   public DaoImpl(TypeLiteral<E> type) {

@@ -6,9 +6,7 @@ package online.draughts.rus.server.domain;
  * Date: 12.12.14
  * Time: 10:20
  */
-public interface PersistableObject extends BasePersistableObject {
+public interface Model extends BaseModel {
 
   Long getId();
-
-  void setId(Long id);
 }

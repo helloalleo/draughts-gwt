@@ -1,11 +1,6 @@
 package online.draughts.rus.server.domain;
 
-import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Index;
-import com.googlecode.objectify.annotation.Stringify;
 import online.draughts.rus.shared.dto.PlayerDto;
-import online.draughts.rus.shared.util.LongStringifier;
 
 import java.util.*;
 
@@ -15,34 +10,33 @@ import java.util.*;
  * Date: 01.12.14
  * Time: 0:36
  */
-@Entity
-public class Player extends PersistableObjectImpl {
+public class Player extends ModelImpl {
 
-  @Index
+//  @Index
   private String sessionId;
 
-  @Index
+//  @Index
   private String vkId;
 
-  @Index
+//  @Index
   private String fbId;
 
-  @Index
+//  @Index
   private String googleSub;
 
-  @Index
+//  @Index
   private String email;
 
-  @Index
+//  @Index
   private String firstName;
 
-  @Index
+//  @Index
   private String lastName;
 
-  @Index
+//  @Index
   private String playerName;
 
-  @Index
+//  @Index
   private int rating = 0;
 
   private int gamePlayed = 0;
@@ -53,51 +47,53 @@ public class Player extends PersistableObjectImpl {
 
   private int gameDraw = 0;
 
-  @Index
+//  @Index
   private AuthProvider authProvider;
 
-  private Set<Ref<Friend>> friends = new HashSet<>();
+  private Set<Friend> friends = new HashSet<>();
 
-  private Set<Ref<Friend>> friendOf = new HashSet<>();
+  private Set<Friend> friendOf = new HashSet<>();
 
-  private Set<Ref<GameMessage>> receivedPlayerMessages = new HashSet<>();
+  private Set<GameMessage> receivedPlayerMessages = new HashSet<>();
 
-  private Set<Ref<GameMessage>> sentPlayerMessages = new HashSet<>();
+  private Set<GameMessage> sentPlayerMessages = new HashSet<>();
 
-  private Set<Ref<Game>> whiteRoleGames = new HashSet<>();
+  private Set<Game> whiteRoleGames = new HashSet<>();
 
-  private Set<Ref<Game>> blackRoleGames = new HashSet<>();
+  private Set<Game> blackRoleGames = new HashSet<>();
 
   private boolean loggedIn;
   private boolean playing;
-  @Index
+//  @Index
   private boolean online;
 
-  @Stringify(LongStringifier.class)
+//  @Stringify(LongStringifier.class)
   private Map<Long, Integer> friendUnreadMessagesMap = new HashMap<>();
 
-  @Index
+//  @Index
   private Date registerDate;
-  @Index
+//  @Index
   private Date lastVisited;
-  @Index
+//  @Index
   private int visitCounter = 0;
 
-  @Index
+//  @Index
   private boolean subscribed;
 
-  @Index
+//  @Index
   private boolean active;
 
   public Player() {
-  }
-
-  public void setSubscribed(boolean subscribed) {
-    this.subscribed = subscribed;
+    super(Player.class);
   }
 
   public boolean isSubscribed() {
     return subscribed;
+  }
+
+  public void setSubscribed(boolean subscribed) {
+    this.subscribed = subscribed;
+    getEntiy().setIndexedProperty("subscribed", subscribed);
   }
 
   public boolean isActive() {
@@ -106,6 +102,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setActive(boolean active) {
     this.active = active;
+    getEntiy().setIndexedProperty("active", active);
   }
 
   public String getSessionId() {
@@ -114,6 +111,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setSessionId(String sessionId) {
     this.sessionId = sessionId;
+    getEntiy().setIndexedProperty("sessionId", sessionId);
   }
 
   public String getVkId() {
@@ -122,6 +120,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setVkId(String vkId) {
     this.vkId = vkId;
+    getEntiy().setIndexedProperty("vkId", vkId);
   }
 
   public String getEmail() {
@@ -130,6 +129,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setEmail(String email) {
     this.email = email;
+    getEntiy().setIndexedProperty("email", email);
   }
 
   public String getFirstName() {
@@ -138,6 +138,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setFirstName(String firstName) {
     this.firstName = firstName;
+    getEntiy().setProperty("firstName", firstName);
   }
 
   public String getLastName() {
@@ -146,6 +147,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setLastName(String lastName) {
     this.lastName = lastName;
+    getEntiy().setProperty("lastName", lastName);
   }
 
   public String getPlayerName() {
@@ -154,6 +156,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setPlayerName(String playerName) {
     this.playerName = playerName;
+    getEntiy().setIndexedProperty("playerName", playerName);
   }
 
   public AuthProvider getAuthProvider() {
@@ -162,6 +165,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setAuthProvider(AuthProvider authProvider) {
     this.authProvider = authProvider;
+    getEntiy().setIndexedProperty("authProvider", authProvider);
   }
 
   public boolean isLoggedIn() {
@@ -170,6 +174,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setLoggedIn(boolean loggedIn) {
     this.loggedIn = loggedIn;
+    getEntiy().setProperty("loggedIn", loggedIn);
   }
 
   public boolean isPlaying() {
@@ -178,6 +183,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setPlaying(boolean playing) {
     this.playing = playing;
+    getEntiy().setProperty("playing", playing);
   }
 
   public boolean isOnline() {
@@ -186,6 +192,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setOnline(boolean online) {
     this.online = online;
+    getEntiy().setIndexedProperty("online", online);
   }
 
   public Map<Long, Integer> getFriendUnreadMessagesMap() {
@@ -194,6 +201,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setRegisterDate(Date registerDate) {
     this.registerDate = registerDate;
+    getEntiy().setIndexedProperty("registerDate", registerDate);
   }
 
   public Date getLastVisited() {
@@ -202,6 +210,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setLastVisited(Date lastVisited) {
     this.lastVisited = lastVisited;
+    getEntiy().setIndexedProperty("lastVisited", lastVisited);
   }
 
   public int getVisitCounter() {
@@ -210,10 +219,7 @@ public class Player extends PersistableObjectImpl {
 
   public void setVisitCounter(int visitCounter) {
     this.visitCounter = visitCounter;
-  }
-
-  public int getGamePlayed() {
-    return gamePlayed;
+    getEntiy().setIndexedProperty("visitCounter", visitCounter);
   }
 
   public int getRating() {
@@ -222,10 +228,16 @@ public class Player extends PersistableObjectImpl {
 
   public void setRating(int rating) {
     this.rating = rating;
+    getEntiy().setProperty("rating", rating);
+  }
+
+  public int getGamePlayed() {
+    return gamePlayed;
   }
 
   public void setGamePlayed(int gamePlayed) {
     this.gamePlayed = gamePlayed;
+    getEntiy().setProperty("gamePlayed", gamePlayed);
   }
 
   public int getGameWin() {
@@ -234,22 +246,25 @@ public class Player extends PersistableObjectImpl {
 
   public void setGameWin(int gameWin) {
     this.gameWin = gameWin;
+    getEntiy().setProperty("gameWin", gameWin);
   }
 
-  public int getGameLose() {
-    return gameLose;
+  public String getFbId() {
+    return fbId;
   }
 
-  public void setGameLose(int gameLose) {
-    this.gameLose = gameLose;
+  public void setFbId(String fbId) {
+    this.fbId = fbId;
+    getEntiy().setIndexedProperty("fbId", fbId);
   }
 
-  public int getGameDraw() {
-    return gameDraw;
+  public String getGoogleSub() {
+    return googleSub;
   }
 
-  public void setGameDraw(int gameDraw) {
-    this.gameDraw = gameDraw;
+  public void setGoogleSub(String googleSub) {
+    this.googleSub = googleSub;
+    getEntiy().setIndexedProperty("googleSub", googleSub);
   }
 
   public String getPublicName() {
@@ -297,22 +312,6 @@ public class Player extends PersistableObjectImpl {
     this.playing = playerDto.isPlaying();
     this.loggedIn = playerDto.isLoggedIn();
     this.subscribed = playerDto.isSubscribed();
-  }
-
-  public void setFbId(String fbId) {
-    this.fbId = fbId;
-  }
-
-  public String getFbId() {
-    return fbId;
-  }
-
-  public void setGoogleSub(String googleSub) {
-    this.googleSub = googleSub;
-  }
-
-  public String getGoogleSub() {
-    return googleSub;
   }
 
   public enum AuthProvider {

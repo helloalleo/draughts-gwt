@@ -1,7 +1,5 @@
 package online.draughts.rus.server.domain;
 
-import com.googlecode.objectify.annotation.Id;
-
 import java.util.Objects;
 
 /**
@@ -10,10 +8,18 @@ import java.util.Objects;
  * Date: 15.11.14
  * Time: 16:03
  */
-public class PersistableObjectImpl implements PersistableObject {
+public class ModelImpl extends BaseModelImpl implements Model {
 
-  @Id
-  private Long id;
+  private long id;
+
+  public ModelImpl(Class entityClass) {
+    super(entityClass);
+  }
+
+  @Override
+  protected void setId(long id) {
+    this.id = id;
+  }
 
   @Override
   public Long getId() {
@@ -21,15 +27,10 @@ public class PersistableObjectImpl implements PersistableObject {
   }
 
   @Override
-  public void setId(Long id) {
-    this.id = id;
-  }
-
-  @Override
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    PersistableObjectImpl that = (PersistableObjectImpl) o;
+    ModelImpl that = (ModelImpl) o;
     return Objects.equals(id, that.id);
   }
 

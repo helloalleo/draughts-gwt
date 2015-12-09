@@ -1,17 +1,11 @@
 package online.draughts.rus.server.domain;
 
 
-import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Ignore;
-import com.googlecode.objectify.annotation.Index;
+import com.google.appengine.api.datastore.Text;
 import online.draughts.rus.shared.dto.GameMessageDto;
 
 import java.util.Date;
 import java.util.List;
-
-import static online.draughts.rus.shared.util.ObjectifyUtil.getObject;
-import static online.draughts.rus.shared.util.ObjectifyUtil.setObject;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,47 +13,47 @@ import static online.draughts.rus.shared.util.ObjectifyUtil.setObject;
  * Date: 15.11.14
  * Time: 15:49
  */
-@Entity
-public class GameMessage extends PersistableObjectImpl {
+//@Entity
+public class GameMessage extends ModelImpl {
 
-  @Index
-  private Ref<Player> sender;
+  private Player sender;
 
-  @Index
-  private Ref<Player> receiver;
+  private Player receiver;
 
   private String message;
 
-  @Index
   private GameMessageDto.MessageType messageType;
 
   private String data;
 
-  @Index
   private Date sentDate;
 
-  private Ref<Move> move;
+  private Move move;
 
-  @Index
-  private Ref<Game> game;
+  private Game game;
 
-  @Ignore
   private List<Player> playerList;
 
+  public GameMessage() {
+    super(GameMessage.class);
+  }
+
   public Player getSender() {
-    return getObject(sender);
+    return sender;
   }
 
   public void setSender(Player sender) {
-    this.sender = setObject(sender);
+    this.sender = sender;
+    setIndexedProperty("sender", sender);
   }
 
   public Player getReceiver() {
-    return getObject(receiver);
+    return receiver;
   }
 
   public void setReceiver(Player receiver) {
-    this.receiver = setObject(receiver);
+    this.receiver = receiver;
+    setIndexedProperty("receiver", receiver);
   }
 
   public String getMessage() {
@@ -68,6 +62,7 @@ public class GameMessage extends PersistableObjectImpl {
 
   public void setMessage(String message) {
     this.message = message;
+    getEntiy().setProperty("message", new Text(message));
   }
 
   public String getData() {
@@ -76,6 +71,7 @@ public class GameMessage extends PersistableObjectImpl {
 
   public void setData(String data) {
     this.data = data;
+    getEntiy().setProperty("data", data);
   }
 
   public Date getSentDate() {
@@ -84,6 +80,7 @@ public class GameMessage extends PersistableObjectImpl {
 
   public void setSentDate(Date sentDate) {
     this.sentDate = sentDate;
+    getEntiy().setIndexedProperty("sentDate", sentDate);
   }
 
   public GameMessageDto.MessageType getMessageType() {
@@ -92,22 +89,25 @@ public class GameMessage extends PersistableObjectImpl {
 
   public void setMessageType(GameMessageDto.MessageType messageType) {
     this.messageType = messageType;
+    getEntiy().setIndexedProperty("messageType", messageType);
   }
 
   public Move getMove() {
-    return getObject(move);
+    return move;
   }
 
   public void setMove(Move move) {
-    this.move = setObject(move);
+    this.move = move;
+    setProperty("move", move);
   }
 
   public Game getGame() {
-    return getObject(game);
+    return game;
   }
 
   public void setGame(Game game) {
-    this.game = setObject(game);
+    this.game = game;
+    setProperty("game", game);
   }
 
   public void setPlayerList(List<Player> playerList) {
@@ -132,25 +132,4 @@ public class GameMessage extends PersistableObjectImpl {
         ", playerList=" + playerList +
         '}';
   }
-
-//  public enum MessageType implements IsSerializable {
-//
-//    CHAT_MESSAGE,
-//    CHAT_PRIVATE_MESSAGE,
-//    USER_LIST_UPDATE,
-//    PLAY_INVITE,
-//    PLAY_REJECT_INVITE,
-//    PLAY_ALREADY_PLAYING,
-//    PLAY_START,
-//    PLAY_OPPONENT_MOVE,
-//    PLAY_CANCEL_MOVE,
-//    PLAY_CANCEL_MOVE_RESPONSE,
-//    PLAY_PROPOSE_DRAW,
-//    PLAY_ACCEPT_DRAW,
-//    PLAY_END,
-//    PLAY_SURRENDER,
-//    NOTIFICATION_ADDED_TO_FAVORITE,
-//    CHANNEL_CLOSE,
-//    PLAYER_REGISTER;
-//  }
 }

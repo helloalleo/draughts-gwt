@@ -1,86 +1,47 @@
 package online.draughts.rus.server.domain;
 
-
-import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Id;
-import com.googlecode.objectify.annotation.Index;
-
-import java.util.Objects;
-
-import static online.draughts.rus.shared.util.ObjectifyUtil.getObject;
-import static online.draughts.rus.shared.util.ObjectifyUtil.setObject;
-
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
  * Date: 01.12.14
  * Time: 14:10
  */
-@Entity
-public class Friend implements BasePersistableObject {
+//@Entity
+public class Friend extends ModelImpl {
 
-  @Id
-  private String id;
+  private Player friend;
+  private Player friendOf;
 
-  @Index
-  private Ref<Player> friend;
-  @Index
-  private Ref<Player> friendOf;
-
-  @Index
   private boolean favorite;
 
   public Friend() {
-  }
-
-  public Friend(Long friendId, Long friendOfId) {
-    this.id = friendId + "::" + friendOfId;
-  }
-
-  public String getId() {
-    return id;
-  }
-
-  public void setId(String id) {
-    this.id = id;
+    super(Friend.class);
   }
 
   public Player getFriend() {
-    return getObject(friend);
+    return friend;
   }
 
   public void setFriend(Player friend) {
-    this.friend = setObject(friend);
+    setIndexedProperty("friend", friend);
+    this.friend = friend;
   }
 
   public Player getFriendOf() {
-    return getObject(friendOf);
+    return friendOf;
   }
 
   public void setFriendOf(Player friendOf) {
-    this.friendOf = setObject(friendOf);
-  }
-
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    Friend friend = (Friend) o;
-    return Objects.equals(id, friend.id);
-  }
-
-  @Override
-  public int hashCode() {
-    return Objects.hash(id);
+    setIndexedProperty("friendOf", friendOf);
+    this.friendOf = friendOf;
   }
 
   public boolean isFavorite() {
     return favorite;
   }
 
-  public Friend setFavorite(boolean favorite) {
+  public void setFavorite(boolean favorite) {
+    getEntiy().setIndexedProperty("favorite", favorite);
     this.favorite = favorite;
-    return this;
   }
 }

@@ -1,16 +1,12 @@
 package online.draughts.rus.server.domain;
 
-import com.googlecode.objectify.Ref;
-import com.googlecode.objectify.annotation.Entity;
-import com.googlecode.objectify.annotation.Index;
+import com.google.appengine.api.datastore.Blob;
+import com.google.appengine.api.datastore.Text;
 import online.draughts.rus.shared.dto.GameDto;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
-
-import static online.draughts.rus.shared.util.ObjectifyUtil.getObject;
-import static online.draughts.rus.shared.util.ObjectifyUtil.setObject;
 
 /**
  * Created with IntelliJ IDEA.
@@ -18,30 +14,26 @@ import static online.draughts.rus.shared.util.ObjectifyUtil.setObject;
  * Date: 31.12.14
  * Time: 16:18
  */
-@Entity
-public class Game extends PersistableObjectImpl {
+public class Game extends ModelImpl {
 
-  @Index
-  private Ref<Player> playerWhite;
+  private Player playerWhite;
+  private Player playerBlack;
 
-  @Index
-  private Ref<Player> playerBlack;
-
-  @Index
   private GameDto.GameEnds playEndStatus;
 
   private Date playStartDate;
 
-  @Index
+//  @Index
   private Date playFinishDate;
 
   private String notation;
 
   private String endGameScreenshot;
 
-  private Set<Ref<GameMessage>> gameMessages = new HashSet<>();
+  private Set<GameMessage> gameMessages = new HashSet<>();
 
   public Game() {
+    super(Game.class);
   }
 
   public Game(Player playerWhiteId,
@@ -51,8 +43,9 @@ public class Game extends PersistableObjectImpl {
               Date playFinishDate,
               String notation,
               String endGameScreenshot) {
-    this.playerWhite = Ref.create(playerWhiteId);
-    this.playerBlack = Ref.create(playerBlackId);
+    super(Game.class);
+    this.playerWhite = playerWhiteId;
+    this.playerBlack = playerBlackId;
     this.playEndStatus = playEndStatus;
     this.playStartDate = playStartDate;
     this.playFinishDate = playFinishDate;
@@ -61,19 +54,21 @@ public class Game extends PersistableObjectImpl {
   }
 
   public Player getPlayerWhite() {
-    return getObject(playerWhite);
+    return playerWhite;
   }
 
   public void setPlayerWhite(Player playerWhite) {
-    this.playerWhite = setObject(playerWhite);
+    this.playerWhite = playerWhite;
+    setIndexedProperty("playerWhite", playerWhite);
   }
 
   public Player getPlayerBlack() {
-    return getObject(playerBlack);
+    return playerBlack;
   }
 
   public void setPlayerBlack(Player playerBlack) {
-    this.playerBlack = setObject(playerBlack);
+    this.playerBlack = playerBlack;
+    setIndexedProperty("playerBlack", playerBlack);
   }
 
   public GameDto.GameEnds getPlayEndStatus() {
@@ -82,6 +77,7 @@ public class Game extends PersistableObjectImpl {
 
   public void setPlayEndStatus(GameDto.GameEnds playEndStatus) {
     this.playEndStatus = playEndStatus;
+    getEntiy().setIndexedProperty("playEndStatus", playEndStatus);
   }
 
   public Date getPlayStartDate() {
@@ -90,6 +86,7 @@ public class Game extends PersistableObjectImpl {
 
   public void setPlayStartDate(Date playStartDate) {
     this.playStartDate = playStartDate;
+    getEntiy().setProperty("playStartDate", playStartDate);
   }
 
   public Date getPlayFinishDate() {
@@ -98,36 +95,28 @@ public class Game extends PersistableObjectImpl {
 
   public void setPlayFinishDate(Date playEndDate) {
     this.playFinishDate = playEndDate;
+    getEntiy().setIndexedProperty("playFinishDate", playFinishDate);
   }
 
   public String getNotation() {
     return notation;
   }
 
-  public void setNotation(String partyNotation) {
-    this.notation = partyNotation;
+  public void setNotation(String notation) {
+    this.notation = notation;
+    getEntiy().setProperty("notation", new Text(notation));
   }
 
   public String getEndGameScreenshot() {
     return endGameScreenshot;
   }
 
-  public Game setEndGameScreenshot(String endGameScreenshot) {
+  public void setEndGameScreenshot(String endGameScreenshot) {
     this.endGameScreenshot = endGameScreenshot;
-    return this;
+    getEntiy().setProperty("endGameScreenshot", new Blob(endGameScreenshot.getBytes()));
   }
 
-  public Set<Ref<GameMessage>> getGameMessages() {
+  public Set<GameMessage> getGameMessages() {
     return gameMessages;
   }
-
-//  public enum GameEnds implements IsSerializable {
-//    BLACK_WIN,
-//    WHITE_WIN,
-//    BLACK_LEFT,
-//    WHITE_LEFT,
-//    SURRENDER_BLACK,
-//    SURRENDER_WHITE,
-//    DRAW
-//  }
 }

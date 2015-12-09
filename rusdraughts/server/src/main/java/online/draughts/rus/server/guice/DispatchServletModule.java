@@ -22,7 +22,6 @@ import com.google.inject.name.Named;
 import com.google.inject.name.Names;
 import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletModule;
-import com.googlecode.objectify.ObjectifyFilter;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
 import online.draughts.rus.server.channel.ServerChannel;
@@ -39,7 +38,6 @@ public class DispatchServletModule extends ServletModule {
 
   @Override
   public void configureServlets() {
-    filter("/*").through(ObjectifyFilter.class);
     filter("/*").through(createUserIdScopingFilter());
 
     serve("/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
