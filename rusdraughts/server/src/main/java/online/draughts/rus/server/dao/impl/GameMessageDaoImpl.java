@@ -9,6 +9,7 @@ import online.draughts.rus.server.dao.GameMessageDao;
 import online.draughts.rus.server.domain.GameMessage;
 import online.draughts.rus.server.domain.Move;
 import online.draughts.rus.server.domain.Player;
+import online.draughts.rus.shared.dto.GameMessageDto;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -50,7 +51,7 @@ public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements GameMess
 //    return list;
 
     Query<GameMessage> query =ofy().load().type(getEntityClass())
-        .filter("messageType", GameMessage.MessageType.CHAT_PRIVATE_MESSAGE)
+        .filter("messageType", GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE)
         .order("sentDate")
         .orderKey(true);
 
@@ -102,5 +103,10 @@ public class GameMessageDaoImpl extends DaoImpl<GameMessage> implements GameMess
       moves.add(gameMessage.getMove());
     }
     return moves;
+  }
+
+  @Override
+  public Move saveMove(Move move) {
+    return ofy().load().key(ofy().save().entity(move).now()).now();
   }
 }

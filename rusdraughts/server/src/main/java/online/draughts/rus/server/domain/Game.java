@@ -1,13 +1,16 @@
 package online.draughts.rus.server.domain;
 
-import com.google.gwt.user.client.rpc.IsSerializable;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
 import com.googlecode.objectify.annotation.Index;
+import online.draughts.rus.shared.dto.GameDto;
 
 import java.util.Date;
 import java.util.HashSet;
 import java.util.Set;
+
+import static online.draughts.rus.shared.util.ObjectifyUtil.getObject;
+import static online.draughts.rus.shared.util.ObjectifyUtil.setObject;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,7 +28,7 @@ public class Game extends PersistableObjectImpl {
   private Ref<Player> playerBlack;
 
   @Index
-  private GameEnds playEndStatus;
+  private GameDto.GameEnds playEndStatus;
 
   private Date playStartDate;
 
@@ -43,7 +46,7 @@ public class Game extends PersistableObjectImpl {
 
   public Game(Player playerWhiteId,
               Player playerBlackId,
-              GameEnds playEndStatus,
+              GameDto.GameEnds playEndStatus,
               Date playStartDate,
               Date playFinishDate,
               String notation,
@@ -58,32 +61,26 @@ public class Game extends PersistableObjectImpl {
   }
 
   public Player getPlayerWhite() {
-    return playerWhite.get();
+    return getObject(playerWhite);
   }
 
   public void setPlayerWhite(Player playerWhite) {
-    if (playerWhite == null) {
-      return;
-    }
-    this.playerWhite = Ref.create(playerWhite);
+    this.playerWhite = setObject(playerWhite);
   }
 
   public Player getPlayerBlack() {
-    return playerBlack.get();
+    return getObject(playerBlack);
   }
 
   public void setPlayerBlack(Player playerBlack) {
-    if (playerBlack == null) {
-      return;
-    }
-    this.playerBlack = Ref.create(playerBlack);
+    this.playerBlack = setObject(playerBlack);
   }
 
-  public GameEnds getPlayEndStatus() {
+  public GameDto.GameEnds getPlayEndStatus() {
     return playEndStatus;
   }
 
-  public void setPlayEndStatus(GameEnds playEndStatus) {
+  public void setPlayEndStatus(GameDto.GameEnds playEndStatus) {
     this.playEndStatus = playEndStatus;
   }
 
@@ -124,13 +121,13 @@ public class Game extends PersistableObjectImpl {
     return gameMessages;
   }
 
-  public enum GameEnds implements IsSerializable {
-    BLACK_WIN,
-    WHITE_WIN,
-    BLACK_LEFT,
-    WHITE_LEFT,
-    SURRENDER_BLACK,
-    SURRENDER_WHITE,
-    DRAW
-  }
+//  public enum GameEnds implements IsSerializable {
+//    BLACK_WIN,
+//    WHITE_WIN,
+//    BLACK_LEFT,
+//    WHITE_LEFT,
+//    SURRENDER_BLACK,
+//    SURRENDER_WHITE,
+//    DRAW
+//  }
 }

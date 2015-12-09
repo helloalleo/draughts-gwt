@@ -5,6 +5,7 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.dao.GameMessageDao;
 import online.draughts.rus.server.domain.GameMessage;
+import online.draughts.rus.server.domain.Move;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.util.DozerHelper;
@@ -33,7 +34,7 @@ public class GameMessageService {
     this.mapper = mapper;
   }
 
-  public GameMessage saveOrCreate(GameMessage gameMessage) {
+  public GameMessage save(GameMessage gameMessage) {
     if (gameMessage == null) {
       return null;
     }
@@ -55,5 +56,9 @@ public class GameMessageService {
   public Map<Long, Integer> findUnreadMessages(Long playerId) {
     Player player = playerService.find(playerId);
     return player.getFriendUnreadMessagesMap();
+  }
+
+  public Move saveMove(Move move) {
+    return gameMessageDaoProvider.get().saveMove(move);
   }
 }

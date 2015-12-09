@@ -20,6 +20,7 @@ import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.server.util.Utils;
 import online.draughts.rus.shared.channel.Chunk;
 import online.draughts.rus.shared.dto.GameMessageDto;
+import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.util.StringUtils;
 import org.apache.log4j.Logger;
 import org.dozer.Mapper;
@@ -68,9 +69,11 @@ public class ServerChannel extends ChannelServer {
   @Override
   public void onMessage(String token, String channelName, String message) {
     if (!authProvider.get()) {
-      throw new RuntimeException("Access denied");
+      logger.info("Unauthorized access");
+      return;
     }
     if (StringUtils.isEmpty(message)) {
+      logger.info("Empty message");
       return;
     }
     GameMessageDto gameMessageDto = null;
@@ -81,6 +84,13 @@ public class ServerChannel extends ChannelServer {
     }
     if (gameMessageDto == null) {
       return;
+    }
+
+    // gameMessageDto должно содержать Move, чтобы правильно меппиться
+    if (null != gameMessageDto.getMove()) {
+      final MoveDto moveDto = gameMessageDto.getMove();
+      Move move = gameMessageService.saveMove(mapper.map(moveDto, Move.class));
+      gameMessageDto.setMove(mapper.map(move, MoveDto.class));
     }
 
     GameMessage gameMessage = mapper.map(gameMessageDto, GameMessage.class);
@@ -110,7 +120,7 @@ public class ServerChannel extends ChannelServer {
         handleGameOver(gameMessage);
         break;
       case CHANNEL_CLOSE:
-        onClose(channelName);
+        handleClose(channelName);
         break;
     }
   }
@@ -140,16 +150,9 @@ public class ServerChannel extends ChannelServer {
     final String channel = String.valueOf(player.getId());
     channelTokenPeers.put(channel, token);
     updatePlayerList();
-
-//    if (player.getUnreadMessages() != 0) {
-//      Queue<GameMessage> messageQueue = playerChatMessageQueue.get(playerId);
-//      for (GameMessage gameMessage : messageQueue) {
-//        sendMessage(channel, gameMessage);
-//      }
-//    }
   }
 
-  public void onClose(String chanelName) {
+  public void handleClose(String chanelName) {
     String token = channelTokenPeers.get(chanelName);
     if (token == null) {
       return;
@@ -167,7 +170,7 @@ public class ServerChannel extends ChannelServer {
       playerService.save(secondPlayer);
 
       gameMessage.setReceiver(secondPlayer);
-      gameMessage.setMessageType(GameMessage.MessageType.PLAY_END);
+      gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_END);
       sendMessage(String.valueOf(secondPlayer.getId()), gameMessage);
     }
 
@@ -187,7 +190,7 @@ public class ServerChannel extends ChannelServer {
 
     Player receiver = playerService.find(receiverId);
     message = saveGameMessage(message);
-    if (GameMessage.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
+    if (GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
       mailService.sendNotification(message, senderId, receiver);
     }
     if (receiver.isOnline()) {
@@ -209,27 +212,29 @@ public class ServerChannel extends ChannelServer {
     gameMessage.setData(message.getData());
     gameMessage.setMessage(message.getMessage());
 
-
-    if (message.getMove() != null) {
-      gameMessage.setMove(new Move(message.getMove()));
-      gameMessage.getMove().setGameMessage(gameMessage);
-    }
-
     gameMessage.setReceiver(playerReceiver);
     gameMessage.setSender(playerSender);
 
     gameMessage.setSentDate(new Date());
 
-    gameMessageService.saveOrCreate(gameMessage);
+    gameMessage = gameMessageService.save(gameMessage);
+
+    if (null != message.getMove()) {
+      message.getMove().setGameMessage(gameMessage);
+      Move move = gameMessageService.saveMove(new Move(message.getMove()));
+      gameMessage.setMove(move);
+
+      gameMessage = gameMessageService.save(gameMessage);
+    }
+
     return gameMessage;
   }
 
   private void updatePlayerList() {
     GameMessage gameMessage = new GameMessage();
-    gameMessage.setMessageType(GameMessage.MessageType.USER_LIST_UPDATE);
+    gameMessage.setMessageType(GameMessageDto.MessageType.USER_LIST_UPDATE);
     List<Player> playerList = playerService.findAll();
     gameMessage.setPlayerList(playerList);
-    gameMessageService.saveOrCreate(gameMessage);
     for (String channelName : channelTokenPeers.keySet()) {
       sendMessage(channelName, gameMessage);
     }

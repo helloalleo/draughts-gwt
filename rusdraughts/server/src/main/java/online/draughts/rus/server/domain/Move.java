@@ -1,14 +1,15 @@
 package online.draughts.rus.server.domain;
 
 
-import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.google.gwt.core.shared.GwtIncompatible;
-import com.google.gwt.user.client.rpc.GwtTransient;
 import com.googlecode.objectify.Ref;
 import com.googlecode.objectify.annotation.Entity;
+import online.draughts.rus.shared.dto.MoveDto;
 
 import java.util.HashSet;
 import java.util.Set;
+
+import static online.draughts.rus.shared.util.ObjectifyUtil.getObject;
+import static online.draughts.rus.shared.util.ObjectifyUtil.setObject;
 
 /**
  * Created with IntelliJ IDEA.
@@ -31,7 +32,7 @@ public class Move extends PersistableObjectImpl {
 
   private String takenPos;
 
-  private Set<MoveFlags> moveFlags = new HashSet<>();
+  private Set<MoveDto.MoveFlags> moveFlags = new HashSet<>();
 
   private String title;
 
@@ -45,7 +46,7 @@ public class Move extends PersistableObjectImpl {
   }
 
   public Move(int number, boolean first, GameMessage gameMessage, String startPos, String endPos, String takenPos,
-              Set<MoveFlags> moveFlags, String screenshot) {
+              Set<MoveDto.MoveFlags> moveFlags, String screenshot) {
     this.number = number;
     this.first = first;
     this.moveFlags = moveFlags;
@@ -65,12 +66,11 @@ public class Move extends PersistableObjectImpl {
   }
 
   public GameMessage getGameMessage() {
-    return gameMessage.get();
+    return getObject(gameMessage);
   }
 
-  public Move setGameMessage(GameMessage gameMessage) {
-    this.gameMessage = Ref.create(gameMessage);
-    return this;
+  public void setGameMessage(GameMessage gameMessage) {
+    this.gameMessage = setObject(gameMessage);
   }
 
   public int getNumber() {
@@ -118,11 +118,11 @@ public class Move extends PersistableObjectImpl {
     return this;
   }
 
-  public Set<MoveFlags> getMoveFlags() {
+  public Set<MoveDto.MoveFlags> getMoveFlags() {
     return moveFlags;
   }
 
-  public Move setMoveFlags(Set<MoveFlags> moveFlags) {
+  public Move setMoveFlags(Set<MoveDto.MoveFlags> moveFlags) {
     this.moveFlags = moveFlags;
     return this;
   }
@@ -183,11 +183,11 @@ public class Move extends PersistableObjectImpl {
     return this;
   }
 
-  public enum MoveFlags {
-    CANCEL_MOVE, // ход отменяется
-    SIMPLE_MOVE, // ход без взятия
-    CONTINUE_BEAT, // продолжить брать
-    START_BEAT, // начало взятия
-    STOP_BEAT // конец взятие
-  }
+//  public enum MoveFlags {
+//    CANCEL_MOVE, // ход отменяется
+//    SIMPLE_MOVE, // ход без взятия
+//    CONTINUE_BEAT, // продолжить брать
+//    START_BEAT, // начало взятия
+//    STOP_BEAT // конец взятие
+//  }
 }

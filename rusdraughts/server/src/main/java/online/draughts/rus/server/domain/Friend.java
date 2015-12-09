@@ -8,6 +8,9 @@ import com.googlecode.objectify.annotation.Index;
 
 import java.util.Objects;
 
+import static online.draughts.rus.shared.util.ObjectifyUtil.getObject;
+import static online.draughts.rus.shared.util.ObjectifyUtil.setObject;
+
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -44,25 +47,19 @@ public class Friend implements BasePersistableObject {
   }
 
   public Player getFriend() {
-    return friend.get();
+    return getObject(friend);
   }
 
   public void setFriend(Player friend) {
-    if (friend == null) {
-      return;
-    }
-    this.friend = Ref.create(friend);
+    this.friend = setObject(friend);
   }
 
   public Player getFriendOf() {
-    return friendOf.get();
+    return getObject(friendOf);
   }
 
   public void setFriendOf(Player friendOf) {
-    if(friendOf == null) {
-      return;
-    }
-    this.friendOf = Ref.create(friendOf);
+    this.friendOf = setObject(friendOf);
   }
 
   @Override

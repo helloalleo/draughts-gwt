@@ -3,9 +3,10 @@ package online.draughts.rus.server.dao.impl;
 import com.google.inject.Inject;
 import com.google.inject.TypeLiteral;
 import com.google.inject.persist.Transactional;
-import com.googlecode.objectify.cmd.Query;
+import com.googlecode.objectify.Key;
 import online.draughts.rus.server.dao.GameDao;
 import online.draughts.rus.server.domain.Game;
+import online.draughts.rus.server.domain.Player;
 
 import java.util.List;
 
@@ -60,17 +61,16 @@ public class GameDaoImpl extends DaoImpl<Game> implements GameDao {
 //    query.setMaxResults(length);
 //    return query.getResultList();
 
-    Query<Game> query = ofy().load().type(getEntityClass())
+    List<Game> gamesBlack = ofy().load().type(getEntityClass())
         .filter("playStateDate !=", null)
-        .order("playStartDate")
-        .orderKey(true);
-
-    List<Game> gamesBlack = query
-        .filter("black.id", userId)
+        .order("-playStartDate")
+        .filter("playerBlack", Key.create(Player.class, userId))
         .list();
 
-    List<Game> gamesWhite = query
-        .filter("white.id", userId)
+    List<Game> gamesWhite = ofy().load().type(getEntityClass())
+        .filter("playStateDate !=", null)
+        .order("-playStartDate")
+        .filter("playerWhite", Key.create(Player.class, userId))
         .list();
 
     gamesBlack.addAll(gamesWhite);

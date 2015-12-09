@@ -17,10 +17,10 @@ public class ObjectifyUtil {
     return (T) getter.get();
   }
 
-  public static <T> void setObject(Ref<T> self, T setter) {
+  public static <T> Ref<T> setObject(T setter) {
     if (setter == null) {
-      return;
+      return null;
     }
-    self = Ref.create(setter);
+    return Ref.create(setter);
   }
 }

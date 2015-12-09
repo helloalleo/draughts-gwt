@@ -18,4 +18,6 @@ public interface GameMessageDao extends Dao<GameMessage> {
   List<GameMessage> findGameMessagesByGameId(Long gameId);
 
   List<Move> findGameMoves(Long gameId);
+
+  Move saveMove(Move move);
 }

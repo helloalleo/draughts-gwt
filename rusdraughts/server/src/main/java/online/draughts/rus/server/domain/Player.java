@@ -92,10 +92,6 @@ public class Player extends PersistableObjectImpl {
   public Player() {
   }
 
-  public boolean getSubscribed() {
-    return subscribed;
-  }
-
   public void setSubscribed(boolean subscribed) {
     this.subscribed = subscribed;
   }
@@ -290,13 +286,17 @@ public class Player extends PersistableObjectImpl {
   /**
    * Обновляем только сеарилизуемые поля
    *
-   * @param player
+   * @param playerDto
    */
-  public void updateSerializable(PlayerDto player) {
-    if (player == null) {
+  public void updateSerializable(PlayerDto playerDto) {
+    if (playerDto == null) {
       return;
     }
-    this.playerName = player.getPlayerName();
+    this.playerName = playerDto.getPlayerName();
+    this.online = playerDto.isOnline();
+    this.playing = playerDto.isPlaying();
+    this.loggedIn = playerDto.isLoggedIn();
+    this.subscribed = playerDto.isSubscribed();
   }
 
   public void setFbId(String fbId) {

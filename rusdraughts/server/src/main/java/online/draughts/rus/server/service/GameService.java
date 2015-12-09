@@ -10,6 +10,7 @@ import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.server.domain.Move;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.util.Rating;
+import online.draughts.rus.shared.dto.GameDto;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
@@ -100,14 +101,14 @@ public class GameService {
   private void updatePlayer(Game game, Long playerId) {
     Player player = playerService.find(playerId);
     player.setGamePlayed(player.getGamePlayed() + 1);
-    final Game.GameEnds playEndStatus = game.getPlayEndStatus();
+    final GameDto.GameEnds playEndStatus = game.getPlayEndStatus();
     if (playEndStatus != null) {
-      final boolean blackWin = Game.GameEnds.BLACK_WIN.equals(playEndStatus);
-      final boolean whiteWin = Game.GameEnds.WHITE_WIN.equals(playEndStatus);
-      final boolean blackSurrender = Game.GameEnds.SURRENDER_BLACK.equals(playEndStatus);
-      final boolean whiteSurrender = Game.GameEnds.SURRENDER_WHITE.equals(playEndStatus);
-      final boolean blackLeft = Game.GameEnds.BLACK_LEFT.equals(playEndStatus);
-      final boolean whiteLeft = Game.GameEnds.WHITE_LEFT.equals(playEndStatus);
+      final boolean blackWin = GameDto.GameEnds.BLACK_WIN.equals(playEndStatus);
+      final boolean whiteWin = GameDto.GameEnds.WHITE_WIN.equals(playEndStatus);
+      final boolean blackSurrender = GameDto.GameEnds.SURRENDER_BLACK.equals(playEndStatus);
+      final boolean whiteSurrender = GameDto.GameEnds.SURRENDER_WHITE.equals(playEndStatus);
+      final boolean blackLeft = GameDto.GameEnds.BLACK_LEFT.equals(playEndStatus);
+      final boolean whiteLeft = GameDto.GameEnds.WHITE_LEFT.equals(playEndStatus);
       if (Objects.equals(game.getPlayerBlack().getId(), player.getId())) {
         if (blackWin || whiteLeft || whiteSurrender) {
           player.setGameWin(player.getGameWin() + 1);

@@ -9,6 +9,9 @@ import online.draughts.rus.server.domain.Move;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.guice.DatabaseModule;
 import online.draughts.rus.server.guice.DbModule;
+import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.dto.GameMessageDto;
+import online.draughts.rus.shared.dto.MoveDto;
 import org.jukito.JukitoRunner;
 import org.jukito.UseModules;
 import org.junit.After;
@@ -71,17 +74,17 @@ public class GameServiceTest extends BaseTest {
     playerBlack.setLoggedIn(true);
     playerBlack = playerService.save(playerBlack);
 
-    Game game = new Game(playerWhite, playerBlack, Game.GameEnds.BLACK_LEFT, new Date(), new Date(), "", "");
+    Game game = new Game(playerWhite, playerBlack, GameDto.GameEnds.BLACK_LEFT, new Date(), new Date(), "", "");
     // create
     game = gameService.save(game);
     assertNotNull(game.getId());
 
     GameMessage gameMessage = new GameMessage();
     gameMessage.setGame(game);
-    gameMessage.setMessageType(GameMessage.MessageType.PLAY_OPPONENT_MOVE);
+    gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_OPPONENT_MOVE);
     Move move = new Move(1, true, gameMessage, "5,6", "4,7", null,
-        new HashSet<Move.MoveFlags>() {{
-          add(Move.MoveFlags.SIMPLE_MOVE);
+        new HashSet<MoveDto.MoveFlags>() {{
+          add(MoveDto.MoveFlags.SIMPLE_MOVE);
         }}, null);
     move.setGameMessage(gameMessage);
     gameMessage.setMove(move);
@@ -91,11 +94,11 @@ public class GameServiceTest extends BaseTest {
     game = gameService.save(game);
 
     gameMessage = new GameMessage();
-    gameMessage.setMessageType(GameMessage.MessageType.PLAY_OPPONENT_MOVE);
+    gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_OPPONENT_MOVE);
     gameMessage.setGame(game);
     move = new Move(2, false, gameMessage, "2,1", "3,0", null,
-        new HashSet<Move.MoveFlags>() {{
-          add(Move.MoveFlags.SIMPLE_MOVE);
+        new HashSet<MoveDto.MoveFlags>() {{
+          add(MoveDto.MoveFlags.SIMPLE_MOVE);
         }}, null);
     move.setGameMessage(gameMessage);
     gameMessage.setMove(move);

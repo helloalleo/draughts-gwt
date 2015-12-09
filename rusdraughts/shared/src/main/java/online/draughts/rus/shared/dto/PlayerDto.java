@@ -29,10 +29,6 @@ public class PlayerDto extends BaseDto {
   public PlayerDto() {
   }
 
-  public boolean getSubscribed() {
-    return subscribed;
-  }
-
   public PlayerDto setSubscribed(boolean subscribed) {
     this.subscribed = subscribed;
     return this;
