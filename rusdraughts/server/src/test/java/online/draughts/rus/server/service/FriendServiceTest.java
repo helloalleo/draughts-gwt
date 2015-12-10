@@ -1,14 +1,12 @@
 package online.draughts.rus.server.service;
 
 import com.google.inject.Inject;
-import com.googlecode.objectify.ObjectifyService;
 import online.draughts.rus.server.BaseTest;
 import online.draughts.rus.server.domain.Friend;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.guice.DatabaseModule;
 import online.draughts.rus.server.guice.DbModule;
 import online.draughts.rus.server.objectify.EmbeddedDataStore;
-import online.draughts.rus.server.objectify.ObjectifyRegistrar;
 import org.jukito.JukitoRunner;
 import org.jukito.UseModules;
 import org.junit.After;
@@ -45,9 +43,6 @@ public class FriendServiceTest extends BaseTest {
 
   @Before
   public void register() {
-    closeable = ObjectifyService.begin();
-
-    ObjectifyRegistrar.registerDataModel();
   }
 
 
@@ -62,14 +57,14 @@ public class FriendServiceTest extends BaseTest {
     playerWhite = playerService.save(playerWhite);
     Player playerBlack = createPlayer();
     playerBlack = playerService.save(playerBlack);
-    Friend friend = new Friend(playerWhite.getId(), playerBlack.getId());
+    Friend friend = new Friend();
     friend.setFriend(playerWhite);
     friend.setFriendOf(playerBlack);
 
     friend = friendService.save(friend);
     assertNotNull(friend.getId());
 
-    friend = new Friend(playerWhite.getId(), playerBlack.getId());
+    friend = new Friend();
     friend.setFriend(playerWhite);
     friend.setFriendOf(playerBlack);
 

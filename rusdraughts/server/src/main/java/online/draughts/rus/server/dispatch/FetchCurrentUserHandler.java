@@ -6,7 +6,6 @@ import com.google.inject.name.Named;
 import com.gwtplatform.dispatch.rpc.server.ExecutionContext;
 import com.gwtplatform.dispatch.rpc.server.actionhandler.ActionHandler;
 import com.gwtplatform.dispatch.shared.ActionException;
-import online.draughts.rus.server.dao.PlayerDao;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.shared.dispatch.FetchCurrentPlayerAction;
 import online.draughts.rus.shared.dispatch.FetchCurrentPlayerResult;
@@ -27,7 +26,6 @@ import javax.servlet.http.HttpSession;
 public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayerAction, FetchCurrentPlayerResult> {
 
   private final Provider<HttpServletRequest> requestProvider;
-  private final Provider<PlayerDao> playerDaoProvider;
   private final Provider<Boolean> authProvider;
   private final Mapper mapper;
 
@@ -35,10 +33,8 @@ public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayer
   public FetchCurrentUserHandler(
       @Named(AuthUtils.AUTHENTICATED) Provider<Boolean> authProvider,
       Provider<HttpServletRequest> requestProvider,
-      Provider<PlayerDao> playerDaoProvider,
       Mapper mapper) {
     this.requestProvider = requestProvider;
-    this.playerDaoProvider = playerDaoProvider;
     this.authProvider = authProvider;
     this.mapper = mapper;
   }
@@ -49,7 +45,7 @@ public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayer
       return new FetchCurrentPlayerResult(null);
     }
     HttpSession session = requestProvider.get().getSession();
-    final Player bySessionId = playerDaoProvider.get().findBySessionId(session.getId());
+    final Player bySessionId = Player.getInstance().findBySessionId(session.getId());
     final PlayerDto dto = mapper.map(bySessionId, PlayerDto.class);
     return new FetchCurrentPlayerResult(dto);
   }

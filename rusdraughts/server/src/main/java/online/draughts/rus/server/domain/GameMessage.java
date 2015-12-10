@@ -89,7 +89,7 @@ public class GameMessage extends ModelImpl {
 
   public void setMessageType(GameMessageDto.MessageType messageType) {
     this.messageType = messageType;
-    getEntiy().setIndexedProperty("messageType", messageType);
+    getEntiy().setIndexedProperty("messageType", messageType.name());
   }
 
   public Move getMove() {

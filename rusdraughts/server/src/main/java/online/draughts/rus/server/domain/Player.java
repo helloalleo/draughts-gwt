@@ -1,5 +1,7 @@
 package online.draughts.rus.server.domain;
 
+import com.google.appengine.api.datastore.PreparedQuery;
+import com.google.appengine.api.datastore.Query;
 import online.draughts.rus.shared.dto.PlayerDto;
 
 import java.util.*;
@@ -10,9 +12,10 @@ import java.util.*;
  * Date: 01.12.14
  * Time: 0:36
  */
-public class Player extends ModelImpl {
+public class Player extends ModelImpl<Player> {
 
-//  @Index
+  private static Player INSTENCE;
+  //  @Index
   private String sessionId;
 
 //  @Index
@@ -43,12 +46,8 @@ public class Player extends ModelImpl {
 
   private int gameWin = 0;
 
-  private int gameLose = 0;
-
-  private int gameDraw = 0;
-
 //  @Index
-  private AuthProvider authProvider;
+  private PlayerDto.AuthProvider authProvider;
 
   private Set<Friend> friends = new HashSet<>();
 
@@ -159,13 +158,13 @@ public class Player extends ModelImpl {
     getEntiy().setIndexedProperty("playerName", playerName);
   }
 
-  public AuthProvider getAuthProvider() {
+  public PlayerDto.AuthProvider getAuthProvider() {
     return authProvider;
   }
 
-  public void setAuthProvider(AuthProvider authProvider) {
+  public void setAuthProvider(PlayerDto.AuthProvider authProvider) {
     this.authProvider = authProvider;
-    getEntiy().setIndexedProperty("authProvider", authProvider);
+    getEntiy().setIndexedProperty("authProvider", authProvider.name());
   }
 
   public boolean isLoggedIn() {
@@ -314,9 +313,51 @@ public class Player extends ModelImpl {
     this.subscribed = playerDto.isSubscribed();
   }
 
-  public enum AuthProvider {
-    VK,
-    FACEBOOK,
-    GOOGLE
+  public static Player getInstance() {
+    if (INSTENCE == null) {
+      INSTENCE = new Player();
+    }
+    return INSTENCE;
   }
+
+  // ********* DB Queries ********* //
+  public Player findBySessionId(String sessionId) {
+    Query.Filter sessionIdFilter =
+        new Query.FilterPredicate("sessionId",
+            Query.FilterOperator.EQUAL,
+            sessionId);
+    Query query = new Query(getEntityName()).setFilter(sessionIdFilter);
+    PreparedQuery pq = getDatastore().prepare(query);
+    try {
+      return getSingleResultObject(pq);
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+  public Player findByVkId(String vkId) {
+    Query.Filter sessionIdFilter =
+        new Query.FilterPredicate("vkId",
+            Query.FilterOperator.EQUAL,
+            vkId);
+    Query query = new Query(getEntityName()).setFilter(sessionIdFilter);
+    PreparedQuery pq = getDatastore().prepare(query);
+    try {
+      return getSingleResultObject(pq);
+    } catch (IllegalAccessException e) {
+      e.printStackTrace();
+    } catch (InstantiationException e) {
+      e.printStackTrace();
+    }
+    return null;
+  }
+
+//  public enum AuthProvider {
+//    VK,
+//    FACEBOOK,
+//    GOOGLE
+//  }
 }

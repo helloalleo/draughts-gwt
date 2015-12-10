@@ -6,7 +6,7 @@ package online.draughts.rus.server.domain;
  * Date: 12.12.14
  * Time: 10:20
  */
-public interface Model extends BaseModel {
+public interface Model<T> extends BaseModel<T> {
 
   Long getId();
 }

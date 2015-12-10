@@ -2,8 +2,6 @@ package online.draughts.rus.server.config;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.googlecode.objectify.ObjectifyService;
-import online.draughts.rus.server.domain.*;
 import online.draughts.rus.server.service.PlayerService;
 
 import java.util.ResourceBundle;
@@ -51,7 +49,6 @@ public class ServerConfiguration {
   @Inject
   public ServerConfiguration(PlayerService playerService) {
     this.playerService = playerService;
-    registerObjectifyEntities();
     resetUserStatuses();
 
     ResourceBundle resourceBundle = ResourceBundle.getBundle("ServerConfiguration");
@@ -89,14 +86,6 @@ public class ServerConfiguration {
     googleClientId = resourceBundle.getString("google_client_id");
     googleClientSecret = resourceBundle.getString("google_client_secret");
     googleScope = resourceBundle.getString("google_scope");
-  }
-
-  private void registerObjectifyEntities() {
-    ObjectifyService.register(Move.class);
-    ObjectifyService.register(GameMessage.class);
-    ObjectifyService.register(Game.class);
-    ObjectifyService.register(Friend.class);
-    ObjectifyService.register(Player.class);
   }
 
   public String getNotFoundErrorUrl() {

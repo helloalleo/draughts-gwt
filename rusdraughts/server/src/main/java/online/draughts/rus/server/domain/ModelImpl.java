@@ -8,7 +8,7 @@ import java.util.Objects;
  * Date: 15.11.14
  * Time: 16:03
  */
-public class ModelImpl extends BaseModelImpl implements Model {
+public class ModelImpl<T> extends BaseModelImpl<T> implements Model<T> {
 
   private long id;
 

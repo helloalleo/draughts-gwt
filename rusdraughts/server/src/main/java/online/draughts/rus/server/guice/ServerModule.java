@@ -1,8 +1,6 @@
 package online.draughts.rus.server.guice;
 
 import com.google.inject.AbstractModule;
-import com.google.inject.Singleton;
-import com.googlecode.objectify.ObjectifyFilter;
 import org.dozer.DozerBeanMapper;
 import org.dozer.Mapper;
 
@@ -20,7 +18,7 @@ public class ServerModule extends AbstractModule {
     install(new DbModule());
     install(new ServerHandlerModule());
 
-    bind(ObjectifyFilter.class).in(Singleton.class);
+//    bind(DatastoreService.class).in(Singleton.class);
     bind(Mapper.class).to(DozerBeanMapper.class);
   }
 }

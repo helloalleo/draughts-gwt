@@ -1,10 +1,7 @@
 package online.draughts.rus.server.service;
 
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.dao.GameDao;
-import online.draughts.rus.server.dao.GameMessageDao;
 import online.draughts.rus.server.domain.Friend;
 import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.server.domain.Move;
@@ -13,6 +10,7 @@ import online.draughts.rus.server.util.Rating;
 import online.draughts.rus.shared.dto.GameDto;
 
 import javax.servlet.http.HttpSession;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -24,28 +22,20 @@ import java.util.Objects;
  */
 @Singleton
 public class GameService {
-  private final Provider<GameDao> gameDaoProvider;
-  private final Provider<GameMessageDao> gameMessageDaoProvider;
   private final PlayerService playerService;
   private final FriendService friendService;
-  private final GameDao gameDao;
 
   @Inject
   public GameService(
-      Provider<GameDao> gameDaoProvider,
-      Provider<GameMessageDao> gameMessageDaoProvider,
       PlayerService playerService,
-      FriendService friendService,
-      GameDao gameDao) {
-    this.gameDaoProvider = gameDaoProvider;
-    this.gameMessageDaoProvider = gameMessageDaoProvider;
+      FriendService friendService) {
     this.playerService = playerService;
     this.friendService = friendService;
-    this.gameDao = gameDao;
   }
 
   public List<Game> findRange(int offset, int limit) {
-    return gameDao.findRange(offset, limit);
+//    return gameDao.findRange(offset, limit);
+    return new ArrayList<>();
   }
 
   public List<Game> findUserGames(HttpSession session, int offset, int limit) {
@@ -61,27 +51,29 @@ public class GameService {
     if (player == null) {
       throw new RuntimeException("Player not found");
     }
-    return gameDaoProvider.get().findUserGames(playerId, offset, limit);
+    return new ArrayList<>();//gameDaoProvider.get().findUserGames(playerId, offset, limit);
   }
 
   public Integer getGamesCount() {
-    return gameDaoProvider.get().countAll();
+//    return gameDaoProvider.get().countAll();
+    return 0;
   }
 
   public Game save(Game game) {
     if (game.getId() == null) {
-      return gameDaoProvider.get().save(game);
+//      return gameDaoProvider.get().save(game);
+      return new Game();
     }
 
     updatePlayer(game, game.getPlayerBlack().getId());
     updatePlayer(game, game.getPlayerWhite().getId());
-    Game saved = gameDaoProvider.get().save(game);
+    Game saved = new Game(); //gameDaoProvider.get().save(game);
 
     Player playerBlack = playerService.find(game.getPlayerBlack().getId());
     Player playerWhite = playerService.find(game.getPlayerWhite().getId());
     boolean playerWhiteIsFriendOfPlayerBlack = friendService.isPlayerFriendOf(playerWhite.getId(), playerBlack.getId());
     if (!playerWhiteIsFriendOfPlayerBlack) {
-      Friend friend = new Friend(playerWhite.getId(), playerBlack.getId());
+      Friend friend = new Friend();
       friend.setFriend(playerWhite);
       friend.setFriendOf(playerBlack);
 
@@ -89,7 +81,7 @@ public class GameService {
     }
     boolean playerBlackIsFriendOfPlayerWhite = friendService.isPlayerFriendOf(playerBlack.getId(), playerWhite.getId());
     if (!playerBlackIsFriendOfPlayerWhite) {
-      Friend friend = new Friend(playerBlack.getId(), playerWhite.getId());
+      Friend friend = new Friend();
       friend.setFriend(playerBlack);
       friend.setFriendOf(playerWhite);
 
@@ -112,18 +104,10 @@ public class GameService {
       if (Objects.equals(game.getPlayerBlack().getId(), player.getId())) {
         if (blackWin || whiteLeft || whiteSurrender) {
           player.setGameWin(player.getGameWin() + 1);
-        } else if (whiteWin || blackLeft || blackSurrender) {
-          player.setGameLose(player.getGameLose() + 1);
-        } else {
-          player.setGameDraw(player.getGameDraw() + 1);
         }
       } else {
-        if (blackWin || whiteLeft || whiteSurrender) {
-          player.setGameLose(player.getGameLose() + 1);
-        } else if (whiteWin || blackLeft || blackSurrender) {
+        if (whiteWin || blackLeft || blackSurrender) {
           player.setGameWin(player.getGameWin() + 1);
-        } else {
-          player.setGameDraw(player.getGameDraw() + 1);
         }
       }
     }
@@ -132,10 +116,10 @@ public class GameService {
   }
 
   public Game find(Long gameId) {
-    return gameDaoProvider.get().find(gameId);
+    return new Game(); //gameDaoProvider.get().find(gameId);
   }
 
   public List<Move> findGameMoves(Long gameId) {
-    return gameMessageDaoProvider.get().findGameMoves(gameId);
+    return new ArrayList<>(); //gameMessageDaoProvider.get().findGameMoves(gameId);
   }
 }

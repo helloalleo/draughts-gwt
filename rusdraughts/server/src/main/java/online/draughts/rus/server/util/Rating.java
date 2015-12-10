@@ -10,9 +10,7 @@ import online.draughts.rus.server.domain.Player;
  */
 public class Rating {
 
-  public static final int WIN_RATING = 4;
-  public static final int LOSE_RATING = 2;
-  public static final int DRAW_RATING = 3;
+  public static final int WIN_RATING = 2;
   public static final int VISIT_RATING = 1;
   public static final int TOTAL_PLAYED_RATING = 1;
 
@@ -20,8 +18,7 @@ public class Rating {
     int rating = player.getRating()
         + player.getGamePlayed() * TOTAL_PLAYED_RATING
         + player.getGameWin() * WIN_RATING
-        + player.getGameDraw() * DRAW_RATING
-        + player.getGameLose() * LOSE_RATING;
+        + player.getVisitCounter() * VISIT_RATING;
     player.setRating(rating);
   }
 

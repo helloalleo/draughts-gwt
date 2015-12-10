@@ -3,9 +3,10 @@ package online.draughts.rus.server.servlet.oauth;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
-import online.draughts.rus.server.domain.Player;
+import online.draughts.rus.shared.dto.PlayerDto;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
@@ -104,7 +105,7 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
         if (player == null) {
           player = new Player();
           player.setFbId(user_id);
-          player.setAuthProvider(Player.AuthProvider.FACEBOOK);
+          player.setAuthProvider(PlayerDto.AuthProvider.FACEBOOK);
           String name = responseObject.getString("name");
           String[] nameArr = name.split(" ");
           if (nameArr.length > 1) {

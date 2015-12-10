@@ -8,7 +8,7 @@ import java.io.Serializable;
  * Date: 23.10.15
  * Time: 19:21
  */
-public interface BaseModel extends Serializable {
+public interface BaseModel<T> extends Serializable {
 
   void update();
 }
