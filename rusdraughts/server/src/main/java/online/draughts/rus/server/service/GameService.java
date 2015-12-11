@@ -60,7 +60,7 @@ public class GameService {
   }
 
   public Game save(Game game) {
-    if (game.getId() == null) {
+    if (game.getId() == 0) {
 //      return gameDaoProvider.get().save(game);
       return new Game();
     }

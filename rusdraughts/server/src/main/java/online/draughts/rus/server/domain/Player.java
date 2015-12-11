@@ -18,35 +18,35 @@ public class Player extends ModelImpl<Player> {
   //  @Index
   private String sessionId;
 
-//  @Index
+  //  @Index
   private String vkId;
 
-//  @Index
+  //  @Index
   private String fbId;
 
-//  @Index
+  //  @Index
   private String googleSub;
 
-//  @Index
+  //  @Index
   private String email;
 
-//  @Index
+  //  @Index
   private String firstName;
 
-//  @Index
+  //  @Index
   private String lastName;
 
-//  @Index
+  //  @Index
   private String playerName;
 
-//  @Index
+  //  @Index
   private int rating = 0;
 
   private int gamePlayed = 0;
 
   private int gameWin = 0;
 
-//  @Index
+  //  @Index
   private PlayerDto.AuthProvider authProvider;
 
   private Set<Friend> friends = new HashSet<>();
@@ -63,23 +63,23 @@ public class Player extends ModelImpl<Player> {
 
   private boolean loggedIn;
   private boolean playing;
-//  @Index
+  //  @Index
   private boolean online;
 
-//  @Stringify(LongStringifier.class)
+  //  @Stringify(LongStringifier.class)
   private Map<Long, Integer> friendUnreadMessagesMap = new HashMap<>();
 
-//  @Index
+  //  @Index
   private Date registerDate;
-//  @Index
+  //  @Index
   private Date lastVisited;
-//  @Index
+  //  @Index
   private int visitCounter = 0;
 
-//  @Index
+  //  @Index
   private boolean subscribed;
 
-//  @Index
+  //  @Index
   private boolean active;
 
   public Player() {
@@ -328,14 +328,7 @@ public class Player extends ModelImpl<Player> {
             sessionId);
     Query query = new Query(getEntityName()).setFilter(sessionIdFilter);
     PreparedQuery pq = getDatastore().prepare(query);
-    try {
-      return getSingleResultObject(pq);
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    }
-    return null;
+    return getSingleResultObject(pq);
   }
 
   public Player findByVkId(String vkId) {
@@ -345,19 +338,6 @@ public class Player extends ModelImpl<Player> {
             vkId);
     Query query = new Query(getEntityName()).setFilter(sessionIdFilter);
     PreparedQuery pq = getDatastore().prepare(query);
-    try {
-      return getSingleResultObject(pq);
-    } catch (IllegalAccessException e) {
-      e.printStackTrace();
-    } catch (InstantiationException e) {
-      e.printStackTrace();
-    }
-    return null;
+    return getSingleResultObject(pq);
   }
-
-//  public enum AuthProvider {
-//    VK,
-//    FACEBOOK,
-//    GOOGLE
-//  }
 }

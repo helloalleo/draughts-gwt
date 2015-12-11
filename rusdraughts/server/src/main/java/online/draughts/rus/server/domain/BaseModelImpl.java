@@ -1,10 +1,13 @@
 package online.draughts.rus.server.domain;
 
 import com.google.appengine.api.datastore.*;
+import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,7 +15,9 @@ import java.lang.reflect.Method;
  * Date: 09.12.15
  * Time: 18:33
  */
-public abstract class BaseModelImpl<T> implements BaseModel<T> {
+public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T> {
+
+  private Logger logger = Logger.getLogger(BaseModelImpl.class);
 
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
 
@@ -27,12 +32,18 @@ public abstract class BaseModelImpl<T> implements BaseModel<T> {
     this.entity = new Entity(entityClass.getSimpleName());
   }
 
-  public void update() {
-    datastore.put(entity);
-    setId(entity.getKey().getId());
+
+  public String getEntityName() {
+    return entityName;
+  }
+
+  protected DatastoreService getDatastore() {
+    return datastore;
   }
 
   protected abstract void setId(long id);
+
+  protected abstract long getId();
 
   protected Entity getEntiy() {
     return entity;
@@ -58,20 +69,21 @@ public abstract class BaseModelImpl<T> implements BaseModel<T> {
     }
   }
 
-  protected T getSingleResultObject(PreparedQuery pq) throws IllegalAccessException, InstantiationException {
-    for (Entity entity1 : pq.asIterable()) {
-      System.out.println(entity1);
-    }
-    Entity entity = pq.asSingleEntity();
-    if (null == entity) {
+  // ********* Datastore Methods ********* //
+
+  private T getResultObject(Entity entity) {
+    T resultObject;
+    try {
+      resultObject = entityClass.newInstance();
+    } catch (InstantiationException | IllegalAccessException e) {
+      logger.error(e.getMessage(), e);
       return null;
     }
-    T resultObject = entityClass.newInstance();
-    for (Field field : entityClass.getDeclaredFields()) {
-      final String fieldName = field.getName();
-      final String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
-      final Method resultObjectSetMethod;
-      try {
+    try {
+      for (Field field : entityClass.getDeclaredFields()) {
+        final String fieldName = field.getName();
+        final String methodName = "set" + fieldName.substring(0, 1).toUpperCase() + fieldName.substring(1);
+        final Method resultObjectSetMethod;
         Object property = entity.getProperty(fieldName);
         if (property == null) {
           continue;
@@ -95,18 +107,38 @@ public abstract class BaseModelImpl<T> implements BaseModel<T> {
         }
         resultObjectSetMethod = resultObject.getClass().getMethod(methodName, field.getType());
         resultObjectSetMethod.invoke(resultObject, value);
-      } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
-        e.printStackTrace();
       }
+      resultObject.getClass().getSuperclass().getDeclaredMethod("setId", long.class)
+          .invoke(resultObject, entity.getKey().getId());
+    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+      logger.error(e.getMessage(), e);
     }
     return resultObject;
   }
 
-  public String getEntityName() {
-    return entityName;
+  @Override
+  public void update() {
+    datastore.put(entity);
+    setId(entity.getKey().getId());
   }
 
-  protected DatastoreService getDatastore() {
-    return datastore;
+  protected T getSingleResultObject(PreparedQuery pq) {
+    Entity entity = pq.asSingleEntity();
+    if (null == entity) {
+      return null;
+    }
+    return getResultObject(entity);
+  }
+
+  public List<T> findAll() {
+    Query query = new Query(getEntityName());
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    Iterable<Entity> entities = preparedQuery.asIterable();
+
+    List<T> resultObjects = new ArrayList<>();
+    for (Entity e : entities) {
+      resultObjects.add(getResultObject(e));
+    }
+    return resultObjects;
   }
 }

@@ -108,7 +108,7 @@ public class GameServiceTest extends BaseTest {
     Collections.sort(gameMessages, new Comparator<GameMessage>() {
       @Override
       public int compare(GameMessage o1, GameMessage o2) {
-        return o1.getId().compareTo(o2.getId());
+        return Long.valueOf(o1.getId()).compareTo(o2.getId());
       }
     });
     final GameMessage gameMessage1 = gameMessages.get(0);

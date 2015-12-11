@@ -8,5 +8,5 @@ package online.draughts.rus.server.domain;
  */
 public interface Model<T> extends BaseModel<T> {
 
-  Long getId();
+  long getId();
 }

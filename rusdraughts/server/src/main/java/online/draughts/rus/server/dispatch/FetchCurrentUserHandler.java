@@ -46,7 +46,10 @@ public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayer
     }
     HttpSession session = requestProvider.get().getSession();
     final Player bySessionId = Player.getInstance().findBySessionId(session.getId());
-    final PlayerDto dto = mapper.map(bySessionId, PlayerDto.class);
+    PlayerDto dto = null;
+    if (bySessionId != null) {
+      dto = mapper.map(bySessionId, PlayerDto.class);
+    }
     return new FetchCurrentPlayerResult(dto);
   }
 

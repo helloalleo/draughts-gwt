@@ -8,7 +8,7 @@ import java.util.Objects;
  * Date: 15.11.14
  * Time: 16:03
  */
-public class ModelImpl<T> extends BaseModelImpl<T> implements Model<T> {
+public class ModelImpl<T extends BaseModel> extends BaseModelImpl<T> implements Model<T> {
 
   private long id;
 
@@ -22,7 +22,7 @@ public class ModelImpl<T> extends BaseModelImpl<T> implements Model<T> {
   }
 
   @Override
-  public Long getId() {
+  public long getId() {
     return id;
   }
 
