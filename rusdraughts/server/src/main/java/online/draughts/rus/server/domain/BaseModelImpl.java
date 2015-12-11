@@ -118,6 +118,13 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
 
   @Override
   public void update() {
+    if (0 != getId()) {
+      Entity entity = new Entity(this.entity.getKind(), getId());
+      for (String propKey : this.entity.getProperties().keySet()) {
+        entity.setProperty(propKey, this.entity.getProperty(propKey));
+      }
+      this.entity = entity;
+    }
     datastore.put(entity);
     setId(entity.getKey().getId());
   }
