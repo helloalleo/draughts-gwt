@@ -20,7 +20,6 @@ import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.server.util.Utils;
 import online.draughts.rus.shared.channel.Chunk;
 import online.draughts.rus.shared.dto.GameMessageDto;
-import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.util.StringUtils;
 import org.apache.log4j.Logger;
 import org.dozer.Mapper;
@@ -76,24 +75,17 @@ public class ServerChannel extends ChannelServer {
       logger.info("Empty message");
       return;
     }
-    GameMessageDto gameMessageDto = null;
+    logger.info("New message: " + message);
+    GameMessage gameMessage = null;
     try {
-      gameMessageDto = (GameMessageDto) Utils.deserializeFromJson(message, GameMessageDto.class);
+      gameMessage = (GameMessage) Utils.deserializeFromJson(message, GameMessage.class);
     } catch (IOException e) {
       logger.error(e.getLocalizedMessage(), e);
     }
-    if (gameMessageDto == null) {
+    if (gameMessage == null) {
       return;
     }
 
-    // gameMessageDto должно содержать Move, чтобы правильно меппиться
-    if (null != gameMessageDto.getMove()) {
-      final MoveDto moveDto = gameMessageDto.getMove();
-      Move move = gameMessageService.saveMove(mapper.map(moveDto, Move.class));
-      gameMessageDto.setMove(mapper.map(move, MoveDto.class));
-    }
-
-    GameMessage gameMessage = mapper.map(gameMessageDto, GameMessage.class);
     // обработка сообщений
     switch (gameMessage.getMessageType()) {
       case PLAYER_REGISTER:
@@ -233,7 +225,7 @@ public class ServerChannel extends ChannelServer {
   private void updatePlayerList() {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessageDto.MessageType.USER_LIST_UPDATE);
-    List<Player> playerList = Player.getInstance().findAll();
+    List<Player> playerList = playerService.findAll();
     gameMessage.setPlayerList(playerList);
     for (String channelName : channelTokenPeers.keySet()) {
       sendMessage(channelName, gameMessage);

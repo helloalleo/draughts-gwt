@@ -12,7 +12,7 @@ public class ModelImpl<T extends BaseModel> extends BaseModelImpl<T> implements 
 
   private long id;
 
-  public ModelImpl(Class entityClass) {
+  public ModelImpl(Class<T> entityClass) {
     super(entityClass);
   }
 

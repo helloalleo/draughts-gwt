@@ -7,7 +7,6 @@ import online.draughts.rus.shared.dto.PlayerDto;
 import org.apache.log4j.Logger;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 
 @Singleton
@@ -20,7 +19,6 @@ public class PlayerService {
   }
 
   public Player save(Player player) {
-//    if (player != null && player.getId() == null) {
     player.update();
     return player;
 //    }
@@ -56,13 +54,11 @@ public class PlayerService {
   }
 
   public Player find(Long playerId) {
-    return new Player();
-//    return Player.getInstance().find(playerId);
+    return Player.getInstance().find(playerId);
   }
 
   public List<Player> findAll() {
-//    return playerDaoProvider.get().findAll();
-    return new ArrayList<>();
+    return Player.getInstance().findAll();
   }
 
   public Player findByFbId(String userId) {
@@ -76,25 +72,23 @@ public class PlayerService {
   }
 
   public Integer totalPlayers() {
-//    return playerDaoProvider.get().findAll().size();
-    return 1;
+    return Player.getInstance().findAll().size();
   }
 
   public Integer onlinePlayers() {
-//    return playerDaoProvider.get().findOnline().size();
-    return 1;
+    return Player.getInstance().findOnline().size();
   }
 
-  public void resetUnreadMessages(Long playerId, Long friendId) {
+  public void resetUnreadMessages(long playerId, Long friendId) {
 //    Player player = playerDaoProvider.get().find(playerId);
 //    player.getFriendUnreadMessagesMap().remove(friendId);
 //    playerDaoProvider.get().save(player);
   }
 
   public Player saveDto(PlayerDto dto) {
-//    Player player = playerDaoProvider.get().find(dto.getId());
-//    player.updateSerializable(dto);
-//    return playerDaoProvider.get().save(player);
-    return new Player();
+    Player player = find(dto.getId());
+    player.updateSerializable(dto);
+    player.update();
+    return player;
   }
 }

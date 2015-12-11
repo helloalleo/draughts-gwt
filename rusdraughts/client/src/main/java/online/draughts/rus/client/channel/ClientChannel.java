@@ -145,7 +145,7 @@ public class ClientChannel implements ChannelListener {
 
   private void handleUpdatePlayerDtoList(List<PlayerDto> playerList) {
     for (PlayerDto p : playerList) {
-      if (p.getId().equals(player.getId())) {
+      if (p.getId() == player.getId()) {
         // TODO Обновить поля?
         player = p;
         break;

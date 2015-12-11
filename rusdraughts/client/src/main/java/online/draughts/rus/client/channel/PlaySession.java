@@ -57,6 +57,6 @@ public class PlaySession {
         && player != null
         && game != null
         && game.getPlayerWhite() != null
-        && player.getId().equals(game.getPlayerWhite().getId());
+        && player.getId() == game.getPlayerWhite().getId();
   }
 }

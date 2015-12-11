@@ -66,9 +66,9 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
       @Override
       public void onSuccess(List<GameMessageDto> result) {
         for (GameMessageDto gameMessage : result) {
-          if (gameMessage.getSender().getId().equals(player.getId())) {
+          if (gameMessage.getSender().getId() == player.getId()) {
             getView().addMyMessage(gameMessage.getMessage(), gameMessage.getSentDate());
-          } else if (gameMessage.getSender().getId().equals(MessengerPresenter.this.opponent.getId())) {
+          } else if (gameMessage.getSender().getId() == MessengerPresenter.this.opponent.getId()) {
             getView().addFriendMessage(gameMessage.getMessage(), gameMessage.getSentDate());
           }
         }

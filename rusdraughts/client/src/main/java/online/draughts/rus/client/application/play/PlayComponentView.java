@@ -361,7 +361,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
       @Override
       public void render(Cell.Context context, PlayerDto object, SafeHtmlBuilder sb) {
-        if (!object.getId().equals(player.getId())) {
+        if (object.getId() != player.getId()) {
           super.render(context, object, sb);
         }
       }
@@ -404,7 +404,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   private SafeHtml getStatusSafeHtml(PlayerDto player) {
-    if (player.getId().equals(this.player.getId())) {
+    if (player.getId() == this.player.getId()) {
       Icon html = getIconString(IconType.USER);
       return new SafeHtmlBuilder().appendHtmlConstant(html.getElement().getString()).toSafeHtml();
     }

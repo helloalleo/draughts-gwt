@@ -89,11 +89,9 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
           continue;
         }
         Object value = null;
-        System.out.println(field);
         if (property instanceof Long && field.getType().equals(int.class)) {
           value = ((Long) property).intValue();
         } else if (field.getType().isEnum()) {
-          System.out.println(property);
           for (Object eConst : field.getType().getEnumConstants()) {
             if (eConst.toString().equals(property.toString())) {
               value = eConst;
@@ -129,17 +127,15 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     setId(entity.getKey().getId());
   }
 
-  protected T getSingleResultObject(PreparedQuery pq) {
-    Entity entity = pq.asSingleEntity();
+  protected T getSingleResultObject(PreparedQuery preparedQuery) {
+    Entity entity = preparedQuery.asSingleEntity();
     if (null == entity) {
       return null;
     }
     return getResultObject(entity);
   }
 
-  public List<T> findAll() {
-    Query query = new Query(getEntityName());
-    PreparedQuery preparedQuery = datastore.prepare(query);
+  protected List<T> getListResult(PreparedQuery preparedQuery) {
     Iterable<Entity> entities = preparedQuery.asIterable();
 
     List<T> resultObjects = new ArrayList<>();
@@ -147,5 +143,23 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
       resultObjects.add(getResultObject(e));
     }
     return resultObjects;
+  }
+
+  public List<T> findAll() {
+    Query query = new Query(getEntityName());
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    return getListResult(preparedQuery);
+  }
+
+  public T find(long id) {
+    if (0 == id) {
+      return null;
+    }
+    Query query = new Query(getEntityName());
+    query.setFilter(new Query.FilterPredicate(Entity.KEY_RESERVED_PROPERTY,
+        Query.FilterOperator.EQUAL,
+        KeyFactory.createKey(getEntityName(), id)));
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    return getSingleResultObject(preparedQuery);
   }
 }

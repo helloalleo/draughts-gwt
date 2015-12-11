@@ -306,11 +306,11 @@ public class Player extends ModelImpl<Player> {
     if (playerDto == null) {
       return;
     }
-    this.playerName = playerDto.getPlayerName();
-    this.online = playerDto.isOnline();
-    this.playing = playerDto.isPlaying();
-    this.loggedIn = playerDto.isLoggedIn();
-    this.subscribed = playerDto.isSubscribed();
+    setPlayerName(playerDto.getPlayerName());
+    setOnline(playerDto.isOnline());
+    setPlaying(playerDto.isPlaying());
+    setLoggedIn(playerDto.isLoggedIn());
+    setSubscribed(playerDto.isSubscribed());
   }
 
   public static Player getInstance() {
@@ -339,5 +339,15 @@ public class Player extends ModelImpl<Player> {
     Query query = new Query(getEntityName()).setFilter(sessionIdFilter);
     PreparedQuery pq = getDatastore().prepare(query);
     return getSingleResultObject(pq);
+  }
+
+  public List<Player> findOnline() {
+    Query.Filter onlineFilter =
+        new Query.FilterPredicate("online",
+            Query.FilterOperator.EQUAL,
+            true);
+    Query query = new Query(getEntityName()).setFilter(onlineFilter);
+    PreparedQuery preparedQuery = getDatastore().prepare(query);
+    return getListResult(preparedQuery);
   }
 }

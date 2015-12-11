@@ -95,7 +95,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       Growl.growlNotif(messages.selectPlayer());
       return;
     }
-    if (opponent.getId().equals(playSession.getPlayer().getId())) {
+    if (opponent.getId() == playSession.getPlayer().getId()) {
       Growl.growlNotif(messages.selectAnotherPlayerItsYou());
       return;
     }
@@ -142,8 +142,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   @Override
   public boolean isMyTurn() {
-    return playSession.getGame().getPlayerWhite().getId()
-        .equals(playSession.getPlayer().getId());
+    return playSession.getGame().getPlayerWhite().getId() == playSession.getPlayer().getId();
   }
 
   @Override
