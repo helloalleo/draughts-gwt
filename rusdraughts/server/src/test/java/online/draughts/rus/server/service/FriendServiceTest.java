@@ -6,17 +6,12 @@ import online.draughts.rus.server.domain.Friend;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.guice.DatabaseModule;
 import online.draughts.rus.server.guice.DbModule;
-import online.draughts.rus.server.objectify.EmbeddedDataStore;
 import org.jukito.JukitoRunner;
 import org.jukito.UseModules;
-import org.junit.After;
 import org.junit.Before;
-import org.junit.Rule;
 import org.junit.Test;
 import org.junit.runner.RunWith;
 
-import java.io.Closeable;
-import java.io.IOException;
 import java.util.List;
 
 import static org.junit.Assert.assertEquals;
@@ -31,9 +26,6 @@ import static org.junit.Assert.assertNotNull;
 @RunWith(JukitoRunner.class)
 @UseModules({DatabaseModule.class, DbModule.class})
 public class FriendServiceTest extends BaseTest {
-  @Rule
-  public EmbeddedDataStore store = new EmbeddedDataStore();
-  private Closeable closeable;
 
   @Inject
   private PlayerService playerService;
@@ -43,12 +35,6 @@ public class FriendServiceTest extends BaseTest {
 
   @Before
   public void register() {
-  }
-
-
-  @After
-  public void tearDown() throws IOException {
-    closeable.close();
   }
 
   @Test

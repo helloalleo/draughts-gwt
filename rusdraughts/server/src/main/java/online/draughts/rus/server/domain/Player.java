@@ -17,78 +17,58 @@ import java.util.*;
  */
 public class Player extends ModelImpl<Player> {
 
-  private static Player INSTENCE;
-
   @Index
   private String sessionId;
-
   @Index
   private String vkId;
-
   @Index
   private String fbId;
-
   @Index
   private String googleSub;
-
   @Index
   private String email;
-
   @Index
   private String firstName;
-
   @Index
   private String lastName;
-
   @Index
   private String playerName;
-
   @Index
   private int rating = 0;
-
   private int gamePlayed = 0;
-
   private int gameWin = 0;
-
   @Index
   private PlayerDto.AuthProvider authProvider;
-
   private Set<Friend> friends = new HashSet<>();
-
   private Set<Friend> friendOf = new HashSet<>();
-
   private Set<GameMessage> receivedPlayerMessages = new HashSet<>();
-
   private Set<GameMessage> sentPlayerMessages = new HashSet<>();
-
   private Set<Game> whiteRoleGames = new HashSet<>();
-
   private Set<Game> blackRoleGames = new HashSet<>();
-
   private boolean loggedIn;
   private boolean playing;
   @Index
   private boolean online;
-
   @MapKey(Long.class)
   @MapValue(Integer.class)
   private Map<Long, Integer> friendUnreadMessagesMap = new HashMap<>();
-
   @Index
   private Date registerDate;
   @Index
   private Date lastVisited;
   @Index
   private int visitCounter = 0;
-
   @Index
   private boolean subscribed;
-
   @Index
   private boolean active;
 
   public Player() {
     super(Player.class);
+  }
+
+  public static Player getInstance() {
+    return SingletonHolder.INSTANCE;
   }
 
   public boolean isSubscribed() {
@@ -302,13 +282,6 @@ public class Player extends ModelImpl<Player> {
     setSubscribed(playerDto.isSubscribed());
   }
 
-  public static Player getInstance() {
-    if (INSTENCE == null) {
-      INSTENCE = new Player();
-    }
-    return INSTENCE;
-  }
-
   // ********* DB Queries ********* //
   public Player findBySessionId(String sessionId) {
     Query.Filter sessionIdFilter =
@@ -338,5 +311,17 @@ public class Player extends ModelImpl<Player> {
     Query query = new Query(getEntityName()).setFilter(onlineFilter);
     PreparedQuery preparedQuery = getDatastore().prepare(query);
     return getListResult(preparedQuery);
+  }
+
+  public Player findByFbId(String userId) {
+    return null;
+  }
+
+  public Player findByGoogleSub(String sub) {
+    return null;
+  }
+
+  private static class SingletonHolder {
+    private static final Player INSTANCE = new Player();
   }
 }

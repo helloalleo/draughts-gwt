@@ -36,7 +36,7 @@ public class GameMessageService {
     }
 
     logger.info("New message: " + gameMessage.toString());
-//    gameMessageDaoProvider.get().save(gameMessage);
+    gameMessage.update();
     return gameMessage;
   }
 
@@ -45,7 +45,7 @@ public class GameMessageService {
   }
 
   public List<GameMessageDto> findLastMessages(Integer countLast, Long playerId, Long opponentId) {
-    final List<GameMessage> lastMessages = new ArrayList<>(); //gameMessageDaoProvider.get().findLastMessages(countLast, playerId, opponentId);
+    final List<GameMessage> lastMessages = GameMessage.getInstance().findLastMessages(countLast, playerId, opponentId);
     return DozerHelper.map(mapper, lastMessages, GameMessageDto.class);
   }
 

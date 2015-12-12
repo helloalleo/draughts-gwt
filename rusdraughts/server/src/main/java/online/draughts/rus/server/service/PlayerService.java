@@ -1,6 +1,5 @@
 package online.draughts.rus.server.service;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.shared.dto.PlayerDto;
@@ -14,28 +13,12 @@ public class PlayerService {
 
   private final Logger logger = Logger.getLogger(PlayerService.class);
 
-  @Inject
   PlayerService() {
   }
 
   public Player save(Player player) {
     player.update();
     return player;
-//    }
-
-//    if (player == null) {
-//      return null;
-//    }
-//    final Player mapped = mapper.map(player, Player.class);
-
-//    Player playerById = playerDaoProvider.get().find(player.getId());
-
-//    if (playerById != null) {
-//      playerById.updateSerializable(player);
-//      return playerDaoProvider.get().save(mapped);
-//      return playerById;
-//    }
-//    return null;
   }
 
   public Player getLoggedInUser(HttpSession session) {
@@ -62,13 +45,11 @@ public class PlayerService {
   }
 
   public Player findByFbId(String userId) {
-//    return playerDaoProvider.get().findByFbId(userId);
-    return new Player();
+    return Player.getInstance().findByFbId(userId);
   }
 
   public Player findByGoogleSub(String sub) {
-//    return playerDaoProvider.get().findByGoogleSub(sub);
-    return new Player();
+    return Player.getInstance().findByGoogleSub(sub);
   }
 
   public Integer totalPlayers() {

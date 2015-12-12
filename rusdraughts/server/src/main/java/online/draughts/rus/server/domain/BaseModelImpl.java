@@ -1,6 +1,7 @@
 package online.draughts.rus.server.domain;
 
 import com.google.appengine.api.datastore.*;
+import online.draughts.rus.server.annotation.Index;
 import online.draughts.rus.server.annotation.MapKey;
 import online.draughts.rus.server.annotation.MapValue;
 import org.apache.log4j.Logger;
@@ -53,7 +54,7 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     if (value == null || value.getId() == 0) {
       return null;
     }
-    return KeyFactory.createKey(entityClass.getSimpleName(), value.getId());
+    return KeyFactory.createKey(value.getClass().getSimpleName(), value.getId());
   }
 
   // ********* Datastore Methods ********* //
@@ -84,6 +85,8 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
           value = ((Boolean) property).booleanValue();
         } else if (field.getType().isInstance(new HashMap<>())) {
           value = getValueFromMap(field, property);
+        } else if (property instanceof Key) {
+          value = BaseModel.class.cast(field.getType().newInstance()).find((Key) property);
         } else {
           value = field.getType().cast(property);
         }
@@ -92,10 +95,18 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
       }
       resultObject.getClass().getSuperclass().getDeclaredMethod("setId", long.class)
           .invoke(resultObject, entity.getKey().getId());
-    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
+    } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException | InstantiationException e) {
       logger.error(e.getMessage(), e);
     }
     return resultObject;
+  }
+
+  public T getByKey(Key property) {
+    try {
+      return getResultObject(datastore.get(property));
+    } catch (EntityNotFoundException e) {
+      return null;
+    }
   }
 
   private Object getValueFromEnum(Field field, Object property) {
@@ -128,12 +139,14 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
           continue;
         }
         if (value.getClass().isEnum()) {
-          entity.setProperty(fieldName, ((Enum) value).name());
-        } else if (value.getClass().isInstance(new HashMap<>())) {
+          updateProperty(entity, field, ((Enum) value).name());
+        } else if (value instanceof HashMap) {
           List<String> stringified = getStringifyMap((HashMap) value);
-          entity.setProperty(fieldName, stringified);
+          updateProperty(entity, field, stringified);
+        } else if (value instanceof Model) {
+          updateProperty(entity, field, getKeyProperty((Model) value));
         } else {
-          entity.setProperty(fieldName, value);
+          updateProperty(entity, field, value);
         }
       } catch (NoSuchMethodException | InvocationTargetException | IllegalAccessException e) {
         logger.error(e.getMessage(), e);
@@ -141,6 +154,14 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     }
     datastore.put(entity);
     setId(entity.getKey().getId());
+  }
+
+  private void updateProperty(Entity entity, Field field, Object value) {
+    if (field.isAnnotationPresent(Index.class)) {
+      entity.setIndexedProperty(field.getName(), value);
+    } else {
+      entity.setProperty(field.getName(), value);
+    }
   }
 
   private Map<Object, Object> getValueFromMap(Field field, Object value) {
@@ -197,20 +218,27 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     return resultObjects;
   }
 
+  @Override
   public List<T> findAll() {
     Query query = new Query(getEntityName());
     PreparedQuery preparedQuery = datastore.prepare(query);
     return getListResult(preparedQuery);
   }
 
+  @Override
   public T find(long id) {
-    if (0 == id) {
+    return find(KeyFactory.createKey(getEntityName(), id));
+  }
+
+  @Override
+  public T find(Key key) {
+    if (null == key) {
       return null;
     }
     Query query = new Query(getEntityName());
     query.setFilter(new Query.FilterPredicate(Entity.KEY_RESERVED_PROPERTY,
         Query.FilterOperator.EQUAL,
-        KeyFactory.createKey(getEntityName(), id)));
+        key));
     PreparedQuery preparedQuery = datastore.prepare(query);
     return getSingleResultObject(preparedQuery);
   }
