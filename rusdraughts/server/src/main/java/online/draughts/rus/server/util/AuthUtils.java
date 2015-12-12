@@ -33,7 +33,7 @@ public class AuthUtils {
   }
 
   public static void login(HttpServletRequest req) {
-    req.getSession().setAttribute("isAuthenticated", true);
+    req.getSession().setAttribute(AUTHENTICATED, true);
   }
 
   public static void processUserAndRedirectToPlayPage(PlayerService playerService, ServerConfiguration config,

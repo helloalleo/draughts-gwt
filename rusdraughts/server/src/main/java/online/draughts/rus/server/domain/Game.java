@@ -1,7 +1,6 @@
 package online.draughts.rus.server.domain;
 
-import com.google.appengine.api.datastore.Blob;
-import com.google.appengine.api.datastore.Text;
+import online.draughts.rus.server.annotation.Index;
 import online.draughts.rus.shared.dto.GameDto;
 
 import java.util.Date;
@@ -14,16 +13,19 @@ import java.util.Set;
  * Date: 31.12.14
  * Time: 16:18
  */
-public class Game extends ModelImpl {
+public class Game extends ModelImpl<Game> {
 
+  @Index
   private Player playerWhite;
+  @Index
   private Player playerBlack;
 
+  @Index
   private GameDto.GameEnds playEndStatus;
 
   private Date playStartDate;
 
-//  @Index
+  @Index
   private Date playFinishDate;
 
   private String notation;
@@ -59,7 +61,6 @@ public class Game extends ModelImpl {
 
   public void setPlayerWhite(Player playerWhite) {
     this.playerWhite = playerWhite;
-    setIndexedProperty("playerWhite", playerWhite);
   }
 
   public Player getPlayerBlack() {
@@ -68,7 +69,6 @@ public class Game extends ModelImpl {
 
   public void setPlayerBlack(Player playerBlack) {
     this.playerBlack = playerBlack;
-    setIndexedProperty("playerBlack", playerBlack);
   }
 
   public GameDto.GameEnds getPlayEndStatus() {
@@ -77,7 +77,6 @@ public class Game extends ModelImpl {
 
   public void setPlayEndStatus(GameDto.GameEnds playEndStatus) {
     this.playEndStatus = playEndStatus;
-    getEntiy().setIndexedProperty("playEndStatus", playEndStatus);
   }
 
   public Date getPlayStartDate() {
@@ -86,7 +85,6 @@ public class Game extends ModelImpl {
 
   public void setPlayStartDate(Date playStartDate) {
     this.playStartDate = playStartDate;
-    getEntiy().setProperty("playStartDate", playStartDate);
   }
 
   public Date getPlayFinishDate() {
@@ -95,7 +93,6 @@ public class Game extends ModelImpl {
 
   public void setPlayFinishDate(Date playEndDate) {
     this.playFinishDate = playEndDate;
-    getEntiy().setIndexedProperty("playFinishDate", playFinishDate);
   }
 
   public String getNotation() {
@@ -104,7 +101,6 @@ public class Game extends ModelImpl {
 
   public void setNotation(String notation) {
     this.notation = notation;
-    getEntiy().setProperty("notation", new Text(notation));
   }
 
   public String getEndGameScreenshot() {
@@ -113,7 +109,6 @@ public class Game extends ModelImpl {
 
   public void setEndGameScreenshot(String endGameScreenshot) {
     this.endGameScreenshot = endGameScreenshot;
-    getEntiy().setProperty("endGameScreenshot", new Blob(endGameScreenshot.getBytes()));
   }
 
   public Set<GameMessage> getGameMessages() {

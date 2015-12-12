@@ -75,7 +75,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
       OAuthAccessTokenResponse response = oAuthClient.accessToken(request, OAuthJSONAccessTokenResponse.class);
       String accessToken = response.getAccessToken();
       Long expiresIn = response.getExpiresIn();
-      String user_id = response.getParam("user_id");
+      String userId = response.getParam("user_id");
       String email = response.getParam("email");
 
       if (StringUtils.isEmpty(accessToken)) {
@@ -95,7 +95,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         return;
       }
 
-      Player player = playerService.findByVkId(user_id);
+      Player player = playerService.findByVkId(userId);
       if (player == null) {
         final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes(StandardCharsets.UTF_8));
         JsonReader jsonReader = Json.createReader(inBody);
@@ -106,7 +106,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         String lastName = array.getString("last_name");
 
         player = new Player();
-        player.setVkId(user_id);
+        player.setVkId(userId);
         player.setAuthProvider(PlayerDto.AuthProvider.VK);
         player.setFirstName(firstName);
         player.setLastName(lastName);

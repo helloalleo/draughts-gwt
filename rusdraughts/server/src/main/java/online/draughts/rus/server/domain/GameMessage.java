@@ -1,7 +1,8 @@
 package online.draughts.rus.server.domain;
 
 
-import com.google.appengine.api.datastore.Text;
+import online.draughts.rus.server.annotation.Index;
+import online.draughts.rus.server.annotation.Transient;
 import online.draughts.rus.shared.dto.GameMessageDto;
 
 import java.util.Date;
@@ -14,24 +15,29 @@ import java.util.List;
  * Time: 15:49
  */
 //@Entity
-public class GameMessage extends ModelImpl {
+public class GameMessage extends ModelImpl<GameMessage> {
 
+  @Index
   private Player sender;
 
+  @Index
   private Player receiver;
 
   private String message;
 
+  @Index
   private GameMessageDto.MessageType messageType;
 
   private String data;
 
+  @Index
   private Date sentDate;
 
   private Move move;
 
   private Game game;
 
+  @Transient
   private List<Player> playerList;
 
   public GameMessage() {
@@ -44,7 +50,6 @@ public class GameMessage extends ModelImpl {
 
   public void setSender(Player sender) {
     this.sender = sender;
-    setIndexedProperty("sender", sender);
   }
 
   public Player getReceiver() {
@@ -53,7 +58,6 @@ public class GameMessage extends ModelImpl {
 
   public void setReceiver(Player receiver) {
     this.receiver = receiver;
-    setIndexedProperty("receiver", receiver);
   }
 
   public String getMessage() {
@@ -62,7 +66,6 @@ public class GameMessage extends ModelImpl {
 
   public void setMessage(String message) {
     this.message = message;
-    getEntiy().setProperty("message", new Text(message));
   }
 
   public String getData() {
@@ -71,7 +74,6 @@ public class GameMessage extends ModelImpl {
 
   public void setData(String data) {
     this.data = data;
-    getEntiy().setProperty("data", data);
   }
 
   public Date getSentDate() {
@@ -80,7 +82,6 @@ public class GameMessage extends ModelImpl {
 
   public void setSentDate(Date sentDate) {
     this.sentDate = sentDate;
-    getEntiy().setIndexedProperty("sentDate", sentDate);
   }
 
   public GameMessageDto.MessageType getMessageType() {
@@ -89,7 +90,6 @@ public class GameMessage extends ModelImpl {
 
   public void setMessageType(GameMessageDto.MessageType messageType) {
     this.messageType = messageType;
-    getEntiy().setIndexedProperty("messageType", messageType.name());
   }
 
   public Move getMove() {
@@ -98,7 +98,6 @@ public class GameMessage extends ModelImpl {
 
   public void setMove(Move move) {
     this.move = move;
-    setProperty("move", move);
   }
 
   public Game getGame() {
@@ -107,7 +106,6 @@ public class GameMessage extends ModelImpl {
 
   public void setGame(Game game) {
     this.game = game;
-    setProperty("game", game);
   }
 
   public void setPlayerList(List<Player> playerList) {

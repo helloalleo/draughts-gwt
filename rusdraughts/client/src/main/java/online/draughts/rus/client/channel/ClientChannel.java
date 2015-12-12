@@ -143,7 +143,7 @@ public class ClientChannel implements ChannelListener {
     channel.send(message);
   }
 
-  private void handleUpdatePlayerDtoList(List<PlayerDto> playerList) {
+  private void handleUpdatePlayerList(List<PlayerDto> playerList) {
     for (PlayerDto p : playerList) {
       if (p.getId() == player.getId()) {
         // TODO Обновить поля?
@@ -266,7 +266,7 @@ public class ClientChannel implements ChannelListener {
 
     switch (gameMessage.getMessageType()) {
       case USER_LIST_UPDATE:
-        handleUpdatePlayerDtoList(gameMessage.getPlayerList());
+        handleUpdatePlayerList(gameMessage.getPlayerList());
         break;
       case PLAY_INVITE:
         handlePlayInvite(gameMessage);

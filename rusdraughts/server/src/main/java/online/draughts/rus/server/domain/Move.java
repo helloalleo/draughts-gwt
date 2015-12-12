@@ -12,7 +12,7 @@ import java.util.Set;
  * Date: 01.09.15
  * Time: 21:45
  */
-public class Move extends ModelImpl {
+public class Move extends ModelImpl<Move> {
 
   private int number; // номер пары хода
   private int moveOrder; // порядковый номер хода
@@ -67,7 +67,6 @@ public class Move extends ModelImpl {
 
   public void setGameMessage(GameMessage gameMessage) {
     this.gameMessage = gameMessage;
-    setProperty("gameMessage", gameMessage);
   }
 
   public int getNumber() {
@@ -76,7 +75,6 @@ public class Move extends ModelImpl {
 
   public void setNumber(int number) {
     this.number = number;
-    getEntiy().setProperty("number", number);
   }
 
   public boolean isFirst() {
@@ -85,7 +83,6 @@ public class Move extends ModelImpl {
 
   public void setFirst(boolean first) {
     this.first = first;
-    getEntiy().setProperty("first", first);
   }
 
   public String getTakenPos() {
@@ -94,7 +91,6 @@ public class Move extends ModelImpl {
 
   public void setTakenPos(String takenPos) {
     this.takenPos = takenPos;
-    getEntiy().setProperty("takenPos", takenPos);
   }
 
   public String getStartPos() {
@@ -103,7 +99,6 @@ public class Move extends ModelImpl {
 
   public void setStartPos(String startPos) {
     this.startPos = startPos;
-    getEntiy().setProperty("startPos", startPos);
   }
 
   public String getEndPos() {
@@ -112,7 +107,6 @@ public class Move extends ModelImpl {
 
   public void setEndPos(String endPos) {
     this.endPos = endPos;
-    getEntiy().setProperty("endPos", endPos);
   }
 
   public Set<MoveDto.MoveFlags> getMoveFlags() {
@@ -121,7 +115,6 @@ public class Move extends ModelImpl {
 
   public void setMoveFlags(Set<MoveDto.MoveFlags> moveFlags) {
     this.moveFlags = moveFlags;
-    getEntiy().setProperty("moveFlags", moveFlags);
   }
 
   public String getTitle() {
@@ -130,7 +123,6 @@ public class Move extends ModelImpl {
 
   public void setTitle(String title) {
     this.title = title;
-    getEntiy().setProperty("title", title);
   }
 
   public String getComment() {
@@ -139,7 +131,6 @@ public class Move extends ModelImpl {
 
   public void setComment(String comment) {
     this.comment = comment;
-    getEntiy().setProperty("comment", comment);
   }
 
   public Set<String> getHashTags() {
@@ -156,7 +147,6 @@ public class Move extends ModelImpl {
 
   public void setMoveOrder(int order) {
     this.moveOrder = order;
-    getEntiy().setProperty("moveOrder", order);
   }
 
   public String getScreenshot() {

@@ -2,6 +2,9 @@ package online.draughts.rus.server.domain;
 
 import com.google.appengine.api.datastore.PreparedQuery;
 import com.google.appengine.api.datastore.Query;
+import online.draughts.rus.server.annotation.Index;
+import online.draughts.rus.server.annotation.MapKey;
+import online.draughts.rus.server.annotation.MapValue;
 import online.draughts.rus.shared.dto.PlayerDto;
 
 import java.util.*;
@@ -15,38 +18,39 @@ import java.util.*;
 public class Player extends ModelImpl<Player> {
 
   private static Player INSTENCE;
-  //  @Index
+
+  @Index
   private String sessionId;
 
-  //  @Index
+  @Index
   private String vkId;
 
-  //  @Index
+  @Index
   private String fbId;
 
-  //  @Index
+  @Index
   private String googleSub;
 
-  //  @Index
+  @Index
   private String email;
 
-  //  @Index
+  @Index
   private String firstName;
 
-  //  @Index
+  @Index
   private String lastName;
 
-  //  @Index
+  @Index
   private String playerName;
 
-  //  @Index
+  @Index
   private int rating = 0;
 
   private int gamePlayed = 0;
 
   private int gameWin = 0;
 
-  //  @Index
+  @Index
   private PlayerDto.AuthProvider authProvider;
 
   private Set<Friend> friends = new HashSet<>();
@@ -63,23 +67,24 @@ public class Player extends ModelImpl<Player> {
 
   private boolean loggedIn;
   private boolean playing;
-  //  @Index
+  @Index
   private boolean online;
 
-  //  @Stringify(LongStringifier.class)
+  @MapKey(Long.class)
+  @MapValue(Integer.class)
   private Map<Long, Integer> friendUnreadMessagesMap = new HashMap<>();
 
-  //  @Index
+  @Index
   private Date registerDate;
-  //  @Index
+  @Index
   private Date lastVisited;
-  //  @Index
+  @Index
   private int visitCounter = 0;
 
-  //  @Index
+  @Index
   private boolean subscribed;
 
-  //  @Index
+  @Index
   private boolean active;
 
   public Player() {
@@ -92,7 +97,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setSubscribed(boolean subscribed) {
     this.subscribed = subscribed;
-    getEntiy().setIndexedProperty("subscribed", subscribed);
   }
 
   public boolean isActive() {
@@ -101,7 +105,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setActive(boolean active) {
     this.active = active;
-    getEntiy().setIndexedProperty("active", active);
   }
 
   public String getSessionId() {
@@ -110,7 +113,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setSessionId(String sessionId) {
     this.sessionId = sessionId;
-    getEntiy().setIndexedProperty("sessionId", sessionId);
   }
 
   public String getVkId() {
@@ -119,7 +121,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setVkId(String vkId) {
     this.vkId = vkId;
-    getEntiy().setIndexedProperty("vkId", vkId);
   }
 
   public String getEmail() {
@@ -128,7 +129,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setEmail(String email) {
     this.email = email;
-    getEntiy().setIndexedProperty("email", email);
   }
 
   public String getFirstName() {
@@ -137,7 +137,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setFirstName(String firstName) {
     this.firstName = firstName;
-    getEntiy().setProperty("firstName", firstName);
   }
 
   public String getLastName() {
@@ -146,7 +145,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setLastName(String lastName) {
     this.lastName = lastName;
-    getEntiy().setProperty("lastName", lastName);
   }
 
   public String getPlayerName() {
@@ -155,7 +153,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setPlayerName(String playerName) {
     this.playerName = playerName;
-    getEntiy().setIndexedProperty("playerName", playerName);
   }
 
   public PlayerDto.AuthProvider getAuthProvider() {
@@ -164,7 +161,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setAuthProvider(PlayerDto.AuthProvider authProvider) {
     this.authProvider = authProvider;
-    getEntiy().setIndexedProperty("authProvider", authProvider.name());
   }
 
   public boolean isLoggedIn() {
@@ -173,7 +169,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setLoggedIn(boolean loggedIn) {
     this.loggedIn = loggedIn;
-    getEntiy().setProperty("loggedIn", loggedIn);
   }
 
   public boolean isPlaying() {
@@ -182,7 +177,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setPlaying(boolean playing) {
     this.playing = playing;
-    getEntiy().setProperty("playing", playing);
   }
 
   public boolean isOnline() {
@@ -191,16 +185,18 @@ public class Player extends ModelImpl<Player> {
 
   public void setOnline(boolean online) {
     this.online = online;
-    getEntiy().setIndexedProperty("online", online);
   }
 
   public Map<Long, Integer> getFriendUnreadMessagesMap() {
     return friendUnreadMessagesMap;
   }
 
+  public void setFriendUnreadMessagesMap(Map<Long, Integer> friendUnreadMessagesMap) {
+    this.friendUnreadMessagesMap = friendUnreadMessagesMap;
+  }
+
   public void setRegisterDate(Date registerDate) {
     this.registerDate = registerDate;
-    getEntiy().setIndexedProperty("registerDate", registerDate);
   }
 
   public Date getLastVisited() {
@@ -209,7 +205,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setLastVisited(Date lastVisited) {
     this.lastVisited = lastVisited;
-    getEntiy().setIndexedProperty("lastVisited", lastVisited);
   }
 
   public int getVisitCounter() {
@@ -218,7 +213,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setVisitCounter(int visitCounter) {
     this.visitCounter = visitCounter;
-    getEntiy().setIndexedProperty("visitCounter", visitCounter);
   }
 
   public int getRating() {
@@ -227,7 +221,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setRating(int rating) {
     this.rating = rating;
-    getEntiy().setProperty("rating", rating);
   }
 
   public int getGamePlayed() {
@@ -236,7 +229,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setGamePlayed(int gamePlayed) {
     this.gamePlayed = gamePlayed;
-    getEntiy().setProperty("gamePlayed", gamePlayed);
   }
 
   public int getGameWin() {
@@ -245,7 +237,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setGameWin(int gameWin) {
     this.gameWin = gameWin;
-    getEntiy().setProperty("gameWin", gameWin);
   }
 
   public String getFbId() {
@@ -254,7 +245,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setFbId(String fbId) {
     this.fbId = fbId;
-    getEntiy().setIndexedProperty("fbId", fbId);
   }
 
   public String getGoogleSub() {
@@ -263,7 +253,6 @@ public class Player extends ModelImpl<Player> {
 
   public void setGoogleSub(String googleSub) {
     this.googleSub = googleSub;
-    getEntiy().setIndexedProperty("googleSub", googleSub);
   }
 
   public String getPublicName() {

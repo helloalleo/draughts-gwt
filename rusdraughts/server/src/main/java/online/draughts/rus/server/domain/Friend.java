@@ -1,5 +1,7 @@
 package online.draughts.rus.server.domain;
 
+import online.draughts.rus.server.annotation.Index;
+
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -7,11 +9,14 @@ package online.draughts.rus.server.domain;
  * Time: 14:10
  */
 //@Entity
-public class Friend extends ModelImpl {
+public class Friend extends ModelImpl<Friend> {
 
+  @Index
   private Player friend;
+  @Index
   private Player friendOf;
 
+  @Index
   private boolean favorite;
 
   public Friend() {
@@ -23,7 +28,6 @@ public class Friend extends ModelImpl {
   }
 
   public void setFriend(Player friend) {
-    setIndexedProperty("friend", friend);
     this.friend = friend;
   }
 
@@ -32,7 +36,6 @@ public class Friend extends ModelImpl {
   }
 
   public void setFriendOf(Player friendOf) {
-    setIndexedProperty("friendOf", friendOf);
     this.friendOf = friendOf;
   }
 
@@ -41,7 +44,6 @@ public class Friend extends ModelImpl {
   }
 
   public void setFavorite(boolean favorite) {
-    getEntiy().setIndexedProperty("favorite", favorite);
     this.favorite = favorite;
   }
 }

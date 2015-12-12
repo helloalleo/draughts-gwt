@@ -80,9 +80,9 @@ public class PlayerService {
   }
 
   public void resetUnreadMessages(long playerId, Long friendId) {
-//    Player player = playerDaoProvider.get().find(playerId);
-//    player.getFriendUnreadMessagesMap().remove(friendId);
-//    playerDaoProvider.get().save(player);
+    Player player = Player.getInstance().find(playerId);
+    player.getFriendUnreadMessagesMap().remove(friendId);
+    player.update();
   }
 
   public Player saveDto(PlayerDto dto) {
