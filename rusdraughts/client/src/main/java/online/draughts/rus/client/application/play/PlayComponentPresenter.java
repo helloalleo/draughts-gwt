@@ -188,10 +188,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         gameMessage.setMessageType(GameMessageDto.MessageType.NOTIFICATION_ADDED_TO_FAVORITE);
         if (friend.isFavorite()) {
           gameMessage.setMessage(messages.youHasBeenAddedToFavorite(playSession.getPlayer().getPublicName()));
-        } else {
-          gameMessage.setMessage(messages.youHasBeenRemovedFromFavorite(playSession.getPlayer().getPublicName()));
+          fireEvent(new GameMessageEvent(gameMessage));
         }
-        fireEvent(new GameMessageEvent(gameMessage));
       }
     }).save(friend);
   }

@@ -16,7 +16,7 @@
         </b:ButtonGroup>
         <g:HTMLPanel addStyleNames="{res.style.hrInfo}">
             <b:Row>
-                <b:Column size="XS_10 SM_10 MD_10 LG_10">
+                <b:Column size="XS_10 SM_10 MD_10 LG_10" addStyleNames="{res.style.totalOnlinePlayersHr}">
                     <b.html:Span addStyleNames="{res.style.hrMiddle}"/>
                 </b:Column>
 

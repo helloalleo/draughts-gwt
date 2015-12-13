@@ -16,7 +16,7 @@ public class Variables {
   public static final String C_TITLE = "#921b12";
   public static final String C_NAVBAR = "#418584";
   public static final String C_NAVBAR_BORDER = "#306160";
-  public static final String C_NAVBAR_ACTIVE_ITEM = "#41a9a8";
+  public static final String C_NAVBAR_ACTIVE_ITEM = "#419392";
   public static final String C_NAVBAR_COLOR = "#fff";
   /* -- Sizes -- */
   public static final String S_TITLE = "22px";

@@ -1,9 +1,7 @@
 package online.draughts.rus.server.domain;
 
 
-import com.google.appengine.api.datastore.KeyFactory;
-import com.google.appengine.api.datastore.PreparedQuery;
-import com.google.appengine.api.datastore.Query;
+import com.google.appengine.api.datastore.*;
 import online.draughts.rus.server.annotation.Index;
 import online.draughts.rus.server.annotation.Transient;
 import online.draughts.rus.shared.dto.GameMessageDto;
@@ -130,45 +128,33 @@ public class GameMessage extends ModelImpl<GameMessage> {
         '}';
   }
 
+  // ********* DB Queries ********* //
   public List<GameMessage> findLastMessages(Integer countLast, Long playerId, Long friendId) {
-//    Query<GameMessage> query =ofy().load().type(getEntityClass())
-//        .filter("messageType", GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE)
-//        .order("sentDate")
-//        .orderKey(true);
-//
-//    List<GameMessage> playerMessages = query
-//        .filter("sender", Key.create(Player.class, playerId))
-//        .filter("receiver", Key.create(Player.class, opponentId))
-//        .list();
-//
-//    List<GameMessage> friendMessages = query
-//        .filter("sender", Key.create(Player.class, opponentId))
-//        .filter("receiver", Key.create(Player.class, playerId))
-//        .list();
-//
-//    playerMessages.addAll(friendMessages);
     Query.Filter chatPrivateMessageFilter =
         new Query.FilterPredicate("messageType",
             Query.FilterOperator.EQUAL,
             GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE.name());
 
+    final Key playerKey = KeyFactory.createKey(Player.getInstance().getEntityName(), playerId);
+    final Key friendKey = KeyFactory.createKey(Player.getInstance().getEntityName(), friendId);
+
     Query.Filter playerSenderMessageFilter =
         new Query.FilterPredicate("sender",
             Query.FilterOperator.EQUAL,
-            KeyFactory.createKey(Player.class.getSimpleName(), playerId));
+            playerKey);
     Query.Filter friendReceiverMessageFilter =
         new Query.FilterPredicate("receiver",
             Query.FilterOperator.EQUAL,
-            KeyFactory.createKey(Player.class.getSimpleName(), friendId));
+            friendKey);
 
     Query.Filter playerReceiverMessageFilter =
         new Query.FilterPredicate("receiver",
             Query.FilterOperator.EQUAL,
-            KeyFactory.createKey(Player.class.getSimpleName(), playerId));
+            playerKey);
     Query.Filter friendSenderMessageFilter =
         new Query.FilterPredicate("sender",
             Query.FilterOperator.EQUAL,
-            KeyFactory.createKey(Player.class.getSimpleName(), friendId));
+            friendKey);
 
     Query.Filter playerFriendMessageFilter = Query.CompositeFilterOperator.and(
         Query.CompositeFilterOperator.and(chatPrivateMessageFilter, playerSenderMessageFilter),
@@ -184,7 +170,9 @@ public class GameMessage extends ModelImpl<GameMessage> {
     Query query = new Query(getEntityName()).setFilter(playerOrFriendMessageFilter);
     query.addSort("sentDate", Query.SortDirection.ASCENDING);
     PreparedQuery preparedQuery = getDatastore().prepare(query);
-    return getListResult(preparedQuery);
+    FetchOptions fetchOptions =
+        FetchOptions.Builder.withLimit(countLast);
+    return getListResult(preparedQuery.asQueryResultList(fetchOptions));
   }
 
   private static class SingletonHolder {

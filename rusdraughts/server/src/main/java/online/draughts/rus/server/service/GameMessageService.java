@@ -9,7 +9,6 @@ import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.util.DozerHelper;
 import org.dozer.Mapper;
 
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Map;
 import java.util.logging.Logger;
@@ -35,13 +34,8 @@ public class GameMessageService {
       return null;
     }
 
-    logger.info("New message: " + gameMessage.toString());
     gameMessage.update();
     return gameMessage;
-  }
-
-  public List<GameMessage> findGameMessagesByGameId(Long gameId) {
-    return new ArrayList<>(); //gameMessageDaoProvider.get().findGameMessagesByGameId(gameId);
   }
 
   public List<GameMessageDto> findLastMessages(Integer countLast, Long playerId, Long opponentId) {

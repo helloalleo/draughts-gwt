@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.name.Named;
 import com.google.inject.servlet.RequestScoped;
+import online.draughts.rus.server.domain.Friend;
 import online.draughts.rus.server.service.FriendService;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.shared.dto.FriendDto;
@@ -32,12 +33,13 @@ public class FriendsResourceImpl implements FriendsResource {
   }
 
   @Override
-  public FriendDto save(FriendDto friend) {
+  public FriendDto save(FriendDto friendDto) {
     if (!authProvider.get()) {
       throw new NotAuthorizedException("Access denied");
     }
-    // TODO !!!
-    return new FriendDto();//friendService.save(friend);
+    Friend mapped = mapper.map(friendDto, Friend.class);
+    Friend saved = friendService.save(mapped);
+    return mapper.map(saved, FriendDto.class);
   }
 
   @Override

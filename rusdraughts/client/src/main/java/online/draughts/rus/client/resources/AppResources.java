@@ -125,5 +125,11 @@ public interface AppResources extends ClientBundle {
     String cellWithButton();
 
     String newMessageCircle();
+
+    String totalOnlinePlayersHr();
+
+    String container();
+
+    String playItemTop();
   }
 }

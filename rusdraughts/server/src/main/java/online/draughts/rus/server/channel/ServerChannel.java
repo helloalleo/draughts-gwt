@@ -135,6 +135,7 @@ public class ServerChannel extends ChannelServer {
   private void handlePlayerConnect(GameMessage message, String token) {
     Player player = playerService.find(message.getSender().getId());
 
+    player.setPlaying(false);
     player.setOnline(true);
     playerService.save(player);
 

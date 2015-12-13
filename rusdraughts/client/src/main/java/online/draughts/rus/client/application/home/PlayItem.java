@@ -72,7 +72,6 @@ public class PlayItem extends Composite {
         homePresenter.addToPopupSlot(draughtsPlayer);
       }
     });
-    gameIdAnchor.setText(String.valueOf(game.getId()));
     if (game.getPlayEndStatus() != null) {
       whoDidWin.setHTML(TrUtils.translateEndGame(game.getPlayEndStatus()));
     }

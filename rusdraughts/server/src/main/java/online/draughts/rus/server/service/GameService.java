@@ -34,8 +34,7 @@ public class GameService {
   }
 
   public List<Game> findRange(int offset, int limit) {
-//    return gameDao.findRange(offset, limit);
-    return new ArrayList<>();
+    return Game.getInstance().findRange(offset, limit);
   }
 
   public List<Game> findUserGames(HttpSession session, int offset, int limit) {
@@ -55,8 +54,7 @@ public class GameService {
   }
 
   public Integer getGamesCount() {
-//    return gameDaoProvider.get().countAll();
-    return 0;
+    throw new RuntimeException("Not Implemented");
   }
 
   public Game save(Game game) {
@@ -114,7 +112,7 @@ public class GameService {
   }
 
   public Game find(Long gameId) {
-    return new Game(); //gameDaoProvider.get().find(gameId);
+    return Game.getInstance().find(gameId);
   }
 
   public List<Move> findGameMoves(Long gameId) {

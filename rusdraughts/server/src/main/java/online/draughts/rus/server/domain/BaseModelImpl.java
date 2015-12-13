@@ -86,6 +86,8 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
           value = getValueFromSetOfEnum(field, property);
         } else if (property instanceof Key) {
           value = BaseModel.class.cast(field.getType().newInstance()).find((Key) property);
+        } else if (property instanceof com.google.appengine.api.datastore.Text) {
+          value = ((com.google.appengine.api.datastore.Text) property).getValue();
         } else {
           value = field.getType().cast(property);
         }
@@ -254,6 +256,14 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     return resultObjects;
   }
 
+  protected List<T> getListResult(QueryResultList<Entity> results) {
+    List<T> resultObjects = new ArrayList<>(results.size());
+    for (Entity result : results) {
+      resultObjects.add(getResultObject(result));
+    }
+    return resultObjects;
+  }
+
   @Override
   public List<T> findAll() {
     Query query = new Query(getEntityName());
@@ -277,5 +287,17 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
         key));
     PreparedQuery preparedQuery = datastore.prepare(query);
     return getSingleResultObject(preparedQuery);
+  }
+
+  public List<T> findRange(int offset, int limit) {
+    if (offset < 0 || limit < 0) {
+      return null;
+    }
+    FetchOptions fetchOptions = FetchOptions.Builder.withLimit(limit);
+    fetchOptions.offset(offset);
+
+    Query query = new Query(getEntityName());
+    PreparedQuery preparedQuery = datastore.prepare(query);
+    return getListResult(preparedQuery.asQueryResultList(fetchOptions));
   }
 }

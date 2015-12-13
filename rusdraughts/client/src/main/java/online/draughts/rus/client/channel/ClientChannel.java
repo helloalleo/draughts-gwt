@@ -146,7 +146,6 @@ public class ClientChannel implements ChannelListener {
   private void handleUpdatePlayerList(List<PlayerDto> playerList) {
     for (PlayerDto p : playerList) {
       if (p.getId() == player.getId()) {
-        // TODO Обновить поля?
         player.updateSerializable(p);
         break;
       }
@@ -229,7 +228,9 @@ public class ClientChannel implements ChannelListener {
 
   @Override
   public void onError(int code, String description) {
-
+    if (401 == code) {
+      Window.Location.reload();
+    }
   }
 
   @Override

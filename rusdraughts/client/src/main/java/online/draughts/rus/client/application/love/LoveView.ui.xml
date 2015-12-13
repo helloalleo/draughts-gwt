@@ -11,23 +11,14 @@
         <g:HTMLPanel>
             <b:Row>
                 <b:Column size="MD_10">
-                    <b:Heading size="H2" text="Добрый день!"/>
-                    <b.html:Paragraph>Если Вам понравился сайт, если Вам понравилось отсутствие рекламы на нём, то вы
-                        можете
-                        перевести мне,
-                        любую денежную сумму на кошелек
-                        <b:Anchor href="https://money.yandex.ru/to/410013762648078">Яндекс.Денег</b:Anchor>
-                        или на карту
-                        <b:Anchor href="https://online.sberbank.ru">Сбербанка</b:Anchor>
-                        <noindex>
-                            <b.html:Span color="green">676280479000045819</b.html:Span>
-                        </noindex>
-                        .
+                    <b:Heading size="H2" text="Здравствуйте!"/>
+                    <b.html:Paragraph>
+                        Надеюсь Вам понравился сайт! Надеюсь увидеть Вас снова!
                     </b.html:Paragraph>
                 </b:Column>
-                <b:Column size="MD_2">
-                    <b:Image resource="{res.images.me}" responsive="true"/>
-                </b:Column>
+                <!--<b:Column size="MD_2">-->
+                    <!--<b:Image resource="{res.images.me}" responsive="true"/>-->
+                <!--</b:Column>-->
             </b:Row>
         </g:HTMLPanel>
     </g:SimplePanel>
