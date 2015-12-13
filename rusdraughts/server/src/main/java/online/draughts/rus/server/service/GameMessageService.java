@@ -55,6 +55,7 @@ public class GameMessageService {
   }
 
   public Move saveMove(Move move) {
-    return new Move();//gameMessageDaoProvider.get().saveMove(move);
+    move.update();
+    return move;
   }
 }

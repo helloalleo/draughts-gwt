@@ -1,18 +1,15 @@
 package online.draughts.rus.server.domain;
 
 import com.google.appengine.api.datastore.*;
+import online.draughts.rus.server.annotation.*;
 import online.draughts.rus.server.annotation.Index;
-import online.draughts.rus.server.annotation.MapKey;
-import online.draughts.rus.server.annotation.MapValue;
+import online.draughts.rus.server.annotation.Text;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
 import java.lang.reflect.InvocationTargetException;
 import java.lang.reflect.Method;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.Map;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -83,8 +80,10 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
           value = getValueFromEnum(field, property);
         } else if (property instanceof Boolean && field.getType().equals(boolean.class)) {
           value = ((Boolean) property).booleanValue();
-        } else if (field.getType().isInstance(new HashMap<>())) {
+        } else if (Map.class.isAssignableFrom(field.getType())) {
           value = getValueFromMap(field, property);
+        } else if (field.getType().isInstance(new HashSet<Enum>())) {
+          value = getValueFromSetOfEnum(field, property);
         } else if (property instanceof Key) {
           value = BaseModel.class.cast(field.getType().newInstance()).find((Key) property);
         } else {
@@ -99,6 +98,19 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
       logger.error(e.getMessage(), e);
     }
     return resultObject;
+  }
+
+  private Object getValueFromSetOfEnum(Field field, Object property) {
+    if (!field.isAnnotationPresent(Enumerated.class)) {
+      throw new RuntimeException("Iterable of Enum must be annotated by @Enumerated");
+    }
+    Set<String> inputSet = new HashSet<>((List<String>) property);
+    Set<Enum> resultSet = new HashSet<>(inputSet.size());
+    Class enumClass = field.getAnnotation(Enumerated.class).value();
+    for (String s : inputSet) {
+      resultSet.add(Enum.valueOf(enumClass, s));
+    }
+    return resultSet;
   }
 
   public T getByKey(Key property) {
@@ -140,8 +152,12 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
         }
         if (value.getClass().isEnum()) {
           updateProperty(entity, field, ((Enum) value).name());
-        } else if (value instanceof HashMap) {
-          List<String> stringified = getStringifyMap((HashMap) value);
+        } else if (value instanceof Map) {
+          List<String> stringified = getStringifiedMap((HashMap) value);
+          updateProperty(entity, field, stringified);
+        } else if (value instanceof Set && !((Set) value).isEmpty()
+            && ((Set) value).iterator().next().getClass().isEnum()) {
+          Set<String> stringified = getStringifiedSetOfEnum((Set) value);
           updateProperty(entity, field, stringified);
         } else if (value instanceof Model) {
           updateProperty(entity, field, getKeyProperty((Model) value));
@@ -156,15 +172,35 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     setId(entity.getKey().getId());
   }
 
+  private Set<String> getStringifiedSetOfEnum(Set value) {
+    Set<String> resultSet = new HashSet<>(value.size());
+    for (Object o : value) {
+      resultSet.add(Enum.class.cast(o).name());
+    }
+    return resultSet;
+  }
+
   private void updateProperty(Entity entity, Field field, Object value) {
+    if (field.isAnnotationPresent(Transient.class)) {
+      return;
+    }
+
+    // текст не индексируется
     if (field.isAnnotationPresent(Index.class)) {
       entity.setIndexedProperty(field.getName(), value);
     } else {
-      entity.setProperty(field.getName(), value);
+      if (field.isAnnotationPresent(Text.class)) {
+        entity.setProperty(field.getName(), new com.google.appengine.api.datastore.Text(value.toString()));
+      } else {
+        entity.setProperty(field.getName(), value);
+      }
     }
   }
 
   private Map<Object, Object> getValueFromMap(Field field, Object value) {
+    if (!(field.isAnnotationPresent(MapKey.class) && field.isAnnotationPresent(MapValue.class))) {
+      throw new RuntimeException("Map must be annotated with @MapKey and @MapValue");
+    }
     List<String> stringList = (List<String>) value;
     Map resultMap = new HashMap();
     Class mapKeyClass = field.getAnnotation(MapKey.class).value();
@@ -188,7 +224,7 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     }
   }
 
-  private List<String> getStringifyMap(Map map) {
+  private List<String> getStringifiedMap(Map map) {
     List<String> resultList = new ArrayList<>(map.size());
     for (Object o : map.keySet()) {
       final Object value = map.get(o);

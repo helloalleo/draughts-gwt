@@ -147,7 +147,7 @@ public class ClientChannel implements ChannelListener {
     for (PlayerDto p : playerList) {
       if (p.getId() == player.getId()) {
         // TODO Обновить поля?
-        player = p;
+        player.updateSerializable(p);
         break;
       }
     }

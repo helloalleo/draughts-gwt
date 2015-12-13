@@ -7,14 +7,11 @@ import com.google.inject.servlet.RequestScoped;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
-import online.draughts.rus.shared.dto.FriendDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.resource.PlayersResource;
-import online.draughts.rus.shared.util.DozerHelper;
 import org.dozer.Mapper;
 
 import javax.ws.rs.NotAuthorizedException;
-import java.util.List;
 
 @RequestScoped
 public class PlayersResourceImpl implements PlayersResource {
@@ -38,7 +35,8 @@ public class PlayersResourceImpl implements PlayersResource {
     if (!authProvider.get()) {
       throw new NotAuthorizedException("Access denied");
     }
-    return mapper.map(playerService.saveDto(player), PlayerDto.class);
+    final Player saved = playerService.saveDto(player);
+    return mapper.map(saved, PlayerDto.class);
   }
 
   @Override

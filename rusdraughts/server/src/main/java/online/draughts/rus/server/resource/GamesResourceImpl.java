@@ -63,12 +63,13 @@ public class GamesResourceImpl implements GamesResource {
   }
 
   @Override
-  public GameDto save(GameDto game) {
+  public GameDto save(GameDto gameDto) {
     if (!authProvider.get()) {
       throw new NotAuthorizedException("Access denied");
     }
-    Game entity = mapper.map(game, Game.class);
-    return mapper.map(gameService.save(entity), GameDto.class);
+    Game mapped = mapper.map(gameDto, Game.class);
+    final Game saved = gameService.save(mapped);
+    return mapper.map(saved, GameDto.class);
   }
 
   @Override

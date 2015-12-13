@@ -1,6 +1,8 @@
 package online.draughts.rus.server.domain;
 
 
+import online.draughts.rus.server.annotation.Enumerated;
+import online.draughts.rus.server.annotation.Text;
 import online.draughts.rus.shared.dto.MoveDto;
 
 import java.util.HashSet;
@@ -26,6 +28,7 @@ public class Move extends ModelImpl<Move> {
 
   private String takenPos;
 
+  @Enumerated(value = MoveDto.MoveFlags.class)
   private Set<MoveDto.MoveFlags> moveFlags = new HashSet<>();
 
   private String title;
@@ -34,6 +37,7 @@ public class Move extends ModelImpl<Move> {
 
   private Set<String> hashTags = new HashSet<>();
 
+  @Text
   private String screenshot;
 
   public Move() {
@@ -59,6 +63,10 @@ public class Move extends ModelImpl<Move> {
   public Move(Move move) {
     this(move.getNumber(), move.isFirst(), move.getGameMessage(), move.getStartPos(), move.getEndPos(),
         move.getTakenPos(), move.getMoveFlags(), move.getScreenshot());
+  }
+
+  public static Move getInstance() {
+    return SingletonHolder.INSTANCE;
   }
 
   public GameMessage getGameMessage() {
@@ -167,5 +175,9 @@ public class Move extends ModelImpl<Move> {
         ", takenPos='" + takenPos + '\'' +
         ", moveFlags=" + moveFlags +
         '}';
+  }
+
+  private static class SingletonHolder {
+    private static final Move INSTANCE = new Move();
   }
 }

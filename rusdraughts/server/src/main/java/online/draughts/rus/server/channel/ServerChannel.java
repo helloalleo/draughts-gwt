@@ -10,7 +10,6 @@ import com.google.inject.name.Named;
 import no.eirikb.gwtchannelapi.server.ChannelServer;
 import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.server.domain.GameMessage;
-import online.draughts.rus.server.domain.Move;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.service.GameMessageService;
 import online.draughts.rus.server.service.GameService;
@@ -191,35 +190,31 @@ public class ServerChannel extends ChannelServer {
   }
 
   private GameMessage saveGameMessage(GameMessage message) {
-    Player playerReceiver = playerService.find(message.getReceiver().getId());
-    Player playerSender = playerService.find(message.getSender().getId());
-    GameMessage gameMessage = new GameMessage();
+//    Player playerReceiver = playerService.find(message.getReceiver().getId());
+//    Player playerSender = playerService.find(message.getSender().getId());
+//    GameMessage gameMessage = new GameMessage();
 
-    if (message.getGame() != null) {
-      Game game = gameService.find(message.getGame().getId());
-      gameMessage.setGame(game);
-    }
+//    if (message.getGame() != null) {
+//      Game game = gameService.find(message.getGame().getId());
+//      gameMessage.setGame(game);
+//    }
 
-    gameMessage.setMessageType(message.getMessageType());
-    gameMessage.setData(message.getData());
-    gameMessage.setMessage(message.getMessage());
+//    gameMessage.setMessageType(message.getMessageType());
+//    gameMessage.setData(message.getData());
+//    gameMessage.setMessage(message.getMessage());
 
-    gameMessage.setReceiver(playerReceiver);
-    gameMessage.setSender(playerSender);
+//    gameMessage.setReceiver(playerReceiver);
+//    gameMessage.setSender(playerSender);
 
-    gameMessage.setSentDate(new Date());
+    message.setSentDate(new Date());
 
-    gameMessage = gameMessageService.save(gameMessage);
+    message = gameMessageService.save(message);
 
     if (null != message.getMove()) {
-      message.getMove().setGameMessage(gameMessage);
-      Move move = gameMessageService.saveMove(new Move(message.getMove()));
-      gameMessage.setMove(move);
-
-      gameMessage = gameMessageService.save(gameMessage);
+      gameMessageService.saveMove(message.getMove());
     }
 
-    return gameMessage;
+    return message;
   }
 
   private void updatePlayerList() {

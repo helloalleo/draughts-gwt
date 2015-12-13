@@ -11,6 +11,8 @@ import online.draughts.rus.server.guice.DbModule;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.dto.MoveDto;
+import org.dozer.DozerBeanMapper;
+import org.dozer.Mapper;
 import org.jukito.JukitoRunner;
 import org.jukito.UseModules;
 import org.junit.After;
@@ -21,6 +23,7 @@ import org.junit.runner.RunWith;
 import java.util.*;
 
 import static org.junit.Assert.assertEquals;
+import static org.junit.Assert.assertNotEquals;
 import static org.junit.Assert.assertNotNull;
 
 /**
@@ -38,6 +41,8 @@ public class GameServiceTest extends BaseTest {
 
   @Inject
   private PlayerService playerService;
+
+  private Mapper mapper = new DozerBeanMapper();
 
   @Before
   public void setUp() throws Exception {
@@ -123,5 +128,17 @@ public class GameServiceTest extends BaseTest {
   @Test
   public void testFind() throws Exception {
 
+  }
+
+  @Test
+  public void testSaveMove() throws Exception {
+    Set<MoveDto.MoveFlags> moveFlagses = new HashSet<>();
+    moveFlagses.add(MoveDto.MoveFlags.CANCEL_MOVE);
+    Move move = new Move(1, true, null, randomString(), randomString(), null, moveFlagses, "");
+    move.update();
+    assertNotEquals(0, move.getId());
+
+    move = Move.getInstance().find(move.getId());
+    assertEquals(1, move.getMoveFlags().size());
   }
 }

@@ -51,7 +51,7 @@ public class GameService {
     if (player == null) {
       throw new RuntimeException("Player not found");
     }
-    return new ArrayList<>();//gameDaoProvider.get().findUserGames(playerId, offset, limit);
+    return Game.getInstance().findUserGames(playerId, offset, limit);
   }
 
   public Integer getGamesCount() {
@@ -61,16 +61,14 @@ public class GameService {
 
   public Game save(Game game) {
     if (game.getId() == 0) {
-//      return gameDaoProvider.get().save(game);
-      return new Game();
+      game.update();
+      return game;
     }
 
-    updatePlayer(game, game.getPlayerBlack().getId());
-    updatePlayer(game, game.getPlayerWhite().getId());
-    Game saved = new Game(); //gameDaoProvider.get().save(game);
+    Player playerBlack = updatePlayerStat(game, game.getPlayerBlack().getId());
+    Player playerWhite = updatePlayerStat(game, game.getPlayerWhite().getId());
+    game.update();
 
-    Player playerBlack = playerService.find(game.getPlayerBlack().getId());
-    Player playerWhite = playerService.find(game.getPlayerWhite().getId());
     boolean playerWhiteIsFriendOfPlayerBlack = friendService.isPlayerFriendOf(playerWhite.getId(), playerBlack.getId());
     if (!playerWhiteIsFriendOfPlayerBlack) {
       Friend friend = new Friend();
@@ -87,14 +85,14 @@ public class GameService {
 
       friendService.save(friend);
     }
-    return saved;
+    return game;
   }
 
-  private void updatePlayer(Game game, Long playerId) {
+  private Player updatePlayerStat(Game game, long playerId) {
     Player player = playerService.find(playerId);
     player.setGamePlayed(player.getGamePlayed() + 1);
     final GameDto.GameEnds playEndStatus = game.getPlayEndStatus();
-    if (playEndStatus != null) {
+    if (null != playEndStatus) {
       final boolean blackWin = GameDto.GameEnds.BLACK_WIN.equals(playEndStatus);
       final boolean whiteWin = GameDto.GameEnds.WHITE_WIN.equals(playEndStatus);
       final boolean blackSurrender = GameDto.GameEnds.SURRENDER_BLACK.equals(playEndStatus);
@@ -112,7 +110,7 @@ public class GameService {
       }
     }
     Rating.calcPlayerRating(player);
-    playerService.save(player);
+    return playerService.save(player);
   }
 
   public Game find(Long gameId) {

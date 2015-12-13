@@ -103,6 +103,10 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       Growl.growlNotif(messages.playerOffline());
       return;
     }
+    if (opponent.isPlaying()) {
+      Growl.growlNotif(messages.playAlreadyPlaying(opponent.getPublicName()));
+      return;
+    }
     getView().setOpponent(opponent);
 
     getView().showInviteDialog(new ClickHandler() {

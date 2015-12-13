@@ -17,7 +17,7 @@ public class ModelImpl<T extends BaseModel> extends BaseModelImpl<T> implements 
   }
 
   @Override
-  protected void setId(long id) {
+  public void setId(long id) {
     this.id = id;
   }
 

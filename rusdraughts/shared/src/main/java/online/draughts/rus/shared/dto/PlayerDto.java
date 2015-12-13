@@ -121,6 +121,14 @@ public class PlayerDto extends BaseDto {
     return "";
   }
 
+  public void updateSerializable(PlayerDto playerDto) {
+    setLoggedIn(playerDto.isLoggedIn());
+    setPlaying(playerDto.isPlaying());
+    setOnline(playerDto.isOnline());
+    setSubscribed(playerDto.isSubscribed());
+    setRating(playerDto.getRating());
+  }
+
   /**
    * Обновляем только сеарилизуемые поля
    *
