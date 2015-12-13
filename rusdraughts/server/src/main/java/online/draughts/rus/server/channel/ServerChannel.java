@@ -176,14 +176,13 @@ public class ServerChannel extends ChannelServer {
 
   private void handleChatPrivateMessage(GameMessage message) {
     long receiverId = message.getReceiver().getId();
-    long senderId = message.getSender().getId();
 
     final String receiverChannel = String.valueOf(receiverId);
 
     Player receiver = playerService.find(receiverId);
     message = saveGameMessage(message);
     if (GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
-      mailService.sendNotification(message, senderId, receiver);
+      mailService.sendNotification(message);
     }
     if (receiver.isOnline()) {
       sendMessage(receiverChannel, message);
