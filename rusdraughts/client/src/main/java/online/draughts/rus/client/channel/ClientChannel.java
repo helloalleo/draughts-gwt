@@ -236,7 +236,10 @@ public class ClientChannel implements ChannelListener {
   @Override
   public void onClose() {
     sendSimpleMessage(GameMessageDto.MessageType.CHANNEL_CLOSE);
+    handleClose();
+  }
 
+  private void handleClose() {
     playSession.setConnected(false);
     eventBus.fireEvent(new DisconnectFromPlayEvent());
   }
@@ -308,8 +311,14 @@ public class ClientChannel implements ChannelListener {
       case NOTIFICATION_ADDED_TO_FAVORITE:
         handleNotification(gameMessage);
         break;
+      case CHANNEL_CLOSE:
+        handleChannelClose();
+        break;
     }
+  }
 
+  private void handleChannelClose() {
+    handleClose();
   }
 
   private void handleNotification(GameMessageDto gameMessage) {

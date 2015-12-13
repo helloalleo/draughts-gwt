@@ -25,6 +25,7 @@ import com.google.inject.servlet.ServletModule;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
 import online.draughts.rus.server.channel.ServerChannel;
+import online.draughts.rus.server.servlet.CheckOnlineServlet;
 import online.draughts.rus.server.servlet.GameGiff;
 import online.draughts.rus.server.servlet.LogoutServlet;
 import online.draughts.rus.server.servlet.oauth.*;
@@ -41,14 +42,21 @@ public class DispatchServletModule extends ServletModule {
     filter("/*").through(createUserIdScopingFilter());
 
     serve("/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
+
     serve("/Application/channel").with(ServerChannel.class);
+    serve("/cron/checkonline").with(CheckOnlineServlet.class);
+
     serve("/logout").with(LogoutServlet.class);
+
     serve("/vkOAuth").with(OAuthVKServlet.class);
     serve("/vkOAuthCallback").with(OAuthVKCallbackServlet.class);
+
     serve("/fbOAuth").with(OAuthFacebookServlet.class);
     serve("/fbOAuthCallback").with(OAuthFacebookCallbackServlet.class);
+
     serve("/gOAuth").with(OAuthGoogleServlet.class);
     serve("/gOAuthCallback").with(OAuthGoogleCallbackServlet.class);
+
     serve("/getGame").with(GameGiff.class);
   }
 

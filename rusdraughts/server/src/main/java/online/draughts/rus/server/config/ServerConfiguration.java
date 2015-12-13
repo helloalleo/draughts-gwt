@@ -2,7 +2,6 @@ package online.draughts.rus.server.config;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.service.PlayerService;
 
 import java.util.ResourceBundle;
 
@@ -32,33 +31,36 @@ public class ServerConfiguration {
   private final String fbScope;
   private final String fbApiVersion;
   private final String fbApiGraph;
+  private final String gaeCronCheckInterval;
   private String fbApiOAuthPath;
   private String loginUrl;
   private String homeUrl;
   private String googleClientId;
   private String googleScope;
   private String googleRedirectUri;
-  private String googleApiVersion;
   private String googleClientSecret;
   private String googleApiUserInfo;
 
-  private final PlayerService playerService;
   private String playUrl;
   private boolean debug;
+  private String gaeCronIpAddr;
 
   @Inject
-  public ServerConfiguration(PlayerService playerService) {
-    this.playerService = playerService;
-    resetUserStatuses();
-
+  public ServerConfiguration() {
     ResourceBundle resourceBundle = ResourceBundle.getBundle("ServerConfiguration");
 
+    gaeCronIpAddr = resourceBundle.getString("gae_cron_ip_addr");
+    gaeCronCheckInterval = resourceBundle.getString("gae_cron_check_interval");
+
     context = resourceBundle.getString("context");
+
     serverErrorUrl = resourceBundle.getString("server_error_url");
     notFoundErrorUrl = resourceBundle.getString("not_found_error_url");
+
     loginUrl = resourceBundle.getString("login");
     homeUrl = resourceBundle.getString("home");
     playUrl = resourceBundle.getString("play");
+
     debug = Boolean.valueOf(resourceBundle.getString("debug"));
 
     // VK API Data
@@ -188,22 +190,19 @@ public class ServerConfiguration {
     return googleApiUserInfo;
   }
 
-  private void resetUserStatuses() {
-    // сбрасываем всех пользователей как не залогиненных при старте контейнера
-//    final List<Player> playerList = playerService.findAll();
-//    for (Player player : playerList) {
-//      player.setOnline(false);
-//      player.setPlaying(false);
-//      player.setLoggedIn(false);
-//      playerService.save(player);
-//    }
-  }
-
   public String getPlayUrl() {
     return playUrl;
   }
 
   public boolean isDebug() {
     return debug;
+  }
+
+  public String getGaeCronIpAddr() {
+    return gaeCronIpAddr;
+  }
+
+  public String getGaeCronCheckInterval() {
+    return gaeCronCheckInterval;
   }
 }

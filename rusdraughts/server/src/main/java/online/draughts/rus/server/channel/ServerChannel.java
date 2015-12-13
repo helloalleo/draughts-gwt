@@ -137,6 +137,7 @@ public class ServerChannel extends ChannelServer {
 
     player.setPlaying(false);
     player.setOnline(true);
+    player.setLastVisited(new Date());
     playerService.save(player);
 
     final String channel = String.valueOf(player.getId());
@@ -170,6 +171,11 @@ public class ServerChannel extends ChannelServer {
     player.setPlaying(false);
     playerService.save(player);
 
+    GameMessage gameMessage = new GameMessage();
+    gameMessage.setReceiver(player);
+    gameMessage.setMessageType(GameMessageDto.MessageType.CHANNEL_CLOSE);
+    sendMessage(String.valueOf(player.getId()), gameMessage);
+
     channelTokenPeers.remove(chanelName);
     updatePlayerList();
   }
@@ -190,24 +196,7 @@ public class ServerChannel extends ChannelServer {
   }
 
   private GameMessage saveGameMessage(GameMessage message) {
-//    Player playerReceiver = playerService.find(message.getReceiver().getId());
-//    Player playerSender = playerService.find(message.getSender().getId());
-//    GameMessage gameMessage = new GameMessage();
-
-//    if (message.getGame() != null) {
-//      Game game = gameService.find(message.getGame().getId());
-//      gameMessage.setGame(game);
-//    }
-
-//    gameMessage.setMessageType(message.getMessageType());
-//    gameMessage.setData(message.getData());
-//    gameMessage.setMessage(message.getMessage());
-
-//    gameMessage.setReceiver(playerReceiver);
-//    gameMessage.setSender(playerSender);
-
     message.setSentDate(new Date());
-
     message = gameMessageService.save(message);
 
     if (null != message.getMove()) {
@@ -217,7 +206,7 @@ public class ServerChannel extends ChannelServer {
     return message;
   }
 
-  private void updatePlayerList() {
+  public void updatePlayerList() {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessageDto.MessageType.USER_LIST_UPDATE);
     List<Player> playerList = playerService.findAll();

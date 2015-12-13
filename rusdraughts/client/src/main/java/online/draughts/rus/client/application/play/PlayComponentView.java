@@ -480,7 +480,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   public void setUpViewOnDisconnectFromServer() {
     playButton.setActive(true);
     playButton.setBlock(true);
-    playButton.addStyleName("btn-danger");
+    playButton.setType(ButtonType.DANGER);
     playButton.setIcon(IconType.REFRESH);
     playButton.setText(messages.reconnect());
     cancelMove.setEnabled(false);
