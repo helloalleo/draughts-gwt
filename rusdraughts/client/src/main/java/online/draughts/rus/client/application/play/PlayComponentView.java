@@ -10,6 +10,7 @@ import com.ait.lienzo.shared.core.types.DataURLType;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SafeHtmlCell;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
@@ -66,7 +67,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @UiField
   HTMLPanel draughtsDesk;
   @UiField
-  HTMLPanel draughtsColumn;
+  org.gwtbootstrap3.client.ui.Column draughtsColumn;
   @UiField
   HTMLPanel notationColumn;
   @UiField
@@ -121,11 +122,18 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     this.playSession = playSession;
 
     initWidget(binder.createAndBindUi(this));
+  }
 
-    initPlayerFriendsCellList();
-    initPlayersCellList();
-
-    initEmptyDeskPanel();
+  @Override
+  protected void onAttach() {
+    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+      @Override
+      public void execute() {
+        initPlayerFriendsCellList();
+        initPlayersCellList();
+        initEmptyDeskPanel();
+      }
+    });
   }
 
   @SuppressWarnings(value = "unused")
@@ -199,8 +207,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private void initEmptyDeskPanel() {
     final String mainContainerMarginTop = Variables.S_MAIN_CONTAINER_SCROLL_MARGIN_TOP;
     final String highStr = mainContainerMarginTop.substring(0, mainContainerMarginTop.length() - 2); // отсекаем строку пикселей
-    int draughtsSide = Window.getClientHeight() - Integer.valueOf(highStr);
-    draughtsColumn.setWidth(draughtsSide + "px");
+    int draughtsSide = draughtsColumn.getOffsetWidth();
+    GWT.log(draughtsSide + "");
+//    draughtsColumn.setWidth(draughtsSide + "px");
 
     lienzoPanel = new LienzoPanel(draughtsSide, draughtsSide);
     int lienzoSide = lienzoPanel.getHeight() - 20;
@@ -250,7 +259,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private void alignNotationPanel() {
     if (Window.getClientWidth() > 0) {
       String notationHeight = lienzoPanel.getHeight() - infoHTMLPanel.getOffsetHeight() - 40 + "px";
-      notationPanel.setHeight(notationHeight);
+//      notationPanel.setHeight(notationHeight);
     }
   }
 
@@ -548,8 +557,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
             .setX(event.getX())
             .setY(event.getY())
             .setFillColor(ColorName.RED);
-//        board.add(circle);
-//        lienzoPanel.draw();
+        board.add(circle);
+        lienzoPanel.draw();
       }
     });
   }

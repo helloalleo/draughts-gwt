@@ -314,11 +314,23 @@ public class Player extends ModelImpl<Player> {
   }
 
   public Player findByFbId(String userId) {
-    return null;
+    Query.Filter fbIdFilter =
+        new Query.FilterPredicate("fbId",
+            Query.FilterOperator.EQUAL,
+            userId);
+    Query query = new Query(getEntityName()).setFilter(fbIdFilter);
+    PreparedQuery pq = getDatastore().prepare(query);
+    return getSingleResultObject(pq);
   }
 
   public Player findByGoogleSub(String sub) {
-    return null;
+    Query.Filter googleSubFilter =
+        new Query.FilterPredicate("googleSub",
+            Query.FilterOperator.EQUAL,
+            sub);
+    Query query = new Query(getEntityName()).setFilter(googleSubFilter);
+    PreparedQuery pq = getDatastore().prepare(query);
+    return getSingleResultObject(pq);
   }
 
   private static class SingletonHolder {

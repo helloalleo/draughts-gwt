@@ -11,8 +11,7 @@ import org.junit.Test;
 import org.junit.runner.RunWith;
 import org.junit.runners.JUnit4;
 import org.openqa.selenium.*;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.interactions.Actions;
 import org.openqa.selenium.support.ui.ExpectedCondition;
 import org.openqa.selenium.support.ui.ExpectedConditions;
@@ -26,7 +25,6 @@ import javax.xml.parsers.DocumentBuilderFactory;
 import javax.xml.parsers.ParserConfigurationException;
 import javax.xml.xpath.*;
 import java.io.ByteArrayInputStream;
-import java.io.File;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
@@ -72,13 +70,10 @@ public class PlayTest {
 
   @Before
   public void setUp() throws ParserConfigurationException, IOException, SAXException {
-    File profDir = new File("/Users/alekspo/Library/Application Support/Firefox/Profiles/p7ws5dyp.WebDriver2");
-    FirefoxProfile profile = new FirefoxProfile(profDir);
-    webDriver2 = new FirefoxDriver(profile);
+    System.setProperty("webdriver.chrome.driver", "/Users/alekspo/bin/chromedriver");
 
-    profDir = new File("/Users/alekspo/Library/Application Support/Firefox/Profiles/se57dh3q.WebDriver1");
-    profile = new FirefoxProfile(profDir);
-    webDriver1 = new FirefoxDriver(profile);
+    webDriver2 = new ChromeDriver();
+    webDriver1 = new ChromeDriver();
   }
 
   @After
@@ -93,10 +88,7 @@ public class PlayTest {
       @Override
       public void run() {
         loginWebDriver(webDriver1, "fbOAuth");
-        try {
-          sleep(1500);
-        } catch (InterruptedException e) {
-        }
+        timeout(1500);
         connectToServer(webDriver1);
         inviteToPlay(webDriver1);
         acceptInvite(webDriver2);
@@ -118,6 +110,13 @@ public class PlayTest {
       vkThread.join();
     } catch (InterruptedException e) {
       e.printStackTrace();
+    }
+  }
+
+  private void timeout(int millisec) {
+    try {
+      sleep(millisec);
+    } catch (InterruptedException e) {
     }
   }
 
@@ -162,6 +161,7 @@ public class PlayTest {
         .moveByOffset(posX(size, end.getCol()), posY(size, end.getRow()))
         .click();
     drawing.perform();
+    timeout(1500);
   }
 
   private int posX(Dimension size, int col) {
@@ -246,7 +246,7 @@ public class PlayTest {
     (new WebDriverWait(webDriver, WAIT)).until(ExpectedConditions.urlMatches(".*" + NEXT_PAGE));
     webDriver.get(SITE_URL + NEXT_PAGE);
 
-    assertEquals("Шашки онлайн", webDriver1.getTitle());
+    assertEquals("Шашки онлайн", webDriver.getTitle());
   }
 
   private String extractXPath(String notation, String path) {

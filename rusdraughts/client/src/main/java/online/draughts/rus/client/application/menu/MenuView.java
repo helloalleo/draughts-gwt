@@ -55,7 +55,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     brand.add(logo);
 
     scrollToTop = new AnchorListItem();
-    scrollToTop.setIcon(IconType.ARROW_CIRCLE_UP);
+    scrollToTop.setIcon(IconType.ARROW_UP);
     scrollToTop.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {

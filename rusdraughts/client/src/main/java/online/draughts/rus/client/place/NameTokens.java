@@ -44,11 +44,11 @@ public class NameTokens {
   }
 
   public Link[] getLeftLinks() {
-    return new Link[]{homeLink, learnLink, loveLink};
+    return new Link[]{homeLink, learnLink};
   }
 
   public Link[] getLeftAuthLinks() {
-    return new Link[]{homeLink, playLink, learnLink, loveLink};
+    return new Link[]{homeLink, playLink, learnLink};
   }
 
   public Link[] getRightLinks() {

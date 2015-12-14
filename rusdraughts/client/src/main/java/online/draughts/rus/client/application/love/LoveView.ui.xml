@@ -13,7 +13,7 @@
                 <b:Column size="MD_10">
                     <b:Heading size="H2" text="Здравствуйте!"/>
                     <b.html:Paragraph>
-                        Надеюсь Вам понравился сайт! Надеюсь увидеть Вас снова!
+                        Надеюсь Вам понравился сайт и я жду Вас снова насайте!
                     </b.html:Paragraph>
                 </b:Column>
                 <!--<b:Column size="MD_2">-->

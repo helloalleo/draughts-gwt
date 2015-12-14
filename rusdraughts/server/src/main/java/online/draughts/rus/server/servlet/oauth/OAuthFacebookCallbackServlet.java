@@ -99,12 +99,12 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
       final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes(StandardCharsets.UTF_8));
       JsonReader jsonReader = Json.createReader(inBody);
       JsonObject responseObject = jsonReader.readObject();
-      String user_id = responseObject.getString("id");
-      if (StringUtils.isNoneEmpty(user_id)) {
-        Player player = playerService.findByFbId(user_id);
+      String userId = responseObject.getString("id");
+      if (StringUtils.isNoneEmpty(userId)) {
+        Player player = playerService.findByFbId(userId);
         if (player == null) {
           player = new Player();
-          player.setFbId(user_id);
+          player.setFbId(userId);
           player.setAuthProvider(PlayerDto.AuthProvider.FACEBOOK);
           String name = responseObject.getString("name");
           String[] nameArr = name.split(" ");

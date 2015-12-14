@@ -18,6 +18,7 @@ public class PlayerService {
 
   public Player save(Player player) {
     player.update();
+    player.flush();
     return player;
   }
 

@@ -1,6 +1,8 @@
 package online.draughts.rus.server.domain;
 
 import com.google.appengine.api.datastore.*;
+import com.google.appengine.api.memcache.AsyncMemcacheService;
+import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import online.draughts.rus.server.annotation.*;
 import online.draughts.rus.server.annotation.Index;
 import online.draughts.rus.server.annotation.Text;
@@ -22,7 +24,7 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
   private Logger logger = Logger.getLogger(BaseModelImpl.class);
 
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
-
+  private AsyncMemcacheService memcache = MemcacheServiceFactory.getAsyncMemcacheService();
   private Class<T> entityClass;
   private String entityName;
 
@@ -172,6 +174,11 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     }
     datastore.put(entity);
     setId(entity.getKey().getId());
+  }
+
+  @Override
+  public void flush() {
+    memcache.clearAll();
   }
 
   private Set<String> getStringifiedSetOfEnum(Set value) {

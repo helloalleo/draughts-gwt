@@ -41,6 +41,7 @@ public class Board extends Layer {
 
   private List<Square> highlightedSquares = new ArrayList<>();
 
+  private Stack<Stroke> moveStack = new Stack<>();
   private Stack<Stroke> moveMyStack = new Stack<>();
   private Stack<Stroke> moveOpponentStack = new Stack<>();
   private int moveCounter = 0;
@@ -560,15 +561,15 @@ public class Board extends Layer {
       }
 
       stroke.setTakenSquare(takenSquare);
-      Stroke prev = moveMyStack.peek();
+      Stroke prev = moveStack.peek();
       if (jumpMoves.isEmpty()) { // если нет шашек которые бьются дальше
         stroke.setOnStopBeat();
-        if (prev.isSimple()) {
+        if (prev.isStopBeat() || prev.isSimple()) {
           stroke.setOnStartBeat();
         }
       } else {
         stroke.setOnContinueBeat();
-        if (prev.isSimple()) {
+        if (prev.isStopBeat() || prev.isSimple()) {
           stroke.setOnStartBeat();
         }
       }
@@ -670,10 +671,12 @@ public class Board extends Layer {
         stroke.setEndSquare(startSquare);
       }
       moveOpponentStack.pop();
+      moveStack.pop();
     } else {
       stroke.setStartSquare(startSquare);
       stroke.setEndSquare(endSquare);
       moveOpponentStack.push(stroke);
+      moveStack.push(stroke);
     }
 
     stroke.setTakenSquare(takenSquare);
@@ -890,6 +893,7 @@ public class Board extends Layer {
 
             getView().doPlayerMove(move);
             moveMyStack.push(stroke);
+            moveStack.push(stroke);
           }
         });
 
@@ -983,6 +987,7 @@ public class Board extends Layer {
   public void moveOpponentCanceled(Stroke stroke) {
     strokeCanceled(stroke);
     Stroke canceled = moveOpponentStack.pop();
+    moveStack.pop();
     if (isCancelFirstMove(canceled)) {
       moveCounter--;
     }
@@ -991,6 +996,7 @@ public class Board extends Layer {
   public void moveMyCanceled(Stroke stroke) {
     strokeCanceled(stroke);
     Stroke canceled = moveMyStack.pop();
+    moveStack.pop();
     if (isCancelFirstMove(canceled)) {
       moveCounter--;
     }

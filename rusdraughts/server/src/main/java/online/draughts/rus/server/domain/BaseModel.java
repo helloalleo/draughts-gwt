@@ -15,6 +15,8 @@ public interface BaseModel<T> extends Serializable {
 
   void update();
 
+  void flush();
+
   List<T> findAll();
 
   T find(long id);
