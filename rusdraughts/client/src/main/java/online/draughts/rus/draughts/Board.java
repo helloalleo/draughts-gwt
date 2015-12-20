@@ -7,7 +7,6 @@ import com.ait.lienzo.client.core.event.NodeTouchEndEvent;
 import com.ait.lienzo.client.core.event.NodeTouchEndHandler;
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.shared.core.types.ColorName;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.draughts.util.Operator;
 import online.draughts.rus.draughts.util.PossibleOperators;
 import online.draughts.rus.shared.dto.MoveDto;
@@ -26,6 +25,7 @@ import java.util.Stack;
 public class Board extends Layer {
   private static final double ANIMATION_DURATION = 50;
   public static int DRAUGHTS_ON_SIDE = 12;
+  private final boolean selfPlay;
   private List<Square> capturedSquares = new ArrayList<>();
   private List<Draught> myDraughtList;
   private List<Draught> opponentDraughtList;
@@ -54,10 +54,12 @@ public class Board extends Layer {
   public Board(BoardBackgroundLayer backgroundLayer,
                int rows,
                int cols,
-               boolean white) {
+               boolean white,
+               boolean selfPlay) {
     this.backgroundLayer = backgroundLayer;
     this.white = white;
-    turn = white;
+    this.turn = white;
+    this.selfPlay = selfPlay;
 
     this.rows = rows;
     this.cols = cols;
@@ -73,7 +75,6 @@ public class Board extends Layer {
     addNodeMouseClickHandler(new NodeMouseClickHandler() {
       @Override
       public void onNodeMouseClick(NodeMouseClickEvent nodeMouseClickEvent) {
-        Logger.debug(nodeMouseClickEvent.getX() + "," + nodeMouseClickEvent.getY());
         Board.this.moveDraught(nodeMouseClickEvent.getX(), nodeMouseClickEvent.getY());
       }
     });
@@ -415,8 +416,8 @@ public class Board extends Layer {
     highlightedSquares.clear();
   }
 
-  public Square getSquare(double row, double col) throws SquareNotFoundException {
-    return backgroundLayer.getSquare(row, col);
+  public Square getSquare(double x, double y) throws SquareNotFoundException {
+    return backgroundLayer.getSquare(x, y);
   }
 
   public Square getSquare(int row, int col) throws SquareNotFoundException {
@@ -860,7 +861,7 @@ public class Board extends Layer {
   public void moveDraught(double clickX, double clickY) {
     Draught selectedDraught = findClickedDraught(clickX, clickY);
     if (selectedDraught != null) {
-      selectedDraught.onNodeTouch();
+      selectedDraught.onNodeTouch(selfPlay);
     } else {
       selectedDraught = Draught.getSelectedDraught();
     }
@@ -943,7 +944,12 @@ public class Board extends Layer {
       return null;
     }
     for (Draught draught : myDraughtList) {
-      final Square current = Square.getFromPos(draught.getRow(), draught.getCol());
+      final Square current;
+      try {
+        current = backgroundLayer.getSquare(draught.getRow(), draught.getCol());
+      } catch (SquareNotFoundException e) {
+        continue;
+      }
       if (square == current) {
         return square.getOccupant();
       }
@@ -1066,5 +1072,23 @@ public class Board extends Layer {
 
   public PlayComponent getView() {
     return view;
+  }
+
+  public void addDraught(double clientX, double clientY, boolean white) {
+    Square square;
+    try {
+      square = backgroundLayer.getSquare(clientX, clientY);
+    } catch (SquareNotFoundException ignore) {
+      return;
+    }
+    if (square.isOccupied()) {
+      return;
+    }
+    if (white == isWhite()) {
+      myDraughtList.add(addDraught(square.getRow(), square.getCol(), white));
+    } else {
+      opponentDraughtList.add(addDraught(square.getRow(), square.getCol(), white));
+    }
+    draw();
   }
 }

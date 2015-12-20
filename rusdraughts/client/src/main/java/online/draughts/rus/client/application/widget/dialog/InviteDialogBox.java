@@ -8,8 +8,10 @@ import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
-import org.gwtbootstrap3.client.ui.Image;
+import org.gwtbootstrap3.client.ui.Icon;
 import org.gwtbootstrap3.client.ui.RadioButton;
+import org.gwtbootstrap3.client.ui.constants.ButtonType;
+import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.gwtbootstrap3.client.ui.gwt.FlowPanel;
 
 /**
@@ -22,7 +24,6 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   private final HTML inviteLabel = new HTML();
   private final RadioButton whiteRadio;
   private final Button submitButton;
-  private final Button cancelButton;
   private final HorizontalPanel waitMessage = new HorizontalPanel();
   private Timer waitResponseTimer;
 
@@ -42,7 +43,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     panel.add(inviteLabel);
 
     submitButton = new Button(messages.next());
-    cancelButton = new Button(messages.cancel());
+    Button cancelButton = new Button(messages.cancel());
 
     Label label = new Label(messages.chooseYourColor());
     panel.add(label);
@@ -59,7 +60,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     radioGroup.add(blackRadio);
     panel.add(radioGroup);
 
-    final Image waitImage = new Image(/*ResourceLoader.INSTANCE.images().busyIconImage()*/);
+    final Icon waitImage = new Icon(IconType.SPINNER);
     waitMessage.setVisible(false);
     waitMessage.add(waitImage);
     waitMessageLabel = new Label(messages.waitResponse());
@@ -82,7 +83,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     ButtonGroup group = new ButtonGroup();
     group.add(cancelButton);
     group.add(submitButton);
-    submitButton.addStyleName("btn-primary");
+    submitButton.setType(ButtonType.PRIMARY);
 
     panel.add(group);
     panel.setCellHorizontalAlignment(group, HasAlignment.ALIGN_RIGHT);
@@ -145,5 +146,4 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   }
 
   public abstract void submitted(boolean white);
-
 }

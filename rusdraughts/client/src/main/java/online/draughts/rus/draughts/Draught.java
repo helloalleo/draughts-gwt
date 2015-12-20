@@ -76,9 +76,9 @@ public class Draught extends Group {
     updateShape();
   }
 
-  public void onNodeTouch() {
+  public void onNodeTouch(boolean selfPlay) {
     Logger.debug("TOUCH");
-    if (!isValidStroke()) {
+    if (!(isValidStroke() || selfPlay)) {
       Logger.debug("STROKE INVALID");
       return;
     }

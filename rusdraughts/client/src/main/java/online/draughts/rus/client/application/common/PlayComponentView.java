@@ -530,7 +530,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public void startPlay(boolean white) {
     BoardBackgroundLayer backgroundLayer = initDeskPanel(white);
-    board = new Board(backgroundLayer, 8, 8, white);
+    board = new Board(backgroundLayer, 8, 8, white, false);
     board.setView(this);
     lienzoPanel.add(board);
     lienzoPanel.getElement().getStyle().setCursor(Style.Cursor.POINTER);

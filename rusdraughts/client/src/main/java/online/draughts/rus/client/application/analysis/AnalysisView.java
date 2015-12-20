@@ -3,9 +3,10 @@ package online.draughts.rus.client.application.analysis;
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.client.widget.LienzoPanel;
-import com.google.gwt.core.client.Scheduler;
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
+import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -21,7 +22,9 @@ import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.CheckBox;
 import org.gwtbootstrap3.client.ui.Column;
+import org.gwtbootstrap3.client.ui.RadioButton;
 
 import javax.inject.Inject;
 
@@ -45,6 +48,12 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
   Button clearDesk;
   @UiField
   HTML turnLabel;
+  @UiField
+  RadioButton whiteDraughtButton;
+  @UiField
+  RadioButton blackDraughtButton;
+  @UiField
+  CheckBox addDraughtCheckbox;
   private final DraughtsMessages messages;
   private Desk deskWhite;
   private Desk deskBlack;
@@ -58,17 +67,13 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
 
   @Override
   protected void onAttach() {
-    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-      @Override
-      public void execute() {
-        if (null == deskWhite) {
-          deskWhite = initEmptyDesk(whiteDesk, whiteDeskColumn.getOffsetWidth(), true);
-        }
-        if (null == deskBlack) {
-          deskBlack = initEmptyDesk(blackDesk, blackDeskColumn.getOffsetWidth(), false);
-        }
-      }
-    });
+    if (null == deskWhite) {
+      deskWhite = initEmptyDesk(whiteDesk, whiteDeskColumn.getOffsetWidth(), true);
+    }
+    if (null == deskBlack) {
+      deskBlack = initEmptyDesk(blackDesk, blackDeskColumn.getOffsetWidth(), false);
+    }
+    addDraughtChangeState();
   }
 
   @SuppressWarnings("unused")
@@ -78,8 +83,20 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     deskBlack = placeDraughtsOnDesk(deskBlack, false);
   }
 
+  @UiHandler("addDraughtCheckbox")
+  public void onAddDraughtCheckboxClicked(ClickEvent clickEvent) {
+    addDraughtChangeState();
+  }
+
+  private void addDraughtChangeState() {
+    whiteDraughtButton.setEnabled(addDraughtCheckbox.getValue());
+    blackDraughtButton.setEnabled(addDraughtCheckbox.getValue());
+    whiteDraughtButton.setValue(addDraughtCheckbox.getValue());
+    blackDraughtButton.setValue(false);
+  }
+
   private Desk placeDraughtsOnDesk(Desk desk, boolean white) {
-    Board board = new Board(desk.backgroundLayer, 8, 8, white);
+    Board board = new Board(desk.backgroundLayer, 8, 8, white, true);
     board.setView(this);
     desk.lienzoPanel.add(board);
     desk.lienzoPanel.getElement().getStyle().setCursor(Style.Cursor.POINTER);
@@ -102,7 +119,6 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     deskBlack = initEmptyDesk(blackDesk, blackDesk.getOffsetWidth(), false);
   }
 
-
   @Override
   public void updateTurn(boolean myTurn) {
     if (myTurn) {
@@ -113,7 +129,7 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
   }
 
   private Desk initEmptyDesk(HTMLPanel draughtsDesk, int draughtsSide, boolean white) {
-    LienzoPanel lienzoPanel = new LienzoPanel(draughtsSide, draughtsSide);
+    final LienzoPanel lienzoPanel = new LienzoPanel(draughtsSide, draughtsSide);
     int lienzoSide = lienzoPanel.getHeight() - 30;
     final Layer initDeskRect = new Layer();
     Rectangle contour = new Rectangle(lienzoSide, lienzoSide);
@@ -130,9 +146,29 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     boardBackgroundLayer.drawCoordinates(white);
     lienzoPanel.setBackgroundLayer(boardBackgroundLayer);
 
-    Desk desk = new Desk();
+    final Desk desk = new Desk();
     desk.lienzoPanel = lienzoPanel;
     desk.backgroundLayer = boardBackgroundLayer;
+
+    lienzoPanel.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        GWT.log("ADD WHITE FORM " + whiteDraughtButton.getFormValue());
+        GWT.log("ADD WHITE " + whiteDraughtButton.getValue());
+        GWT.log("1");
+        if (null == desk.board) {
+          return;
+        }
+        GWT.log("ADD WHITE FORM " + whiteDraughtButton.getFormValue());
+        GWT.log("ADD WHITE " + whiteDraughtButton.getValue());
+        if (whiteDraughtButton.getValue()) {
+          desk.board.addDraught(event.getX(), event.getY(), true);
+        } else if (blackDraughtButton.getValue()) {
+          desk.board.addDraught(event.getX(), event.getY(), false);
+        }
+      }
+    });
+
     return desk;
   }
 
@@ -171,12 +207,12 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     return null;
   }
 
-private static class Desk {
-  LienzoPanel lienzoPanel;
-  Board board;
-  BoardBackgroundLayer backgroundLayer;
-}
+  private static class Desk {
+    LienzoPanel lienzoPanel;
+    Board board;
+    BoardBackgroundLayer backgroundLayer;
+  }
 
-interface Binder extends UiBinder<Widget, AnalysisView> {
-}
+  interface Binder extends UiBinder<Widget, AnalysisView> {
+  }
 }

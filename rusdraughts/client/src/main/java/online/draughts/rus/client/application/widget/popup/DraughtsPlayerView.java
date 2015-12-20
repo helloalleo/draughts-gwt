@@ -295,7 +295,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     LienzoPanel lienzoPanel = new LienzoPanel(side, side);
     lienzoPanel.setBackgroundLayer(boardBackground);
 
-    board = new Board(boardBackground, rows, cols, true);
+    board = new Board(boardBackground, rows, cols, true, false);
     board.setEmulate(true);
     lienzoPanel.add(board);
 
