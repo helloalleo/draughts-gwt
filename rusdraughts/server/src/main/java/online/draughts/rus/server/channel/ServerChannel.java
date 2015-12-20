@@ -1,8 +1,5 @@
 package online.draughts.rus.server.channel;
 
-import com.google.appengine.api.channel.ChannelMessage;
-import com.google.appengine.api.channel.ChannelServiceFactory;
-import com.google.common.base.Splitter;
 import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
@@ -17,14 +14,12 @@ import online.draughts.rus.server.service.MailService;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.server.util.Utils;
-import online.draughts.rus.shared.channel.Chunk;
 import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.util.StringUtils;
 import org.apache.log4j.Logger;
-import org.dozer.Mapper;
 
 import java.io.IOException;
-import java.util.*;
+import java.util.Date;
 
 /**
  * Created with IntelliJ IDEA.
@@ -35,37 +30,36 @@ import java.util.*;
 @Singleton
 public class ServerChannel extends ChannelServer {
 
-  private static Map<String, String> channelTokenPeers = Collections.synchronizedMap(new HashMap<String, String>());
+  private final CoreChannel coreChannel;
   private final PlayerService playerService;
   private final GameMessageService gameMessageService;
   private final GameService gameService;
   private final Provider<Boolean> authProvider;
   private final Logger logger = Logger.getLogger(ServerChannel.class);
   private final MailService mailService;
-  private final Mapper mapper;
 
   @Inject
-  ServerChannel(PlayerService playerService,
+  ServerChannel(CoreChannel coreChannel,
+                PlayerService playerService,
                 GameService gameService,
                 GameMessageService gameMessageService,
                 @Named(AuthUtils.AUTHENTICATED) Provider<Boolean> authProvider,
-                MailService mailService,
-                Mapper mapper) {
+                MailService mailService) {
+    this.coreChannel = coreChannel;
     this.playerService = playerService;
     this.gameService = gameService;
     this.gameMessageService = gameMessageService;
     this.authProvider = authProvider;
     this.mailService = mailService;
-    this.mapper = mapper;
   }
 
   @Override
   public void onJoin(String token, String channelName) {
-    channelTokenPeers.put(channelName, token);
+    coreChannel.joinPlayer(token, channelName);
   }
 
   @Override
-  public void onMessage(String token, String channelName, String message) {
+  public void onMessage(String token, String channel, String message) {
     if (!authProvider.get()) {
       logger.info("Unauthorized access");
       return;
@@ -111,7 +105,7 @@ public class ServerChannel extends ChannelServer {
         handleGameOver(gameMessage);
         break;
       case CHANNEL_CLOSE:
-        handleClose(channelName);
+        handleClose(channel);
         break;
     }
   }
@@ -132,25 +126,16 @@ public class ServerChannel extends ChannelServer {
     handleChatPrivateMessage(gameMessage);
   }
 
-  private void handlePlayerConnect(GameMessage message, String token) {
-    Player player = playerService.find(message.getSender().getId());
-
-    player.setPlaying(false);
-    player.setOnline(true);
-    player.setLastVisited(new Date());
-    playerService.save(player);
-
-    final String channel = String.valueOf(player.getId());
-    channelTokenPeers.put(channel, token);
-    updatePlayerList();
+  private void handlePlayerConnect(GameMessage gameMessage, String token) {
+    coreChannel.connectPlayer(gameMessage, token);
   }
 
-  public void handleClose(String chanelName) {
-    String token = channelTokenPeers.get(chanelName);
+  public void handleClose(String channel) {
+    String token = coreChannel.getToken(channel);
     if (token == null) {
       return;
     }
-    Player player = playerService.find(Long.valueOf(chanelName));
+    Player player = playerService.find(Long.valueOf(channel));
 
     if (player.isPlaying()) {
       Game game = gameService.findUserGames(player.getId(), 0, 1).get(0);
@@ -164,7 +149,7 @@ public class ServerChannel extends ChannelServer {
 
       gameMessage.setReceiver(secondPlayer);
       gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_END);
-      sendMessage(String.valueOf(secondPlayer.getId()), gameMessage);
+      coreChannel.sendMessage(String.valueOf(secondPlayer.getId()), gameMessage);
     }
 
     player.setOnline(false);
@@ -174,10 +159,9 @@ public class ServerChannel extends ChannelServer {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setReceiver(player);
     gameMessage.setMessageType(GameMessageDto.MessageType.CHANNEL_CLOSE);
-    sendMessage(String.valueOf(player.getId()), gameMessage);
+    coreChannel.sendMessage(String.valueOf(player.getId()), gameMessage);
 
-    channelTokenPeers.remove(chanelName);
-    updatePlayerList();
+    coreChannel.disconnectChannel(channel);
   }
 
   private void handleChatPrivateMessage(GameMessage message) {
@@ -191,7 +175,7 @@ public class ServerChannel extends ChannelServer {
       mailService.sendNotification(message);
     }
     if (receiver.isOnline()) {
-      sendMessage(receiverChannel, message);
+      coreChannel.sendMessage(receiverChannel, message);
     }
   }
 
@@ -207,25 +191,6 @@ public class ServerChannel extends ChannelServer {
   }
 
   public void updatePlayerList() {
-    GameMessage gameMessage = new GameMessage();
-    gameMessage.setMessageType(GameMessageDto.MessageType.USER_LIST_UPDATE);
-    List<Player> playerList = playerService.findAll();
-    gameMessage.setPlayerList(playerList);
-    for (String channelName : channelTokenPeers.keySet()) {
-      sendMessage(channelName, gameMessage);
-    }
-  }
-
-  private void sendMessage(String channel, GameMessage message) {
-    GameMessageDto dto = mapper.map(message, GameMessageDto.class);
-    final String serialized = Utils.serializeToJson(dto);
-    List<String> chunks = Splitter.fixedLength(1024 * 31).splitToList(serialized);
-    for (int i = 0; i < chunks.size(); i++) {
-      send(channel, Utils.serializeToJson(new Chunk(chunks.size(), i + 1, chunks.get(i))));
-    }
-  }
-
-  private void send(String channel, String chunk) {
-    ChannelServiceFactory.getChannelService().sendMessage(new ChannelMessage(channel, chunk));
+    coreChannel.updatePlayerList();
   }
 }

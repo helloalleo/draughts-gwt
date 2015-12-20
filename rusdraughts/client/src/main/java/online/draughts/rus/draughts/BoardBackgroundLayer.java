@@ -6,6 +6,7 @@ import com.ait.lienzo.client.core.shape.Text;
 import com.ait.lienzo.client.core.types.Shadow;
 import com.ait.lienzo.shared.core.types.Color;
 import com.ait.lienzo.shared.core.types.ColorName;
+import online.draughts.rus.client.util.Logger;
 
 import java.util.Vector;
 
@@ -30,6 +31,7 @@ public class BoardBackgroundLayer extends Layer {
 
   public BoardBackgroundLayer(int side, int deskSide, int rows, int cols) {
     setListening(false);
+    Logger.debug("SIDE " + side);
 
     BoardBackgroundLayer.side = side;
     this.deskSide = deskSide;
@@ -127,14 +129,6 @@ public class BoardBackgroundLayer extends Layer {
     draw();
   }
 
-//  @Override
-//  public void draw() {
-//  }
-
-  public Square[][] getGameBoard() {
-    return gameBoard;
-  }
-
   public Square getSquare(int row, int col) throws SquareNotFoundException {
     if (inBounds(row, col)) {
       final Square square = gameBoard[row][col];
@@ -171,5 +165,4 @@ public class BoardBackgroundLayer extends Layer {
   public double getOffsetX() {
     return OFFSET_X;
   }
-
 }

@@ -8,66 +8,53 @@
 
         <b:Row>
             <b:Column size="XS_12 SM_12 MD_6 LG_6" ui:field="draughtsColumn">
-                <g:HTMLPanel addStyleNames="{res.style.draughtsColumn}">
-                    <g:HTMLPanel ui:field="draughtsDesk" debugId="draughtsDesk"/>
-                </g:HTMLPanel>
+                <g:HTMLPanel ui:field="draughtsDesk" debugId="draughtsDesk"/>
             </b:Column>
 
-            <b:Column size="XS_6 SM_6 MD_3 LG_3">
+            <b:Column size="XS_6 SM_6 MD_2 LG_2">
                 <g:HTMLPanel ui:field="notationColumn" addStyleNames="{res.style.notationColumn}">
                     <g:HTMLPanel ui:field="infoHTMLPanel">
-                        <ui:msg description="Ход" key="turn">
-                            <b>Ход:</b>
-                        </ui:msg>
+                            <b:Heading size="H5" text="Ход:"/>
                         <g:HTML ui:field="turnLabel" text="Игра не началась">
                             <ui:attribute name="text"/>
                         </g:HTML>
-                        <ui:msg description="Сбито шашек" key="beatDraughts">
-                            <b>Сбито шашек:</b>
-                        </ui:msg>
+                            <b:Heading size="H5" text="Сбито шашек:"/>
                         <g:Label ui:field="beatenMineDraughtsLabel" text="0 - Белых"/>
                         <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных"/>
                         <br/>
-                        <b:Button ui:field="cancelMove" text="Отменить ход" addStyleNames="btn btn-default btn-block">
+                        <b:Button ui:field="cancelMove" text="Отменить ход">
                             <ui:attribute name="text"/>
                         </b:Button>
                         <br/>
                     </g:HTMLPanel>
                     <g:HTMLPanel ui:field="notationHTMLPanel">
-                        <ui:msg description="Нотация" key="notationList">
-                            <b>Нотация:</b>
-                        </ui:msg>
+                            <b:Heading size="H5" text="Нотация:"/>
                         <g:HTMLPanel ui:field="notationList"/>
                     </g:HTMLPanel>
                 </g:HTMLPanel>
             </b:Column>
 
-            <b:Column size="XS_6 SM_6 MD_3 LG_3">
+            <b:Column size="XS_6 SM_6 MD_4 LG_4">
                 <g:HTMLPanel ui:field="playerListColumn" addStyleNames="{res.style.playerList}">
                     <span>
-                        <b:Button ui:field="playButton" icon="REFRESH" debugId="connectToServer"
-                                  addStyleNames="btn btn-default btn-primary btn-block">
+                        <b:Button ui:field="playButton" icon="REFRESH" debugId="connectToServer">
                             <ui:msg description="Подключиться" key="connectToPlayButton">Подключиться</ui:msg>
                         </b:Button>
-                        <b:Button ui:field="drawButton" addStyleNames="btn btn-default btn-block btn-sm"
+                        <b:Button ui:field="drawButton"
                                   visible="false">
                             <ui:msg description="Предложить ничью" key="drawButton">Предложить ничью</ui:msg>
                         </b:Button>
-                        <b:Button ui:field="surrenderButton" addStyleNames="btn btn-default btn-block btn-sm"
+                        <b:Button ui:field="surrenderButton"
                                   visible="false">
                             <ui:msg description="Сдаться" key="surrenderButton">Сдаться</ui:msg>
                         </b:Button>
                     </span>
-                    <ui:msg description="Список игроков" key="playerFriendListLabel">
-                        <b>Недавно играли с вами:</b>
-                    </ui:msg>
+                        <b:Heading size="H5" text="Недавно играли с вами:"/>
                     <g:ScrollPanel height="160px" width="100%">
                         <b.gwt:CellTable ui:field="playerFriendCellTable" condensed="true" striped="true" hover="true"/>
                     </g:ScrollPanel>
 
-                    <ui:msg description="Список игроков" key="playerListLabel">
-                        <b>Список игроков:</b>
-                    </ui:msg>
+                        <b:Heading size="H5" text="Список игроков:"/>
                     <g:ScrollPanel height="160px" width="100%">
                         <b.gwt:CellTable ui:field="playerCellTable" condensed="true" striped="true" hover="true"/>
                     </g:ScrollPanel>

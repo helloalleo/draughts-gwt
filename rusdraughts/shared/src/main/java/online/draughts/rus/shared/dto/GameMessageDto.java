@@ -123,6 +123,7 @@ public class GameMessageDto extends BaseDto {
     CHAT_MESSAGE,
     CHAT_PRIVATE_MESSAGE,
     USER_LIST_UPDATE,
+    GAME_LIST_UPDATE,
     PLAY_INVITE,
     PLAY_REJECT_INVITE,
     PLAY_ALREADY_PLAYING,

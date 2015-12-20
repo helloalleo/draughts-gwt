@@ -24,8 +24,6 @@ public interface AppResources extends ClientBundle {
 
     String playerSearch();
 
-    String draughtsColumn();
-
     String playerList();
 
     String mainContainer();

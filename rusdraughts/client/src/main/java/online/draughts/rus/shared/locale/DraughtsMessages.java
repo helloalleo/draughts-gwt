@@ -232,4 +232,6 @@ public interface DraughtsMessages extends Messages {
   String learn();
 
   String newMessageFrom(String sender);
+
+  String analysis();
 }

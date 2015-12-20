@@ -1,4 +1,4 @@
-package online.draughts.rus.client.application.play;
+package online.draughts.rus.client.application.common;
 
 import com.ait.lienzo.client.core.shape.Circle;
 import com.ait.lienzo.client.core.shape.Layer;
@@ -22,7 +22,6 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
-import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -122,6 +121,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     this.playSession = playSession;
 
     initWidget(binder.createAndBindUi(this));
+    initPlayerFriendsCellList();
+    initPlayersCellList();
   }
 
   @Override
@@ -129,8 +130,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
       @Override
       public void execute() {
-        initPlayerFriendsCellList();
-        initPlayersCellList();
         initEmptyDeskPanel();
       }
     });
@@ -205,6 +204,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   private void initEmptyDeskPanel() {
+    if (null != lienzoPanel) {
+      return;
+    }
     final String mainContainerMarginTop = Variables.S_MAIN_CONTAINER_SCROLL_MARGIN_TOP;
     final String highStr = mainContainerMarginTop.substring(0, mainContainerMarginTop.length() - 2); // отсекаем строку пикселей
     int draughtsSide = draughtsColumn.getOffsetWidth();
@@ -241,26 +243,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     }
     notationPanel = notationPanelFactory.createNotationPanel(gameId);
     notationList.add(notationPanel);
-
-    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
-      @Override
-      public void execute() {
-        alignNotationPanel();
-      }
-    });
   }
 
   @Override
   public void setUnreadMessagesMap(Map<Long, Integer> result) {
     this.unreadMessagesMap = result;
     setPlayerList(playerList);
-  }
-
-  private void alignNotationPanel() {
-    if (Window.getClientWidth() > 0) {
-      String notationHeight = lienzoPanel.getHeight() - infoHTMLPanel.getOffsetHeight() - 40 + "px";
-//      notationPanel.setHeight(notationHeight);
-    }
   }
 
   private void initPlayerFriendsCellList() {
@@ -622,11 +610,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   private BoardBackgroundLayer initDeskPanel(boolean white) {
     int lienzoSide = lienzoPanel.getHeight() - 50;
-    if (lienzoSide > 800) {
-      lienzoSide = 800;
-    } else if (lienzoSide < 200) {
-      lienzoSide = 200;
-    }
+//    if (lienzoSide > 800) {
+//      lienzoSide = 800;
+//    } else if (lienzoSide < 200) {
+//      lienzoSide = 200;
+//    }
     BoardBackgroundLayer boardBackgroundLayer = new BoardBackgroundLayer(
         lienzoSide, lienzoSide - 30,
         8, 8);

@@ -1,4 +1,4 @@
-package online.draughts.rus.client.application.play;
+package online.draughts.rus.client.application.common;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
@@ -11,6 +11,7 @@ import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
+import online.draughts.rus.client.application.play.PlayView;
 import online.draughts.rus.client.application.play.messanger.MessengerPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.NotationPanel;

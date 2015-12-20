@@ -1,4 +1,4 @@
-package online.draughts.rus.client.application.play;
+package online.draughts.rus.client.application.analysis;
 
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
@@ -15,31 +15,34 @@ import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.Cookies;
 
 
-public class PlayPresenter extends Presenter<PlayPresenter.MyView, PlayPresenter.MyProxy>
-    implements PlayUiHandlers {
-  public static final PermanentSlot<PlayComponentPresenter> SLOT_NEWPLAY = new PermanentSlot<>();
+public class AnalysisPresenter extends Presenter<AnalysisPresenter.MyView, AnalysisPresenter.MyProxy>
+    implements AnalysisUiHandlers {
+  public static final PermanentSlot<PlayComponentPresenter> SLOT_ANALYSIS = new PermanentSlot<>();
 
   @Inject
-  PlayPresenter(
+  AnalysisPresenter(
       EventBus eventBus,
       MyView view,
       MyProxy proxy,
-      Cookies cookies,
-      PlayComponentPresenter playComponentPresenter) {
+      Cookies cookies) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     getView().setUiHandlers(this);
 
-    cookies.setLocation(NameTokens.playPage);
-
-    setInSlot(SLOT_NEWPLAY, playComponentPresenter);
+    cookies.setLocation(NameTokens.analysisPage);
   }
 
-  interface MyView extends View, HasUiHandlers<PlayUiHandlers> {
+  @Override
+  public boolean isMyTurn() {
+    return false;
+  }
+
+  interface MyView extends View, HasUiHandlers<AnalysisUiHandlers> {
+    void updateTurn(boolean myTurn);
   }
 
   @ProxyCodeSplit
-  @NameToken(NameTokens.playPage)
-  interface MyProxy extends ProxyPlace<PlayPresenter> {
+  @NameToken(NameTokens.analysisPage)
+  interface MyProxy extends ProxyPlace<AnalysisPresenter> {
   }
 }

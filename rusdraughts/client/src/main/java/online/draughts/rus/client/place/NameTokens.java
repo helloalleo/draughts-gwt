@@ -9,6 +9,7 @@ public class NameTokens {
   public static final String homePage = "!home";
   public static final String learnPage = "!learn";
   public static final String playPage = "!play";
+  public static final String analysisPage = "!analysis";
   public static final String loginPage = "!login";
   public static final String profilePage = "!profile";
   public static final String lovePage = "!love";
@@ -26,12 +27,14 @@ public class NameTokens {
   private final Link profileLink;
   private final Link settingsLink;
   private final Link playLink;
+  private final Link analysisLink;
 
   @Inject
   public NameTokens(DraughtsMessages messages) {
     homeLink = new Link(homePage, messages.home(), null, IconType.HOME);
     learnLink = new Link(learnPage, messages.learn(), null, null);
     playLink = new Link(playPage, messages.play(), null, IconType.PLAY_CIRCLE_O);
+    analysisLink = new Link(analysisPage, messages.analysis(), null, null);
     loveLink = new Link(lovePage, "", null, IconType.HEART_O);
     loginLink = new Link(loginPage, messages.login(), null, IconType.SIGN_IN);
     logoutLink = new Link(null, messages.logout(), logoutPage, IconType.SIGN_OUT);
@@ -48,7 +51,7 @@ public class NameTokens {
   }
 
   public Link[] getLeftAuthLinks() {
-    return new Link[]{homeLink, playLink, learnLink};
+    return new Link[]{homeLink, playLink, analysisLink, learnLink};
   }
 
   public Link[] getRightLinks() {

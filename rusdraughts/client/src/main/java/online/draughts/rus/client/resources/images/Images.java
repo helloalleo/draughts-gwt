@@ -4,6 +4,12 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
 public interface Images extends ClientBundle {
+  @Source("img/BlackDraught.png")
+  ImageResource blackDraught();
+
+  @Source("img/WhiteDraught.png")
+  ImageResource whiteDraught();
+
   @Source("img/logo.png")
   ImageResource logo();
 

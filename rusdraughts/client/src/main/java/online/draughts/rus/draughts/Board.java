@@ -6,6 +6,7 @@ import com.ait.lienzo.client.core.event.NodeMouseClickHandler;
 import com.ait.lienzo.client.core.event.NodeTouchEndEvent;
 import com.ait.lienzo.client.core.event.NodeTouchEndHandler;
 import com.ait.lienzo.client.core.shape.Layer;
+import com.ait.lienzo.shared.core.types.ColorName;
 import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.draughts.util.Operator;
 import online.draughts.rus.draughts.util.PossibleOperators;
@@ -86,43 +87,49 @@ public class Board extends Layer {
   }
 
   private void placeDraughts() {
-    for (int row = 0; row < 3; row++) {
-//    for(int row = 3; row < 4; row++) {
-      for (int col = 0; col < 8; col++) {
-//      for (int col = 2; col < 3; col++) {
-        if (Square.isValid(row, col)) {
-          opponentDraughtList.add(addDraught(row, col, !white));
-        }
-      }
-    }
-
-    // Now establish the Black side
-    for (int row = 5; row < 8; row++) {
-//    for(int row = 4; row < 5; row++) {
-//      if ((row - 1) % 2 == 0) {
-//        continue;
+//    for (int row = 0; row < 3; row++) {
+////    for(int row = 3; row < 4; row++) {
+//      for (int col = 0; col < 8; col++) {
+////      for (int col = 2; col < 3; col++) {
+//        if (Square.isValid(row, col)) {
+//          opponentDraughtList.add(addDraught(row, col, !white));
+//        }
 //      }
-      for (int col = 0; col < 8; col++) {
-//      for (int col = 5; col < 6; col++) {
-        if (Square.isValid(row, col)) {
-          myDraughtList.add(addDraught(row, col, white));
-        }
-      }
+//    }
+//
+//    // Now establish the Black side
+//    for (int row = 5; row < 8; row++) {
+////    for(int row = 4; row < 5; row++) {
+////      if ((row - 1) % 2 == 0) {
+////        continue;
+////      }
+//      for (int col = 0; col < 8; col++) {
+////      for (int col = 5; col < 6; col++) {
+//        if (Square.isValid(row, col)) {
+//          myDraughtList.add(addDraught(row, col, white));
+//        }
+//      }
+//    }
+
+    if (!isMyTurn()) {
+      opponentDraughtList.add(addDraught(4, 3, !white));
+//      opponentDraughtList.add(addDraught(1, 6, !white));
+      opponentDraughtList.add(addDraught(1, 2, !white));
+      opponentDraughtList.add(addDraught(5, 4, !white));
+      final Draught e = addDraught(6, 1, white);
+//      e.setQueen(true);
+      myDraughtList.add(e);
     }
 
-/*
-    if (isWhite()) {
-      opponentDraughtList.add(addDraught(3, 4, !white));
-    } else {
-      myDraughtList.add(addDraught(4, 3, white));
+    if (isMyTurn()) {
+      final Draught e = addDraught(1, 6, !white);
+//      e.setQueen(true);
+      opponentDraughtList.add(e);
+      myDraughtList.add(addDraught(3, 4, white));
+//      myDraughtList.add(addDraught(6, 1, white));
+      myDraughtList.add(addDraught(2, 1, white));
+      myDraughtList.add(addDraught(4, 5, white));
     }
-
-    if (isWhite()) {
-      myDraughtList.add(addDraught(4, 3, white));
-    } else {
-      opponentDraughtList.add(addDraught(3, 4, !white));
-    }
-*/
   }
 
   private Draught addDraught(int row, int col, boolean white) {
@@ -265,11 +272,13 @@ public class Board extends Layer {
   /**
    * Possible calcStroke in next and back direction
    *
-   * @param sideWhite - цвет текущей шашки
+   * @param sideWhite       - цвет текущей шашки
+   * @return возвращает побита ли шашка дамкой
    */
-  private void possibleMovePair(Operator opRow, Operator opCol, int row, int col, boolean white, boolean sideWhite,
-                                boolean queen, List<Square> outPossibleMoves, List<Square> outJumpMoves,
-                                boolean straightQueen) {
+  private boolean possibleMovePair(Operator opRow, Operator opCol, int row, int col, boolean white, boolean sideWhite,
+                                   boolean queen, List<Square> outPossibleMoves, List<Square> outJumpMoves,
+                                   boolean straightQueen) {
+    boolean foundBeatDraught = false;
     if (inBounds(opRow.apply(row, 1), opCol.apply(col, 1)) && (white || queen)) {
       Square square = null, nextSquare = null;
       try {
@@ -281,9 +290,17 @@ public class Board extends Layer {
       // Check moves to the op1, op2 of this Draught
       if (square != null && !square.isOccupied()) {
         outPossibleMoves.add(square);
+        square.getShape().setFillColor(ColorName.YELLOW);
         if (queen) {
           possibleMovePair(opRow, opCol, opRow.apply(row, 1), opCol.apply(col, 1), white, sideWhite,
               true, outPossibleMoves, outJumpMoves, straightQueen);
+          for (Square outJumpMove : outJumpMoves) {
+            outJumpMove.getShape().setFillColor(ColorName.GREEN);
+          }
+          for (Square outPossibleMove : outPossibleMoves) {
+            outPossibleMove.getShape().setFillColor(ColorName.RED);
+          }
+          return !outJumpMoves.isEmpty();
         }
       } else {
         //if square is occupied, and the color of the Draught in square is
@@ -302,7 +319,7 @@ public class Board extends Layer {
               try {
                 startSquareLoop = backgroundLayer.getSquare(i, j);
               } catch (SquareNotFoundException e) {
-                return;
+                return false;
               }
               while (inBounds(i, j) && !startSquareLoop.isOccupied()) {
                 final Square loopSquare;
@@ -311,36 +328,48 @@ public class Board extends Layer {
                 } catch (SquareNotFoundException e) {
                   continue;
                 }
-                if (straightQueen) {
-                  if (opRow.equals(PossibleOperators.SUB) && opCol.equals(PossibleOperators.SUB)
-                      || opRow.equals(PossibleOperators.ADD) && opCol.equals(PossibleOperators.ADD)) { // top-left & bottom-right
-                    possibleMovePair(Operator.ADDITION, Operator.SUBTRACTION, i, j, white, sideWhite, true,
-                        outPossibleMoves, outJumpMoves, false);
-                    possibleMovePair(Operator.SUBTRACTION, Operator.ADDITION, i, j, white, sideWhite, true,
-                        outPossibleMoves, outJumpMoves, false);
-                  } else if (opRow.equals(PossibleOperators.SUB) && opCol.equals(PossibleOperators.ADD)
-                      || opRow.equals(PossibleOperators.ADD) && opCol.equals(PossibleOperators.SUB)) { // bottom-left & top-right
-                    possibleMovePair(Operator.SUBTRACTION, Operator.SUBTRACTION, i, j, white, sideWhite, true,
-                        outPossibleMoves, outJumpMoves, false);
-                    possibleMovePair(Operator.ADDITION, Operator.ADDITION, i, j, white, sideWhite, true,
-                        outPossibleMoves, outJumpMoves, false);
-                  }
-                  if (!outJumpMoves.isEmpty()) {
-                    jumps.add(loopSquare);
-                    outJumpMoves.clear();
-                  } else if (jumps.isEmpty()) {
-                    oneJumps.add(loopSquare);
-                  }
-                } else {
-                  outJumpMoves.add(loopSquare);
+                if (loopSquare.isOccupied()) {
+                  return true;
                 }
+//                if (straightQueen) {
+                  if (opRow.equals(PossibleOperators.SUB) && opCol.equals(PossibleOperators.SUB)) { // top-left & bottom-right
+                    foundBeatDraught = possibleMovePair(Operator.SUBTRACTION, Operator.SUBTRACTION, i, j, white, sideWhite, true,
+                        outPossibleMoves, outJumpMoves, false)
+                        || possibleMovePair(Operator.SUBTRACTION, Operator.ADDITION, i, j, white, sideWhite, true,
+                        outPossibleMoves, outJumpMoves, false)
+                        || possibleMovePair(Operator.ADDITION, Operator.SUBTRACTION, i, j, white, sideWhite, true,
+                        outPossibleMoves, outJumpMoves, false);
+                  } else if (opRow.equals(PossibleOperators.SUB) && opCol.equals(PossibleOperators.ADD)) { // bottom-left & top-right
+                    foundBeatDraught = possibleMovePair(Operator.SUBTRACTION, Operator.SUBTRACTION, i, j, white, sideWhite, true,
+                        outPossibleMoves, outJumpMoves, false)
+                        || possibleMovePair(Operator.SUBTRACTION, Operator.ADDITION, i, j, white, sideWhite, true,
+                        outPossibleMoves, outJumpMoves, false)
+                        || possibleMovePair(Operator.ADDITION, Operator.ADDITION, i, j, white, sideWhite, true,
+                        outPossibleMoves, outJumpMoves, false);
+                  } else if (opRow.equals(PossibleOperators.ADD) && opCol.equals(PossibleOperators.ADD)) { // top-left & bottom-right
+                    foundBeatDraught = possibleMovePair(Operator.ADDITION, Operator.ADDITION, i, j, white, sideWhite, true,
+                        outPossibleMoves, outJumpMoves, false)
+                        || possibleMovePair(Operator.SUBTRACTION, Operator.ADDITION, i, j, white, sideWhite, true,
+                        outPossibleMoves, outJumpMoves, false)
+                        || possibleMovePair(Operator.ADDITION, Operator.SUBTRACTION, i, j, white, sideWhite, true,
+                        outPossibleMoves, outJumpMoves, false);
+                  } else if (opRow.equals(PossibleOperators.ADD) && opCol.equals(PossibleOperators.SUB)) { // bottom-left & top-right
+                    foundBeatDraught = possibleMovePair(Operator.ADDITION, Operator.SUBTRACTION, i, j, white, sideWhite, true,
+                        outPossibleMoves, outJumpMoves, false)
+                        || possibleMovePair(Operator.SUBTRACTION, Operator.SUBTRACTION, i, j, white, sideWhite, true,
+                        outPossibleMoves, outJumpMoves, false)
+                        || possibleMovePair(Operator.ADDITION, Operator.ADDITION, i, j, white, sideWhite, true,
+                        outPossibleMoves, outJumpMoves, false);
+                  }
+//                if (straightQueen) {
+                  jumps.add(loopSquare);
+//                }
+//                }
                 i = opRow.apply(i, 1);
                 j = opCol.apply(j, 1);
               }
-              if (!jumps.isEmpty()) {
+              if (!jumps.isEmpty() && !foundBeatDraught) {
                 outJumpMoves.addAll(jumps);
-              } else if (!oneJumps.isEmpty()) {
-                outJumpMoves.addAll(oneJumps);
               }
               if (!capturedSquares.contains(square)) {
                 capturedSquares.add(square);
@@ -378,6 +407,7 @@ public class Board extends Layer {
         }
       }
     }
+    return foundBeatDraught;
   }
 
   public void resetDesk() {
@@ -1004,6 +1034,7 @@ public class Board extends Layer {
 
   /**
    * Отменяем первый ход? Тот который стоит за номером
+   *
    * @param canceled отменяемы ход
    * @return отменяем ли первый ход
    */
