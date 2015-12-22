@@ -25,7 +25,7 @@ import java.util.Stack;
 public class Board extends Layer {
   private static final double ANIMATION_DURATION = 50;
   public static int DRAUGHTS_ON_SIDE = 12;
-  private final boolean selfPlay;
+  private boolean selfPlay;
   private List<Square> capturedSquares = new ArrayList<>();
   private List<Draught> myDraughtList;
   private List<Draught> opponentDraughtList;
@@ -54,12 +54,10 @@ public class Board extends Layer {
   public Board(BoardBackgroundLayer backgroundLayer,
                int rows,
                int cols,
-               boolean white,
-               boolean selfPlay) {
+               boolean white) {
     this.backgroundLayer = backgroundLayer;
     this.white = white;
     this.turn = white;
-    this.selfPlay = selfPlay;
 
     this.rows = rows;
     this.cols = cols;
@@ -69,6 +67,14 @@ public class Board extends Layer {
 
     placeDraughts();
     bindEvents();
+  }
+
+  public boolean isSelfPlay() {
+    return selfPlay;
+  }
+
+  public void setSelfPlay(boolean selfPlay) {
+    this.selfPlay = selfPlay;
   }
 
   private void bindEvents() {
@@ -113,20 +119,24 @@ public class Board extends Layer {
 //    }
 
     if (!isMyTurn()) {
-      opponentDraughtList.add(addDraught(4, 3, !white));
+      final Draught e1 = addDraught(4, 3, !white);
+      e1.setQueen(true);
+      opponentDraughtList.add(e1);
 //      opponentDraughtList.add(addDraught(1, 6, !white));
       opponentDraughtList.add(addDraught(1, 2, !white));
       opponentDraughtList.add(addDraught(5, 4, !white));
       final Draught e = addDraught(6, 1, white);
-//      e.setQueen(true);
+      e.setQueen(true);
       myDraughtList.add(e);
     }
 
     if (isMyTurn()) {
       final Draught e = addDraught(1, 6, !white);
-//      e.setQueen(true);
+      e.setQueen(true);
       opponentDraughtList.add(e);
-      myDraughtList.add(addDraught(3, 4, white));
+      final Draught e1 = addDraught(3, 4, white);
+      e1.setQueen(true);
+      myDraughtList.add(e1);
 //      myDraughtList.add(addDraught(6, 1, white));
       myDraughtList.add(addDraught(2, 1, white));
       myDraughtList.add(addDraught(4, 5, white));
@@ -943,7 +953,17 @@ public class Board extends Layer {
     } catch (SquareNotFoundException e) {
       return null;
     }
-    for (Draught draught : myDraughtList) {
+    if (turn && getClickedDraughtFromList(square, myDraughtList)) {
+      return square.getOccupant();
+    }
+    if (!turn && selfPlay && getClickedDraughtFromList(square, opponentDraughtList)) {
+      return square.getOccupant();
+    }
+    return null;
+  }
+
+  private boolean getClickedDraughtFromList(Square square, List<Draught> draughtList) {
+    for (Draught draught : draughtList) {
       final Square current;
       try {
         current = backgroundLayer.getSquare(draught.getRow(), draught.getCol());
@@ -951,10 +971,10 @@ public class Board extends Layer {
         continue;
       }
       if (square == current) {
-        return square.getOccupant();
+        return true;
       }
     }
-    return null;
+    return false;
   }
 
   /**
@@ -1074,21 +1094,41 @@ public class Board extends Layer {
     return view;
   }
 
-  public void addDraught(double clientX, double clientY, boolean white) {
+  public void addDraught(double x, double y, boolean white, boolean queen) {
     Square square;
     try {
-      square = backgroundLayer.getSquare(clientX, clientY);
+      square = backgroundLayer.getSquare(x, y);
     } catch (SquareNotFoundException ignore) {
       return;
     }
     if (square.isOccupied()) {
       return;
     }
-    if (white == isWhite()) {
-      myDraughtList.add(addDraught(square.getRow(), square.getCol(), white));
+    final Draught draught = addDraught(square.getRow(), square.getCol(), white);
+    if (draught != null) {
+      draught.setQueen(queen);
     } else {
-      opponentDraughtList.add(addDraught(square.getRow(), square.getCol(), white));
+      return;
+    }
+    if (white == isWhite()) {
+      myDraughtList.add(draught);
+    } else {
+      opponentDraughtList.add(draught);
     }
     draw();
+  }
+
+  public void removeDraughtFrom(double x, double y) {
+    Square square;
+    try {
+      square = backgroundLayer.getSquare(x, y);
+    } catch (SquareNotFoundException ignore) {
+      return;
+    }
+    if (!square.isOccupied()) {
+      return;
+    }
+    removeDraughtFrom(square);
+    resetDesk();
   }
 }

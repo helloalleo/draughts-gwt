@@ -10,6 +10,12 @@ public interface Images extends ClientBundle {
   @Source("img/WhiteDraught.png")
   ImageResource whiteDraught();
 
+  @Source("img/BlackQueen.png")
+  ImageResource blackQueen();
+
+  @Source("img/WhiteQueen.png")
+  ImageResource whiteQueen();
+
   @Source("img/logo.png")
   ImageResource logo();
 

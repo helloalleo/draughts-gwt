@@ -3,10 +3,11 @@ package online.draughts.rus.client.application.analysis;
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.client.widget.LienzoPanel;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.logical.shared.ValueChangeEvent;
+import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
@@ -14,6 +15,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
@@ -21,10 +23,7 @@ import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import org.gwtbootstrap3.client.ui.Button;
-import org.gwtbootstrap3.client.ui.CheckBox;
-import org.gwtbootstrap3.client.ui.Column;
-import org.gwtbootstrap3.client.ui.RadioButton;
+import org.gwtbootstrap3.client.ui.*;
 
 import javax.inject.Inject;
 
@@ -35,11 +34,7 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
   @UiField
   HTMLPanel main;
   @UiField
-  HTMLPanel whiteDesk;
-  @UiField
-  HTMLPanel blackDesk;
-  @UiField
-  Column blackDeskColumn;
+  HTMLPanel draughtsDesk;
   @UiField
   Column whiteDeskColumn;
   @UiField
@@ -54,78 +49,110 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
   RadioButton blackDraughtButton;
   @UiField
   CheckBox addDraughtCheckbox;
+  @UiField
+  Button myPlaceDraughts;
+  @UiField
+  CheckBox addQueenCheckbox;
+  @UiField
+  Image blackDraughtImage;
+  @UiField
+  Image whiteDraughtImage;
+  @UiField
+  RadioButton removeDraughtButton;
   private final DraughtsMessages messages;
-  private Desk deskWhite;
-  private Desk deskBlack;
+  private final AppResources resources;
+  private Desk desk;
 
   @Inject
   AnalysisView(Binder uiBinder,
-               DraughtsMessages messages) {
+               DraughtsMessages messages,
+               AppResources resources) {
     this.messages = messages;
+    this.resources = resources;
     initWidget(uiBinder.createAndBindUi(this));
+    handlers();
+  }
+
+  private void handlers() {
+    addQueenCheckbox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
+      @Override
+      public void onValueChange(ValueChangeEvent<Boolean> event) {
+        onAddQueenCheckboxClicked(event.getValue());
+      }
+    });
   }
 
   @Override
   protected void onAttach() {
-    if (null == deskWhite) {
-      deskWhite = initEmptyDesk(whiteDesk, whiteDeskColumn.getOffsetWidth(), true);
-    }
-    if (null == deskBlack) {
-      deskBlack = initEmptyDesk(blackDesk, blackDeskColumn.getOffsetWidth(), false);
+    if (null == desk) {
+      desk = initEmptyDesk(draughtsDesk, whiteDeskColumn.getOffsetWidth(), true);
     }
     addDraughtChangeState();
   }
 
   @SuppressWarnings("unused")
   @UiHandler("placeDraughts")
-  public void onPlaceDraughts(ClickEvent clickEvent) {
-    deskWhite = placeDraughtsOnDesk(deskWhite, true);
-    deskBlack = placeDraughtsOnDesk(deskBlack, false);
+  public void onPlaceDraughtsClicked(ClickEvent clickEvent) {
+    desk = placeDraughtsOnDesk(desk, true, false);
+    addDraughtCheckbox.setEnabled(false);
   }
 
+  public void onAddQueenCheckboxClicked(Boolean value) {
+    if (value) {
+      blackDraughtImage.setResource(resources.images().blackQueen());
+      whiteDraughtImage.setResource(resources.images().whiteQueen());
+    } else {
+      blackDraughtImage.setResource(resources.images().blackDraught());
+      whiteDraughtImage.setResource(resources.images().whiteDraught());
+    }
+  }
+
+  @SuppressWarnings("unused")
   @UiHandler("addDraughtCheckbox")
   public void onAddDraughtCheckboxClicked(ClickEvent clickEvent) {
+    addDraughtChangeState();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("myPlaceDraughts")
+  public void onMyPlaceDraughtsClicked(ClickEvent clickEvent) {
+    desk = placeDraughtsOnDesk(desk, true, true);
+    addDraughtCheckbox.setEnabled(true);
+    addDraughtCheckbox.setValue(true);
     addDraughtChangeState();
   }
 
   private void addDraughtChangeState() {
     whiteDraughtButton.setEnabled(addDraughtCheckbox.getValue());
     blackDraughtButton.setEnabled(addDraughtCheckbox.getValue());
+    addQueenCheckbox.setEnabled(addDraughtCheckbox.getValue());
+    removeDraughtButton.setEnabled(addDraughtCheckbox.getValue());
     whiteDraughtButton.setValue(addDraughtCheckbox.getValue());
     blackDraughtButton.setValue(false);
   }
 
-  private Desk placeDraughtsOnDesk(Desk desk, boolean white) {
-    Board board = new Board(desk.backgroundLayer, 8, 8, white, true);
+  private Desk placeDraughtsOnDesk(Desk desk, boolean white, boolean clear) {
+    Board board = new Board(desk.backgroundLayer, 8, 8, white);
+    board.setSelfPlay(true);
+    if (clear) {
+      board.clearDesk();
+    }
     board.setView(this);
     desk.lienzoPanel.add(board);
     desk.lienzoPanel.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     desk.board = board;
-    updateTurn(getUiHandlers().isMyTurn());
     return desk;
   }
 
   @SuppressWarnings("unused")
   @UiHandler("clearDesk")
   public void onClearPlayComponent(ClickEvent clickEvent) {
-    deskWhite.lienzoPanel.removeAll();
-    deskWhite.board.clearDesk();
-    whiteDesk.remove(deskWhite.lienzoPanel);
-    deskWhite = initEmptyDesk(whiteDesk, whiteDesk.getOffsetWidth(), true);
-
-    deskBlack.lienzoPanel.removeAll();
-    deskBlack.board.clearDesk();
-    blackDesk.remove(deskBlack.lienzoPanel);
-    deskBlack = initEmptyDesk(blackDesk, blackDesk.getOffsetWidth(), false);
-  }
-
-  @Override
-  public void updateTurn(boolean myTurn) {
-    if (myTurn) {
-      turnLabel.setHTML(messages.yourTurn());
-    } else {
-      turnLabel.setHTML(messages.opponentTurn());
-    }
+    desk.lienzoPanel.removeAll();
+    desk.board.clearDesk();
+    draughtsDesk.remove(desk.lienzoPanel);
+    desk = initEmptyDesk(draughtsDesk, draughtsDesk.getOffsetWidth(), true);
+    addDraughtCheckbox.setValue(false);
+    addDraughtChangeState();
   }
 
   private Desk initEmptyDesk(HTMLPanel draughtsDesk, int draughtsSide, boolean white) {
@@ -153,18 +180,17 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     lienzoPanel.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        GWT.log("ADD WHITE FORM " + whiteDraughtButton.getFormValue());
-        GWT.log("ADD WHITE " + whiteDraughtButton.getValue());
-        GWT.log("1");
         if (null == desk.board) {
           return;
         }
-        GWT.log("ADD WHITE FORM " + whiteDraughtButton.getFormValue());
-        GWT.log("ADD WHITE " + whiteDraughtButton.getValue());
-        if (whiteDraughtButton.getValue()) {
-          desk.board.addDraught(event.getX(), event.getY(), true);
-        } else if (blackDraughtButton.getValue()) {
-          desk.board.addDraught(event.getX(), event.getY(), false);
+        if (removeDraughtButton.getValue()) {
+          desk.board.removeDraughtFrom(event.getX(), event.getY());
+        } else {
+          if (whiteDraughtButton.getValue()) {
+            desk.board.addDraught(event.getX(), event.getY(), true, addQueenCheckbox.getValue());
+          } else if (blackDraughtButton.getValue()) {
+            desk.board.addDraught(event.getX(), event.getY(), false, addQueenCheckbox.getValue());
+          }
         }
       }
     });
@@ -184,7 +210,11 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
 
   @Override
   public void toggleTurn(boolean turn) {
-
+    if (turn) {
+      turnLabel.setHTML(messages.whitesTurn());
+    } else {
+      turnLabel.setHTML(messages.blacksTurn());
+    }
   }
 
   @Override

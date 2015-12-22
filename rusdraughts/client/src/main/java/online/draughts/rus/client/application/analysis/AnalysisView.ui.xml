@@ -6,11 +6,28 @@
 
     <g:HTMLPanel ui:field="main">
         <b:Row>
-            <b:Column size="XS_5 SM_5 MD_5 LG_5" ui:field="whiteDeskColumn">
-                <g:HTMLPanel ui:field="whiteDesk" debugId="draughtsWhiteDesk"/>
+            <b:Column size="XS_6 SM_6 MD_6 LG_6" ui:field="whiteDeskColumn">
+                <g:HTMLPanel ui:field="draughtsDesk" debugId="draughtsWhiteDesk"/>
             </b:Column>
-            <b:Column size="XS_5 SM_5 MD_5 LG_5" ui:field="blackDeskColumn">
-                <g:HTMLPanel ui:field="blackDesk" debugId="draughtsBlackDesk"/>
+            <b:Column size="XS_2 SM_2 MD_2 LG_2">
+                <g:HTMLPanel>
+                    <g:HTMLPanel>
+                        <b:RadioButton ui:field="whiteDraughtButton" text="Белые&nbsp;&nbsp;" name="addDraughtGroup"/>
+                        <b:Image ui:field="whiteDraughtImage" resource="{res.images.whiteDraught}" width="60px" height="60px"/>
+                    </g:HTMLPanel>
+                    <g:HTMLPanel>
+                        <b:RadioButton ui:field="blackDraughtButton" text="Черные" name="addDraughtGroup"/>
+                        <b:Image ui:field="blackDraughtImage" resource="{res.images.blackDraught}" width="60px" height="60px"/>
+                    </g:HTMLPanel>
+                    <b:RadioButton ui:field="removeDraughtButton" text="Удалить" name="addDraughtGroup"/>
+                    <b:CheckBox ui:field="addQueenCheckbox" text="Дамка"/>
+                    <b:CheckBox ui:field="addDraughtCheckbox" text="Добавить шашку" enabled="false"/>
+                    <b:Button ui:field="myPlaceDraughts" text="Моя расстановка" type="LINK"/>
+                    <b:Button ui:field="placeDraughts" text="Расставить с начала" type="LINK"/>
+                    <b:Button ui:field="clearDesk" text="Очистить доску" type="LINK"/>
+                    <b:Button ui:field="savePosition" text="Сохранить" type="LINK"/>
+                    <b:Button ui:field="loadPosition" text="Загрузить" type="LINK"/>
+                </g:HTMLPanel>
             </b:Column>
             <b:Column size="XS_2 SM_2 MD_2 LG_2">
                 <g:HTMLPanel ui:field="notationColumn" addStyleNames="{res.style.notationColumn}">
@@ -39,41 +56,6 @@
                         <b:Heading size="H5" text="Нотация:"/>
                         <g:HTMLPanel ui:field="notationList"/>
                     </g:HTMLPanel>
-                </g:HTMLPanel>
-            </b:Column>
-        </b:Row>
-        <b:Row>
-            <b:Column size="XS_4 SM_4 MD_4 LG_4">
-                <b:Row>
-                    <b:Column size="XS_6 SM_6 MD_6 LG_6">
-                        <g:HTMLPanel>
-                            <b:Image resource="{res.images.whiteDraught}" width="60px" height="60px"/>
-                            <b:RadioButton ui:field="whiteDraughtButton" text="Белые" name="addDraughtGroup"/>
-                        </g:HTMLPanel>
-                    </b:Column>
-                    <b:Column size="XS_6 SM_6 MD_6 LG_6">
-                        <g:HTMLPanel>
-                            <b:Image resource="{res.images.blackDraught}" width="60px" height="60px"/>
-                            <b:RadioButton ui:field="blackDraughtButton" text="Черные" name="addDraughtGroup"/>
-                        </g:HTMLPanel>
-                    </b:Column>
-                </b:Row>
-                <b:CheckBox ui:field="addDraughtCheckbox" text="Добавить шашку"/>
-            </b:Column>
-            <b:Column size="XS_2 SM_2 MD_2 LG_2">
-                <g:HTMLPanel>
-                    <b:Button ui:field="placeDraughts" text="Расставить с начала"/>
-                    <br/>
-                    <br/>
-                    <b:Button ui:field="clearDesk" text="Очистить доску"/>
-                </g:HTMLPanel>
-            </b:Column>
-            <b:Column size="XS_2 SM_2 MD_2 LG_2">
-                <g:HTMLPanel>
-                    <b:Button ui:field="savePosition" text="Сохранить"/>
-                    <br/>
-                    <br/>
-                    <b:Button ui:field="loadPosition" text="Загрузить"/>
                 </g:HTMLPanel>
             </b:Column>
         </b:Row>

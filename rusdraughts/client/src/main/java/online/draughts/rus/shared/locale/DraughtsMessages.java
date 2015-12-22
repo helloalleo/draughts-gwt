@@ -234,4 +234,8 @@ public interface DraughtsMessages extends Messages {
   String newMessageFrom(String sender);
 
   String analysis();
+
+  String whitesTurn();
+
+  SafeHtml blacksTurn();
 }

@@ -38,7 +38,6 @@ public class AnalysisPresenter extends Presenter<AnalysisPresenter.MyView, Analy
   }
 
   interface MyView extends View, HasUiHandlers<AnalysisUiHandlers> {
-    void updateTurn(boolean myTurn);
   }
 
   @ProxyCodeSplit
