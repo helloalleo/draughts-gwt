@@ -378,7 +378,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
     final String oldTitle = current.getAttribute(NotationPanel.DATA_TITLE_ATTR);
     final String oTitle = oldTitle.length() != 0 ? (oldTitle + NotationPanel.USER_COMMENT_SEP)
-        : "";
+        : currentNotation;
     final String gameTitle = currentSession.getPlayer().getSiteName();
     final String newTitle = oTitle + gameTitle;
     if (StringUtils.isNotEmpty(newTitle)) {
