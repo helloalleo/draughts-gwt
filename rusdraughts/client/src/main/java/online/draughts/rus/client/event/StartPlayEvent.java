@@ -11,13 +11,19 @@ import com.google.gwt.event.shared.GwtEvent;
 public class StartPlayEvent extends GwtEvent<StartPlayEventHandler> {
   public static Type<StartPlayEventHandler> TYPE = new Type<>();
   private final boolean white;
+  private final boolean inviter;
 
-  public StartPlayEvent(boolean white) {
+  public StartPlayEvent(boolean white, boolean inviter) {
     this.white = white;
+    this.inviter = inviter;
   }
 
   public boolean isWhite() {
     return white;
+  }
+
+  public boolean isInviter() {
+    return inviter;
   }
 
   public Type<StartPlayEventHandler> getAssociatedType() {

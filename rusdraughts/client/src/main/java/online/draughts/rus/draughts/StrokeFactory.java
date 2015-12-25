@@ -22,9 +22,11 @@ public class StrokeFactory {
         .setOrder(move.getMoveOrder())
         .setNumber(move.getNumber())
         .setMoveFlags(move.getMoveFlags())
-        .setStartSquare(Square.fromString(move.getStartPos()))
-        .setEndSquare(Square.fromString(move.getEndPos()))
-        .setTakenSquare(Square.fromString(move.getTakenPos()));
+        .setStartSquare(Square.fromPosition(move.getStartPos().getPos()))
+        .setEndSquare(Square.fromPosition(move.getEndPos().getPos()))
+        .setTakenSquare(move.getTakenPos() != null ? Square.fromPosition(move.getTakenPos().getPos()) : null)
+        .setQueen(move.getEndPos().isQueen())
+        .setWhite(move.getEndPos().isWhite());
   }
 
   public static Stroke createStrokeFromNotationHtml(Element outerNotation, String step, boolean back) {

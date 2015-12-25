@@ -22,11 +22,11 @@ public class Move extends ModelImpl<Move> {
 
   private GameMessage gameMessage;
 
-  private String startPos;
+  private Draught startPos;
 
-  private String endPos;
+  private Draught endPos;
 
-  private String takenPos;
+  private Draught takenPos;
 
   @Enumerated(value = MoveDto.MoveFlags.class)
   private Set<MoveDto.MoveFlags> moveFlags = new HashSet<>();
@@ -44,7 +44,7 @@ public class Move extends ModelImpl<Move> {
     super(Move.class);
   }
 
-  public Move(int number, boolean first, GameMessage gameMessage, String startPos, String endPos, String takenPos,
+  public Move(int number, boolean first, GameMessage gameMessage, Draught startPos, Draught endPos, Draught takenPos,
               Set<MoveDto.MoveFlags> moveFlags, String screenshot) {
     super(Move.class);
     this.number = number;
@@ -93,27 +93,27 @@ public class Move extends ModelImpl<Move> {
     this.first = first;
   }
 
-  public String getTakenPos() {
+  public Draught getTakenPos() {
     return takenPos;
   }
 
-  public void setTakenPos(String takenPos) {
+  public void setTakenPos(Draught takenPos) {
     this.takenPos = takenPos;
   }
 
-  public String getStartPos() {
+  public Draught getStartPos() {
     return startPos;
   }
 
-  public void setStartPos(String startPos) {
+  public void setStartPos(Draught startPos) {
     this.startPos = startPos;
   }
 
-  public String getEndPos() {
+  public Draught getEndPos() {
     return endPos;
   }
 
-  public void setEndPos(String endPos) {
+  public void setEndPos(Draught endPos) {
     this.endPos = endPos;
   }
 
@@ -175,6 +175,26 @@ public class Move extends ModelImpl<Move> {
         ", takenPos='" + takenPos + '\'' +
         ", moveFlags=" + moveFlags +
         '}';
+  }
+
+  @Override
+  public void update() {
+    this.getStartPos().update();
+    this.getEndPos().update();
+    if (null != this.getTakenPos()) {
+      this.getTakenPos().update();
+    }
+    super.update();
+  }
+
+  @Override
+  public String serializeToString() {
+    return serializeToString(this);
+  }
+
+  @Override
+  public Move fromString(String json) {
+    return fromString(json, Move.class);
   }
 
   private static class SingletonHolder {

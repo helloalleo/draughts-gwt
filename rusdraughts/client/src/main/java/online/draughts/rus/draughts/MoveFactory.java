@@ -1,5 +1,6 @@
 package online.draughts.rus.draughts;
 
+import online.draughts.rus.shared.dto.DraughtDto;
 import online.draughts.rus.shared.dto.MoveDto;
 
 /**
@@ -19,12 +20,12 @@ public class MoveFactory {
     MoveDto move = new MoveDto().setFirst(stroke.isFirst())
         .setNumber(stroke.getNumber())
         .setMoveFlags(stroke.getMoveFlags())
-        .setStartPos(stroke.getStartSquare().getPos())
-        .setEndPos(stroke.getEndSquare().getPos());
+        .setStartPos(new DraughtDto(stroke.getStartSquare().getPos(), stroke.isWhite(), stroke.isQueen()))
+        .setEndPos(new DraughtDto(stroke.getEndSquare().getPos(), stroke.isWhite(), stroke.isQueen()));
 
     // При преобразовании не всегда есть захваченная шашка, поэтому делаем проверка
     if (stroke.getTakenSquare() != null) {
-      move.setTakenPos(stroke.getTakenSquare().getPos());
+      move.setTakenPos(new DraughtDto(stroke.getTakenSquare().getPos(), stroke.isWhite(), stroke.isQueen()));
     }
     return move;
   }

@@ -15,6 +15,7 @@ public class FriendService {
 
   public Friend save(Friend friend) {
     friend.update();
+    friend.flush();
     return friend;
   }
 

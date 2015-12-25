@@ -18,11 +18,11 @@ public class MoveDto extends BaseDto {
   private int moveOrder;
   private boolean first; // первый ход в паре ходов. Например, ee-aa в ee-aa bb-cc
 
-  private String startPos;
+  private DraughtDto startPos;
 
-  private String endPos;
+  private DraughtDto endPos;
 
-  private String takenPos;
+  private DraughtDto takenPos;
 
   private Set<MoveFlags> moveFlags = new HashSet<>();
 
@@ -35,7 +35,7 @@ public class MoveDto extends BaseDto {
   public MoveDto() {
   }
 
-  public MoveDto(int number, boolean first, String startPos, String endPos, String takenPos,
+  public MoveDto(int number, boolean first, DraughtDto startPos, DraughtDto endPos, DraughtDto takenPos,
                  Set<MoveFlags> moveFlags) {
     this.number = number;
     this.first = first;
@@ -70,29 +70,29 @@ public class MoveDto extends BaseDto {
     return this;
   }
 
-  public String getTakenPos() {
+  public DraughtDto getTakenPos() {
     return takenPos;
   }
 
-  public MoveDto setTakenPos(String takenPos) {
+  public MoveDto setTakenPos(DraughtDto takenPos) {
     this.takenPos = takenPos;
     return this;
   }
 
-  public String getStartPos() {
+  public DraughtDto getStartPos() {
     return startPos;
   }
 
-  public MoveDto setStartPos(String startPos) {
+  public MoveDto setStartPos(DraughtDto startPos) {
     this.startPos = startPos;
     return this;
   }
 
-  public String getEndPos() {
+  public DraughtDto getEndPos() {
     return endPos;
   }
 
-  public MoveDto setEndPos(String endPos) {
+  public MoveDto setEndPos(DraughtDto endPos) {
     this.endPos = endPos;
     return this;
   }

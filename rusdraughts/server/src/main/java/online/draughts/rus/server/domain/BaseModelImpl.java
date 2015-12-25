@@ -1,11 +1,13 @@
 package online.draughts.rus.server.domain;
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.appengine.api.datastore.*;
 import com.google.appengine.api.memcache.AsyncMemcacheService;
 import com.google.appengine.api.memcache.MemcacheServiceFactory;
 import online.draughts.rus.server.annotation.*;
 import online.draughts.rus.server.annotation.Index;
 import online.draughts.rus.server.annotation.Text;
+import online.draughts.rus.server.util.Utils;
 import org.apache.log4j.Logger;
 
 import java.lang.reflect.Field;
@@ -21,13 +23,19 @@ import java.util.*;
  */
 public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T> {
 
+  @JsonIgnore
   private Logger logger = Logger.getLogger(BaseModelImpl.class);
 
+  @JsonIgnore
   private DatastoreService datastore = DatastoreServiceFactory.getDatastoreService();
+  @JsonIgnore
   private AsyncMemcacheService memcache = MemcacheServiceFactory.getAsyncMemcacheService();
+  @JsonIgnore
   private Class<T> entityClass;
+  @JsonIgnore
   private String entityName;
 
+  @JsonIgnore
   private Entity entity;
 
   public BaseModelImpl(Class<T> entityClass) {
@@ -84,8 +92,12 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
           value = ((Boolean) property).booleanValue();
         } else if (Map.class.isAssignableFrom(field.getType())) {
           value = getValueFromMap(field, property);
-        } else if (field.getType().isInstance(new HashSet<Enum>())) {
-          value = getValueFromSetOfEnum(field, property);
+        } else if (field.getType().isInstance(new HashSet<>())) {
+          if (field.isAnnotationPresent(Enumerated.class)) {
+            value = getValueFromSetOfEnum(field, property);
+          } else if (field.isAnnotationPresent(KeySet.class)) {
+            value = getValueFromSetOfModel(field, property);
+          }
         } else if (property instanceof Key) {
           value = BaseModel.class.cast(field.getType().newInstance()).find((Key) property);
         } else if (property instanceof com.google.appengine.api.datastore.Text) {
@@ -104,9 +116,26 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     return resultObject;
   }
 
+  private Object getValueFromSetOfModel(Field field, Object property) {
+    if (!field.isAnnotationPresent(KeySet.class)) {
+      throw new RuntimeException("Iterable field " + field.getName() + " of Model must be annotated by @KeySet");
+    }
+    Set<String> inputSet = new HashSet<>((List<String>) property);
+    Set<Object> resultSet = new HashSet<>(inputSet.size());
+    Class modelClass = field.getAnnotation(KeySet.class).value();
+    for (String s : inputSet) {
+      try {
+        resultSet.add(((Model) modelClass.newInstance()).fromString(s));
+      } catch (InstantiationException | IllegalAccessException e) {
+        e.printStackTrace();
+      }
+    }
+    return resultSet;
+  }
+
   private Object getValueFromSetOfEnum(Field field, Object property) {
     if (!field.isAnnotationPresent(Enumerated.class)) {
-      throw new RuntimeException("Iterable of Enum must be annotated by @Enumerated");
+      throw new RuntimeException("Iterable field " + field.getName() + " of Enum must be annotated by @Enumerated");
     }
     Set<String> inputSet = new HashSet<>((List<String>) property);
     Set<Enum> resultSet = new HashSet<>(inputSet.size());
@@ -163,6 +192,10 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
             && ((Set) value).iterator().next().getClass().isEnum()) {
           Set<String> stringified = getStringifiedSetOfEnum((Set) value);
           updateProperty(entity, field, stringified);
+        } else if (value instanceof Set && !((Set) value).isEmpty()
+            && ((Set) value).iterator().next() instanceof Model) {
+          Set<String> stringified = getStringifiedSetOfModel((Set) value);
+          updateProperty(entity, field, stringified);
         } else if (value instanceof Model) {
           updateProperty(entity, field, getKeyProperty((Model) value));
         } else {
@@ -174,6 +207,14 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     }
     datastore.put(entity);
     setId(entity.getKey().getId());
+  }
+
+  private Set<String> getStringifiedSetOfModel(Set value) {
+    Set<String> resultSet = new HashSet<>(value.size());
+    for (Object o : value) {
+      resultSet.add(Model.class.cast(o).serializeToString());
+    }
+    return resultSet;
   }
 
   @Override
@@ -306,5 +347,15 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     Query query = new Query(getEntityName());
     PreparedQuery preparedQuery = datastore.prepare(query);
     return getListResult(preparedQuery.asQueryResultList(fetchOptions));
+  }
+
+  @JsonIgnore
+  protected <O extends BaseModel> String serializeToString(O obj) {
+    return Utils.serializeToJson(obj);
+  }
+
+  @JsonIgnore
+  protected <O extends BaseModel> O fromString(String json, Class<O> clazz) {
+    return Utils.deserializeFromJson(json, clazz);
   }
 }

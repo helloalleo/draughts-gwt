@@ -18,7 +18,6 @@ import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.util.StringUtils;
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -69,12 +68,7 @@ public class ServerChannel extends ChannelServer {
       return;
     }
     logger.info("New message: " + message);
-    GameMessage gameMessage = null;
-    try {
-      gameMessage = (GameMessage) Utils.deserializeFromJson(message, GameMessage.class);
-    } catch (IOException e) {
-      logger.error(e.getLocalizedMessage(), e);
-    }
+    GameMessage gameMessage = Utils.deserializeFromJson(message, GameMessage.class);
     if (gameMessage == null) {
       return;
     }

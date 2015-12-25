@@ -38,4 +38,14 @@ public class ModelImpl<T extends BaseModel> extends BaseModelImpl<T> implements 
   public int hashCode() {
     return Objects.hash(id);
   }
+
+  @Override
+  public String serializeToString() {
+    return serializeToString(this);
+  }
+
+  @Override
+  public T fromString(String s) {
+    return (T) fromString(s, ModelImpl.class);
+  }
 }

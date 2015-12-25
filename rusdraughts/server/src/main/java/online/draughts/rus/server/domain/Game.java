@@ -2,6 +2,7 @@ package online.draughts.rus.server.domain;
 
 import com.google.appengine.api.datastore.*;
 import online.draughts.rus.server.annotation.Index;
+import online.draughts.rus.server.annotation.KeySet;
 import online.draughts.rus.server.annotation.Text;
 import online.draughts.rus.shared.dto.GameDto;
 
@@ -39,6 +40,9 @@ public class Game extends ModelImpl<Game> {
 
   private Set<GameMessage> gameMessages = new HashSet<>();
 
+  @KeySet(value = Draught.class)
+  private Set<Draught> initialPos = new HashSet<>();
+
   public Game() {
     super(Game.class);
   }
@@ -62,6 +66,14 @@ public class Game extends ModelImpl<Game> {
 
   public static Game getInstance() {
     return SingletonHolder.INSTANCE;
+  }
+
+  public Set<Draught> getInitialPos() {
+    return initialPos;
+  }
+
+  public void setInitialPos(Set<Draught> initialPos) {
+    this.initialPos = initialPos;
   }
 
   public Player getPlayerWhite() {
@@ -169,6 +181,16 @@ public class Game extends ModelImpl<Game> {
         FetchOptions.Builder.withLimit(limit);
     fetchOptions.offset(offset);
     return getListResult(preparedQuery.asQueryResultList(fetchOptions));
+  }
+
+  @Override
+  public String serializeToString() {
+    return serializeToString(this);
+  }
+
+  @Override
+  public Game fromString(String s) {
+    return fromString(s, Game.class);
   }
 
   private static class SingletonHolder {

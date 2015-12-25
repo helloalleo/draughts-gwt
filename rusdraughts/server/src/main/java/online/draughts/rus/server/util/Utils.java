@@ -34,9 +34,13 @@ public class Utils {
     return stringWriter.toString();
   }
 
-  public static Object deserializeFromJson(String json, Class clazz) throws IOException {
+  public static <T> T deserializeFromJson(String json, Class<T> clazz) {
     ObjectMapper objectMapper = new ObjectMapper();
-    return objectMapper.readValue(json, clazz);
+    try {
+      return objectMapper.readValue(json, clazz);
+    } catch (IOException e) {
+      return null;
+    }
   }
 
   public static String readFile(String path) {

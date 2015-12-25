@@ -3,6 +3,8 @@ package online.draughts.rus.shared.dto;
 import com.google.gwt.user.client.rpc.IsSerializable;
 
 import java.util.Date;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,6 +27,8 @@ public class GameDto extends BaseDto {
   private String notation;
 
   private String endGameScreenshot;
+
+  private Set<DraughtDto> initialPos = new HashSet<>();
 
   public GameDto() {
   }
@@ -100,6 +104,14 @@ public class GameDto extends BaseDto {
   public GameDto setEndGameScreenshot(String endGameScreenshot) {
     this.endGameScreenshot = endGameScreenshot;
     return this;
+  }
+
+  public Set<DraughtDto> getInitialPos() {
+    return initialPos;
+  }
+
+  public void setInitialPos(Set<DraughtDto> initialPos) {
+    this.initialPos = initialPos;
   }
 
   public enum GameEnds implements IsSerializable {

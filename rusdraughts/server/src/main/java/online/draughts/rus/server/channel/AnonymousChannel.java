@@ -11,8 +11,6 @@ import online.draughts.rus.shared.util.StringUtils;
 import org.apache.log4j.Logger;
 import org.dozer.Mapper;
 
-import java.io.IOException;
-
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -54,11 +52,7 @@ public class AnonymousChannel extends ChannelServer {
     }
     logger.info("New message: " + message);
     GameMessage gameMessage = null;
-    try {
-      gameMessage = (GameMessage) Utils.deserializeFromJson(message, GameMessage.class);
-    } catch (IOException e) {
-      logger.error(e.getLocalizedMessage(), e);
-    }
+    gameMessage = Utils.deserializeFromJson(message, GameMessage.class);
     if (gameMessage == null) {
       return;
     }

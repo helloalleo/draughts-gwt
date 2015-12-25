@@ -1,17 +1,14 @@
 package online.draughts.rus.client.application.common;
 
-import com.ait.lienzo.client.core.shape.Circle;
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.client.core.shape.Text;
 import com.ait.lienzo.client.widget.LienzoPanel;
-import com.ait.lienzo.shared.core.types.ColorName;
 import com.ait.lienzo.shared.core.types.DataURLType;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SafeHtmlCell;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -127,12 +124,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Override
   protected void onAttach() {
-    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
-      @Override
-      public void execute() {
-        initEmptyDeskPanel();
-      }
-    });
+    initEmptyDeskPanel();
   }
 
   @SuppressWarnings(value = "unused")
@@ -512,6 +504,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     lienzoPanel.removeAll();
     board.clearDesk();
     draughtsDesk.remove(lienzoPanel);
+    lienzoPanel = null;
     initEmptyDeskPanel();
 
     turnLabel.setHTML(messages.playDidNotStart());
@@ -535,21 +528,20 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     board.setView(this);
     lienzoPanel.add(board);
     lienzoPanel.getElement().getStyle().setCursor(Style.Cursor.POINTER);
-    updateTurn(getUiHandlers().isMyTurn());
     cancelMove.setEnabled(true);
     hidePlayButtonAndShowPlayingButtons();
 
-    lienzoPanel.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        Circle circle = new Circle(2)
-            .setX(event.getX())
-            .setY(event.getY())
-            .setFillColor(ColorName.RED);
-        board.add(circle);
-        lienzoPanel.draw();
-      }
-    });
+//    lienzoPanel.addClickHandler(new ClickHandler() {
+//      @Override
+//      public void onClick(ClickEvent event) {
+//        Circle circle = new Circle(2)
+//            .setX(event.getX())
+//            .setY(event.getY())
+//            .setFillColor(ColorName.RED);
+//        board.add(circle);
+//        lienzoPanel.draw();
+//      }
+//    });
   }
 
   @Override

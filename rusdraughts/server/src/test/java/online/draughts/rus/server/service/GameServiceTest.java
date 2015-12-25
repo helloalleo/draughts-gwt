@@ -2,10 +2,7 @@ package online.draughts.rus.server.service;
 
 import com.google.inject.Inject;
 import online.draughts.rus.server.BaseTest;
-import online.draughts.rus.server.domain.Game;
-import online.draughts.rus.server.domain.GameMessage;
-import online.draughts.rus.server.domain.Move;
-import online.draughts.rus.server.domain.Player;
+import online.draughts.rus.server.domain.*;
 import online.draughts.rus.server.guice.DatabaseModule;
 import online.draughts.rus.server.guice.DbModule;
 import online.draughts.rus.shared.dto.GameDto;
@@ -22,9 +19,7 @@ import org.junit.runner.RunWith;
 
 import java.util.*;
 
-import static org.junit.Assert.assertEquals;
-import static org.junit.Assert.assertNotEquals;
-import static org.junit.Assert.assertNotNull;
+import static org.junit.Assert.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -86,7 +81,7 @@ public class GameServiceTest extends BaseTest {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setGame(game);
     gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_OPPONENT_MOVE);
-    Move move = new Move(1, true, gameMessage, "5,6", "4,7", null,
+    Move move = new Move(1, true, gameMessage, new Draught(new Position(5, 6), true, false), new Draught(new Position(4, 7), true, false), null,
         new HashSet<MoveDto.MoveFlags>() {{
           add(MoveDto.MoveFlags.SIMPLE_MOVE);
         }}, null);
@@ -100,7 +95,8 @@ public class GameServiceTest extends BaseTest {
     gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_OPPONENT_MOVE);
     gameMessage.setGame(game);
-    move = new Move(2, false, gameMessage, "2,1", "3,0", null,
+    move = new Move(2, false, gameMessage, new Draught(new Position(2, 1), true, false),
+        new Draught(new Position(3, 0), true, false), null,
         new HashSet<MoveDto.MoveFlags>() {{
           add(MoveDto.MoveFlags.SIMPLE_MOVE);
         }}, null);
@@ -134,7 +130,8 @@ public class GameServiceTest extends BaseTest {
   public void testSaveMove() throws Exception {
     Set<MoveDto.MoveFlags> moveFlagses = new HashSet<>();
     moveFlagses.add(MoveDto.MoveFlags.CANCEL_MOVE);
-    Move move = new Move(1, true, null, randomString(), randomString(), null, moveFlagses, "");
+    Move move = new Move(1, true, null, new Draught(new Position(1, 1), true, false),
+        new Draught(new Position(2, 2), true, false), null, moveFlagses, "");
     move.update();
     assertNotEquals(0, move.getId());
 

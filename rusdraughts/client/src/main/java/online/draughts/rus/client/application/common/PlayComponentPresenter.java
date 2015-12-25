@@ -287,18 +287,25 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
     addRegisteredHandler(StartPlayEvent.TYPE, new StartPlayEventHandler() {
       @Override
-      public void onStartPlay(StartPlayEvent event) {
+      public void onStartPlay(final StartPlayEvent event) {
         getView().hideInviteDialog();
         getView().startPlay(event.isWhite());
-        getView().initNotationPanel(playSession.getGame().getId());
+
+        GameDto game = playSession.getGame();
+
+        // isMyTurn вызывает Game и Player из текущей сессии
+        getView().updateTurn(isMyTurn());
+        getView().initNotationPanel(game.getId());
+
+        if (event.isInviter()) {
+          final Set<DraughtDto> initialPosition = getView().getBoard().getInitialPosition();
+          game.setPlayStartDate(new Date());
+          game.setInitialPos(initialPosition);
+          gamesDelegate.withoutCallback().save(game);
+        }
 
         playSession.getPlayer().setPlaying(true);
-        playersDelegate.withCallback(new AsyncCallback<PlayerDto>() {
-          @Override
-          public void onFailure(Throwable caught) {
-            ErrorDialogBox.setMessage(caught).show();
-          }
-
+        playersDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>() {
           @Override
           public void onSuccess(PlayerDto result) {
             fireEvent(new UpdatePlayerListEvent());

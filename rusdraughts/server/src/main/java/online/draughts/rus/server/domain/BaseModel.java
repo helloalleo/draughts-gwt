@@ -22,4 +22,8 @@ public interface BaseModel<T> extends Serializable {
   T find(long id);
 
   T find(Key key);
+
+  String serializeToString();
+
+  T fromString(String s);
 }

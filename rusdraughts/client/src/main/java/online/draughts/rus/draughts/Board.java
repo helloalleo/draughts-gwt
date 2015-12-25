@@ -6,15 +6,14 @@ import com.ait.lienzo.client.core.event.NodeMouseClickHandler;
 import com.ait.lienzo.client.core.event.NodeTouchEndEvent;
 import com.ait.lienzo.client.core.event.NodeTouchEndHandler;
 import com.ait.lienzo.client.core.shape.Layer;
-import com.ait.lienzo.shared.core.types.ColorName;
 import online.draughts.rus.draughts.util.Operator;
 import online.draughts.rus.draughts.util.PossibleOperators;
+import online.draughts.rus.shared.dto.DraughtDto;
 import online.draughts.rus.shared.dto.MoveDto;
+import online.draughts.rus.shared.dto.PositionDto;
 import online.draughts.rus.shared.util.StringUtils;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Stack;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.
@@ -50,6 +49,7 @@ public class Board extends Layer {
   private BoardBackgroundLayer backgroundLayer;
 
   private PlayComponent view;
+  private Set<DraughtDto> initialPos = new HashSet<>();
 
   public Board(BoardBackgroundLayer backgroundLayer,
                int rows,
@@ -94,53 +94,53 @@ public class Board extends Layer {
   }
 
   private void placeDraughts() {
-//    for (int row = 0; row < 3; row++) {
-////    for(int row = 3; row < 4; row++) {
-//      for (int col = 0; col < 8; col++) {
-////      for (int col = 2; col < 3; col++) {
-//        if (Square.isValid(row, col)) {
-//          opponentDraughtList.add(addDraught(row, col, !white));
-//        }
+    for (int row = 0; row < 3; row++) {
+//    for(int row = 3; row < 4; row++) {
+      for (int col = 0; col < 8; col++) {
+//      for (int col = 2; col < 3; col++) {
+        if (Square.isValid(row, col)) {
+          opponentDraughtList.add(addDraught(row, col, !white));
+        }
+      }
+    }
+
+    // Now establish the Black side
+    for (int row = 5; row < 8; row++) {
+//    for(int row = 4; row < 5; row++) {
+//      if ((row - 1) % 2 == 0) {
+//        continue;
 //      }
+      for (int col = 0; col < 8; col++) {
+//      for (int col = 5; col < 6; col++) {
+        if (Square.isValid(row, col)) {
+          myDraughtList.add(addDraught(row, col, white));
+        }
+      }
+    }
+
+//    if (!isMyTurn()) {
+//      final Draught e1 = addDraught(4, 3, !white);
+//      e1.setQueen(true);
+//      opponentDraughtList.add(e1);
+////      opponentDraughtList.add(addDraught(1, 6, !white));
+//      opponentDraughtList.add(addDraught(1, 2, !white));
+//      opponentDraughtList.add(addDraught(5, 4, !white));
+//      final Draught e = addDraught(6, 1, white);
+//      e.setQueen(true);
+//      myDraughtList.add(e);
 //    }
 //
-//    // Now establish the Black side
-//    for (int row = 5; row < 8; row++) {
-////    for(int row = 4; row < 5; row++) {
-////      if ((row - 1) % 2 == 0) {
-////        continue;
-////      }
-//      for (int col = 0; col < 8; col++) {
-////      for (int col = 5; col < 6; col++) {
-//        if (Square.isValid(row, col)) {
-//          myDraughtList.add(addDraught(row, col, white));
-//        }
-//      }
+//    if (isMyTurn()) {
+//      final Draught e = addDraught(1, 6, !white);
+//      e.setQueen(true);
+//      opponentDraughtList.add(e);
+//      final Draught e1 = addDraught(3, 4, white);
+//      e1.setQueen(true);
+//      myDraughtList.add(e1);
+////      myDraughtList.add(addDraught(6, 1, white));
+//      myDraughtList.add(addDraught(2, 1, white));
+//      myDraughtList.add(addDraught(4, 5, white));
 //    }
-
-    if (!isMyTurn()) {
-      final Draught e1 = addDraught(4, 3, !white);
-      e1.setQueen(true);
-      opponentDraughtList.add(e1);
-//      opponentDraughtList.add(addDraught(1, 6, !white));
-      opponentDraughtList.add(addDraught(1, 2, !white));
-      opponentDraughtList.add(addDraught(5, 4, !white));
-      final Draught e = addDraught(6, 1, white);
-      e.setQueen(true);
-      myDraughtList.add(e);
-    }
-
-    if (isMyTurn()) {
-      final Draught e = addDraught(1, 6, !white);
-      e.setQueen(true);
-      opponentDraughtList.add(e);
-      final Draught e1 = addDraught(3, 4, white);
-      e1.setQueen(true);
-      myDraughtList.add(e1);
-//      myDraughtList.add(addDraught(6, 1, white));
-      myDraughtList.add(addDraught(2, 1, white));
-      myDraughtList.add(addDraught(4, 5, white));
-    }
   }
 
   private Draught addDraught(int row, int col, boolean white) {
@@ -155,6 +155,7 @@ public class Board extends Layer {
             backgroundLayer.getOffsetX());
         add(draught);
         square.setOccupant(draught);
+        initialPos.add(new DraughtDto(new PositionDto(row, col), white, false));
         return draught;
       }
     } catch (SquareNotFoundException ignore) {
@@ -301,15 +302,15 @@ public class Board extends Layer {
       // Check moves to the op1, op2 of this Draught
       if (square != null && !square.isOccupied()) {
         outPossibleMoves.add(square);
-        square.getShape().setFillColor(ColorName.YELLOW);
+//        square.getShape().setFillColor(ColorName.YELLOW);
         if (queen) {
           possibleMovePair(opRow, opCol, opRow.apply(row, 1), opCol.apply(col, 1), white, sideWhite,
               true, outPossibleMoves, outJumpMoves, straightQueen);
           for (Square outJumpMove : outJumpMoves) {
-            outJumpMove.getShape().setFillColor(ColorName.GREEN);
+//            outJumpMove.getShape().setFillColor(ColorName.GREEN);
           }
           for (Square outPossibleMove : outPossibleMoves) {
-            outPossibleMove.getShape().setFillColor(ColorName.RED);
+//            outPossibleMove.getShape().setFillColor(ColorName.RED);
           }
           return !outJumpMoves.isEmpty();
         }
@@ -551,6 +552,7 @@ public class Board extends Layer {
 
     stroke.setStartSquare(from);
     stroke.setEndSquare(to);
+    stroke.setWhite(isWhite());
 
     final boolean first = isFirstMoveFlag();
     stroke.setFirst(first);
@@ -576,6 +578,7 @@ public class Board extends Layer {
       if (!queen && row == 0) {
         queen = true;
       }
+      stroke.setQueen(queen);
       List<Square> jumpMoves = new ArrayList<>();
       if (this.white) {
         possibleNextMovePair(from, Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, queen,
@@ -602,15 +605,18 @@ public class Board extends Layer {
       }
 
       stroke.setTakenSquare(takenSquare);
-      Stroke prev = moveStack.peek();
+      Stroke prev = null;
+      if (!moveStack.empty()) {
+        prev = moveStack.peek();
+      }
       if (jumpMoves.isEmpty()) { // если нет шашек которые бьются дальше
         stroke.setOnStopBeat();
-        if (prev.isStopBeat() || prev.isSimple()) {
+        if (null == prev || prev.isStopBeat() || prev.isSimple()) {
           stroke.setOnStartBeat();
         }
       } else {
         stroke.setOnContinueBeat();
-        if (prev.isStopBeat() || prev.isSimple()) {
+        if (null == prev || prev.isStopBeat() || prev.isSimple()) {
           stroke.setOnStartBeat();
         }
       }
@@ -1130,5 +1136,9 @@ public class Board extends Layer {
     }
     removeDraughtFrom(square);
     resetDesk();
+  }
+
+  public Set<DraughtDto> getInitialPosition() {
+    return initialPos;
   }
 }

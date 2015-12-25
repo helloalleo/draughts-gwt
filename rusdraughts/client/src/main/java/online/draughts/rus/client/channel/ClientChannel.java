@@ -17,6 +17,7 @@ import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.json.ChunkMapper;
 import online.draughts.rus.client.json.GameMessageMapper;
+import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.channel.Chunk;
 import online.draughts.rus.shared.dto.GameDto;
@@ -27,7 +28,6 @@ import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.util.StringUtils;
 
-import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -173,28 +173,21 @@ public class ClientChannel implements ChannelListener {
 
         playSession.setOpponent(gameMessage.getSender());
 
-        GameDto game = GWT.create(GameDto.class);
-        game.setPlayStartDate(new Date());
+        final GameDto game = new GameDto();
         game.setPlayerWhite(isWhite() ? playSession.getPlayer() : playSession.getOpponent());
         game.setPlayerBlack(isWhite() ? playSession.getOpponent() : playSession.getPlayer());
-
-        gamesDelegate.withCallback(new AsyncCallback<GameDto>() {
+        gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>() {
           @Override
-          public void onFailure(Throwable throwable) {
-            ErrorDialogBox.setMessage(messages.failToStartGame(), throwable).show();
-          }
-
-          @Override
-          public void onSuccess(GameDto game) {
+          public void onSuccess(GameDto result) {
             GameMessageDto message = createGameMessage(gameMessage);
             message.setMessageType(GameMessageDto.MessageType.PLAY_START);
-            message.setGame(game);
+            message.setGame(result);
             message.setData(String.valueOf(!isWhite()));
 
             sendGameMessage(message);
 
-            playSession.setGame(game);
-            eventBus.fireEvent(new StartPlayEvent(isWhite()));
+            playSession.setGame(result);
+            eventBus.fireEvent(new StartPlayEvent(isWhite(), false));
           }
         }).save(game);
       }
@@ -427,7 +420,7 @@ public class ClientChannel implements ChannelListener {
   }
 
   private GameMessageDto createGameMessage(GameMessageDto gameMessage) {
-    GameMessageDto message = GWT.create(GameMessageDto.class);
+    GameMessageDto message = new GameMessageDto();
     message.setSender(gameMessage.getReceiver());
     message.setReceiver(gameMessage.getSender());
     return message;
@@ -464,11 +457,10 @@ public class ClientChannel implements ChannelListener {
    * Начало игры на стороне приглашающего
    */
   private void handlePlayStart(final GameMessageDto gameMessage) {
-    final GameDto game = gameMessage.getGame();
-    playSession.setGame(game);
     boolean white = Boolean.valueOf(gameMessage.getData());
-    playSession.setOpponent(white ? game.getPlayerBlack() : game.getPlayerWhite());
-    eventBus.fireEvent(new StartPlayEvent(white));
+    playSession.setOpponent(gameMessage.getSender());
+    playSession.setGame(gameMessage.getGame());
+    eventBus.fireEvent(new StartPlayEvent(white, true));
   }
 
   private void handleChatPrivateMessage(GameMessageDto gameMessage) {

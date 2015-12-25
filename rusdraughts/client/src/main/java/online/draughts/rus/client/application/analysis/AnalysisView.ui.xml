@@ -10,16 +10,16 @@
                 <g:HTMLPanel ui:field="draughtsDesk" debugId="draughtsWhiteDesk"/>
             </b:Column>
             <b:Column size="XS_2 SM_2 MD_2 LG_2">
-                <g:HTMLPanel>
+                <g:HTMLPanel ui:field="draughtControls">
                     <g:HTMLPanel>
-                        <b:RadioButton ui:field="whiteDraughtButton" text="Белые&nbsp;&nbsp;" name="addDraughtGroup"/>
-                        <b:Image ui:field="whiteDraughtImage" resource="{res.images.whiteDraught}" width="60px" height="60px"/>
+                        <b:RadioButton ui:field="whiteDraughtButton" text="Белые &nbsp;&nbsp;&nbsp;1" name="addDraughtGroup"/>
+                        <b:Image ui:field="whiteDraughtImage" resource="{res.images.whiteDraught}" width="50px" height="50px"/>
                     </g:HTMLPanel>
                     <g:HTMLPanel>
-                        <b:RadioButton ui:field="blackDraughtButton" text="Черные" name="addDraughtGroup"/>
-                        <b:Image ui:field="blackDraughtImage" resource="{res.images.blackDraught}" width="60px" height="60px"/>
+                        <b:RadioButton ui:field="blackDraughtButton" text="Черные &nbsp;2" name="addDraughtGroup"/>
+                        <b:Image ui:field="blackDraughtImage" resource="{res.images.blackDraught}" width="50px" height="50px"/>
                     </g:HTMLPanel>
-                    <b:RadioButton ui:field="removeDraughtButton" text="Удалить" name="addDraughtGroup"/>
+                    <b:RadioButton ui:field="removeDraughtButton" text="Удалить 3" name="addDraughtGroup"/>
                     <b:CheckBox ui:field="addQueenCheckbox" text="Дамка"/>
                     <b:CheckBox ui:field="addDraughtCheckbox" text="Добавить шашку" enabled="false"/>
                     <b:Button ui:field="myPlaceDraughts" text="Моя расстановка" type="LINK"/>

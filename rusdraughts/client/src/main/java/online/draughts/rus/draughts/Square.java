@@ -4,6 +4,7 @@ import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.shared.core.types.Color;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.core.client.GWT;
+import online.draughts.rus.shared.dto.PositionDto;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.io.Serializable;
@@ -23,8 +24,6 @@ public class Square implements Serializable {
   private Rectangle shape;
   @JsonIgnore
   private static BoardBackgroundLayer board;
-  @JsonIgnore
-  private static final String TO_SEND_SEP = ",";
   private int row;
   private int col;
   @JsonIgnore
@@ -44,7 +43,11 @@ public class Square implements Serializable {
     add("h");
   }};
 
-  public Square(int row, int col) {
+  private Square(PositionDto pos) {
+    this(pos.getRow(), pos.getCol());
+  }
+
+  private Square(int row, int col) {
     if (GWT.isClient()) {
       this.shape = new Rectangle(0, 0);
       this.shape.setFillColor(boardBackground);
@@ -61,14 +64,12 @@ public class Square implements Serializable {
     Square.board = backgroundLayer;
   }
 
-  public static Square fromString(String toSendStr) {
+  public static Square fromPosition(String toSendStr) {
     if (StringUtils.isEmpty(toSendStr)) {
       return null;
     }
-    final String[] toSendArr = toSendStr.split(TO_SEND_SEP);
-    final Integer row = Integer.valueOf(toSendArr[0]);
-    final Integer col = Integer.valueOf(toSendArr[1]);
-    return new Square(row, col);
+    final PositionDto pos = PositionDto.fromString(toSendStr);
+    return new Square(pos);
   }
 
   public Rectangle getShape() {
@@ -228,8 +229,8 @@ public class Square implements Serializable {
     }
   }
 
-  public String getPos() {
-    return row + TO_SEND_SEP + col;
+  public PositionDto getPos() {
+    return new PositionDto(row, col);
   }
 
   public Square mirror() {
@@ -251,5 +252,12 @@ public class Square implements Serializable {
     } catch (SquareNotFoundException e) {
       return null;
     }
+  }
+
+  public static Square fromPosition(PositionDto pos) {
+    if (null == pos) {
+      return null;
+    }
+    return new Square(pos);
   }
 }

@@ -4,8 +4,7 @@ import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.client.widget.LienzoPanel;
 import com.google.gwt.dom.client.Style;
-import com.google.gwt.event.dom.client.ClickEvent;
-import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
 import com.google.gwt.event.logical.shared.ValueChangeHandler;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -59,6 +58,8 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
   Image whiteDraughtImage;
   @UiField
   RadioButton removeDraughtButton;
+  @UiField
+  HTMLPanel draughtControls;
   private final DraughtsMessages messages;
   private final AppResources resources;
   private Desk desk;
@@ -80,6 +81,21 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
         onAddQueenCheckboxClicked(event.getValue());
       }
     });
+
+    draughtControls.addDomHandler(new KeyPressHandler() {
+      @Override
+      public void onKeyPress(KeyPressEvent event) {
+        if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ONE) {
+          whiteDraughtButton.setValue(true);
+        }
+        if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_TWO) {
+          blackDraughtButton.setValue(true);
+        }
+        if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_THREE) {
+          removeDraughtButton.setValue(true);
+        }
+      }
+    }, KeyPressEvent.getType());
   }
 
   @Override

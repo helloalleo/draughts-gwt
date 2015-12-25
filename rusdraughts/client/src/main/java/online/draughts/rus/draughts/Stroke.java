@@ -28,6 +28,8 @@ public class Stroke {
   private int number;
   private String comment;
   private String title;
+  private boolean queen;
+  private boolean white;
 
   public Stroke() {
   }
@@ -193,5 +195,23 @@ public class Stroke {
 
   public String getTitle() {
     return title;
+  }
+
+  public Stroke setQueen(boolean queen) {
+    this.queen = queen;
+    return this;
+  }
+
+  public boolean isQueen() {
+    return queen;
+  }
+
+  public Stroke setWhite(boolean white) {
+    this.white = white;
+    return this;
+  }
+
+  public boolean isWhite() {
+    return white;
   }
 }
