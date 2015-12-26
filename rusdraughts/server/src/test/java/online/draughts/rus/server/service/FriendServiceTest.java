@@ -44,14 +44,14 @@ public class FriendServiceTest extends BaseTest {
     Player playerBlack = createPlayer();
     playerBlack = playerService.save(playerBlack);
     Friend friend = new Friend();
-    friend.setFriend(playerWhite);
+    friend.setMe(playerWhite);
     friend.setFriendOf(playerBlack);
 
     friend = friendService.save(friend);
     assertNotNull(friend.getId());
 
     friend = new Friend();
-    friend.setFriend(playerWhite);
+    friend.setMe(playerWhite);
     friend.setFriendOf(playerBlack);
 
     friend = friendService.save(friend);

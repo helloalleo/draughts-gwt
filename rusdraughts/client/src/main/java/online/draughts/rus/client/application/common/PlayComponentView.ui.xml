@@ -14,11 +14,11 @@
             <b:Column size="XS_6 SM_6 MD_2 LG_2">
                 <g:HTMLPanel ui:field="notationColumn" addStyleNames="{res.style.notationColumn}">
                     <g:HTMLPanel ui:field="infoHTMLPanel">
-                            <b:Heading size="H5" text="Ход:"/>
+                        <b:Heading size="H5" text="Ход:"/>
                         <g:HTML ui:field="turnLabel" text="Игра не началась">
                             <ui:attribute name="text"/>
                         </g:HTML>
-                            <b:Heading size="H5" text="Сбито шашек:"/>
+                        <b:Heading size="H5" text="Сбито шашек:"/>
                         <g:Label ui:field="beatenMineDraughtsLabel" text="0 - Белых"/>
                         <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных"/>
                         <br/>
@@ -28,14 +28,14 @@
                         <br/>
                     </g:HTMLPanel>
                     <g:HTMLPanel ui:field="notationHTMLPanel">
-                            <b:Heading size="H5" text="Нотация:"/>
+                        <b:Heading size="H5" text="Нотация:"/>
                         <g:HTMLPanel ui:field="notationList"/>
                     </g:HTMLPanel>
                 </g:HTMLPanel>
             </b:Column>
 
             <b:Column size="XS_6 SM_6 MD_4 LG_4">
-                <g:HTMLPanel ui:field="playerListColumn" addStyleNames="{res.style.playerList}">
+                <g:HTMLPanel ui:field="playerListColumn">
                     <span>
                         <b:Button ui:field="playButton" icon="REFRESH" debugId="connectToServer">
                             <ui:msg description="Подключиться" key="connectToPlayButton">Подключиться</ui:msg>
@@ -49,14 +49,14 @@
                             <ui:msg description="Сдаться" key="surrenderButton">Сдаться</ui:msg>
                         </b:Button>
                     </span>
-                        <b:Heading size="H5" text="Недавно играли с вами:"/>
-                    <g:ScrollPanel height="160px" width="100%">
-                        <b.gwt:CellTable ui:field="playerFriendCellTable" condensed="true" striped="true" hover="true"/>
+                    <b:Heading size="H5" text="Недавно играли с вами:"/>
+                    <g:ScrollPanel ui:field="playerCellTablePanel" width="100%">
+                        <b.gwt:CellTable ui:field="friendCellTable" addStyleNames="{res.style.playCellTable}" condensed="true" striped="true" hover="true"/>
                     </g:ScrollPanel>
 
-                        <b:Heading size="H5" text="Список игроков:"/>
-                    <g:ScrollPanel height="160px" width="100%">
-                        <b.gwt:CellTable ui:field="playerCellTable" condensed="true" striped="true" hover="true"/>
+                    <b:Heading size="H5" text="Список игроков:"/>
+                    <g:ScrollPanel ui:field="playerFriendCellTablePanel" height="50%" width="100%">
+                        <b.gwt:CellTable ui:field="playerCellTable" addStyleNames="{res.style.playCellTable}" condensed="true" striped="true" hover="true"/>
                     </g:ScrollPanel>
                     <b:InputGroup>
                         <b:TextBox placeholder="Поиск игроков" autoComplete="true"

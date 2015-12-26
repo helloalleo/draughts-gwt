@@ -24,8 +24,6 @@ public interface AppResources extends ClientBundle {
 
     String playerSearch();
 
-    String playerList();
-
     String mainContainer();
 
     String alignHorizontal();
@@ -121,6 +119,8 @@ public interface AppResources extends ClientBundle {
     String friendMessageTime();
 
     String cellWithButton();
+
+    String playCellTable();
 
     String newMessageCircle();
 

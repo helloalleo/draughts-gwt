@@ -65,12 +65,14 @@ public class PlayerService {
     Player player = Player.getInstance().find(playerId);
     player.getFriendUnreadMessagesMap().remove(friendId);
     player.update();
+    player.flush();
   }
 
   public Player saveDto(PlayerDto dto) {
     Player player = find(dto.getId());
     player.updateSerializable(dto);
     player.update();
+    player.flush();
     return player;
   }
 }

@@ -36,4 +36,6 @@ interface PlayComponentUiHandlers extends UiHandlers {
   void writeToFriend(PlayerDto friend);
 
   List<PlayerDto> getSortedPlayerList(Set<Long> playerIds, List<PlayerDto> playerList);
+
+  List<FriendDto> getSortedFriendList(Set<Long> playerIds, List<FriendDto> playerList);
 }

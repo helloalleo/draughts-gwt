@@ -140,7 +140,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     gameMessagesDelegate.withCallback(new AbstractAsyncCallback<Map<Long, Integer>>() {
       @Override
       public void onSuccess(Map<Long, Integer> result) {
-        getView().setUnreadMessagesMap(result);
+        getView().setUnreadMessagesMapForPlayers(result);
+        getView().setUnreadMessagesMapForFriends(result);
       }
     }).findUnreadMessages(currentSession.getPlayer().getId());
   }
@@ -219,6 +220,10 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   public void writeToFriend(PlayerDto friend) {
     currentMessenger = messengerFactory.create(playView, friend);
     addToPopupSlot(currentMessenger);
+    resetUnreadMessages(friend);
+  }
+
+  private void resetUnreadMessages(PlayerDto friend) {
     playersDelegate.withCallback(new AbstractAsyncCallback<Void>() {
       @Override
       public void onSuccess(Void result) {
@@ -244,6 +249,27 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     List<PlayerDto> result = new ArrayList<>(workingList.size());
     workingList.removeAll(playerDtos);
     result.addAll(playerDtos);
+    result.addAll(workingList);
+    return result;
+  }
+
+  @Override
+  public List<FriendDto> getSortedFriendList(Set<Long> playerIds, List<FriendDto> friendList) {
+    List<FriendDto> workingList = new ArrayList<>(friendList);
+    List<Long> playerIdList = new ArrayList<>(playerIds);
+    Collections.sort(playerIdList, Collections.reverseOrder());
+    List<FriendDto> friendDtos = new ArrayList<>(workingList.size());
+    for (Long aLong : playerIdList) {
+      for (FriendDto friendDto : workingList) {
+        if (aLong.equals(friendDto.getFriendOf().getId())) {
+          friendDtos.add(friendDto);
+          break;
+        }
+      }
+    }
+    List<FriendDto> result = new ArrayList<>(workingList.size());
+    workingList.removeAll(friendDtos);
+    result.addAll(friendDtos);
     result.addAll(workingList);
     return result;
   }
@@ -447,19 +473,29 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         }
       }
     });
+
+    addRegisteredHandler(ResetUnreadMessagesEvent.TYPE, new ResetUnreadMessagesEventHandler() {
+      @Override
+      public void onResetUnreadMessages(ResetUnreadMessagesEvent event) {
+        resetUnreadMessages(event.getFriend());
+      }
+    });
   }
 
   private void updatePlayerFriendList() {
     friendsDelegate.withCallback(new AbstractAsyncCallback<List<FriendDto>>() {
       @Override
       public void onSuccess(List<FriendDto> result) {
-        getView().setPlayerFriendList(result);
+        getView().setFriendList(result);
+        updateUnreadMessages();
       }
     }).getPlayerFriendList(playSession.getPlayer().getId());
   }
 
   public interface MyView extends View, HasUiHandlers<PlayComponentUiHandlers> {
-    void setPlayerFriendList(List<FriendDto> playerList);
+    void setUnreadMessagesMapForFriends(Map<Long, Integer> result);
+
+    void setFriendList(List<FriendDto> playerList);
 
     void setPlayerList(List<PlayerDto> playerList);
 
@@ -501,6 +537,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
     void initNotationPanel(Long gameId);
 
-    void setUnreadMessagesMap(Map<Long, Integer> result);
+    void setUnreadMessagesMapForPlayers(Map<Long, Integer> result);
   }
 }

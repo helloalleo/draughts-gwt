@@ -17,7 +17,7 @@ import java.util.List;
 public class Friend extends ModelImpl<Friend> {
 
   @Index
-  private Player friend;
+  private Player me;
   @Index
   private Player friendOf;
 
@@ -32,12 +32,12 @@ public class Friend extends ModelImpl<Friend> {
     return SingletonHolder.INSTANCE;
   }
 
-  public Player getFriend() {
-    return friend;
+  public Player getMe() {
+    return me;
   }
 
-  public void setFriend(Player friend) {
-    this.friend = friend;
+  public void setMe(Player me) {
+    this.me = me;
   }
 
   public Player getFriendOf() {
@@ -60,7 +60,7 @@ public class Friend extends ModelImpl<Friend> {
   public List<Friend> findFriends(long playerId) {
     Query query = new Query(getEntityName());
     Query.Filter friendFilter =
-        new Query.FilterPredicate("friend",
+        new Query.FilterPredicate("me",
             Query.FilterOperator.EQUAL,
             KeyFactory.createKey(Player.getInstance().getEntityName(), playerId));
     query.setFilter(friendFilter);
@@ -74,7 +74,7 @@ public class Friend extends ModelImpl<Friend> {
 
     Query query = new Query(getEntityName());
     Query.Filter playerFilter =
-        new Query.FilterPredicate("friend",
+        new Query.FilterPredicate("me",
             Query.FilterOperator.EQUAL,
             playerKey);
     Query.Filter friendFilter =

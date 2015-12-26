@@ -110,8 +110,8 @@ public class MailService {
   }
 
   public boolean sendNotification(GameMessage message) {
-    Player receiver = message.getReceiver();
-    Player sender = message.getSender();
+    Player receiver = playerService.find(message.getReceiver().getId());
+    Player sender = playerService.find(message.getSender().getId());
 
     if (null == receiver || null == sender) {
       return false;

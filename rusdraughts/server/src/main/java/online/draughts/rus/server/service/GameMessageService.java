@@ -35,6 +35,7 @@ public class GameMessageService {
     }
 
     gameMessage.update();
+    gameMessage.flush();
     return gameMessage;
   }
 

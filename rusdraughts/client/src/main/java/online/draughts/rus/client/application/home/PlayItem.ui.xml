@@ -16,9 +16,9 @@
                         <g:HTML ui:field="whoDidWin" addStyleNames="{res.style.whoDidWin}"/>
                     </g:HTMLPanel>
                 </b:Column>
-                <b:Column size="XS_2 SM_2 MD_2 LG_2">
-                    <b:Anchor ui:field="shareAnchor" icon="SHARE_ALT_SQUARE" iconSize="TIMES2" text="Поделиться"/>
-                </b:Column>
+                <!--<b:Column size="XS_2 SM_2 MD_2 LG_2">-->
+                    <!--<b:Anchor ui:field="shareAnchor" icon="SHARE_ALT_SQUARE" iconSize="TIMES2" text="Поделиться"/>-->
+                <!--</b:Column>-->
             </b:Row>
         </g:HTMLPanel>
 

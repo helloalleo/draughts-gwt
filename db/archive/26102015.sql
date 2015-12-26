@@ -1,1 +1,1 @@
-CREATE UNIQUE INDEX friend_id_friend_of_id_index ON public.friend (friend_id, friend_of_id);
+CREATE UNIQUE INDEX friend_id_friend_of_id_index ON public.me (friend_id, friend_of_id);

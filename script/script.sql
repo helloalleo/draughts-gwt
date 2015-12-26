@@ -45,7 +45,7 @@ SELECT
   player2_.session_id    AS session19_6_,
   player2_.visit_counter AS visit_c20_6_,
   player2_.vk_id         AS vk_id21_6_
-FROM player player0_ LEFT OUTER JOIN friend friends1_ ON player0_.id = friends1_.friend_of_id
+FROM player player0_ LEFT OUTER JOIN me friends1_ ON player0_.id = friends1_.friend_of_id
   INNER JOIN player player2_ ON friends1_.friend_id = player2_.id
 WHERE player0_.id = 2;
 
@@ -54,5 +54,5 @@ SELECT
   friend0_.friend_of_id AS friend_o4_2_0_,
   friend0_.id           AS id1_2_0_,
   friend0_.favorite     AS favorite2_2_0_
-FROM friend friend0_
+FROM me friend0_
 WHERE friend0_.friend_id = 2 AND friend0_.friend_of_id = 1 AND friend0_.id = null;

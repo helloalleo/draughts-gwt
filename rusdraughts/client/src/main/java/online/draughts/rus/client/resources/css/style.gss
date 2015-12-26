@@ -1,7 +1,7 @@
 @require "variables";
 @require "mixins";
 
-@external active panel-body panel-heading panel-footer;
+@external active panel-body panel-heading panel-footer btn;
 
 body {
     background-color: #fffffe;
@@ -26,12 +26,6 @@ body {
     float: left;
     width: 200px;
     /*margin-left: 10px;*/
-}
-
-.playerList {
-    float: left;
-    margin-left: 20px;
-    max-width: 295px;
 }
 
 .playerSearch {
@@ -381,4 +375,9 @@ body {
 
 .cellWithButton div {
     line-height: 2.4;
+}
+
+.playCellTable .btn {
+    padding: 6px 0;
+    float: left !important;
 }

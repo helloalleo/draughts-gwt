@@ -30,8 +30,8 @@ public class ModelImpl<T extends BaseModel> extends BaseModelImpl<T> implements 
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
-    ModelImpl that = (ModelImpl) o;
-    return Objects.equals(id, that.id);
+    ModelImpl<?> model = (ModelImpl<?>) o;
+    return Objects.equals(id, model.id);
   }
 
   @Override

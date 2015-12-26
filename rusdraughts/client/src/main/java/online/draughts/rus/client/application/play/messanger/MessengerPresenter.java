@@ -12,6 +12,7 @@ import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.event.ChatMessageEvent;
 import online.draughts.rus.client.event.ChatMessageEventHandler;
 import online.draughts.rus.client.event.GameMessageEvent;
+import online.draughts.rus.client.event.ResetUnreadMessagesEvent;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.GameMessageDto;
@@ -90,6 +91,7 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
 
   @Override
   public void resetOpponent() {
+    fireEvent(new ResetUnreadMessagesEvent(opponent));
     opponent = null;
   }
 

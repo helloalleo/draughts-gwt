@@ -70,7 +70,7 @@ public class GameService {
     boolean playerWhiteIsFriendOfPlayerBlack = friendService.isPlayerFriendOf(playerWhite.getId(), playerBlack.getId());
     if (!playerWhiteIsFriendOfPlayerBlack) {
       Friend friend = new Friend();
-      friend.setFriend(playerWhite);
+      friend.setMe(playerWhite);
       friend.setFriendOf(playerBlack);
 
       friendService.save(friend);
@@ -78,7 +78,7 @@ public class GameService {
     boolean playerBlackIsFriendOfPlayerWhite = friendService.isPlayerFriendOf(playerBlack.getId(), playerWhite.getId());
     if (!playerBlackIsFriendOfPlayerWhite) {
       Friend friend = new Friend();
-      friend.setFriend(playerBlack);
+      friend.setMe(playerBlack);
       friend.setFriendOf(playerWhite);
 
       friendService.save(friend);

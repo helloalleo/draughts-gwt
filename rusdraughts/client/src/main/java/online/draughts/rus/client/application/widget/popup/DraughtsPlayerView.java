@@ -4,7 +4,6 @@ import com.ait.lienzo.client.widget.LienzoPanel;
 import com.google.gwt.dom.client.Node;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.HandlerRegistration;
-import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.safehtml.shared.SimpleHtmlSanitizer;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -150,6 +149,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
         hide();
       }
     });
+    Window.enableScrolling(false);
   }
 
   @Override
@@ -378,8 +378,8 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
     final String oldTitle = current.getAttribute(NotationPanel.DATA_TITLE_ATTR);
     final String oTitle = oldTitle.length() != 0 ? (oldTitle + NotationPanel.USER_COMMENT_SEP)
-        : currentNotation;
-    final String gameTitle = currentSession.getPlayer().getSiteName();
+        : "";
+    final String gameTitle = "<i>" + currentSession.getPlayer().getPublicName() + "</i>";
     final String newTitle = oTitle + gameTitle;
     if (StringUtils.isNotEmpty(newTitle)) {
       current.setAttribute(NotationPanel.DATA_TITLE_ATTR, newTitle);
@@ -391,8 +391,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     String text = commentCurrentStrokeTextArea.getText().replace(config.escapeChars(), "");
     text = SimpleHtmlSanitizer.getInstance().sanitize(text).asString();
     final String gameComment = text.replace("\n", NotationPanel.COMMENT_SEP);
-    final String s = oComment + gameComment + NotationPanel.COMMENT_SEP;
-    final String newComment = new SafeHtmlBuilder().appendEscapedLines(s).toSafeHtml().asString();
+    final String newComment = oComment + gameComment + NotationPanel.COMMENT_SEP;
 
     current.setAttribute(NotationPanel.DATA_COMMENT_ATTR, newComment);
 
@@ -405,14 +404,49 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>() {
       @Override
       public void onSuccess(GameDto result) {
-        addGameComment(order, currentNotation, gameTitle, gameComment);
+        addGameComment(order, currentNotation, newTitle, newComment);
         setStrokeComment(newTitle, newComment);
       }
     }).save(game);
   }
 
   private void addGameComment(int order, String currentNotation, String gameTitle, String gameComment) {
+    gameComments.clear();
     addComment(gameComments, gameCommentsScroll, order, currentNotation, gameTitle, gameComment);
+  }
+
+
+  private void setStrokeComment(String title, String comment) {
+    currentStrokeComment.clear();
+    addComment(currentStrokeComment, currentStrokeCommentScroll, -1, null, title, comment);
+  }
+
+  private void addComment(HTMLPanel panel, ScrollPanel scrollPanel, final int order, String currentNotation, String title, String comment) {
+    if (StringUtils.isEmpty(title) || StringUtils.isEmpty(comment)) {
+      return;
+    }
+    String[] titles = title.split(NotationPanel.USER_COMMENT_SEP);
+    String[] comments = comment.split(NotationPanel.USER_COMMENT_SEP);
+    if (titles.length != comments.length) {
+      return;
+    }
+    for (int i = 0; i < titles.length; i++) {
+      if (StringUtils.isEmpty(currentNotation)) {
+        panel.add(new HTML(titles[i] + NotationPanel.TITLE_COMMENT_SEP + comments[i]));
+      } else {
+        Anchor anchor = new Anchor(currentNotation);
+        anchor.addClickHandler(new ClickHandler() {
+          @Override
+          public void onClick(ClickEvent event) {
+            toMoveByClick(order);
+          }
+        });
+        panel.add(new Span(titles[i] + NotationPanel.TITLE_COMMENT_SEP));
+        panel.add(anchor);
+        panel.add(new Span(NotationPanel.TITLE_COMMENT_SEP + comments[i]));
+      }
+    }
+    scrollPanel.scrollToBottom();
   }
 
   private void initButtons() {
@@ -586,39 +620,6 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       prevButton.setEnabled(true);
       toStartButton.setEnabled(true);
     }
-  }
-
-  private void setStrokeComment(String title, String comment) {
-    currentStrokeComment.clear();
-    addComment(currentStrokeComment, currentStrokeCommentScroll, -1, null, title, comment);
-  }
-
-  private void addComment(HTMLPanel panel, ScrollPanel scrollPanel, final int order, String currentNotation, String title, String comment) {
-    if (StringUtils.isEmpty(title) || StringUtils.isEmpty(comment)) {
-      return;
-    }
-    String[] titles = title.split(NotationPanel.USER_COMMENT_SEP);
-    String[] comments = comment.split(NotationPanel.USER_COMMENT_SEP);
-    if (titles.length != comments.length) {
-      return;
-    }
-    for (int i = 0; i < titles.length; i++) {
-      if (StringUtils.isEmpty(currentNotation)) {
-        panel.add(new HTML(titles[i] + NotationPanel.TITLE_COMMENT_SEP + comments[i]));
-      } else {
-        Anchor anchor = new Anchor(currentNotation);
-        anchor.addClickHandler(new ClickHandler() {
-          @Override
-          public void onClick(ClickEvent event) {
-            toMoveByClick(order);
-          }
-        });
-        panel.add(new Span(titles[i] + NotationPanel.TITLE_COMMENT_SEP));
-        panel.add(anchor);
-        panel.add(new Span(NotationPanel.TITLE_COMMENT_SEP + comments[i]));
-      }
-    }
-    scrollPanel.scrollToBottom();
   }
 
   private Element getStrokeById(int id) {

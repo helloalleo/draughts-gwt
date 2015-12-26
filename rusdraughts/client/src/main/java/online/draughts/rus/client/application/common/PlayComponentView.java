@@ -31,7 +31,6 @@ import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.gin.NotationPanelFactory;
 import online.draughts.rus.client.resources.AppResources;
-import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
@@ -88,13 +87,17 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private LienzoPanel lienzoPanel;
   private PlayerDto player;
   @UiField
-  CellTable<FriendDto> playerFriendCellTable;
+  CellTable<FriendDto> friendCellTable;
   @UiField
   CellTable<PlayerDto> playerCellTable;
   @UiField
   HTMLPanel infoHTMLPanel;
   @UiField
   HTMLPanel notationHTMLPanel;
+  @UiField
+  ScrollPanel playerCellTablePanel;
+  @UiField
+  ScrollPanel playerFriendCellTablePanel;
   SingleSelectionModel<FriendDto> playerFriendSelectionModel;
   SingleSelectionModel<PlayerDto> playerSelectionModel;
   private boolean prevSelected = false;
@@ -105,6 +108,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private List<FriendDto> playerFriendList;
   private Map<Long, Integer> unreadMessagesMap;
   private List<PlayerDto> playerList;
+  private List<FriendDto> friendList;
 
   @Inject
   PlayComponentView(Binder binder,
@@ -125,6 +129,10 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   protected void onAttach() {
     initEmptyDeskPanel();
+    playerListColumn.setHeight(draughtsColumn.getOffsetHeight() + "px");
+    int axillaryWidgets = 80;
+    playerCellTablePanel.setHeight(playerListColumn.getOffsetHeight() / 2 - axillaryWidgets + "px");
+    playerFriendCellTablePanel.setHeight(playerListColumn.getOffsetHeight() / 2 - axillaryWidgets + "px");
   }
 
   @SuppressWarnings(value = "unused")
@@ -199,11 +207,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     if (null != lienzoPanel) {
       return;
     }
-    final String mainContainerMarginTop = Variables.S_MAIN_CONTAINER_SCROLL_MARGIN_TOP;
-    final String highStr = mainContainerMarginTop.substring(0, mainContainerMarginTop.length() - 2); // отсекаем строку пикселей
     int draughtsSide = draughtsColumn.getOffsetWidth();
     GWT.log(draughtsSide + "");
-//    draughtsColumn.setWidth(draughtsSide + "px");
 
     lienzoPanel = new LienzoPanel(draughtsSide, draughtsSide);
     int lienzoSide = lienzoPanel.getHeight() - 20;
@@ -238,19 +243,25 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void setUnreadMessagesMap(Map<Long, Integer> result) {
+  public void setUnreadMessagesMapForPlayers(Map<Long, Integer> result) {
     this.unreadMessagesMap = result;
     setPlayerList(playerList);
   }
 
+  @Override
+  public void setUnreadMessagesMapForFriends(Map<Long, Integer> result) {
+    this.unreadMessagesMap = result;
+    setFriendList(friendList);
+  }
+
   private void initPlayerFriendsCellList() {
     playerFriendSelectionModel = new SingleSelectionModel<>();
-    playerFriendCellTable.setSelectionModel(playerFriendSelectionModel);
+    friendCellTable.setSelectionModel(playerFriendSelectionModel);
     final HTML connectToServer = new HTML();
     connectToServer.setHTML(messages.connectToServer());
     connectToServer.getElement().getStyle().setFontSize(12, Style.Unit.PX);
-    playerFriendCellTable.setLoadingIndicator(connectToServer);
-    playerFriendCellTable.getElement().getStyle().setCursor(Style.Cursor.POINTER);
+    friendCellTable.setLoadingIndicator(connectToServer);
+    friendCellTable.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     playerFriendSelectionModel.addSelectionChangeHandler(new SelectionChangeEvent.Handler() {
       @Override
       public void onSelectionChange(SelectionChangeEvent event) {
@@ -265,7 +276,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       }
     };
     statusColumn.setCellStyleNames(resources.style().cellWithButton());
-    playerFriendCellTable.addColumn(statusColumn);
+    friendCellTable.addColumn(statusColumn);
 
     TextColumn<FriendDto> publicNameColumn = new TextColumn<FriendDto>() {
       @Override
@@ -274,7 +285,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       }
     };
     publicNameColumn.setCellStyleNames(resources.style().cellWithButton());
-    playerFriendCellTable.addColumn(publicNameColumn);
+    friendCellTable.addColumn(publicNameColumn);
 
     final ButtonCell favoriteButtonCell = new ButtonCell();
     final Column<FriendDto, String> favoriteColumn = new Column<FriendDto, String>(favoriteButtonCell) {
@@ -300,12 +311,62 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
           object.setFavorite(!object.isFavorite());
           getUiHandlers().saveFriend(object);
           playerFriendList.get(playerFriendList.indexOf(object)).setFavorite(object.isFavorite());
-          playerFriendCellTable.setRowCount(0);
-          playerFriendCellTable.setRowData(playerFriendList);
+          friendCellTable.setRowCount(0);
+          friendCellTable.setRowData(playerFriendList);
         }
       }
     });
-    playerFriendCellTable.addColumn(favoriteColumn);
+    friendCellTable.addColumn(favoriteColumn);
+
+    final ButtonCell writeButtonCell = new ButtonCell(ButtonType.LINK, IconType.PENCIL);
+    final Column<FriendDto, String> writeColumn = new Column<FriendDto, String>(writeButtonCell) {
+      @Override
+      public String getValue(FriendDto object) {
+        return "";
+      }
+
+      @Override
+      public void render(Cell.Context context, FriendDto object, SafeHtmlBuilder sb) {
+        if (object.getFriendOf().getId() != player.getId()) {
+          super.render(context, object, sb);
+        }
+      }
+    };
+    writeColumn.setFieldUpdater(new FieldUpdater<FriendDto, String>() {
+      @Override
+      public void update(int index, FriendDto object, String value) {
+        unreadMessagesMap.remove(object.getMe().getId());
+        getUiHandlers().writeToFriend(object.getFriendOf());
+      }
+    });
+    friendCellTable.addColumn(writeColumn);
+
+    TextColumn<FriendDto> newMessagesColumn = new TextColumn<FriendDto>() {
+      @Override
+      public String getValue(FriendDto friend) {
+        if (unreadMessagesMap != null && unreadMessagesMap.containsKey(friend.getFriendOf().getId())) {
+          return String.valueOf(unreadMessagesMap.get(friend.getFriendOf().getId()));
+        }
+        return "";
+      }
+
+      @Override
+      public void render(Cell.Context context, FriendDto object, SafeHtmlBuilder sb) {
+        if (unreadMessagesMap == null) {
+          return;
+        }
+        final Integer unreadMsg = unreadMessagesMap.get(object.getFriendOf().getId());
+        sb.appendHtmlConstant("<span class=\""
+            + (unreadMsg != null ? resources.style().newMessageCircle() : "") + "\" " +
+            ">");
+        if (unreadMsg != null) {
+          sb.append(unreadMsg);
+        }
+        sb.appendHtmlConstant("</span>");
+      }
+    };
+    newMessagesColumn.setCellStyleNames(resources.style().cellWithButton());
+    friendCellTable.addColumn(newMessagesColumn);
   }
 
   private void initPlayersCellList() {
@@ -436,10 +497,17 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void setPlayerFriendList(List<FriendDto> playerList) {
-    playerFriendList = playerList;
-    playerFriendCellTable.setRowCount(0);
-    playerFriendCellTable.setRowData(playerList);
+  public void setFriendList(List<FriendDto> friendList) {
+    if (null == friendList) {
+      return;
+    }
+    if (!unreadMessagesMap.isEmpty()) {
+      this.friendList = getUiHandlers().getSortedFriendList(unreadMessagesMap.keySet(), friendList);
+    } else {
+      this.friendList = friendList;
+    }
+    friendCellTable.setRowCount(0);
+    friendCellTable.setRowData(this.friendList);
   }
 
   @Override
@@ -475,7 +543,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     cancelMove.setEnabled(false);
 
     playerCellTable.setRowData(new ArrayList<PlayerDto>());
-    playerFriendCellTable.setRowData(new ArrayList<FriendDto>());
+    friendCellTable.setRowData(new ArrayList<FriendDto>());
     turnLabel.setHTML(messages.youDisconnected());
 
     hidePlayingButtonsAndShowPlayButton();

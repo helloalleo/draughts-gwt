@@ -11,7 +11,7 @@ public class FriendDto {
 
   private String id;
 
-  private PlayerDto friend;
+  private PlayerDto me;
   private PlayerDto friendOf;
 
   private boolean favorite;
@@ -31,12 +31,12 @@ public class FriendDto {
     this.id = id;
   }
 
-  public PlayerDto getFriend() {
-    return friend;
+  public PlayerDto getMe() {
+    return me;
   }
 
-  public void setFriend(PlayerDto friend) {
-    this.friend = friend;
+  public void setMe(PlayerDto me) {
+    this.me = me;
   }
 
   public PlayerDto getFriendOf() {
