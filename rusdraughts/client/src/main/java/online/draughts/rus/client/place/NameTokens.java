@@ -47,11 +47,11 @@ public class NameTokens {
   }
 
   public Link[] getLeftLinks() {
-    return new Link[]{homeLink, learnLink};
+    return new Link[]{homeLink};
   }
 
   public Link[] getLeftAuthLinks() {
-    return new Link[]{homeLink, playLink, analysisLink, learnLink};
+    return new Link[]{homeLink, playLink};
   }
 
   public Link[] getRightLinks() {

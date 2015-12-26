@@ -10,7 +10,9 @@ import java.util.Objects;
  */
 public class Draught extends ModelImpl<Draught> {
 
-  private Position pos;
+  private int row;
+  private int col;
+
   private boolean white;
   private boolean queen;
 
@@ -18,19 +20,29 @@ public class Draught extends ModelImpl<Draught> {
     super(Draught.class);
   }
 
-  public Draught(Position pos, boolean white, boolean queen) {
+  public Draught(int row, int col, boolean white, boolean queen) {
     super(Draught.class);
-    this.pos = pos;
+    this.row = row;
+    this.col = col;
+
     this.white = white;
     this.queen = queen;
   }
 
-  public Position getPos() {
-    return pos;
+  public int getRow() {
+    return row;
   }
 
-  public void setPos(Position pos) {
-    this.pos = pos;
+  public void setRow(int row) {
+    this.row = row;
+  }
+
+  public int getCol() {
+    return col;
+  }
+
+  public void setCol(int col) {
+    this.col = col;
   }
 
   public boolean isWhite() {
@@ -53,15 +65,16 @@ public class Draught extends ModelImpl<Draught> {
   public boolean equals(Object o) {
     if (this == o) return true;
     if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
     Draught draught = (Draught) o;
-    return Objects.equals(white, draught.white) &&
-        Objects.equals(queen, draught.queen) &&
-        Objects.equals(pos, draught.pos);
+    return Objects.equals(row, draught.row) &&
+        Objects.equals(col, draught.col) &&
+        Objects.equals(white, draught.white);
   }
 
   @Override
   public int hashCode() {
-    return Objects.hash(super.hashCode(), pos, white, queen);
+    return Objects.hash(super.hashCode(), row, col, white);
   }
 
   public String serializeToString() {
@@ -74,7 +87,6 @@ public class Draught extends ModelImpl<Draught> {
 
   @Override
   public void update() {
-    this.getPos().update();
     super.update();
   }
 

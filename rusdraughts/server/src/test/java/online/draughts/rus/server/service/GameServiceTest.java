@@ -81,7 +81,7 @@ public class GameServiceTest extends BaseTest {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setGame(game);
     gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_OPPONENT_MOVE);
-    Move move = new Move(1, true, gameMessage, new Draught(new Position(5, 6), true, false), new Draught(new Position(4, 7), true, false), null,
+    Move move = new Move(1, true, gameMessage, new Draught(5, 6, true, false), new Draught(4, 7, true, false), null,
         new HashSet<MoveDto.MoveFlags>() {{
           add(MoveDto.MoveFlags.SIMPLE_MOVE);
         }}, null);
@@ -95,8 +95,8 @@ public class GameServiceTest extends BaseTest {
     gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_OPPONENT_MOVE);
     gameMessage.setGame(game);
-    move = new Move(2, false, gameMessage, new Draught(new Position(2, 1), true, false),
-        new Draught(new Position(3, 0), true, false), null,
+    move = new Move(2, false, gameMessage, new Draught(2, 1, true, false),
+        new Draught(3, 0, true, false), null,
         new HashSet<MoveDto.MoveFlags>() {{
           add(MoveDto.MoveFlags.SIMPLE_MOVE);
         }}, null);
@@ -130,8 +130,8 @@ public class GameServiceTest extends BaseTest {
   public void testSaveMove() throws Exception {
     Set<MoveDto.MoveFlags> moveFlagses = new HashSet<>();
     moveFlagses.add(MoveDto.MoveFlags.CANCEL_MOVE);
-    Move move = new Move(1, true, null, new Draught(new Position(1, 1), true, false),
-        new Draught(new Position(2, 2), true, false), null, moveFlagses, "");
+    Move move = new Move(1, true, null, new Draught(1, 1, true, false),
+        new Draught(2, 2, true, false), null, moveFlagses, "");
     move.update();
     assertNotEquals(0, move.getId());
 

@@ -39,12 +39,12 @@ public class Player extends ModelImpl<Player> {
   private int gameWin = 0;
   @Index
   private PlayerDto.AuthProvider authProvider;
-  private Set<Friend> friends = new HashSet<>();
-  private Set<Friend> friendOf = new HashSet<>();
-  private Set<GameMessage> receivedPlayerMessages = new HashSet<>();
-  private Set<GameMessage> sentPlayerMessages = new HashSet<>();
-  private Set<Game> whiteRoleGames = new HashSet<>();
-  private Set<Game> blackRoleGames = new HashSet<>();
+//  private Set<Friend> friends = new HashSet<>();
+//  private Set<Friend> friendOf = new HashSet<>();
+//  private Set<GameMessage> receivedPlayerMessages = new HashSet<>();
+//  private Set<GameMessage> sentPlayerMessages = new HashSet<>();
+//  private Set<Game> whiteRoleGames = new HashSet<>();
+//  private Set<Game> blackRoleGames = new HashSet<>();
   private boolean loggedIn;
   private boolean playing;
   @Index
@@ -175,10 +175,6 @@ public class Player extends ModelImpl<Player> {
     this.friendUnreadMessagesMap = friendUnreadMessagesMap;
   }
 
-  public void setRegisterDate(Date registerDate) {
-    this.registerDate = registerDate;
-  }
-
   public Date getLastVisited() {
     return lastVisited;
   }
@@ -233,6 +229,14 @@ public class Player extends ModelImpl<Player> {
 
   public void setGoogleSub(String googleSub) {
     this.googleSub = googleSub;
+  }
+
+  public Date getRegisterDate() {
+    return registerDate;
+  }
+
+  public void setRegisterDate(Date registerDate) {
+    this.registerDate = registerDate;
   }
 
   public String getPublicName() {

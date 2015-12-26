@@ -18,11 +18,20 @@ public class MoveDto extends BaseDto {
   private int moveOrder;
   private boolean first; // первый ход в паре ходов. Например, ee-aa в ee-aa bb-cc
 
-  private DraughtDto startPos;
+  /**
+   * Ещё не перемещенная шашка
+   */
+  private DraughtDto movingDraught;
 
-  private DraughtDto endPos;
+  /**
+   * Перемещённая шашка
+   */
+  private DraughtDto movedDraught;
 
-  private DraughtDto takenPos;
+  /**
+   * Сбитая шашка
+   */
+  private DraughtDto takenDraught;
 
   private Set<MoveFlags> moveFlags = new HashSet<>();
 
@@ -35,21 +44,21 @@ public class MoveDto extends BaseDto {
   public MoveDto() {
   }
 
-  public MoveDto(int number, boolean first, DraughtDto startPos, DraughtDto endPos, DraughtDto takenPos,
+  public MoveDto(int number, boolean first, DraughtDto movingDraught, DraughtDto movedDraught, DraughtDto takenDraught,
                  Set<MoveFlags> moveFlags) {
     this.number = number;
     this.first = first;
     this.moveFlags = moveFlags;
 
-    this.startPos = startPos;
-    this.endPos = endPos;
-    this.takenPos = takenPos;
+    this.movingDraught = movingDraught;
+    this.movedDraught = movedDraught;
+    this.takenDraught = takenDraught;
   }
 
   @GwtIncompatible
   public MoveDto(MoveDto move) {
-    this(move.getNumber(), move.isFirst(), move.getStartPos(), move.getEndPos(),
-        move.getTakenPos(), move.getMoveFlags());
+    this(move.getNumber(), move.isFirst(), move.getMovingDraught(), move.getMovedDraught(),
+        move.getTakenDraught(), move.getMoveFlags());
   }
 
   public int getNumber() {
@@ -70,30 +79,30 @@ public class MoveDto extends BaseDto {
     return this;
   }
 
-  public DraughtDto getTakenPos() {
-    return takenPos;
+  public DraughtDto getTakenDraught() {
+    return takenDraught;
   }
 
-  public MoveDto setTakenPos(DraughtDto takenPos) {
-    this.takenPos = takenPos;
+  public MoveDto setTakenDraught(DraughtDto takenDraught) {
+    this.takenDraught = takenDraught;
     return this;
   }
 
-  public DraughtDto getStartPos() {
-    return startPos;
+  public DraughtDto getMovingDraught() {
+    return movingDraught;
   }
 
-  public MoveDto setStartPos(DraughtDto startPos) {
-    this.startPos = startPos;
+  public MoveDto setMovingDraught(DraughtDto movingDraught) {
+    this.movingDraught = movingDraught;
     return this;
   }
 
-  public DraughtDto getEndPos() {
-    return endPos;
+  public DraughtDto getMovedDraught() {
+    return movedDraught;
   }
 
-  public MoveDto setEndPos(DraughtDto endPos) {
-    this.endPos = endPos;
+  public MoveDto setMovedDraught(DraughtDto movedDraught) {
+    this.movedDraught = movedDraught;
     return this;
   }
 
@@ -138,9 +147,9 @@ public class MoveDto extends BaseDto {
     return "Move{" +
         "number=" + number +
         ", first=" + first +
-        ", startPos='" + startPos + '\'' +
-        ", endPos='" + endPos + '\'' +
-        ", takenPos='" + takenPos + '\'' +
+        ", movingDraught='" + movingDraught + '\'' +
+        ", movedDraught='" + movedDraught + '\'' +
+        ", takenDraught='" + takenDraught + '\'' +
         ", moveFlags=" + moveFlags +
         '}';
   }

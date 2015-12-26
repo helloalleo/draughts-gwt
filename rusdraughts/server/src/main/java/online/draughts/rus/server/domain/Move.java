@@ -22,11 +22,11 @@ public class Move extends ModelImpl<Move> {
 
   private GameMessage gameMessage;
 
-  private Draught startPos;
+  private Draught movingDraught;
 
-  private Draught endPos;
+  private Draught movedDraught;
 
-  private Draught takenPos;
+  private Draught takenDraught;
 
   @Enumerated(value = MoveDto.MoveFlags.class)
   private Set<MoveDto.MoveFlags> moveFlags = new HashSet<>();
@@ -44,8 +44,8 @@ public class Move extends ModelImpl<Move> {
     super(Move.class);
   }
 
-  public Move(int number, boolean first, GameMessage gameMessage, Draught startPos, Draught endPos, Draught takenPos,
-              Set<MoveDto.MoveFlags> moveFlags, String screenshot) {
+  public Move(int number, boolean first, GameMessage gameMessage, Draught movingDraught, Draught movedDraught,
+              Draught takenDraught, Set<MoveDto.MoveFlags> moveFlags, String screenshot) {
     super(Move.class);
     this.number = number;
     this.first = first;
@@ -53,16 +53,16 @@ public class Move extends ModelImpl<Move> {
 
     this.gameMessage = gameMessage;
 
-    this.startPos = startPos;
-    this.endPos = endPos;
-    this.takenPos = takenPos;
+    this.movingDraught = movingDraught;
+    this.movedDraught = movedDraught;
+    this.takenDraught = takenDraught;
 
     this.screenshot = screenshot;
   }
 
   public Move(Move move) {
-    this(move.getNumber(), move.isFirst(), move.getGameMessage(), move.getStartPos(), move.getEndPos(),
-        move.getTakenPos(), move.getMoveFlags(), move.getScreenshot());
+    this(move.getNumber(), move.isFirst(), move.getGameMessage(), move.getMovingDraught(), move.getMovedDraught(),
+        move.getTakenDraught(), move.getMoveFlags(), move.getScreenshot());
   }
 
   public static Move getInstance() {
@@ -93,28 +93,28 @@ public class Move extends ModelImpl<Move> {
     this.first = first;
   }
 
-  public Draught getTakenPos() {
-    return takenPos;
+  public Draught getTakenDraught() {
+    return takenDraught;
   }
 
-  public void setTakenPos(Draught takenPos) {
-    this.takenPos = takenPos;
+  public void setTakenDraught(Draught takenDraught) {
+    this.takenDraught = takenDraught;
   }
 
-  public Draught getStartPos() {
-    return startPos;
+  public Draught getMovingDraught() {
+    return movingDraught;
   }
 
-  public void setStartPos(Draught startPos) {
-    this.startPos = startPos;
+  public void setMovingDraught(Draught movingDraught) {
+    this.movingDraught = movingDraught;
   }
 
-  public Draught getEndPos() {
-    return endPos;
+  public Draught getMovedDraught() {
+    return movedDraught;
   }
 
-  public void setEndPos(Draught endPos) {
-    this.endPos = endPos;
+  public void setMovedDraught(Draught movedDraught) {
+    this.movedDraught = movedDraught;
   }
 
   public Set<MoveDto.MoveFlags> getMoveFlags() {
@@ -170,19 +170,19 @@ public class Move extends ModelImpl<Move> {
     return "Move{" +
         "number=" + number +
         ", first=" + first +
-        ", startPos='" + startPos + '\'' +
-        ", endPos='" + endPos + '\'' +
-        ", takenPos='" + takenPos + '\'' +
+        ", movingDraught='" + movingDraught + '\'' +
+        ", movedDraught='" + movedDraught + '\'' +
+        ", takenDraught='" + takenDraught + '\'' +
         ", moveFlags=" + moveFlags +
         '}';
   }
 
   @Override
   public void update() {
-    this.getStartPos().update();
-    this.getEndPos().update();
-    if (null != this.getTakenPos()) {
-      this.getTakenPos().update();
+    this.getMovingDraught().update();
+    this.getMovedDraught().update();
+    if (null != this.getTakenDraught()) {
+      this.getTakenDraught().update();
     }
     super.update();
   }

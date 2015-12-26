@@ -7,6 +7,7 @@ import com.google.inject.name.Named;
 import no.eirikb.gwtchannelapi.server.ChannelServer;
 import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.server.domain.GameMessage;
+import online.draughts.rus.server.domain.Move;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.service.GameMessageService;
 import online.draughts.rus.server.service.GameService;
@@ -175,11 +176,13 @@ public class ServerChannel extends ChannelServer {
 
   private GameMessage saveGameMessage(GameMessage message) {
     message.setSentDate(new Date());
-    message = gameMessageService.save(message);
 
+    Move move = null;
     if (null != message.getMove()) {
-      gameMessageService.saveMove(message.getMove());
+       move = gameMessageService.saveMove(message.getMove());
     }
+    message.setMove(move);
+    message = gameMessageService.save(message);
 
     return message;
   }

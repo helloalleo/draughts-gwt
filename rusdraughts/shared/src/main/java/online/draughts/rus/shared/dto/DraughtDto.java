@@ -10,41 +10,36 @@ import java.util.Objects;
  */
 public class DraughtDto extends BaseDto {
 
-  private PositionDto pos;
+  private int row;
+  private int col;
   private boolean white;
   private boolean queen;
 
   public DraughtDto() {
   }
 
-  public DraughtDto(PositionDto pos, boolean white, boolean queen) {
-    this.pos = pos;
+  public DraughtDto(int row, int col, boolean white, boolean queen) {
+    this.row = row;
+    this.col = col;
+
     this.white = white;
     this.queen = queen;
   }
 
-  @Override
-  public boolean equals(Object o) {
-    if (this == o) return true;
-    if (o == null || getClass() != o.getClass()) return false;
-    if (!super.equals(o)) return false;
-    DraughtDto that = (DraughtDto) o;
-    return Objects.equals(white, that.white) &&
-        Objects.equals(queen, that.queen) &&
-        Objects.equals(pos, that.pos);
+  public int getRow() {
+    return row;
   }
 
-  @Override
-  public int hashCode() {
-    return Objects.hash(super.hashCode(), pos, white, queen);
+  public void setRow(int row) {
+    this.row = row;
   }
 
-  public PositionDto getPos() {
-    return pos;
+  public int getCol() {
+    return col;
   }
 
-  public void setPos(PositionDto pos) {
-    this.pos = pos;
+  public void setCol(int col) {
+    this.col = col;
   }
 
   public boolean isWhite() {
@@ -61,5 +56,21 @@ public class DraughtDto extends BaseDto {
 
   public void setQueen(boolean queen) {
     this.queen = queen;
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    if (!super.equals(o)) return false;
+    DraughtDto that = (DraughtDto) o;
+    return Objects.equals(row, that.row) &&
+        Objects.equals(col, that.col) &&
+        Objects.equals(white, that.white);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(super.hashCode(), row, col, white);
   }
 }

@@ -10,7 +10,6 @@ import online.draughts.rus.draughts.util.Operator;
 import online.draughts.rus.draughts.util.PossibleOperators;
 import online.draughts.rus.shared.dto.DraughtDto;
 import online.draughts.rus.shared.dto.MoveDto;
-import online.draughts.rus.shared.dto.PositionDto;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.util.*;
@@ -155,7 +154,7 @@ public class Board extends Layer {
             backgroundLayer.getOffsetX());
         add(draught);
         square.setOccupant(draught);
-        initialPos.add(new DraughtDto(new PositionDto(row, col), white, false));
+        initialPos.add(new DraughtDto(row, col, white, false));
         return draught;
       }
     } catch (SquareNotFoundException ignore) {

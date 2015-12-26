@@ -4,7 +4,6 @@ import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.shared.core.types.Color;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import com.google.gwt.core.client.GWT;
-import online.draughts.rus.shared.dto.PositionDto;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.io.Serializable;
@@ -19,6 +18,9 @@ import java.util.List;
  */
 @SuppressWarnings("GwtInconsistentSerializableClass")
 public class Square implements Serializable {
+
+  @JsonIgnore
+  private static final String POSITION_DELIMITER = ",";
 
   @JsonIgnore
   private Rectangle shape;
@@ -43,10 +45,6 @@ public class Square implements Serializable {
     add("h");
   }};
 
-  private Square(PositionDto pos) {
-    this(pos.getRow(), pos.getCol());
-  }
-
   private Square(int row, int col) {
     if (GWT.isClient()) {
       this.shape = new Rectangle(0, 0);
@@ -64,12 +62,26 @@ public class Square implements Serializable {
     Square.board = backgroundLayer;
   }
 
-  public static Square fromPosition(String toSendStr) {
+  public static Square fromString(String toSendStr) {
     if (StringUtils.isEmpty(toSendStr)) {
       return null;
     }
-    final PositionDto pos = PositionDto.fromString(toSendStr);
-    return new Square(pos);
+    final String[] toSendArr = toSendStr.split(POSITION_DELIMITER);
+    final Integer row = Integer.valueOf(toSendArr[0]);
+    final Integer col = Integer.valueOf(toSendArr[1]);
+    try {
+      return board.getSquare(row, col);
+    } catch (SquareNotFoundException e) {
+      return null;
+    }
+  }
+
+  public static Square fromPosition(int row, int col) {
+    try {
+      return board.getSquare(row, col);
+    } catch (SquareNotFoundException e) {
+      return null;
+    }
   }
 
   public Rectangle getShape() {
@@ -221,18 +233,6 @@ public class Square implements Serializable {
     return shape.getAlpha();
   }
 
-  public static Square getFromPos(int row, int col) {
-    try {
-      return board.getSquare(row, col);
-    } catch (SquareNotFoundException e) {
-      return null;
-    }
-  }
-
-  public PositionDto getPos() {
-    return new PositionDto(row, col);
-  }
-
   public Square mirror() {
     int col = BoardBackgroundLayer.COLS - 1 - this.col;
     int row = BoardBackgroundLayer.ROWS - 1 - this.row;
@@ -252,12 +252,5 @@ public class Square implements Serializable {
     } catch (SquareNotFoundException e) {
       return null;
     }
-  }
-
-  public static Square fromPosition(PositionDto pos) {
-    if (null == pos) {
-      return null;
-    }
-    return new Square(pos);
   }
 }

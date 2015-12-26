@@ -20,12 +20,15 @@ public class MoveFactory {
     MoveDto move = new MoveDto().setFirst(stroke.isFirst())
         .setNumber(stroke.getNumber())
         .setMoveFlags(stroke.getMoveFlags())
-        .setStartPos(new DraughtDto(stroke.getStartSquare().getPos(), stroke.isWhite(), stroke.isQueen()))
-        .setEndPos(new DraughtDto(stroke.getEndSquare().getPos(), stroke.isWhite(), stroke.isQueen()));
+        .setMovingDraught(new DraughtDto(stroke.getStartSquare().getRow(), stroke.getStartSquare().getCol(),
+            stroke.isWhite(), stroke.isQueen()))
+        .setMovedDraught(new DraughtDto(stroke.getEndSquare().getRow(), stroke.getEndSquare().getCol(),
+            stroke.isWhite(), stroke.isQueen()));
 
     // При преобразовании не всегда есть захваченная шашка, поэтому делаем проверка
     if (stroke.getTakenSquare() != null) {
-      move.setTakenPos(new DraughtDto(stroke.getTakenSquare().getPos(), stroke.isWhite(), stroke.isQueen()));
+      move.setTakenDraught(new DraughtDto(stroke.getTakenSquare().getRow(), stroke.getTakenSquare().getCol(),
+          stroke.isWhite(), stroke.isQueen()));
     }
     return move;
   }

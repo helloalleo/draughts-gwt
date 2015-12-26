@@ -1,57 +1,49 @@
 {
-  "id": 6579477580611584,
   "sender": {
-    "id": 5629499534213120,
     "firstName": "Алексей",
     "lastName": "Попрядухин",
     "playerName": null,
-    "rating": 52,
+    "rating": 1473,
     "loggedIn": true,
     "playing": true,
     "online": true,
-    "subscribed": false
+    "subscribed": false,
+    "id": 5629499534213120
   },
   "receiver": {
-    "id": 5066549580791808,
     "firstName": "Алексей",
     "lastName": "Попрядухин",
     "playerName": null,
-    "rating": 25,
+    "rating": 1723,
     "loggedIn": true,
     "playing": false,
     "online": true,
-    "subscribed": false
+    "subscribed": false,
+    "id": 5066549580791808
   },
   "message": null,
   "messageType": "PLAY_OPPONENT_MOVE",
   "data": null,
-  "sentDate": 1451033670077,
+  "sentDate": null,
   "move": {
-    "id": 4749890231992320,
     "number": 1,
     "moveOrder": 0,
     "first": true,
-    "startPos": {
-      "id": 0,
-      "pos": {
-        "id": 0,
-        "row": 5,
-        "col": 6
-      },
+    "moveDraught": {
+      "row": 5,
+      "col": 6,
       "white": true,
-      "queen": false
+      "queen": false,
+      "id": 0
     },
-    "endPos": {
-      "id": 0,
-      "pos": {
-        "id": 0,
-        "row": 4,
-        "col": 7
-      },
+    "movedDraught": {
+      "row": 4,
+      "col": 7,
       "white": true,
-      "queen": false
+      "queen": false,
+      "id": 0
     },
-    "takenPos": null,
+    "takenDraught": null,
     "moveFlags": [
       "SIMPLE_MOVE"
     ],
@@ -59,38 +51,40 @@
     "comment": null,
     "hashTags": [
       "#dsffsd"
-    ]
+    ],
+    "id": 0
   },
   "game": {
-    "id": 5453577673768960,
     "playerWhite": {
-      "id": 5629499534213120,
       "firstName": "Алексей",
       "lastName": "Попрядухин",
       "playerName": null,
-      "rating": 52,
+      "rating": 1415,
       "loggedIn": true,
       "playing": false,
       "online": true,
-      "subscribed": false
+      "subscribed": false,
+      "id": 5629499534213120
     },
     "playerBlack": {
-      "id": 5066549580791808,
       "firstName": "Алексей",
       "lastName": "Попрядухин",
       "playerName": null,
-      "rating": 25,
+      "rating": 1723,
       "loggedIn": true,
       "playing": false,
       "online": true,
-      "subscribed": false
+      "subscribed": false,
+      "id": 5066549580791808
     },
     "playEndStatus": null,
-    "playStartDate": 1451033657208,
+    "playStartDate": 1451070354501,
     "playFinishDate": null,
     "notation": null,
     "endGameScreenshot": null,
-    "initialPos": []
+    "initialPos": null,
+    "id": 5845003813257216
   },
-  "playerList": null
+  "playerList": null,
+  "id": 0
 }

@@ -302,6 +302,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
           game.setPlayStartDate(new Date());
           game.setInitialPos(initialPosition);
           gamesDelegate.withoutCallback().save(game);
+          game.setInitialPos(null);
         }
 
         playSession.getPlayer().setPlaying(true);

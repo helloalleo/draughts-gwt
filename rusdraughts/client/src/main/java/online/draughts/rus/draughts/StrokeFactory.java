@@ -22,11 +22,12 @@ public class StrokeFactory {
         .setOrder(move.getMoveOrder())
         .setNumber(move.getNumber())
         .setMoveFlags(move.getMoveFlags())
-        .setStartSquare(Square.fromPosition(move.getStartPos().getPos()))
-        .setEndSquare(Square.fromPosition(move.getEndPos().getPos()))
-        .setTakenSquare(move.getTakenPos() != null ? Square.fromPosition(move.getTakenPos().getPos()) : null)
-        .setQueen(move.getEndPos().isQueen())
-        .setWhite(move.getEndPos().isWhite());
+        .setStartSquare(Square.fromPosition(move.getMovingDraught().getRow(), move.getMovingDraught().getCol()))
+        .setEndSquare(Square.fromPosition(move.getMovedDraught().getRow(), move.getMovedDraught().getCol()))
+        .setTakenSquare(move.getTakenDraught() != null ?
+            Square.fromPosition(move.getTakenDraught().getRow(), move.getTakenDraught().getCol()) : null)
+        .setQueen(move.getMovedDraught().isQueen())
+        .setWhite(move.getMovedDraught().isWhite());
   }
 
   public static Stroke createStrokeFromNotationHtml(Element outerNotation, String step, boolean back) {
@@ -89,7 +90,7 @@ public class StrokeFactory {
     for (int row = 0; row < BoardBackgroundLayer.ROWS; row++) {
       for (int col = 0; col < BoardBackgroundLayer.COLS; col++) {
         Square current;
-        current = Square.getFromPos(row, col);
+        current = Square.fromPosition(row, col);
         if (null != current && (null != current.getOccupant() || back) && current.isBetween(firstStep, secondStep)
             && current.isOnLine(firstStep)) {
           return current;
