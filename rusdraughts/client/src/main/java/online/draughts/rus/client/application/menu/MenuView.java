@@ -3,6 +3,7 @@ package online.draughts.rus.client.application.menu;
 
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Element;
@@ -17,6 +18,8 @@ import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.Cookies;
 import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.constants.IconType;
+
+import java.util.Date;
 
 @SuppressWarnings("deprecation")
 public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements MenuPresenter.MyView {
@@ -50,7 +53,12 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     this.resources = resources;
     this.cookies = cookies;
 
-    logo = new Image(resources.images().logo());
+    int currentMonth = Integer.valueOf(DateTimeFormat.getFormat("M").format(new Date()));
+    if (12 == currentMonth || 1 == currentMonth) {
+      logo = new Image(resources.images().logoNewYear());
+    } else {
+      logo = new Image(resources.images().logo());
+    }
     logo.setSize(Variables.S_LOGO_TOP_HEIGHT, Variables.S_LOGO_TOP_HEIGHT);
     brand.add(logo);
 

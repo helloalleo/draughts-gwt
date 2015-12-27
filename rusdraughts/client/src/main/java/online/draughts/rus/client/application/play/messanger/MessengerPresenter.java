@@ -13,6 +13,7 @@ import online.draughts.rus.client.event.ChatMessageEvent;
 import online.draughts.rus.client.event.ChatMessageEventHandler;
 import online.draughts.rus.client.event.GameMessageEvent;
 import online.draughts.rus.client.event.ResetUnreadMessagesEvent;
+import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.GameMessageDto;
@@ -27,6 +28,7 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
   private final ResourceDelegate<GameMessagesResource> gameMessagesDelegate;
   private final PlayerDto player;
   private final ClientConfiguration config;
+  private final AppResources resources;
   private PlayerDto opponent;
 
   public MessengerPresenter(final EventBus eventBus,
@@ -34,10 +36,12 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
                             final ResourceDelegate<GameMessagesResource> gameMessagesDelegate,
                             final ClientConfiguration config,
                             final CurrentSession currentSession,
+                            final AppResources resources,
                             final PlayerDto opponent) {
     super(eventBus, view);
 
     this.gameMessagesDelegate = gameMessagesDelegate;
+    this.resources = resources;
     this.player = currentSession.getPlayer();
     this.opponent = opponent;
     this.config = config;
@@ -118,24 +122,27 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
     private final ResourceDelegate<GameMessagesResource> gameMessagesDelegate;
     private final ClientConfiguration config;
     private final CurrentSession currentSession;
+    private final AppResources resources;
 
     @Inject
     public FactoryImpl(EventBus eventBus,
                        ViewFactory viewFactory,
                        ResourceDelegate<GameMessagesResource> gameMessagesDelegate,
                        ClientConfiguration config,
-                       CurrentSession currentSession) {
+                       CurrentSession currentSession,
+                       AppResources resources) {
       this.eventBus = eventBus;
       this.viewFactory = viewFactory;
       this.gameMessagesDelegate = gameMessagesDelegate;
       this.config = config;
       this.currentSession = currentSession;
+      this.resources = resources;
     }
 
     @Override
     public MessengerPresenter create(PlayView playView, PlayerDto opponent) {
       return new MessengerPresenter(eventBus, viewFactory.create(playView),
-          gameMessagesDelegate, config, currentSession, opponent);
+          gameMessagesDelegate, config, currentSession, resources, opponent);
     }
   }
 }

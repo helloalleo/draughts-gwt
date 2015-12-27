@@ -19,6 +19,9 @@ public interface Images extends ClientBundle {
   @Source("img/logo.png")
   ImageResource logo();
 
+  @Source("img/logo_new_year.png")
+  ImageResource logoNewYear();
+
   @Source("img/online.png")
   ImageResource onlineIconImage();
 

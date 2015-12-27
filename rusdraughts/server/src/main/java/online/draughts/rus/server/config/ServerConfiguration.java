@@ -44,6 +44,7 @@ public class ServerConfiguration {
   private String playUrl;
   private boolean debug;
   private String gaeCronIpAddr;
+  private String fromEmail;
 
   @Inject
   public ServerConfiguration() {
@@ -51,6 +52,7 @@ public class ServerConfiguration {
 
     gaeCronIpAddr = resourceBundle.getString("gae_cron_ip_addr");
     gaeCronCheckInterval = resourceBundle.getString("gae_cron_check_interval");
+    fromEmail = resourceBundle.getString("from_email");
 
     context = resourceBundle.getString("context");
 
@@ -204,5 +206,9 @@ public class ServerConfiguration {
 
   public String getGaeCronCheckInterval() {
     return gaeCronCheckInterval;
+  }
+
+  public String getFromEmail() {
+    return fromEmail;
   }
 }

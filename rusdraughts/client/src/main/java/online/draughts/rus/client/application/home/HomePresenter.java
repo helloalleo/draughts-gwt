@@ -125,7 +125,9 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
         @Override
         public void onSuccess(List<GameDto> result) {
-          gamesOffset = getView().setGames(result);
+          if (null != result) {
+            gamesOffset = getView().setGames(result);
+          }
           getProxy().manualReveal(HomePresenter.this);
         }
       }).getLoggedInUserGames(0, INIT_SHOW_GAMES_PAGE_SIZE);
@@ -139,7 +141,9 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
         @Override
         public void onSuccess(List<GameDto> result) {
-          gamesOffset = getView().setGames(result);
+          if (null != result) {
+            gamesOffset = getView().setGames(result);
+          }
           getProxy().manualReveal(HomePresenter.this);
         }
       }).getGames(0, INIT_SHOW_GAMES_PAGE_SIZE);

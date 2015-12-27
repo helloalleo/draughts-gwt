@@ -12,6 +12,7 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.safehtml.shared.SafeHtml;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.uibinder.client.UiBinder;
@@ -39,8 +40,10 @@ import online.draughts.rus.shared.dto.FriendDto;
 import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Icon;
+import org.gwtbootstrap3.client.ui.TextBox;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.gwtbootstrap3.client.ui.gwt.ButtonCell;
@@ -98,6 +101,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   ScrollPanel playerCellTablePanel;
   @UiField
   ScrollPanel playerFriendCellTablePanel;
+  @UiField
+  TextBox playerSearch;
   SingleSelectionModel<FriendDto> playerFriendSelectionModel;
   SingleSelectionModel<PlayerDto> playerSelectionModel;
   private boolean prevSelected = false;
@@ -105,9 +110,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private InviteDialogBox inviteDialogBox;
   private boolean opponentColor;
   private PlayerDto opponent;
-  private List<FriendDto> playerFriendList;
   private Map<Long, Integer> unreadMessagesMap;
   private List<PlayerDto> playerList;
+  private List<PlayerDto> playerOrigList;
   private List<FriendDto> friendList;
 
   @Inject
@@ -141,6 +146,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     if (IconType.REFRESH.equals(playButton.getIcon())) {
       getUiHandlers().refreshConnectionToServer();
       player = playSession.getPlayer();
+      playerSearch.setEnabled(true);
     } else {
       PlayerDto selectedPlayer = null;
       if (playerSelectionModel.getSelectedObject() != null) {
@@ -150,6 +156,25 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       }
       getUiHandlers().startPlayWith(selectedPlayer);
     }
+  }
+
+  @SuppressWarnings(value = "unused")
+  @UiHandler("playerSearch")
+  public void onPlayerSearchKeyDown(KeyPressEvent event) {
+    final String searchText = playerSearch.getText().toUpperCase();
+    if (StringUtils.isEmpty(searchText)) {
+      setPlayerList(playerOrigList);
+      return;
+    }
+    List<PlayerDto> filtered = new ArrayList<>(playerList.size());
+    for (PlayerDto playerDto : playerOrigList) {
+      if (playerDto.getPublicName().toUpperCase().contains(searchText)) {
+        filtered.add(playerDto);
+      }
+    }
+    this.playerList = filtered;
+    playerCellTable.setRowCount(0);
+    playerCellTable.setRowData(filtered);
   }
 
   @SuppressWarnings(value = "unused")
@@ -310,9 +335,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         if (object != null) {
           object.setFavorite(!object.isFavorite());
           getUiHandlers().saveFriend(object);
-          playerFriendList.get(playerFriendList.indexOf(object)).setFavorite(object.isFavorite());
+          friendList.get(friendList.indexOf(object)).setFavorite(object.isFavorite());
           friendCellTable.setRowCount(0);
-          friendCellTable.setRowData(playerFriendList);
+          friendCellTable.setRowData(friendList);
         }
       }
     });
@@ -520,6 +545,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     } else {
       this.playerList = playerList;
     }
+    this.playerOrigList = this.playerList;
     this.playerList.remove(player);
     this.playerList.add(0, player);
     playerCellTable.setRowCount(0);
@@ -541,6 +567,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playButton.setIcon(IconType.REFRESH);
     playButton.setText(messages.reconnect());
     cancelMove.setEnabled(false);
+    playerSearch.setEnabled(false);
 
     playerCellTable.setRowData(new ArrayList<PlayerDto>());
     friendCellTable.setRowData(new ArrayList<FriendDto>());

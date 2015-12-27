@@ -10,6 +10,9 @@ import com.google.gwt.resources.client.DataResource;
  * Time: 14:28
  */
 public interface Sounds extends ClientBundle {
-  @Source("snd/hello.m4a")
+  @Source("snd/new_message.m4a")
+  DataResource newMessageSound();
+
+  @Source("snd/invite.m4a")
   DataResource inviteSound();
 }

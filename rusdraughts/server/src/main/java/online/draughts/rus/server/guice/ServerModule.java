@@ -19,6 +19,7 @@ public class ServerModule extends AbstractModule {
     install(new DispatchServletModule());
     install(new DbModule());
     install(new ServerHandlerModule());
+//    install(new CrawlerModule());
 
     bind(Mapper.class).to(DozerBeanMapper.class);
     bind(CoreChannel.class).in(Singleton.class);

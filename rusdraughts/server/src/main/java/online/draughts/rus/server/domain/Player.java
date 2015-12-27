@@ -307,6 +307,14 @@ public class Player extends ModelImpl<Player> {
     return getSingleResultObject(pq);
   }
 
+  @Override
+  public List<Player> findAll() {
+    Query query = new Query(getEntityName());
+    query.addSort("online", Query.SortDirection.DESCENDING);
+    PreparedQuery preparedQuery = getDatastore().prepare(query);
+    return getListResult(preparedQuery);
+  }
+
   public List<Player> findOnline() {
     Query.Filter onlineFilter =
         new Query.FilterPredicate("online",

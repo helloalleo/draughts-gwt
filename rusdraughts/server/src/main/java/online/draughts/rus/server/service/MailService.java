@@ -1,6 +1,5 @@
 package online.draughts.rus.server.service;
 
-import com.google.apphosting.api.ApiProxy;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.config.ServerConfiguration;
@@ -56,46 +55,43 @@ public class MailService {
     }
 
     try {
-      Transport transport = mailSession.getTransport();
-
       MimeMessage message = new MimeMessage(mailSession);
-      message.setSubject(String.format("Новое сообщение от %s", sender.getPublicName()));
-      String fromEmail = "admin@" + ApiProxy.getCurrentEnvironment().getAppId() + ".appspotmail.com";
-      message.setFrom(new InternetAddress(fromEmail, "Шашки.Онлайн"));
+      message.setSubject(String.format("Новое сообщение от %s", sender.getPublicName()), "UTF-8");
+      message.setFrom(new InternetAddress(config.getFromEmail(), "Шашки.Онлайн"));
       message.addRecipient(Message.RecipientType.TO,
           new InternetAddress(receiver.getEmail(), receiver.getPublicName()));
 
       //
       // This HTML mail have to 2 part, the BODY and the embedded image
       //
-      MimeMultipart multipart = new MimeMultipart();
+      MimeMultipart multipart = new MimeMultipart("alternative");
 
       // first part  (the html)
-      BodyPart messageBodyPart = new MimeBodyPart();
+      BodyPart htmlMessagePart = new MimeBodyPart();
       String htmlText = Utils.readFile("mail/new_message/index.html");
       htmlText = htmlText.replace("{{0}}", msg);
       htmlText = htmlText.replace("{{1}}", sender.getPublicName());
-      messageBodyPart.setContent(htmlText, "text/html");
+      htmlMessagePart.setHeader("Content-Type", "text/plain; charset=UTF-8");
+      htmlMessagePart.setHeader("Content-Transfer-Encoding", "quoted-printable");
+      htmlMessagePart.setContent(htmlText, "text/html; charset=UTF-8");
 
       // add it
-      multipart.addBodyPart(messageBodyPart);
+      multipart.addBodyPart(htmlMessagePart);
 
-      // second part (the image)
-      messageBodyPart = new MimeBodyPart();
+      // text part
+      BodyPart textMessagePart = new MimeBodyPart();
       String text = Utils.readFile("mail/new_message/new_message.txt");
       text = text.replace("{{0}}", sender.getPublicName());
-      messageBodyPart.setContent(text, "plain/text");
+      textMessagePart.setHeader("Content-Type", "text/plain; charset=UTF-8");
+      textMessagePart.setHeader("Content-Transfer-Encoding", "quoted-printable");
+      textMessagePart.setContent(text, "text/plain; charset=UTF-8");
 
-      // add it
-      multipart.addBodyPart(messageBodyPart);
+      multipart.addBodyPart(textMessagePart);
 
       // put everything together
       message.setContent(multipart);
 
-      transport.connect();
-      transport.sendMessage(message,
-          message.getRecipients(Message.RecipientType.TO));
-      transport.close();
+      Transport.send(message);
       return true;
     } catch (AddressException e) {
       e.printStackTrace();
@@ -126,7 +122,7 @@ public class MailService {
     receiver.getFriendUnreadMessagesMap().put(sender.getId(), unreadMessages + 1);
     playerService.save(receiver);
 
-    return !receiver.isLoggedIn()
+    return (!(receiver.isLoggedIn() && receiver.isOnline()))
         && StringUtils.isNotEmpty(receiver.getEmail())
         && sendNotificationMail(resourceBundle.getString("new_unread_message"), receiver, sender);
   }

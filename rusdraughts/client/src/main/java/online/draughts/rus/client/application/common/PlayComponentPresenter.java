@@ -21,7 +21,9 @@ import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.channel.ClientChannel;
 import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.event.*;
+import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
+import online.draughts.rus.client.util.AudioUtil;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.MoveFactory;
 import online.draughts.rus.draughts.Stroke;
@@ -51,6 +53,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final ResourceDelegate<FriendsResource> friendsDelegate;
+  private final AppResources resources;
   private MessengerPresenter currentMessenger;
 
   @Inject
@@ -66,7 +69,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       ResourceDelegate<GameMessagesResource> gameMessagesDelegate,
       MessengerPresenter.Factory messengerFactory,
       ClientChannel clientChannel,
-      PlayView playView) {
+      PlayView playView,
+      AppResources resources) {
     super(eventBus, view);
 
     this.messages = messages;
@@ -79,6 +83,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     this.messengerFactory = messengerFactory;
     this.gameMessagesDelegate = gameMessagesDelegate;
     this.playView = playView;
+    this.resources = resources;
 
     getView().setUiHandlers(this);
   }
@@ -469,6 +474,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onChatMessage(ChatMessageEvent event) {
         if (currentMessenger == null || !currentMessenger.isVisible()) {
           Growl.growlNotif(messages.newMessageFrom(event.getMessage().getSender().getPublicName()));
+          AudioUtil.playSound(resources.sounds().newMessageSound());
+
           updateUnreadMessages();
         }
       }

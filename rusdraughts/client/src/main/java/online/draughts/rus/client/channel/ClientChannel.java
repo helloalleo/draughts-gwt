@@ -17,7 +17,9 @@ import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.json.ChunkMapper;
 import online.draughts.rus.client.json.GameMessageMapper;
+import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
+import online.draughts.rus.client.util.AudioUtil;
 import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.channel.Chunk;
 import online.draughts.rus.shared.dto.GameDto;
@@ -50,6 +52,7 @@ public class ClientChannel implements ChannelListener {
   private PlaySession playSession;
   private ChunkMapper chunkMapper;
   private GameMessageMapper messageMapper;
+  private final AppResources resources;
   private Map<Integer, String> gameMessageChunks = new TreeMap<>();
 
   @Inject
@@ -59,7 +62,8 @@ public class ClientChannel implements ChannelListener {
                        ChunkMapper chunkMapper,
                        GameMessageMapper messageMapper,
                        ResourceDelegate<GamesResource> gamesDelegate,
-                       DraughtsMessages messages) {
+                       DraughtsMessages messages,
+                       AppResources resources) {
     this.currentSession = currentSession;
     this.playSession = playSession;
     this.gamesDelegate = gamesDelegate;
@@ -67,6 +71,7 @@ public class ClientChannel implements ChannelListener {
     this.messages = messages;
     this.chunkMapper = chunkMapper;
     this.messageMapper = messageMapper;
+    this.resources = resources;
 
     bindEvents();
 
@@ -201,6 +206,7 @@ public class ClientChannel implements ChannelListener {
       }
     };
     confirmPlayDialogBox.show(gameMessage.getMessage(), Boolean.valueOf(gameMessage.getData()));
+    AudioUtil.playSound(resources.sounds().inviteSound());
   }
 
   @Override
