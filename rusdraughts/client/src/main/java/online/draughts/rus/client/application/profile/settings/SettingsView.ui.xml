@@ -36,12 +36,23 @@
                                 </b:Column>
                                 <b:Column size="XS_3 SM_3 MD_3 LG_3">
                                     <b:Button ui:field="submitPlayerNameButton" text="Сохранить"
-                                              addStyleNames="btn btn-default btn-block">
+                                              block="true">
                                         <ui:attribute name="text" description="Save"/>
                                     </b:Button>
                                 </b:Column>
                             </b:Row>
-                            <!--<hr/>-->
+                            <hr/>
+                            <b:Row>
+                                <b:Column size="XS_9 SM_9 MD_9 LG_9">
+                                    <b:CheckBox ui:field="subscribeOnNewsletter">
+                                        <ui:msg description="Подписаться на рассылку"
+                                                key="subscribeOnNewsletter">
+                                            Подписаться на рассылку
+                                        </ui:msg>
+                                    </b:CheckBox>
+                                </b:Column>
+                            </b:Row>
+
                             <!--<b:Row>-->
                             <!--<b:Column size="MD_9">-->
                             <!--<b:InputGroup>-->

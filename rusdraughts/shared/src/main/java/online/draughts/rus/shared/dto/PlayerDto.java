@@ -25,6 +25,7 @@ public class PlayerDto extends BaseDto {
   private boolean online;
 
   private boolean subscribed;
+  private boolean subscribeOnNewsletter;
 
   public PlayerDto() {
   }
@@ -93,6 +94,14 @@ public class PlayerDto extends BaseDto {
   public PlayerDto setRating(int rating) {
     this.rating = rating;
     return this;
+  }
+
+  public boolean isSubscribeOnNewsletter() {
+    return subscribeOnNewsletter;
+  }
+
+  public void setSubscribeOnNewsletter(boolean subscribeOnNewsletter) {
+    this.subscribeOnNewsletter = subscribeOnNewsletter;
   }
 
   @JsonIgnore

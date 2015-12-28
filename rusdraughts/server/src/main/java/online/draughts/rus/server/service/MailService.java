@@ -29,14 +29,12 @@ public class MailService {
   private final Logger logger = Logger.getLogger(MailService.class);
 
   private final PlayerService playerService;
-  private final ResourceBundle resourceBundle;
 
   @Inject
   public MailService(ServerConfiguration config,
                      PlayerService playerService) {
     this.config = config;
     this.playerService = playerService;
-    this.resourceBundle = ResourceBundle.getBundle("ServerMessages");
   }
 
   private boolean sendNotificationMail(String receivedMessage, Player receiver, Player sender) {
@@ -124,7 +122,8 @@ public class MailService {
     receiver.getFriendUnreadMessagesMap().put(sender.getId(), unreadMessages + 1);
     playerService.save(receiver);
 
-    return (!(receiver.isLoggedIn() && receiver.isOnline()))
+    return !(receiver.isLoggedIn() && receiver.isOnline())
+        && receiver.isSubscribeOnNewsletter()
         && StringUtils.isNotEmpty(receiver.getEmail())
         && sendNotificationMail(message.getMessage(), receiver, sender);
   }

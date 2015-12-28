@@ -39,12 +39,6 @@ public class Player extends ModelImpl<Player> {
   private int gameWin = 0;
   @Index
   private PlayerDto.AuthProvider authProvider;
-//  private Set<Friend> friends = new HashSet<>();
-//  private Set<Friend> friendOf = new HashSet<>();
-//  private Set<GameMessage> receivedPlayerMessages = new HashSet<>();
-//  private Set<GameMessage> sentPlayerMessages = new HashSet<>();
-//  private Set<Game> whiteRoleGames = new HashSet<>();
-//  private Set<Game> blackRoleGames = new HashSet<>();
   private boolean loggedIn;
   private boolean playing;
   @Index
@@ -62,6 +56,7 @@ public class Player extends ModelImpl<Player> {
   private boolean subscribed;
   @Index
   private boolean active;
+  private boolean subscribeOnNewsletter;
 
   public Player() {
     super(Player.class);
@@ -237,6 +232,14 @@ public class Player extends ModelImpl<Player> {
 
   public void setRegisterDate(Date registerDate) {
     this.registerDate = registerDate;
+  }
+
+  public boolean isSubscribeOnNewsletter() {
+    return subscribeOnNewsletter;
+  }
+
+  public void setSubscribeOnNewsletter(boolean subscribeOnNewsletter) {
+    this.subscribeOnNewsletter = subscribeOnNewsletter;
   }
 
   public String getPublicName() {

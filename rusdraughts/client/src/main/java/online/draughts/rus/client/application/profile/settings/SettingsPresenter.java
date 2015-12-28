@@ -45,6 +45,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
 
     getView().setUiHandlers(this);
     getView().setPlayerName(player.getPublicName());
+    getView().setSubscribedOnNewsletter(player.isSubscribeOnNewsletter());
   }
 
   @Override
@@ -65,6 +66,22 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
         if (playSession.isConnected()) {
           fireEvent(new UpdateAllPlayerListEvent());
         }
+      }
+    }).save(player);
+  }
+
+  @Override
+  public void subscribeOnNewsletter(Boolean value) {
+    player.setSubscribeOnNewsletter(value);
+    playersDelegate.withCallback(new AsyncCallback<PlayerDto>() {
+      @Override
+      public void onFailure(Throwable caught) {
+        ErrorDialogBox.setMessage(caught).show();
+      }
+
+      @Override
+      public void onSuccess(PlayerDto result) {
+        Growl.growlNotif(messages.profileUpdated());
       }
     }).save(player);
   }
@@ -108,5 +125,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
 
   public interface MyView extends View, HasUiHandlers<SettingsUiHandlers> {
     void setPlayerName(String playerName);
+
+    void setSubscribedOnNewsletter(boolean subscribeOnNewsletter);
   }
 }

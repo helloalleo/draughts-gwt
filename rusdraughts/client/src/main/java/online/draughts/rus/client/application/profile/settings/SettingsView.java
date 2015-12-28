@@ -10,6 +10,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import org.gwtbootstrap3.client.ui.CheckBox;
 import org.gwtbootstrap3.client.ui.TextBox;
 
 public class SettingsView extends ViewWithUiHandlers<SettingsUiHandlers> implements SettingsPresenter.MyView {
@@ -17,6 +18,8 @@ public class SettingsView extends ViewWithUiHandlers<SettingsUiHandlers> impleme
   SimplePanel main;
   @UiField
   TextBox playerNameTextBox;
+  @UiField
+  CheckBox subscribeOnNewsletter;
 
   @Inject
   SettingsView(Binder uiBinder) {
@@ -30,16 +33,29 @@ public class SettingsView extends ViewWithUiHandlers<SettingsUiHandlers> impleme
     playerNameTextBox.setText(playerName);
   }
 
+  @Override
+  public void setSubscribedOnNewsletter(boolean subscribeOnNewsletter) {
+    this.subscribeOnNewsletter.setValue(subscribeOnNewsletter);
+  }
+
+  @SuppressWarnings("unused")
   @UiHandler("submitPlayerNameButton")
   public void onSubmitPlayerName(ClickEvent event) {
     getUiHandlers().submitNewPlayerName(playerNameTextBox.getText());
   }
 
+  @SuppressWarnings("unused")
   @UiHandler("playerNameTextBox")
   public void onSubmit(KeyPressEvent event) {
     if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
       getUiHandlers().submitNewPlayerName(playerNameTextBox.getText());
     }
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("subscribeOnNewsletter")
+  public void onSubscribeOnNewsletterChecked(ClickEvent event) {
+    getUiHandlers().subscribeOnNewsletter(subscribeOnNewsletter.getValue());
   }
 
   public static class ViewFactoryImpl implements SettingsPresenter.ViewFactory {

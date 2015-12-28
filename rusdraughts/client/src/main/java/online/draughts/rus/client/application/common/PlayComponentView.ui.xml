@@ -22,7 +22,7 @@
                         <g:Label ui:field="beatenMineDraughtsLabel" text="0 - Белых"/>
                         <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных"/>
                         <br/>
-                        <b:Button ui:field="cancelMove" text="Отменить ход">
+                        <b:Button ui:field="cancelMove" text="Отменить ход" block="true">
                             <ui:attribute name="text"/>
                         </b:Button>
                         <br/>
@@ -37,7 +37,7 @@
             <b:Column size="XS_6 SM_6 MD_4 LG_4">
                 <g:HTMLPanel ui:field="playerListColumn">
                     <span>
-                        <b:Button ui:field="playButton" icon="REFRESH" debugId="connectToServer">
+                        <b:Button ui:field="playButton" icon="REFRESH" debugId="connectToServer" block="true">
                             <ui:msg description="Подключиться" key="connectToPlayButton">Подключиться</ui:msg>
                         </b:Button>
                         <b:Button ui:field="drawButton"

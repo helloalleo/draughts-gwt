@@ -43,6 +43,7 @@ public class AuthUtils {
     player.setLoggedIn(true);
     player.setPlaying(false);
     player.setOnline(false);
+    player.setSubscribeOnNewsletter(true);
 
     HttpSession session = req.getSession();
     if (player.getSessionId() == null
