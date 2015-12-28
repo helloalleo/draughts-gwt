@@ -1,7 +1,6 @@
 package online.draughts.rus.client.application.profile.settings;
 
 import com.google.gwt.safehtml.shared.SimpleHtmlSanitizer;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
@@ -9,10 +8,10 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
-import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.event.UpdateAllPlayerListEvent;
+import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
@@ -53,12 +52,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
     String name = playerName.replace(config.escapeChars(), "");
     name = SimpleHtmlSanitizer.getInstance().sanitize(name).asString();
     player.setPlayerName(name);
-    playersDelegate.withCallback(new AsyncCallback<PlayerDto>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
-      }
-
+    playersDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>() {
       @Override
       public void onSuccess(PlayerDto result) {
         SettingsPresenter.this.player.setPlayerName(result.getPlayerName());
@@ -73,12 +67,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
   @Override
   public void subscribeOnNewsletter(Boolean value) {
     player.setSubscribeOnNewsletter(value);
-    playersDelegate.withCallback(new AsyncCallback<PlayerDto>() {
-      @Override
-      public void onFailure(Throwable caught) {
-        ErrorDialogBox.setMessage(caught).show();
-      }
-
+    playersDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>() {
       @Override
       public void onSuccess(PlayerDto result) {
         Growl.growlNotif(messages.profileUpdated());

@@ -40,14 +40,23 @@
                         <b:Button ui:field="playButton" icon="REFRESH" debugId="connectToServer" block="true">
                             <ui:msg description="Подключиться" key="connectToPlayButton">Подключиться</ui:msg>
                         </b:Button>
-                        <b:Button ui:field="drawButton"
-                                  visible="false">
-                            <ui:msg description="Предложить ничью" key="drawButton">Предложить ничью</ui:msg>
-                        </b:Button>
-                        <b:Button ui:field="surrenderButton"
-                                  visible="false">
-                            <ui:msg description="Сдаться" key="surrenderButton">Сдаться</ui:msg>
-                        </b:Button>
+                        <b:Row>
+                            <b:Column size="XS_6 SM_6 MD_6 LG_6">
+                                <b:Button ui:field="drawButton"
+                                          visible="false" block="true">
+                                    <ui:msg description="Предложить ничью" key="drawButton">Предложить ничью</ui:msg>
+                                </b:Button>
+                            </b:Column>
+
+                            <b:Column size="XS_6 SM_6 MD_6 LG_6">
+                                <b:Button ui:field="surrenderButton"
+                                          visible="false" block="true">
+                                    <ui:msg description="Сдаться" key="surrenderButton">Сдаться</ui:msg>
+                                </b:Button>
+                            </b:Column>
+
+                        </b:Row>
+
                     </span>
                     <b:Heading size="H5" text="Недавно играли с вами:"/>
                     <g:ScrollPanel ui:field="playerCellTablePanel" width="100%">

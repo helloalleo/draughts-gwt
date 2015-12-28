@@ -23,8 +23,8 @@ body {
 }
 
 .notationColumn {
-    float: left;
-    width: 200px;
+    /*float: left;*/
+    /*width: 200px;*/
     /*margin-left: 10px;*/
 }
 

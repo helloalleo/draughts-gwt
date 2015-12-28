@@ -287,6 +287,7 @@ public class Player extends ModelImpl<Player> {
     setPlaying(playerDto.isPlaying());
     setLoggedIn(playerDto.isLoggedIn());
     setSubscribed(playerDto.isSubscribed());
+    setSubscribeOnNewsletter(playerDto.isSubscribeOnNewsletter());
   }
 
   // ********* DB Queries ********* //

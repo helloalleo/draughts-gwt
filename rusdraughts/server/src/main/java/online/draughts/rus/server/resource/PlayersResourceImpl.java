@@ -11,8 +11,6 @@ import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.resource.PlayersResource;
 import org.dozer.Mapper;
 
-import javax.ws.rs.NotAuthorizedException;
-
 @RequestScoped
 public class PlayersResourceImpl implements PlayersResource {
 
@@ -33,7 +31,7 @@ public class PlayersResourceImpl implements PlayersResource {
   @Override
   public PlayerDto save(PlayerDto player) {
     if (!authProvider.get()) {
-      throw new NotAuthorizedException("Access denied");
+      return null;
     }
     final Player saved = playerService.saveDto(player);
     return mapper.map(saved, PlayerDto.class);
