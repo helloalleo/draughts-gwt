@@ -2,6 +2,7 @@ package online.draughts.rus.server.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import online.draughts.rus.server.config.ServerConfiguration;
 import online.draughts.rus.server.domain.GameMessage;
 import online.draughts.rus.server.domain.Player;
@@ -38,7 +39,7 @@ public class MailService {
     this.resourceBundle = ResourceBundle.getBundle("ServerMessages");
   }
 
-  private boolean sendNotificationMail(String msg, Player receiver, Player sender) {
+  private boolean sendNotificationMail(String receivedMessage, Player receiver, Player sender) {
     Properties props = new Properties();
     props.put("mail.transport.protocol", "smtp");
     if (config.isDebug()) {
@@ -57,9 +58,9 @@ public class MailService {
     try {
       MimeMessage message = new MimeMessage(mailSession);
       message.setSubject(String.format("Новое сообщение от %s", sender.getPublicName()), "UTF-8");
-      message.setFrom(new InternetAddress(config.getFromEmail(), "Шашки.Онлайн"));
+      message.setFrom(new InternetAddress(config.getFromEmail(), "Шашки.Онлайн", "UTF-8"));
       message.addRecipient(Message.RecipientType.TO,
-          new InternetAddress(receiver.getEmail(), receiver.getPublicName()));
+          new InternetAddress(receiver.getEmail(), receiver.getPublicName(), "UTF-8"));
 
       //
       // This HTML mail have to 2 part, the BODY and the embedded image
@@ -69,8 +70,8 @@ public class MailService {
       // first part  (the html)
       BodyPart htmlMessagePart = new MimeBodyPart();
       String htmlText = Utils.readFile("mail/new_message/index.html");
-      htmlText = htmlText.replace("{{0}}", msg);
-      htmlText = htmlText.replace("{{1}}", sender.getPublicName());
+      htmlText = htmlText.replace("{{0}}", sender.getPublicName());
+      htmlText = htmlText.replace("{{1}}", receivedMessage);
       htmlMessagePart.setHeader("Content-Type", "text/plain; charset=UTF-8");
       htmlMessagePart.setHeader("Content-Transfer-Encoding", "quoted-printable");
       htmlMessagePart.setContent(htmlText, "text/html; charset=UTF-8");
@@ -82,6 +83,7 @@ public class MailService {
       BodyPart textMessagePart = new MimeBodyPart();
       String text = Utils.readFile("mail/new_message/new_message.txt");
       text = text.replace("{{0}}", sender.getPublicName());
+      text = text.replace("{{1}}", receivedMessage);
       textMessagePart.setHeader("Content-Type", "text/plain; charset=UTF-8");
       textMessagePart.setHeader("Content-Transfer-Encoding", "quoted-printable");
       textMessagePart.setContent(text, "text/plain; charset=UTF-8");
@@ -124,6 +126,6 @@ public class MailService {
 
     return (!(receiver.isLoggedIn() && receiver.isOnline()))
         && StringUtils.isNotEmpty(receiver.getEmail())
-        && sendNotificationMail(resourceBundle.getString("new_unread_message"), receiver, sender);
+        && sendNotificationMail(message.getMessage(), receiver, sender);
   }
 }

@@ -48,7 +48,7 @@ public class Utils {
     BufferedInputStream inputStream = (BufferedInputStream) loader.getResourceAsStream(path);
     String text = null;
     try {
-      text = IOUtils.toString(inputStream);
+      text = IOUtils.toString(inputStream, "UTF-8");
       inputStream.close();
     } catch (IOException e) {
       log.severe(e.getLocalizedMessage());
