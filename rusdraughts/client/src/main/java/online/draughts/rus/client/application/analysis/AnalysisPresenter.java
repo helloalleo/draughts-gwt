@@ -6,6 +6,7 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.Presenter;
 import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
+import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
@@ -42,6 +43,7 @@ public class AnalysisPresenter extends Presenter<AnalysisPresenter.MyView, Analy
 
   @ProxyCodeSplit
   @NameToken(NameTokens.analysisPage)
+  @NoGatekeeper
   interface MyProxy extends ProxyPlace<AnalysisPresenter> {
   }
 }

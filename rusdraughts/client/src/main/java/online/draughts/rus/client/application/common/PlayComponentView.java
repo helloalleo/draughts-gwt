@@ -100,7 +100,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @UiField
   ScrollPanel playerCellTablePanel;
   @UiField
-  ScrollPanel playerFriendCellTablePanel;
+  ScrollPanel friendCellTablePanel;
   @UiField
   TextBox playerSearch;
   SingleSelectionModel<FriendDto> playerFriendSelectionModel;
@@ -137,7 +137,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playerListColumn.setHeight(draughtsColumn.getOffsetHeight() + "px");
     int axillaryWidgets = 80;
     playerCellTablePanel.setHeight(playerListColumn.getOffsetHeight() / 2 - axillaryWidgets + "px");
-    playerFriendCellTablePanel.setHeight(playerListColumn.getOffsetHeight() / 2 - axillaryWidgets + "px");
+    friendCellTablePanel.setHeight(playerListColumn.getOffsetHeight() / 2 - axillaryWidgets + "px");
   }
 
   @SuppressWarnings(value = "unused")
@@ -265,6 +265,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     }
     notationPanel = notationPanelFactory.createNotationPanel(gameId);
     notationList.add(notationPanel);
+    notationHTMLPanel.setHeight((notationColumn.getOffsetHeight() - infoHTMLPanel.getOffsetHeight()) + "px");
   }
 
   @Override

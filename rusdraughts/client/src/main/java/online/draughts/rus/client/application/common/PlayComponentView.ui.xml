@@ -64,7 +64,7 @@
                     </g:ScrollPanel>
 
                     <b:Heading size="H5" text="Список игроков:"/>
-                    <g:ScrollPanel ui:field="playerFriendCellTablePanel" height="50%" width="100%">
+                    <g:ScrollPanel ui:field="friendCellTablePanel" height="50%" width="100%">
                         <b.gwt:CellTable ui:field="playerCellTable" addStyleNames="{res.style.playCellTable}" condensed="true" striped="true" hover="true"/>
                     </g:ScrollPanel>
                     <b:InputGroup>

@@ -125,6 +125,7 @@ public class Draught extends Group {
 
     mainCircle.setRadius(radius);
     innerCircle1.setRadius(radius - radius / 4);
+    innerCircle2.setRadius(radius - radius / 2);
     if (isQueen()) {
       this.remove(innerCircle1);
       this.remove(innerCircle2);
@@ -133,6 +134,10 @@ public class Draught extends Group {
       queenStar.setInnerRadius(radius - radius / 1.3);
       queenStar.setOuterRadius(radius - radius / 2);
     } else {
+      if (!getChildNodes().contains(innerCircle1)) {
+        this.add(innerCircle1);
+      }
+
       if (!getChildNodes().contains(innerCircle2)) {
         this.add(innerCircle2);
       }
@@ -140,8 +145,6 @@ public class Draught extends Group {
       if (this.getChildNodes().contains(queenStar)) {
         this.remove(queenStar);
       }
-
-      innerCircle2.setRadius(radius - radius / 2);
     }
   }
 
