@@ -83,7 +83,8 @@ public class ServerChannel extends ChannelServer {
         updatePlayerList();
         break;
       case PLAY_INVITE:
-      case PLAY_REJECT_INVITE:
+      case PLAY_REJECTED_INVITE:
+      case PLAY_DID_NOT_RESPONSE:
       case PLAY_ALREADY_PLAYING:
       case PLAY_START:
       case PLAY_OPPONENT_MOVE:

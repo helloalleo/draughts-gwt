@@ -200,7 +200,7 @@ public class ClientChannel implements ChannelListener {
       @Override
       public void canceled() {
         GameMessageDto message = createGameMessage(gameMessage);
-        message.setMessageType(GameMessageDto.MessageType.PLAY_REJECT_INVITE);
+        message.setMessageType(GameMessageDto.MessageType.PLAY_REJECTED_INVITE);
 
         sendGameMessage(message);
       }
@@ -277,8 +277,11 @@ public class ClientChannel implements ChannelListener {
       case PLAY_START:
         handlePlayStart(gameMessage);
         break;
-      case PLAY_REJECT_INVITE:
+      case PLAY_REJECTED_INVITE:
         handlePlayRejectInvite(gameMessage);
+        break;
+      case PLAY_DID_NOT_RESPONSE:
+        handleDidNotResponse(gameMessage);
         break;
       case PLAY_ALREADY_PLAYING:
         handlePlayAlreadyPlaying(gameMessage);
@@ -314,6 +317,10 @@ public class ClientChannel implements ChannelListener {
         handleChannelClose();
         break;
     }
+  }
+
+  private void handleDidNotResponse(GameMessageDto gameMessage) {
+    confirmPlayDialogBox.hide();
   }
 
   private void handleChannelClose() {

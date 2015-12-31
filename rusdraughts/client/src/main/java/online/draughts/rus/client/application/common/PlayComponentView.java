@@ -37,6 +37,7 @@ import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
 import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.dto.FriendDto;
+import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
@@ -114,6 +115,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private List<PlayerDto> playerList;
   private List<PlayerDto> playerOrigList;
   private List<FriendDto> friendList;
+  private String timeOnPlay;
+  private String fisherTime;
 
   @Inject
   PlayComponentView(Binder binder,
@@ -675,8 +678,15 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   public void showInviteDialog(ClickHandler inviteClickHandler) {
     inviteDialogBox = new InviteDialogBox(inviteClickHandler) {
       @Override
-      public void submitted(boolean white) {
+      public void didNotResponse() {
+        getUiHandlers().didNotResponse(opponent);
+      }
+
+      @Override
+      public void submitted(boolean white, String timeOnPlay, String fisherTime) {
         PlayComponentView.this.opponentColor = !white;
+        PlayComponentView.this.timeOnPlay = timeOnPlay;
+        PlayComponentView.this.fisherTime = fisherTime;
       }
     };
     inviteDialogBox.show(messages.inviteToPlay(opponent.getPublicName(),

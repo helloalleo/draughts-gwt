@@ -12,6 +12,9 @@ import online.draughts.rus.shared.util.StringUtils;
  */
 public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
 
+  private static final String TIME_ON_PLAY = "timeOnPlay";
+  private static final String FISHER_TIME = "fisherTime";
+  private static final String TIME_ON_PLAY_CUSTOM = "timeOnPlayCustom";
   private final String GAMES_ON_PAGE_COUNTER = "gamesOnPage";
   private final String LOCATION = "LOCATION"; // куки адреса страницы
   private final String MY_GAMES = "myGames";
@@ -50,5 +53,47 @@ public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
       myGames = Boolean.FALSE.toString();
     }
     return Boolean.valueOf(myGames);
+  }
+
+  @Override
+  public void setTimeOnPlay(String value) {
+    Cookies.setCookie(TIME_ON_PLAY, String.valueOf(value));
+  }
+
+  @Override
+  public int getTimeOnPlay() {
+    String gamesOnPage = Cookies.getCookie(TIME_ON_PLAY);
+    if (StringUtils.isEmpty(gamesOnPage)) {
+      gamesOnPage = "0";
+    }
+    return Integer.valueOf(gamesOnPage);
+  }
+
+  @Override
+  public void setTimeOnPlayCustom(String value) {
+    Cookies.setCookie(TIME_ON_PLAY_CUSTOM, String.valueOf(value));
+  }
+
+  @Override
+  public boolean getTimeOnPlayCustom() {
+    String gamesOnPage = Cookies.getCookie(TIME_ON_PLAY_CUSTOM);
+    if (StringUtils.isEmpty(gamesOnPage)) {
+      gamesOnPage = Boolean.FALSE.toString();
+    }
+    return Boolean.valueOf(gamesOnPage);
+  }
+
+  @Override
+  public void setFisherTime(String value) {
+    Cookies.setCookie(FISHER_TIME, String.valueOf(value));
+  }
+
+  @Override
+  public int getFisherTime() {
+    String gamesOnPage = Cookies.getCookie(FISHER_TIME);
+    if (StringUtils.isEmpty(gamesOnPage)) {
+      gamesOnPage = "0";
+    }
+    return Integer.valueOf(gamesOnPage);
   }
 }

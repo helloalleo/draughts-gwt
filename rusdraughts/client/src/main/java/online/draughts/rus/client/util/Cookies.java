@@ -8,12 +8,27 @@ package online.draughts.rus.client.util;
  */
 public interface Cookies {
 
-  void setLocation(String nameToken);
   String getLocation();
 
-  void setGamesOnPageCounter(int value);
+  void setLocation(String nameToken);
+
   int getGamesOnPageCounter();
 
-  void setMyGames(boolean myGames);
+  void setGamesOnPageCounter(int value);
+
   boolean isMyGames();
+
+  void setMyGames(boolean myGames);
+
+  int getTimeOnPlay();
+
+  void setTimeOnPlay(String value);
+
+  void setTimeOnPlayCustom(String value);
+
+  boolean getTimeOnPlayCustom();
+
+  int getFisherTime();
+
+  void setFisherTime(String value);
 }

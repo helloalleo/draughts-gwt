@@ -1,6 +1,5 @@
 package online.draughts.rus.client.application.common;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -279,8 +278,17 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     return result;
   }
 
+  @Override
+  public void didNotResponse(PlayerDto opponent) {
+    GameMessageDto gameMessageDto = new GameMessageDto();
+    gameMessageDto.setSender(playSession.getPlayer());
+    gameMessageDto.setReceiver(opponent);
+    gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_DID_NOT_RESPONSE);
+    fireEvent(new GameMessageEvent(gameMessageDto));
+  }
+
   private GameMessageDto createGameMessage() {
-    GameMessageDto gameMessage = GWT.create(GameMessageDto.class);
+    GameMessageDto gameMessage = new GameMessageDto();
     gameMessage.setSender(playSession.getPlayer());
     gameMessage.setReceiver(playSession.getOpponent());
     gameMessage.setGame(playSession.getGame());

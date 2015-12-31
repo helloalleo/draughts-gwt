@@ -38,4 +38,6 @@ interface PlayComponentUiHandlers extends UiHandlers {
   List<PlayerDto> getSortedPlayerList(Set<Long> playerIds, List<PlayerDto> playerList);
 
   List<FriendDto> getSortedFriendList(Set<Long> playerIds, List<FriendDto> playerList);
+
+  void didNotResponse(PlayerDto opponent);
 }

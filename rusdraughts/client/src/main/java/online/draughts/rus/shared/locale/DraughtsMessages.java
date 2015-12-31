@@ -238,4 +238,14 @@ public interface DraughtsMessages extends Messages {
   String whitesTurn();
 
   SafeHtml blacksTurn();
+
+  String minutes();
+
+  String timeOnPlay();
+
+  String specifyTime();
+
+  String fisherTime();
+
+  String seconds();
 }

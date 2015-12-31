@@ -68,7 +68,7 @@ public class AnonymousChannel extends ChannelServer {
       case GAME_LIST_UPDATE:
         updateGameList(gameMessage);
       case PLAY_INVITE:
-      case PLAY_REJECT_INVITE:
+      case PLAY_REJECTED_INVITE:
       case PLAY_ALREADY_PLAYING:
       case PLAY_START:
       case PLAY_OPPONENT_MOVE:

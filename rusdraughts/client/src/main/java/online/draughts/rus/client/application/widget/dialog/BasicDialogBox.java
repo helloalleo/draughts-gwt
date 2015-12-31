@@ -7,6 +7,8 @@ import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DialogBox;
 import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.client.util.DTCookiesImpl;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 
 /**
@@ -18,6 +20,7 @@ import online.draughts.rus.shared.locale.DraughtsMessages;
 public class BasicDialogBox extends DialogBox implements BaseDialogBox {
   protected static DraughtsMessages messages = GWT.create(DraughtsMessages.class);
   protected AppResources resources = GWT.create(AppResources.class);
+  protected Cookies cookies = GWT.create(DTCookiesImpl.class);
 
   protected int WIDTH = 400;
   protected int HEIGHT = 60;
