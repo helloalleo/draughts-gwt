@@ -94,9 +94,7 @@ public class Board extends Layer {
 
   private void placeDraughts() {
     for (int row = 0; row < 3; row++) {
-//    for(int row = 3; row < 4; row++) {
       for (int col = 0; col < 8; col++) {
-//      for (int col = 2; col < 3; col++) {
         if (Square.isValid(row, col)) {
           opponentDraughtList.add(addDraught(row, col, !white));
         }
@@ -105,17 +103,36 @@ public class Board extends Layer {
 
     // Now establish the Black side
     for (int row = 5; row < 8; row++) {
-//    for(int row = 4; row < 5; row++) {
-//      if ((row - 1) % 2 == 0) {
-//        continue;
-//      }
       for (int col = 0; col < 8; col++) {
-//      for (int col = 5; col < 6; col++) {
         if (Square.isValid(row, col)) {
           myDraughtList.add(addDraught(row, col, white));
         }
       }
     }
+
+//    if (!isMyTurn()) {
+////      final Draught e1 = addDraught(4, 3, !white);
+////      e1.setQueen(true);
+////      opponentDraughtList.add(e1);
+//////      opponentDraughtList.add(addDraught(1, 6, !white));
+////      opponentDraughtList.add(addDraught(1, 2, !white));
+//      opponentDraughtList.add(addDraught(3, 4, true));
+////      final Draught e = addDraught(6, 1, white);
+////      e.setQueen(true);
+//      myDraughtList.add(addDraught(4,3, false));
+//    }
+//
+//    if (isMyTurn()) {
+////      final Draught e = addDraught(1, 6, !white);
+////      e.setQueen(true);
+//      opponentDraughtList.add(addDraught(3,4 , false));
+////      final Draught e1 = addDraught(3, 4, white);
+////      e1.setQueen(true);
+//      myDraughtList.add(addDraught(4,3,true));
+////      myDraughtList.add(addDraught(6, 1, white));
+////      myDraughtList.add(addDraught(2, 1, white));
+////      myDraughtList.add(addDraught(4, 5, white));
+//    }
   }
 
   private Draught addDraught(int row, int col, boolean white) {
@@ -738,6 +755,10 @@ public class Board extends Layer {
     doMove(stroke, stepCursor, false);
   }
 
+  public void doMove(final Stroke stroke, final int stepCursor, final boolean back) {
+    doMove(stroke, stepCursor, back, false);
+  }
+
   /**
    * Функция, которая выполняет физическое перемещение шашек
    * Используется в эмуляторе
@@ -746,7 +767,7 @@ public class Board extends Layer {
    * @param stepCursor для дамок
    * @param back       ход назад
    */
-  public void doMove(Stroke stroke, final int stepCursor, final boolean back) {
+  public void doMove(final Stroke stroke, final int stepCursor, final boolean back, final boolean cancel) {
     final Draught occupant = stroke.getStartSquare().getOccupant();
 
     // вычисляем координаты для перемещения шашки относительно её центра
@@ -785,7 +806,7 @@ public class Board extends Layer {
             occupant.setPosition(endSquare.getRow(), endSquare.getCol());
             occupant.setQueen(true);
           }
-        } else {
+        } else if (cancel) {
           if (((1 == occupant.getRow() || 2 == occupant.getRow())
               && (occupant.isWhite() && isWhite()
               || !occupant.isWhite() && !isWhite()))
@@ -1049,7 +1070,7 @@ public class Board extends Layer {
       }
       stroke.setTakenSquare(taken);
     }
-    doMove(stroke, stepCursor, back);
+    doMove(stroke, stepCursor, back, true);
   }
 
   public void moveOpponentCanceled(Stroke stroke) {

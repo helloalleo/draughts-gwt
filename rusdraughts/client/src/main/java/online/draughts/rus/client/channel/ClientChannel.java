@@ -8,6 +8,7 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import no.eirikb.gwtchannelapi.client.Channel;
 import no.eirikb.gwtchannelapi.client.ChannelListener;
+import online.draughts.rus.client.application.common.PlayComponentPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.dialog.ConfirmPlayDialogBox;
 import online.draughts.rus.client.application.widget.dialog.ConfirmeDialogBox;
@@ -187,12 +188,16 @@ public class ClientChannel implements ChannelListener {
             GameMessageDto message = createGameMessage(gameMessage);
             message.setMessageType(GameMessageDto.MessageType.PLAY_START);
             message.setGame(result);
-            message.setData(String.valueOf(!isWhite()));
+            String[] time = gameMessage.getData().split(PlayComponentPresenter.INVITE_TIME_DELIMITER);
+            message.setData(String.valueOf(!isWhite())
+                + PlayComponentPresenter.INVITE_TIME_DELIMITER + time[1]
+                + PlayComponentPresenter.INVITE_TIME_DELIMITER + time[2]);
 
             sendGameMessage(message);
 
             playSession.setGame(result);
-            eventBus.fireEvent(new StartPlayEvent(isWhite(), false));
+            eventBus.fireEvent(new StartPlayEvent(isWhite(), false,
+                Integer.valueOf(time[1]), Integer.valueOf(time[2])));
           }
         }).save(game);
       }
@@ -298,14 +303,17 @@ public class ClientChannel implements ChannelListener {
       case PLAY_ACCEPT_DRAW:
         handlePlayAcceptDraw(gameMessage);
         break;
+      case PLAY_END:
+        handlePlayEndGame(gameMessage);
+        break;
+      case PLAY_TIMEOUT:
+        handlePlayTimeout(gameMessage);
+        break;
       case PLAY_CANCEL_MOVE:
         handlePlayCancelMove(gameMessage);
         break;
       case PLAY_CANCEL_MOVE_RESPONSE:
         handlePlayCancelMoveResponse(gameMessage);
-        break;
-      case PLAY_END:
-        handlePlayEndGame(gameMessage);
         break;
       case CHAT_PRIVATE_MESSAGE:
         handleChatPrivateMessage(gameMessage);
@@ -316,6 +324,19 @@ public class ClientChannel implements ChannelListener {
       case CHANNEL_CLOSE:
         handleChannelClose();
         break;
+    }
+  }
+
+  private void handlePlayTimeout(GameMessageDto gameMessage) {
+    if (playSession.getGame() != null) {
+      GameDto game = gameMessage.getGame();
+      GameDto.GameEnds gameEnd = game.getPlayEndStatus();
+      eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AbstractAsyncCallback<GameDto>() {
+        @Override
+        public void onSuccess(GameDto aVoid) {
+          InfoDialogBox.setMessage(messages.timeOutOpponentLose());
+        }
+      }));
     }
   }
 
@@ -337,12 +358,7 @@ public class ClientChannel implements ChannelListener {
       GameDto game = playSession.getGame();
       final GameDto.GameEnds gameEnd = playSession.isPlayerHasWhiteColor()
           ? GameDto.GameEnds.BLACK_LEFT : GameDto.GameEnds.WHITE_LEFT;
-      eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<GameDto>() {
-        @Override
-        public void onFailure(Throwable throwable) {
-          ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
-        }
-
+      eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AbstractAsyncCallback<GameDto>() {
         @Override
         public void onSuccess(GameDto aVoid) {
           Growl.growlNotif(messages.opponentLeftGame());
@@ -470,10 +486,11 @@ public class ClientChannel implements ChannelListener {
    * Начало игры на стороне приглашающего
    */
   private void handlePlayStart(final GameMessageDto gameMessage) {
-    boolean white = Boolean.valueOf(gameMessage.getData());
     playSession.setOpponent(gameMessage.getSender());
     playSession.setGame(gameMessage.getGame());
-    eventBus.fireEvent(new StartPlayEvent(white, true));
+    String[] data = gameMessage.getData().split(PlayComponentPresenter.INVITE_TIME_DELIMITER);
+    boolean white = Boolean.valueOf(data[0]);
+    eventBus.fireEvent(new StartPlayEvent(white, true, Integer.valueOf(data[1]), Integer.valueOf(data[2])));
   }
 
   private void handleChatPrivateMessage(GameMessageDto gameMessage) {

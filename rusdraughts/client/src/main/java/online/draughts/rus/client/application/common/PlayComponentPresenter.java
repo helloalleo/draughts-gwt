@@ -3,7 +3,7 @@ package online.draughts.rus.client.application.common;
 import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
-import com.google.gwt.user.client.rpc.AsyncCallback;
+import com.google.gwt.user.client.Timer;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
@@ -14,7 +14,6 @@ import online.draughts.rus.client.application.play.PlayView;
 import online.draughts.rus.client.application.play.messanger.MessengerPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.NotationPanel;
-import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.channel.ClientChannel;
@@ -40,11 +39,12 @@ import java.util.*;
 public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresenter.MyView>
     implements PlayComponentUiHandlers {
 
+  public final static String INVITE_TIME_DELIMITER = ":";
+  private final static int DRAUGHTS_ON_DESK_INIT = 12;
   private final MessengerPresenter.Factory messengerFactory;
   private final PlayView playView;
   private final ResourceDelegate<GameMessagesResource> gameMessagesDelegate;
   private final CurrentSession currentSession;
-  private int DRAUGHTS_ON_DESK_INIT = 12;
 
   private final ClientChannel clientChannel;
   private final PlaySession playSession;
@@ -54,6 +54,10 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ResourceDelegate<FriendsResource> friendsDelegate;
   private final AppResources resources;
   private MessengerPresenter currentMessenger;
+  private int fisherCounter;
+  private int timeCounter;
+  private Timer timeTimer;
+  private Timer fisherTimer;
 
   @Inject
   PlayComponentPresenter(
@@ -121,10 +125,12 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_INVITE);
         gameMessage.setReceiver(opponent);
 
-        final boolean white = getView().opponentColor();
+        final boolean white = getView().getOpponentColor();
+        final String timeOnPlay = getView().getTimeOnPlay();
+        final String fisherTime = getView().getFisherTime();
         gameMessage.setMessage(messages.inviteMessage(playSession.getPlayer().getPublicName(),
             String.valueOf(white ? messages.white() : messages.black())));
-        gameMessage.setData(String.valueOf(white));
+        gameMessage.setData(String.valueOf(white) + INVITE_TIME_DELIMITER + timeOnPlay + INVITE_TIME_DELIMITER + fisherTime);
 
         fireEvent(new GameMessageEvent(gameMessage));
       }
@@ -152,7 +158,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   @Override
   public boolean isMyTurn() {
-    return playSession.getGame().getPlayerWhite().getId() == playSession.getPlayer().getId();
+    return getView().getBoard().isMyTurn();
   }
 
   @Override
@@ -287,6 +293,12 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     fireEvent(new GameMessageEvent(gameMessageDto));
   }
 
+  @Override
+  public void stopTimers() {
+    timeTimer.cancel();
+    fisherTimer.cancel();
+  }
+
   private GameMessageDto createGameMessage() {
     GameMessageDto gameMessage = new GameMessageDto();
     gameMessage.setSender(playSession.getPlayer());
@@ -329,6 +341,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onStartPlay(final StartPlayEvent event) {
         getView().hideInviteDialog();
         getView().startPlay(event.isWhite());
+
+        initTimers(event.getTimeOnPlay(), event.getFisherTime());
 
         GameDto game = playSession.getGame();
 
@@ -394,12 +408,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         if (gameEnd == null) {
           return;
         }
-        fireEvent(new GameOverEvent(endGame, gameEnd, new AsyncCallback<GameDto>() {
-          @Override
-          public void onFailure(Throwable caught) {
-            ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), caught).show();
-          }
-
+        fireEvent(new GameOverEvent(endGame, gameEnd, new AbstractAsyncCallback<GameDto>() {
           @Override
           public void onSuccess(GameDto result) {
           }
@@ -440,6 +449,10 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         game.setNotation(notation);
         game.setEndGameScreenshot(getView().takeScreenshot());
         gamesDelegate.withCallback(event.getAsyncCallback()).save(game);
+
+        GameMessageDto gameMessageDto = createGameMessage();
+        gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_END);
+        fireEvent(new GameMessageEvent(gameMessageDto));
 
         fireEvent(new ClearPlayComponentEvent());
       }
@@ -497,6 +510,67 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     });
   }
 
+  private String formatTime(int counter) {
+    int min = counter / 60;
+    int sec = counter - min * 60;
+    return String.valueOf(min) + ":" + (sec < 10 ? "0" : "") + sec;
+  }
+
+  private void initTimers(int timeOnPlay, final int fisherTime) {
+    fisherCounter = fisherTime;
+    timeCounter = timeOnPlay * 60;
+    timeTimer = new Timer() {
+      @Override
+      public void run() {
+        getView().setTime(formatTime(timeCounter));
+        if (isMyTurn() && 0 == fisherCounter) {
+          timeCounter--;
+        }
+        if (!isMyTurn() && fisherTime != fisherCounter) {
+          timeCounter = timeCounter + fisherCounter;
+          fisherCounter = fisherTime;
+          getView().setTime(formatTime(timeCounter));
+          getView().setFisherTime(formatTime(fisherCounter));
+        }
+        if (0 == timeCounter) {
+          timeTimer.cancel();
+          GameDto endGame = playSession.getGame();
+          GameDto.GameEnds gameEnd = isMyTurn()
+              ? (getView().isWhite() ? GameDto.GameEnds.BLACK_WIN : GameDto.GameEnds.WHITE_WIN)
+                  : (getView().isWhite() ? GameDto.GameEnds.WHITE_WIN : GameDto.GameEnds.BLACK_WIN);
+          endGame.setPlayEndStatus(gameEnd);
+          GameMessageDto gameMessageDto = createGameMessage();
+          gameMessageDto.setGame(endGame);
+          gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_TIMEOUT);
+          fireEvent(new GameMessageEvent(gameMessageDto));
+          fireEvent(new GameOverEvent(endGame, gameEnd, new AbstractAsyncCallback<GameDto>() {
+            @Override
+            public void onSuccess(GameDto result) {
+              Growl.growlNotif(messages.timeOut());
+            }
+          }));
+        }
+      }
+    };
+
+    fisherTimer = new Timer() {
+      @Override
+      public void run() {
+        if (isMyTurn() && fisherCounter > 0) {
+          fisherCounter--;
+          getView().setFisherTime(formatTime(fisherCounter));
+        }
+        if (fisherCounter == 0) {
+          timeCounter = timeCounter - fisherTime;
+          fisherCounter = fisherTime;
+        }
+      }
+    };
+
+    timeTimer.scheduleRepeating(1000);
+    fisherTimer.scheduleRepeating(1000);
+  }
+
   private void updatePlayerFriendList() {
     friendsDelegate.withCallback(new AbstractAsyncCallback<List<FriendDto>>() {
       @Override
@@ -532,6 +606,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
     void updateTurn(boolean myTurn);
 
+    void setTurnMessage(String message);
+
     int getMyDraughtsSize();
 
     int getOpponentDraughtsSize();
@@ -542,7 +618,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
     void showInviteDialog(ClickHandler inviteClickHandler);
 
-    boolean opponentColor();
+    boolean getOpponentColor();
 
     String takeScreenshot();
 
@@ -553,5 +629,13 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     void initNotationPanel(Long gameId);
 
     void setUnreadMessagesMapForPlayers(Map<Long, Integer> result);
+
+    String getTimeOnPlay();
+
+    String getFisherTime();
+
+    void setTime(String time);
+
+    void setFisherTime(String fisherTime);
   }
 }

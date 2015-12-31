@@ -48,6 +48,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
 
     panel.add(inviteLabel);
 
+
     submitButton = new Button(messages.next());
     Button cancelButton = new Button(messages.cancel());
 

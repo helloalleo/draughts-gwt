@@ -21,11 +21,13 @@
                         <b:Heading size="H5" text="Сбито шашек:"/>
                         <g:Label ui:field="beatenMineDraughtsLabel" text="0 - Белых"/>
                         <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных"/>
-                        <br/>
+                        <b:Heading size="H5" text="Время:"/>
+                        <g:Label ui:field="timeLabel"/>
+                        <b:Heading size="H5" text="Время на ход:"/>
+                        <g:Label ui:field="fisherTimeLabel"/>
                         <b:Button ui:field="cancelMove" text="Отменить ход" block="true">
                             <ui:attribute name="text"/>
                         </b:Button>
-                        <br/>
                     </g:HTMLPanel>
                     <g:HTMLPanel ui:field="notationHTMLPanel">
                         <b:Heading size="H5" text="Нотация:"/>

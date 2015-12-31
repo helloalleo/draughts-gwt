@@ -98,6 +98,7 @@ public class ServerChannel extends ChannelServer {
       case PLAY_END:
       case PLAY_SURRENDER:
       case PLAY_ACCEPT_DRAW:
+      case PLAY_TIMEOUT:
         handleGameOver(gameMessage);
         break;
       case CHANNEL_CLOSE:

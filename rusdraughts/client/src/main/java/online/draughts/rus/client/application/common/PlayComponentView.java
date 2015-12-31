@@ -37,7 +37,6 @@ import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
 import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.dto.FriendDto;
-import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
@@ -104,6 +103,10 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   ScrollPanel friendCellTablePanel;
   @UiField
   TextBox playerSearch;
+  @UiField
+  Label timeLabel;
+  @UiField
+  Label fisherTimeLabel;
   SingleSelectionModel<FriendDto> playerFriendSelectionModel;
   SingleSelectionModel<PlayerDto> playerSelectionModel;
   private boolean prevSelected = false;
@@ -275,6 +278,26 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   public void setUnreadMessagesMapForPlayers(Map<Long, Integer> result) {
     this.unreadMessagesMap = result;
     setPlayerList(playerList);
+  }
+
+  @Override
+  public String getTimeOnPlay() {
+    return timeOnPlay;
+  }
+
+  @Override
+  public String getFisherTime() {
+    return fisherTime;
+  }
+
+  @Override
+  public void setTime(String time) {
+    timeLabel.setText(time);
+  }
+
+  @Override
+  public void setFisherTime(String fisherTime) {
+    fisherTimeLabel.setText(fisherTime);
   }
 
   @Override
@@ -577,6 +600,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     friendCellTable.setRowData(new ArrayList<FriendDto>());
     turnLabel.setHTML(messages.youDisconnected());
 
+    timeLabel.setText("");
+    fisherTimeLabel.setText("");
+
     hidePlayingButtonsAndShowPlayButton();
   }
 
@@ -606,7 +632,10 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     lienzoPanel = null;
     initEmptyDeskPanel();
 
+    getUiHandlers().stopTimers();
     turnLabel.setHTML(messages.playDidNotStart());
+    timeLabel.setText("");
+    fisherTimeLabel.setText("");
   }
 
   public void setBeatenMy(int count) {
@@ -646,10 +675,15 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public void updateTurn(boolean myTurn) {
     if (myTurn) {
-      turnLabel.setHTML(messages.yourTurn());
+      setTurnMessage(messages.yourTurn());
     } else {
-      turnLabel.setHTML(messages.opponentTurn());
+      setTurnMessage(messages.opponentTurn());
     }
+  }
+
+  @Override
+  public void setTurnMessage(String message) {
+    turnLabel.setHTML(message);
   }
 
   @Override
@@ -694,7 +728,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public boolean opponentColor() {
+  public boolean getOpponentColor() {
     return opponentColor;
   }
 

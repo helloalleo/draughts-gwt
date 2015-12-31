@@ -248,4 +248,8 @@ public interface DraughtsMessages extends Messages {
   String fisherTime();
 
   String seconds();
+
+  String timeOut();
+
+  String timeOutOpponentLose();
 }
