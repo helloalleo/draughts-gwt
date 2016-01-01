@@ -28,6 +28,8 @@
 @def S_NAVBAR_SCROLL_LINE_HEIGHT    eval("online.draughts.rus.client.resources.Variables.S_NAVBAR_SCROLL_LINE_HEIGHT");
 @def S_LOGO_TOP_HEIGHT              eval("online.draughts.rus.client.resources.Variables.S_LOGO_TOP_HEIGHT");
 @def S_LOGO_SCROLL_HEIGHT           eval("online.draughts.rus.client.resources.Variables.S_LOGO_SCROLL_HEIGHT");
+@def S_MESSANGER_WIDTH              330px;
+@def S_SMILE_PANEL_WIDTH            228px;
 
 /**
  * Measures

@@ -96,6 +96,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     super.onBind();
 
     bindEvents();
+
+    currentMessenger = messengerFactory.create(playView, new PlayerDto());
+    addToPopupSlot(currentMessenger);
   }
 
   @Override

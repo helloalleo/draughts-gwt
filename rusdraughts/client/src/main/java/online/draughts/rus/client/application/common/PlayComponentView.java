@@ -8,7 +8,6 @@ import com.ait.lienzo.shared.core.types.DataURLType;
 import com.google.gwt.cell.client.Cell;
 import com.google.gwt.cell.client.FieldUpdater;
 import com.google.gwt.cell.client.SafeHtmlCell;
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
@@ -239,7 +238,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       return;
     }
     int draughtsSide = draughtsColumn.getOffsetWidth();
-    GWT.log(draughtsSide + "");
 
     lienzoPanel = new LienzoPanel(draughtsSide, draughtsSide);
     int lienzoSide = lienzoPanel.getHeight() - 20;

@@ -104,9 +104,17 @@ public interface AppResources extends ClientBundle {
 
     String messageOuter();
 
+    String smilePanel();
+
+    String smileChoosePanel();
+
+    String smileCaret();
+
     String myMessageInner();
 
     String messengerMessagesScroll();
+
+    String messageTextArea();
 
     String myMessageTime();
 

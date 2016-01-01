@@ -4,6 +4,10 @@ import com.google.gwt.user.client.Cookies;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.shared.util.StringUtils;
 
+import java.util.ArrayList;
+import java.util.Arrays;
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -15,6 +19,8 @@ public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
   private static final String TIME_ON_PLAY = "timeOnPlay";
   private static final String FISHER_TIME = "fisherTime";
   private static final String TIME_ON_PLAY_CUSTOM = "timeOnPlayCustom";
+  private static final String LAST_USED_SMILES = "lastUsedSmiles";
+  private static final String LIST_DELIMITER = ",";
   private final String GAMES_ON_PAGE_COUNTER = "gamesOnPage";
   private final String LOCATION = "LOCATION"; // куки адреса страницы
   private final String MY_GAMES = "myGames";
@@ -86,6 +92,25 @@ public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
   @Override
   public void setFisherTime(String value) {
     Cookies.setCookie(FISHER_TIME, String.valueOf(value));
+  }
+
+  @Override
+  public void setLastUsedSmiles(List<String> lastUsedSmilesQueue) {
+    StringBuilder builder = new StringBuilder(lastUsedSmilesQueue.size());
+    for (String s : lastUsedSmilesQueue) {
+      builder.append(s);
+      builder.append(LIST_DELIMITER);
+    }
+    Cookies.setCookie(LAST_USED_SMILES, builder.toString());
+  }
+
+  @Override
+  public List<String> getLastUsedSmiles() {
+    String s = Cookies.getCookie(LAST_USED_SMILES);
+    if (StringUtils.isEmpty(s)) {
+      return new ArrayList<>();
+    }
+    return new ArrayList<>(Arrays.asList(s.split(LIST_DELIMITER)));
   }
 
   @Override

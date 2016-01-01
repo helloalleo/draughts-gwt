@@ -1,5 +1,7 @@
 package online.draughts.rus.client.util;
 
+import java.util.List;
+
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -28,7 +30,11 @@ public interface Cookies {
 
   boolean getTimeOnPlayCustom();
 
+  List<String> getLastUsedSmiles();
+
   int getFisherTime();
 
   void setFisherTime(String value);
+
+  void setLastUsedSmiles(List<String> lastUsedSmilesQueue);
 }

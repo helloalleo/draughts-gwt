@@ -11,10 +11,10 @@
             <b:Panel>
                 <b:PanelHeader ui:field="messengerHeader">
                     <b:Row>
-                        <b:Column size="MD_10">
+                        <b:Column size="XS_10 SM_10 MD_10 LG_10">
                             <b:Heading ui:field="messengerHeading" size="H4" text="Сообщения"/>
                         </b:Column>
-                        <b:Column size="MD_2">
+                        <b:Column size="XS_2 SM_2 MD_2 LG_2">
                             <b:Button ui:field="collapseMessengerButton" icon="CLOSE" type="LINK"/>
                         </b:Column>
                     </b:Row>
@@ -24,8 +24,23 @@
                         <g:HTMLPanel ui:field="messengerMessages" addStyleNames="{res.style.messengerMessages}"/>
                     </g:ScrollPanel>
                 </b:PanelBody>
-                <b:PanelFooter>
-                    <b:TextArea ui:field="messengerMessage" addStyleNames="{res.style.messengerMessage}" maxLength="250"/>
+                <b:PanelFooter addStyleNames="{res.style.messengerMessage}">
+                    <g:FlowPanel ui:field="lastUsedSmiles"/>
+                    <g:HTMLPanel ui:field="smilesPanel" visible="false" addStyleNames="{res.style.smilePanel}">
+                        <g:ScrollPanel ui:field="smilesScrollPanel" addStyleNames="{res.style.smileChoosePanel}">
+                            <g:HTMLPanel ui:field="smileChoosePanel">
+                            </g:HTMLPanel>
+                        </g:ScrollPanel>
+                        <b.html:Div addStyleNames="{res.style.smileCaret}"/>
+                    </g:HTMLPanel>
+
+                    <b:InputGroup>
+                        <b:TextArea ui:field="messengerMessage" addStyleNames="{res.style.messageTextArea}"
+                                    maxLength="250" height="35px"/>
+                        <b:InputGroupButton>
+                            <b:Button ui:field="smilesButton" icon="SMILE_O"/>
+                        </b:InputGroupButton>
+                    </b:InputGroup>
                 </b:PanelFooter>
             </b:Panel>
         </g:HTMLPanel>
