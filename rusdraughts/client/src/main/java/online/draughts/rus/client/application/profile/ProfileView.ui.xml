@@ -17,4 +17,5 @@
             </b:Row>
         </g:HTMLPanel>
     </g:SimplePanel>
+
 </ui:UiBinder>

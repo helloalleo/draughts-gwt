@@ -413,3 +413,12 @@ body {
     padding: 6px 0;
     float: left !important;
 }
+
+/* Footer */
+.footerContainer {
+    height: S_FOOTER_HEIGHT;
+    border-top: 1px solid #ccc;
+    padding: 4px 20px 4px;
+}
+
+/* End Footer */

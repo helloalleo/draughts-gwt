@@ -8,7 +8,6 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.annotations.NameToken;
 import com.gwtplatform.mvp.client.annotations.NoGatekeeper;
 import com.gwtplatform.mvp.client.annotations.ProxyCodeSplit;
-import com.gwtplatform.mvp.client.annotations.Title;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import online.draughts.rus.client.application.ApplicationPresenter;
@@ -35,7 +34,6 @@ public class OAuthLoginPresenter extends Presenter<OAuthLoginPresenter.MyView, O
   interface MyView extends View, HasUiHandlers<OAuthLoginUiHandlers> {
   }
 
-  @Title("Логин")
   @ProxyCodeSplit
   @NameToken(NameTokens.loginPage)
   @NoGatekeeper

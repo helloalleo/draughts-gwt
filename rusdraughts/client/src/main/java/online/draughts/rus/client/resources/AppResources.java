@@ -137,5 +137,7 @@ public interface AppResources extends ClientBundle {
     String container();
 
     String playItemTop();
+
+    String footerContainer();
   }
 }

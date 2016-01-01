@@ -12,5 +12,6 @@
             <g:SimplePanel ui:field="mainContentPanel" addStyleNames="{res.style.mainContainer}"/>
         </b:Container>
 
+        <g:SimplePanel ui:field="footerPanel"/>
     </g:HTMLPanel>
 </ui:UiBinder>

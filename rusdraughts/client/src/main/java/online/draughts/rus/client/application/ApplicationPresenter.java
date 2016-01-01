@@ -24,6 +24,7 @@ import com.gwtplatform.mvp.client.annotations.ProxyStandard;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.Proxy;
+import online.draughts.rus.client.application.footer.FooterPresenter;
 import online.draughts.rus.client.application.menu.MenuPresenter;
 
 /**
@@ -38,17 +39,21 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
    */
   public static final NestedSlot SLOT_MAIN_CONTENT = new NestedSlot();
   static final PermanentSlot<MenuPresenter> SLOT_MENU = new PermanentSlot<>();
+  static final PermanentSlot<FooterPresenter> SLOT_FOOTER = new PermanentSlot<>();
   private final MenuPresenter menuPresenter;
+  private final FooterPresenter footerPresenter;
 
   @Inject
   ApplicationPresenter(
       EventBus eventBus,
       MyView view,
       MyProxy proxy,
-      MenuPresenter menuPresenter) {
+      MenuPresenter menuPresenter,
+      FooterPresenter footerPresenter) {
     super(eventBus, view, proxy, RevealType.Root);
 
     this.menuPresenter = menuPresenter;
+    this.footerPresenter = footerPresenter;
   }
 
   @Override
@@ -56,6 +61,7 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
     super.onBind();
 
     setInSlot(SLOT_MENU, menuPresenter);
+    setInSlot(SLOT_FOOTER, footerPresenter);
   }
 
   /**
