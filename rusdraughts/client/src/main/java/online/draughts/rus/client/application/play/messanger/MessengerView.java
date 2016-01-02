@@ -21,6 +21,7 @@ import com.gwtplatform.mvp.client.view.PopupPositioner;
 import online.draughts.rus.client.application.play.PlayView;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.*;
@@ -191,14 +192,37 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     smilesPanel.setVisible(!smilesPanel.isVisible());
   }
 
-  private HTMLPanel formatMessage(String message, Date date, boolean isFriend) {
+  private HTMLPanel formatMessage(String message, Date messageDate, boolean isFriend) {
     SafeHtmlBuilder safeHtmlBuilder = new SafeHtmlBuilder().appendEscapedLines(message);
     HTML htmlInline = new HTML(safeHtmlBuilder.toSafeHtml());
     htmlInline.addStyleName(resources.style().messageInner());
     htmlInline.addStyleName(isFriend ? resources.style().friendMessageInner() : resources.style().myMessageInner());
-    DateTimeFormat dateTimeFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.TIME_SHORT);
-    safeHtmlBuilder = new SafeHtmlBuilder().appendEscaped(dateTimeFormat.format(date));
-    HTML htmlTime = new HTML(safeHtmlBuilder.toSafeHtml());
+    DateTimeFormat timeFormat;
+    DateTimeFormat dateFormat;
+    Date md = new Date();
+    md.setHours(0);
+    Logger.debug(md.toString());
+    HTML htmlTime;
+    String time, date;
+    boolean showDate;
+    // формируем дату для отображения в диалоге. Если она до полуночи текущего дня, отображаем время,
+    // иначе отображаем дату и время в тайтле
+    if (messageDate.before(md)) {
+      dateFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_SHORT);
+      date = dateFormat.format(messageDate);
+      timeFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.TIME_SHORT);
+      time = timeFormat.format(messageDate);
+      safeHtmlBuilder = new SafeHtmlBuilder().appendEscaped(date);
+      htmlTime = new HTML(safeHtmlBuilder.toSafeHtml());
+      htmlTime.setTitle(time);
+      showDate = true;
+    } else {
+      timeFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.TIME_SHORT);
+      time = timeFormat.format(messageDate);
+      safeHtmlBuilder = new SafeHtmlBuilder().appendEscaped(time);
+      htmlTime = new HTML(safeHtmlBuilder.toSafeHtml());
+      showDate = false;
+    }
     htmlTime.addStyleName(resources.style().messageTime());
     htmlTime.addStyleName(isFriend ? resources.style().friendMessageTime() : resources.style().myMessageTime());
     HTMLPanel html = new HTMLPanel("");
@@ -209,11 +233,22 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     } else {
       Row row = new Row();
       row.getElement().getStyle().setMargin(4, Style.Unit.PX);
-      Column column = new Column(ColumnSize.MD_10);
+      Column column;
+      // уменьшаем поле для сообщений
+      if (showDate) {
+        column = new Column(ColumnSize.MD_9);
+      } else {
+        column = new Column(ColumnSize.MD_10);
+      }
       column.getElement().getStyle().setPadding(4, Style.Unit.PX);
       column.add(htmlInline);
       row.add(column);
-      column = new Column(ColumnSize.MD_2);
+      // увеличиваем поле для времени
+      if (showDate) {
+        column = new Column(ColumnSize.MD_3);
+      } else {
+        column = new Column(ColumnSize.MD_2);
+      }
       column.getElement().getStyle().setPadding(4, Style.Unit.PX);
       column.add(htmlTime);
       row.add(column);
