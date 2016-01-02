@@ -16,11 +16,9 @@ import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
-import com.gwtplatform.mvp.client.view.PopupPositioner;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.resources.AppResources;
-import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.draughts.*;
@@ -168,17 +166,17 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       playerInit();
     }
 
-    setPopupPositioner(new PopupPositioner() {
-      @Override
-      protected int getLeft(int popupWidth) {
-        return (Window.getClientWidth() - main.getOffsetWidth()) / 2;
-      }
-
-      @Override
-      protected int getTop(int popupHeight) {
-        return Window.getScrollTop() + Variables.marginTop();
-      }
-    });
+//    setPopupPositioner(new PopupPositioner() {
+//      @Override
+//      protected int getLeft(int popupWidth) {
+//        return (Window.getClientWidth() - main.getOffsetWidth()) / 2;
+//      }
+//
+//      @Override
+//      protected int getTop(int popupHeight) {
+//        return Window.getScrollTop() + Variables.marginTop();
+//      }
+//    });
   }
 
   private void playerInit() {
