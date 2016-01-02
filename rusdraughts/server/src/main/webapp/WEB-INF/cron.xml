@@ -3,6 +3,6 @@
     <cron>
         <url>/cron/checkonline</url>
         <description>Repopulate the cache every 2 minutes</description>
-        <schedule>every 48 hours</schedule>
+        <schedule>every 6 hours</schedule>
     </cron>
 </cronentries>
