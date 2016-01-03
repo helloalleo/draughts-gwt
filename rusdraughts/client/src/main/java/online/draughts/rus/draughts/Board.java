@@ -1098,7 +1098,7 @@ public class Board extends Layer {
    * @return отменяем ли первый ход
    */
   private boolean isCancelFirstMove(Stroke canceled) {
-    return canceled.isFirst() && canceled.isStartBeat();
+    return canceled.isFirst() && canceled.isSimple() || canceled.isFirst() && canceled.isStartBeat();
   }
 
   public Stroke getLastMove() {

@@ -8,6 +8,7 @@ import com.google.inject.assistedinject.Assisted;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import online.draughts.rus.client.event.*;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.util.StringUtils;
 
@@ -153,7 +154,10 @@ public class NotationPanel extends ScrollPanel {
         if (stroke.getNumber() != 1) {
           notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(NOTATION_SEP)) + NOTATION_SEP);
         } else {
-          cleanNotationPanel();
+          notation = new StringBuilder();
+          getElement().setInnerHTML("");
+          order = 0;
+          return;
         }
       } else {
         notation = new StringBuilder(notation.substring(0, notation.lastIndexOf(wrapInSpan(MOVE_SEP))));
@@ -175,6 +179,7 @@ public class NotationPanel extends ScrollPanel {
     }
     order--;
     getElement().setInnerHTML(notation.toString());
+    Logger.debug(notation.toString());
   }
 
   void cleanNotationPanel() {

@@ -24,7 +24,7 @@
                     </b:Column>
                     <b:Column size="XS_7 SM_7 MD_7 LG_7">
                         <b:Row>
-                            <b:Column size="XS_4 SM_4 MD_4 LG_4">
+                            <b:Column size="XS_6 SM_6 MD_5 LG_4">
                                 <g:HTMLPanel ui:field="notationInfoPanel">
                                     <b:ButtonGroup addStyleNames="{res.style.playerControls}">
                                         <b:Button ui:field="toStartButton" icon="FAST_BACKWARD" size="SMALL"/>
@@ -58,7 +58,7 @@
                                 </g:HTMLPanel>
 
                             </b:Column>
-                            <b:Column size="XS_8 SM_8 MD_8 LG_8">
+                            <b:Column size="XS_6 SM_6 MD_5 LG_8">
                                 <b:Heading size="H4" ui:field="allCommentsHeading" text="Все комментарии">
                                     <ui:attribute name="text" description="Все комментарии"/>
                                 </b:Heading>
