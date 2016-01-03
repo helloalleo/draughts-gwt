@@ -8,7 +8,9 @@
         <g:HTMLPanel addStyleNames="{res.style.playItemTop}">
             <b:Row>
                 <b:Column size="XS_2 SM_2 MD_2 LG_2">
-                    <b:Anchor ui:field="gameIdAnchor" icon="PLAY_CIRCLE" iconSize="TIMES2" text="Смотреть"/>
+                    <b:Anchor ui:field="gameIdAnchor" icon="PLAY_CIRCLE" iconSize="TIMES2" text="Смотреть">
+                        <ui:attribute name="text" description="Смотреть"/>
+                    </b:Anchor>
                 </b:Column>
                 <b:Column size="XS_8 SM_8 MD_8 LG_8">
                     <g:HTMLPanel ui:field="whoAndWhenDidWin" addStyleNames="{res.style.whoAndWhenDidWin}">

@@ -1,0 +1,78 @@
+######## 1 ########
+webSocketDoesNotSupport=Your browser does not support WebSockets. Play imposable
+
+inviteMessage={0} invites you in play. You are playing {1}. Do you agree?
+inviteToPlay=Inviting <i>{0}</i> play in {1}.
+
+tooLongPlayerName=Too long name
+invalidCharsInName=Forbidden characters
+tooShortPlayerName=Too short name
+
+playStartDescription=To start play press Connect \n\
+  then choose player and press Play
+
+failToStartGame=Fail to start a play
+
+selectPlayer=Choose a player
+opponentTurn=<span style="color:red;">Ход соперника</span>
+youDisconnected=<span style="color:red;">Вы отключены</span>
+
+youLose=You loose :(
+youWon=You win! :)
+
+playDidNotStart=Игра не началась
+
+areYouSureYouWantSurrender=Вы действительно хотите сдаться?
+opponentSurrendered=Соперник сдался
+doYouWantToProposeDraw=Вы хотите предложить ничью?
+opponentLeftGame=Соперник покинул игру
+
+playerProposesDraw=<i>{0}</i> предлагает ничью. Вы согласны?
+playerRejectedDraw=<i>{0}</i> отказался от ничьи
+
+doYouWantToCancelMove=Отменить ход?
+
+playerProposesCancelMove=<i>{0}</i> предлагает отменить ход. Вы согласны?
+playerRejectedMoveCancel=<i>{0}</i> отказался отменять ход
+
+youDontMove=Вы ещё не ходили
+playAlreadyPlaying=<i>{0}</i> уже играет
+
+BLACK_WIN=Черные победили
+WHITE_WIN=Белые победили
+BLACK_LEFT=Черные покинули игру
+WHITE_LEFT=Белые покинули игру
+SURRENDER_BLACK=Черные сдались
+SURRENDER_WHITE=Белые сдались
+DRAW=Draw
+
+# данные не загружены
+connectToServer=Не загружено
+youHasBeenAddedToFavorite=<i>{0}</i> добавил вас в избранные
+playerCaption=Партия: белыми - {0}, черными - {1}.<br/>Окончание: {2}
+draughtsBeaten=Сбито шашек
+gameNotFound=Game not found
+timeOnPlay=Укажите время на игру в минутах
+fisherTime=Добавочное время (часы Фишера)<br/><small>0 или пусто значение, чтобы не учитывать</small>
+timeOutOpponentLose=Время вышло, соперник проиграл
+
+######## 2 Draughts Player ########
+# Generated from online.draughts.rus.client.application.widget.popup.DraughtsPlayerViewBinderImplGenMessages
+# for locale default
+
+# Description: Комментировать ход
+91D8D1BAAE075CF6F267FDDC102CC0C1=Комментировать ход
+
+# Description: Комментарии к ходу
+ECDE4A447D77B61C184189A73C052BC7=Комментарии к ходу
+
+######## 3 PlayComponent ########
+6E1E407738395C302F7F1B2D3CD67E1F=Список игроков\:
+8CD6F07B3FF29526344063C6F310507C=Время на ход\:
+958C21802550292D43FC430C0C2BB281=Недавно играли с вами\:
+A09C21B83CBEC777CB74F0B5D4A10669=Игра не началась
+drawButton=Предложить ничью
+
+######## 4 Settings ########
+# Description: A player name on the site
+C4C4FB180E6D4259837FBA895507EFFA=Имя на сайте

@@ -129,7 +129,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         final String timeOnPlay = getView().getTimeOnPlay();
         final String fisherTime = getView().getFisherTime();
         gameMessage.setMessage(messages.inviteMessage(playSession.getPlayer().getPublicName(),
-            String.valueOf(white ? messages.white() : messages.black())));
+            String.valueOf(white ? messages.whitesil() : messages.blacksil())));
         gameMessage.setData(String.valueOf(white) + INVITE_TIME_DELIMITER + timeOnPlay + INVITE_TIME_DELIMITER + fisherTime);
 
         fireEvent(new GameMessageEvent(gameMessage));

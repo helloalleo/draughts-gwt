@@ -17,6 +17,7 @@ import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.Cookies;
 import org.gwtbootstrap3.client.ui.*;
+import org.gwtbootstrap3.client.ui.constants.ButtonType;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 
 import java.util.Date;
@@ -36,11 +37,12 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   @UiField
   Navbar navbar;
 
+  private Button localeEn;
+  private Button localeRu;
   private AnchorListItem prevAnchor;
   private NameTokens nameTokens;
   private AppResources resources;
   private AnchorListItem scrollToTop;
-
   @SuppressWarnings("SuspiciousNameCombination")
   @Inject
   MenuView(Binder binder,
@@ -71,6 +73,38 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
       }
     });
 
+    localeEn = new Button();
+    localeEn.getElement().addClassName(resources.style().localeButton());
+    localeEn.setType(ButtonType.LINK);
+    final Image enImg = new Image(resources.images().usFlag().getSafeUri());
+    final String widthLocale = "24px";
+    final String heightLocale = widthLocale;
+    enImg.setWidth(widthLocale);
+    enImg.setHeight(heightLocale);
+    enImg.setResponsive(true);
+    localeEn.insert(enImg, 0);
+    localeEn.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        setLocale("en");
+      }
+    });
+
+    localeRu = new Button();
+    localeRu.getElement().addClassName(resources.style().localeButton());
+    localeRu.setType(ButtonType.LINK);
+    final Image ruImg = new Image(resources.images().russianFlag().getSafeUri());
+    ruImg.setWidth(widthLocale);
+    ruImg.setHeight(heightLocale);
+    ruImg.setResponsive(true);
+    localeRu.insert(ruImg, 0);
+    localeRu.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        setLocale("ru");
+      }
+    });
+
     Window.addWindowScrollHandler(new Window.ScrollHandler() {
       @Override
       public void onWindowScroll(Window.ScrollEvent event) {
@@ -81,6 +115,11 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
         }
       }
     });
+  }
+
+  private void setLocale(String en) {
+    String hash = Window.Location.getHash();
+    Window.Location.assign("/?locale=" + en + hash);
   }
 
   private void setLinkHeight(String height) {
@@ -96,6 +135,9 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   private void setLinkChildHeight(Element element, boolean top) {
     for (int i = 0; i < element.getChildCount(); i++) {
       final Element child = (Element) element.getChild(i);
+      if (child.getTagName() != null && child.getTagName().toUpperCase().equals("IMG")) {
+        continue;
+      }
       if (top) {
         child.addClassName(resources.style().navbarElemTop());
         child.removeClassName(resources.style().navbarElemScroll());
@@ -108,7 +150,6 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
 
   @Override
   protected void onAttach() {
-    super.onAttach();
     setLinks();
   }
 
@@ -136,6 +177,9 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
         navRight.add(anchor);
       }
     }
+
+    navRight.add(localeEn);
+    navRight.insert(localeRu, 0);
 
     highlightMenu();
     navbarTopHeight();

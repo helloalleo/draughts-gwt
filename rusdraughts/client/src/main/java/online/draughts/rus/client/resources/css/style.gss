@@ -156,7 +156,7 @@ body {
 /*margin-bottom: 0;*/
 /*}*/
 
-.dialogBox {
+.dialogBox, .dialogBoxPlayer {
 @mixin radius(DIALOG_BORDER_RADIUS);
     background: rgba(200, 200, 200, .9);
     z-index: 1040;
@@ -164,20 +164,20 @@ body {
 }
 
 @media(min-width: 768px) {
-    .dialogBox {
-        min-width: 750px !important;
+    .dialogBoxPlayer {
+        min-width: 750px;
     }
 }
 
 @media(min-width: 992px) {
-    .dialogBox {
-        min-width: 970px !important;
+    .dialogBoxPlayer {
+        min-width: 970px;
     }
 }
 
 @media(min-width: 1200px) {
-    .dialogBox {
-        min-width: 1170px !important;
+    .dialogBoxPlayer {
+        min-width: 1170px;
     }
 }
 
@@ -441,3 +441,8 @@ body {
 }
 
 /* End Footer */
+
+.localeButton {
+    text-decoration: none;
+    padding: 0;
+}

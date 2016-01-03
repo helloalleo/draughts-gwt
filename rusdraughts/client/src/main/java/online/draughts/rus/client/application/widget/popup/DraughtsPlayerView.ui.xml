@@ -10,7 +10,7 @@
     <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
     <g:PopupPanel ui:field="main" autoHideOnHistoryEventsEnabled="true" autoHideEnabled="true"
-                  addStyleNames="{res.style.dialogBox}">
+                  addStyleNames="{res.style.dialogBoxPlayer}">
         <g:HTMLPanel>
             <g:HTMLPanel>
                 <b:Button ui:field="dismiss" icon="CLOSE" pull="RIGHT" type="LINK" addStyleNames="{res.style.playerDismiss}"/>
@@ -33,17 +33,25 @@
                                         <b:Button ui:field="nextButton" icon="FORWARD" size="SMALL"/>
                                         <b:Button ui:field="toEndButton" icon="FAST_FORWARD" size="SMALL"/>
                                     </b:ButtonGroup>
-                                    <b:Heading size="H4" text="Сбито шашек"/>
+                                    <b:Heading size="H4" text="Сбито шашек">
+                                        <ui:attribute name="text" description="Сбито шашек"/>
+                                    </b:Heading>
                                     <g:HTMLPanel ui:field="beatenDraughts">
                                         <g:Label ui:field="beatenMineDraughtsLabel" text="0 - Белых"
-                                                 addStyleNames="{res.style.emulatorDraughtsBeaten}"/>
+                                                 addStyleNames="{res.style.emulatorDraughtsBeaten}">
+                                            <ui:attribute name="text" description="0 - Белых"/>
+                                        </g:Label>
                                         <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных"
-                                                 addStyleNames="{res.style.emulatorDraughtsBeaten}"/>
+                                                 addStyleNames="{res.style.emulatorDraughtsBeaten}">
+                                            <ui:attribute name="text" description="0 - Чёрных"/>
+                                        </g:Label>
                                     </g:HTMLPanel>
                                 </g:HTMLPanel>
 
                                 <g:HTMLPanel ui:field="notationHTMLPanel">
-                                    <b:Heading size="H4" text="Нотация"/>
+                                    <b:Heading size="H4" text="Нотация">
+                                        <ui:attribute name="text" description="Нотация"/>
+                                    </b:Heading>
                                     <g:ScrollPanel ui:field="notationScroll">
                                         <g:HTMLPanel ui:field="notationPanel"/>
                                     </g:ScrollPanel>
@@ -51,31 +59,41 @@
 
                             </b:Column>
                             <b:Column size="XS_8 SM_8 MD_8 LG_8">
-                                <b:Heading size="H4" ui:field="allCommentsHeading" text="Все комментарии"/>
+                                <b:Heading size="H4" ui:field="allCommentsHeading" text="Все комментарии">
+                                    <ui:attribute name="text" description="Все комментарии"/>
+                                </b:Heading>
                                 <g:ScrollPanel ui:field="gameCommentsScroll">
                                     <g:HTMLPanel ui:field="gameComments"
                                                  addStyleNames="{res.style.gameCommentPanel}"/>
                                 </g:ScrollPanel>
 
-                                <b:Heading size="H4" ui:field="commentsToStrokeHeading" text="Комментарии к ходу"/>
+                                <b:Heading size="H4" ui:field="commentsToStrokeHeading" text="Комментарии к ходу">
+                                    <ui:attribute name="text" description="Комментарии к ходу"/>
+                                </b:Heading>
                                 <g:ScrollPanel ui:field="currentStrokeCommentScroll">
                                     <g:HTMLPanel ui:field="currentStrokeComment"
                                                  addStyleNames="{res.style.strokeCommentPanel}"/>
                                 </g:ScrollPanel>
 
-                                <b:Heading size="H4" ui:field="commentStrokeHeading" text="Комментировать ход"/>
+                                <b:Heading size="H4" ui:field="commentStrokeHeading" text="Комментировать ход">
+                                    <ui:attribute name="text" description="Комментировать ход"/>
+                                </b:Heading>
 
                                 <g:HTMLPanel ui:field="notLoggedInCommentPanel" visible="true">
                                     <g:Label ui:field="logInToCommentLabel" text="Войдите, чтобы комментировать"
                                              visible="false"
-                                             addStyleNames="{res.style.strokeCommentPanel}"/>
+                                             addStyleNames="{res.style.strokeCommentPanel}">
+                                        <ui:attribute name="text" description="Войдите, чтобы комментировать"/>
+                                    </g:Label>
                                 </g:HTMLPanel>
                                 <g:HTMLPanel ui:field="loggedInCommentPanel" visible="false">
                                     <b:TextArea ui:field="commentCurrentStrokeTextArea" maxLength="250"/>
                                     <b:Label ui:field="leftSymbolsLabel" addStyleNames="{res.style.leftSymbols}"
                                              pull="LEFT"/>
                                     <b:Button ui:field="commentCurrentStrokeButton" pull="RIGHT" icon="PENCIL"
-                                              text="Комментировать"/>
+                                              text="Комментировать">
+                                        <ui:attribute name="text" description="Комментировать"/>
+                                    </b:Button>
                                 </g:HTMLPanel>
 
                             </b:Column>

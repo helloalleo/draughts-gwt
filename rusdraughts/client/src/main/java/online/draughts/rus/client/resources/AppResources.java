@@ -139,5 +139,9 @@ public interface AppResources extends ClientBundle {
     String playItemTop();
 
     String footerContainer();
+
+    String localeButton();
+
+    String dialogBoxPlayer();
   }
 }

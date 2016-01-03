@@ -4,6 +4,12 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.ImageResource;
 
 public interface Images extends ClientBundle {
+  @Source("img/russia-flag.png")
+  ImageResource russianFlag();
+
+  @Source("img/us-flag.png")
+  ImageResource usFlag();
+
   @Source("img/BlackDraught.png")
   ImageResource blackDraught();
 

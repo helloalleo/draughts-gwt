@@ -341,7 +341,9 @@ public class ClientChannel implements ChannelListener {
   }
 
   private void handleDidNotResponse(GameMessageDto gameMessage) {
-    confirmPlayDialogBox.hide();
+    if (null != confirmPlayDialogBox) {
+      confirmPlayDialogBox.hide();
+    }
   }
 
   private void handleChannelClose() {

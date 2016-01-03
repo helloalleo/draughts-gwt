@@ -3,16 +3,25 @@
              xmlns:g="urn:import:com.google.gwt.user.client.ui"
              xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
              xmlns:b.html="urn:import:org.gwtbootstrap3.client.ui.html"
-        >
+             ui:generateFormat='com.google.gwt.i18n.server.PropertyCatalogFactory'
+             ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
+             ui:generateLocales="default">
 
     <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
     <g:HTMLPanel ui:field="main">
-        <b.html:Strong ui:field="gameListLabel" text="Список игр" addStyleNames="{res.style.xLargeFont}"/>
-        <b:CheckBoxButton ui:field="myGameListCheckButton" size="LARGE">Мои игры</b:CheckBoxButton>
+        <b.html:Strong ui:field="gameListLabel" text="Список игр" addStyleNames="{res.style.xLargeFont}">
+            <ui:attribute name="text" description="Список игр"/>
+        </b.html:Strong>
+        <b:CheckBoxButton ui:field="myGameListCheckButton" size="LARGE">
+            <ui:msg key="myGames" description="Мои игры">Мои игры</ui:msg></b:CheckBoxButton>
         <b:ButtonGroup ui:field="showGameOnPageButtonGroup" pull="RIGHT">
-            <b:Button ui:field="moreGameOnPage" size="LARGE" icon="ANGLE_LEFT" title="Показать меньше на странице"/>
-            <b:Button ui:field="lessGameOnPage" size="LARGE" icon="ANGLE_RIGHT" title="Показать больше на странице"/>
+            <b:Button ui:field="moreGameOnPage" size="LARGE" icon="ANGLE_LEFT" title="Показать меньше на странице">
+                <ui:attribute name="title" description="Показать меньше на странице"/>
+            </b:Button>
+            <b:Button ui:field="lessGameOnPage" size="LARGE" icon="ANGLE_RIGHT" title="Показать больше на странице">
+                <ui:attribute name="title" description="Показать больше на странице"/>
+            </b:Button>
         </b:ButtonGroup>
         <g:HTMLPanel addStyleNames="{res.style.hrInfo}">
             <b:Row>
@@ -22,10 +31,12 @@
 
                 <b:Column size="XS_2 SM_2 MD_2 LG_2">
                     <g:HTMLPanel addStyleNames="{res.style.playersStatus}">
-                        <b.html:Span>Всего</b.html:Span>
+                        <b.html:Span>
+                            <ui:msg key="total" description="Всего">Всего</ui:msg>
+                        </b.html:Span>
                         <b.html:Span ui:field="totalPlayersSpan"/>
                         <b.html:Span addStyleNames="{res.style.hrDelimiter}"/>
-                        <b.html:Span>Онлайн</b.html:Span>
+                        <b.html:Span><ui:msg key="online" description="Онлайн">Онлайн</ui:msg></b.html:Span>
                         <b.html:Span ui:field="onlinePlayersSpan"/>
                     </g:HTMLPanel>
 
