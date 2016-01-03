@@ -284,7 +284,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   }
 
   private void initMainPanel() {
-    int side = 1000; //draughtsDeskColumn.getOffsetWidth();
+    int side = draughtsDeskColumn.getOffsetWidth();
     int deskSide = side - 80;
 
     BoardBackgroundLayer boardBackground = new BoardBackgroundLayer(side, deskSide, rows, cols);
