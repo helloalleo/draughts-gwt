@@ -148,7 +148,6 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
         hide();
       }
     });
-    Window.enableScrolling(false);
 
     setPopupPositioner(new PopupPositioner() {
       @Override
@@ -285,7 +284,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   }
 
   private void initMainPanel() {
-    int side = draughtsDeskColumn.getOffsetWidth();
+    int side = 1000; //draughtsDeskColumn.getOffsetWidth();
     int deskSide = side - 80;
 
     BoardBackgroundLayer boardBackground = new BoardBackgroundLayer(side, deskSide, rows, cols);
