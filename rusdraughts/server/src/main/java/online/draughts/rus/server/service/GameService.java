@@ -91,27 +91,37 @@ public class GameService {
     player.setGamePlayed(player.getGamePlayed() + 1);
     final GameDto.GameEnds playEndStatus = game.getPlayEndStatus();
     if (null != playEndStatus) {
-      boolean whiteWon = false, blackWon = false, white = false;
+      boolean whiteWon = false, blackWon = false, white = false, draw = false;
       final boolean blackWin = GameDto.GameEnds.BLACK_WIN.equals(playEndStatus);
       final boolean whiteWin = GameDto.GameEnds.WHITE_WIN.equals(playEndStatus);
       final boolean blackSurrender = GameDto.GameEnds.SURRENDER_BLACK.equals(playEndStatus);
       final boolean whiteSurrender = GameDto.GameEnds.SURRENDER_WHITE.equals(playEndStatus);
       final boolean blackLeft = GameDto.GameEnds.BLACK_LEFT.equals(playEndStatus);
       final boolean whiteLeft = GameDto.GameEnds.WHITE_LEFT.equals(playEndStatus);
+      Player opponent;
       // если игрок играет черными
       if (Objects.equals(game.getPlayerBlack().getId(), player.getId())) {
+        opponent = playerService.find(game.getPlayerWhite().getId());
         if (blackWin || whiteLeft || whiteSurrender) {
           player.setGameWon(player.getGameWon() + 1);
           blackWon = true;
+          opponent.setGameLost(opponent.getGameLost() + 1);
         }
       } else {
         // если играет белыми
+        opponent = playerService.find(game.getPlayerBlack().getId());
         if (whiteWin || blackLeft || blackSurrender) {
           player.setGameWon(player.getGameWon() + 1);
           whiteWon = true;
           white = true;
+          opponent.setGameLost(opponent.getGameLost() + 1);
         }
       }
+      if (!whiteWon && !blackWon) {
+        player.setGameDraw(opponent.getGameDraw() + 1);
+        opponent.setGameDraw(opponent.getGameDraw() + 1);
+      }
+      playerService.save(opponent);
       player.setRating(Rating.calcPlayerRating(player.getRating(), white, blackWon, whiteWon));
     }
     return playerService.save(player);
