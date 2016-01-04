@@ -506,6 +506,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private SafeHtml getStatusSafeHtml(PlayerDto player) {
     if (player.getId() == this.player.getId()) {
       Icon html = getIconString(IconType.USER);
+      html.setTitle(messages.rating(String.valueOf(this.player.getRating())));
       return new SafeHtmlBuilder().appendHtmlConstant(html.getElement().getString()).toSafeHtml();
     }
     Image img;
@@ -522,6 +523,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         img.setTitle(playerPublicName + " " + messages.offlineTitle());
       }
     }
+    img.setTitle(messages.rating(String.valueOf(player.getRating())));
     return new SafeHtmlBuilder().appendHtmlConstant(img.getElement().getString()).toSafeHtml();
   }
 

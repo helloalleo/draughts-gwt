@@ -36,7 +36,9 @@ public class Player extends ModelImpl<Player> {
   @Index
   private int rating = 0;
   private int gamePlayed = 0;
-  private int gameWin = 0;
+  private int gameWon = 0;
+  private int gameLost = 0;
+  private int gameDraw = 0;
   @Index
   private PlayerDto.AuthProvider authProvider;
   private boolean loggedIn;
@@ -202,12 +204,30 @@ public class Player extends ModelImpl<Player> {
     this.gamePlayed = gamePlayed;
   }
 
-  public int getGameWin() {
-    return gameWin;
+  public int getGameWon() {
+    return gameWon;
   }
 
-  public void setGameWin(int gameWin) {
-    this.gameWin = gameWin;
+  public void setGameWon(int gameWon) {
+    this.gameWon = gameWon;
+  }
+
+  public int getGameLost() {
+    return gameLost;
+  }
+
+  public Player setGameLost(int gameLost) {
+    this.gameLost = gameLost;
+    return this;
+  }
+
+  public int getGameDraw() {
+    return gameDraw;
+  }
+
+  public Player setGameDraw(int gameDraw) {
+    this.gameDraw = gameDraw;
+    return this;
   }
 
   public String getFbId() {

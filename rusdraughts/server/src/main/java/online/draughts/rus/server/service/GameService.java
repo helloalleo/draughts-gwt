@@ -91,23 +91,29 @@ public class GameService {
     player.setGamePlayed(player.getGamePlayed() + 1);
     final GameDto.GameEnds playEndStatus = game.getPlayEndStatus();
     if (null != playEndStatus) {
+      boolean whiteWon = false, blackWon = false, white = false;
       final boolean blackWin = GameDto.GameEnds.BLACK_WIN.equals(playEndStatus);
       final boolean whiteWin = GameDto.GameEnds.WHITE_WIN.equals(playEndStatus);
       final boolean blackSurrender = GameDto.GameEnds.SURRENDER_BLACK.equals(playEndStatus);
       final boolean whiteSurrender = GameDto.GameEnds.SURRENDER_WHITE.equals(playEndStatus);
       final boolean blackLeft = GameDto.GameEnds.BLACK_LEFT.equals(playEndStatus);
       final boolean whiteLeft = GameDto.GameEnds.WHITE_LEFT.equals(playEndStatus);
+      // если игрок играет черными
       if (Objects.equals(game.getPlayerBlack().getId(), player.getId())) {
         if (blackWin || whiteLeft || whiteSurrender) {
-          player.setGameWin(player.getGameWin() + 1);
+          player.setGameWon(player.getGameWon() + 1);
+          blackWon = true;
         }
       } else {
+        // если играет белыми
         if (whiteWin || blackLeft || blackSurrender) {
-          player.setGameWin(player.getGameWin() + 1);
+          player.setGameWon(player.getGameWon() + 1);
+          whiteWon = true;
+          white = true;
         }
       }
+      player.setRating(Rating.calcPlayerRating(player.getRating(), white, blackWon, whiteWon));
     }
-    Rating.calcPlayerRating(player);
     return playerService.save(player);
   }
 

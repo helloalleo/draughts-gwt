@@ -118,7 +118,7 @@ public class GameServiceTest extends BaseTest {
 
     // save
     playerWhite = playerService.find(playerWhite.getId());
-    assertEquals(1, playerWhite.getGameWin());
+    assertEquals(1, playerWhite.getGameWon());
   }
 
   @Test

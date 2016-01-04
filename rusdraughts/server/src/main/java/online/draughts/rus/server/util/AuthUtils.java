@@ -52,8 +52,8 @@ public class AuthUtils {
       player.setRegisterDate(new Date());
     }
     player.setVisitCounter(player.getVisitCounter() + 1);
+    player.setRating(player.getRating() + 1);
 
-    Rating.calcPlayerRating(player);
     playerService.save(player);
 
     if (player.isActive()) {
