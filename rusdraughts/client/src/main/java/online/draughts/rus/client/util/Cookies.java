@@ -30,6 +30,10 @@ public interface Cookies {
 
   boolean getTimeOnPlayCustom();
 
+  String getDefaultLocale();
+
+  String getLocale();
+
   List<String> getLastUsedSmiles();
 
   int getFisherTime();
@@ -37,4 +41,6 @@ public interface Cookies {
   void setFisherTime(String value);
 
   void setLastUsedSmiles(List<String> lastUsedSmilesQueue);
+
+  void setLocale(String locale);
 }

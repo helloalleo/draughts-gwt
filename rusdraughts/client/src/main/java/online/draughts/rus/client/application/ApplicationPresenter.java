@@ -16,6 +16,7 @@
 
 package online.draughts.rus.client.application;
 
+import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.mvp.client.Presenter;
@@ -26,6 +27,7 @@ import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.Proxy;
 import online.draughts.rus.client.application.footer.FooterPresenter;
 import online.draughts.rus.client.application.menu.MenuPresenter;
+import online.draughts.rus.client.util.Cookies;
 
 /**
  * This is the top-logLevel presenter of the hierarchy. Other presenters reveal themselves within this presenter.
@@ -49,11 +51,24 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
       MyView view,
       MyProxy proxy,
       MenuPresenter menuPresenter,
-      FooterPresenter footerPresenter) {
+      FooterPresenter footerPresenter,
+      Cookies cookies) {
     super(eventBus, view, proxy, RevealType.Root);
 
     this.menuPresenter = menuPresenter;
     this.footerPresenter = footerPresenter;
+
+    setLocation(cookies);
+  }
+
+  private void setLocation(Cookies cookies) {
+    String savedLocale = cookies.getLocale();
+    String currentLocale = Window.Location.getParameter("locale");
+    if (!savedLocale.equals(currentLocale)) {
+      String hash = Window.Location.getHash();
+      Window.Location.assign("/?locale=" + savedLocale + hash);
+      cookies.setLocale(savedLocale);
+    }
   }
 
   @Override

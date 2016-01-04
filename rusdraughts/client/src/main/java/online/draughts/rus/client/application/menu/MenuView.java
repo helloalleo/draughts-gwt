@@ -78,9 +78,8 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     localeEn.setType(ButtonType.LINK);
     final Image enImg = new Image(resources.images().usFlag().getSafeUri());
     final String widthLocale = "24px";
-    final String heightLocale = widthLocale;
     enImg.setWidth(widthLocale);
-    enImg.setHeight(heightLocale);
+    enImg.setHeight(widthLocale);
     enImg.setResponsive(true);
     localeEn.insert(enImg, 0);
     localeEn.addClickHandler(new ClickHandler() {
@@ -95,7 +94,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     localeRu.setType(ButtonType.LINK);
     final Image ruImg = new Image(resources.images().russianFlag().getSafeUri());
     ruImg.setWidth(widthLocale);
-    ruImg.setHeight(heightLocale);
+    ruImg.setHeight(widthLocale);
     ruImg.setResponsive(true);
     localeRu.insert(ruImg, 0);
     localeRu.addClickHandler(new ClickHandler() {
@@ -117,9 +116,10 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     });
   }
 
-  private void setLocale(String en) {
+  private void setLocale(String locale) {
     String hash = Window.Location.getHash();
-    Window.Location.assign("/?locale=" + en + hash);
+    Window.Location.assign("/?locale=" + locale + hash);
+    cookies.setLocale(locale);
   }
 
   private void setLinkHeight(String height) {

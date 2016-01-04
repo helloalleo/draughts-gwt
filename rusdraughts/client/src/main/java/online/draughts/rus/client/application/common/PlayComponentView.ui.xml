@@ -17,7 +17,9 @@
             <b:Column size="XS_6 SM_6 MD_2 LG_2">
                 <g:HTMLPanel ui:field="notationColumn" addStyleNames="{res.style.notationColumn}">
                     <g:HTMLPanel ui:field="infoHTMLPanel">
-                        <b:Heading size="H5" text="Ход:"/>
+                        <b:Heading size="H5" text="Ход:">
+                            <ui:attribute name="text" description="Ход" key="move"/>
+                        </b:Heading>
                         <g:HTML ui:field="turnLabel" text="Игра не началась">
                             <ui:attribute name="text" description="Игра не началась"/>
                         </g:HTML>

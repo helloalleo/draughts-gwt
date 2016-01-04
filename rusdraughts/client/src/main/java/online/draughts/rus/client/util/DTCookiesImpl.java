@@ -16,14 +16,16 @@ import java.util.List;
  */
 public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
 
-  private static final String TIME_ON_PLAY = "timeOnPlay";
-  private static final String FISHER_TIME = "fisherTime";
-  private static final String TIME_ON_PLAY_CUSTOM = "timeOnPlayCustom";
-  private static final String LAST_USED_SMILES = "lastUsedSmiles";
+  private static final String TIME_ON_PLAY = "TIME_ON_PLAY";
+  private static final String FISHER_TIME = "FISHER_TIME";
+  private static final String TIME_ON_PLAY_CUSTOM = "TIME_ON_PLAY_CUSTOM";
+  private static final String LAST_USED_SMILES = "LAST_USED_SMILES";
   private static final String LIST_DELIMITER = ",";
-  private final String GAMES_ON_PAGE_COUNTER = "gamesOnPage";
+  public static final String LOCALE = "LOCALE";
+  private static final String DEFAULT_LOCALE = "ru";
+  private final String GAMES_ON_PAGE_COUNTER = "GAMES_ON_PAGE";
   private final String LOCATION = "LOCATION"; // куки адреса страницы
-  private final String MY_GAMES = "myGames";
+  private final String MY_GAMES = "MY_GAMES";
 
   public void setLocation(String nameToken) {
     Cookies.setCookie(LOCATION, nameToken);
@@ -102,6 +104,25 @@ public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
       builder.append(LIST_DELIMITER);
     }
     Cookies.setCookie(LAST_USED_SMILES, builder.toString());
+  }
+
+  @Override
+  public void setLocale(String locale) {
+    Cookies.setCookie(LOCALE, locale);
+  }
+
+  @Override
+  public String getDefaultLocale() {
+    return DEFAULT_LOCALE;
+  }
+
+  @Override
+  public String getLocale() {
+    String locale = Cookies.getCookie(LOCALE);
+    if (StringUtils.isEmpty(locale)) {
+      return DEFAULT_LOCALE;
+    }
+    return locale;
   }
 
   @Override
