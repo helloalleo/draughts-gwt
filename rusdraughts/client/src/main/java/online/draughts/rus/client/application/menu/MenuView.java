@@ -239,7 +239,9 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
       if (setActiveAnchor(nameToken, (AnchorListItem) widget)) return;
     }
     for (Widget widget : navRight) {
-      if (setActiveAnchor(nameToken, (AnchorListItem) widget)) return;
+      if (widget instanceof AnchorListItem) {
+        if (setActiveAnchor(nameToken, (AnchorListItem) widget)) return;
+      }
     }
   }
 

@@ -7,20 +7,20 @@ package online.draughts.rus.shared.locale;
 public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   
   /**
-   * Translated "Black left game".
+   * Translated "Black has left the Game".
    * 
-   * @return translated "Black left game"
+   * @return translated "Black has left the Game"
    */
-  @DefaultMessage("Black left game")
+  @DefaultMessage("Black has left the Game")
   @Key("BLACK_LEFT")
   String BLACK_LEFT();
 
   /**
-   * Translated "Black win".
+   * Translated "Black wins".
    * 
-   * @return translated "Black win"
+   * @return translated "Black wins"
    */
-  @DefaultMessage("Black win")
+  @DefaultMessage("Black wins")
   @Key("BLACK_WIN")
   String BLACK_WIN();
 
@@ -34,38 +34,38 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String DRAW();
 
   /**
-   * Translated "Black has surrendered".
+   * Translated "Black has conceded".
    * 
-   * @return translated "Black has surrendered"
+   * @return translated "Black has conceded"
    */
-  @DefaultMessage("Black has surrendered")
+  @DefaultMessage("Black has conceded")
   @Key("SURRENDER_BLACK")
   String SURRENDER_BLACK();
 
   /**
-   * Translated "White has surrendered".
+   * Translated "White has conceded".
    * 
-   * @return translated "White has surrendered"
+   * @return translated "White has conceded"
    */
-  @DefaultMessage("White has surrendered")
+  @DefaultMessage("White has conceded")
   @Key("SURRENDER_WHITE")
   String SURRENDER_WHITE();
 
   /**
-   * Translated "White left game".
+   * Translated "White has left the Game".
    * 
-   * @return translated "White left game"
+   * @return translated "White has left the Game"
    */
-  @DefaultMessage("White left game")
+  @DefaultMessage("White has left the Game")
   @Key("WHITE_LEFT")
   String WHITE_LEFT();
 
   /**
-   * Translated "White win".
+   * Translated "White wins".
    * 
-   * @return translated "White win"
+   * @return translated "White wins"
    */
-  @DefaultMessage("White win")
+  @DefaultMessage("White wins")
   @Key("WHITE_WIN")
   String WHITE_WIN();
 
@@ -106,11 +106,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String analysis();
 
   /**
-   * Translated "Are you sure you want to surrender?".
+   * Translated "Do you really want to concede?".
    * 
-   * @return translated "Are you sure you want to surrender?"
+   * @return translated "Do you really want to concede?"
    */
-  @DefaultMessage("Are you sure you want to surrender?")
+  @DefaultMessage("Do you really want to concede?")
   @Key("areYouSureYouWantSurrender")
   String areYouSureYouWantSurrender();
 
@@ -133,11 +133,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String blacks();
 
   /**
-   * Translated "Black turn".
+   * Translated "Black`s turn".
    * 
-   * @return translated "Black turn"
+   * @return translated "Black`s turn"
    */
-  @DefaultMessage("Black turn")
+  @DefaultMessage("Black`s turn")
   @Key("blacksTurn")
   String blacksTurn();
 
@@ -196,11 +196,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String confirm();
 
   /**
-   * Translated "Не загружено".
+   * Translated "Not connected".
    * 
-   * @return translated "Не загружено"
+   * @return translated "Not connected"
    */
-  @DefaultMessage("Не загружено")
+  @DefaultMessage("Not connected")
   @Key("connectToServer")
   String connectToServer();
 
@@ -223,20 +223,20 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String contactsToken();
 
   /**
-   * Translated "Do cancel turn?".
+   * Translated "Undo move?".
    * 
-   * @return translated "Do cancel turn?"
+   * @return translated "Undo move?"
    */
-  @DefaultMessage("Do cancel turn?")
+  @DefaultMessage("Undo move?")
   @Key("doYouWantToCancelMove")
   String doYouWantToCancelMove();
 
   /**
-   * Translated "Do you want propose draw?".
+   * Translated "Offer a draw?".
    * 
-   * @return translated "Do you want propose draw?"
+   * @return translated "Offer a draw?"
    */
-  @DefaultMessage("Do you want propose draw?")
+  @DefaultMessage("Offer a draw?")
   @Key("doYouWantToProposeDraw")
   String doYouWantToProposeDraw();
 
@@ -250,11 +250,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String draughts();
 
   /**
-   * Translated "Beaten draughts".
+   * Translated "Pieces captured".
    * 
-   * @return translated "Beaten draughts"
+   * @return translated "Pieces captured"
    */
-  @DefaultMessage("Beaten draughts")
+  @DefaultMessage("Pieces captured")
   @Key("draughtsBeaten")
   String draughtsBeaten();
 
@@ -286,38 +286,38 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String errorToken();
 
   /**
-   * Translated "Error while loading game.".
+   * Translated "Error while loading game".
    * 
-   * @return translated "Error while loading game."
+   * @return translated "Error while loading game"
    */
-  @DefaultMessage("Error while loading game.")
+  @DefaultMessage("Error while loading game")
   @Key("errorWhileGettingGame")
   String errorWhileGettingGame();
 
   /**
-   * Translated "Error while loading profile.".
+   * Translated "Error while loading profile".
    * 
-   * @return translated "Error while loading profile."
+   * @return translated "Error while loading profile"
    */
-  @DefaultMessage("Error while loading profile.")
+  @DefaultMessage("Error while loading profile")
   @Key("errorWhileGettingProfile")
   String errorWhileGettingProfile();
 
   /**
-   * Translated "Error while updating profile.".
+   * Translated "Error while updating profile".
    * 
-   * @return translated "Error while updating profile."
+   * @return translated "Error while updating profile"
    */
-  @DefaultMessage("Error while updating profile.")
+  @DefaultMessage("Error while updating profile")
   @Key("errorWhileProfileUpdate")
   String errorWhileProfileUpdate();
 
   /**
-   * Translated "Error while saving game.".
+   * Translated "Error while saving game".
    * 
-   * @return translated "Error while saving game."
+   * @return translated "Error while saving game"
    */
-  @DefaultMessage("Error while saving game.")
+  @DefaultMessage("Error while saving game")
   @Key("errorWhileSavingGame")
   String errorWhileSavingGame();
 
@@ -331,20 +331,20 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String failToConnectToServer();
 
   /**
-   * Translated "Fail to start a play".
+   * Translated "Fail to launch the Game".
    * 
-   * @return translated "Fail to start a play"
+   * @return translated "Fail to launch the Game"
    */
-  @DefaultMessage("Fail to start a play")
+  @DefaultMessage("Fail to launch the Game")
   @Key("failToStartGame")
   String failToStartGame();
 
   /**
-   * Translated "Addition time (Fisher clocks)<br/><small>0 or empty value to not count</small>".
+   * Translated "Additional time (Fischer’s clock)<br/><small>0 or empty to disable</small>".
    * 
-   * @return translated "Addition time (Fisher clocks)<br/><small>0 or empty value to not count</small>"
+   * @return translated "Additional time (Fischer’s clock)<br/><small>0 or empty to disable</small>"
    */
-  @DefaultMessage("Addition time (Fisher clocks)<br/><small>0 or empty value to not count</small>")
+  @DefaultMessage("Additional time (Fischer’s clock)<br/><small>0 or empty to disable</small>")
   @Key("fisherTime")
   String fisherTime();
 
@@ -403,20 +403,20 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String inviteCaption();
 
   /**
-   * Translated "{0} invites you in play. You are playing {1}. Вы согласны?".
+   * Translated "{0} invites you to play. You are playing {1}. Accept the challenge?".
    * 
-   * @return translated "{0} invites you in play. You are playing {1}. Вы согласны?"
+   * @return translated "{0} invites you to play. You are playing {1}. Accept the challenge?"
    */
-  @DefaultMessage("{0} invites you in play. You are playing {1}. Вы согласны?")
+  @DefaultMessage("{0} invites you to play. You are playing {1}. Accept the challenge?")
   @Key("inviteMessage")
   String inviteMessage(String arg0,  String arg1);
 
   /**
-   * Translated "Inviting <i>{0}</i> play in {1}.".
+   * Translated "Inviting <i>{0}</i> to play {1}".
    * 
-   * @return translated "Inviting <i>{0}</i> play in {1}."
+   * @return translated "Inviting <i>{0}</i> to play {1}"
    */
-  @DefaultMessage("Inviting <i>{0}</i> play in {1}.")
+  @DefaultMessage("Inviting <i>{0}</i> to play {1}")
   @Key("inviteToPlay")
   String inviteToPlay(String arg0,  String arg1);
 
@@ -547,11 +547,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String onlineTitle();
 
   /**
-   * Translated "Opponent left game".
+   * Translated "Opponent has left the Game".
    * 
-   * @return translated "Opponent left game"
+   * @return translated "Opponent has left the Game"
    */
-  @DefaultMessage("Opponent left game")
+  @DefaultMessage("Opponent has left the Game")
   @Key("opponentLeftGame")
   String opponentLeftGame();
 
@@ -565,20 +565,20 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String opponentNotFound();
 
   /**
-   * Translated "Opponent surrendered game".
+   * Translated "Opponent has conceded".
    * 
-   * @return translated "Opponent surrendered game"
+   * @return translated "Opponent has conceded"
    */
-  @DefaultMessage("Opponent surrendered game")
+  @DefaultMessage("Opponent has conceded")
   @Key("opponentSurrendered")
   String opponentSurrendered();
 
   /**
-   * Translated "<span style=\"color:red;\">Opponents turn</span>".
+   * Translated "<span style=\"color:red;\">Opponent’s Turn</span>".
    * 
-   * @return translated "<span style=\"color:red;\">Opponents turn</span>"
+   * @return translated "<span style=\"color:red;\">Opponent’s Turn</span>"
    */
-  @DefaultMessage("<span style=\"color:red;\">Opponents turn</span>")
+  @DefaultMessage("<span style=\"color:red;\">Opponent’s Turn</span>")
   @Key("opponentTurn")
   String opponentTurn();
 
@@ -592,20 +592,20 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String play();
 
   /**
-   * Translated "<i>{0}</i> already playing".
+   * Translated "<i>{0}</i> is already playing".
    * 
-   * @return translated "<i>{0}</i> already playing"
+   * @return translated "<i>{0}</i> is already playing"
    */
-  @DefaultMessage("<i>{0}</i> already playing")
+  @DefaultMessage("<i>{0}</i> is already playing")
   @Key("playAlreadyPlaying")
   String playAlreadyPlaying(String arg0);
 
   /**
-   * Translated "Play does not started".
+   * Translated "Game launch failed".
    * 
-   * @return translated "Play does not started"
+   * @return translated "Game launch failed"
    */
-  @DefaultMessage("Play does not started")
+  @DefaultMessage("Game launch failed")
   @Key("playDidNotStart")
   String playDidNotStart();
 
@@ -619,11 +619,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String playListButtonText();
 
   /**
-   * Translated "To start play press Connect \nthen choose player and press Play".
+   * Translated "Press Connect to start the Game\nSelect opponent and press Play".
    * 
-   * @return translated "To start play press Connect \nthen choose player and press Play"
+   * @return translated "Press Connect to start the Game\nSelect opponent and press Play"
    */
-  @DefaultMessage("To start play press Connect \nthen choose player and press Play")
+  @DefaultMessage("Press Connect to start the Game\nSelect opponent and press Play")
   @Key("playStartDescription")
   String playStartDescription();
 
@@ -637,11 +637,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String playToken();
 
   /**
-   * Translated "Party: white - {0}, black - {1}.<br/>Result: {2}".
+   * Translated "Match: White - {0}, Black - {1}.<br/>Results: {2}".
    * 
-   * @return translated "Party: white - {0}, black - {1}.<br/>Result: {2}"
+   * @return translated "Match: White - {0}, Black - {1}.<br/>Results: {2}"
    */
-  @DefaultMessage("Party: white - {0}, black - {1}.<br/>Result: {2}")
+  @DefaultMessage("Match: White - {0}, Black - {1}.<br/>Results: {2}")
   @Key("playerCaption")
   String playerCaption(String arg0,  String arg1,  String arg2);
 
@@ -655,47 +655,47 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String playerOffline();
 
   /**
-   * Translated "<i>{0}</i> suppose cancel turn. Are you agree?".
+   * Translated "<i>{0}</i> offers to undo move. Do you agree?".
    * 
-   * @return translated "<i>{0}</i> suppose cancel turn. Are you agree?"
+   * @return translated "<i>{0}</i> offers to undo move. Do you agree?"
    */
-  @DefaultMessage("<i>{0}</i> suppose cancel turn. Are you agree?")
+  @DefaultMessage("<i>{0}</i> offers to undo move. Do you agree?")
   @Key("playerProposesCancelMove")
   String playerProposesCancelMove(String arg0);
 
   /**
-   * Translated "<i>{0}</i> proposes draw. Are you agree?".
+   * Translated "<i>{0}</i> offers a draw. Do you accept it?".
    * 
-   * @return translated "<i>{0}</i> proposes draw. Are you agree?"
+   * @return translated "<i>{0}</i> offers a draw. Do you accept it?"
    */
-  @DefaultMessage("<i>{0}</i> proposes draw. Are you agree?")
+  @DefaultMessage("<i>{0}</i> offers a draw. Do you accept it?")
   @Key("playerProposesDraw")
   String playerProposesDraw(String arg0);
 
   /**
-   * Translated "<i>{0}</i> refused from draw".
+   * Translated "<i>{0}</i> has refused to accept a draw".
    * 
-   * @return translated "<i>{0}</i> refused from draw"
+   * @return translated "<i>{0}</i> has refused to accept a draw"
    */
-  @DefaultMessage("<i>{0}</i> refused from draw")
+  @DefaultMessage("<i>{0}</i> has refused to accept a draw")
   @Key("playerRejectedDraw")
   String playerRejectedDraw(String arg0);
 
   /**
-   * Translated "<i>{0}</i> refused to cancel turn".
+   * Translated "<i>{0}</i> has refused to undo move".
    * 
-   * @return translated "<i>{0}</i> refused to cancel turn"
+   * @return translated "<i>{0}</i> has refused to undo move"
    */
-  @DefaultMessage("<i>{0}</i> refused to cancel turn")
+  @DefaultMessage("<i>{0}</i> has refused to undo move")
   @Key("playerRejectedMoveCancel")
   String playerRejectedMoveCancel(String arg0);
 
   /**
-   * Translated "<i>{0}</i> refused play with you.".
+   * Translated "<i>{0}</i> refused to play with you".
    * 
-   * @return translated "<i>{0}</i> refused play with you."
+   * @return translated "<i>{0}</i> refused to play with you"
    */
-  @DefaultMessage("<i>{0}</i> refused play with you.")
+  @DefaultMessage("<i>{0}</i> refused to play with you")
   @Key("playerRejectedPlayRequest")
   String playerRejectedPlayRequest(String arg0);
 
@@ -727,11 +727,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String profileToken();
 
   /**
-   * Translated "Profile updated".
+   * Translated "The Profile was updated".
    * 
-   * @return translated "Profile updated"
+   * @return translated "The Profile was updated"
    */
-  @DefaultMessage("Profile updated")
+  @DefaultMessage("The Profile was updated")
   @Key("profileUpdated")
   String profileUpdated();
 
@@ -763,20 +763,20 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String seconds();
 
   /**
-   * Translated "You chosen yourself, please chose another player".
+   * Translated "You have chosen yourself, please chose another player".
    * 
-   * @return translated "You chosen yourself, please chose another player"
+   * @return translated "You have chosen yourself, please chose another player"
    */
-  @DefaultMessage("You chosen yourself, please chose another player")
+  @DefaultMessage("You have chosen yourself, please chose another player")
   @Key("selectAnotherPlayerItsYou")
   String selectAnotherPlayerItsYou();
 
   /**
-   * Translated "Choose a player".
+   * Translated "Select an Opponent".
    * 
-   * @return translated "Choose a player"
+   * @return translated "Select an Opponent"
    */
-  @DefaultMessage("Choose a player")
+  @DefaultMessage("Select an Opponent")
   @Key("selectPlayer")
   String selectPlayer();
 
@@ -808,11 +808,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String signIn();
 
   /**
-   * Translated "Specify".
+   * Translated "My time".
    * 
-   * @return translated "Specify"
+   * @return translated "My time"
    */
-  @DefaultMessage("Specify")
+  @DefaultMessage("My time")
   @Key("specifyTime")
   String specifyTime();
 
@@ -826,11 +826,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String symbolsLeft();
 
   /**
-   * Translated "Specify time for game in minutes".
+   * Translated "Match time".
    * 
-   * @return translated "Specify time for game in minutes"
+   * @return translated "Match time"
    */
-  @DefaultMessage("Specify time for game in minutes")
+  @DefaultMessage("Match time")
   @Key("timeOnPlay")
   String timeOnPlay();
 
@@ -844,29 +844,29 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String timeOut();
 
   /**
-   * Translated "Timeout, opponent loose".
+   * Translated "Time out. Opponent has lost".
    * 
-   * @return translated "Timeout, opponent loose"
+   * @return translated "Time out. Opponent has lost"
    */
-  @DefaultMessage("Timeout, opponent loose")
+  @DefaultMessage("Time out. Opponent has lost")
   @Key("timeOutOpponentLose")
   String timeOutOpponentLose();
 
   /**
-   * Translated "Too long name".
+   * Translated "Name is too long".
    * 
-   * @return translated "Too long name"
+   * @return translated "Name is too long"
    */
-  @DefaultMessage("Too long name")
+  @DefaultMessage("Name is too long")
   @Key("tooLongPlayerName")
   String tooLongPlayerName();
 
   /**
-   * Translated "Too short name".
+   * Translated "Name is too short".
    * 
-   * @return translated "Too short name"
+   * @return translated "Name is too short"
    */
-  @DefaultMessage("Too short name")
+  @DefaultMessage("Name is too short")
   @Key("tooShortPlayerName")
   String tooShortPlayerName();
 
@@ -889,11 +889,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String waitResponse();
 
   /**
-   * Translated "Your browser does not support WebSockets. Play imposable".
+   * Translated "Your browser does not support WebSockets. The Game cannot be launched".
    * 
-   * @return translated "Your browser does not support WebSockets. Play imposable"
+   * @return translated "Your browser does not support WebSockets. The Game cannot be launched"
    */
-  @DefaultMessage("Your browser does not support WebSockets. Play imposable")
+  @DefaultMessage("Your browser does not support WebSockets. The Game cannot be launched")
   @Key("webSocketDoesNotSupport")
   String webSocketDoesNotSupport();
 
@@ -916,11 +916,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String whites();
 
   /**
-   * Translated "Whites turn".
+   * Translated "White`s turn".
    * 
-   * @return translated "Whites turn"
+   * @return translated "White`s turn"
    */
-  @DefaultMessage("Whites turn")
+  @DefaultMessage("White`s turn")
   @Key("whitesTurn")
   String whitesTurn();
 
@@ -952,47 +952,47 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String you();
 
   /**
-   * Translated "<span style=\"color:red;\">You disconnected</span>".
+   * Translated "<span style=\"color:red;\">You were disconnected</span>".
    * 
-   * @return translated "<span style=\"color:red;\">You disconnected</span>"
+   * @return translated "<span style=\"color:red;\">You were disconnected</span>"
    */
-  @DefaultMessage("<span style=\"color:red;\">You disconnected</span>")
+  @DefaultMessage("<span style=\"color:red;\">You were disconnected</span>")
   @Key("youDisconnected")
   String youDisconnected();
 
   /**
-   * Translated "You have not move yet".
+   * Translated "Your move".
    * 
-   * @return translated "You have not move yet"
+   * @return translated "Your move"
    */
-  @DefaultMessage("You have not move yet")
+  @DefaultMessage("Your move")
   @Key("youDontMove")
   String youDontMove();
 
   /**
-   * Translated "<i>{0}</i> has added you in favorites".
+   * Translated "<i>{0}</i> has added you to Favorites".
    * 
-   * @return translated "<i>{0}</i> has added you in favorites"
+   * @return translated "<i>{0}</i> has added you to Favorites"
    */
-  @DefaultMessage("<i>{0}</i> has added you in favorites")
+  @DefaultMessage("<i>{0}</i> has added you to Favorites")
   @Key("youHasBeenAddedToFavorite")
   String youHasBeenAddedToFavorite(String arg0);
 
   /**
-   * Translated "You loose :(".
+   * Translated "You lost :(".
    * 
-   * @return translated "You loose :("
+   * @return translated "You lost :("
    */
-  @DefaultMessage("You loose :(")
+  @DefaultMessage("You lost :(")
   @Key("youLose")
   String youLose();
 
   /**
-   * Translated "You win! :)".
+   * Translated "You won! :)".
    * 
-   * @return translated "You win! :)"
+   * @return translated "You won! :)"
    */
-  @DefaultMessage("You win! :)")
+  @DefaultMessage("You won! :)")
   @Key("youWon")
   String youWon();
 
