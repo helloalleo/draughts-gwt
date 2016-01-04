@@ -411,12 +411,7 @@ public class ClientChannel implements ChannelListener {
 
   private void handlePlayAcceptDraw(GameMessageDto gameMessage) {
     if (Boolean.valueOf(gameMessage.getData())) {
-      eventBus.fireEvent(new GameOverEvent(playSession.getGame(), GameDto.GameEnds.DRAW, new AsyncCallback<GameDto>() {
-        @Override
-        public void onFailure(Throwable throwable) {
-          ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
-        }
-
+      eventBus.fireEvent(new GameOverEvent(playSession.getGame(), GameDto.GameEnds.DRAW, new AbstractAsyncCallback<GameDto>() {
         @Override
         public void onSuccess(GameDto aVoid) {
         }
@@ -440,6 +435,7 @@ public class ClientChannel implements ChannelListener {
         } else {
           message.setData(Boolean.FALSE.toString());
         }
+        message.setGame(playSession.getGame());
 
         sendGameMessage(message);
 
