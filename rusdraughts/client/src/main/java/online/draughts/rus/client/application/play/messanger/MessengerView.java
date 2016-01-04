@@ -279,7 +279,11 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     fillLastUsedSmiles();
   }
 
+  /**
+   * Заполняем поле над сообщением последними смайлами
+   */
   private void fillLastUsedSmiles() {
+    // если пользователь только зашёл на сайт и еще не отправлял смайлы
     if (lastUsedSmilesQueue.isEmpty()) {
       final String smile = codes.get(0) + Integer.toHexString(10);
       final HTML smileHtml = new HTML("&#x" + smile + ";");
@@ -289,7 +293,7 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
       smileButton.getElement().getStyle().setPaddingLeft(4, Style.Unit.PX);
       smileButton.getElement().getStyle().setPaddingRight(4, Style.Unit.PX);
       lastUsedSmiles.add(smileButton);
-      lastUsedSmilesQueue.add(smile);
+      lastUsedSmilesQueue.add(sm);
       cookies.setLastUsedSmiles(lastUsedSmilesQueue);
       return;
     }
