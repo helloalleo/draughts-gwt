@@ -17,7 +17,6 @@ import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.Cookies;
 import org.gwtbootstrap3.client.ui.*;
-import org.gwtbootstrap3.client.ui.constants.ButtonType;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 
 import java.util.Date;
@@ -73,37 +72,6 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
       }
     });
 
-    localeEn = new Button();
-    localeEn.getElement().addClassName(resources.style().localeButton());
-    localeEn.setType(ButtonType.LINK);
-    final Image enImg = new Image(resources.images().usFlag().getSafeUri());
-    final String widthLocale = "24px";
-    enImg.setWidth(widthLocale);
-    enImg.setHeight(widthLocale);
-    enImg.setResponsive(true);
-    localeEn.insert(enImg, 0);
-    localeEn.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        setLocale("en");
-      }
-    });
-
-    localeRu = new Button();
-    localeRu.getElement().addClassName(resources.style().localeButton());
-    localeRu.setType(ButtonType.LINK);
-    final Image ruImg = new Image(resources.images().russianFlag().getSafeUri());
-    ruImg.setWidth(widthLocale);
-    ruImg.setHeight(widthLocale);
-    ruImg.setResponsive(true);
-    localeRu.insert(ruImg, 0);
-    localeRu.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        setLocale("ru");
-      }
-    });
-
     Window.addWindowScrollHandler(new Window.ScrollHandler() {
       @Override
       public void onWindowScroll(Window.ScrollEvent event) {
@@ -154,32 +122,60 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   }
 
   private void setLinks() {
+    AnchorListItem anchor;
     if (getUiHandlers().isLoggedIn()) {
       for (final NameTokens.Link link : nameTokens.getLeftAuthLinks()) {
-        final AnchorListItem anchor = createAnchor(link);
+        anchor = createAnchor(link);
         navLeft.add(anchor);
       }
     } else {
       for (final NameTokens.Link link : nameTokens.getLeftLinks()) {
-        final AnchorListItem anchor = createAnchor(link);
+        anchor = createAnchor(link);
         navLeft.add(anchor);
       }
     }
 
     if (getUiHandlers().isLoggedIn()) {
       for (NameTokens.Link link : nameTokens.getRightAuthLinks()) {
-        AnchorListItem anchor = createAnchor(link);
+        anchor = createAnchor(link);
         navRight.add(anchor);
       }
     } else {
       for (NameTokens.Link link : nameTokens.getRightLinks()) {
-        AnchorListItem anchor = createAnchor(link);
+        anchor = createAnchor(link);
         navRight.add(anchor);
       }
     }
 
-    navRight.add(localeEn);
-    navRight.insert(localeRu, 0);
+    anchor = new AnchorListItem();
+    final Image ruImg = new Image(resources.images().russiaFlag().getSafeUri());
+    ruImg.setResponsive(true);
+    anchor.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        setLocale("ru");
+      }
+    });
+    Anchor a = (Anchor) anchor.getWidget(0);
+    a.setPaddingLeft(2);
+    a.setPaddingRight(2);
+    a.add(ruImg);
+    navRight.add(anchor);
+
+    anchor = new AnchorListItem();
+    final Image enImg = new Image(resources.images().usFlag().getSafeUri());
+    enImg.setResponsive(true);
+    anchor.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        setLocale("en");
+      }
+    });
+    a = (Anchor) anchor.getWidget(0);
+    a.setPaddingLeft(2);
+    a.setPaddingRight(2);
+    a.add(enImg);
+    navRight.add(anchor);
 
     highlightMenu();
     navbarTopHeight();

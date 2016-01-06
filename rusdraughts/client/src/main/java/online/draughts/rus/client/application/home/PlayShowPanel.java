@@ -52,6 +52,7 @@ public class PlayShowPanel extends Composite {
   private int lastMaxHeight = 0;
   private int lastScrollPos = 0;
   private boolean blockScroll;
+  private List<GameDto> showedGames = new ArrayList<>();
 
   @Inject
   public PlayShowPanel(Binder binder,
@@ -160,8 +161,14 @@ public class PlayShowPanel extends Composite {
     if (filledGamesInRow != 0) {
       Row lastRow = (Row) playRowList.getWidget(playRowList.getWidgetCount() - 2);
       for (int i = 0; i < gamesInRow - filledGamesInRow; i++) {
+        final GameDto gameDto = gameList.get(i);
+        if (showedGames.contains(gameDto)) {
+          continue;
+        }
+
         Column column = new Column(getSize(gamesInRow));
-        final PlayItem item = showPanelFactory.createItem(gamesInRow, gameList.get(i));
+        final PlayItem item = showPanelFactory.createItem(gamesInRow, gameDto);
+        showedGames.add(gameDto);
         column.add(item);
         lastRow.add(column);
 
@@ -233,8 +240,12 @@ public class PlayShowPanel extends Composite {
       gamesInRow = 2;
     }
     for (GameDto game : rowGameList) {
+      if (showedGames.contains(game)) {
+        continue;
+      }
       Column column = new Column(getSize(gamesInRow));
       final PlayItem item = showPanelFactory.createItem(gamesInRow, game);
+      showedGames.add(game);
       column.add(item);
       row.add(column);
     }

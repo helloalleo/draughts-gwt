@@ -5,7 +5,7 @@ import com.google.gwt.resources.client.ImageResource;
 
 public interface Images extends ClientBundle {
   @Source("img/russia-flag.png")
-  ImageResource russianFlag();
+  ImageResource russiaFlag();
 
   @Source("img/us-flag.png")
   ImageResource usFlag();

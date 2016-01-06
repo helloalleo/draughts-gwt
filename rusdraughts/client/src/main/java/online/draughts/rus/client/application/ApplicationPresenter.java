@@ -28,6 +28,7 @@ import com.gwtplatform.mvp.client.proxy.Proxy;
 import online.draughts.rus.client.application.footer.FooterPresenter;
 import online.draughts.rus.client.application.menu.MenuPresenter;
 import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.shared.util.StringUtils;
 
 /**
  * This is the top-logLevel presenter of the hierarchy. Other presenters reveal themselves within this presenter.
@@ -64,7 +65,7 @@ public class ApplicationPresenter extends Presenter<ApplicationPresenter.MyView,
   private void setLocation(Cookies cookies) {
     String savedLocale = cookies.getLocale();
     String currentLocale = Window.Location.getParameter("locale");
-    if (!savedLocale.equals(currentLocale)) {
+    if (!savedLocale.equals(currentLocale) && StringUtils.isNotEmpty(currentLocale)) {
       String hash = Window.Location.getHash();
       Window.Location.assign("/?locale=" + savedLocale + hash);
       cookies.setLocale(savedLocale);
