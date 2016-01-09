@@ -138,14 +138,10 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
    */
   @Override
   public void update() {
-    // если обновляем уже сохранённую сущность, тогда пересоздаем сущность с теми же полями,
-    // чтобы
+    // если обновляем уже сохранённую сущность, тогда пересоздаем сущность с id объекта,
+    // потому что id сущности задать нельзя
     if (0 != getId()) {
-      Entity entity = new Entity(this.entity.getKind(), getId());
-      for (String propKey : this.entity.getProperties().keySet()) {
-        entity.setProperty(propKey, this.entity.getProperty(propKey));
-      }
-      this.entity = entity;
+      this.entity = new Entity(this.entity.getKind(), getId());
     }
 
     // итерируем по всем полям текущего класса

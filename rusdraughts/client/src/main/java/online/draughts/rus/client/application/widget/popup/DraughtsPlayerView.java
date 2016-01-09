@@ -157,15 +157,13 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
       @Override
       protected int getTop(int popupHeight) {
-        return 75;
+         return Window.getScrollTop() + 75;
       }
     });
   }
 
   @Override
   protected void onAttach() {
-    super.onAttach();
-
     if (currentSession.isLoggedIn()) {
       gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>() {
         @Override
@@ -200,7 +198,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     super.onDetach();
 
     nativePreviewHandler.removeHandler();
-    Window.enableScrolling(true);
+    deskPanel.clear();
   }
 
   private void registerNativeEvents() {

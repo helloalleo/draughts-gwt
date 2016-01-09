@@ -44,7 +44,7 @@ public class PlayItem extends Composite {
   @UiField
   HTMLPanel whoAndWhenDidWin;
   @UiField
-  Anchor gameIdAnchor;
+  Anchor showGameAnchor;
 
   @Inject
   PlayItem(Binder binder,
@@ -64,8 +64,8 @@ public class PlayItem extends Composite {
 
   public void setGame(final HomePresenter homePresenter, final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
                       final GameDto game) {
-    gameIdAnchor.setId(game.getId() + GAME_ID);
-    gameIdAnchor.addClickHandler(new ClickHandler() {
+    showGameAnchor.setId(game.getId() + GAME_ID);
+    showGameAnchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
         draughtsPlayer = draughtsPlayerFactory.create(game);

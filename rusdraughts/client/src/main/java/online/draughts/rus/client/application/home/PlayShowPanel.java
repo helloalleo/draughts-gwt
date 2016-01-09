@@ -207,6 +207,7 @@ public class PlayShowPanel extends Composite {
   }
 
   private void resetGamesOnPanel(List<GameDto> gameList) {
+    showedGames.clear();
     if (gameList == null || gameList.isEmpty()) {
       return;
     }

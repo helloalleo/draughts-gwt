@@ -24,7 +24,7 @@ public class AppPreBootstrapper implements PreBootstrapper {
     } else if ("ru".equals(locale)) {
       html = new HTML("Загрузка...");
     } else {
-      html = new HTML("Loading...");
+      html = new HTML("Загрузка...");
     }
     html.getElement().setId("loading");
     final Style style = html.getElement().getStyle();
