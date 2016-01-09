@@ -45,9 +45,11 @@ public class Player extends ModelImpl<Player> {
   private boolean playing;
   @Index
   private boolean online;
+
   @MapKey(Long.class)
   @MapValue(Integer.class)
   private Map<Long, Integer> friendUnreadMessagesMap = new HashMap<>();
+
   @Index
   private Date registerDate;
   @Index

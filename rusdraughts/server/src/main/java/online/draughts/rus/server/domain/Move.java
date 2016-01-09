@@ -1,8 +1,9 @@
 package online.draughts.rus.server.domain;
 
 
-import online.draughts.rus.server.annotation.Enumerated;
+import online.draughts.rus.server.annotation.Converter;
 import online.draughts.rus.server.annotation.Text;
+import online.draughts.rus.server.domain.converter.MoveFlagsConverter;
 import online.draughts.rus.shared.dto.MoveDto;
 
 import java.util.HashSet;
@@ -28,7 +29,7 @@ public class Move extends ModelImpl<Move> {
 
   private Draught takenDraught;
 
-  @Enumerated(value = MoveDto.MoveFlags.class)
+  @Converter(value = MoveFlagsConverter.class)
   private Set<MoveDto.MoveFlags> moveFlags = new HashSet<>();
 
   private String title;

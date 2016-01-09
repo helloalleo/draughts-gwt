@@ -2,7 +2,6 @@ package online.draughts.rus.server.domain;
 
 import com.google.appengine.api.datastore.*;
 import online.draughts.rus.server.annotation.Index;
-import online.draughts.rus.server.annotation.KeySet;
 import online.draughts.rus.server.annotation.Text;
 import online.draughts.rus.shared.dto.GameDto;
 
@@ -40,7 +39,6 @@ public class Game extends ModelImpl<Game> {
 
   private Set<GameMessage> gameMessages = new HashSet<>();
 
-  @KeySet(value = Draught.class)
   private Set<Draught> initialPos = new HashSet<>();
 
   public Game() {
