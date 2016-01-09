@@ -195,8 +195,6 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
   @Override
   protected void onDetach() {
-    super.onDetach();
-
     nativePreviewHandler.removeHandler();
     deskPanel.clear();
   }
