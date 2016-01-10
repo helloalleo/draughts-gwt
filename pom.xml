@@ -55,9 +55,9 @@
     </properties>
 
     <modules>
-        <module>rusdraughts/shared</module>
-        <module>rusdraughts/client</module>
-        <module>rusdraughts/server</module>
+        <module>draughts/shared</module>
+        <module>draughts/client</module>
+        <module>draughts/server</module>
         <module>selenium</module>
     </modules>
 
