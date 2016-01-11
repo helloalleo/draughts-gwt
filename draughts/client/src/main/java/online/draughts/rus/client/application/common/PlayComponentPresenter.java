@@ -4,6 +4,7 @@ import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.Timer;
+import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
@@ -54,10 +55,10 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ResourceDelegate<FriendsResource> friendsDelegate;
   private final AppResources resources;
   private MessengerPresenter currentMessenger;
-  private int fisherCounter;
-  private int timeCounter;
-  private Timer timeTimer;
-  private Timer fisherTimer;
+  private int playerTimeSeconds;
+  private int opponentTimeSeconds;
+  private Timer playerTimer;
+  private int fisherTimeSeconds;
 
   @Inject
   PlayComponentPresenter(
@@ -100,7 +101,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   @Override
   public void startPlayWith(final PlayerDto opponent) {
-    if (opponent == null) {
+    if (null == opponent) {
       Growl.growlNotif(messages.selectPlayer());
       return;
     }
@@ -116,7 +117,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       Growl.growlNotif(messages.playAlreadyPlaying(opponent.getPublicName()));
       return;
     }
-    getView().setOpponent(opponent);
+    playSession.setOpponent(opponent);
 
     getView().showInviteDialog(new ClickHandler() {
       @Override
@@ -295,8 +296,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   @Override
   public void stopTimers() {
-    timeTimer.cancel();
-    fisherTimer.cancel();
+    playerTimer.cancel();
   }
 
   private GameMessageDto createGameMessage() {
@@ -332,7 +332,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     addRegisteredHandler(DisconnectFromPlayEvent.TYPE, new DisconnectFromPlayEventHandler() {
       @Override
       public void onDisconnectFromPlay(DisconnectFromPlayEvent event) {
-        getView().setUpViewOnDisconnectFromServer();
+        Window.Location.reload();
       }
     });
 
@@ -378,6 +378,12 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     addRegisteredHandler(TurnChangeEvent.TYPE, new TurnChangeEventHandler() {
       @Override
       public void onTurnChange(TurnChangeEvent event) {
+        if (event.isMyTurn()) {
+          opponentTimeSeconds += fisherTimeSeconds;
+        } else {
+          playerTimeSeconds += fisherTimeSeconds;
+        }
+
         getView().updateTurn(event.isMyTurn());
       }
     });
@@ -424,7 +430,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         fireEvent(new RemovePlayMoveOpponentHandlerEvent());
 
         playSession.setOpponent(null);
-        getView().setOpponent(null);
         playSession.setGame(null);
 
         getView().clearPlayComponent();
@@ -517,27 +522,26 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   private void initTimers(int timeOnPlay, final int fisherTime) {
-    fisherCounter = fisherTime;
-    timeCounter = timeOnPlay * 60;
-    timeTimer = new Timer() {
+    this.fisherTimeSeconds = fisherTime;
+    playerTimeSeconds = timeOnPlay * 60;
+    opponentTimeSeconds = timeOnPlay * 60;
+
+    playerTimer = new Timer() {
       @Override
       public void run() {
-        getView().setTime(formatTime(timeCounter));
-        if (isMyTurn() && 0 == fisherCounter) {
-          timeCounter--;
+        getView().setPlayerTime(formatTime(playerTimeSeconds));
+        getView().setOpponentTime(formatTime(opponentTimeSeconds));
+        if (isMyTurn()) {
+          playerTimeSeconds--;
+        } else {
+          opponentTimeSeconds--;
         }
-        if (!isMyTurn() && fisherTime != fisherCounter) {
-          timeCounter = timeCounter + fisherCounter;
-          fisherCounter = fisherTime;
-          getView().setTime(formatTime(timeCounter));
-          getView().setFisherTime(formatTime(fisherCounter));
-        }
-        if (0 == timeCounter) {
-          timeTimer.cancel();
+        if (playerTimeSeconds <= 0) {
+          playerTimer.cancel();
           GameDto endGame = playSession.getGame();
           GameDto.GameEnds gameEnd = isMyTurn()
               ? (getView().isWhite() ? GameDto.GameEnds.BLACK_WIN : GameDto.GameEnds.WHITE_WIN)
-                  : (getView().isWhite() ? GameDto.GameEnds.WHITE_WIN : GameDto.GameEnds.BLACK_WIN);
+              : (getView().isWhite() ? GameDto.GameEnds.WHITE_WIN : GameDto.GameEnds.BLACK_WIN);
           endGame.setPlayEndStatus(gameEnd);
           GameMessageDto gameMessageDto = createGameMessage();
           gameMessageDto.setGame(endGame);
@@ -550,25 +554,13 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
             }
           }));
         }
-      }
-    };
-
-    fisherTimer = new Timer() {
-      @Override
-      public void run() {
-        if (isMyTurn() && fisherCounter > 0) {
-          fisherCounter--;
-          getView().setFisherTime(formatTime(fisherCounter));
-        }
-        if (fisherCounter == 0) {
-          timeCounter = timeCounter - fisherTime;
-          fisherCounter = fisherTime;
+        if (opponentTimeSeconds <= 0) {
+          playerTimer.cancel();
         }
       }
     };
 
-    timeTimer.scheduleRepeating(1000);
-    fisherTimer.scheduleRepeating(1000);
+    playerTimer.scheduleRepeating(1000);
   }
 
   private void updatePlayerFriendList() {
@@ -589,8 +581,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     void setPlayerList(List<PlayerDto> playerList);
 
     void toggleInPlayButton();
-
-    void setUpViewOnDisconnectFromServer();
 
     void hidePlayButtonAndShowPlayingButtons();
 
@@ -622,8 +612,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
     String takeScreenshot();
 
-    void setOpponent(PlayerDto opponent);
-
     Board getBoard();
 
     void initNotationPanel(Long gameId);
@@ -634,8 +622,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
     String getFisherTime();
 
-    void setTime(String time);
+    void setPlayerTime(String time);
 
-    void setFisherTime(String fisherTime);
+    void setOpponentTime(String time);
   }
 }

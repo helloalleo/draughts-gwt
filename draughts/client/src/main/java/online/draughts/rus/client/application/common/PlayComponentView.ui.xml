@@ -32,20 +32,16 @@
                         <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных">
                             <ui:attribute name="text" description="0 - Чёрных"/>
                         </g:Label>
-                        <b:Heading size="H5" text="Время:">
-                            <ui:attribute name="text" description="Время"/>
-                        </b:Heading>
-                        <g:Label ui:field="timeLabel"/>
-                        <b:Heading size="H5" text="Время на ход:">
-                            <ui:attribute name="text" description="Время на ход"/>
-                        </b:Heading>
-                        <g:Label ui:field="fisherTimeLabel"/>
+                        <b:Heading ui:field="playerTimeLabel" size="H5"/>
+                        <g:Label ui:field="playerTime"/>
+                        <b:Heading ui:field="opponentTimeLabel" size="H5"/>
+                        <g:Label ui:field="opponentTime"/>
                         <b:Button ui:field="cancelMove" text="Отменить ход" block="true">
                             <ui:attribute name="text" description="Отменить ход"/>
                         </b:Button>
                     </g:HTMLPanel>
                     <g:HTMLPanel ui:field="notationHTMLPanel">
-                        <b:Heading size="H5" text="Нотация:">
+                        <b:Heading ui:field="notationLabel" size="H5" text="Нотация:">
                             <ui:attribute name="text" description="Нотация"/>
                         </b:Heading>
                         <g:HTMLPanel ui:field="notationList"/>
@@ -81,14 +77,16 @@
                         <ui:attribute name="text" description="Недавно играли с вами"/>
                     </b:Heading>
                     <g:ScrollPanel ui:field="playerCellTablePanel" width="100%">
-                        <b.gwt:CellTable ui:field="friendCellTable" addStyleNames="{res.style.playCellTable}" condensed="true" striped="true" hover="true"/>
+                        <b.gwt:CellTable ui:field="friendCellTable" addStyleNames="{res.style.playCellTable}"
+                                         condensed="true" striped="true" hover="true"/>
                     </g:ScrollPanel>
 
                     <b:Heading size="H5" text="Список игроков:">
                         <ui:attribute name="text" description="Список игроков"/>
                     </b:Heading>
                     <g:ScrollPanel ui:field="friendCellTablePanel" height="50%" width="100%">
-                        <b.gwt:CellTable ui:field="playerCellTable" addStyleNames="{res.style.playCellTable}" condensed="true" striped="true" hover="true"/>
+                        <b.gwt:CellTable ui:field="playerCellTable" addStyleNames="{res.style.playCellTable}"
+                                         condensed="true" striped="true" hover="true"/>
                     </g:ScrollPanel>
                     <b:InputGroup>
                         <b:TextBox ui:field="playerSearch" placeholder="Поиск игроков" autoComplete="true"

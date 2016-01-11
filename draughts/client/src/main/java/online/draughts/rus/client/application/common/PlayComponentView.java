@@ -42,6 +42,7 @@ import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.Heading;
 import org.gwtbootstrap3.client.ui.Icon;
 import org.gwtbootstrap3.client.ui.TextBox;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
@@ -104,9 +105,15 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @UiField
   TextBox playerSearch;
   @UiField
-  Label timeLabel;
+  Label playerTime;
   @UiField
-  Label fisherTimeLabel;
+  Label opponentTime;
+  @UiField
+  Heading notationLabel;
+  @UiField
+  Heading playerTimeLabel;
+  @UiField
+  Heading opponentTimeLabel;
   SingleSelectionModel<FriendDto> playerFriendSelectionModel;
   SingleSelectionModel<PlayerDto> playerSelectionModel;
   private boolean prevSelected = false;
@@ -277,7 +284,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     }
     notationPanel = notationPanelFactory.createNotationPanel(gameId);
     notationList.add(notationPanel);
-    notationHTMLPanel.setHeight((notationColumn.getOffsetHeight() - infoHTMLPanel.getOffsetHeight()) + "px");
+    notationHTMLPanel.setHeight((draughtsColumn.getOffsetHeight() - 80 - infoHTMLPanel.getOffsetHeight()) + "px");
+    notationPanel.setHeight((notationHTMLPanel.getOffsetHeight() - notationLabel.getOffsetHeight()) + "px");
   }
 
   @Override
@@ -297,13 +305,13 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void setTime(String time) {
-    timeLabel.setText(time);
+  public void setPlayerTime(String time) {
+    playerTime.setText(time);
   }
 
   @Override
-  public void setFisherTime(String fisherTime) {
-    fisherTimeLabel.setText(fisherTime);
+  public void setOpponentTime(String time) {
+    opponentTime.setText(time);
   }
 
   @Override
@@ -606,26 +614,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void setUpViewOnDisconnectFromServer() {
-    playButton.setActive(true);
-    playButton.setBlock(true);
-    playButton.setType(ButtonType.DANGER);
-    playButton.setIcon(IconType.REFRESH);
-    playButton.setText(messages.reconnect());
-    cancelMove.setEnabled(false);
-    playerSearch.setEnabled(false);
-
-    playerCellTable.setRowData(new ArrayList<PlayerDto>());
-    friendCellTable.setRowData(new ArrayList<FriendDto>());
-    turnLabel.setHTML(messages.youDisconnected());
-
-    timeLabel.setText("");
-    fisherTimeLabel.setText("");
-
-    hidePlayingButtonsAndShowPlayButton();
-  }
-
-  @Override
   public void hidePlayingButtonsAndShowPlayButton() {
     playButton.setVisible(true);
     drawButton.setVisible(false);
@@ -653,8 +641,10 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
     getUiHandlers().stopTimers();
     turnLabel.setHTML(messages.playDidNotStart());
-    timeLabel.setText("");
-    fisherTimeLabel.setText("");
+    playerTime.setText("");
+    opponentTime.setText("");
+    playerTimeLabel.setText("");
+    opponentTimeLabel.setText("");
   }
 
   public void setBeatenMy(int count) {
@@ -677,6 +667,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     lienzoPanel.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     cancelMove.setEnabled(true);
     hidePlayButtonAndShowPlayingButtons();
+
+    playerTimeLabel.setText(messages.timeLabel(player.getPublicName()));
+    opponentTimeLabel.setText(messages.timeLabel(getOpponent().getPublicName()));
 
 //    lienzoPanel.addClickHandler(new ClickHandler() {
 //      @Override
@@ -742,7 +735,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         PlayComponentView.this.fisherTime = fisherTime;
       }
     };
-    inviteDialogBox.show(messages.inviteToPlay(opponent.getPublicName(),
+    inviteDialogBox.show(messages.inviteToPlay(getOpponent().getPublicName(),
         messages.draughts()));
   }
 
@@ -762,22 +755,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   private BoardBackgroundLayer initDeskPanel(boolean white) {
     int lienzoSide = lienzoPanel.getHeight() - 50;
-//    if (lienzoSide > 800) {
-//      lienzoSide = 800;
-//    } else if (lienzoSide < 200) {
-//      lienzoSide = 200;
-//    }
     BoardBackgroundLayer boardBackgroundLayer = new BoardBackgroundLayer(
         lienzoSide, lienzoSide - 30,
         8, 8);
     boardBackgroundLayer.drawCoordinates(white);
     lienzoPanel.setBackgroundLayer(boardBackgroundLayer);
     return boardBackgroundLayer;
-  }
-
-  @Override
-  public void setOpponent(PlayerDto opponent) {
-    this.opponent = opponent;
   }
 
   @Override

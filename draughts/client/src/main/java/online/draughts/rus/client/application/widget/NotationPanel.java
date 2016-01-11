@@ -1,14 +1,12 @@
 package online.draughts.rus.client.application.widget;
 
 
-import com.google.gwt.core.client.Scheduler;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
 import com.google.web.bindery.event.shared.EventBus;
 import com.google.web.bindery.event.shared.HandlerRegistration;
 import online.draughts.rus.client.event.*;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.util.StringUtils;
 
@@ -26,7 +24,6 @@ public class NotationPanel extends ScrollPanel {
   public static final String BEAT_SEP = ":";
   public static final String MOVE_SEP = " ";
   public static final String COUNT_SEP = ". ";
-  private static final String NOTATION_WIDTH = "200px";
   public static final String DATA_SIMPLE_ATTR = "data-simple";
   public static final String DATA_STOP_BEAT_ATTR = "data-stopbeat";
   public static final String DATA_CONTINUE_BEAT_ATTR = "data-continuebeat";
@@ -69,13 +66,6 @@ public class NotationPanel extends ScrollPanel {
       @Override
       public void onClearNotation(ClearNotationEvent event) {
         cleanNotationPanel();
-      }
-    });
-
-    Scheduler.get().scheduleFinally(new Scheduler.ScheduledCommand() {
-      @Override
-      public void execute() {
-        setWidth(NOTATION_WIDTH);
       }
     });
   }

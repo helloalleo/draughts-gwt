@@ -1010,4 +1010,6 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String concede();
 
   String draw();
+
+  String timeLabel(String playerName);
 }
