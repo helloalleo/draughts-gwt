@@ -6,10 +6,10 @@
 
     <g:HTMLPanel ui:field="main">
         <b:Row>
-            <b:Column size="XS_6 SM_6 MD_6 LG_6" ui:field="whiteDeskColumn">
+            <b:Column size="MD_6 LG_6" ui:field="whiteDeskColumn">
                 <g:HTMLPanel ui:field="draughtsDesk" debugId="draughtsWhiteDesk"/>
             </b:Column>
-            <b:Column size="XS_2 SM_2 MD_2 LG_2">
+            <b:Column size="MD_2 LG_2">
                 <g:HTMLPanel ui:field="draughtControls">
                     <g:HTMLPanel>
                         <b:RadioButton ui:field="whiteDraughtButton" text="Белые &nbsp;&nbsp;&nbsp;1" name="addDraughtGroup"/>

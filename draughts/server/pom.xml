@@ -322,26 +322,6 @@
                 </configuration>
             </plugin>
 
-            <!--<plugin>-->
-            <!--<groupId>org.apache.maven.plugins</groupId>-->
-            <!--<artifactId>maven-war-plugin</artifactId>-->
-            <!--<version>2.6</version>-->
-            <!--<configuration>-->
-            <!--<webXml>${project.build.directory}/generated-sources/appengine-endpoints/WEB-INF/web.xml</webXml>-->
-            <!--<webappDirectory>-->
-            <!--${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}-->
-            <!--</webappDirectory>-->
-            <!--</configuration>-->
-            <!--<executions>-->
-            <!--<execution>-->
-            <!--<id>war</id>-->
-            <!--<phase>package</phase>-->
-            <!--<goals>-->
-            <!--<goal>war</goal>-->
-            <!--</goals>-->
-            <!--</execution>-->
-            <!--</executions>-->
-            <!--</plugin>-->
             <plugin>
                 <groupId>com.google.appengine</groupId>
                 <artifactId>appengine-maven-plugin</artifactId>
@@ -351,8 +331,8 @@
                     <enableJarClasses>false</enableJarClasses>
                     <version>${app.version}</version>
                     <!-- Comment in the below snippet to bind to all IPs instead of just localhost -->
-                    <!-- address>0.0.0.0</address>
-                    <port>8080</port -->
+                    <address>0.0.0.0</address>
+                    <port>8080</port>
                     <!-- Comment in the below snippet to enable local debugging with a remote debugger
                          like those included with Eclipse or IntelliJ -->
                     <!-- jvmFlags>

@@ -59,6 +59,10 @@ public class Player extends ModelImpl<Player> {
   @Index
   private boolean subscribed;
   @Index
+  private boolean moderator;
+  @Index
+  private boolean admin;
+  @Index
   private boolean active;
   private boolean subscribeOnNewsletter;
 
@@ -76,6 +80,24 @@ public class Player extends ModelImpl<Player> {
 
   public void setSubscribed(boolean subscribed) {
     this.subscribed = subscribed;
+  }
+
+  public boolean isModerator() {
+    return moderator;
+  }
+
+  public Player setModerator(boolean moderator) {
+    this.moderator = moderator;
+    return this;
+  }
+
+  public boolean isAdmin() {
+    return admin;
+  }
+
+  public Player setAdmin(boolean admin) {
+    this.admin = admin;
+    return this;
   }
 
   public boolean isActive() {
@@ -336,6 +358,8 @@ public class Player extends ModelImpl<Player> {
   @Override
   public List<Player> findAll() {
     Query query = new Query(getEntityName());
+    query.addSort("admin", Query.SortDirection.DESCENDING);
+    query.addSort("moderator", Query.SortDirection.DESCENDING);
     query.addSort("online", Query.SortDirection.DESCENDING);
     PreparedQuery preparedQuery = getDatastore().prepare(query);
     return getListResult(preparedQuery);

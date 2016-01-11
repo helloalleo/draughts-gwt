@@ -36,8 +36,6 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   @UiField
   Navbar navbar;
 
-  private Button localeEn;
-  private Button localeRu;
   private AnchorListItem prevAnchor;
   private NameTokens nameTokens;
   private AppResources resources;
@@ -186,6 +184,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     navbar.getElement().addClassName(resources.style().navbarScroll());
     navbar.getElement().removeClassName(resources.style().navbarTop());
     setLinkHeight(navbarScrollHeight);
+    brand.setHeight(navbarScrollHeight);
     logo.addStyleName(resources.style().logoScroll());
     logo.removeStyleName(resources.style().logoTop());
     navRight.insert(scrollToTop, 0);
@@ -196,6 +195,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     navbar.getElement().addClassName(resources.style().navbarTop());
     navbar.getElement().removeClassName(resources.style().navbarScroll());
     setLinkHeight(navbarTopHeight);
+    brand.setHeight(navbarTopHeight);
     logo.addStyleName(resources.style().logoTop());
     logo.removeStyleName(resources.style().logoScroll());
     navRight.remove(scrollToTop);

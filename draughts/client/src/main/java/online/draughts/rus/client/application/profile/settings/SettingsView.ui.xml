@@ -22,7 +22,7 @@
                             <b:Row>
                                 <b:Column size="XS_9 SM_9 MD_9 LG_9">
                                     <b:InputGroup>
-                                        <b:InputGroupAddon icon="USER">
+                                        <b:InputGroupAddon ui:field="playerNameAddon" icon="USER">
                                             <ui:msg description="A player name on the site"
                                                     key="playerNameOnSite">
                                                 Имя на сайте
@@ -52,25 +52,6 @@
                                     </b:CheckBox>
                                 </b:Column>
                             </b:Row>
-
-                            <!--<b:Row>-->
-                            <!--<b:Column size="MD_9">-->
-                            <!--<b:InputGroup>-->
-                            <!--<b:InputGroupAddon icon="EXTERNAL_LINK">-->
-                            <!--</b:InputGroupAddon>-->
-                            <!--<b:TextBox ui:field="inviteLinkTextBox" placeholder="Ссылка для приглашения">-->
-                            <!--<ui:attribute name="placeholder"-->
-                            <!--description="Ссылка для приглашения"/>-->
-                            <!--</b:TextBox>-->
-                            <!--</b:InputGroup>-->
-                            <!--</b:Column>-->
-                            <!--<b:Column size="MD_3">-->
-                            <!--<b:Button ui:field="generateLink" text="Создать"-->
-                            <!--addStyleNames="btn btn-default btn-block">-->
-                            <!--<ui:attribute name="text" description="Создать"/>-->
-                            <!--</b:Button>-->
-                            <!--</b:Column>-->
-                            <!--</b:Row>-->
                         </g:HTMLPanel>
                     </b:PanelBody>
                 </b:Panel>

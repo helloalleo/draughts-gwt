@@ -89,9 +89,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   }
 
   @Override
-  protected void onBind() {
-    super.onBind();
-
+  protected void onReveal() {
     getView().setShowLoggedInControls(currentSession.isLoggedIn());
     playersDelegate.withCallback(new AbstractAsyncCallback<Integer>() {
       @Override

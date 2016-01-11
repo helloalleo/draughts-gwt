@@ -19,4 +19,9 @@
         <property name="sentDate" direction="asc"/>
     </datastore-index>
 
+    <datastore-index kind="Player" ancestor="false" source="manual">
+        <property name="admin" direction="desc"/>
+        <property name="moderator" direction="desc"/>
+        <property name="online" direction="desc"/>
+    </datastore-index>
 </datastore-indexes>

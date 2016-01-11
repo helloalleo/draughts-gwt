@@ -14,18 +14,18 @@
             <b:Column size="XS_8 SM_8 MD_8 LG_8" offset="XS_2 SM_2 MD_2 LG_2">
                 <b:Row>
                     <b:Column size="XS_3 SM_3 MD_3 LG_3">
-                        <b:Icon type="SIGN_IN" size="TIMES5" addStyleNames="{res.style.alignHorizontal}"/>
+                        <b:Icon ui:field="signIn" type="SIGN_IN" size="TIMES5" addStyleNames="{res.style.alignHorizontal}"/>
                     </b:Column>
                     <b:Column size="XS_3 SM_3 MD_3 LG_3">
-                        <b:Anchor href="/vkOAuth" icon="VK" iconSize="TIMES5"
+                        <b:Anchor ui:field="vkSignIn" href="/vkOAuth" icon="VK" iconSize="TIMES5"
                                   addStyleNames="{res.style.alignHorizontal}"/>
                     </b:Column>
                     <b:Column size="XS_3 SM_3 MD_3 LG_3">
-                        <b:Anchor href="/fbOAuth" icon="FACEBOOK_OFFICIAL" iconSize="TIMES5"
+                        <b:Anchor ui:field="fbSignIn" href="/fbOAuth" icon="FACEBOOK_OFFICIAL" iconSize="TIMES5"
                                   addStyleNames="{res.style.alignHorizontal}"/>
                     </b:Column>
                     <b:Column size="XS_3 SM_3 MD_3 LG_3">
-                        <b:Anchor href="/gOAuth" icon="GOOGLE" iconSize="TIMES5"
+                        <b:Anchor ui:field="gSignIn" href="/gOAuth" icon="GOOGLE" iconSize="TIMES5"
                                   addStyleNames="{res.style.alignHorizontal}"/>
                     </b:Column>
                 </b:Row>

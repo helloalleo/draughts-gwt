@@ -52,7 +52,12 @@ public class ProfileView extends ViewWithUiHandlers<ProfileUiHandlers> implement
   }
 
   private AnchorListItem createAnchor(final NameTokens.Link link) {
-    final AnchorListItem anchor = new AnchorListItem(link.name);
+    final AnchorListItem anchor;
+    if (Window.getClientWidth() < 768) {
+      anchor = new AnchorListItem();
+    } else {
+      anchor = new AnchorListItem(link.name);
+    }
     switch (link.token) {
       case NameTokens.settingsPage:
         anchor.setIcon(IconType.COG);

@@ -19,6 +19,7 @@ import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
@@ -143,6 +144,13 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     int axillaryWidgets = 80;
     playerCellTablePanel.setHeight(playerListColumn.getOffsetHeight() / 2 - axillaryWidgets + "px");
     friendCellTablePanel.setHeight(playerListColumn.getOffsetHeight() / 2 - axillaryWidgets + "px");
+
+    if (Window.getClientWidth() < 768) {
+      surrenderButton.setText("");
+      surrenderButton.setIcon(IconType.FLAG_O);
+      surrenderButton.setTitle(messages.concede());
+      drawButton.setText(messages.draw());
+    }
   }
 
   @SuppressWarnings(value = "unused")
@@ -505,25 +513,36 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   private SafeHtml getStatusSafeHtml(PlayerDto player) {
     if (player.getId() == this.player.getId()) {
-      Icon html = getIconString(IconType.USER);
-      html.setTitle(messages.rating(String.valueOf(this.player.getRating())));
-      return new SafeHtmlBuilder().appendHtmlConstant(html.getElement().getString()).toSafeHtml();
+      if (player.isModerator()) {
+        Image img = new Image(resources.images().moderator().getSafeUri());
+        img.setTitle(messages.moderator());
+        return new SafeHtmlBuilder().appendHtmlConstant(img.getElement().getString()).toSafeHtml();
+      } else {
+        Icon html = getIconString(IconType.USER);
+        html.setTitle(messages.rating(String.valueOf(this.player.getRating())));
+        return new SafeHtmlBuilder().appendHtmlConstant(html.getElement().getString()).toSafeHtml();
+      }
     }
     Image img;
     String playerPublicName = player.getPublicName();
-    if (player.isPlaying()) {
-      img = new Image(resources.images().playingIconImage().getSafeUri());
-      img.setTitle(playerPublicName + " " + messages.playingTitle());
+    if (player.isModerator()) {
+      img = new Image(resources.images().moderator().getSafeUri());
+      img.setTitle(messages.moderator());
     } else {
-      if (player.isOnline()) {
-        img = new Image(resources.images().onlineIconImage().getSafeUri());
-        img.setTitle(playerPublicName + " " + messages.onlineTitle());
+      if (player.isPlaying()) {
+        img = new Image(resources.images().playingIconImage().getSafeUri());
+        img.setTitle(playerPublicName + " " + messages.playingTitle());
       } else {
-        img = new Image(resources.images().offlineIconImage().getSafeUri());
-        img.setTitle(playerPublicName + " " + messages.offlineTitle());
+        if (player.isOnline()) {
+          img = new Image(resources.images().onlineIconImage().getSafeUri());
+          img.setTitle(playerPublicName + " " + messages.onlineTitle());
+        } else {
+          img = new Image(resources.images().offlineIconImage().getSafeUri());
+          img.setTitle(playerPublicName + " " + messages.offlineTitle());
+        }
       }
+      img.setTitle(img.getTitle() + " " + messages.rating(String.valueOf(player.getRating())));
     }
-    img.setTitle(messages.rating(String.valueOf(player.getRating())));
     return new SafeHtmlBuilder().appendHtmlConstant(img.getElement().getString()).toSafeHtml();
   }
 

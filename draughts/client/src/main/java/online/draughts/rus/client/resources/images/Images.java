@@ -45,4 +45,7 @@ public interface Images extends ClientBundle {
 
   @Source("img/me.jpg")
   ImageResource me();
+
+  @Source("img/moderator.png")
+  ImageResource moderator();
 }

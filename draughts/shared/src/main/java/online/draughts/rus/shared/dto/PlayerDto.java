@@ -25,6 +25,8 @@ public class PlayerDto extends BaseDto {
   private boolean online;
 
   private boolean subscribed;
+  private boolean moderator;
+  private boolean admin;
   private boolean subscribeOnNewsletter;
 
   public PlayerDto() {
@@ -37,6 +39,24 @@ public class PlayerDto extends BaseDto {
 
   public boolean isSubscribed() {
     return subscribed;
+  }
+
+  public boolean isModerator() {
+    return moderator;
+  }
+
+  public PlayerDto setModerator(boolean moderator) {
+    this.moderator = moderator;
+    return this;
+  }
+
+  public boolean isAdmin() {
+    return admin;
+  }
+
+  public PlayerDto setAdmin(boolean admin) {
+    this.admin = admin;
+    return this;
   }
 
   public String getFirstName() {

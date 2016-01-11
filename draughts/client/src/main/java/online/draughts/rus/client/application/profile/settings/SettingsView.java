@@ -6,12 +6,16 @@ import com.google.gwt.event.dom.client.KeyPressEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.uibinder.client.UiHandler;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.CheckBox;
+import org.gwtbootstrap3.client.ui.InputGroupAddon;
 import org.gwtbootstrap3.client.ui.TextBox;
+import org.gwtbootstrap3.client.ui.constants.IconType;
 
 public class SettingsView extends ViewWithUiHandlers<SettingsUiHandlers> implements SettingsPresenter.MyView {
   @UiField
@@ -20,12 +24,25 @@ public class SettingsView extends ViewWithUiHandlers<SettingsUiHandlers> impleme
   TextBox playerNameTextBox;
   @UiField
   CheckBox subscribeOnNewsletter;
+  @UiField
+  Button submitPlayerNameButton;
+  @UiField
+  InputGroupAddon playerNameAddon;
 
   @Inject
   SettingsView(Binder uiBinder) {
     initWidget(uiBinder.createAndBindUi(this));
 
     bindSlot(SettingsPresenter.SLOT_SETTINGS, main);
+  }
+
+  @Override
+  protected void onAttach() {
+    if (Window.getClientWidth() < 768) {
+      submitPlayerNameButton.setText("");
+      submitPlayerNameButton.setIcon(IconType.SAVE);
+      playerNameAddon.setText("");
+    }
   }
 
   @Override
