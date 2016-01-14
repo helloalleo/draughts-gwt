@@ -187,6 +187,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String close();
 
   /**
+   * Translated "Concede".
+   * 
+   * @return translated "Concede"
+   */
+  @DefaultMessage("Concede")
+  @Key("concede")
+  String concede();
+
+  /**
    * Translated "Confirm".
    * 
    * @return translated "Confirm"
@@ -257,6 +266,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Pieces captured")
   @Key("draughtsBeaten")
   String draughtsBeaten();
+
+  /**
+   * Translated "Draw".
+   * 
+   * @return translated "Draw"
+   */
+  @DefaultMessage("Draw")
+  @Key("draw")
+  String draw();
 
   /**
    * Translated "Error".
@@ -455,6 +473,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Minutes")
   @Key("minutes")
   String minutes();
+
+  /**
+   * Translated "Moderator".
+   * 
+   * @return translated "Moderator"
+   */
+  @DefaultMessage("Moderator")
+  @Key("moderator")
+  String moderator();
 
   /**
    * Translated "My games".
@@ -691,11 +718,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String playerRejectedMoveCancel(String arg0);
 
   /**
-   * Translated "<i>{0}</i> refused to play with you".
+   * Translated "<i>{0}</i> rejected your challenge".
    * 
-   * @return translated "<i>{0}</i> refused to play with you"
+   * @return translated "<i>{0}</i> rejected your challenge"
    */
-  @DefaultMessage("<i>{0}</i> refused to play with you")
+  @DefaultMessage("<i>{0}</i> rejected your challenge")
   @Key("playerRejectedPlayRequest")
   String playerRejectedPlayRequest(String arg0);
 
@@ -824,6 +851,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("symbols")
   @Key("symbolsLeft")
   String symbolsLeft();
+
+  /**
+   * Translated "Time {0}".
+   * 
+   * @return translated "Time {0}"
+   */
+  @DefaultMessage("Time {0}")
+  @Key("timeLabel")
+  String timeLabel(String arg0);
 
   /**
    * Translated "Match time".
@@ -1004,12 +1040,4 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("<span style=\"color:green;\">Your turn</span>")
   @Key("yourTurn")
   String yourTurn();
-
-  String moderator();
-
-  String concede();
-
-  String draw();
-
-  String timeLabel(String playerName);
 }
