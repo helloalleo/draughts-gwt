@@ -31,7 +31,7 @@ public class ServerConfiguration {
   private final String fbScope;
   private final String fbApiVersion;
   private final String fbApiGraph;
-  private final String gaeCronCheckInterval;
+  private final String gaeCronCheckIntervalHour;
   private String fbApiOAuthPath;
   private String loginUrl;
   private String homeUrl;
@@ -51,7 +51,7 @@ public class ServerConfiguration {
     ResourceBundle resourceBundle = ResourceBundle.getBundle("ServerConfiguration");
 
     gaeCronIpAddr = resourceBundle.getString("gae_cron_ip_addr");
-    gaeCronCheckInterval = resourceBundle.getString("gae_cron_check_interval");
+    gaeCronCheckIntervalHour = resourceBundle.getString("gae_cron_check_interval_hour");
     fromEmail = resourceBundle.getString("from_email");
 
     context = resourceBundle.getString("context");
@@ -204,8 +204,8 @@ public class ServerConfiguration {
     return gaeCronIpAddr;
   }
 
-  public String getGaeCronCheckInterval() {
-    return gaeCronCheckInterval;
+  public String getGaeCronCheckIntervalHour() {
+    return gaeCronCheckIntervalHour;
   }
 
   public String getFromEmail() {

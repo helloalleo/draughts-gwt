@@ -42,4 +42,8 @@ interface PlayComponentUiHandlers extends UiHandlers {
   void didNotResponse(PlayerDto opponent);
 
   void stopTimers();
+
+  String getTimeOnPlayStringMinutes();
+
+  String getFisherTimeStringSecond();
 }

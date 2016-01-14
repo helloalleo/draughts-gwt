@@ -59,6 +59,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private int opponentTimeSeconds;
   private Timer playerTimer;
   private int fisherTimeSeconds;
+  private String timeOnPlayStringMinutes;
+  private String fisherTimeStringSecond;
 
   @Inject
   PlayComponentPresenter(
@@ -342,6 +344,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         getView().hideInviteDialog();
         getView().startPlay(event.isWhite());
 
+        timeOnPlayStringMinutes =String.valueOf(event.getTimeOnPlay());
+        fisherTimeStringSecond  = String.valueOf(event.getFisherTime());
         initTimers(event.getTimeOnPlay(), event.getFisherTime());
 
         GameDto game = playSession.getGame();
@@ -515,6 +519,16 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     });
   }
 
+  @Override
+  public String getTimeOnPlayStringMinutes() {
+    return timeOnPlayStringMinutes;
+  }
+
+  @Override
+  public String getFisherTimeStringSecond() {
+    return fisherTimeStringSecond;
+  }
+
   private String formatTime(int counter) {
     int min = counter / 60;
     int sec = counter - min * 60;
@@ -522,7 +536,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   private void initTimers(int timeOnPlay, final int fisherTime) {
-    this.fisherTimeSeconds = fisherTime;
+    this.fisherTimeSeconds = fisherTime + 1;
     playerTimeSeconds = timeOnPlay * 60;
     opponentTimeSeconds = timeOnPlay * 60;
 

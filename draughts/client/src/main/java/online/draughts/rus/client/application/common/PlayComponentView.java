@@ -668,8 +668,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     cancelMove.setEnabled(true);
     hidePlayButtonAndShowPlayingButtons();
 
-    playerTimeLabel.setText(messages.timeLabel(player.getPublicName()));
-    opponentTimeLabel.setText(messages.timeLabel(getOpponent().getPublicName()));
+    playerTimeLabel.setText(isWhite() ? messages.white() : messages.black());
+    playerTimeLabel.setSubText(player.getPublicName() + " "
+        + getUiHandlers().getTimeOnPlayStringMinutes() + "+" + getUiHandlers().getFisherTimeStringSecond());
+    opponentTimeLabel.setText(!isWhite() ? messages.white() : messages.black());
+    opponentTimeLabel.setSubText(opponent.getPublicName() + " "
+        + getUiHandlers().getTimeOnPlayStringMinutes() + "+" + getUiHandlers().getFisherTimeStringSecond());
 
 //    lienzoPanel.addClickHandler(new ClickHandler() {
 //      @Override
