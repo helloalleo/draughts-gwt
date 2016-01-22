@@ -21,7 +21,6 @@ import online.draughts.rus.client.json.GameMessageMapper;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.AudioUtil;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.channel.Chunk;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.GameMessageDto;
@@ -188,10 +187,10 @@ public class ClientChannel implements ChannelListener {
             GameMessageDto message = createGameMessage(gameMessage);
             message.setMessageType(GameMessageDto.MessageType.PLAY_START);
             message.setGame(result);
-            String[] time = gameMessage.getData().split(PlayComponentPresenter.INVITE_TIME_DELIMITER);
+            String[] time = gameMessage.getData().split(PlayComponentPresenter.INVITE_MESSAGE_DELIMITER);
             message.setData(String.valueOf(!isWhite())
-                + PlayComponentPresenter.INVITE_TIME_DELIMITER + time[1]
-                + PlayComponentPresenter.INVITE_TIME_DELIMITER + time[2]);
+                + PlayComponentPresenter.INVITE_MESSAGE_DELIMITER + time[1]
+                + PlayComponentPresenter.INVITE_MESSAGE_DELIMITER + time[2]);
 
             sendGameMessage(message);
 
@@ -210,7 +209,11 @@ public class ClientChannel implements ChannelListener {
         sendGameMessage(message);
       }
     };
-    confirmPlayDialogBox.show(gameMessage.getMessage(), Boolean.valueOf(gameMessage.getData()));
+    String[] data = gameMessage.getData().split(PlayComponentPresenter.INVITE_MESSAGE_DELIMITER);
+    final String color = Boolean.valueOf(data[0]) ?
+        messages.whitesil() : messages.blacksil();
+    confirmPlayDialogBox.show(messages.inviteMessage(gameMessage.getMessage(), color, data[1], data[2]),
+        Boolean.valueOf(gameMessage.getData()));
     AudioUtil.playSound(resources.sounds().inviteSound());
   }
 
@@ -484,7 +487,7 @@ public class ClientChannel implements ChannelListener {
   private void handlePlayStart(final GameMessageDto gameMessage) {
     playSession.setOpponent(gameMessage.getSender());
     playSession.setGame(gameMessage.getGame());
-    String[] data = gameMessage.getData().split(PlayComponentPresenter.INVITE_TIME_DELIMITER);
+    String[] data = gameMessage.getData().split(PlayComponentPresenter.INVITE_MESSAGE_DELIMITER);
     boolean white = Boolean.valueOf(data[0]);
     eventBus.fireEvent(new StartPlayEvent(white, true, Integer.valueOf(data[1]), Integer.valueOf(data[2])));
   }

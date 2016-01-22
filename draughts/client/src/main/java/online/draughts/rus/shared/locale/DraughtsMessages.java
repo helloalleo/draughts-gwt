@@ -427,7 +427,7 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
    */
   @DefaultMessage("{0} invites you to play. You are playing {1}. Accept the challenge?")
   @Key("inviteMessage")
-  String inviteMessage(String arg0,  String arg1);
+  String inviteMessage(String arg0, String arg1, String s, String s1);
 
   /**
    * Translated "Inviting <i>{0}</i> to play {1}".

@@ -168,7 +168,7 @@ public class NotationPanel extends ScrollPanel {
     getElement().setInnerHTML(notation.toString());
   }
 
-  void cleanNotationPanel() {
+  public void cleanNotationPanel() {
     notation = new StringBuilder();
     getElement().setInnerHTML("");
     order = 0;

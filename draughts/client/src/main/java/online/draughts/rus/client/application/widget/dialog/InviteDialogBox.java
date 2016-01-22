@@ -35,7 +35,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   private final TextBox fisherTime;
 
   private int waitCounter = 0;
-  private final int WAIT = 14;
+  private final int WAIT = 20;
   private Timer timerCounterTimer;
   private Label waitMessageLabel;
 
@@ -165,6 +165,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
       @Override
       public void run() {
         hide();
+        didNotResponse();
         stopTimers();
       }
     };
@@ -189,7 +190,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
           return;
         }
         waitMessage.setVisible(true);
-        waitResponseTimer.schedule((WAIT + 1) * 1000);
+        waitResponseTimer.schedule(WAIT * 1000);
         timerCounterTimer.scheduleRepeating(1000);
         String timeOnPlay;
         if (messages.specifyTime().equals(minutesListBox.getSelectedValue())) {
@@ -262,7 +263,6 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   public void hide() {
     super.hide();
     stopTimers();
-    didNotResponse();
   }
 
   public abstract void didNotResponse();

@@ -40,7 +40,7 @@ import java.util.*;
 public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresenter.MyView>
     implements PlayComponentUiHandlers {
 
-  public final static String INVITE_TIME_DELIMITER = ":";
+  public final static String INVITE_MESSAGE_DELIMITER = ":";
   private final static int DRAUGHTS_ON_DESK_INIT = 12;
   private final MessengerPresenter.Factory messengerFactory;
   private final PlayView playView;
@@ -131,9 +131,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         final boolean white = getView().getOpponentColor();
         final String timeOnPlay = getView().getTimeOnPlay();
         final String fisherTime = getView().getFisherTime();
-        gameMessage.setMessage(messages.inviteMessage(playSession.getPlayer().getPublicName(),
-            String.valueOf(white ? messages.whitesil() : messages.blacksil())));
-        gameMessage.setData(String.valueOf(white) + INVITE_TIME_DELIMITER + timeOnPlay + INVITE_TIME_DELIMITER + fisherTime);
+        gameMessage.setMessage(playSession.getPlayer().getPublicName());
+        gameMessage.setData(String.valueOf(white) + INVITE_MESSAGE_DELIMITER + timeOnPlay + INVITE_MESSAGE_DELIMITER + fisherTime);
 
         fireEvent(new GameMessageEvent(gameMessage));
       }
@@ -283,10 +282,10 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   @Override
-  public void didNotResponse(PlayerDto opponent) {
+  public void didNotResponse() {
     GameMessageDto gameMessageDto = new GameMessageDto();
     gameMessageDto.setSender(playSession.getPlayer());
-    gameMessageDto.setReceiver(opponent);
+    gameMessageDto.setReceiver(playSession.getOpponent());
     gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_DID_NOT_RESPONSE);
     fireEvent(new GameMessageEvent(gameMessageDto));
   }

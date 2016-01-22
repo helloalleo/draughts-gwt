@@ -120,7 +120,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private NotationPanel notationPanel;
   private InviteDialogBox inviteDialogBox;
   private boolean opponentColor;
-  private PlayerDto opponent;
   private Map<Long, Integer> unreadMessagesMap;
   private List<PlayerDto> playerList;
   private List<PlayerDto> playerOrigList;
@@ -638,6 +637,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Override
   public void clearPlayComponent() {
+    notationPanel.cleanNotationPanel();
+    notationList.remove(notationPanel);
     lienzoPanel.removeAll();
     board.clearDesk();
     draughtsDesk.remove(lienzoPanel);
@@ -649,7 +650,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playerTime.setText("");
     opponentTime.setText("");
     playerTimeLabel.setText("");
+    playerTimeLabel.setSubText("");
     opponentTimeLabel.setText("");
+    opponentTimeLabel.setSubText("");
   }
 
   public void setBeatenMy(int count) {
@@ -674,11 +677,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     hidePlayButtonAndShowPlayingButtons();
 
     playerTimeLabel.setText(isWhite() ? messages.white() : messages.black());
-    playerTimeLabel.setSubText(player.getPublicName() + " "
-        + getUiHandlers().getTimeOnPlayStringMinutes() + "+" + getUiHandlers().getFisherTimeStringSecond());
+    playerTimeLabel.setSubText(player.getPublicName());
     opponentTimeLabel.setText(!isWhite() ? messages.white() : messages.black());
-    opponentTimeLabel.setSubText(opponent.getPublicName() + " "
-        + getUiHandlers().getTimeOnPlayStringMinutes() + "+" + getUiHandlers().getFisherTimeStringSecond());
+    opponentTimeLabel.setSubText(playSession.getOpponent().getPublicName());
 
 //    lienzoPanel.addClickHandler(new ClickHandler() {
 //      @Override
@@ -734,7 +735,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     inviteDialogBox = new InviteDialogBox(inviteClickHandler) {
       @Override
       public void didNotResponse() {
-        getUiHandlers().didNotResponse(opponent);
+        getUiHandlers().didNotResponse();
       }
 
       @Override
