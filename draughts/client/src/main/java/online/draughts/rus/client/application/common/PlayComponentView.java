@@ -354,7 +354,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         return friend.getFriendOf().getPublicName();
       }
     };
-    publicNameColumn.setCellStyleNames(resources.style().cellWithButton());
+    publicNameColumn.setCellStyleNames(resources.style().cellWithName());
     friendCellTable.addColumn(publicNameColumn);
 
     final ButtonCell favoriteButtonCell = new ButtonCell();
@@ -469,7 +469,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         return player.getPublicName();
       }
     };
-    publicNameColumn.setCellStyleNames(resources.style().cellWithButton());
+    publicNameColumn.setCellStyleNames(resources.style().cellWithName());
     playerCellTable.addColumn(publicNameColumn);
 
     final ButtonCell writeButtonCell = new ButtonCell(ButtonType.LINK, IconType.PENCIL);

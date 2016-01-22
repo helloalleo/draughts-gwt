@@ -428,6 +428,11 @@ body {
     line-height: 2.4;
 }
 
+.cellWithName div {
+    line-height: 2.4;
+    width: 250px;
+}
+
 .playCellTable .btn {
     padding: 6px 0;
     float: left !important;

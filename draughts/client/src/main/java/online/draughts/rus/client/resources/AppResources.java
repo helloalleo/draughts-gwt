@@ -128,6 +128,8 @@ public interface AppResources extends ClientBundle {
 
     String cellWithButton();
 
+    String cellWithName();
+
     String playCellTable();
 
     String newMessageCircle();
