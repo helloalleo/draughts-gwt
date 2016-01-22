@@ -6,6 +6,7 @@ import com.ait.lienzo.client.core.event.NodeMouseClickHandler;
 import com.ait.lienzo.client.core.event.NodeTouchEndEvent;
 import com.ait.lienzo.client.core.event.NodeTouchEndHandler;
 import com.ait.lienzo.client.core.shape.Layer;
+import com.google.gwt.core.client.GWT;
 import online.draughts.rus.draughts.util.Operator;
 import online.draughts.rus.draughts.util.PossibleOperators;
 import online.draughts.rus.shared.dto.DraughtDto;
@@ -277,7 +278,6 @@ public class Board extends Layer {
    * Possible calcStroke in next and back direction
    *
    * @param sideWhite - цвет за который играет шашка
-   * @return возвращает побита ли шашка дамкой
    */
   private void possibleMovePair(Operator opRow, Operator opCol, int row, int col, boolean white, boolean sideWhite,
                                 boolean queen, List<Square> outPossibleMoves, List<Square> outJumpMoves,
@@ -342,13 +342,13 @@ public class Board extends Layer {
     List<Square> jumpMoves = new ArrayList<>(rows * cols);
     boolean foundAllMoves = false;
     while (!foundAllMoves) {
-      Square sq = null;
+      Square sq;
       try {
         sq = backgroundLayer.getSquare(row, col);
-        if (depth == 0) {
+        if (depth == 0 && !sq.isOccupied()) {
           possibleMoves.add(sq);
         }
-      } catch (SquareNotFoundException e) {
+      } catch (SquareNotFoundException ignored) {
       }
       if (!inBounds(opRow.apply(row, 1), opCol.apply(col, 1))) {
         break;
@@ -642,6 +642,12 @@ public class Board extends Layer {
     removeDraughtFrom(takenSquare, false);
   }
 
+  /**
+   * Удаляет шашку с клетки
+   * @param takenSquare клетка, на которой находится шашка
+   * @param clearDesk очистка доски, указывается в методах где выполняется очистка доски от шашек, а
+   *                  не взятие шашки
+   */
   private void removeDraughtFrom(Square takenSquare, final boolean clearDesk) {
     opponentDraughtList.remove(takenSquare.getOccupant());
     final Draught takenDraught = takenSquare.getOccupant();
@@ -665,6 +671,7 @@ public class Board extends Layer {
           @Override
           public void onClose(IAnimation iAnimation, IAnimationHandle iAnimationHandle) {
             remove(takenDraught);
+            GWT.log("remove");
             if (!isEmulate() && !clearDesk) {
               getView().checkWinner();
             }
@@ -1177,17 +1184,9 @@ public class Board extends Layer {
     public QueenMoves() {
     }
 
-    public List<Square> getPossibleMoves() {
-      return possibleMoves;
-    }
-
     public QueenMoves setPossibleMoves(List<Square> possibleMoves) {
       this.possibleMoves = possibleMoves;
       return this;
-    }
-
-    public List<Square> getJumpMoves() {
-      return jumpMoves;
     }
 
     public QueenMoves setJumpMoves(List<Square> jumpMoves) {

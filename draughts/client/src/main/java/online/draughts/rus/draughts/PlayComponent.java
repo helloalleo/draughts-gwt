@@ -1,7 +1,6 @@
 package online.draughts.rus.draughts;
 
 import online.draughts.rus.shared.dto.MoveDto;
-import online.draughts.rus.shared.dto.PlayerDto;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,15 +11,9 @@ import online.draughts.rus.shared.dto.PlayerDto;
 public interface PlayComponent {
   void checkWinner();
 
-  void addNotationStroke(Stroke strokeForNotation);
-
   void toggleTurn(boolean turn);
 
   void doPlayerMove(MoveDto move);
 
-  PlayerDto getPlayer();
-
-  PlayerDto getOpponent();
-
-  String takeScreenshot();
+  void addNotationStroke(Stroke strokeForNotation);
 }

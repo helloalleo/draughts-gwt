@@ -56,8 +56,7 @@ public class NotationPanelTest {
 
   @Before
   public void setUp() {
-    SimpleEventBus eventBus = new SimpleEventBus();
-    notationPanel = new NotationPanel(eventBus, 1L);
+    notationPanel = new NotationPanel(1L);
   }
 
   @Test

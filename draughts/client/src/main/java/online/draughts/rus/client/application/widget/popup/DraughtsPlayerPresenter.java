@@ -6,10 +6,8 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import online.draughts.rus.client.event.CheckWinnerEvent;
-import online.draughts.rus.client.event.NotationStrokeEvent;
 import online.draughts.rus.client.event.PlayMovePlayerMessageEvent;
 import online.draughts.rus.client.event.TurnChangeEvent;
-import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.MoveDto;
 
@@ -52,11 +50,6 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
   @Override
   public void checkWinner() {
     fireEvent(new CheckWinnerEvent());
-  }
-
-  @Override
-  public void addNotationStroke(Stroke strokeForNotation) {
-    fireEvent(new NotationStrokeEvent(strokeForNotation));
   }
 
   @Override

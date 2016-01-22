@@ -84,7 +84,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @UiField
   Label beatenOpponentDraughtsLabel;
   @UiField
-  Label beatenMineDraughtsLabel;
+  Label beatenMyDraughtsLabel;
   @UiField
   Button cancelMove;
   private Board board;
@@ -312,6 +312,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public void setOpponentTime(String time) {
     opponentTime.setText(time);
+  }
+
+  @Override
+  public void cancelMove(Stroke stroke) {
+    notationPanel.cancelMove(stroke);
   }
 
   @Override
@@ -618,7 +623,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playButton.setVisible(true);
     drawButton.setVisible(false);
     surrenderButton.setVisible(false);
-    beatenMineDraughtsLabel.setText("");
+    beatenMyDraughtsLabel.setText("");
     beatenOpponentDraughtsLabel.setText("");
   }
 
@@ -648,7 +653,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   public void setBeatenMy(int count) {
-    beatenMineDraughtsLabel.setText(count + " - " + (board.isWhite() ? messages.whites()
+    beatenMyDraughtsLabel.setText(count + " - " + (board.isWhite() ? messages.whites()
         : messages.blacks()));
   }
 
@@ -739,7 +744,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         PlayComponentView.this.fisherTime = fisherTime;
       }
     };
-    inviteDialogBox.show(messages.inviteToPlay(getOpponent().getPublicName(),
+    inviteDialogBox.show(messages.inviteToPlay(playSession.getOpponent().getPublicName(),
         messages.draughts()));
   }
 
@@ -780,7 +785,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Override
   public void addNotationStroke(Stroke strokeForNotation) {
-    getUiHandlers().addNotationStroke(strokeForNotation);
+    notationPanel.appendMove(strokeForNotation);
   }
 
   @Override
@@ -791,16 +796,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public void doPlayerMove(MoveDto move) {
     getUiHandlers().doPlayerMove(move);
-  }
-
-  @Override
-  public PlayerDto getPlayer() {
-    return playSession.getPlayer();
-  }
-
-  @Override
-  public PlayerDto getOpponent() {
-    return playSession.getOpponent();
   }
 
   interface Binder extends UiBinder<Widget, PlayComponentView> {

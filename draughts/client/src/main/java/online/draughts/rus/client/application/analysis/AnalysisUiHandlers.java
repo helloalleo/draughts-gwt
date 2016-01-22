@@ -4,4 +4,6 @@ import com.gwtplatform.mvp.client.UiHandlers;
 
 interface AnalysisUiHandlers extends UiHandlers {
   boolean isMyTurn();
+
+  void checkWinner();
 }

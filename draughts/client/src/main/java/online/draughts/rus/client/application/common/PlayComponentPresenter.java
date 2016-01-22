@@ -215,11 +215,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   @Override
-  public void addNotationStroke(Stroke strokeForNotation) {
-    fireEvent(new NotationStrokeEvent(strokeForNotation));
-  }
-
-  @Override
   public void toggleTurn(boolean turn) {
     fireEvent(new TurnChangeEvent(turn));
   }
@@ -483,7 +478,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         final MoveDto move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
         final Stroke mirror = stroke.flip();
-        fireEvent(new NotationCancelStrokeEvent(stroke));
+        getView().cancelMove(stroke);
         getView().getBoard().moveMyCanceled(mirror);
       }
     });
@@ -494,7 +489,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         final MoveDto move = event.getMove();
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
         final Stroke mirror = stroke.flip();
-        fireEvent(new NotationCancelStrokeEvent(mirror));
+        getView().cancelMove(mirror);
         getView().getBoard().moveOpponentCanceled(stroke);
       }
     });
@@ -639,5 +634,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     void setPlayerTime(String time);
 
     void setOpponentTime(String time);
+
+    void cancelMove(Stroke stroke);
   }
 }

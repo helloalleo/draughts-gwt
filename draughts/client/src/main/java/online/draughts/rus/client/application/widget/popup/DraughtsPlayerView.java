@@ -674,11 +674,6 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   }
 
   @Override
-  public void addNotationStroke(Stroke strokeForNotation) {
-    getUiHandlers().addNotationStroke(strokeForNotation);
-  }
-
-  @Override
   public void toggleTurn(boolean turn) {
     getUiHandlers().toggleTurn(turn);
   }
@@ -689,17 +684,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   }
 
   @Override
-  public PlayerDto getPlayer() {
-    throw new RuntimeException("Not implemented");
-  }
-
-  @Override
-  public PlayerDto getOpponent() {
-    throw new RuntimeException("Not implemented");
-  }
-
-  @Override
-  public String takeScreenshot() {
+  public void addNotationStroke(Stroke strokeForNotation) {
     throw new RuntimeException("Not implemented");
   }
 

@@ -10,6 +10,16 @@
     <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
     <g:HTMLPanel ui:field="main">
+        <script src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+        <!-- DraughtOnlineHome -->
+        <ins class="adsbygoogle"
+             style="display:block"
+             data-ad-client="ca-pub-6590061713732270"
+             data-ad-slot="6965334310"
+             data-ad-format="auto"></ins>
+        <script>
+            (adsbygoogle = window.adsbygoogle || []).push({});
+        </script>
         <b.html:Strong ui:field="gameListLabel" text="Список игр" addStyleNames="{res.style.xLargeFont}">
             <ui:attribute name="text" description="Список игр"/>
         </b.html:Strong>

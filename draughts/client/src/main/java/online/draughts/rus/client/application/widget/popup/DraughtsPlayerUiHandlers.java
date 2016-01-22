@@ -8,8 +8,6 @@ interface DraughtsPlayerUiHandlers extends UiHandlers {
 
   void checkWinner();
 
-  void addNotationStroke(Stroke strokeForNotation);
-
   void toggleTurn(boolean turn);
 
   void doPlayerMove(MoveDto move);

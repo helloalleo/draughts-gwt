@@ -14,13 +14,14 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import online.draughts.rus.client.application.widget.NotationPanel;
+import online.draughts.rus.client.gin.NotationPanelFactory;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
 import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.dto.MoveDto;
-import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import org.gwtbootstrap3.client.ui.*;
 
@@ -30,6 +31,7 @@ import javax.inject.Inject;
 public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     implements AnalysisPresenter.MyView, PlayComponent {
 
+  private final NotationPanelFactory notationPanelFactory;
   @UiField
   HTMLPanel main;
   @UiField
@@ -60,16 +62,25 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
   RadioButton removeDraughtButton;
   @UiField
   HTMLPanel draughtControls;
+  @UiField
+  com.google.gwt.user.client.ui.Label beatenOpponentDraughtsLabel;
+  @UiField
+  com.google.gwt.user.client.ui.Label beatenMyDraughtsLabel;
+  @UiField
+  HTMLPanel notationList;
   private final DraughtsMessages messages;
   private final AppResources resources;
   private Desk desk;
+  private NotationPanel notationPanel;
 
   @Inject
   AnalysisView(Binder uiBinder,
                DraughtsMessages messages,
-               AppResources resources) {
+               AppResources resources,
+               NotationPanelFactory notationPanelFactory) {
     this.messages = messages;
     this.resources = resources;
+    this.notationPanelFactory = notationPanelFactory;
     initWidget(uiBinder.createAndBindUi(this));
     handlers();
   }
@@ -157,6 +168,9 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     desk.lienzoPanel.add(board);
     desk.lienzoPanel.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     desk.board = board;
+    notationList.clear();
+    notationPanel = notationPanelFactory.createNotationPanel(0L);
+    notationList.add(notationPanel);
     return desk;
   }
 
@@ -168,6 +182,7 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     draughtsDesk.remove(desk.lienzoPanel);
     desk = initEmptyDesk(draughtsDesk, draughtsDesk.getOffsetWidth(), true);
     addDraughtCheckbox.setValue(false);
+    notationList.clear();
     addDraughtChangeState();
   }
 
@@ -216,12 +231,11 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
 
   @Override
   public void checkWinner() {
-
+    getUiHandlers().checkWinner();
   }
 
-  @Override
   public void addNotationStroke(Stroke strokeForNotation) {
-
+    notationPanel.appendMove(strokeForNotation);
   }
 
   @Override
@@ -235,22 +249,33 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
 
   @Override
   public void doPlayerMove(MoveDto move) {
-
+    throw new RuntimeException("Not implemented");
   }
 
   @Override
-  public PlayerDto getPlayer() {
-    return null;
+  public int getMyDraughtsSize() {
+    return desk.board.getMyDraughts().size();
   }
 
   @Override
-  public PlayerDto getOpponent() {
-    return null;
+  public int getOpponentDraughtsSize() {
+    return desk.board.getOpponentDraughts().size();
   }
 
+  public void setBeatenMy(int count) {
+    beatenMyDraughtsLabel.setText(count + " - " + (desk.board.isWhite() ? messages.whites()
+        : messages.blacks()));
+  }
+
+  public void setBeatenOpponent(int count) {
+    beatenOpponentDraughtsLabel.setText(count + " - " + (desk.board.isWhite() ? messages.blacks()
+        : messages.whites()));
+  }
+
+
   @Override
-  public String takeScreenshot() {
-    return null;
+  public boolean isWhite() {
+    return desk.board.isWhite();
   }
 
   private static class Desk {

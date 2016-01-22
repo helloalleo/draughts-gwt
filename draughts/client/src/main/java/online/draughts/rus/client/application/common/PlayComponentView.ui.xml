@@ -26,7 +26,7 @@
                         <b:Heading size="H5" text="Сбито шашек:">
                             <ui:attribute name="text" description="Сбито шашек"/>
                         </b:Heading>
-                        <g:Label ui:field="beatenMineDraughtsLabel" text="0 - Белых">
+                        <g:Label ui:field="beatenMyDraughtsLabel" text="0 - Белых">
                             <ui:attribute name="text" description="0 - Белых"/>
                         </g:Label>
                         <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных">

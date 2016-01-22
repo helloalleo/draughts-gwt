@@ -24,9 +24,8 @@ public enum Operator
   // You'd include other operators too...
 
   private final PossibleOperators operator;
-//  private boolean inverted;
 
-  private Operator(PossibleOperators operator) {
+  Operator(PossibleOperators operator) {
     this.operator = operator;
   }
 

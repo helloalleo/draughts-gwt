@@ -45,7 +45,7 @@
                             <ui:attribute name="text"/>
                         </g:HTML>
                         <b:Heading size="H5" text="Сбито шашек:"/>
-                        <g:Label ui:field="beatenMineDraughtsLabel" text="0 - Белых"/>
+                        <g:Label ui:field="beatenMyDraughtsLabel" text="0 - Белых"/>
                         <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных"/>
                         <br/>
                         <b:Button ui:field="cancelMove" text="Отменить ход">
