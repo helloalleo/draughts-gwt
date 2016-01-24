@@ -33,15 +33,14 @@ public class ServerConfiguration {
   private final String fbApiGraph;
   private final String gaeCronCheckIntervalHour;
   private String fbApiOAuthPath;
-  private String loginUrl;
-  private String homeUrl;
+  private String loginHash;
   private String googleClientId;
   private String googleScope;
   private String googleRedirectUri;
   private String googleClientSecret;
   private String googleApiUserInfo;
 
-  private String playUrl;
+  private String playHash;
   private boolean debug;
   private String gaeCronIpAddr;
   private String fromEmail;
@@ -59,9 +58,8 @@ public class ServerConfiguration {
     serverErrorUrl = resourceBundle.getString("server_error_url");
     notFoundErrorUrl = resourceBundle.getString("not_found_error_url");
 
-    loginUrl = resourceBundle.getString("login");
-    homeUrl = resourceBundle.getString("home");
-    playUrl = resourceBundle.getString("play");
+    loginHash = resourceBundle.getString("loginHash");
+    playHash = resourceBundle.getString("playHash");
 
     debug = Boolean.valueOf(resourceBundle.getString("debug"));
 
@@ -164,12 +162,8 @@ public class ServerConfiguration {
     return fbApiOAuthPath;
   }
 
-  public String getLoginUrl() {
-    return loginUrl;
-  }
-
-  public String getHomeUrl() {
-    return homeUrl;
+  public String getLoginHash() {
+    return loginHash;
   }
 
   public String getGoogleClientId() {
@@ -192,8 +186,8 @@ public class ServerConfiguration {
     return googleApiUserInfo;
   }
 
-  public String getPlayUrl() {
-    return playUrl;
+  public String getPlayHash() {
+    return playHash;
   }
 
   public boolean isDebug() {

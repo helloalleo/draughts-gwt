@@ -22,12 +22,12 @@ import java.io.IOException;
 public class LogoutServlet extends HttpServlet {
 
   private final PlayerService playerService;
-  private final ServerConfiguration configuration;
+  private final ServerConfiguration config;
 
   @Inject
   LogoutServlet(PlayerService playerService, ServerConfiguration serverConfiguration) {
     this.playerService = playerService;
-    this.configuration = serverConfiguration;
+    this.config = serverConfiguration;
   }
 
   protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
@@ -40,6 +40,6 @@ public class LogoutServlet extends HttpServlet {
     }
 
     request.getSession().invalidate();
-    response.sendRedirect(configuration.getLoginUrl());
+    response.sendRedirect("/" + config.getLoginHash());
   }
 }

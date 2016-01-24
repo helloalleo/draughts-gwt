@@ -4,6 +4,7 @@ import online.draughts.rus.server.config.ServerConfiguration;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.domain.Player;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import javax.servlet.http.HttpSession;
@@ -59,6 +60,15 @@ public class AuthUtils {
     if (player.isActive()) {
       AuthUtils.login(req);
     }
-    resp.sendRedirect(config.getPlayUrl());
+
+    String locale = "ru";
+    for (Cookie cookie : req.getCookies()) {
+      if ("locale".equals(cookie.getName())) {
+        locale = cookie.getValue();
+        break;
+      }
+    }
+
+    resp.sendRedirect(String.format("/?locale=%s%s", locale, config.getPlayHash()));
   }
 }

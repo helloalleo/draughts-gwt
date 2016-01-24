@@ -2,7 +2,7 @@ package online.draughts.rus.shared.locale;
 
 /**
  * Interface to represent the messages contained in resource bundle:
- * 	/Users/alekspo/Documents/Development/GWT/draughts/default/draughts/client/src/main/java/online/draughts/rus/shared/locale/DraughtsMessages_en.properties'.
+ * 	/Users/alekspo/Documents/Development/GWT/draughts/default/draughts/client/src/main/java/online/draughts/rus/shared/locale/DraughtsMessages.properties'.
  */
 public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   
@@ -421,13 +421,13 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String inviteCaption();
 
   /**
-   * Translated "{0} invites you to play. You are playing {1}. Accept the challenge?".
+   * Translated "{0} invites you to play. You are playing {1}. Match time {2} (min.), extra time {3} (sec.). Accept the challenge?".
    * 
-   * @return translated "{0} invites you to play. You are playing {1}. Accept the challenge?"
+   * @return translated "{0} invites you to play. You are playing {1}. Match time {2} (min.), extra time {3} (sec.). Accept the challenge?"
    */
-  @DefaultMessage("{0} invites you to play. You are playing {1}. Accept the challenge?")
+  @DefaultMessage("{0} invites you to play. You are playing {1}. Match time {2} (min.), extra time {3} (sec.). Accept the challenge?")
   @Key("inviteMessage")
-  String inviteMessage(String arg0, String arg1, String s, String s1);
+  String inviteMessage(String arg0,  String arg1,  String arg2,  String arg3);
 
   /**
    * Translated "Inviting <i>{0}</i> to play {1}".

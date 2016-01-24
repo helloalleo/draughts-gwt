@@ -23,6 +23,8 @@ public class AppPreBootstrapper implements PreBootstrapper {
       html = new HTML("Loading...");
     } else if ("ru".equals(locale)) {
       html = new HTML("Загрузка...");
+    } else if ("ua".equals(locale)) {
+      html = new HTML("Завантаження...");
     } else {
       html = new HTML("Загрузка...");
     }
