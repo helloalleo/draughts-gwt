@@ -10,16 +10,15 @@
     <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
     <g:HTMLPanel ui:field="main">
-        <script src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-        <!-- DraughtOnlineHome -->
-        <ins class="adsbygoogle"
-             style="display:block"
-             data-ad-client="ca-pub-6590061713732270"
-             data-ad-slot="6965334310"
-             data-ad-format="auto"></ins>
-        <script>
-            (adsbygoogle = window.adsbygoogle || []).push({});
-        </script>
+        <g:HTMLPanel>
+            <!-- DraughtOnlineHome -->
+            <ins class="adsbygoogle"
+                 style="display:block"
+                 data-ad-client="ca-pub-6590061713732270"
+                 data-ad-slot="6965334310"
+                 data-ad-format="auto"></ins>
+        </g:HTMLPanel>
+
         <b.html:Strong ui:field="gameListLabel" text="Список игр" addStyleNames="{res.style.xLargeFont}">
             <ui:attribute name="text" description="Список игр"/>
         </b.html:Strong>
@@ -35,11 +34,11 @@
         </b:ButtonGroup>
         <g:HTMLPanel addStyleNames="{res.style.hrInfo}">
             <b:Row>
-                <b:Column size="XS_4 SM_8 MD_10 LG_9" addStyleNames="{res.style.totalOnlinePlayersHr}">
+                <b:Column size="XS_3 SM_8 MD_10 LG_9" addStyleNames="{res.style.totalOnlinePlayersHr}">
                     <b.html:Span addStyleNames="{res.style.hrMiddle}"/>
                 </b:Column>
 
-                <b:Column size="XS_8 SM_4 MD_2 LG_3">
+                <b:Column size="XS_9 SM_4 MD_2 LG_3">
                     <g:HTMLPanel addStyleNames="{res.style.playersStatus}">
                         <b.html:Span>
                             <ui:msg key="total" description="Всего">Всего игроков</ui:msg>

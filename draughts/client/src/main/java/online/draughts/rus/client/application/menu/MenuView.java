@@ -161,6 +161,22 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     navRight.add(anchor);
 
     anchor = new AnchorListItem();
+    final Image uaImg = new Image(resources.images().ukraineFlag().getSafeUri());
+    uaImg.setResponsive(true);
+    anchor.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        setLocale("ua");
+      }
+    });
+    a = (Anchor) anchor.getWidget(0);
+    a.setPaddingLeft(2);
+    a.setPaddingRight(2);
+    a.setMarginTop(-1);
+    a.add(uaImg);
+    navRight.add(anchor);
+
+    anchor = new AnchorListItem();
     final Image enImg = new Image(resources.images().usFlag().getSafeUri());
     enImg.setResponsive(true);
     anchor.addClickHandler(new ClickHandler() {

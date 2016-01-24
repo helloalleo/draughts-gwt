@@ -2,7 +2,7 @@ package online.draughts.rus.shared.locale;
 
 /**
  * Interface to represent the messages contained in resource bundle:
- * 	/Users/alekspo/Documents/Development/GWT/draughts/default/draughts/client/src/main/java/online/draughts/rus/shared/locale/DraughtsMessages.properties'.
+ * 	/Users/alekspo/Documents/Development/GWT/draughts/default/draughts/client/src/main/java/online/draughts/rus/shared/locale/DraughtsMessages_en.properties'.
  */
 public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   

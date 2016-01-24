@@ -10,7 +10,7 @@
     <g:HTMLPanel ui:field="main">
 
         <b:Row>
-            <b:Column size="XS_12 SM_12 MD_6 LG_6" ui:field="draughtsColumn">
+            <b:Column size="XS_11 SM_11 MD_6 LG_6" ui:field="draughtsColumn">
                 <g:HTMLPanel ui:field="draughtsDesk" debugId="draughtsDesk"/>
             </b:Column>
 

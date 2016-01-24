@@ -39,6 +39,6 @@
 
     <extend-property name="locale" values="en"/>
     <extend-property name="locale" values="ru"/>
-    <!--<set-property name="locale" value="ru"/>-->
+    <extend-property name="locale" values="ua"/>
 
 </module>

@@ -7,6 +7,9 @@ public interface Images extends ClientBundle {
   @Source("img/russia-flag.png")
   ImageResource russiaFlag();
 
+  @Source("img/ukraine-flag.png")
+  ImageResource ukraineFlag();
+
   @Source("img/us-flag.png")
   ImageResource usFlag();
 

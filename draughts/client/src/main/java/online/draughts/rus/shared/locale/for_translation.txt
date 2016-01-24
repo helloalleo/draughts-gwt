@@ -1,10 +1,295 @@
-Поиск игроков
-Ой, произошла непредвиденная ошибка.
-Группа в контакте
-Всего игроков
-Мои игры
-Список игр
-Получать уведомления на e-mail
-Все комментарии
-Комментировать ход (поле в котором нужно писать комментарий)
-Комментарии к ходу (все комментарии к ходу)
+home=Главная
+homeToken=!home
+
+play=Играть
+playToken=doPlay
+
+unrecognizedPlace=Неизвестная страница
+signIn=Войти
+
+login=Войти
+logout=Выйти
+
+profile=Профиль
+profileToken=doProfile
+
+settings=Настройки
+settingsToken=doSettings
+
+webSocketDoesNotSupport=Ваш браузер не поддерживает WebSockets. Игра невозможна.
+
+reconnect=Подключиться
+
+close=Закрыть
+error=Ошибка
+info=Информация
+captionGame=Игра
+next=Далее
+cancel=Отмена
+chooseYourColor=Выберите цвет:
+white=Белые
+black=Чёрные
+whitesil=Белыми
+blacksil=Чёрными
+waitResponse=Ждём ответа.
+yes=Да
+no=Нет
+confirm=Подтверждение
+inviteMessage={0} приглашает Вас в игру. Вы играете {1}. Время на игру {2} (мин.), дополнительное время {3} (сек.). Вы принимаете вызов?
+inviteToPlay=Приглашаем <i>{0}</i> играть в {1}
+draughts=Шашки
+
+aboutUs=О сайте
+aboutUsToken=doAboutUs
+
+errorWhileProfileUpdate=Ошибка во время обновления профиля
+errorWhileGettingProfile=Ошибка загрузки профиля
+errorWhileGettingGame=Ошибка загрузки игры
+errorWhileSavingGame=Ошибка во время сохранения игры
+
+profileUpdated=Профиль обновлен
+tooLongPlayerName=Слишком длинное имя
+invalidCharsInName=Недопустимые символы в имени
+tooShortPlayerName=Слишком короткое имя
+
+playStartDescription=Для того, чтобы начать игру, нажмите \n\
+  Подключиться, а затем выберите игрока и \n\
+  нажмите Играть.
+
+playerRejectedPlayRequest=<i>{0}</i> отклонил Ваш вызов
+
+failToStartGame=Не удалось начать игру
+
+selectPlayer=Выберите соперника
+selectAnotherPlayerItsYou=Вы выбрали себя, выберите другого игрока
+
+yourTurn=<span style="color:green;">Ваш ход</span>
+opponentTurn=<span style="color:red;">Ход соперника</span>
+youDisconnected=<span style="color:red;">Вы отключены</span>
+
+whites=Белых
+blacks=Чёрных
+
+youLose=Вы проиграли :(
+youWon=Ура! Вы победили :)
+
+playDidNotStart=Игра не началась
+
+areYouSureYouWantSurrender=Вы действительно хотите сдаться?
+opponentSurrendered=Соперник сдался
+doYouWantToProposeDraw=Вы хотите предложить ничью?
+opponentLeftGame=Соперник покинул игру
+
+playerProposesDraw=<i>{0}</i> предлагает ничью. Вы согласны?
+playerRejectedDraw=<i>{0}</i> отказался от ничьи
+
+doYouWantToCancelMove=Отменить ход?
+
+playerProposesCancelMove=<i>{0}</i> предлагает отменить ход. Вы согласны?
+playerRejectedMoveCancel=<i>{0}</i> отказался отменять ход
+
+youDontMove=Вы ещё не ходили
+playAlreadyPlaying=<i>{0}</i> уже играет
+
+BLACK_WIN=Черные победили
+WHITE_WIN=Белые победили
+BLACK_LEFT=Черные покинули игру
+WHITE_LEFT=Белые покинули игру
+SURRENDER_BLACK=Черные сдались
+SURRENDER_WHITE=Белые сдались
+DRAW=Ничья
+
+contacts=Контакты
+contactsToken=!contacts
+errorToken=!error
+myGames=Мои игры
+playingTitle= играет
+onlineTitle= в сети
+offlineTitle= не в сети
+errorInAuthentication=Ошибка аутентификации
+opponentNotFound=Соперник не найден
+failToConnectToServer=Не удалось подключиться к серверу
+newGameButtonText=Новая игра
+playListButtonText=Список игр
+playerOffline=Игрок не в сети
+you=Вы
+rating=Рейтинг {0}
+connectToServer=Не загружено
+youHasBeenAddedToFavorite=<i>{0}</i> добавил вас в избранные
+notification=Уведомление
+ok=Ок
+inviteCaption=Приглашение
+playerCaption=Партия: белыми - {0}, черными - {1}.<br/>Окончание: {2}
+notationTitle=Нотация
+draughtsBeaten=Сбито шашек
+symbolsLeft=символов
+gameNotFound=Игра не найдена
+alreadyConnected=Вы уже подключены
+learn=Уроки
+newMessageFrom=Новое сообщение от <i>{0}</i>
+analysis=Разбор
+whitesTurn=Ход белых
+blacksTurn=Ход черных
+timeOnPlay=Укажите время на игру в минутах
+specifyTime=Указать
+minutes=Минуты
+fisherTime=Добавочное время (часы Фишера)<br/><small>0 или пусто значение, чтобы не учитывать</small>
+seconds=Секунды
+timeOut=Время вышло
+timeOutOpponentLose=Время вышло, соперник проиграл
+moderator=Модератор
+concede=Сдаться
+draw=Ничья
+timeLabel=Время {0}
+
+#player
+
+# Generated from online.draughts.rus.client.application.widget.popup.DraughtsPlayerViewBinderImplGenMessages
+# for locale default
+
+# Description: Сбито шашек
+51955B51AD7D4F9AB17B9150058F8D92=Сбито шашек
+
+# Description: 0 - Чёрных
+6FD379BA56268854299B506702ED1702=0 - Чёрных
+
+# Description: Войдите, чтобы комментировать
+8043F53664D930E42C7DF1C34E48D788=Войдите, чтобы комментировать
+
+# Description: Нотация
+8A8BA8823145D49DC1569A2F14E81004=Нотация
+
+# Description: Комментировать ход
+91D8D1BAAE075CF6F267FDDC102CC0C1=Комментировать ход
+
+# Description: Все комментарии
+CA789ED818B627CE34781B7427AF64F3=Все комментарии
+
+# Description: 0 - Белых
+D2A6A8B768B71C6D9C6C1364DA56C34A=0 - Белых
+
+# Description: Комментировать
+E1BBE0EE4E4A985B391469B62F465ABD=Комментировать
+
+# Description: Комментарии к ходу
+ECDE4A447D77B61C184189A73C052BC7=Комментарии к ходу
+
+# settings
+
+# Generated from online.draughts.rus.client.application.profile.settings.SettingsViewBinderImplGenMessages
+# for locale default
+
+# Description: PrivateSettings
+1CC07B269630BB5BDC36EE27771B443E=Персональные
+
+# Description: Save
+74EA58B6A801F0DCE4E5D34DBCA034DC=Сохранить
+
+# Description: A player name on the site
+C4C4FB180E6D4259837FBA895507EFFA=Имя на сайте
+
+# Description: Settings
+lkSettings=Настройки
+
+# Description: A player name on the site
+playerNameOnSite=Имя на сайте
+
+# Description: Подписаться на рассылку
+subscribeOnNewsletter=Получать уведомления на e-mail
+
+# messenger
+
+# Messages from online.draughts.rus.client.application.play.messanger.MessengerViewBinderImplGenMessages
+# Source locale en
+
+# Description: Сообщения
+7E264844E4FC7EA0A5EA239F44BC9736=Сообщения
+
+# home
+
+# Messages from online.draughts.rus.client.application.home.HomeViewBinderImplGenMessages
+# Source locale en
+
+# Description: Список игр
+24E8AD9FC2B0BE330DF5042517D90E14=Список игр
+
+# Description: Показать меньше на странице
+CFA338113D09A88954CFBDD311667E98=Показать меньше
+
+# Description: Показать больше на странице
+F88AD8295ED102D9078BCC3EECDE0201=Показать больше
+
+# Description: Мои игры
+myGames=Мои игры
+
+# Description: Онлайн
+online=Онлайн
+
+# Description: Всего
+total=Всего игроков
+
+# footer
+
+# Messages from online.draughts.rus.client.application.footer.FooterViewBinderImplGenMessages
+# Source locale en
+
+# Description: Группа в контакте
+4160224063EE142B03873636C2243F16=Мы в ВК
+
+######## error ########
+
+# Messages from online.draughts.rus.client.application.error.ErrorViewBinderImplGenMessages
+# Source locale en
+
+# Description: Непредвиденная ошибка
+unexpectedError=Ой, произошла непредвиденная ошибка.
+
+####### play #######
+
+# Messages from online.draughts.rus.client.application.common.PlayComponentViewBinderImplGenMessages
+# Source locale en
+
+# Description: Сбито шашек
+24CE80B70FD14C9F62ECA912F08D5E6A=Сбито шашек\:
+
+# Description: Отменить ход
+3061B15551F73E77827C48AB02E1F0E2=Отменить ход
+
+# Description: Поиск игроков
+572CCEAD6187C79DAC20F0ACD36BB96A=Поиск игроков
+
+# Description: Список игроков
+6E1E407738395C302F7F1B2D3CD67E1F=Список игроков\:
+
+# Description: 0 - Чёрных
+6FD379BA56268854299B506702ED1702=0 - Чёрных
+
+# Description: Время на ход
+8CD6F07B3FF29526344063C6F310507C=Время на ход\:
+
+# Description: Недавно играли с вами
+958C21802550292D43FC430C0C2BB281=Недавно с Вами играли\:
+
+# Description: Время
+9DB534601F8C9AF08C05B729F4490FBA=Время\:
+
+# Description: Игра не началась
+A09C21B83CBEC777CB74F0B5D4A10669=Игра не началась
+
+# Description: Нотация
+AF3651A74521FEC259920A959C8374F1=Нотация\:
+
+# Description: 0 - Белых
+D2A6A8B768B71C6D9C6C1364DA56C34A=0 - Белых
+
+# Description: Подключиться
+connectToPlayButton=Подключиться
+
+# Description: Предложить ничью
+drawButton=Предложить ничью
+
+# Description: Сдаться
+surrenderButton=Сдаться
+
+move=Ход
+

@@ -14,8 +14,6 @@ public class FooterView extends ViewImpl implements FooterPresenter.MyView {
   @UiField
   HTMLPanel panel;
   @UiField
-  HTMLPanel donate;
-  @UiField
   Anchor groupInVk;
 
   @Inject
@@ -26,7 +24,6 @@ public class FooterView extends ViewImpl implements FooterPresenter.MyView {
   @Override
   protected void onAttach() {
     if (Window.getClientWidth() < 768) {
-      donate.setVisible(false);
       groupInVk.setIconSize(IconSize.TIMES3);
     }
   }
