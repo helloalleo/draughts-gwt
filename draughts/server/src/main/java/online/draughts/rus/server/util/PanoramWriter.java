@@ -17,14 +17,14 @@ import com.google.appengine.api.images.ImagesServiceFactory;
 import java.util.ArrayList;
 import java.util.List;
 
-public class GaeGifSequenceWriter {
+public class PanoramWriter {
 
   private CompositeBuilder compositeBuilder = new CompositeBuilder();
 
   /**
    * Creates a new GifSequenceWriter
    */
-  public GaeGifSequenceWriter() {
+  public PanoramWriter() {
   }
 
   class CompositeBuilder {

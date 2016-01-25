@@ -17,6 +17,7 @@
                  data-ad-client="ca-pub-6590061713732270"
                  data-ad-slot="6965334310"
                  data-ad-format="auto"></ins>
+            <b.html:Br/>
         </g:HTMLPanel>
 
         <b.html:Strong ui:field="gameListLabel" text="Список игр" addStyleNames="{res.style.xLargeFont}">

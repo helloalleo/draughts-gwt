@@ -2,7 +2,6 @@ package online.draughts.rus.server.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import com.sun.xml.internal.messaging.saaj.util.ByteOutputStream;
 import online.draughts.rus.server.config.ServerConfiguration;
 import online.draughts.rus.server.domain.GameMessage;
 import online.draughts.rus.server.domain.Player;
@@ -14,7 +13,6 @@ import javax.mail.*;
 import javax.mail.internet.*;
 import java.io.UnsupportedEncodingException;
 import java.util.Properties;
-import java.util.ResourceBundle;
 
 /**
  * Created with IntelliJ IDEA.
@@ -56,7 +54,7 @@ public class MailService {
     try {
       MimeMessage message = new MimeMessage(mailSession);
       message.setSubject(String.format("Новое сообщение от %s", sender.getPublicName()), "UTF-8");
-      message.setFrom(new InternetAddress(config.getFromEmail(), "Шашки.Онлайн", "UTF-8"));
+      message.setFrom(new InternetAddress(config.getFromEmail(), "ШашкиОнлайн.COM", "UTF-8"));
       message.addRecipient(Message.RecipientType.TO,
           new InternetAddress(receiver.getEmail(), receiver.getPublicName(), "UTF-8"));
 

@@ -7,7 +7,7 @@ import com.google.appengine.api.images.Transform;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.service.GameService;
-import online.draughts.rus.server.util.GaeGifSequenceWriter;
+import online.draughts.rus.server.util.PanoramWriter;
 import online.draughts.rus.server.domain.Move;
 import online.draughts.rus.shared.util.StringUtils;
 import org.apache.commons.codec.binary.Base64;
@@ -52,7 +52,7 @@ public class GameGiff extends HttpServlet {
       return;
     }
 
-    GaeGifSequenceWriter writer = new GaeGifSequenceWriter();
+    PanoramWriter writer = new PanoramWriter();
     final int imgSize = 400;
     for (Move move : moves) {
       final byte[] imageData = Base64.decodeBase64(move.getScreenshot()
