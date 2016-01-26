@@ -6,6 +6,7 @@ import online.draughts.rus.server.annotation.Index;
 import online.draughts.rus.server.annotation.Transient;
 import online.draughts.rus.shared.dto.GameMessageDto;
 
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 
@@ -173,6 +174,34 @@ public class GameMessage extends ModelImpl<GameMessage> {
     FetchOptions fetchOptions =
         FetchOptions.Builder.withLimit(countLast);
     return getListResult(preparedQuery.asQueryResultList(fetchOptions));
+  }
+
+  /**
+   * Функция ищет все ходя для заданной игры
+   * @param gameId id игры ходы которой ищем
+   * @return список ходов
+   */
+  public List<Move> findGameMoves(Long gameId) {
+    Key gameKey = KeyFactory.createKey(Game.getInstance().getEntityName(), gameId);
+    Query.Filter gameIdFilter =
+        new Query.FilterPredicate("game",
+            Query.FilterOperator.EQUAL,
+            gameKey);
+
+    Query queryGameMessages = new Query(getEntityName()).setFilter(gameIdFilter);
+    queryGameMessages.addSort("sentDate", Query.SortDirection.ASCENDING);
+
+    PreparedQuery preparedQuery = getDatastore().prepare(queryGameMessages);
+
+    List<GameMessage> gameMessages = getListResult(preparedQuery);
+    List<Move> moves = new ArrayList<>(gameMessages.size());
+    for (GameMessage gameMessage : gameMessages) {
+      if (null == gameMessage.getMove()) {
+        continue;
+      }
+      moves.add(gameMessage.getMove());
+    }
+    return moves;
   }
 
   private static class SingletonHolder {

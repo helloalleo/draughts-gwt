@@ -6,10 +6,8 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import online.draughts.rus.client.event.CheckWinnerEvent;
-import online.draughts.rus.client.event.PlayMovePlayerMessageEvent;
 import online.draughts.rus.client.event.TurnChangeEvent;
 import online.draughts.rus.shared.dto.GameDto;
-import online.draughts.rus.shared.dto.MoveDto;
 
 
 public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPresenter.MyView> implements DraughtsPlayerUiHandlers {
@@ -55,11 +53,6 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
   @Override
   public void toggleTurn(boolean turn) {
     fireEvent(new TurnChangeEvent(turn));
-  }
-
-  @Override
-  public void doPlayerMove(MoveDto move) {
-    fireEvent(new PlayMovePlayerMessageEvent(move));
   }
 
   public interface MyView extends PopupView, HasUiHandlers<DraughtsPlayerUiHandlers> {

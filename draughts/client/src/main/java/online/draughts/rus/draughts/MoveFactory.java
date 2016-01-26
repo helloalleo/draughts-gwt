@@ -18,6 +18,7 @@ public class MoveFactory {
    */
   public static MoveDto createMoveFromStroke(Stroke stroke) {
     MoveDto move = new MoveDto().setFirst(stroke.isFirst())
+        .setTitle(stroke.toNotation())
         .setNumber(stroke.getNumber())
         .setMoveFlags(stroke.getMoveFlags())
         .setMovingDraught(new DraughtDto(stroke.getStartSquare().getRow(), stroke.getStartSquare().getCol(),

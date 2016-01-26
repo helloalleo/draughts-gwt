@@ -3,6 +3,7 @@ package online.draughts.rus.client.application.analysis;
 import com.ait.lienzo.client.core.shape.Layer;
 import com.ait.lienzo.client.core.shape.Rectangle;
 import com.ait.lienzo.client.widget.LienzoPanel;
+import com.ait.lienzo.shared.core.types.DataURLType;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.logical.shared.ValueChangeEvent;
@@ -230,12 +231,26 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
   }
 
   @Override
+  public String takeScreenshot() {
+    return takeScreenshot(DataURLType.PNG, true);
+  }
+
+  public String takeScreenshot(DataURLType dataType, boolean includeBackgroundLayer) {
+    return desk.lienzoPanel.toDataURL(dataType, includeBackgroundLayer);
+  }
+
+  @Override
   public void checkWinner() {
     getUiHandlers().checkWinner();
   }
 
   public void addNotationStroke(Stroke strokeForNotation) {
     notationPanel.appendMove(strokeForNotation);
+  }
+
+  @Override
+  public void doSaveMove(MoveDto move) {
+
   }
 
   @Override
@@ -249,7 +264,6 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
 
   @Override
   public void doPlayerMove(MoveDto move) {
-    throw new RuntimeException("Not implemented");
   }
 
   @Override

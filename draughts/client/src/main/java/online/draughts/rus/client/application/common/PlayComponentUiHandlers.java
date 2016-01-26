@@ -41,7 +41,5 @@ interface PlayComponentUiHandlers extends UiHandlers {
 
   void stopTimers();
 
-  String getTimeOnPlayStringMinutes();
-
-  String getFisherTimeStringSecond();
+  void doSaveMove(MoveDto move);
 }

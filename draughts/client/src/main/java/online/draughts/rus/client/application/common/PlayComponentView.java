@@ -790,6 +790,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
+  public void doSaveMove(MoveDto move) {
+    getUiHandlers().doSaveMove(move);
+  }
+
+  @Override
   public void toggleTurn(boolean turn) {
     getUiHandlers().toggleTurn(turn);
   }

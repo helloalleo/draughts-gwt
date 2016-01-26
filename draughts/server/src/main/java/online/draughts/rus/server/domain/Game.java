@@ -5,10 +5,7 @@ import online.draughts.rus.server.annotation.Index;
 import online.draughts.rus.server.annotation.Text;
 import online.draughts.rus.shared.dto.GameDto;
 
-import java.util.Date;
-import java.util.HashSet;
-import java.util.List;
-import java.util.Set;
+import java.util.*;
 
 /**
  * Created with IntelliJ IDEA.

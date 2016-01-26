@@ -1,6 +1,5 @@
 package online.draughts.rus.server.domain;
 
-
 import online.draughts.rus.server.annotation.Converter;
 import online.draughts.rus.server.annotation.Text;
 import online.draughts.rus.server.domain.converter.MoveFlagsConverter;
@@ -20,6 +19,7 @@ public class Move extends ModelImpl<Move> {
   private int number; // номер пары хода
   private int moveOrder; // порядковый номер хода
   private boolean first; // первый ход в паре ходов. Например, ee-aa в ee-aa bb-cc
+  private boolean fixate; // индикатор того, что ходили белыми
 
   private GameMessage gameMessage;
 
@@ -92,6 +92,14 @@ public class Move extends ModelImpl<Move> {
 
   public void setFirst(boolean first) {
     this.first = first;
+  }
+
+  public boolean isFixate() {
+    return fixate;
+  }
+
+  public void setFixate(boolean fixate) {
+    this.fixate = fixate;
   }
 
   public Draught getTakenDraught() {

@@ -669,6 +669,11 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   }
 
   @Override
+  public String takeScreenshot() {
+    throw new RuntimeException("Not implemented");
+  }
+
+  @Override
   public void checkWinner() {
     getUiHandlers().checkWinner();
   }
@@ -680,11 +685,15 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
   @Override
   public void doPlayerMove(MoveDto move) {
-    getUiHandlers().doPlayerMove(move);
   }
 
   @Override
   public void addNotationStroke(Stroke strokeForNotation) {
+    throw new RuntimeException("Not implemented");
+  }
+
+  @Override
+  public void doSaveMove(MoveDto move) {
     throw new RuntimeException("Not implemented");
   }
 

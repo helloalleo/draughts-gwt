@@ -11,7 +11,6 @@ import online.draughts.rus.draughts.util.Operator;
 import online.draughts.rus.draughts.util.PossibleOperators;
 import online.draughts.rus.shared.dto.DraughtDto;
 import online.draughts.rus.shared.dto.MoveDto;
-import online.draughts.rus.shared.util.StringUtils;
 
 import java.util.*;
 
@@ -67,10 +66,6 @@ public class Board extends Layer {
 
     placeDraughts();
     bindEvents();
-  }
-
-  public boolean isSelfPlay() {
-    return selfPlay;
   }
 
   public void setSelfPlay(boolean selfPlay) {
@@ -215,26 +210,26 @@ public class Board extends Layer {
     boolean queen = p.isQueen();
     if (this.white) {
       possibleMovePair(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, white, white, queen,
-          possibleMoves, jumpMoves, true);
+          possibleMoves, jumpMoves);
       possibleMovePair(Operator.SUBTRACTION, Operator.ADDITION, row, col, white, white, queen,
-          possibleMoves, jumpMoves, true);
+          possibleMoves, jumpMoves);
       possibleMovePair(Operator.ADDITION, Operator.SUBTRACTION, row, col, !white, white, queen,
-          possibleMoves, jumpMoves, true);
+          possibleMoves, jumpMoves);
       possibleMovePair(Operator.ADDITION, Operator.ADDITION, row, col, !white, white, queen,
-          possibleMoves, jumpMoves, true);
+          possibleMoves, jumpMoves);
     } else {
       // top-left
       possibleMovePair(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, !white, white, queen,
-          possibleMoves, jumpMoves, true);
+          possibleMoves, jumpMoves);
       // top-right
       possibleMovePair(Operator.SUBTRACTION, Operator.ADDITION, row, col, !white, white, queen,
-          possibleMoves, jumpMoves, true);
+          possibleMoves, jumpMoves);
       // bottom-left
       possibleMovePair(Operator.ADDITION, Operator.SUBTRACTION, row, col, white, white, queen,
-          possibleMoves, jumpMoves, true);
+          possibleMoves, jumpMoves);
       // bottom-right
       possibleMovePair(Operator.ADDITION, Operator.ADDITION, row, col, white, white, queen,
-          possibleMoves, jumpMoves, true);
+          possibleMoves, jumpMoves);
     }
 
     if (p == clickedDraught) {
@@ -280,8 +275,7 @@ public class Board extends Layer {
    * @param sideWhite - цвет за который играет шашка
    */
   private void possibleMovePair(Operator opRow, Operator opCol, int row, int col, boolean white, boolean sideWhite,
-                                boolean queen, List<Square> outPossibleMoves, List<Square> outJumpMoves,
-                                boolean straightQueen) {
+                                boolean queen, List<Square> outPossibleMoves, List<Square> outJumpMoves) {
     if (queen) {
       QueenMoves moves = queenPossibleMoves(opRow, opCol, row, col, sideWhite, 0);
       if (!moves.possibleMoves.isEmpty()) {
@@ -751,6 +745,14 @@ public class Board extends Layer {
       getView().addNotationStroke(strokeForNotation);
     }
 
+    // отправляем ход на сервер и сохраняем его там
+//    if (isWhite()) {
+//      MoveDto move = MoveFactory.createMoveFromStroke(stroke);
+//      move.setScreenshot(getView().takeScreenshot());
+//      move.setFixate(true);
+//      getView().doSaveMove(move);
+//    }
+
     doMove(stroke); // сделать ход
   }
 
@@ -951,7 +953,6 @@ public class Board extends Layer {
         props.push(AnimationProperty.Properties.X(endSquare.getCenterX()));
         props.push(AnimationProperty.Properties.Y(endSquare.getCenterY()));
 
-        final AnimationCallback animationCallback = new AnimationCallback();
         selectedDraught.animate(AnimationTweener.LINEAR, props, ANIMATION_DURATION, new IAnimationCallback() {
           @Override
           public void onStart(IAnimation animation, IAnimationHandle handle) {
@@ -963,16 +964,17 @@ public class Board extends Layer {
 
           @Override
           public void onClose(IAnimation animation, IAnimationHandle handle) {
-            final MoveDto move = MoveFactory.createMoveFromStroke(stroke)
-                .setTitle(stroke.toNotation())
-                .setHashTags(StringUtils.getHashes(getComment()));
+            final MoveDto move = MoveFactory.createMoveFromStroke(stroke);
 
-//            if (isWhite() && getView().getPlayer().isSubscribed() || getView().getOpponent().isSubscribed()) {
+//            if (isWhite()) {
 //              move.setScreenshot(getView().takeScreenshot());
+//              move.setFixate(true);
 //            }
             backgroundLayer.resetDeskDrawing();
 
+            // перемещаем шашку на стороне оппонента
             getView().doPlayerMove(move);
+
             moveMyStack.push(stroke);
             moveStack.push(stroke);
           }

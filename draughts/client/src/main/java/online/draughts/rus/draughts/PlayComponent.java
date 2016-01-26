@@ -9,6 +9,8 @@ import online.draughts.rus.shared.dto.MoveDto;
  * Time: 20:23
  */
 public interface PlayComponent {
+  String takeScreenshot();
+
   void checkWinner();
 
   void toggleTurn(boolean turn);
@@ -16,4 +18,6 @@ public interface PlayComponent {
   void doPlayerMove(MoveDto move);
 
   void addNotationStroke(Stroke strokeForNotation);
+
+  void doSaveMove(MoveDto move);
 }

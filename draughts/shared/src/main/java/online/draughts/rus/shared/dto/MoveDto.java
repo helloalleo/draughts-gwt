@@ -17,6 +17,7 @@ public class MoveDto extends BaseDto {
   private int number; // номер пары хода
   private int moveOrder;
   private boolean first; // первый ход в паре ходов. Например, ee-aa в ee-aa bb-cc
+  private boolean fixate;
 
   /**
    * Ещё не перемещенная шашка
@@ -40,6 +41,7 @@ public class MoveDto extends BaseDto {
   private String comment;
 
   private Set<String> hashTags = new HashSet<>();
+  private String screenshot;
 
   public MoveDto() {
   }
@@ -77,6 +79,14 @@ public class MoveDto extends BaseDto {
   public MoveDto setFirst(boolean first) {
     this.first = first;
     return this;
+  }
+
+  public boolean isFixate() {
+    return fixate;
+  }
+
+  public void setFixate(boolean fixate) {
+    this.fixate = fixate;
   }
 
   public DraughtDto getTakenDraught() {
@@ -160,6 +170,14 @@ public class MoveDto extends BaseDto {
 
   public void setMoveOrder(int order) {
     this.moveOrder = order;
+  }
+
+  public void setScreenshot(String screenshot) {
+    this.screenshot = screenshot;
+  }
+
+  public String getScreenshot() {
+    return screenshot;
   }
 
   public enum MoveFlags {

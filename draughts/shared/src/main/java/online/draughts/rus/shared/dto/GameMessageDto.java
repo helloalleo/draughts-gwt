@@ -129,6 +129,7 @@ public class GameMessageDto extends BaseDto {
     PLAY_ALREADY_PLAYING,
     PLAY_START,
     PLAY_OPPONENT_MOVE,
+    PLAY_SAVE_MOVE,
     PLAY_CANCEL_MOVE,
     PLAY_CANCEL_MOVE_RESPONSE,
     PLAY_PROPOSE_DRAW,
@@ -139,6 +140,6 @@ public class GameMessageDto extends BaseDto {
     PLAY_DID_NOT_RESPONSE,
     NOTIFICATION_ADDED_TO_FAVORITE,
     CHANNEL_CLOSE,
-    PLAYER_REGISTER,
+    PLAYER_REGISTER
   }
 }

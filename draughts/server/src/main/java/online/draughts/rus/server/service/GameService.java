@@ -2,10 +2,7 @@ package online.draughts.rus.server.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.domain.Friend;
-import online.draughts.rus.server.domain.Game;
-import online.draughts.rus.server.domain.Move;
-import online.draughts.rus.server.domain.Player;
+import online.draughts.rus.server.domain.*;
 import online.draughts.rus.server.util.Rating;
 import online.draughts.rus.shared.dto.GameDto;
 
@@ -132,6 +129,6 @@ public class GameService {
   }
 
   public List<Move> findGameMoves(Long gameId) {
-    return new ArrayList<>(); //gameMessageDaoProvider.get().findGameMoves(gameId);
+    return GameMessage.getInstance().findGameMoves(gameId);
   }
 }

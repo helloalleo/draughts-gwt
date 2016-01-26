@@ -55,6 +55,9 @@ public class GameGiff extends HttpServlet {
     PanoramWriter writer = new PanoramWriter();
     final int imgSize = 400;
     for (Move move : moves) {
+      if (null == move.getScreenshot()) {
+        continue;
+      }
       final byte[] imageData = Base64.decodeBase64(move.getScreenshot()
           .replaceAll("data:image/[a-z]*;base64,", "")
           .getBytes());

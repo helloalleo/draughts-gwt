@@ -218,9 +218,18 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     fireEvent(new TurnChangeEvent(turn));
   }
 
+  /**
+   * Перемещает шашку оппонента
+   * @param move место куда переместить
+   */
   @Override
   public void doPlayerMove(MoveDto move) {
-    fireEvent(new PlayMovePlayerMessageEvent(move));
+    GameMessageDto message = createGameMessage();
+    message.setMessageType(GameMessageDto.MessageType.PLAY_OPPONENT_MOVE);
+    message.setMove(move);
+    message.setGame(playSession.getGame());
+
+    fireEvent(new GameMessageEvent(message));
   }
 
   @Override
@@ -293,6 +302,16 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   @Override
   public void stopTimers() {
     playerTimer.cancel();
+  }
+
+  @Override
+  public void doSaveMove(MoveDto move) {
+    GameMessageDto message = createGameMessage();
+    message.setMessageType(GameMessageDto.MessageType.PLAY_SAVE_MOVE);
+    message.setMove(move);
+    message.setGame(playSession.getGame());
+
+    fireEvent(new GameMessageEvent(message));
   }
 
   private GameMessageDto createGameMessage() {
@@ -513,16 +532,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     });
   }
 
-  @Override
-  public String getTimeOnPlayStringMinutes() {
-    return timeOnPlayStringMinutes;
-  }
-
-  @Override
-  public String getFisherTimeStringSecond() {
-    return fisherTimeStringSecond;
-  }
-
   private String formatTime(int counter) {
     int min = counter / 60;
     int sec = counter - min * 60;
@@ -618,8 +627,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
     boolean getOpponentColor();
 
-    String takeScreenshot();
-
     Board getBoard();
 
     void initNotationPanel(Long gameId);
@@ -635,5 +642,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     void setOpponentTime(String time);
 
     void cancelMove(Stroke stroke);
+
+    String takeScreenshot();
   }
 }

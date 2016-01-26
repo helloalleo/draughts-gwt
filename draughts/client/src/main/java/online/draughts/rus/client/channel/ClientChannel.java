@@ -102,19 +102,6 @@ public class ClientChannel implements ChannelListener {
       }
     });
 
-    // перемещаем шашку оппонента
-    eventBus.addHandler(PlayMovePlayerMessageEvent.TYPE, new PlayMoveMessageEventHandler() {
-      @Override
-      public void onPlayMoveMessage(PlayMovePlayerMessageEvent event) {
-        GameMessageDto message = createGameMessage();
-        message.setMessageType(GameMessageDto.MessageType.PLAY_OPPONENT_MOVE);
-        message.setMove(event.getMove());
-        message.setGame(playSession.getGame());
-
-        sendGameMessage(message);
-      }
-    });
-
     eventBus.addHandler(UpdatePlayerListEvent.TYPE, new UpdatePlayerListEventHandler() {
       @Override
       public void onUpdatePlayerList(UpdatePlayerListEvent event) {

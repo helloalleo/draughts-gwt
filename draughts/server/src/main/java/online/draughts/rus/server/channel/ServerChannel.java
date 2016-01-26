@@ -88,6 +88,7 @@ public class ServerChannel extends ChannelServer {
       case PLAY_ALREADY_PLAYING:
       case PLAY_START:
       case PLAY_OPPONENT_MOVE:
+      case PLAY_SAVE_MOVE:
       case PLAY_PROPOSE_DRAW:
       case PLAY_CANCEL_MOVE:
       case PLAY_CANCEL_MOVE_RESPONSE:
@@ -179,11 +180,10 @@ public class ServerChannel extends ChannelServer {
   private GameMessage saveGameMessage(GameMessage message) {
     message.setSentDate(new Date());
 
-    Move move = null;
     if (null != message.getMove()) {
-       move = gameMessageService.saveMove(message.getMove());
+      Move move = gameMessageService.saveMove(message.getMove());
+      message.setMove(move);
     }
-    message.setMove(move);
     message = gameMessageService.save(message);
 
     return message;
