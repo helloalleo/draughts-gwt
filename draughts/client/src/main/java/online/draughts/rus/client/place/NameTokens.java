@@ -17,6 +17,7 @@ public class NameTokens {
   public static final String errorPage = "!error";
   public static final String settingsPage = "!settings";
   public static final String logoutPage = "/logout";
+  private final String ruShashkiNetUrl = "https://rushashki-net.appspot.com";
 
   // ссылки - название и токен
   private final Link homeLink;
@@ -28,10 +29,12 @@ public class NameTokens {
   private final Link settingsLink;
   private final Link playLink;
   private final Link analysisLink;
+  private final Link ruShashkiNetLink;
 
   @Inject
   public NameTokens(DraughtsMessages messages) {
     homeLink = new Link(homePage, messages.home(), null, IconType.HOME);
+    ruShashkiNetLink = new Link(null, "RuShashkiNet", ruShashkiNetUrl, IconType.LINK);
     learnLink = new Link(learnPage, messages.learn(), null, null);
     playLink = new Link(playPage, messages.play(), null, IconType.PLAY_CIRCLE_O);
     analysisLink = new Link(analysisPage, messages.analysis(), null, null);
@@ -47,11 +50,11 @@ public class NameTokens {
   }
 
   public Link[] getLeftLinks() {
-    return new Link[]{homeLink};
+    return new Link[]{homeLink, ruShashkiNetLink};
   }
 
   public Link[] getLeftAuthLinks() {
-    return new Link[]{homeLink, playLink};
+    return new Link[]{homeLink, playLink, analysisLink, ruShashkiNetLink};
   }
 
   public Link[] getRightLinks() {

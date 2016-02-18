@@ -69,6 +69,10 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
   com.google.gwt.user.client.ui.Label beatenMyDraughtsLabel;
   @UiField
   HTMLPanel notationList;
+  @UiField
+  Button savePosition;
+  @UiField
+  Button loadPosition;
   private final DraughtsMessages messages;
   private final AppResources resources;
   private Desk desk;
@@ -148,6 +152,12 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     addDraughtCheckbox.setEnabled(true);
     addDraughtCheckbox.setValue(true);
     addDraughtChangeState();
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("savePosition")
+  public void onSavePositionClicked(ClickEvent clickEvent) {
+    desk.board.getCurrentPosition();
   }
 
   private void addDraughtChangeState() {

@@ -6,9 +6,6 @@ import com.ait.lienzo.client.core.shape.Text;
 import com.ait.lienzo.client.core.types.Shadow;
 import com.ait.lienzo.shared.core.types.Color;
 import com.ait.lienzo.shared.core.types.ColorName;
-import online.draughts.rus.client.util.Logger;
-
-import java.util.Vector;
 
 /**
  * Created with IntelliJ IDEA.
@@ -25,7 +22,6 @@ public class BoardBackgroundLayer extends Layer {
   private int deskSide;
   private Square[][] gameBoard;
   private Rectangle boardConturRect;
-  private Vector<Text> coordsTextVector = new Vector<>();
   public static final int OFFSET_X = 29;
   public static final Color BOARD_BACKGROUND = new Color(65, 133, 132);
 
@@ -76,12 +72,6 @@ public class BoardBackgroundLayer extends Layer {
   }
 
   public void drawCoordinates(boolean white) {
-    if (!coordsTextVector.isEmpty()) {
-      for (Text t : coordsTextVector) {
-        remove(t);
-      }
-      coordsTextVector.clear();
-    }
     int numCoords = white ? rows : 1;
     int alphIdCoords = white ? 0 : cols - 1;
     String alphCoords[] = new String[]{"A", "B", "C", "D", "E", "F", "G", "H"};
@@ -97,7 +87,6 @@ public class BoardBackgroundLayer extends Layer {
           num.setX(x);
           num.setY(y);
           add(num);
-          coordsTextVector.add(num);
         }
         if (rows == (i + 1)) {
           double x = deskSide * ((double) j / ((double) rows) + 1 / ((double) cols * 2)) + OFFSET_X - 8;
@@ -109,7 +98,6 @@ public class BoardBackgroundLayer extends Layer {
           alph.setX(x);
           alph.setY(y);
           add(alph);
-          coordsTextVector.add(alph);
         }
       }
     }

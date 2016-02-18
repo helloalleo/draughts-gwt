@@ -17,7 +17,7 @@
 
     <name>server</name>
 
-    <url>http://draughts.online</url>
+    <url>http://шашкионлайн.com</url>
 
     <properties>
         <app.version>1</app.version>
@@ -412,7 +412,8 @@
                         Ensures that the config.properties file is always loaded from the
                         configuration directory of the active Maven profile. 
                     -->
-                    <filter>${project.basedir}/src/main/resources/profiles/${build.profile.id}/config.properties
+                    <filter>
+                        ${project.basedir}/src/main/resources/profiles/${build.profile.id}/config.properties
                     </filter>
                 </filters>
             </build>

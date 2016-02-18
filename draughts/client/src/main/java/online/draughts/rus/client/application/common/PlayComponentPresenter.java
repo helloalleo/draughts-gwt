@@ -368,7 +368,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         getView().initNotationPanel(game.getId());
 
         if (event.isInviter()) {
-          final Set<DraughtDto> initialPosition = getView().getBoard().getInitialPosition();
+          final Set<DraughtDto> initialPosition = getView().getBoard().getCurrentPosition();
           game.setPlayStartDate(new Date());
           game.setInitialPos(initialPosition);
           gamesDelegate.withoutCallback().save(game);
