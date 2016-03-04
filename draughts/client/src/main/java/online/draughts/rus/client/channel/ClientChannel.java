@@ -10,10 +10,7 @@ import no.eirikb.gwtchannelapi.client.Channel;
 import no.eirikb.gwtchannelapi.client.ChannelListener;
 import online.draughts.rus.client.application.common.PlayComponentPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
-import online.draughts.rus.client.application.widget.dialog.ConfirmPlayDialogBox;
-import online.draughts.rus.client.application.widget.dialog.ConfirmeDialogBox;
-import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
-import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
+import online.draughts.rus.client.application.widget.dialog.*;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.json.ChunkMapper;
@@ -131,6 +128,9 @@ public class ClientChannel implements ChannelListener {
   }
 
   private void sendGameMessage(GameMessageDto gameMessage) {
+    if (gameMessage.getSender() == null) {
+      gameMessage.setSender(playSession.getPlayer());
+    }
     String message = messageMapper.write(gameMessage);
     channel.send(message);
   }
@@ -207,7 +207,7 @@ public class ClientChannel implements ChannelListener {
   @Override
   public void onOpen() {
     if (player == null) {
-      InfoDialogBox.setMessage(messages.failToConnectToServer()).show();
+      InfoDialogBox.setMessage(messages.failedToConnectToServer()).show();
       return;
     }
     GameMessageDto gameMessage = GWT.create(GameMessageDto.class);
@@ -406,7 +406,7 @@ public class ClientChannel implements ChannelListener {
       }));
     } else {
       String senderName = gameMessage.getSender().getPublicName();
-      InfoDialogBox.setMessage(messages.playerRejectedDraw(senderName)).show();
+      GameResultDialogBox.setMessage(messages.playerRejectedDraw(senderName)).show();
     }
   }
 
@@ -455,7 +455,7 @@ public class ClientChannel implements ChannelListener {
 
       @Override
       public void onSuccess(GameDto aVoid) {
-        InfoDialogBox.setMessage(messages.opponentSurrendered()).show();
+        GameResultDialogBox.setMessage(messages.opponentSurrendered()).show();
       }
     }));
   }

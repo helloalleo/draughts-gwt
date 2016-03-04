@@ -15,7 +15,7 @@ import online.draughts.rus.client.application.play.PlayView;
 import online.draughts.rus.client.application.play.messanger.MessengerPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.NotationPanel;
-import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
+import online.draughts.rus.client.application.widget.dialog.GameResultDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.channel.ClientChannel;
 import online.draughts.rus.client.channel.PlaySession;
@@ -413,7 +413,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         final GameDto endGame = playSession.getGame();
         GameDto.GameEnds gameEnd = null;
         if (0 == getView().getMyDraughtsSize()) {
-          InfoDialogBox.setMessage(messages.youLose()).show();
+          GameResultDialogBox.setMessage(messages.youLose()).show();
           if ((getView().isWhite())) {
             gameEnd = GameDto.GameEnds.BLACK_WIN;
           } else {
@@ -421,7 +421,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
           }
         }
         if (0 == getView().getOpponentDraughtsSize()) {
-          InfoDialogBox.setMessage(messages.youWon()).show();
+          GameResultDialogBox.setMessage(messages.youWon()).show();
           if (getView().isWhite()) {
             gameEnd = GameDto.GameEnds.WHITE_WIN;
           } else {

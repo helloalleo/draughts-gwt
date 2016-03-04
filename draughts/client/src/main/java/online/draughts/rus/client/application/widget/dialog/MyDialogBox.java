@@ -1,13 +1,19 @@
 package online.draughts.rus.client.application.widget.dialog;
 
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
+import com.google.web.bindery.event.shared.EventBus;
+import online.draughts.rus.client.event.GameMessageEvent;
+import online.draughts.rus.shared.dto.GameMessageDto;
+import org.apache.commons.lang3.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
+import org.gwtbootstrap3.client.ui.TextArea;
 
 /**
  * Created with IntelliJ IDEA.
@@ -16,7 +22,9 @@ import org.gwtbootstrap3.client.ui.Button;
  * Time: 14:12
  */
 public class MyDialogBox extends BasicDialogBox {
+  private final TextArea messageToAdmins = new TextArea();
   private HTML contentHTML;
+  private EventBus eventBus = GWT.create(EventBus.class);
 
   public MyDialogBox(String header, String content) {
     ScrollPanel contentScrollPanel = new ScrollPanel();
@@ -28,6 +36,10 @@ public class MyDialogBox extends BasicDialogBox {
     VerticalPanel panel = new VerticalPanel();
     panel.setPixelSize(WIDTH, HEIGHT);
     panel.add(contentScrollPanel);
+
+    messageToAdmins.setPlaceholder(messages.messageToAdmins());
+    panel.add(messageToAdmins);
+    messageToAdmins.setVisible(false);
 
     final Button buttonClose = new Button(messages.ok(), new ClickHandler() {
       @Override
@@ -55,6 +67,20 @@ public class MyDialogBox extends BasicDialogBox {
     setText(header);
   }
 
+  protected void setMessageToAdminsVisible(boolean visible) {
+    messageToAdmins.setVisible(visible);
+  }
+
   public void submit() {
+    if (StringUtils.isEmpty(messageToAdmins.getValue())){
+      return;
+    }
+
+    GameMessageDto gameMessage = new GameMessageDto();
+    gameMessage.setMessageType(GameMessageDto.MessageType.CHAT_MESSAGE);
+    gameMessage.setReceiver(null);
+    gameMessage.setMessage(messageToAdmins.getValue());
+
+    eventBus.fireEvent(new GameMessageEvent(gameMessage));
   }
 }

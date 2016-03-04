@@ -11,7 +11,7 @@ import com.google.gwt.user.client.ui.HTML;
  */
 public class InfoDialogBox extends MyDialogBox {
 
-  private InfoDialogBox(String content) {
+  protected InfoDialogBox(String content) {
     super(messages.info(), content);
     HTML caption = new HTML(messages.info());
     caption.getElement().addClassName(resources.style().dialogCaptionInfo());

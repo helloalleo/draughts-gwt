@@ -345,8 +345,8 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
    * @return translated "Error while connecting to server"
    */
   @DefaultMessage("Error while connecting to server")
-  @Key("failToConnectToServer")
-  String failToConnectToServer();
+  @Key("failedToConnectToServer")
+  String failedToConnectToServer();
 
   /**
    * Translated "Fail to launch the Game".
@@ -464,6 +464,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Logout")
   @Key("logout")
   String logout();
+
+  /**
+   * Translated "Message to admins (optional)".
+   * 
+   * @return translated "Message to admins (optional)"
+   */
+  @DefaultMessage("Message to admins (optional)")
+  @Key("messageToAdmins")
+  String messageToAdmins();
 
   /**
    * Translated "Minutes".
@@ -968,6 +977,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("White")
   @Key("whitesil")
   String whitesil();
+
+  /**
+   * Translated "{0}, {1}".
+   * 
+   * @return translated "{0}, {1}"
+   */
+  @DefaultMessage("{0}, {1}")
+  @Key("whoHadWon")
+  String whoHadWon(String arg0,  String arg1);
 
   /**
    * Translated "Yes".
