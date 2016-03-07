@@ -11,6 +11,6 @@ import javax.ws.rs.core.Application;
  * Date: 15.10.15
  * Time: 7:36
  */
-@ApplicationPath(ApiPaths.RESOURCE)
+@ApplicationPath(ApiPaths.SERVER_RESOURCE)
 public class RestApplication extends Application {
 }

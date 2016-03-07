@@ -18,6 +18,7 @@ package online.draughts.rus.shared.resource;
 
 public class ApiPaths {
   public static final String RESOURCE = "/resource";
+  public static final String SERVER_RESOURCE = "/d/resource";
 
   public static final String GAMES = "/games";
 

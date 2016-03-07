@@ -4,14 +4,15 @@ package online.draughts.rus.client.application.widget.dialog;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
+import com.google.gwt.event.shared.EventBus;
+import com.google.gwt.event.shared.SimpleEventBus;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
-import com.google.web.bindery.event.shared.EventBus;
 import online.draughts.rus.client.event.GameMessageEvent;
 import online.draughts.rus.shared.dto.GameMessageDto;
-import org.apache.commons.lang3.StringUtils;
+import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.TextArea;
 
@@ -24,7 +25,7 @@ import org.gwtbootstrap3.client.ui.TextArea;
 public class MyDialogBox extends BasicDialogBox {
   private final TextArea messageToAdmins = new TextArea();
   private HTML contentHTML;
-  private EventBus eventBus = GWT.create(EventBus.class);
+  private EventBus eventBus = GWT.create(SimpleEventBus.class);
 
   public MyDialogBox(String header, String content) {
     ScrollPanel contentScrollPanel = new ScrollPanel();

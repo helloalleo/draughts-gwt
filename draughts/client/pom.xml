@@ -42,6 +42,8 @@
         <mockito-all.version>1.9.5</mockito-all.version>
         <gwt-test-utils.version>0.48-SNAPSHOT</gwt-test-utils.version>
         <gwtmockito.version>1.1.5</gwtmockito.version>
+
+        <project.context>d</project.context>
     </properties>
 
     <dependencyManagement>
@@ -401,7 +403,7 @@
                             <bindAddress>0.0.0.0</bindAddress>
                             <style>${gwt.style}</style>
                             <webappDirectory>
-                                ${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}
+                                ${project.basedir}/../../${project.artifacts.directory}/${project.devOutput.directory}/${project.context}
                             </webappDirectory>
                         </configuration>
                         <executions>
@@ -435,7 +437,7 @@
                             <style>OBFUSCATED</style>
                             <outputDirectory>${outputDirectory}</outputDirectory>
                             <webappDirectory>
-                                ${project.basedir}/../../${project.artifacts.directory}/${project.prodOutput.directory}
+                                ${project.basedir}/../../${project.artifacts.directory}/${project.prodOutput.directory}/${project.context}
                             </webappDirectory>
                         </configuration>
                         <executions>

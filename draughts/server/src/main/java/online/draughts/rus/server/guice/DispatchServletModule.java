@@ -41,7 +41,7 @@ public class DispatchServletModule extends ServletModule {
   public void configureServlets() {
     filter("/*").through(createUserIdScopingFilter());
 
-    serve("/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
+    serve("/d/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
 
     serve("/Application/channel").with(ServerChannel.class);
     serve("/cron/checkonline").with(CheckOnlineServlet.class);
