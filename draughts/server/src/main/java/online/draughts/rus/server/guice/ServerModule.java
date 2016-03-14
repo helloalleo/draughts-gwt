@@ -17,7 +17,6 @@ public class ServerModule extends AbstractModule {
   protected void configure() {
     install(new ResourceModule());
     install(new DispatchServletModule());
-    install(new DbModule());
     install(new ServerHandlerModule());
 
     bind(Mapper.class).to(DozerBeanMapper.class);

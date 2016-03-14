@@ -5,7 +5,6 @@ import online.draughts.rus.server.BaseTest;
 import online.draughts.rus.server.domain.GameMessage;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.guice.DatabaseModule;
-import online.draughts.rus.server.guice.DbModule;
 import org.jukito.JukitoRunner;
 import org.jukito.UseModules;
 import org.junit.Test;
@@ -20,7 +19,7 @@ import static org.junit.Assert.assertTrue;
  * Time: 14:20
  */
 @RunWith(JukitoRunner.class)
-@UseModules({DatabaseModule.class, DbModule.class})
+@UseModules({DatabaseModule.class})
 public class MailServiceTest extends BaseTest {
 
   @Inject

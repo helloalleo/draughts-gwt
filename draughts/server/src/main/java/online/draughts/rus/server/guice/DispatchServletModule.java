@@ -43,7 +43,7 @@ public class DispatchServletModule extends ServletModule {
 
     serve("/d/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
 
-    serve("/Application/channel").with(ServerChannel.class);
+    serve("/d/Application/channel").with(ServerChannel.class);
     serve("/cron/checkonline").with(CheckOnlineServlet.class);
 
     serve("/logout").with(LogoutServlet.class);

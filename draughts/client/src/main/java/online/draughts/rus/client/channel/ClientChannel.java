@@ -198,9 +198,9 @@ public class ClientChannel implements ChannelListener {
     };
     String[] data = gameMessage.getData().split(PlayComponentPresenter.INVITE_MESSAGE_DELIMITER);
     final String color = Boolean.valueOf(data[0]) ?
-        messages.whitesil() : messages.blacksil();
+        messages.white_with_ending() : messages.black_with_ending();
     confirmPlayDialogBox.show(messages.inviteMessage(gameMessage.getMessage(), color, data[1], data[2]),
-        Boolean.valueOf(gameMessage.getData()));
+        Boolean.valueOf(data[0]));
     AudioUtil.playSound(resources.sounds().inviteSound());
   }
 

@@ -69,6 +69,6 @@ public class AuthUtils {
       }
     }
 
-    resp.sendRedirect(String.format("/?locale=%s%s", locale, config.getPlayHash()));
+    resp.sendRedirect(String.format("%s/?locale=%s%s", config.getContext(), locale, config.getPlayHash()));
   }
 }

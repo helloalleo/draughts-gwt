@@ -1,7 +1,6 @@
 package online.draughts.rus.server.service;
 
 import online.draughts.rus.server.guice.DatabaseModule;
-import online.draughts.rus.server.guice.DbModule;
 import org.jukito.JukitoRunner;
 import org.jukito.UseModules;
 import org.junit.Test;
@@ -14,7 +13,7 @@ import org.junit.runner.RunWith;
  * Time: 20:39
  */
 @RunWith(JukitoRunner.class)
-@UseModules({DatabaseModule.class, DbModule.class})
+@UseModules({DatabaseModule.class})
 public class PlayerServiceTest {
 
   @Test

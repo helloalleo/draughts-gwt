@@ -147,8 +147,8 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
    * @return translated "Black"
    */
   @DefaultMessage("Black")
-  @Key("blacksil")
-  String blacksil();
+  @Key("black_with_ending")
+  String black_with_ending();
 
   /**
    * Translated "Cancel".
@@ -975,8 +975,8 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
    * @return translated "White"
    */
   @DefaultMessage("White")
-  @Key("whitesil")
-  String whitesil();
+  @Key("white_with_ending")
+  String white_with_ending();
 
   /**
    * Translated "{0}, {1}".

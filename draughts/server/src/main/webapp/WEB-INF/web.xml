@@ -34,7 +34,7 @@
     <!-- this should be the same URL pattern as the servlet-mapping property -->
     <context-param>
         <param-name>resteasy.servlet.mapping.prefix</param-name>
-        <param-value>/resource</param-value>
+        <param-value>/d/resource</param-value>
     </context-param>
 
     <servlet>
@@ -53,7 +53,7 @@
 
     <servlet-mapping>
         <servlet-name>Resteasy</servlet-name>
-        <url-pattern>/resource/*</url-pattern>
+        <url-pattern>/d/resource/*</url-pattern>
     </servlet-mapping>
 
     <!--<servlet-mapping>-->
@@ -63,12 +63,12 @@
 
     <error-page>
         <error-code>500</error-code>
-        <location>/500.html</location>
+        <location>/d/500.html</location>
     </error-page>
 
     <error-page>
         <error-code>404</error-code>
-        <location>/404.html</location>
+        <location>/d/404.html</location>
     </error-page>
 
     <session-config>

@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import online.draughts.rus.server.BaseTest;
 import online.draughts.rus.server.domain.*;
 import online.draughts.rus.server.guice.DatabaseModule;
-import online.draughts.rus.server.guice.DbModule;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.dto.MoveDto;
@@ -28,7 +27,7 @@ import static org.junit.Assert.*;
  * Time: 20:30
  */
 @RunWith(JukitoRunner.class)
-@UseModules({DatabaseModule.class, DbModule.class})
+@UseModules({DatabaseModule.class})
 public class GameServiceTest extends BaseTest {
 
   @Inject
