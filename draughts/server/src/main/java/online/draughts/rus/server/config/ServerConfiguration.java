@@ -44,6 +44,7 @@ public class ServerConfiguration {
   private boolean debug;
   private String gaeCronIpAddr;
   private String fromEmail;
+  private String adminMail;
 
   @Inject
   public ServerConfiguration() {
@@ -52,6 +53,7 @@ public class ServerConfiguration {
     gaeCronIpAddr = resourceBundle.getString("gae_cron_ip_addr");
     gaeCronCheckIntervalHour = resourceBundle.getString("gae_cron_check_interval_hour");
     fromEmail = resourceBundle.getString("from_email");
+    adminMail = resourceBundle.getString("admin_mail");
 
     context = resourceBundle.getString("context");
 
@@ -204,5 +206,9 @@ public class ServerConfiguration {
 
   public String getFromEmail() {
     return fromEmail;
+  }
+
+  public String getAdminMail() {
+    return adminMail;
   }
 }

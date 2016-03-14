@@ -36,6 +36,7 @@ public class MailService {
   }
 
   private boolean sendNotificationMail(String receivedMessage, Player receiver, Player sender) {
+    // TODO Обработать отправку письма админам когда получатель или отправитель ранвы нал
     Properties props = new Properties();
     props.put("mail.transport.protocol", "smtp");
     if (config.isDebug()) {
@@ -53,10 +54,11 @@ public class MailService {
 
     try {
       MimeMessage message = new MimeMessage(mailSession);
-      message.setSubject(String.format("Новое сообщение от %s", sender.getPublicName()), "UTF-8");
+      message.setSubject(String.format("Новое сообщение от %s", sender == null ? "не указано" : sender.getPublicName()), "UTF-8");
       message.setFrom(new InternetAddress(config.getFromEmail(), "ШашкиОнлайн.COM", "UTF-8"));
       message.addRecipient(Message.RecipientType.TO,
-          new InternetAddress(receiver.getEmail(), receiver.getPublicName(), "UTF-8"));
+          new InternetAddress(receiver == null ? config.getAdminMail() : receiver.getEmail(),
+              receiver == null ? "Админ" : receiver.getPublicName(), "UTF-8"));
 
       //
       // This HTML mail have to 2 part, the BODY and the embedded image
@@ -124,5 +126,20 @@ public class MailService {
         && receiver.isSubscribeOnNewsletter()
         && StringUtils.isNotEmpty(receiver.getEmail())
         && sendNotificationMail(message.getMessage(), receiver, sender);
+  }
+
+  public void sendToAdmins(GameMessage message) {
+    Player receiver = null;
+    if (message.getReceiver() != null) {
+      receiver = playerService.find(message.getReceiver().getId());
+    }
+    Player sender = null;
+    if (message.getSender() != null) {
+      sender = playerService.find(message.getSender().getId());
+    }
+
+    // если получатель не имеет сообщений от данного отправителя, тогда инициализируем Map и увеличиваем счетчика
+    // на единицу
+    sendNotificationMail(message.getMessage(), receiver, sender);
   }
 }

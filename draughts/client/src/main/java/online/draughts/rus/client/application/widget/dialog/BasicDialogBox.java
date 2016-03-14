@@ -9,6 +9,8 @@ import com.google.gwt.user.client.ui.DialogBox;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.client.util.DTCookiesImpl;
+import online.draughts.rus.client.util.DTLogImpl;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 
 /**

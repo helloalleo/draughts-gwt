@@ -6,7 +6,6 @@ import com.ait.lienzo.client.core.event.NodeMouseClickHandler;
 import com.ait.lienzo.client.core.event.NodeTouchEndEvent;
 import com.ait.lienzo.client.core.event.NodeTouchEndHandler;
 import com.ait.lienzo.client.core.shape.Layer;
-import com.google.gwt.core.client.GWT;
 import online.draughts.rus.draughts.util.Operator;
 import online.draughts.rus.draughts.util.PossibleOperators;
 import online.draughts.rus.shared.dto.DraughtDto;
@@ -670,7 +669,6 @@ public class Board extends Layer {
           @Override
           public void onClose(IAnimation iAnimation, IAnimationHandle iAnimationHandle) {
             remove(takenDraught);
-            GWT.log("remove");
             if (!isEmulate() && !clearDesk) {
               getView().checkWinner();
             }

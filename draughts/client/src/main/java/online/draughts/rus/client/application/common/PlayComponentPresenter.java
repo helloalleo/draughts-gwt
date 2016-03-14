@@ -413,7 +413,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         final GameDto endGame = playSession.getGame();
         GameDto.GameEnds gameEnd = null;
         if (0 == getView().getMyDraughtsSize()) {
-          GameResultDialogBox.setMessage(messages.youLose()).show();
+          GameResultDialogBox.setMessage(messages.youLose(), getEventBus()).show();
           if ((getView().isWhite())) {
             gameEnd = GameDto.GameEnds.BLACK_WIN;
           } else {
@@ -421,7 +421,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
           }
         }
         if (0 == getView().getOpponentDraughtsSize()) {
-          GameResultDialogBox.setMessage(messages.youWon()).show();
+          GameResultDialogBox.setMessage(messages.youWon(), getEventBus()).show();
           if (getView().isWhite()) {
             gameEnd = GameDto.GameEnds.WHITE_WIN;
           } else {

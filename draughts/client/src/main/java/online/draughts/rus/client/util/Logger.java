@@ -15,7 +15,7 @@ public class Logger {
     this.log = new DTLogImpl();
   }
 
-  public static Logger getInstance() {
+  private static Logger getInstance() {
     return LoggerHolder.INSTANCE;
   }
 

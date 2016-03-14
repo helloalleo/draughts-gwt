@@ -204,6 +204,13 @@ public abstract class InviteDialogBox extends BasicDialogBox {
       }
     });
     submitButton.addClickHandler(submitClickHandler);
+    submitButton.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        timerCounterTimer.cancel();
+        waitResponseTimer.cancel();
+      }
+    });
 
     cancelButton.addClickHandler(new ClickHandler() {
       @Override

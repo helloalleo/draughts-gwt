@@ -322,7 +322,7 @@ public class ClientChannel implements ChannelListener {
       eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AbstractAsyncCallback<GameDto>() {
         @Override
         public void onSuccess(GameDto aVoid) {
-          InfoDialogBox.setMessage(messages.timeOutOpponentLose());
+          GameResultDialogBox.setMessage(messages.timeOutOpponentLose(), eventBus);
         }
       }));
     }
@@ -406,7 +406,7 @@ public class ClientChannel implements ChannelListener {
       }));
     } else {
       String senderName = gameMessage.getSender().getPublicName();
-      GameResultDialogBox.setMessage(messages.playerRejectedDraw(senderName)).show();
+      GameResultDialogBox.setMessage(messages.playerRejectedDraw(senderName), eventBus).show();
     }
   }
 
@@ -455,7 +455,7 @@ public class ClientChannel implements ChannelListener {
 
       @Override
       public void onSuccess(GameDto aVoid) {
-        GameResultDialogBox.setMessage(messages.opponentSurrendered()).show();
+        GameResultDialogBox.setMessage(messages.opponentSurrendered(), eventBus).show();
       }
     }));
   }

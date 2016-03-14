@@ -163,6 +163,10 @@ public class ServerChannel extends ChannelServer {
   }
 
   private void handleChatPrivateMessage(GameMessage message) {
+    if (message.getReceiver() == null || message.getSender() == null) {
+      mailService.sendToAdmins(message);
+      return;
+    }
     long receiverId = message.getReceiver().getId();
 
     final String receiverChannel = String.valueOf(receiverId);

@@ -40,4 +40,8 @@ public class ErrorDialogBox extends MyDialogBox {
   public static ErrorDialogBox setMessage(String message) {
     return new ErrorDialogBox(constructMessage(message, null));
   }
+
+  @Override
+  public void submit() {
+  }
 }

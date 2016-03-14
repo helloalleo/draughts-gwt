@@ -12,13 +12,12 @@ import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import online.draughts.rus.client.application.ApplicationPresenter;
 import online.draughts.rus.client.application.common.PlayComponentPresenter;
-import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
+import online.draughts.rus.client.application.widget.dialog.GameResultDialogBox;
 import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.event.GameOverEvent;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 
@@ -59,7 +58,7 @@ public class AnalysisPresenter extends Presenter<AnalysisPresenter.MyView, Analy
     final GameDto endGame = playSession.getGame();
     GameDto.GameEnds gameEnd = null;
     if (0 == getView().getMyDraughtsSize()) {
-      InfoDialogBox.setMessage(messages.youLose()).show();
+      GameResultDialogBox.setMessage(messages.youLose(), getEventBus()).show();
       if ((getView().isWhite())) {
         gameEnd = GameDto.GameEnds.BLACK_WIN;
       } else {
@@ -67,7 +66,7 @@ public class AnalysisPresenter extends Presenter<AnalysisPresenter.MyView, Analy
       }
     }
     if (0 == getView().getOpponentDraughtsSize()) {
-      InfoDialogBox.setMessage(messages.youWon()).show();
+      GameResultDialogBox.setMessage(messages.youWon(), getEventBus()).show();
       if (getView().isWhite()) {
         gameEnd = GameDto.GameEnds.WHITE_WIN;
       } else {
