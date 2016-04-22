@@ -16,6 +16,7 @@ import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.resource.PlayersResource;
+import online.draughts.rus.shared.util.StringUtils;
 
 
 public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView> implements SettingsUiHandlers {
@@ -49,6 +50,14 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
 
   @Override
   public void submitNewPlayerName(String playerName) {
+    if (StringUtils.isEmpty(playerName) || playerName.length() < 3) {
+      Growl.growlNotif(messages.tooShortPlayerName());
+      return;
+    } else if (playerName.length() > 50) {
+      Growl.growlNotif(messages.tooLongPlayerName());
+      return;
+    }
+
     String name = playerName.replace(config.escapeChars(), "");
     name = SimpleHtmlSanitizer.getInstance().sanitize(name).asString();
     player.setPlayerName(name);

@@ -28,7 +28,7 @@
                                                 Имя на сайте
                                             </ui:msg>
                                         </b:InputGroupAddon>
-                                        <b:TextBox ui:field="playerNameTextBox" placeholder="Имя на сайте">
+                                        <b:TextBox ui:field="playerNameTextBox" placeholder="Имя на сайте" maxLength="50">
                                             <ui:attribute name="placeholder"
                                                           description="A player name on the site"/>
                                         </b:TextBox>
