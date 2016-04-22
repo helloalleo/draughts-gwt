@@ -28,7 +28,7 @@
                     response.sendRedirect("/l/");
                 }
             } else {
-                response.sendRedirect("/l/index.html");
+                response.sendRedirect("/l/");
             }
         }
     }

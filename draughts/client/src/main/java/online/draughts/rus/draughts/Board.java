@@ -850,6 +850,8 @@ public class Board extends Layer {
             opponentDraughtList.add(addDraught(taken.getRow(), taken.getCol(), !isWhite()));
           }
         }
+        // обновляем количество побитых шашек
+        getView().checkWinner();
       } else {
         removeDraughtFrom(taken);
       }
