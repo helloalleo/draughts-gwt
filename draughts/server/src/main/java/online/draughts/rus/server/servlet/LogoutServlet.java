@@ -7,6 +7,7 @@ import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.domain.Player;
 
 import javax.servlet.ServletException;
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
@@ -30,8 +31,8 @@ public class LogoutServlet extends HttpServlet {
     this.config = serverConfiguration;
   }
 
-  protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
-    Player player = playerService.findBySessionId(request.getSession().getId());
+  protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+    Player player = playerService.findBySessionId(req.getSession().getId());
     if (player != null) {
       player.setOnline(false);
       player.setPlaying(false);
@@ -39,7 +40,8 @@ public class LogoutServlet extends HttpServlet {
       playerService.save(player);
     }
 
-    request.getSession().invalidate();
-    response.sendRedirect("/" + config.getLoginHash());
+    req.getSession().invalidate();
+    resp.addCookie(new Cookie("loggedIn", "0"));
+    resp.sendRedirect("/" + config.getLoginHash());
   }
 }

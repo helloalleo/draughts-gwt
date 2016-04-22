@@ -63,11 +63,12 @@ public class AuthUtils {
 
     String locale = "ru";
     for (Cookie cookie : req.getCookies()) {
-      if ("locale".equals(cookie.getName())) {
+      if ("locale".equalsIgnoreCase(cookie.getName())) {
         locale = cookie.getValue();
         break;
       }
     }
+    resp.addCookie(new Cookie("loggedIn", "1"));
 
     resp.sendRedirect(String.format("%s/?locale=%s%s", config.getContext(), locale, config.getPlayHash()));
   }
