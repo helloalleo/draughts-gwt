@@ -7,6 +7,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.Label;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.*;
@@ -48,7 +49,6 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     panel.setPixelSize(WIDTH, HEIGHT);
 
     panel.add(inviteLabel);
-
 
     submitButton = new Button(messages.next());
     Button cancelButton = new Button(messages.cancel());
@@ -145,6 +145,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     timerCounterTimer = new Timer() {
       @Override
       public void run() {
+        Logger.debug(waitCounter);
         waitMessageLabel.setText(messages.waitResponse() + " " + waitCounter);
         waitCounter -= 1;
       }
@@ -204,13 +205,6 @@ public abstract class InviteDialogBox extends BasicDialogBox {
       }
     });
     submitButton.addClickHandler(submitClickHandler);
-    submitButton.addClickHandler(new ClickHandler() {
-      @Override
-      public void onClick(ClickEvent event) {
-        timerCounterTimer.cancel();
-        waitResponseTimer.cancel();
-      }
-    });
 
     cancelButton.addClickHandler(new ClickHandler() {
       @Override

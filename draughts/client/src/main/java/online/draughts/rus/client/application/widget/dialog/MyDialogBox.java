@@ -59,7 +59,7 @@ public abstract class MyDialogBox extends BasicDialogBox {
   }
 
   public void messageAdmins(EventBus eventBus) {
-    if (StringUtils.isEmpty(messageToAdmins.getValue())){
+    if (StringUtils.isEmpty(messageToAdmins.getValue())) {
       return;
     }
 
