@@ -23,6 +23,7 @@ import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Column;
 import org.gwtbootstrap3.client.ui.Row;
+import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Hr;
 
 import java.util.ArrayList;
@@ -200,6 +201,19 @@ public class PlayShowPanel extends Composite {
     return this.gameList.size();
   }
 
+  private void addAdvertisment() {
+    Row row = new Row();
+    Div ins = new Div();
+    row.getElement().setInnerHTML("<ins class=\"adsbygoogle\"" +
+        "                 style=\"display:block\"" +
+        "                 data-ad-client=\"ca-pub-6590061713732270\"" +
+        "                 data-ad-slot=\"6965334310\"" +
+        "                 data-ad-format=\"auto\"></ins>");
+    row.add(ins);
+    playRowList.add(row);
+    playRowList.add(new Hr());
+  }
+
   private String getSize(int gamesInRow) {
     return "MD_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow
         + " " + "SM_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow
@@ -252,6 +266,7 @@ public class PlayShowPanel extends Composite {
     }
     playRowList.add(row);
     playRowList.add(new Hr());
+    addAdvertisment();
   }
 
   public void moreGameOnPanel() {

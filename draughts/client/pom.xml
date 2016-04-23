@@ -396,7 +396,7 @@
                             <logLevel>INFO</logLevel>
 
                             <extraJvmArgs>-Xmx2048m</extraJvmArgs>
-                            <runTarget>index.html</runTarget>
+                            <runTarget>d/index.html</runTarget>
                             <module>online.draughts.rus.Application_dev</module>
                             <draftCompile>true</draftCompile>
                             <sourceLevel>${maven.compiler.source}</sourceLevel>
@@ -430,7 +430,7 @@
                         <configuration>
                             <strict>true</strict>
                             <logLevel>INFO</logLevel>
-                            <runTarget>index.html</runTarget>
+                            <runTarget>d/index.html</runTarget>
                             <module>online.draughts.rus.Application</module>
                             <draftCompile>false</draftCompile>
                             <sourceLevel>${maven.compiler.source}</sourceLevel>

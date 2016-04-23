@@ -11,7 +11,6 @@
     <name>draughts</name>
 
     <properties>
-        <gwt.version>2.7.0</gwt.version>
         <gwt.style>PRETTY</gwt.style>
 
         <!-- GWT needs at least java 1.6 -->
@@ -32,7 +31,7 @@
 
         <!--GWT-->
         <gwt.version>2.7.0</gwt.version>
-        <gwtp.version>1.5.2</gwtp.version>
+        <gwtp.version>1.5.3</gwtp.version>
 
         <!--JAX-RS-->
         <jsr311-api.version>1.1.1</jsr311-api.version>
