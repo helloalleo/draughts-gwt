@@ -18,6 +18,8 @@ public class PlayerDto extends BaseDto {
 
   private String playerName;
 
+  private String avatar;
+
   private int rating = 0;
 
   private boolean loggedIn;
@@ -81,6 +83,14 @@ public class PlayerDto extends BaseDto {
 
   public void setPlayerName(String playerName) {
     this.playerName = playerName;
+  }
+
+  public String getAvatar() {
+    return avatar;
+  }
+
+  public void setAvatar(String avatar) {
+    this.avatar = avatar;
   }
 
   public boolean isLoggedIn() {

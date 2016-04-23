@@ -1,6 +1,7 @@
 package online.draughts.rus.shared.dto;
 
-import java.io.Serializable;
+import com.google.gwt.user.client.rpc.IsSerializable;
+
 import java.util.Objects;
 
 /**
@@ -9,7 +10,7 @@ import java.util.Objects;
  * Date: 05.12.15
  * Time: 19:08
  */
-public class BaseDto implements Serializable {
+public class BaseDto implements IsSerializable {
 
   private long id;
 

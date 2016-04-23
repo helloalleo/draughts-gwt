@@ -348,6 +348,15 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     statusColumn.setCellStyleNames(resources.style().cellWithButton());
     friendCellTable.addColumn(statusColumn);
 
+    Column<FriendDto, SafeHtml> avatar = new Column<FriendDto, SafeHtml>(new SafeHtmlCell()) {
+      @Override
+      public SafeHtml getValue(FriendDto object) {
+        return new SafeHtmlBuilder().appendHtmlConstant(getAvatarImage(object.getFriendOf()))
+            .toSafeHtml();
+      }
+    };
+    friendCellTable.addColumn(avatar);
+
     TextColumn<FriendDto> publicNameColumn = new TextColumn<FriendDto>() {
       @Override
       public String getValue(FriendDto friend) {
@@ -468,6 +477,15 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     statusColumn.setCellStyleNames(resources.style().cellWithButton());
     playerCellTable.addColumn(statusColumn);
 
+    Column<PlayerDto, SafeHtml> avatar = new Column<PlayerDto, SafeHtml>(new SafeHtmlCell()) {
+      @Override
+      public SafeHtml getValue(PlayerDto object) {
+        return new SafeHtmlBuilder().appendHtmlConstant(getAvatarImage(object))
+            .toSafeHtml();
+      }
+    };
+    playerCellTable.addColumn(avatar);
+
     TextColumn<PlayerDto> publicNameColumn = new TextColumn<PlayerDto>() {
       @Override
       public String getValue(PlayerDto player) {
@@ -533,6 +551,13 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     playerCellTable.addColumn(newMessagesColumn);
   }
 
+  private String getAvatarImage(PlayerDto object) {
+    if (StringUtils.isNotEmpty(object.getAvatar())) {
+      return new Image(object.getAvatar(), 10, 10, 30, 30).getElement().getString();
+    }
+    return "";
+  }
+
   private void createUserNameForPlayerList(PlayerDto object, SafeHtmlBuilder sb) {
     sb.appendHtmlConstant("<span>");
     sb.appendHtmlConstant(object.getPublicName());
@@ -572,17 +597,14 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     } else {
       if (player.isPlaying()) {
         img = new Image(resources.images().playingIconImage().getSafeUri());
-        img.setTitle(playerPublicName + " " + messages.playingTitle());
       } else {
         if (player.isOnline()) {
           img = new Image(resources.images().onlineIconImage().getSafeUri());
-          img.setTitle(playerPublicName + " " + messages.onlineTitle());
         } else {
           img = new Image(resources.images().offlineIconImage().getSafeUri());
-          img.setTitle(playerPublicName + " " + messages.offlineTitle());
         }
       }
-      img.setTitle(img.getTitle() + " " + messages.rating(String.valueOf(player.getRating())));
+      img.setTitle(playerPublicName + " " + messages.rating(String.valueOf(player.getRating())));
     }
     return new SafeHtmlBuilder().appendHtmlConstant(img.getElement().getString()).toSafeHtml();
   }

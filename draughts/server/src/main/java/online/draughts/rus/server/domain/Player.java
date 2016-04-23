@@ -35,6 +35,7 @@ public class Player extends ModelImpl<Player> {
   private String playerName;
   @Index
   private int rating = 0;
+  private String avatar;
   private int gamePlayed = 0;
   private int gameWon = 0;
   private int gameLost = 0;
@@ -154,6 +155,14 @@ public class Player extends ModelImpl<Player> {
 
   public void setPlayerName(String playerName) {
     this.playerName = playerName;
+  }
+
+  public String getAvatar() {
+    return avatar;
+  }
+
+  public void setAvatar(String avatar) {
+    this.avatar = avatar;
   }
 
   public PlayerDto.AuthProvider getAuthProvider() {
@@ -360,8 +369,8 @@ public class Player extends ModelImpl<Player> {
     Query query = new Query(getEntityName());
     query.addSort("admin", Query.SortDirection.DESCENDING);
     query.addSort("moderator", Query.SortDirection.DESCENDING);
-    query.addSort("online", Query.SortDirection.DESCENDING);
     query.addSort("rating", Query.SortDirection.DESCENDING);
+    query.addSort("online", Query.SortDirection.DESCENDING);
     PreparedQuery preparedQuery = getDatastore().prepare(query);
     return getListResult(preparedQuery);
   }

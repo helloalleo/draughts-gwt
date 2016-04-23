@@ -74,7 +74,6 @@ public class OAuthVKCallbackServlet extends HttpServlet {
       OAuthClient oAuthClient = new OAuthClient(new URLConnectionClient());
       OAuthAccessTokenResponse response = oAuthClient.accessToken(request, OAuthJSONAccessTokenResponse.class);
       String accessToken = response.getAccessToken();
-      Long expiresIn = response.getExpiresIn();
       String userId = response.getParam("user_id");
       String email = response.getParam("email");
 
@@ -83,8 +82,10 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         return;
       }
 
-      OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(config.getVkApiUserInfo())
-          .setAccessToken(accessToken).buildQueryMessage();
+      OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(config.getVkApiUserInfo()
+          + "?fields=photo_50")
+          .setAccessToken(accessToken)
+          .buildQueryMessage();
 
       OAuthResourceResponse resourceResponse = oAuthClient.resource(bearerClientRequest,
           OAuth.HttpMethod.GET,
@@ -104,12 +105,14 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         JsonObject array = usersArray.getJsonObject(0);
         String firstName = array.getString("first_name");
         String lastName = array.getString("last_name");
+        String avatar = array.getString("photo_50");
 
         player = new Player();
         player.setVkId(userId);
         player.setAuthProvider(PlayerDto.AuthProvider.VK);
         player.setFirstName(firstName);
         player.setLastName(lastName);
+        player.setAvatar(avatar);
         if (StringUtils.isNotEmpty(email)) {
           player.setEmail(email);
         }
