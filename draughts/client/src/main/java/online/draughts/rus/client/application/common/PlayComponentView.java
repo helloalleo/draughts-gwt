@@ -353,6 +353,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       public String getValue(FriendDto friend) {
         return friend.getFriendOf().getPublicName();
       }
+
+      @Override
+      public void render(Cell.Context context, FriendDto object, SafeHtmlBuilder sb) {
+        createUserNameForPlayerList(object.getFriendOf(), sb);
+      }
     };
     publicNameColumn.setCellStyleNames(resources.style().cellWithName());
     friendCellTable.addColumn(publicNameColumn);
@@ -468,6 +473,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       public String getValue(PlayerDto player) {
         return player.getPublicName();
       }
+
+      @Override
+      public void render(Cell.Context context, PlayerDto object, SafeHtmlBuilder sb) {
+        createUserNameForPlayerList(object, sb);
+      }
     };
     publicNameColumn.setCellStyleNames(resources.style().cellWithName());
     playerCellTable.addColumn(publicNameColumn);
@@ -521,6 +531,25 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     };
     newMessagesColumn.setCellStyleNames(resources.style().cellWithButton());
     playerCellTable.addColumn(newMessagesColumn);
+  }
+
+  private void createUserNameForPlayerList(PlayerDto object, SafeHtmlBuilder sb) {
+    sb.appendHtmlConstant("<span>");
+    sb.appendHtmlConstant(object.getPublicName());
+    sb.appendHtmlConstant("<small>&nbsp;");
+    sb.appendHtmlConstant(getObjectStatus(object));
+    sb.appendHtmlConstant("</small>");
+    sb.appendHtmlConstant("</span>");
+  }
+
+  private String getObjectStatus(PlayerDto object) {
+    if (object.isOnline()) {
+      if (object.isPlaying()) {
+        return messages.playingTitle();
+      }
+      return messages.onlineTitle();
+    }
+    return messages.offlineTitle();
   }
 
   private SafeHtml getStatusSafeHtml(PlayerDto player) {
