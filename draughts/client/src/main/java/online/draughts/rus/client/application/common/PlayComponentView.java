@@ -21,6 +21,8 @@ import com.google.gwt.user.cellview.client.Column;
 import com.google.gwt.user.cellview.client.TextColumn;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.*;
+import com.google.gwt.user.client.ui.Image;
+import com.google.gwt.user.client.ui.Label;
 import com.google.gwt.view.client.SelectionChangeEvent;
 import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.inject.Inject;
@@ -32,6 +34,7 @@ import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.gin.NotationPanelFactory;
 import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
@@ -41,9 +44,9 @@ import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.util.StringUtils;
+import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.Button;
-import org.gwtbootstrap3.client.ui.Heading;
-import org.gwtbootstrap3.client.ui.Icon;
+import org.gwtbootstrap3.client.ui.CheckBox;
 import org.gwtbootstrap3.client.ui.TextBox;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
 import org.gwtbootstrap3.client.ui.constants.IconType;
@@ -61,6 +64,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private final AppResources resources;
   private final NotationPanelFactory notationPanelFactory;
   private final PlaySession playSession;
+  private final Cookies cookies;
   @UiField
   HTMLPanel main;
   @UiField
@@ -114,6 +118,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   Heading playerTimeLabel;
   @UiField
   Heading opponentTimeLabel;
+  @UiField(provided = true)
+  CheckBox hideAvatars;
   SingleSelectionModel<FriendDto> playerFriendSelectionModel;
   SingleSelectionModel<PlayerDto> playerSelectionModel;
   private boolean prevSelected = false;
@@ -131,13 +137,17 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   PlayComponentView(Binder binder,
                     DraughtsMessages messages,
                     AppResources resources,
+                    Cookies cookies,
                     PlaySession playSession,
                     NotationPanelFactory notationPanelFactory) {
     this.messages = messages;
     this.resources = resources;
     this.notationPanelFactory = notationPanelFactory;
+    this.cookies = cookies;
     this.playSession = playSession;
 
+    this.hideAvatars = new CheckBox();
+    this.hideAvatars.setValue(cookies.isHideAvatars());
     initWidget(binder.createAndBindUi(this));
     initPlayerFriendsCellList();
     initPlayersCellList();
@@ -222,8 +232,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     };
   }
 
-  @UiHandler("cancelMove")
   @SuppressWarnings(value = "unused")
+  @UiHandler("cancelMove")
   public void onCancelMove(ClickEvent event) {
     if (board == null) {
       return;
@@ -245,6 +255,14 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         }
       }
     };
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("hideAvatars")
+  public void onHideAvatarsClicked(ClickEvent clickEvent) {
+    cookies.setHideAvatars(hideAvatars.getValue());
+    setPlayerList(playerList);
+    setFriendList(friendList);
   }
 
   private void initEmptyDeskPanel() {
@@ -400,6 +418,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         }
       }
     });
+    favoriteColumn.setCellStyleNames(resources.style().cellWithButton());
     friendCellTable.addColumn(favoriteColumn);
 
     final ButtonCell writeButtonCell = new ButtonCell(ButtonType.LINK, IconType.PENCIL);
@@ -423,6 +442,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         getUiHandlers().writeToFriend(object.getFriendOf());
       }
     });
+    writeColumn.setCellStyleNames(resources.style().cellWithButton());
     friendCellTable.addColumn(writeColumn);
 
     TextColumn<FriendDto> newMessagesColumn = new TextColumn<FriendDto>() {
@@ -552,6 +572,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   private String getAvatarImage(PlayerDto object) {
+    if (hideAvatars.getValue()) {
+      return "";
+    }
     if (StringUtils.isNotEmpty(object.getAvatar())) {
       final Image image = new Image(object.getAvatar());
       image.addStyleName(resources.style().cycle());

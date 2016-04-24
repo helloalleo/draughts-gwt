@@ -5,98 +5,104 @@
              ui:generateFormat='com.google.gwt.i18n.server.PropertyCatalogFactory'
              ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
              ui:generateLocales="default">
-    <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
+  <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
-    <g:HTMLPanel ui:field="main">
+  <g:HTMLPanel ui:field="main">
 
-        <b:Row>
-            <b:Column size="XS_10 SM_10 MD_6 LG_6" ui:field="draughtsColumn">
-                <g:HTMLPanel ui:field="draughtsDesk" debugId="draughtsDesk"/>
-            </b:Column>
+    <b:Row>
+      <b:Column size="XS_10 SM_10 MD_6 LG_6" ui:field="draughtsColumn">
+        <g:HTMLPanel ui:field="draughtsDesk" debugId="draughtsDesk"/>
+      </b:Column>
 
-            <b:Column size="XS_6 SM_6 MD_2 LG_2">
-                <g:HTMLPanel ui:field="notationColumn" addStyleNames="{res.style.notationColumn}">
-                    <g:HTMLPanel ui:field="infoHTMLPanel">
-                        <b:Heading size="H5" text="Ход:">
-                            <ui:attribute name="text" description="Ход" key="move"/>
-                        </b:Heading>
-                        <g:HTML ui:field="turnLabel" text="Игра не началась">
-                            <ui:attribute name="text" description="Игра не началась"/>
-                        </g:HTML>
-                        <b:Heading size="H5" text="Сбито шашек:">
-                            <ui:attribute name="text" description="Сбито шашек"/>
-                        </b:Heading>
-                        <g:Label ui:field="beatenMyDraughtsLabel" text="0 - Белых">
-                            <ui:attribute name="text" description="0 - Белых"/>
-                        </g:Label>
-                        <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных">
-                            <ui:attribute name="text" description="0 - Чёрных"/>
-                        </g:Label>
-                        <b:Heading ui:field="playerTimeLabel" size="H5"/>
-                        <g:Label ui:field="playerTime"/>
-                        <b:Heading ui:field="opponentTimeLabel" size="H5"/>
-                        <g:Label ui:field="opponentTime"/>
-                        <b:Button ui:field="cancelMove" text="Отменить ход" block="true">
-                            <ui:attribute name="text" description="Отменить ход"/>
-                        </b:Button>
-                    </g:HTMLPanel>
-                    <g:HTMLPanel ui:field="notationHTMLPanel">
-                        <b:Heading ui:field="notationLabel" size="H5" text="Нотация:">
-                            <ui:attribute name="text" description="Нотация"/>
-                        </b:Heading>
-                        <g:HTMLPanel ui:field="notationList"/>
-                    </g:HTMLPanel>
-                </g:HTMLPanel>
-            </b:Column>
+      <b:Column size="XS_6 SM_6 MD_2 LG_2">
+        <g:HTMLPanel ui:field="notationColumn" addStyleNames="{res.style.notationColumn}">
+          <g:HTMLPanel ui:field="infoHTMLPanel">
+            <b:Heading size="H5" text="Ход:">
+              <ui:attribute name="text" description="Ход" key="move"/>
+            </b:Heading>
+            <g:HTML ui:field="turnLabel" text="Игра не началась">
+              <ui:attribute name="text" description="Игра не началась"/>
+            </g:HTML>
+            <b:Heading size="H5" text="Сбито шашек:">
+              <ui:attribute name="text" description="Сбито шашек"/>
+            </b:Heading>
+            <g:Label ui:field="beatenMyDraughtsLabel" text="0 - Белых">
+              <ui:attribute name="text" description="0 - Белых"/>
+            </g:Label>
+            <g:Label ui:field="beatenOpponentDraughtsLabel" text="0 - Чёрных">
+              <ui:attribute name="text" description="0 - Чёрных"/>
+            </g:Label>
+            <b:Heading ui:field="playerTimeLabel" size="H5"/>
+            <g:Label ui:field="playerTime"/>
+            <b:Heading ui:field="opponentTimeLabel" size="H5"/>
+            <g:Label ui:field="opponentTime"/>
+            <b:Button ui:field="cancelMove" text="Отменить ход" block="true">
+              <ui:attribute name="text" description="Отменить ход"/>
+            </b:Button>
+          </g:HTMLPanel>
+          <g:HTMLPanel ui:field="notationHTMLPanel">
+            <b:Heading ui:field="notationLabel" size="H5" text="Нотация:">
+              <ui:attribute name="text" description="Нотация"/>
+            </b:Heading>
+            <g:HTMLPanel ui:field="notationList"/>
+          </g:HTMLPanel>
+        </g:HTMLPanel>
+      </b:Column>
 
-            <b:Column size="XS_6 SM_6 MD_4 LG_4">
-                <g:HTMLPanel ui:field="playerListColumn">
-                    <span>
-                        <b:Button ui:field="playButton" icon="REFRESH" debugId="connectToServer" block="true">
-                            <ui:msg description="Подключиться" key="connectToPlayButton">Подключиться</ui:msg>
-                        </b:Button>
-                        <b:Row>
-                            <b:Column size="XS_6 SM_6 MD_6 LG_6">
-                                <b:Button ui:field="drawButton"
-                                          visible="false" block="true">
-                                    <ui:msg description="Предложить ничью" key="drawButton">Предложить ничью</ui:msg>
-                                </b:Button>
-                            </b:Column>
+      <b:Column size="XS_6 SM_6 MD_4 LG_4">
+        <g:HTMLPanel ui:field="playerListColumn">
+          <span>
+            <b:Button ui:field="playButton" icon="REFRESH" debugId="connectToServer" block="true">
+              <ui:msg description="Подключиться" key="connectToPlayButton">Подключиться</ui:msg>
+            </b:Button>
+            <b:Row>
+              <b:Column size="XS_6 SM_6 MD_6 LG_6">
+                <b:Button ui:field="drawButton"
+                          visible="false" block="true">
+                  <ui:msg description="Предложить ничью" key="drawButton">Предложить ничью</ui:msg>
+                </b:Button>
+              </b:Column>
 
-                            <b:Column size="XS_6 SM_6 MD_6 LG_6">
-                                <b:Button ui:field="surrenderButton"
-                                          visible="false" block="true">
-                                    <ui:msg description="Сдаться" key="surrenderButton">Сдаться</ui:msg>
-                                </b:Button>
-                            </b:Column>
+              <b:Column size="XS_6 SM_6 MD_6 LG_6">
+                <b:Button ui:field="surrenderButton"
+                          visible="false" block="true">
+                  <ui:msg description="Сдаться" key="surrenderButton">Сдаться</ui:msg>
+                </b:Button>
+              </b:Column>
 
-                        </b:Row>
+            </b:Row>
 
-                    </span>
-                    <b:Heading size="H5" text="Недавно играли с вами:">
-                        <ui:attribute name="text" description="Недавно играли с вами"/>
-                    </b:Heading>
-                    <g:ScrollPanel ui:field="playerCellTablePanel" width="100%">
-                        <b.gwt:CellTable ui:field="friendCellTable" addStyleNames="{res.style.playCellTable}"
-                                         condensed="true" striped="true" hover="true"/>
-                    </g:ScrollPanel>
+          </span>
+          <b:Heading size="H5" text="Недавно играли с вами:" pull="LEFT">
+            <ui:attribute name="text" description="Недавно играли с вами"/>
+          </b:Heading>
+          <b:CheckBox ui:field="hideAvatars" pull="RIGHT">
+            <ui:msg description="Спрятать фото"
+                    key="subscribeOnNewsletter">
+              Спрятать фото
+            </ui:msg>
+          </b:CheckBox>
+          <g:ScrollPanel ui:field="playerCellTablePanel" width="100%">
+            <b.gwt:CellTable ui:field="friendCellTable" addStyleNames="{res.style.playCellTable}"
+                             condensed="true" striped="true" hover="true"/>
+          </g:ScrollPanel>
 
-                    <b:Heading size="H5" text="Список игроков:">
-                        <ui:attribute name="text" description="Список игроков"/>
-                    </b:Heading>
-                    <g:ScrollPanel ui:field="friendCellTablePanel" height="50%" width="100%">
-                        <b.gwt:CellTable ui:field="playerCellTable" addStyleNames="{res.style.playCellTable}"
-                                         condensed="true" striped="true" hover="true"/>
-                    </g:ScrollPanel>
-                    <b:InputGroup>
-                        <b:TextBox ui:field="playerSearch" placeholder="Поиск игроков" autoComplete="true"
-                                   addStyleNames="{res.style.playerSearch}">
-                            <ui:attribute name="placeholder" description="Поиск игроков"/>
-                        </b:TextBox>
-                        <b:InputGroupAddon icon="SEARCH"/>
-                    </b:InputGroup>
-                </g:HTMLPanel>
-            </b:Column>
-        </b:Row>
-    </g:HTMLPanel>
+          <b:Heading size="H5" text="Список игроков:">
+            <ui:attribute name="text" description="Список игроков"/>
+          </b:Heading>
+          <g:ScrollPanel ui:field="friendCellTablePanel" height="50%" width="100%">
+            <b.gwt:CellTable ui:field="playerCellTable" addStyleNames="{res.style.playCellTable}"
+                             condensed="true" striped="true" hover="true"/>
+          </g:ScrollPanel>
+          <b:InputGroup>
+            <b:TextBox ui:field="playerSearch" placeholder="Поиск игроков" autoComplete="true"
+                       addStyleNames="{res.style.playerSearch}">
+              <ui:attribute name="placeholder" description="Поиск игроков"/>
+            </b:TextBox>
+            <b:InputGroupAddon icon="SEARCH"/>
+          </b:InputGroup>
+        </g:HTMLPanel>
+      </b:Column>
+    </b:Row>
+  </g:HTMLPanel>
 </ui:UiBinder>

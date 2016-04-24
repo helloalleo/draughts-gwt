@@ -43,4 +43,8 @@ public interface Cookies {
   void setLastUsedSmiles(List<String> lastUsedSmilesQueue);
 
   void setLocale(String locale);
+
+  void setHideAvatars(Boolean value);
+
+  boolean isHideAvatars();
 }

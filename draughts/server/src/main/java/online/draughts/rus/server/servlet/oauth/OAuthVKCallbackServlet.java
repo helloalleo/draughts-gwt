@@ -96,27 +96,27 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         return;
       }
 
+      final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes(StandardCharsets.UTF_8));
+      JsonReader jsonReader = Json.createReader(inBody);
+      JsonObject responseObject = jsonReader.readObject();
+      JsonArray usersArray = responseObject.getJsonArray("response");
+      JsonObject array = usersArray.getJsonObject(0);
+      String firstName = array.getString("first_name");
+      String lastName = array.getString("last_name");
+      String avatar = array.getString("photo_50");
+
       Player player = playerService.findByVkId(userId);
       if (player == null) {
-        final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes(StandardCharsets.UTF_8));
-        JsonReader jsonReader = Json.createReader(inBody);
-        JsonObject responseObject = jsonReader.readObject();
-        JsonArray usersArray = responseObject.getJsonArray("response");
-        JsonObject array = usersArray.getJsonObject(0);
-        String firstName = array.getString("first_name");
-        String lastName = array.getString("last_name");
-        String avatar = array.getString("photo_50");
-
         player = new Player();
         player.setVkId(userId);
         player.setAuthProvider(PlayerDto.AuthProvider.VK);
-        player.setFirstName(firstName);
-        player.setLastName(lastName);
-        player.setAvatar(avatar);
-        if (StringUtils.isNotEmpty(email)) {
-          player.setEmail(email);
-        }
         player.setActive(true);
+      }
+      player.setFirstName(firstName);
+      player.setLastName(lastName);
+      player.setAvatar(avatar);
+      if (StringUtils.isNotEmpty(email)) {
+        player.setEmail(email);
       }
 
       AuthUtils.processUserAndRedirectToPlayPage(playerService, config, req, resp, player);

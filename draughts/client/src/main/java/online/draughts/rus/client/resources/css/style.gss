@@ -425,15 +425,16 @@ body {
 /* End Messenger */
 
 .cellWithButton div {
-    line-height: 3.6;
+    line-height: 3.5;
 }
 
 .cellWithName div {
-    line-height: 3.6;
-    width: 250px;
+    line-height: 3.5;
+    width: 200px;
 }
 
 .playCellTable .btn {
+    line-height: 2.5;
     padding: 6px 0;
     float: left !important;
 }

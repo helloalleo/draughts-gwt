@@ -105,16 +105,16 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
           player = new Player();
           player.setFbId(userId);
           player.setAuthProvider(PlayerDto.AuthProvider.FACEBOOK);
-          String firstName = responseObject.getString("first_name");
-          player.setFirstName(firstName);
-          String lastName = responseObject.getString("last_name");
-          player.setLastName(lastName);
-          String picture = responseObject.getJsonObject("picture").getJsonObject("data").getString("url");
-          player.setAvatar(picture);
-          String email = responseObject.getString("email");
-          player.setEmail(email);
           player.setActive(true);
         }
+        String firstName = responseObject.getString("first_name");
+        player.setFirstName(firstName);
+        String lastName = responseObject.getString("last_name");
+        player.setLastName(lastName);
+        String picture = responseObject.getJsonObject("picture").getJsonObject("data").getString("url");
+        player.setAvatar(picture);
+        String email = responseObject.getString("email");
+        player.setEmail(email);
 
         AuthUtils.processUserAndRedirectToPlayPage(playerService, config, req, resp, player);
       }

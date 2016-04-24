@@ -23,6 +23,7 @@ public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
   private static final String LIST_DELIMITER = ",";
   public static final String LOCALE = "LOCALE";
   private static final String DEFAULT_LOCALE = "ru";
+  private static final String HIDE_AVATARS = "HIDE_AVATARS";
   private final String GAMES_ON_PAGE_COUNTER = "GAMES_ON_PAGE";
   private final String LOCATION = "LOCATION"; // куки адреса страницы
   private final String MY_GAMES = "MY_GAMES";
@@ -109,6 +110,19 @@ public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
   @Override
   public void setLocale(String locale) {
     Cookies.setCookie(LOCALE, locale);
+  }
+
+  @Override
+  public void setHideAvatars(Boolean value) {
+    Cookies.setCookie(HIDE_AVATARS, String.valueOf(value));
+  }
+
+  public boolean isHideAvatars() {
+    String hideAvatars = Cookies.getCookie(HIDE_AVATARS);
+    if (StringUtils.isEmpty(hideAvatars)) {
+      hideAvatars = Boolean.FALSE.toString();
+    }
+    return Boolean.valueOf(hideAvatars);
   }
 
   @Override

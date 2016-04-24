@@ -105,16 +105,16 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
           player = new Player();
           player.setGoogleSub(user_id);
           player.setAuthProvider(PlayerDto.AuthProvider.GOOGLE);
-          String given_name = responseObject.getString("given_name");
-          String family_name = responseObject.getString("family_name");
-          player.setFirstName(given_name);
-          player.setLastName(family_name);
-          String picture = responseObject.getString("picture") + "?sz=50";
-          player.setAvatar(picture);
-          String email = responseObject.getString("email");
-          player.setEmail(email);
           player.setActive(true);
         }
+        String given_name = responseObject.getString("given_name");
+        player.setFirstName(given_name);
+        String family_name = responseObject.getString("family_name");
+        player.setLastName(family_name);
+        String picture = responseObject.getString("picture") + "?sz=50";
+        player.setAvatar(picture);
+        String email = responseObject.getString("email");
+        player.setEmail(email);
 
         AuthUtils.processUserAndRedirectToPlayPage(playerService, config, req, resp, player);
       }
