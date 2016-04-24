@@ -145,5 +145,7 @@ public interface AppResources extends ClientBundle {
     String localeButton();
 
     String dialogBoxPlayer();
+
+    String cycle();
   }
 }

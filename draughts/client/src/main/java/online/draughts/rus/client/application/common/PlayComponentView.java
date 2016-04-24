@@ -553,7 +553,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   private String getAvatarImage(PlayerDto object) {
     if (StringUtils.isNotEmpty(object.getAvatar())) {
-      return new Image(object.getAvatar(), 10, 10, 30, 30).getElement().getString();
+      final Image image = new Image(object.getAvatar(), 10, 10, 30, 30);
+      image.addStyleName(resources.style().cycle());
+      return image.getElement().getString();
     }
     return "";
   }

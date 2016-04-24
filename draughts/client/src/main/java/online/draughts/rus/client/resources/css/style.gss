@@ -451,3 +451,7 @@ body {
     text-decoration: none;
     padding: 0;
 }
+
+.cycle {
+    border-radius: 25px;
+}

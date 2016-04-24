@@ -21,9 +21,7 @@ import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
+import javax.json.*;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
@@ -83,7 +81,8 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
         return;
       }
 
-      OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(config.getFbApiGraph() + "/me?fields=id,name,email")
+      OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(config.getFbApiGraph()
+          + "/me?fields=id,first_name,last_name,email,picture")
           .setAccessToken(accessToken)
           .buildQueryMessage();
 
@@ -106,14 +105,12 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
           player = new Player();
           player.setFbId(userId);
           player.setAuthProvider(PlayerDto.AuthProvider.FACEBOOK);
-          String name = responseObject.getString("name");
-          String[] nameArr = name.split(" ");
-          if (nameArr.length > 1) {
-            player.setFirstName(nameArr[0]);
-            player.setLastName(nameArr[1]);
-          } else {
-            player.setFirstName(nameArr[0]);
-          }
+          String firstName = responseObject.getString("first_name");
+          player.setFirstName(firstName);
+          String lastName = responseObject.getString("last_name");
+          player.setLastName(lastName);
+          String picture = responseObject.getJsonObject("picture").getJsonObject("data").get("url").toString();
+          player.setAvatar(picture);
           String email = responseObject.getString("email");
           player.setEmail(email);
           player.setActive(true);
