@@ -109,7 +109,7 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
           player.setFirstName(firstName);
           String lastName = responseObject.getString("last_name");
           player.setLastName(lastName);
-          String picture = responseObject.getJsonObject("picture").getJsonObject("data").get("url").toString();
+          String picture = responseObject.getJsonObject("picture").getJsonObject("data").getString("url");
           player.setAvatar(picture);
           String email = responseObject.getString("email");
           player.setEmail(email);

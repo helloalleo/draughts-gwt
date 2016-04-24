@@ -109,6 +109,8 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
           String family_name = responseObject.getString("family_name");
           player.setFirstName(given_name);
           player.setLastName(family_name);
+          String picture = responseObject.getString("picture") + "?sz=50";
+          player.setAvatar(picture);
           String email = responseObject.getString("email");
           player.setEmail(email);
           player.setActive(true);
