@@ -12,13 +12,10 @@ import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import online.draughts.rus.client.application.ApplicationPresenter;
 import online.draughts.rus.client.application.common.PlayComponentPresenter;
-import online.draughts.rus.client.application.widget.dialog.GameResultDialogBox;
+import online.draughts.rus.client.application.common.PlayComponentUtil;
 import online.draughts.rus.client.channel.PlaySession;
-import online.draughts.rus.client.event.GameOverEvent;
 import online.draughts.rus.client.place.NameTokens;
-import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 
 
@@ -55,35 +52,18 @@ public class AnalysisPresenter extends Presenter<AnalysisPresenter.MyView, Analy
   public void checkWinner() {
     getView().setBeatenMy(DRAUGHTS_ON_DESK_INIT - getView().getMyDraughtsSize());
     getView().setBeatenOpponent(DRAUGHTS_ON_DESK_INIT - getView().getOpponentDraughtsSize());
-    final GameDto endGame = playSession.getGame();
-    GameDto.GameEnds gameEnd = null;
-    if (0 == getView().getMyDraughtsSize()) {
-      GameResultDialogBox.setMessage(messages.youLose(), getEventBus()).show();
-      if ((getView().isWhite())) {
-        gameEnd = GameDto.GameEnds.BLACK_WIN;
-      } else {
-        gameEnd = GameDto.GameEnds.WHITE_WIN;
-      }
-    }
-    if (0 == getView().getOpponentDraughtsSize()) {
-      GameResultDialogBox.setMessage(messages.youWon(), getEventBus()).show();
-      if (getView().isWhite()) {
-        gameEnd = GameDto.GameEnds.WHITE_WIN;
-      } else {
-        gameEnd = GameDto.GameEnds.BLACK_WIN;
-      }
-    }
-    if (gameEnd == null) {
-      return;
-    }
-    fireEvent(new GameOverEvent(endGame, gameEnd, new AbstractAsyncCallback<GameDto>() {
-      @Override
-      public void onSuccess(GameDto result) {
-      }
-    }));
+    PlayComponentUtil.checkWin(getEventBus(), playSession, messages, getView().getMyDraughtsSize(),
+        getView().getOpponentDraughtsSize(), getView().isWhite());
   }
 
-  interface MyView extends View, HasUiHandlers<AnalysisUiHandlers> {
+  @Override
+  public void gameStuck(boolean isWhite) {
+    PlayComponentUtil.checkStuck(getEventBus(), playSession, isWhite);
+  }
+
+  public interface MyView extends View, HasUiHandlers<AnalysisUiHandlers> {
+    void gameStuck(boolean isWhite);
+
     int getMyDraughtsSize();
 
     int getOpponentDraughtsSize();

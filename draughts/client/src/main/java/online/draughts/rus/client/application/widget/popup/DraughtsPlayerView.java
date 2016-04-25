@@ -679,6 +679,11 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   }
 
   @Override
+  public void gameStuck(boolean isWhite) {
+    getUiHandlers().gameStuck(isWhite);
+  }
+
+  @Override
   public void toggleTurn(boolean turn) {
     getUiHandlers().toggleTurn(turn);
   }

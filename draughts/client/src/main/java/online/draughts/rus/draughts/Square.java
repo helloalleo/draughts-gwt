@@ -30,7 +30,6 @@ public class Square implements Serializable {
   private int col;
   @JsonIgnore
   private static final Color boardBackground = new Color(65, 133, 132);
-  private boolean occupied;
   @JsonIgnore
   private Draught occupant;
   @JsonIgnore
@@ -53,22 +52,29 @@ public class Square implements Serializable {
     this.row = row;
     this.col = col;
 
-    this.occupied = false;
     this.occupant = null;
   }
 
-  public Square(BoardBackgroundLayer backgroundLayer, int row, int col) {
+  Square(BoardBackgroundLayer backgroundLayer, int row, int col) {
     this(row, col);
     Square.board = backgroundLayer;
   }
 
-  public static Square fromString(String toSendStr) {
-    if (StringUtils.isEmpty(toSendStr)) {
-      return null;
-    }
-    final String[] toSendArr = toSendStr.split(POSITION_DELIMITER);
-    final Integer row = Integer.valueOf(toSendArr[0]);
-    final Integer col = Integer.valueOf(toSendArr[1]);
+//  public static Square fromString(String toSendStr) {
+//    if (StringUtils.isEmpty(toSendStr)) {
+//      return null;
+//    }
+//    final String[] toSendArr = toSendStr.split(POSITION_DELIMITER);
+//    final Integer row = Integer.valueOf(toSendArr[0]);
+//    final Integer col = Integer.valueOf(toSendArr[1]);
+//    try {
+//      return board.getSquare(row, col);
+//    } catch (SquareNotFoundException e) {
+//      return null;
+//    }
+//  }
+
+  static Square fromPosition(int row, int col) {
     try {
       return board.getSquare(row, col);
     } catch (SquareNotFoundException e) {
@@ -76,19 +82,11 @@ public class Square implements Serializable {
     }
   }
 
-  public static Square fromPosition(int row, int col) {
-    try {
-      return board.getSquare(row, col);
-    } catch (SquareNotFoundException e) {
-      return null;
-    }
-  }
-
-  public Rectangle getShape() {
+  Rectangle getShape() {
     return shape;
   }
 
-  public static boolean isValid(int row, int col) {
+  static boolean isValid(int row, int col) {
     return row % 2 != col % 2;
   }
 
@@ -97,7 +95,7 @@ public class Square implements Serializable {
    *
    * @return The piece that occupies this Square, if any
    */
-  public Draught getOccupant() {
+  Draught getOccupant() {
     if (this.isOccupied()) {
       return occupant;
     }
@@ -110,13 +108,11 @@ public class Square implements Serializable {
    *
    * @param visitor The Piece that should now reside here
    */
-  public void setOccupant(Draught visitor) {
+  void setOccupant(Draught visitor) {
     if (visitor != null) {
       this.occupant = visitor;
-      this.occupied = true;
     } else {
       this.occupant = null;
-      this.occupied = false;
     }
   }
 
@@ -125,8 +121,8 @@ public class Square implements Serializable {
    *
    * @return Whether or not this Square is selected
    */
-  public boolean isOccupied() {
-    return occupied;
+  boolean isOccupied() {
+    return occupant != null;
   }
 
   @Override
@@ -134,7 +130,6 @@ public class Square implements Serializable {
     return "Square{" +
         "row=" + row +
         ", col=" + col +
-        ", occupied=" + occupied +
         ", occupant=" + occupant +
         '}';
   }
@@ -144,7 +139,7 @@ public class Square implements Serializable {
    *
    * @return нотация для клетки
    */
-  public String toNotation() {
+  String toNotation() {
     return alph.get(col) + String.valueOf(BoardBackgroundLayer.ROWS - row);
   }
 
@@ -154,7 +149,7 @@ public class Square implements Serializable {
    * @param square шашка на линии с которой эта шашка
    * @return шашка на линии с этой и переданной шашкой?
    */
-  public boolean isOnLine(Square square) {
+  boolean isOnLine(Square square) {
     // равенство абсолютной велечины строки и колонки говорит что мы на одной диагонали
     if (Math.abs(this.getRow() - square.getRow()) == Math.abs(this.getCol() - square.getCol())) {
       // на главной диагонали
@@ -185,11 +180,11 @@ public class Square implements Serializable {
    *
    * @return The column on the game board represented by this Square
    */
-  public int getCol() {
+  int getCol() {
     return col;
   }
 
-  public boolean isBetween(Square from, Square to) {
+  boolean isBetween(Square from, Square to) {
     return isBetween(this.getRow(), from.getRow(), to.getRow())
         && isBetween(this.getCol(), from.getCol(), to.getCol()) || isBetween(this.getRow(), from.getRow(), to.getRow())
         && isBetween(this.getCol(), to.getCol(), from.getCol()) || isBetween(this.getRow(), to.getRow(), from.getRow())
@@ -201,7 +196,7 @@ public class Square implements Serializable {
     return ((value > min) && (value < max));
   }
 
-  public void updateShape(int side, int rows, int cols, double offsetX, int offsetY) {
+  void updateShape(int side, int rows, int cols, double offsetX, int offsetY) {
     double x = ((double) col) * side / ((double) rows) + offsetX;
     double y = ((double) row) * side / ((double) cols) + offsetY;
     shape.setX(x);
@@ -212,34 +207,34 @@ public class Square implements Serializable {
     shape.setHeight(squareSize);
   }
 
-  public boolean contains(double x, double y) {
+  boolean contains(double x, double y) {
     return (x > shape.getX()) && (x < (shape.getX() + shape.getWidth()))
         && (y > shape.getY()) && (y < (shape.getY() + shape.getHeight()));
   }
 
-  public double getCenterX() {
+  double getCenterX() {
     return shape.getX() + shape.getWidth() / 2;
   }
 
-  public double getCenterY() {
+  double getCenterY() {
     return shape.getY() + shape.getHeight() / 2;
   }
 
-  public void setAlpha(double alpha) {
+  void setAlpha(double alpha) {
     shape.setAlpha(alpha);
   }
 
-  public double getAlpha() {
+  double getAlpha() {
     return shape.getAlpha();
   }
 
-  public Square mirror() {
+  Square mirror() {
     int col = BoardBackgroundLayer.COLS - 1 - this.col;
     int row = BoardBackgroundLayer.ROWS - 1 - this.row;
     return new Square(row, col);
   }
 
-  public static Square fromNotation(String pos) {
+  static Square fromNotation(String pos) {
     if (StringUtils.isEmpty(pos)) {
       return null;
     }

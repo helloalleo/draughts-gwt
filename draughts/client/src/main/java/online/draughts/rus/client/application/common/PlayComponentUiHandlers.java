@@ -42,4 +42,6 @@ interface PlayComponentUiHandlers extends UiHandlers {
   void stopTimers();
 
   void doSaveMove(MoveDto move);
+
+  void gameStuck(boolean isWhite);
 }

@@ -53,7 +53,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
     if (StringUtils.isEmpty(playerName) || playerName.length() < 3) {
       Growl.growlNotif(messages.tooShortPlayerName());
       return;
-    } else if (playerName.length() > 50) {
+    } else if (playerName.length() > 19) {
       Growl.growlNotif(messages.tooLongPlayerName());
       return;
     }

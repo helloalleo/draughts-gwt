@@ -254,6 +254,11 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     getUiHandlers().checkWinner();
   }
 
+  @Override
+  public void gameStuck(boolean isWhite) {
+    getUiHandlers().gameStuck(isWhite);
+  }
+
   public void addNotationStroke(Stroke strokeForNotation) {
     notationPanel.appendMove(strokeForNotation);
   }

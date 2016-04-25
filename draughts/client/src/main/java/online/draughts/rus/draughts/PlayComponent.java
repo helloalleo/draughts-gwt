@@ -13,6 +13,8 @@ public interface PlayComponent {
 
   void checkWinner();
 
+  void gameStuck(boolean white);
+
   void toggleTurn(boolean turn);
 
   void doPlayerMove(MoveDto move);
