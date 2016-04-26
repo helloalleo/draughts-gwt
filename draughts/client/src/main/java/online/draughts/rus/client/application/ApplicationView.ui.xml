@@ -1,17 +1,28 @@
 <ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
              xmlns:g='urn:import:com.google.gwt.user.client.ui'
              xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
-        >
+>
 
-    <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
+  <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
-    <g:HTMLPanel>
-        <g:SimplePanel ui:field="menuPanel"/>
+  <g:HTMLPanel>
+    <g:SimplePanel ui:field="menuPanel"/>
 
-        <b:Container>
-            <g:SimplePanel ui:field="mainContentPanel" addStyleNames="{res.style.mainContainer}"/>
-        </b:Container>
+    <b:Container>
+      <g:SimplePanel ui:field="mainContentPanel" addStyleNames="{res.style.mainContainer}"/>
+    </b:Container>
 
-        <g:SimplePanel ui:field="footerPanel"/>
-    </g:HTMLPanel>
+    <g:SimplePanel ui:field="footerPanel"/>
+
+    <script>
+      (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+      (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+      m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+      })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
+
+      ga('create', 'UA-76960011-1', 'auto');
+      ga('send', 'pageview');
+
+    </script>
+  </g:HTMLPanel>
 </ui:UiBinder>
