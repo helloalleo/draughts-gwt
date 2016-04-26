@@ -30,7 +30,7 @@
 @def S_LOGO_SCROLL_HEIGHT           eval("online.draughts.rus.client.resources.Variables.S_LOGO_SCROLL_HEIGHT");
 @def S_FOOTER_HEIGHT                eval("online.draughts.rus.client.resources.Variables.S_FOOTER_HEIGHT");
 @def S_MESSANGER_WIDTH              330px;
-@def S_SMILE_PANEL_WIDTH            228px;
+@def S_SMILE_PANEL_WIDTH            185px;
 
 /**
  * Measures

@@ -93,7 +93,6 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
   }
 
   private void fillSmileChoosePanel() {
-    smilesScrollPanel.setHeight("200px");
     for (int i = 0; i < 15; i++) {
       for (int j = 0; j < 5; j++) {
         final String smile = codes.get(j) + Integer.toHexString(i);
