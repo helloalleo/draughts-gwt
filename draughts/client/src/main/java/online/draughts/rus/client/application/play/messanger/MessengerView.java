@@ -224,8 +224,34 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     htmlTime.addStyleName(isFriend ? resources.style().friendMessageTime() : resources.style().myMessageTime());
     HTMLPanel html = new HTMLPanel("");
     if (isFriend) {
-      html.add(htmlInline);
-      html.add(htmlTime);
+      if (message.length() < 35) {
+        html.add(htmlInline);
+        html.add(htmlTime);
+      } else {
+        Row row = new Row();
+        row.getElement().getStyle().setMargin(-4, Style.Unit.PX);
+        Column column;
+        // уменьшаем поле для сообщений
+        if (showDate) {
+          column = new Column(ColumnSize.MD_8);
+        } else {
+          column = new Column(ColumnSize.MD_9);
+        }
+        column.getElement().getStyle().setPadding(4, Style.Unit.PX);
+        htmlInline.getElement().getStyle().setMarginRight(0, Style.Unit.PX);
+        column.add(htmlInline);
+        row.add(column);
+        // увеличиваем поле для времени
+        if (showDate) {
+          column = new Column(ColumnSize.MD_3);
+        } else {
+          column = new Column(ColumnSize.MD_2);
+        }
+        column.getElement().getStyle().setPadding(4, Style.Unit.PX);
+        column.add(htmlTime);
+        row.add(column);
+        html.add(row);
+      }
       html.addStyleName(resources.style().messageOuter());
     } else {
       Row row = new Row();

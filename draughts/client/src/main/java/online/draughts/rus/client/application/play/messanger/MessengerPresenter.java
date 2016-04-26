@@ -67,11 +67,10 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
   }
 
   private void specialMessage() {
-    if (!opponent.isOnline()) {
-      getView().addFriendMessage(messages.userOfflineButYouCanMessageHim(opponent.getPublicName()), new Date());
-    }
     if (opponent.isModerator()) {
       getView().addFriendMessage(messages.moderatorGreeting(), new Date());
+    } else if (!opponent.isOnline()) {
+      getView().addFriendMessage(messages.userOfflineButYouCanMessageHim(opponent.getPublicName()), new Date());
     }
   }
 
