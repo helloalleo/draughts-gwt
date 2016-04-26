@@ -2,7 +2,7 @@ package online.draughts.rus.server.servlet.oauth;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.config.Config;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.common.OAuthProviderType;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
@@ -24,11 +24,9 @@ import java.util.logging.Logger;
 public class OAuthFacebookServlet extends HttpServlet {
 
   private final Logger log;
-  private final ServerConfiguration config;
 
   @Inject
-  public OAuthFacebookServlet(ServerConfiguration configuration, Logger log) {
-    this.config = configuration;
+  public OAuthFacebookServlet(Logger log) {
     this.log = log;
   }
 
@@ -37,9 +35,9 @@ public class OAuthFacebookServlet extends HttpServlet {
     try {
       OAuthClientRequest oAuthRequest = OAuthClientRequest
           .authorizationProvider(OAuthProviderType.FACEBOOK)
-          .setClientId(config.getFbClientId())
-          .setScope(config.getFbScope())
-          .setRedirectURI(config.getFbRedirectUri())
+          .setClientId(Config.FB_CLIENT_ID)
+          .setScope(Config.FB_SCOPE)
+          .setRedirectURI(Config.FB_REDIRECT_URI)
           .setResponseType("code")
           .buildQueryMessage();
       log.info("REQUEST URI: " + oAuthRequest.getLocationUri());

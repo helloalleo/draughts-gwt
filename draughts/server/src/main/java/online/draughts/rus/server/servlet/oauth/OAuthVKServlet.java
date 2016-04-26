@@ -2,7 +2,7 @@ package online.draughts.rus.server.servlet.oauth;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.config.Config;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 
@@ -23,11 +23,9 @@ import java.util.logging.Logger;
 public class OAuthVKServlet extends HttpServlet {
 
   private final Logger log;
-  private final ServerConfiguration config;
 
   @Inject
-  public OAuthVKServlet(ServerConfiguration configuration, Logger log) {
-    this.config = configuration;
+  public OAuthVKServlet(Logger log) {
     this.log = log;
   }
 
@@ -35,11 +33,11 @@ public class OAuthVKServlet extends HttpServlet {
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     try {
       OAuthClientRequest oAuthRequest = OAuthClientRequest
-          .authorizationLocation(config.getVkAuthUri())
-          .setClientId(config.getVkClientId())
-          .setScope(config.getVkScope())
-          .setRedirectURI(config.getVkRedirectUri())
-          .setParameter("v", config.getVkApiVersion())
+          .authorizationLocation(Config.VK_AUTH_URI)
+          .setClientId(Config.VK_CLIENT_ID)
+          .setScope(Config.VK_SCOPE)
+          .setRedirectURI(Config.VK_REDIRECT_URI)
+          .setParameter("v", Config.VK_API_VERSION)
           .setResponseType("code")
           .buildQueryMessage();
       log.info("REQUEST URI: " + oAuthRequest.getLocationUri());

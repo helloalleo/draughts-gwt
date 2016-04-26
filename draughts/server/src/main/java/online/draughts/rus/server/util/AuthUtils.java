@@ -1,6 +1,6 @@
 package online.draughts.rus.server.util;
 
-import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.domain.Player;
 
@@ -21,7 +21,7 @@ public class AuthUtils {
 
   public static final String AUTHENTICATED = "isAuthenticated";
 
-  public static boolean isAuthenticated(HttpSession session) {
+  private static boolean isAuthenticated(HttpSession session) {
     if (session == null) {
       return false;
     }
@@ -33,11 +33,11 @@ public class AuthUtils {
     return !isAuthenticated(session);
   }
 
-  public static void login(HttpServletRequest req) {
+  private static void login(HttpServletRequest req) {
     req.getSession().setAttribute(AUTHENTICATED, true);
   }
 
-  public static void processUserAndRedirectToPlayPage(PlayerService playerService, ServerConfiguration config,
+  public static void processUserAndRedirectToPlayPage(PlayerService playerService,
                                                       HttpServletRequest req, HttpServletResponse resp,
                                                       Player player) throws IOException {
     player.setLastVisited(new Date());
@@ -45,6 +45,9 @@ public class AuthUtils {
     player.setPlaying(false);
     player.setOnline(false);
     player.setSubscribeOnNewsletter(true);
+    if (player.getPublicName().length() > Config.STRIP_PLAYER_NAME) {
+      player.setPlayerName(player.getPublicName().substring(0, Config.STRIP_PLAYER_NAME));
+    }
 
     HttpSession session = req.getSession();
     if (player.getSessionId() == null
@@ -70,6 +73,6 @@ public class AuthUtils {
     }
     resp.addCookie(new Cookie("loggedIn", "1"));
 
-    resp.sendRedirect(String.format("%s/?locale=%s%s", config.getContext(), locale, config.getPlayHash()));
+    resp.sendRedirect(String.format("%s/?locale=%s%s", Config.CONTEXT, locale, Config.PLAY_HASH));
   }
 }

@@ -2,7 +2,7 @@ package online.draughts.rus.server.servlet.oauth;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.config.Config;
 import org.apache.oltu.oauth2.client.request.OAuthClientRequest;
 import org.apache.oltu.oauth2.common.OAuthProviderType;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
@@ -26,11 +26,9 @@ import java.util.logging.Logger;
 public class OAuthGoogleServlet extends HttpServlet {
 
   private final Logger log;
-  private final ServerConfiguration config;
 
   @Inject
-  public OAuthGoogleServlet(ServerConfiguration configuration, Logger log) {
-    this.config = configuration;
+  public OAuthGoogleServlet(Logger log) {
     this.log = log;
   }
 
@@ -40,9 +38,9 @@ public class OAuthGoogleServlet extends HttpServlet {
       String state = new BigInteger(130, new SecureRandom()).toString(32);
       OAuthClientRequest oAuthRequest = OAuthClientRequest
           .authorizationProvider(OAuthProviderType.GOOGLE)
-          .setClientId(config.getGoogleClientId())
-          .setScope(config.getGoogleScope())
-          .setRedirectURI(config.getGoogleRedirectUri())
+          .setClientId(Config.GOOGLE_CLIENT_ID)
+          .setScope(Config.GOOGLE_SCOPE)
+          .setRedirectURI(Config.GOOGLE_REDIRECT_URI)
           .setResponseType("code")
           .setParameter("state", state)
           .buildQueryMessage();

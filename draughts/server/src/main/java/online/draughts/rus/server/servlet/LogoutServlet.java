@@ -2,7 +2,7 @@ package online.draughts.rus.server.servlet;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.domain.Player;
 
@@ -23,12 +23,10 @@ import java.io.IOException;
 public class LogoutServlet extends HttpServlet {
 
   private final PlayerService playerService;
-  private final ServerConfiguration config;
 
   @Inject
-  LogoutServlet(PlayerService playerService, ServerConfiguration serverConfiguration) {
+  LogoutServlet(PlayerService playerService) {
     this.playerService = playerService;
-    this.config = serverConfiguration;
   }
 
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -42,6 +40,6 @@ public class LogoutServlet extends HttpServlet {
 
     req.getSession().invalidate();
     resp.addCookie(new Cookie("loggedIn", "0"));
-    resp.sendRedirect("/" + config.getLoginHash());
+    resp.sendRedirect("/" + Config.LOGIN_HASH);
   }
 }

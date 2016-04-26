@@ -2,7 +2,7 @@ package online.draughts.rus.server.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.GameMessage;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.util.Utils;
@@ -23,15 +23,12 @@ import java.util.Properties;
 @Singleton
 public class MailService {
 
-  private final ServerConfiguration config;
   private final Logger logger = Logger.getLogger(MailService.class);
 
   private final PlayerService playerService;
 
   @Inject
-  public MailService(ServerConfiguration config,
-                     PlayerService playerService) {
-    this.config = config;
+  public MailService(PlayerService playerService) {
     this.playerService = playerService;
   }
 
@@ -39,7 +36,7 @@ public class MailService {
     // TODO Обработать отправку письма админам когда получатель или отправитель ранвы нал
     Properties props = new Properties();
     props.put("mail.transport.protocol", "smtp");
-    if (config.isDebug()) {
+    if (Config.DEBUG) {
       props.put("mail.smtp.port", "1025");
     } else {
       props.put("mail.smtp.starttls.enable", "true");
@@ -48,16 +45,16 @@ public class MailService {
     }
 
     Session mailSession = Session.getInstance(props, null);
-    if (config.isDebug()) {
+    if (Config.DEBUG) {
       mailSession.setDebug(true);
     }
 
     try {
       MimeMessage message = new MimeMessage(mailSession);
       message.setSubject(String.format("Новое сообщение от %s", sender == null ? "не указано" : sender.getPublicName()), "UTF-8");
-      message.setFrom(new InternetAddress(config.getFromEmail(), "ШашкиОнлайн.COM", "UTF-8"));
+      message.setFrom(new InternetAddress(Config.FROM_EMAIL, "ШашкиОнлайн.COM", "UTF-8"));
       message.addRecipient(Message.RecipientType.TO,
-          new InternetAddress(receiver == null ? config.getAdminMail() : receiver.getEmail(),
+          new InternetAddress(receiver == null ? Config.ADMIN_MAIL : receiver.getEmail(),
               receiver == null ? "Админ" : receiver.getPublicName(), "UTF-8"));
 
       //

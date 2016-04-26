@@ -587,12 +587,15 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     sb.appendHtmlConstant("<span>");
     sb.appendHtmlConstant(object.getPublicName());
     sb.appendHtmlConstant("<small>&nbsp;");
-    sb.appendHtmlConstant(getObjectStatus(object));
+    sb.appendHtmlConstant(getPlayerStatus(object));
     sb.appendHtmlConstant("</small>");
     sb.appendHtmlConstant("</span>");
   }
 
-  private String getObjectStatus(PlayerDto object) {
+  private String getPlayerStatus(PlayerDto object) {
+    if (object.isModerator() || object.isAdmin() || player.getId() == object.getId()) {
+      return "";
+    }
     if (object.isOnline()) {
       if (object.isPlaying()) {
         return messages.playingTitle();

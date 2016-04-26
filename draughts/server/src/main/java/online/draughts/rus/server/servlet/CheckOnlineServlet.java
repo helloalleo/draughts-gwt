@@ -3,7 +3,7 @@ package online.draughts.rus.server.servlet;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.channel.ServerChannel;
-import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.Player;
 
 import javax.servlet.ServletException;
@@ -25,19 +25,17 @@ public class CheckOnlineServlet extends HttpServlet {
 
   @Inject
   private ServerChannel serverChannel;
-  @Inject
-  private ServerConfiguration config;
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
     String remoteIp = req.getRemoteAddr();
-    if (!remoteIp.equals(config.getGaeCronIpAddr())) {
+    if (!remoteIp.equals(Config.GAE_CRON_IP_ADDR)) {
       return;
     }
 
     List<Player> players = Player.getInstance().findAll();
     Calendar calendar = Calendar.getInstance();
-    calendar.add(Calendar.HOUR, -Integer.valueOf(config.getGaeCronCheckIntervalHour()));
+    calendar.add(Calendar.HOUR, -Integer.valueOf(Config.GAE_CRON_CHECK_INTERVAL_HOUR));
     for (Player player : players) {
       Calendar lastVisited = Calendar.getInstance();
       lastVisited.setTime(player.getLastVisited());

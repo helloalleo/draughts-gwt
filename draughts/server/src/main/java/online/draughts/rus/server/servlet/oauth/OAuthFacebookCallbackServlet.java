@@ -2,7 +2,7 @@ package online.draughts.rus.server.servlet.oauth;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
@@ -40,17 +40,14 @@ import java.util.logging.Logger;
 @Singleton
 public class OAuthFacebookCallbackServlet extends HttpServlet {
 
-  private final ServerConfiguration config;
   private final PlayerService playerService;
   private Logger log;
 
 
   @Inject
   public OAuthFacebookCallbackServlet(Logger log,
-                                      ServerConfiguration config,
                                       PlayerService playerService) {
     this.log = log;
-    this.config = config;
     this.playerService = playerService;
   }
 
@@ -61,12 +58,12 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
       String code = oAuthAuthzResponse.getCode();
 
       OAuthClientRequest request = OAuthClientRequest
-          .tokenLocation(config.getFbApiGraph() + "/" + config.getFbApiVersion() + "/" + config.getFbApiOAuthPath())
+          .tokenLocation(Config.FB_API_GRAPH + "/" + Config.FB_API_VERSION + "/" + Config.FB_API_OAUTH_PATH)
           .setGrantType(GrantType.AUTHORIZATION_CODE)
-          .setClientId(config.getFbClientId())
-          .setClientSecret(config.getFbClientSecret())
-          .setRedirectURI(config.getFbRedirectUri())
-          .setScope(config.getFbScope())
+          .setClientId(Config.FB_CLIENT_ID)
+          .setClientSecret(Config.FB_CLIENT_SECRET)
+          .setRedirectURI(Config.FB_REDIRECT_URI)
+          .setScope(Config.FB_SCOPE)
           .setCode(code)
           .buildQueryMessage();
 
@@ -77,11 +74,11 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
       String accessToken = response.getAccessToken();
 
       if (StringUtils.isEmpty(accessToken)) {
-        resp.sendRedirect(config.getServerErrorUrl());
+        resp.sendRedirect(Config.SERVER_ERROR_URL);
         return;
       }
 
-      OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(config.getFbApiGraph()
+      OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(Config.FB_API_GRAPH
           + "/me?fields=id,first_name,last_name,email,picture")
           .setAccessToken(accessToken)
           .buildQueryMessage();
@@ -91,7 +88,7 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
           OAuthResourceResponse.class);
 
       if (resourceResponse.getResponseCode() != 200) {
-        resp.sendRedirect(config.getServerErrorUrl());
+        resp.sendRedirect(Config.SERVER_ERROR_URL);
         return;
       }
 
@@ -116,7 +113,7 @@ public class OAuthFacebookCallbackServlet extends HttpServlet {
         String email = responseObject.getString("email");
         player.setEmail(email);
 
-        AuthUtils.processUserAndRedirectToPlayPage(playerService, config, req, resp, player);
+        AuthUtils.processUserAndRedirectToPlayPage(playerService, req, resp, player);
       }
     } catch (OAuthSystemException | OAuthProblemException e) {
       log.severe(e.getLocalizedMessage());

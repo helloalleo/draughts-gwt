@@ -2,7 +2,7 @@ package online.draughts.rus.server.servlet.oauth;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
@@ -42,17 +42,14 @@ import java.util.logging.Logger;
 @Singleton
 public class OAuthVKCallbackServlet extends HttpServlet {
 
-  private final ServerConfiguration config;
   private final PlayerService playerService;
   private Logger log;
 
 
   @Inject
   public OAuthVKCallbackServlet(Logger log,
-                                ServerConfiguration config,
                                 PlayerService playerService) {
     this.log = log;
-    this.config = config;
     this.playerService = playerService;
   }
 
@@ -63,11 +60,11 @@ public class OAuthVKCallbackServlet extends HttpServlet {
       String code = oAuthAuthzResponse.getCode();
 
       OAuthClientRequest request = OAuthClientRequest
-          .tokenLocation(config.getVkTokenUri())
-          .setClientId(config.getVkClientId())
-          .setClientSecret(config.getVkClientSecret())
-          .setRedirectURI(config.getVkRedirectUri())
-          .setScope(config.getVkScope())
+          .tokenLocation(Config.VK_TOKEN_URI)
+          .setClientId(Config.VK_CLIENT_ID)
+          .setClientSecret(Config.VK_CLIENT_SECRET)
+          .setRedirectURI(Config.VK_REDIRECT_URI)
+          .setScope(Config.VK_SCOPE)
           .setCode(code)
           .buildQueryMessage();
 
@@ -78,11 +75,11 @@ public class OAuthVKCallbackServlet extends HttpServlet {
       String email = response.getParam("email");
 
       if (StringUtils.isEmpty(accessToken)) {
-        resp.sendRedirect(config.getServerErrorUrl());
+        resp.sendRedirect(Config.SERVER_ERROR_URL);
         return;
       }
 
-      OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(config.getVkApiUserInfo()
+      OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(Config.VK_API_USER_INFO
           + "?fields=photo_50")
           .setAccessToken(accessToken)
           .buildQueryMessage();
@@ -92,7 +89,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
           OAuthResourceResponse.class);
 
       if (resourceResponse.getResponseCode() != 200) {
-        resp.sendRedirect(config.getServerErrorUrl());
+        resp.sendRedirect(Config.SERVER_ERROR_URL);
         return;
       }
 
@@ -119,7 +116,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         player.setEmail(email);
       }
 
-      AuthUtils.processUserAndRedirectToPlayPage(playerService, config, req, resp, player);
+      AuthUtils.processUserAndRedirectToPlayPage(playerService, req, resp, player);
     } catch (OAuthSystemException | OAuthProblemException e) {
       log.severe(e.getLocalizedMessage());
     }

@@ -2,7 +2,7 @@ package online.draughts.rus.server.servlet.oauth;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.config.ServerConfiguration;
+import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
@@ -43,16 +43,13 @@ import java.util.logging.Logger;
 @Singleton
 public class OAuthGoogleCallbackServlet extends HttpServlet {
 
-  private final ServerConfiguration config;
   private final PlayerService playerService;
   private Logger log;
 
   @Inject
   public OAuthGoogleCallbackServlet(Logger log,
-                                    ServerConfiguration config,
                                     PlayerService playerService) {
     this.log = log;
-    this.config = config;
     this.playerService = playerService;
   }
 
@@ -65,10 +62,10 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
       OAuthClientRequest request = OAuthClientRequest
           .tokenProvider(OAuthProviderType.GOOGLE)
           .setGrantType(GrantType.AUTHORIZATION_CODE)
-          .setClientId(config.getGoogleClientId())
-          .setClientSecret(config.getGoogleClientSecret())
-          .setRedirectURI(config.getGoogleRedirectUri())
-          .setScope(config.getGoogleScope())
+          .setClientId(Config.GOOGLE_CLIENT_ID)
+          .setClientSecret(Config.GOOGLE_CLIENT_SECRET)
+          .setRedirectURI(Config.GOOGLE_REDIRECT_URI)
+          .setScope(Config.GOOGLE_SCOPE)
           .setCode(code)
           .buildBodyMessage();
 
@@ -79,11 +76,11 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
       System.out.println(response);
 
       if (StringUtils.isEmpty(accessToken)) {
-        resp.sendRedirect(config.getServerErrorUrl());
+        resp.sendRedirect(Config.SERVER_ERROR_URL);
         return;
       }
 
-      OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(config.getGoogleApiUserInfo())
+      OAuthClientRequest bearerClientRequest = new OAuthBearerClientRequest(Config.GOOGLE_API_USER_INFO)
           .setAccessToken(accessToken).buildQueryMessage();
 
       OAuthResourceResponse resourceResponse = oAuthClient.resource(bearerClientRequest,
@@ -91,7 +88,7 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
           OAuthResourceResponse.class);
 
       if (resourceResponse.getResponseCode() != 200) {
-        resp.sendRedirect(config.getServerErrorUrl());
+        resp.sendRedirect(Config.SERVER_ERROR_URL);
         return;
       }
 
@@ -116,7 +113,7 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
         String email = responseObject.getString("email");
         player.setEmail(email);
 
-        AuthUtils.processUserAndRedirectToPlayPage(playerService, config, req, resp, player);
+        AuthUtils.processUserAndRedirectToPlayPage(playerService, req, resp, player);
       }
     } catch (OAuthSystemException | OAuthProblemException e) {
       log.severe(e.getLocalizedMessage());
