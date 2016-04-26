@@ -15,7 +15,7 @@ import static online.draughts.rus.client.util.Utils.format;
  */
 public class Stroke {
 
-  public static final String SIMPLE_MOVE_SEP = "-";
+  static final String SIMPLE_MOVE_SEP = "-";
   public static final String BEAT_MOVE_SEP = ":";
 
   private Square takenSquare;
@@ -34,29 +34,29 @@ public class Stroke {
   public Stroke() {
   }
 
-  public Square getTakenSquare() {
+  Square getTakenSquare() {
     return takenSquare;
   }
 
-  public Stroke setTakenSquare(Square takenSquare) {
+  Stroke setTakenSquare(Square takenSquare) {
     this.takenSquare = takenSquare;
     return this;
   }
 
-  public Square getStartSquare() {
+  Square getStartSquare() {
     return startSquare;
   }
 
-  public Stroke setStartSquare(Square startSquare) {
+  Stroke setStartSquare(Square startSquare) {
     this.startSquare = startSquare;
     return this;
   }
 
-  public Square getEndSquare() {
+  Square getEndSquare() {
     return endSquare;
   }
 
-  public Stroke setEndSquare(Square endSquare) {
+  Stroke setEndSquare(Square endSquare) {
     this.endSquare = endSquare;
     return this;
   }
@@ -76,7 +76,7 @@ public class Stroke {
     return order;
   }
 
-  public Stroke setOrder(int order) {
+  Stroke setOrder(int order) {
     this.order = order;
     return this;
   }
@@ -105,19 +105,19 @@ public class Stroke {
     moveFlags.add(MoveDto.MoveFlags.CANCEL_MOVE);
   }
 
-  public void setOnSimpleMove() {
+  void setOnSimpleMove() {
     moveFlags.add(MoveDto.MoveFlags.SIMPLE_MOVE);
   }
 
-  public void setOnContinueBeat() {
+  void setOnContinueBeat() {
     moveFlags.add(MoveDto.MoveFlags.CONTINUE_BEAT);
   }
 
-  public void setOnStopBeat() {
+  void setOnStopBeat() {
     moveFlags.add(MoveDto.MoveFlags.STOP_BEAT);
   }
 
-  public void setOnStartBeat() {
+  void setOnStartBeat() {
     moveFlags.add(MoveDto.MoveFlags.START_BEAT);
   }
 
@@ -140,17 +140,17 @@ public class Stroke {
     return stroke;
   }
 
-  public Stroke setMoveFlags(Set<MoveDto.MoveFlags> moveFlags) {
+  Stroke setMoveFlags(Set<MoveDto.MoveFlags> moveFlags) {
     this.moveFlags = moveFlags;
     return this;
   }
 
-  public Stroke setFirst(boolean first) {
+  Stroke setFirst(boolean first) {
     this.first = first;
     return this;
   }
 
-  public Stroke setNumber(int number) {
+  Stroke setNumber(int number) {
     this.number = number;
     return this;
   }
@@ -163,7 +163,7 @@ public class Stroke {
     return first;
   }
 
-  public Set<MoveDto.MoveFlags> getMoveFlags() {
+  Set<MoveDto.MoveFlags> getMoveFlags() {
     return moveFlags;
   }
 
@@ -179,7 +179,7 @@ public class Stroke {
         '}';
   }
 
-  public Stroke setComment(String comment) {
+  Stroke setComment(String comment) {
     this.comment = comment;
     return this;
   }
@@ -188,7 +188,7 @@ public class Stroke {
     return comment;
   }
 
-  public Stroke setTitle(String title) {
+  Stroke setTitle(String title) {
     this.title = title;
     return this;
   }
@@ -197,12 +197,12 @@ public class Stroke {
     return title;
   }
 
-  public Stroke setQueen(boolean queen) {
+  Stroke setQueen(boolean queen) {
     this.queen = queen;
     return this;
   }
 
-  public boolean isQueen() {
+  boolean isQueen() {
     return queen;
   }
 

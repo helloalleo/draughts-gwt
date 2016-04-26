@@ -38,7 +38,7 @@ public class Board extends Layer {
   private Stack<Integer> queenStepStack = new Stack<>();
 
   private Set<Square> highlightedSquares = new HashSet<>();
-  private Set<Square> capturedSquares = new HashSet<>();
+  private Map<Square, List<Square>> capturedJumpSquares = new HashMap<>();
 
   private Stack<Stroke> moveStack = new Stack<>();
   private Stack<Stroke> moveMyStack = new Stack<>();
@@ -157,21 +157,23 @@ public class Board extends Layer {
    * @param clickedPiece нажатая шашка
    */
   void highlightAllowedMoves(Draught clickedPiece) {
-    Set<Square> capturedSquares = getCapturedSquares();
-    if (!capturedSquares.isEmpty()) {
-      Square clickedSquare;
-      try {
-        clickedSquare = backgroundLayer.getSquare(clickedPiece.getRow(), clickedPiece.getCol());
-      } catch (SquareNotFoundException ignore) {
-        return;
-      }
-      for (Square current : capturedSquares) {
-        if (clickedSquare.isOnLine(current)) {
-          highlightSquareToBeat(current);
-          highlightedSquares.add(current);
+    Square clickedSquare;
+    try {
+      clickedSquare = backgroundLayer.getSquare(clickedPiece.getRow(), clickedPiece.getCol());
+    } catch (SquareNotFoundException ignore) {
+      return;
+    }
+    Map<Square, List<Square>> capturedJumpMoves = getCaptureJumpMoves();
+    if (!capturedJumpMoves.isEmpty()) {
+      for (Square captured : capturedJumpMoves.keySet()) {
+        for (Square jump : capturedJumpMoves.get(captured)) {
+          if (clickedSquare.isOnLine(jump) && clickedSquare.isOnLine(captured)) {
+            highlightSquareToBeat(jump);
+            highlightedSquares.add(jump);
+          }
         }
       }
-      this.capturedSquares = capturedSquares;
+      capturedJumpSquares = capturedJumpMoves;
     } else {
       Set<Square> possibleMoves = getPossibleMoves(clickedPiece);
       if (!possibleMoves.isEmpty()) {
@@ -212,19 +214,29 @@ public class Board extends Layer {
 
       boolean queen = draught.isQueen();
       if (this.white) {
-        possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, queen));
-        possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.ADDITION, row, col, queen));
-        possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.SUBTRACTION, row, col, queen));
-        possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.ADDITION, row, col, queen));
+        if (draught.isWhite()) {
+          // если играют белыми и выбрана белая шашка, то она идут вверх
+          possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, queen));
+          possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.ADDITION, row, col, queen));
+        } else {
+          // если играют белыми и выбрана чёрная шашка, то она идут вниз
+          possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.SUBTRACTION, row, col, queen));
+          possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.ADDITION, row, col, queen));
+        }
       } else {
-        // top-left
-        possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, queen));
-        // top-right
-        possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.ADDITION, row, col, queen));
-        // bottom-left
-        possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.SUBTRACTION, row, col, queen));
-        // bottom-right
-        possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.ADDITION, row, col, queen));
+        if (draught.isWhite()) {
+          // если играют чёрными и выбрана белая шашка, то она идут вниз
+          // bottom-left
+          possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.SUBTRACTION, row, col, queen));
+          // bottom-right
+          possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.ADDITION, row, col, queen));
+        } else {
+          // если играют чёрными и выбрана чёрная шашка, то она идут вверх
+          // top-left
+          possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, queen));
+          // top-right
+          possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.ADDITION, row, col, queen));
+        }
       }
 
     }
@@ -250,7 +262,7 @@ public class Board extends Layer {
     if (queen) {
       return queenPossibleMoves(opRow, opCol, row, col);
     } else {
-      if (inBounds(opRow.apply(row, 1), opCol.apply(col, 1)) && white) {
+      if (inBounds(opRow.apply(row, 1), opCol.apply(col, 1))) {
         Square square = null;
         try {
           square = backgroundLayer.getSquare(opRow.apply(row, 1), opCol.apply(col, 1));
@@ -258,7 +270,9 @@ public class Board extends Layer {
         }
         // Check moves to the op1, op2 of this Draught
         if (square != null && !square.isOccupied()) {
-          return Collections.singleton(square);
+          Set<Square> result = new HashSet<>();
+          result.add(square);
+          return result;
         }
       }
     }
@@ -309,7 +323,7 @@ public class Board extends Layer {
   }
 
   private Set<Square> possibleNextMovePair(Square takenSquare, Operator opRow, Operator opCol, int row, int col,
-                                    boolean queen) {
+                                           boolean queen) {
     Set<Square> nextMoves = new HashSet<>();
     if (inBounds(opRow.apply(row, 1), opCol.apply(col, 1))) {
       // Check moves to the op1, op2 of this Draught
@@ -317,13 +331,13 @@ public class Board extends Layer {
       try {
         jumpSquare = backgroundLayer.getSquare(opRow.apply(row, 2), opCol.apply(col, 2));
       } catch (SquareNotFoundException e) {
-        return emptySet();
+        return Collections.emptySet();
       }
       Square capturedSquare;
       try {
         capturedSquare = backgroundLayer.getSquare(opRow.apply(row, 1), opCol.apply(col, 1));
       } catch (SquareNotFoundException e) {
-        return emptySet();
+        return Collections.emptySet();
       }
       //if square is occupied, and the color of the Draught in square is
       //not equal to the Draught whose moves we are checking, then
@@ -335,10 +349,10 @@ public class Board extends Layer {
           try {
             square = backgroundLayer.getSquare(row, col);
           } catch (SquareNotFoundException e) {
-            return emptySet();
+            return Collections.emptySet();
           }
           if (capturedSquare.isBetween(square, takenSquare)) {
-            return emptySet();
+            return Collections.emptySet();
           }
           int r = row;
           int c = col;
@@ -349,12 +363,12 @@ public class Board extends Layer {
             try {
               capturedSquare = backgroundLayer.getSquare(opRow.apply(r, 1), opCol.apply(c, 1));
             } catch (SquareNotFoundException e) {
-              return emptySet();
+              return Collections.emptySet();
             }
             try {
               jumpSquare = backgroundLayer.getSquare(opRow.apply(r, 2), opCol.apply(c, 2));
             } catch (SquareNotFoundException e) {
-              return emptySet();
+              return Collections.emptySet();
             }
           }
           if (jumpSquare != null && !jumpSquare.isOccupied()
@@ -365,7 +379,7 @@ public class Board extends Layer {
             try {
               squareStartLoop = backgroundLayer.getSquare(i, j);
             } catch (SquareNotFoundException e) {
-              return emptySet();
+              return Collections.emptySet();
             }
             while (inBounds(i, j) && !squareStartLoop.isOccupied()) {
               final Square squareLoop;
@@ -385,12 +399,12 @@ public class Board extends Layer {
         try {
           square = backgroundLayer.getSquare(opRow.apply(row, 1), opCol.apply(col, 1));
         } catch (SquareNotFoundException e) {
-          return emptySet();
+          return Collections.emptySet();
         }
         if (square.isOccupied()) {
           // нельзя возвращяться назад
           if (takenSquare == jumpSquare) {
-            return emptySet();
+            return Collections.emptySet();
           }
           if (inBounds(opRow.apply(row, 2), opCol.apply(col, 2))) {
             if (!jumpSquare.isOccupied()
@@ -402,10 +416,6 @@ public class Board extends Layer {
       }
     }
     return nextMoves;
-  }
-
-  private HashSet<Square> emptySet() {
-    return new HashSet<>();
   }
 
   /**
@@ -430,11 +440,11 @@ public class Board extends Layer {
     final boolean first = isFirstMoveFlag();
     stroke.setFirst(first);
 
-    if (!capturedSquares.isEmpty()) {
+    if (!capturedJumpSquares.isEmpty()) {
       //A jump has been performed, so getProvider the Square that lies between from and to
       Square takenSquare = null;
-      // проходим по сбитым шашкам из метода getCapturedSquares()
-      for (Square s : capturedSquares) {
+      // проходим по сбитым шашкам из метода getCaptureJumpMoves()
+      for (Square s : capturedJumpSquares.keySet()) {
         if (to.isOnLine(s) && s.isBetween(from, to)) {
           takenSquare = s;
           break;
@@ -538,7 +548,7 @@ public class Board extends Layer {
             }
           }
         });
-    capturedSquares = new HashSet<>();
+    capturedJumpSquares.clear();
   }
 
   private boolean inBounds(int row, int col) {
@@ -1044,26 +1054,33 @@ public class Board extends Layer {
     return currentPosition;
   }
 
-  private Set<Square> getCapturedSquares() {
-    Set<Square> capturedSquares = new HashSet<>();
+  private Map<Square, List<Square>> getCaptureJumpMoves() {
+    Map<Square, List<Square>> captureJumpMoves = new HashMap<>();
     for (Draught draught : myDraughtList) {
-      final Set<Square> capturedSquaresByDraught = getCapturedSquaresByDraught(draught);
-      if (null != capturedSquaresByDraught) {
-        capturedSquares.addAll(capturedSquaresByDraught);
+      final Map<Square, List<Square>> capturedSquaresByDraught = getCapturedJumpMovesByDraught(draught);
+      if (!capturedSquaresByDraught.isEmpty()) {
+        for (Square square : capturedSquaresByDraught.keySet()) {
+          if (captureJumpMoves.containsKey(square)) {
+            // если побитый ходу уже есть в мап, тогда дополняем его
+            captureJumpMoves.get(square).addAll(capturedSquaresByDraught.get(square));
+          } else {
+            captureJumpMoves.putAll(capturedSquaresByDraught);
+          }
+        }
       }
     }
-    return capturedSquares;
+    return captureJumpMoves;
   }
 
-  private Set<Square> getCapturedSquaresByDraught(Draught draught) {
+  private Map<Square, List<Square>> getCapturedJumpMovesByDraught(Draught draught) {
         /* Possible moves include up-left, up-right, down-left, down-right
      * This corresponds to (row-- col--), (row-- col++),
 		 * 						(row++ col--), (row++ col++) respectively
 		 */
     if (null == draught) {
-      return null;
+      return new HashMap<>();
     }
-    Set<Square> jumpMoves = new HashSet<>();
+    Map<Square, List<Square>> captureJumpMoves = new HashMap<>();
     int row = draught.getRow();
     int col = draught.getCol();
 
@@ -1073,21 +1090,21 @@ public class Board extends Layer {
     boolean draughtColor = draught.isWhite();
     boolean queen = draught.isQueen();
     if (this.white) {
-      jumpMoves.addAll(jumpMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, draughtColor, queen));
-      jumpMoves.addAll(jumpMoves(Operator.SUBTRACTION, Operator.ADDITION, row, col, draughtColor, queen));
-      jumpMoves.addAll(jumpMoves(Operator.ADDITION, Operator.SUBTRACTION, row, col, draughtColor, queen));
-      jumpMoves.addAll(jumpMoves(Operator.ADDITION, Operator.ADDITION, row, col, draughtColor, queen));
+      jumpMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, draughtColor, queen, captureJumpMoves);
+      jumpMoves(Operator.SUBTRACTION, Operator.ADDITION, row, col, draughtColor, queen, captureJumpMoves);
+      jumpMoves(Operator.ADDITION, Operator.SUBTRACTION, row, col, draughtColor, queen, captureJumpMoves);
+      jumpMoves(Operator.ADDITION, Operator.ADDITION, row, col, draughtColor, queen, captureJumpMoves);
     } else {
       // top-left
-      jumpMoves.addAll(jumpMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, draughtColor, queen));
+      jumpMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, draughtColor, queen, captureJumpMoves);
       // top-right
-      jumpMoves.addAll(jumpMoves(Operator.SUBTRACTION, Operator.ADDITION, row, col, draughtColor, queen));
+      jumpMoves(Operator.SUBTRACTION, Operator.ADDITION, row, col, draughtColor, queen, captureJumpMoves);
       // bottom-left
-      jumpMoves.addAll(jumpMoves(Operator.ADDITION, Operator.SUBTRACTION, row, col, draughtColor, queen));
+      jumpMoves(Operator.ADDITION, Operator.SUBTRACTION, row, col, draughtColor, queen, captureJumpMoves);
       // bottom-right
-      jumpMoves.addAll(jumpMoves(Operator.ADDITION, Operator.ADDITION, row, col, draughtColor, queen));
+      jumpMoves(Operator.ADDITION, Operator.ADDITION, row, col, draughtColor, queen, captureJumpMoves);
     }
-    return jumpMoves;
+    return captureJumpMoves;
   }
 
   /**
@@ -1099,14 +1116,13 @@ public class Board extends Layer {
    * @param col          координаты шашки которая бьёт
    * @param draughtColor цвет шашки которая бьёт. Не должен совпадать с цветом побитой шашки
    * @param queen        дамка?
-   * @return список клеток куда можно побить
    */
-  private List<Square> jumpMoves(Operator opRow, Operator opCol, int row, int col, boolean draughtColor,
-                                 boolean queen) {
+  private void jumpMoves(Operator opRow, Operator opCol, int row, int col, boolean draughtColor,
+                         boolean queen, Map<Square, List<Square>> outCaptureJumps) {
     if (queen) {
-      return queenJumpMoves(opRow, opCol, row, col, draughtColor, 0);
+      queenJumpMoves(opRow, opCol, row, col, draughtColor, 0, outCaptureJumps);
     } else {
-      if (inBounds(opRow.apply(row, 1), opCol.apply(col, 1)) && white) {
+      if (inBounds(opRow.apply(row, 1), opCol.apply(col, 1))) {
         Square square = null, nextSquare = null;
         try {
           square = backgroundLayer.getSquare(opRow.apply(row, 1), opCol.apply(col, 1));
@@ -1114,37 +1130,37 @@ public class Board extends Layer {
         } catch (SquareNotFoundException ignore) {
         }
         // Check moves to the op1, op2 of this Draught
-        if (square != null && square.isOccupied() && square.getOccupant().isWhite() != draughtColor) {
-          //if square is occupied, and the color of the Draught in square is
-          //not equal to the Draught whose moves we are checking, then
-          //check to see if we can make the jump by checking
-          //the next square in the same direction
-          if (inBounds(opRow.apply(row, 2), opCol.apply(col, 2))) {
-            if (nextSquare != null && !nextSquare.isOccupied()) {
-              return Collections.singletonList(nextSquare);
-            }
+        if (square != null && square.isOccupied() && square.getOccupant().isWhite() != draughtColor
+            && nextSquare != null && !nextSquare.isOccupied()
+            && inBounds(opRow.apply(row, 2), opCol.apply(col, 2))) {
+          if (!outCaptureJumps.containsKey(square)) {
+            outCaptureJumps.put(square, new ArrayList<Square>());
           }
+          outCaptureJumps.get(square).add(nextSquare);
         }
       }
 
-      if (inBounds(opRow.apply(row, 2), opCol.apply(col, 2))) {
-        Square square = null, nextSquare = null;
-        try {
-          square = backgroundLayer.getSquare(opRow.apply(row, 1), opCol.apply(col, 1));
-          nextSquare = backgroundLayer.getSquare(opRow.apply(row, 2), opCol.apply(col, 2));
-        } catch (SquareNotFoundException ignore) {
-        }
-        if (nextSquare != null && !nextSquare.isOccupied() && square != null && square.isOccupied()
-            && square.getOccupant().isWhite() != draughtColor) {
-          return Collections.singletonList(nextSquare);
-        }
-      }
+//      if (inBounds(opRow.apply(row, 2), opCol.apply(col, 2))) {
+//        Square square = null, nextSquare = null;
+//        try {
+//          square = backgroundLayer.getSquare(opRow.apply(row, 1), opCol.apply(col, 1));
+//          nextSquare = backgroundLayer.getSquare(opRow.apply(row, 2), opCol.apply(col, 2));
+//        } catch (SquareNotFoundException ignore) {
+//        }
+//        if (nextSquare != null && !nextSquare.isOccupied() && square != null && square.isOccupied()
+//            && square.getOccupant().isWhite() != draughtColor) {
+//          if (!outCaptureJumps.containsKey(square)) {
+//            outCaptureJumps.put(square, new ArrayList<Square>());
+//          }
+//          outCaptureJumps.get(square).add(nextSquare);
+//        }
+//      }
     }
-    return new ArrayList<>();
   }
 
-  private List<Square> queenJumpMoves(Operator opRow, Operator opCol, int row, int col, boolean draughtColor, int depth) {
-    List<Square> jumpMoves = new ArrayList<>(rows * cols);
+  private void queenJumpMoves(Operator opRow, Operator opCol, int row, int col, boolean draughtColor, int depth,
+                              Map<Square, List<Square>> outCaptureJumps) {
+    Map<Square, List<Square>> capturedJumpMoves = new HashMap<>(rows * cols);
 
     Square square = null, nextSquare = null;
     try {
@@ -1156,12 +1172,18 @@ public class Board extends Layer {
       if (!inBounds(opRow.apply(row, 0), opCol.apply(col, 0))) {
         break;
       }
+      // если следующее поле не занято и текущее занято и другого цвета
       if (nextSquare != null && !nextSquare.isOccupied() && square != null && square.isOccupied()
           && square.getOccupant().isWhite() != draughtColor) {
+        // перепрыгиваем через текущую шашку, другими словами бьём её
         int r = opRow.apply(row, 2), c = opCol.apply(col, 2);
+        // и смотрим пока не вышли за границы поля
+        List<Square> jumpMoves = new ArrayList<>(rows * cols);
         while (inBounds(r, c)) {
           try {
+            // берем текущее поле
             Square s = backgroundLayer.getSquare(opRow.apply(r, 0), opCol.apply(c, 0));
+            // если оно занято заканчиваем цикл
             if (s.isOccupied()) {
               break;
             }
@@ -1174,6 +1196,7 @@ public class Board extends Layer {
           r = opRow.apply(r, 1);
           c = opCol.apply(c, 1);
         }
+        capturedJumpMoves.put(square, jumpMoves);
         break;
       } else if (square != null && square.isOccupied()) {
         break;
@@ -1190,35 +1213,50 @@ public class Board extends Layer {
     }
 
     depth++;
-    if (!jumpMoves.isEmpty()) {
-      List<Square> subMove = new ArrayList<>();
-      for (Square move : jumpMoves) {
-        if (opRow.equals(PossibleOperators.SUB) && opCol.equals(PossibleOperators.SUB)) { // top-left & bottom-right
-          subMove.addAll(queenJumpMoves(Operator.SUBTRACTION, Operator.ADDITION, move.getRow(), move.getCol(), draughtColor, depth));
-          subMove.addAll(queenJumpMoves(Operator.ADDITION, Operator.SUBTRACTION, move.getRow(), move.getCol(), draughtColor, depth));
-        } else if (opRow.equals(PossibleOperators.SUB) && opCol.equals(PossibleOperators.ADD)) { // bottom-left & top-right
-          subMove.addAll(queenJumpMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, move.getRow(), move.getCol(), draughtColor, depth));
-          subMove.addAll(queenJumpMoves(Operator.ADDITION, Operator.ADDITION, move.getRow(), move.getCol(), draughtColor, depth));
-        } else if (opRow.equals(PossibleOperators.ADD) && opCol.equals(PossibleOperators.ADD)) { // top-left & bottom-right
-          subMove.addAll(queenJumpMoves(Operator.SUBTRACTION, Operator.ADDITION, move.getRow(), move.getCol(), draughtColor, depth));
-          subMove.addAll(queenJumpMoves(Operator.ADDITION, Operator.SUBTRACTION, move.getRow(), move.getCol(), draughtColor, depth));
-        } else if (opRow.equals(PossibleOperators.ADD) && opCol.equals(PossibleOperators.SUB)) { // bottom-left & top-right
-          subMove.addAll(queenJumpMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, move.getRow(), move.getCol(), draughtColor, depth));
-          subMove.addAll(queenJumpMoves(Operator.ADDITION, Operator.ADDITION, move.getRow(), move.getCol(), draughtColor, depth));
+    if (!capturedJumpMoves.isEmpty()) {
+      Map<Square, List<Square>> subMove = new HashMap<>();
+      for (List<Square> moves : capturedJumpMoves.values()) {
+        for (Square move : moves) {
+          if (opRow.equals(PossibleOperators.SUB) && opCol.equals(PossibleOperators.SUB)) { // top-left & bottom-right
+            queenJumpMoves(Operator.SUBTRACTION, Operator.ADDITION, move.getRow(), move.getCol(), draughtColor, depth, subMove);
+            queenJumpMoves(Operator.ADDITION, Operator.SUBTRACTION, move.getRow(), move.getCol(), draughtColor, depth, subMove);
+          } else if (opRow.equals(PossibleOperators.SUB) && opCol.equals(PossibleOperators.ADD)) { // bottom-left & top-right
+            queenJumpMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, move.getRow(), move.getCol(), draughtColor, depth, subMove);
+            queenJumpMoves(Operator.ADDITION, Operator.ADDITION, move.getRow(), move.getCol(), draughtColor, depth, subMove);
+          } else if (opRow.equals(PossibleOperators.ADD) && opCol.equals(PossibleOperators.ADD)) { // top-left & bottom-right
+            queenJumpMoves(Operator.SUBTRACTION, Operator.ADDITION, move.getRow(), move.getCol(), draughtColor, depth, subMove);
+            queenJumpMoves(Operator.ADDITION, Operator.SUBTRACTION, move.getRow(), move.getCol(), draughtColor, depth, subMove);
+          } else if (opRow.equals(PossibleOperators.ADD) && opCol.equals(PossibleOperators.SUB)) { // bottom-left & top-right
+            queenJumpMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, move.getRow(), move.getCol(), draughtColor, depth, subMove);
+            queenJumpMoves(Operator.ADDITION, Operator.ADDITION, move.getRow(), move.getCol(), draughtColor, depth, subMove);
+          }
         }
       }
       if (!subMove.isEmpty()) {
-        List<Square> resultMove = new ArrayList<>();
-        for (Square move : jumpMoves) {
-          for (Square sq : subMove) {
-            if (move.isOnLine(sq) && !resultMove.contains(move)) {
-              resultMove.add(move);
+        HashMap<Square, List<Square>> resultMove = new HashMap<>();
+        // проходим по побитым шашкам
+        for (Square move : capturedJumpMoves.keySet()) {
+          // проходим по прыжкам за побитой шашкой move
+          for (Square m : capturedJumpMoves.get(move)) {
+            // проходим по побитым под ходам
+            for (Square subMv : subMove.keySet()) {
+              // проходим по прыжкам за побитыми подходами
+              for (Square sm : subMove.get(subMv)) {
+                // если подход на той же линии что и ход тогда заносим в мап побитую шашку и соответсвующий ход
+                if (sm.isOnLine(m)) {
+                  if (!resultMove.containsKey(move)) {
+                    resultMove.put(move, new ArrayList<Square>());
+                  }
+                  resultMove.get(move).add(m);
+                }
+              }
             }
           }
         }
-        return resultMove;
+        outCaptureJumps.putAll(resultMove);
+        return;
       }
     }
-    return jumpMoves;
+    outCaptureJumps.putAll(capturedJumpMoves);
   }
 }
