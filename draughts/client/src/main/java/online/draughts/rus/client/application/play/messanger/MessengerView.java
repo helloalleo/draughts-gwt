@@ -21,7 +21,6 @@ import com.gwtplatform.mvp.client.view.PopupPositioner;
 import online.draughts.rus.client.application.play.PlayView;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.*;
@@ -336,7 +335,7 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
   interface Binder extends UiBinder<PopupPanel, MessengerView> {
   }
 
-  public static class ViewFactoryImpl implements MessengerPresenter.ViewFactory {
+  static class ViewFactoryImpl implements MessengerPresenter.ViewFactory {
 
     private final Binder uiBinder;
     private final EventBus eventBus;

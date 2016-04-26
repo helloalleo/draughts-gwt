@@ -54,7 +54,7 @@ public class NameTokens {
   }
 
   public Link[] getLeftAuthLinks() {
-    return new Link[]{homeLink, playLink, analysisLink};
+    return new Link[]{homeLink, playLink};
   }
 
   public Link[] getRightLinks() {
