@@ -9,8 +9,6 @@ import com.google.gwt.user.client.ui.DialogBox;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.client.util.DTCookiesImpl;
-import online.draughts.rus.client.util.DTLogImpl;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 
 /**
@@ -24,10 +22,10 @@ public class BasicDialogBox extends DialogBox implements BaseDialogBox {
   protected AppResources resources = GWT.create(AppResources.class);
   protected Cookies cookies = GWT.create(DTCookiesImpl.class);
 
-  protected int WIDTH = 400;
-  protected int HEIGHT = 60;
+  int WIDTH = 400;
+  int HEIGHT = 60;
 
-  public BasicDialogBox() {
+  BasicDialogBox() {
     setAnimationEnabled(true);
 
     getElement().addClassName(resources.style().dialogBox());

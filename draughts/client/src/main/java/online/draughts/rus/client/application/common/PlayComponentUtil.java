@@ -3,9 +3,9 @@ package online.draughts.rus.client.application.common;
 import com.google.web.bindery.event.shared.EventBus;
 import online.draughts.rus.client.application.widget.dialog.GameResultDialogBox;
 import online.draughts.rus.client.channel.PlaySession;
-import online.draughts.rus.client.event.GameCheckStuckEvent;
 import online.draughts.rus.client.event.GameOverEvent;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 
@@ -38,7 +38,6 @@ public class PlayComponentUtil {
 
     final GameDto endGame = playSession.getGame();
     if (gameEnd == null) {
-      eventBus.fireEvent(new GameCheckStuckEvent());
       return;
     }
     eventBus.fireEvent(new GameOverEvent(endGame, gameEnd, new AbstractAsyncCallback<GameDto>() {
@@ -49,16 +48,18 @@ public class PlayComponentUtil {
   }
 
   public static void checkStuck(EventBus eventBus, PlaySession playSession, boolean isWhite) {
-    GameDto.GameEnds gameEnd;
+    final GameDto.GameEnds gameEnd;
     if (isWhite) {
       gameEnd = GameDto.GameEnds.BLACK_WIN;
     } else {
       gameEnd = GameDto.GameEnds.WHITE_WIN;
     }
-    final GameDto endGame = playSession.getGame();
-    eventBus.fireEvent(new GameOverEvent(endGame, gameEnd, new AbstractAsyncCallback<GameDto>() {
+    final GameDto endedGame = playSession.getGame();
+    Logger.debug("ENDED GAME " + endedGame);
+    eventBus.fireEvent(new GameOverEvent(endedGame, gameEnd, new AbstractAsyncCallback<GameDto>() {
       @Override
       public void onSuccess(GameDto result) {
+        Logger.debug("GAME STUCK " + gameEnd.name());
       }
     }));
   }

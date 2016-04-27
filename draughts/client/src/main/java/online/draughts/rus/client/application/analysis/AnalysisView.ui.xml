@@ -20,11 +20,11 @@
                         <b:Image ui:field="blackDraughtImage" resource="{res.images.blackDraught}" width="50px" height="50px"/>
                     </g:HTMLPanel>
                     <b:RadioButton ui:field="removeDraughtButton" text="Удалить 3" name="addDraughtGroup"/>
-                    <b:CheckBox ui:field="addQueenCheckbox" text="Дамка"/>
-                    <b:CheckBox ui:field="addDraughtCheckbox" text="Добавить шашку" enabled="false"/>
-                    <b:Button ui:field="myPlaceDraughts" text="Моя расстановка" type="LINK"/>
-                    <b:Button ui:field="placeDraughts" text="Расставить с начала" type="LINK"/>
-                    <b:Button ui:field="clearDesk" text="Очистить доску" type="LINK"/>
+                    <b:CheckBox ui:field="addQueenCheckbox" text="Дамка Q"/>
+                    <b:CheckBox ui:field="addDraughtCheckbox" text="Добавить шашку A" enabled="false"/>
+                    <b:Button ui:field="myPlaceDraughts" text="Моя расстановка M" type="LINK"/>
+                    <b:Button ui:field="placeDraughts" text="Расставить с начала S" type="LINK"/>
+                    <b:Button ui:field="clearDesk" text="Очистить доску C" type="LINK"/>
                     <b:Button ui:field="savePosition" text="Сохранить" type="LINK"/>
                     <b:Button ui:field="loadPosition" text="Загрузить" type="LINK"/>
                 </g:HTMLPanel>

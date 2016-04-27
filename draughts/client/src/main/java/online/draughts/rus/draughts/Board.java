@@ -21,18 +21,17 @@ import java.util.*;
  */
 public class Board extends Layer {
   private static final double ANIMATION_DURATION = 50;
+  private static final double removeDraughtFade = 200;
+  private static final double moveDraughtDuration = 200;
   public static int DRAUGHTS_ON_SIDE = 12;
-  private boolean selfPlay;
+  private boolean analysis;
   // шашки, которые надо побить
   private List<Draught> myDraughtList;
   private List<Draught> opponentDraughtList;
-
   private boolean white;
   private boolean turn;
   private int rows;
   private int cols;
-  private static final double removeDraughtFade = 200;
-  private static final double moveDraughtDuration = 200;
   private boolean emulate = false; // эмулировать шашки
   // стек ходов шашек, когда они становятся дамками
   private Stack<Integer> queenStepStack = new Stack<>();
@@ -49,7 +48,6 @@ public class Board extends Layer {
 
   private PlayComponent view;
   private Set<DraughtDto> currentPosition = new HashSet<>();
-  private boolean fakeHighlight = false;
 
   public Board(BoardBackgroundLayer backgroundLayer,
                int rows,
@@ -69,8 +67,8 @@ public class Board extends Layer {
     bindEvents();
   }
 
-  public void setSelfPlay(boolean selfPlay) {
-    this.selfPlay = selfPlay;
+  public void setAnalysis(boolean analysis) {
+    this.analysis = analysis;
   }
 
   private void bindEvents() {
@@ -106,30 +104,6 @@ public class Board extends Layer {
         }
       }
     }
-
-//    if (!isMyTurn()) {
-////      final Draught e1 = addDraught(4, 3, !white);
-////      e1.setQueen(true);
-////      opponentDraughtList.add(e1);
-//////      opponentDraughtList.add(addDraught(1, 6, !white));
-////      opponentDraughtList.add(addDraught(1, 2, !white));
-//      opponentDraughtList.add(addDraught(3, 4, true));
-////      final Draught e = addDraught(6, 1, white);
-////      e.setQueen(true);
-//      myDraughtList.add(addDraught(4,3, false));
-//    }
-//
-//    if (isMyTurn()) {
-////      final Draught e = addDraught(1, 6, !white);
-////      e.setQueen(true);
-//      opponentDraughtList.add(addDraught(3,4 , false));
-////      final Draught e1 = addDraught(3, 4, white);
-////      e1.setQueen(true);
-//      myDraughtList.add(addDraught(4,3,true));
-////      myDraughtList.add(addDraught(6, 1, white));
-////      myDraughtList.add(addDraught(2, 1, white));
-////      myDraughtList.add(addDraught(4, 5, white));
-//    }
   }
 
   private Draught addDraught(int row, int col, boolean white) {
@@ -188,11 +162,18 @@ public class Board extends Layer {
   }
 
   public void checkIfGameStuck() {
-    fakeHighlight = true;
-    for (Draught draught : myDraughtList) {
-      highlightAllowedMoves(draught);
+    Map<Square, List<Square>> capturedJumpMoves = getCaptureJumpMoves();
+    if (!capturedJumpMoves.isEmpty()) {
+      return;
     }
-    fakeHighlight = false;
+    Set<Square> allPossibleMoves = new HashSet<>();
+    for (Draught draught : myDraughtList) {
+      allPossibleMoves.addAll(getPossibleMoves(draught));
+    }
+    if (!allPossibleMoves.isEmpty()) {
+      return;
+    }
+    getView().gameStuck(isWhite());
   }
 
   /**
@@ -201,8 +182,16 @@ public class Board extends Layer {
    * @param clickedDraught Draught for which moves should be found
    */
   private Set<Square> getPossibleMoves(Draught clickedDraught) {
+    Set<Square> possibleMoves = getPossibleMovesByTurn(clickedDraught, myDraughtList);
+    if (analysis && !isMyTurn()) {
+      possibleMoves = getPossibleMovesByTurn(clickedDraught, opponentDraughtList);
+    }
+    return possibleMoves;
+  }
+
+  private Set<Square> getPossibleMovesByTurn(Draught clickedDraught, List<Draught> draughtList) {
     Set<Square> possibleMoves = new HashSet<>();
-    for (Draught draught : myDraughtList) {
+    for (Draught draught : draughtList) {
       if (!clickedDraught.equals(draught)) {
         continue;
       }
@@ -211,48 +200,68 @@ public class Board extends Layer {
 
       //Begin checking which moves are possible, keeping in mind that only black draughts may calcStroke up
       //and only red draughts may calcStroke downwards
-
       boolean queen = draught.isQueen();
       if (this.white) {
-        if (draught.isWhite()) {
-          // если играют белыми и выбрана белая шашка, то она идут вверх
-          possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, queen));
-          possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.ADDITION, row, col, queen));
+        if (isMyTurn()) {
+          myTurnAndWhiteOrNotMyTurnAndBlack(possibleMoves, draught, row, col, queen);
         } else {
-          // если играют белыми и выбрана чёрная шашка, то она идут вниз
-          possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.SUBTRACTION, row, col, queen));
-          possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.ADDITION, row, col, queen));
+          notMyTurnAndWhiteOrMyTurnAndBlack(possibleMoves, draught, row, col, queen);
         }
       } else {
-        if (draught.isWhite()) {
-          // если играют чёрными и выбрана белая шашка, то она идут вниз
-          // bottom-left
-          possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.SUBTRACTION, row, col, queen));
-          // bottom-right
-          possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.ADDITION, row, col, queen));
+        if (isMyTurn()) {
+          notMyTurnAndWhiteOrMyTurnAndBlack(possibleMoves, draught, row, col, queen);
         } else {
-          // если играют чёрными и выбрана чёрная шашка, то она идут вверх
-          // top-left
-          possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, queen));
-          // top-right
-          possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.ADDITION, row, col, queen));
+          myTurnAndWhiteOrNotMyTurnAndBlack(possibleMoves, draught, row, col, queen);
         }
       }
-
     }
     return possibleMoves;
   }
 
-  private void fadeInSquare(Square square) {
-    if (!fakeHighlight) {
-      square.setAlpha(.5);
+  private void myTurnAndWhiteOrNotMyTurnAndBlack(Set<Square> possibleMoves, Draught draught, int row, int col, boolean queen) {
+    if (draught.isWhite()) {
+      upPossibleMoves(possibleMoves, row, col, queen);
+    } else {
+      downPossibleMoves(possibleMoves, row, col, queen);
     }
   }
 
-  private void highlightSquareToBeat(Square square) {
-    if (!fakeHighlight) {
-      square.setAlpha(.4);
+  private void notMyTurnAndWhiteOrMyTurnAndBlack(Set<Square> possibleMoves, Draught draught, int row, int col, boolean queen) {
+    if (draught.isWhite()) {
+      downPossibleMoves(possibleMoves, row, col, queen);
+    } else {
+      upPossibleMoves(possibleMoves, row, col, queen);
     }
+  }
+
+  private void downPossibleMoves(Set<Square> possibleMoves, int row, int col, boolean queen) {
+    // если играют белыми и выбрана чёрная шашка, то она идут вниз
+    possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.SUBTRACTION, row, col, queen));
+    possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.ADDITION, row, col, queen));
+    if (queen) {
+      // если играют белыми и выбрана белая шашка, то она идут вверх
+      possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, true));
+      possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.ADDITION, row, col, true));
+    }
+  }
+
+  private void upPossibleMoves(Set<Square> possibleMoves, int row, int col, boolean queen) {
+    // если играют белыми и выбрана белая шашка, то она идут вверх
+    possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, queen));
+    possibleMoves.addAll(possibleMoves(Operator.SUBTRACTION, Operator.ADDITION, row, col, queen));
+    if (queen) {
+      // если играют белыми и выбрана чёрная шашка, то она идут вниз
+      possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.SUBTRACTION, row, col, true));
+      possibleMoves.addAll(possibleMoves(Operator.ADDITION, Operator.ADDITION, row, col, true));
+    }
+  }
+
+  private void fadeInSquare(Square square) {
+    square.setAlpha(.5);
+  }
+
+  private void highlightSquareToBeat(Square square) {
+    square.setAlpha(.4);
   }
 
   /**
@@ -458,11 +467,17 @@ public class Board extends Layer {
 
       int row = to.getRow();
       int col = to.getCol();
+
       boolean queen = beingMoved.isQueen();
-      if (!queen && (0 == row && beingMoved.isWhite() || (rows - 1) == row && !beingMoved.isWhite())) {
+      if (!queen &&
+          (((0 == row) && beingMoved.isWhite() && isWhite())
+              || (((rows - 1) == row) && beingMoved.isWhite() && !isWhite())
+              || ((0 == row) && !beingMoved.isWhite() && !isWhite())
+              || (((rows - 1) == row) && !beingMoved.isWhite() && isWhite()))) {
         queen = true;
       }
       stroke.setQueen(queen);
+
       Set<Square> jumpMoves = new HashSet<>();
       if (this.white) {
         jumpMoves.addAll(possibleNextMovePair(from, Operator.SUBTRACTION, Operator.SUBTRACTION, row, col, queen));
@@ -580,6 +595,11 @@ public class Board extends Layer {
     }
   }
 
+  /**
+   * Ход оппонента
+   *
+   * @param stroke ход клиента
+   */
   public void moveOpponent(Stroke stroke) {
     Square startSquare, endSquare, takenSquare = null;
     try {
@@ -631,6 +651,7 @@ public class Board extends Layer {
 //    }
 
     doMove(stroke); // сделать ход
+    checkIfGameStuck();
   }
 
   private void doMove(Stroke stroke) {
@@ -676,19 +697,15 @@ public class Board extends Layer {
         // if draught achieved start of desk mark it as Queen
         if (!occupant.isQueen()) {
           if (isEmulate()) {
-            if (null != endSquare.getOccupant() && endSquare.getOccupant().isWhite() && 0 == endSquare.getRow()
-                || null != endSquare.getOccupant() && !endSquare.getOccupant().isWhite()
-                && (rows - 1) == endSquare.getRow()) {
-              occupant.setPosition(endSquare.getRow(), endSquare.getCol());
-              occupant.setQueen(true);
-              queenStepStack.push(stepCursor);
+            final Draught endSquareOccupant = endSquare.getOccupant();
+            if (null != endSquareOccupant) {
+              if (isQueen(endSquareOccupant.getRow(), endSquareOccupant.isWhite(), isWhite())) {
+                occupant.setPosition(endSquare.getRow(), endSquare.getCol());
+                occupant.setQueen(true);
+                queenStepStack.push(stepCursor);
+              }
             }
-          } else if ((0 == occupant.getRow()
-              && (occupant.isWhite() && isWhite()
-              || !occupant.isWhite() && !isWhite()))
-              || ((rows - 1) == occupant.getRow()
-              && (!occupant.isWhite() && isWhite()
-              || occupant.isWhite() && !isWhite()))) {
+          } else if (isQueen(occupant.getRow(), occupant.isWhite(), isWhite())) {
             occupant.setPosition(endSquare.getRow(), endSquare.getCol());
             occupant.setQueen(true);
           }
@@ -731,15 +748,12 @@ public class Board extends Layer {
       }
     }
 
-    if (!stroke.isContinueBeat() && !isEmulate()) {
-      toggleTurn();
-    }
-
     // переносим этот код из конца анимации сюда, потому что в ускоренной промотки он не выполняется.
     if (isEmulate() && occupant.isQueen()) {
-      if ((null != endSquare.getOccupant() && endSquare.getOccupant().isWhite()
+      final Draught endSquareOccupant = endSquare.getOccupant();
+      if ((null != endSquareOccupant && endSquareOccupant.isWhite()
           && 0 == startSquare.getRow()
-          || null != endSquare.getOccupant() && !endSquare.getOccupant().isWhite()
+          || null != endSquareOccupant && !endSquareOccupant.isWhite()
           && (rows - 1) == startSquare.getRow())
           && queenStepStack.peek() == stepCursor + 1) {
         occupant.setPosition(endSquare.getRow(), endSquare.getCol());
@@ -749,6 +763,41 @@ public class Board extends Layer {
     }
     startSquare.setOccupant(null);
     highlightedSquares.clear();
+
+    if (!stroke.isContinueBeat() && !isEmulate()) {
+      toggleTurn();
+    }
+  }
+
+  private boolean isQueen(int row, boolean draughtWhite, boolean boardWhite) {
+    if (isAnalysis()) {
+      final boolean playWhiteAndDraughtIsWhite, playBlackAndDraughtIsBlack,
+          playBlackAndDraughtIsWhite, playWhiteAndDraughtIsBlack;
+      // необходимо инвертировать значение boardWhite, потому что при ходе во время анализа/разбора
+      // цвет игрока инвертируется
+      if (isMyTurn()) {
+        playWhiteAndDraughtIsWhite = boardWhite && draughtWhite;
+        playBlackAndDraughtIsBlack = !boardWhite && !draughtWhite;
+        playBlackAndDraughtIsWhite = !boardWhite && draughtWhite;
+        playWhiteAndDraughtIsBlack = boardWhite && !draughtWhite;
+      } else {
+        playWhiteAndDraughtIsWhite = !boardWhite && draughtWhite;
+        playBlackAndDraughtIsBlack = boardWhite && !draughtWhite;
+        playBlackAndDraughtIsWhite = boardWhite && draughtWhite;
+        playWhiteAndDraughtIsBlack = !boardWhite && !draughtWhite;
+      }
+      final boolean firstRow = (0 == row) && (playWhiteAndDraughtIsWhite || playBlackAndDraughtIsBlack);
+      final boolean lastRow = ((rows - 1) == row) && (playBlackAndDraughtIsWhite || playWhiteAndDraughtIsBlack);
+      return firstRow || lastRow;
+    } else {
+      final boolean playWhiteAndDraughtIsWhite = boardWhite && draughtWhite,
+          playBlackAndDraughtIsBlack = !boardWhite && !draughtWhite,
+          playBlackAndDraughtIsWhite = !boardWhite && draughtWhite,
+          playWhiteAndDraughtIsBlack = boardWhite && !draughtWhite;
+      final boolean firstRow = (0 == row) && (playWhiteAndDraughtIsWhite || playBlackAndDraughtIsBlack);
+      final boolean lastRow = ((rows - 1) == row) && (playBlackAndDraughtIsWhite || playWhiteAndDraughtIsBlack);
+      return firstRow || lastRow;
+    }
   }
 
   public boolean isWhite() {
@@ -762,6 +811,9 @@ public class Board extends Layer {
   private void toggleTurn() {
     turn = !turn;
     getView().toggleTurn(turn);
+    if (analysis) {
+      white = !white;
+    }
   }
 
   public List<Draught> getMyDraughts() {
@@ -776,6 +828,11 @@ public class Board extends Layer {
     return emulate;
   }
 
+  /**
+   * Эмулятор для шашечного плеера
+   *
+   * @param emulate эмулировать?
+   */
   public void setEmulate(boolean emulate) {
     this.emulate = emulate;
   }
@@ -789,7 +846,7 @@ public class Board extends Layer {
   private void moveDraught(double clickX, double clickY) {
     Draught selectedDraught = findClickedDraught(clickX, clickY);
     if (selectedDraught != null) {
-      selectedDraught.onNodeTouch(selfPlay);
+      selectedDraught.onNodeTouch(analysis);
     } else {
       selectedDraught = Draught.getSelectedDraught();
     }
@@ -810,18 +867,18 @@ public class Board extends Layer {
         // получаем флаги передвижения и взятую шашку
         final Stroke stroke = calcStroke(startSquare, endSquare);
 
+        // этот блок должен быть после того, что выше, потому что он меняет значение переменной white
         boolean isSimpleMove = stroke.isSimple();
         if (isSimpleMove || stroke.isStopBeat()) {
           toggleTurn();
         }
+
         if (!selectedDraught.isQueen()) {
-          if ((0 == selectedDraught.getRow()
-              && (selectedDraught.isWhite() && isWhite()
-              || !selectedDraught.isWhite() && !isWhite())
-              || (rows - 1) == selectedDraught.getRow() && !selectedDraught.isWhite())) {
+          if (isQueen(selectedDraught.getRow(), selectedDraught.isWhite(), isWhite())) {
             selectedDraught.setQueen(true);
           }
         }
+
         Stroke strokeForNotation = stroke;
         if (!isWhite()) {
           strokeForNotation = stroke.flip();
@@ -877,7 +934,7 @@ public class Board extends Layer {
     if (turn && getClickedDraughtFromList(square, myDraughtList)) {
       return square.getOccupant();
     }
-    if (!turn && selfPlay && getClickedDraughtFromList(square, opponentDraughtList)) {
+    if (!turn && analysis && getClickedDraughtFromList(square, opponentDraughtList)) {
       return square.getOccupant();
     }
     return null;
@@ -1004,12 +1061,12 @@ public class Board extends Layer {
     return moveOpponentStack.lastElement();
   }
 
-  public void setView(PlayComponent view) {
-    this.view = view;
-  }
-
   public PlayComponent getView() {
     return view;
+  }
+
+  public void setView(PlayComponent view) {
+    this.view = view;
   }
 
   public void addDraught(double x, double y, boolean white, boolean queen) {
@@ -1055,8 +1112,16 @@ public class Board extends Layer {
   }
 
   private Map<Square, List<Square>> getCaptureJumpMoves() {
+    Map<Square, List<Square>> captureJumpMoves = getCapturedByTurn(myDraughtList);
+    if (analysis && !isMyTurn()) {
+      captureJumpMoves = getCapturedByTurn(opponentDraughtList);
+    }
+    return captureJumpMoves;
+  }
+
+  private Map<Square, List<Square>> getCapturedByTurn(List<Draught> draughtList) {
     Map<Square, List<Square>> captureJumpMoves = new HashMap<>();
-    for (Draught draught : myDraughtList) {
+    for (Draught draught : draughtList) {
       final Map<Square, List<Square>> capturedSquaresByDraught = getCapturedJumpMovesByDraught(draught);
       if (!capturedSquaresByDraught.isEmpty()) {
         for (Square square : capturedSquaresByDraught.keySet()) {
@@ -1258,5 +1323,9 @@ public class Board extends Layer {
       }
     }
     outCaptureJumps.putAll(capturedJumpMoves);
+  }
+
+  public boolean isAnalysis() {
+    return analysis;
   }
 }

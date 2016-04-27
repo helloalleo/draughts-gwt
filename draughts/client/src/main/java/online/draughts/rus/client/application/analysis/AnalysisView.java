@@ -28,6 +28,8 @@ import org.gwtbootstrap3.client.ui.*;
 
 import javax.inject.Inject;
 
+import static com.google.gwt.event.dom.client.KeyCodes.*;
+
 
 public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     implements AnalysisPresenter.MyView, PlayComponent {
@@ -97,21 +99,52 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
         onAddQueenCheckboxClicked(event.getValue());
       }
     });
-
-    draughtControls.addDomHandler(new KeyPressHandler() {
+    addDraughtCheckbox.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
       @Override
-      public void onKeyPress(KeyPressEvent event) {
-        if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ONE) {
-          whiteDraughtButton.setValue(true);
-        }
-        if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_TWO) {
-          blackDraughtButton.setValue(true);
-        }
-        if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_THREE) {
-          removeDraughtButton.setValue(true);
+      public void onValueChange(ValueChangeEvent<Boolean> event) {
+        addDraughtChangeState();
+      }
+    });
+
+    draughtControls.addDomHandler(new KeyDownHandler() {
+      @Override
+      public void onKeyDown(KeyDownEvent event) {
+        final int keyCode = event.getNativeEvent().getKeyCode();
+        switch (keyCode) {
+          case KEY_ONE: {
+            whiteDraughtButton.setValue(true);
+            break;
+          }
+          case KEY_TWO: {
+            blackDraughtButton.setValue(true);
+            break;
+          }
+          case KEY_THREE: {
+            removeDraughtButton.setValue(true);
+            break;
+          }
+          case KEY_Q: {
+            addQueenCheckbox.setValue(!addQueenCheckbox.getValue(), true);
+            break;
+          }
+          case KEY_M: {
+            myPlaceDraughts.click();
+            break;
+          }
+          case KEY_A: {
+            addDraughtCheckbox.setValue(!addDraughtCheckbox.getValue(), true);
+            break;
+          }
+          case KEY_C: {
+            clearDesk.click();
+            break;
+          }
+          case KEY_S: {
+            placeDraughts.click();
+          }
         }
       }
-    }, KeyPressEvent.getType());
+    }, KeyDownEvent.getType());
   }
 
   @Override
@@ -129,7 +162,7 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     addDraughtCheckbox.setEnabled(false);
   }
 
-  public void onAddQueenCheckboxClicked(Boolean value) {
+  private void onAddQueenCheckboxClicked(Boolean value) {
     if (value) {
       blackDraughtImage.setResource(resources.images().blackQueen());
       whiteDraughtImage.setResource(resources.images().whiteQueen());
@@ -171,7 +204,7 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
 
   private Desk placeDraughtsOnDesk(Desk desk, boolean white, boolean clear) {
     Board board = new Board(desk.backgroundLayer, 8, 8, white);
-    board.setSelfPlay(true);
+    board.setAnalysis(true);
     if (clear) {
       board.clearDesk();
     }
@@ -245,7 +278,7 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
     return takeScreenshot(DataURLType.PNG, true);
   }
 
-  public String takeScreenshot(DataURLType dataType, boolean includeBackgroundLayer) {
+  private String takeScreenshot(DataURLType dataType, boolean includeBackgroundLayer) {
     return desk.lienzoPanel.toDataURL(dataType, includeBackgroundLayer);
   }
 

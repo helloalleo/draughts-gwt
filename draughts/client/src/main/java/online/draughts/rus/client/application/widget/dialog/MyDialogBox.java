@@ -9,7 +9,6 @@ import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.web.bindery.event.shared.EventBus;
 import online.draughts.rus.client.event.GameMessageEvent;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
@@ -25,7 +24,7 @@ public abstract class MyDialogBox extends BasicDialogBox {
   private final TextArea messageToAdmins = new TextArea();
   private HTML contentHTML;
 
-  public MyDialogBox(String header, String content) {
+  MyDialogBox(String header, String content) {
     ScrollPanel contentScrollPanel = new ScrollPanel();
 
     contentHTML = new HTML();
@@ -58,7 +57,7 @@ public abstract class MyDialogBox extends BasicDialogBox {
     getElement().getStyle().setZIndex(1000);
   }
 
-  public void messageAdmins(EventBus eventBus) {
+  void messageAdmins(EventBus eventBus) {
     if (StringUtils.isEmpty(messageToAdmins.getValue())) {
       return;
     }
@@ -79,9 +78,8 @@ public abstract class MyDialogBox extends BasicDialogBox {
     setText(header);
   }
 
-  protected void setMessageToAdminsVisible(boolean visible) {
+  void setMessageToAdminsVisible(boolean visible) {
     messageToAdmins.setVisible(visible);
-    Logger.debug("Message to admins " + visible);
   }
 
   public abstract void submit();

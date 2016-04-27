@@ -145,7 +145,6 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     timerCounterTimer = new Timer() {
       @Override
       public void run() {
-        Logger.debug(waitCounter);
         waitMessageLabel.setText(messages.waitResponse() + " " + waitCounter);
         waitCounter -= 1;
       }

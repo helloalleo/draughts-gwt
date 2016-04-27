@@ -20,7 +20,7 @@
         <!--GWT-->
         <gwtp.extensions.version>1.5</gwtp.extensions.version>
         <gin.version>2.1.2</gin.version>
-        <gwt.style>PRETTY</gwt.style>
+        <gwt.style>DETAILED</gwt.style>
 
         <gwtbootstrap3.version>0.9.1</gwtbootstrap3.version>
         <google-oauth-client.version>1.19.0</google-oauth-client.version>
