@@ -227,6 +227,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   public void doPlayerMove(MoveDto move) {
     GameMessageDto message = createGameMessage();
     message.setMessageType(GameMessageDto.MessageType.PLAY_OPPONENT_MOVE);
+    message.setData(String.valueOf(playerTimeSeconds));
     message.setMove(move);
     message.setGame(playSession.getGame());
 
@@ -316,8 +317,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   @Override
-  public void gameStuck(boolean isWhite) {
-    fireEvent(new GameStuckEvent(isWhite));
+  public void gameShut(boolean isWhite) {
+    fireEvent(new GameShutEvent(isWhite));
   }
 
   private GameMessageDto createGameMessage() {
@@ -421,17 +422,10 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       }
     });
 
-    addRegisteredHandler(GameStuckEvent.TYPE, new GameStuckEventHandler() {
+    addRegisteredHandler(GameShutEvent.TYPE, new GameShutEventHandler() {
       @Override
-      public void onGameStuck(GameStuckEvent event) {
-        PlayComponentUtil.checkStuck(getEventBus(), playSession, event.isWhite());
-      }
-    });
-
-    addRegisteredHandler(GameCheckStuckEvent.TYPE, new GameCheckStuckEventHandler() {
-      @Override
-      public void onGameCheckStuck(GameCheckStuckEvent event) {
-        getView().checkIfGameStuck();
+      public void onGameShut(GameShutEvent event) {
+        PlayComponentUtil.checkShut(getEventBus(), playSession, messages, event.isWhite());
       }
     });
 
@@ -481,6 +475,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       @Override
       public void onPlayMoveOpponent(PlayMoveOpponentEvent event) {
         final MoveDto move = event.getMove();
+        opponentTimeSeconds = event.getOpponentTimeSeconds();
+        getView().setOpponentTime(formatTime(opponentTimeSeconds));
         final Stroke stroke = StrokeFactory.createStrokeFromMove(move);
         final Stroke mirror = stroke.flip();
         getView().getBoard().moveOpponent(mirror);
@@ -641,7 +637,5 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     void cancelMove(Stroke stroke);
 
     String takeScreenshot();
-
-    void checkIfGameStuck();
   }
 }

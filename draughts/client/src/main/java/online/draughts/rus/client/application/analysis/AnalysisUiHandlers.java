@@ -7,5 +7,5 @@ interface AnalysisUiHandlers extends UiHandlers {
 
   void checkWinner();
 
-  void gameStuck(boolean isWhite);
+  void gameShut(boolean isWhite);
 }

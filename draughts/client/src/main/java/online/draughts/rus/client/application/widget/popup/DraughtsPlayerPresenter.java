@@ -6,7 +6,7 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import online.draughts.rus.client.event.CheckWinnerEvent;
-import online.draughts.rus.client.event.GameStuckEvent;
+import online.draughts.rus.client.event.GameShutEvent;
 import online.draughts.rus.client.event.TurnChangeEvent;
 import online.draughts.rus.shared.dto.GameDto;
 
@@ -52,8 +52,8 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
   }
 
   @Override
-  public void gameStuck(boolean isWhite) {
-    fireEvent(new GameStuckEvent(isWhite));
+  public void gameShut(boolean isWhite) {
+    fireEvent(new GameShutEvent(isWhite));
   }
 
   @Override

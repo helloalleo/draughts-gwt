@@ -346,8 +346,15 @@ public class ClientChannel implements ChannelListener {
   private void handlePlayEndGame(GameMessageDto gameMessage) {
     if (playSession.getGame() != null) {
       GameDto game = playSession.getGame();
-      final GameDto.GameEnds gameEnd = playSession.isPlayerHasWhiteColor()
-          ? GameDto.GameEnds.BLACK_LEFT : GameDto.GameEnds.WHITE_LEFT;
+      final GameDto.GameEnds gameEnd;
+      final GameDto.GameEnds remotePlayEndStatus = gameMessage.getGame().getPlayEndStatus();
+      if (GameDto.GameEnds.WHITE_WIN.equals(remotePlayEndStatus)
+          || GameDto.GameEnds.BLACK_WIN.equals(remotePlayEndStatus)) {
+        gameEnd = remotePlayEndStatus;
+      } else {
+        gameEnd = playSession.isPlayerHasWhiteColor()
+            ? GameDto.GameEnds.BLACK_LEFT : GameDto.GameEnds.WHITE_LEFT;
+      }
       eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AbstractAsyncCallback<GameDto>() {
         @Override
         public void onSuccess(GameDto aVoid) {
@@ -465,7 +472,7 @@ public class ClientChannel implements ChannelListener {
    */
   private void handlePlayMove(GameMessageDto gameMessage) {
     final MoveDto move = gameMessage.getMove();
-    eventBus.fireEvent(new PlayMoveOpponentEvent(move));
+    eventBus.fireEvent(new PlayMoveOpponentEvent(move, Integer.valueOf(gameMessage.getData())));
   }
 
   /**

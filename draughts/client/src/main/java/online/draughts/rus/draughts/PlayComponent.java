@@ -13,7 +13,7 @@ public interface PlayComponent {
 
   void checkWinner();
 
-  void gameStuck(boolean white);
+  void gameShut(boolean white);
 
   void toggleTurn(boolean turn);
 

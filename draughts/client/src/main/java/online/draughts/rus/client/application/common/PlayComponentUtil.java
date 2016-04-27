@@ -47,8 +47,14 @@ public class PlayComponentUtil {
     }));
   }
 
-  public static void checkStuck(EventBus eventBus, PlaySession playSession, boolean isWhite) {
+  public static void checkShut(EventBus eventBus, PlaySession playSession,
+                               DraughtsMessages messages, boolean isWhite) {
     final GameDto.GameEnds gameEnd;
+    if (isWhite == playSession.isPlayerHasWhiteColor()) {
+      GameResultDialogBox.setMessage(messages.youLose(), eventBus).show();
+    } else {
+      GameResultDialogBox.setMessage(messages.youWon(), eventBus).show();
+    }
     if (isWhite) {
       gameEnd = GameDto.GameEnds.BLACK_WIN;
     } else {

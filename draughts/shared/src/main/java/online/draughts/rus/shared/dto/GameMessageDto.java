@@ -137,6 +137,7 @@ public class GameMessageDto extends BaseDto {
     PLAY_END,
     PLAY_SURRENDER,
     PLAY_TIMEOUT,
+    // не получили ответа на приглашение
     PLAY_DID_NOT_RESPONSE,
     NOTIFICATION_ADDED_TO_FAVORITE,
     CHANNEL_CLOSE,

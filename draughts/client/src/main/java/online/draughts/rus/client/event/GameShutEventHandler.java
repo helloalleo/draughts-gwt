@@ -8,6 +8,6 @@ import com.google.gwt.event.shared.EventHandler;
  * Date: 24.04.16
  * Time: 18:36
  */
-public interface GameStuckEventHandler extends EventHandler {
-  void onGameStuck(GameStuckEvent event);
+public interface GameShutEventHandler extends EventHandler {
+  void onGameShut(GameShutEvent event);
 }

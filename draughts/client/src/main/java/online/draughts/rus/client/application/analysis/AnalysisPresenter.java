@@ -57,12 +57,12 @@ public class AnalysisPresenter extends Presenter<AnalysisPresenter.MyView, Analy
   }
 
   @Override
-  public void gameStuck(boolean isWhite) {
-    PlayComponentUtil.checkStuck(getEventBus(), playSession, isWhite);
+  public void gameShut(boolean isWhite) {
+    PlayComponentUtil.checkShut(getEventBus(), playSession, messages, isWhite);
   }
 
   public interface MyView extends View, HasUiHandlers<AnalysisUiHandlers> {
-    void gameStuck(boolean isWhite);
+    void gameShut(boolean isWhite);
 
     int getMyDraughtsSize();
 

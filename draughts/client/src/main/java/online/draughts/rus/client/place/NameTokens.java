@@ -55,7 +55,7 @@ public class NameTokens {
   }
 
   public Link[] getLeftAuthLinks() {
-    return new Link[]{homeLink, playLink, analysisLink};
+    return new Link[]{homeLink, playLink};
   }
 
   public Link[] getRightLinks() {
@@ -76,7 +76,7 @@ public class NameTokens {
     public String href;
     public IconType iconType;
 
-    public Link(String token, String name, String href, IconType iconType) {
+    Link(String token, String name, String href, IconType iconType) {
       this.token = token;
       this.name = name;
       this.href = href;

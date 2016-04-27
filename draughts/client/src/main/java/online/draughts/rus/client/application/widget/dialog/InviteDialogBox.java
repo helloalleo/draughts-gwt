@@ -7,7 +7,6 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.Label;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.*;
@@ -166,7 +165,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
       public void run() {
         hide();
         didNotResponse();
-        stopTimers();
+        stopWating();
       }
     };
 
@@ -209,12 +208,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
       @Override
       public void onClick(ClickEvent event) {
         hide();
-        timerCounterTimer.cancel();
-        waitResponseTimer.cancel();
-        submitButton.setEnabled(true);
-        waitMessageLabel.setText(messages.waitResponse());
-        waitMessage.setVisible(false);
-        waitCounter = WAIT;
+        stopWating();
       }
     });
 
@@ -262,17 +256,18 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   @Override
   public void hide() {
     super.hide();
-    stopTimers();
+    stopWating();
   }
 
   public abstract void didNotResponse();
 
-  private void stopTimers() {
+  private void stopWating() {
     timerCounterTimer.cancel();
-    waitMessageLabel.setText(messages.waitResponse());
-    waitCounter = WAIT;
+    waitResponseTimer.cancel();
     submitButton.setEnabled(true);
+    waitMessageLabel.setText(messages.waitResponse());
     waitMessage.setVisible(false);
+    waitCounter = WAIT;
   }
 
   public abstract void submitted(boolean white, String timeOnPlay, String fisherTime);

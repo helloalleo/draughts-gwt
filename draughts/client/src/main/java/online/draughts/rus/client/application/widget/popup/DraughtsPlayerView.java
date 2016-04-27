@@ -679,8 +679,8 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   }
 
   @Override
-  public void gameStuck(boolean isWhite) {
-    getUiHandlers().gameStuck(isWhite);
+  public void gameShut(boolean isWhite) {
+    getUiHandlers().gameShut(isWhite);
   }
 
   @Override

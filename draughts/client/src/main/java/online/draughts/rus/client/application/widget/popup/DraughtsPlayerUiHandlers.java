@@ -6,7 +6,7 @@ interface DraughtsPlayerUiHandlers extends UiHandlers {
 
   void checkWinner();
 
-  void gameStuck(boolean isWhite);
+  void gameShut(boolean isWhite);
 
   void toggleTurn(boolean turn);
 }

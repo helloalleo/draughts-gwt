@@ -104,6 +104,29 @@ public class Board extends Layer {
         }
       }
     }
+//    if (!isMyTurn()) {
+//      final Draught e1 = addDraught(5, 2, !white);
+//      e1.setQueen(true);
+//      opponentDraughtList.add(e1);
+////      opponentDraughtList.add(addDraught(1, 6, !white));
+//      opponentDraughtList.add(addDraught(1, 2, !white));
+//      opponentDraughtList.add(addDraught(3, 2, !white));
+//      final Draught e = addDraught(5, 0, white);
+////      e.setQueen(true);
+//      myDraughtList.add(e);
+//    }
+//
+//    if (isMyTurn()) {
+//      final Draught e = addDraught(2, 7, !white);
+////      e.setQueen(true);
+//      opponentDraughtList.add(e);
+//      final Draught e1 = addDraught(2, 5, white);
+//      e1.setQueen(true);
+//      myDraughtList.add(e1);
+////      myDraughtList.add(addDraught(6, 1, white));
+//      myDraughtList.add(addDraught(2, 1, white));
+//      myDraughtList.add(addDraught(4, 5, white));
+//    }
   }
 
   private Draught addDraught(int row, int col, boolean white) {
@@ -161,9 +184,9 @@ public class Board extends Layer {
     backgroundLayer.draw();
   }
 
-  public void checkIfGameStuck() {
+  private void checkIfGameShut() {
     Map<Square, List<Square>> capturedJumpMoves = getCaptureJumpMoves();
-    if (!capturedJumpMoves.isEmpty()) {
+    if (!capturedJumpMoves.isEmpty() || myDraughtList.isEmpty() || opponentDraughtList.isEmpty()) {
       return;
     }
     Set<Square> allPossibleMoves = new HashSet<>();
@@ -173,7 +196,7 @@ public class Board extends Layer {
     if (!allPossibleMoves.isEmpty()) {
       return;
     }
-    getView().gameStuck(isWhite());
+    getView().gameShut(isWhite());
   }
 
   /**
@@ -651,7 +674,7 @@ public class Board extends Layer {
 //    }
 
     doMove(stroke); // сделать ход
-    checkIfGameStuck();
+    checkIfGameShut();
   }
 
   private void doMove(Stroke stroke) {

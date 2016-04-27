@@ -838,12 +838,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     return takeScreenshot(DataURLType.PNG, true);
   }
 
-  @Override
-  public void checkIfGameStuck() {
-    getBoard().checkIfGameStuck();
-  }
-
-  public String takeScreenshot(DataURLType dataType, boolean includeBackgroundLayer) {
+  private String takeScreenshot(DataURLType dataType, boolean includeBackgroundLayer) {
     return lienzoPanel.toDataURL(dataType, includeBackgroundLayer);
   }
 
@@ -869,8 +864,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @Override
-  public void gameStuck(boolean isWhite) {
-    getUiHandlers().gameStuck(isWhite);
+  public void gameShut(boolean isWhite) {
+    getUiHandlers().gameShut(isWhite);
   }
 
   @Override

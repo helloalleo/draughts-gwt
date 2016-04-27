@@ -288,8 +288,8 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
   }
 
   @Override
-  public void gameStuck(boolean isWhite) {
-    getUiHandlers().gameStuck(isWhite);
+  public void gameShut(boolean isWhite) {
+    getUiHandlers().gameShut(isWhite);
   }
 
   public void addNotationStroke(Stroke strokeForNotation) {
