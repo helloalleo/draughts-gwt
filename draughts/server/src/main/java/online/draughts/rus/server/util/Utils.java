@@ -39,6 +39,7 @@ public class Utils {
     try {
       return objectMapper.readValue(json, clazz);
     } catch (IOException e) {
+      log.severe("An error occurred while parsing JSON: " + e.getMessage());
       return null;
     }
   }
