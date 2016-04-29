@@ -34,6 +34,8 @@ public class Player extends ModelImpl<Player> {
   @Index
   private String playerName;
   @Index
+  private String notificationsUserId;
+  @Index
   private int rating = 0;
   private String avatar;
   private int gamePlayed = 0;
@@ -155,6 +157,15 @@ public class Player extends ModelImpl<Player> {
 
   public void setPlayerName(String playerName) {
     this.playerName = playerName;
+  }
+
+
+  public void setNotificationsUserId(String notificationsUserId) {
+    this.notificationsUserId = notificationsUserId;
+  }
+
+  public String getNotificationsUserId() {
+    return notificationsUserId;
   }
 
   public String getAvatar() {
@@ -340,6 +351,7 @@ public class Player extends ModelImpl<Player> {
     setPlaying(playerDto.isPlaying());
     setLoggedIn(playerDto.isLoggedIn());
     setSubscribed(playerDto.isSubscribed());
+    setNotificationsUserId(playerDto.getNotificationsUserId());
     setSubscribeOnNewsletter(playerDto.isSubscribeOnNewsletter());
   }
 

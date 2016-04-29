@@ -2,8 +2,6 @@ package online.draughts.rus.shared.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
 
-import java.io.Serializable;
-
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -12,10 +10,11 @@ import java.io.Serializable;
  */
 public class PlayerDto extends BaseDto {
 
+  private String sessionId;
+  private String notificationsUserId;
+
   private String firstName;
-
   private String lastName;
-
   private String playerName;
 
   private String avatar;
@@ -32,6 +31,22 @@ public class PlayerDto extends BaseDto {
   private boolean subscribeOnNewsletter;
 
   public PlayerDto() {
+  }
+
+  public String getSessionId() {
+    return sessionId;
+  }
+
+  public void setSessionId(String sessionId) {
+    this.sessionId = sessionId;
+  }
+
+  public String getNotificationsUserId() {
+    return notificationsUserId;
+  }
+
+  public void setNotificationsUserId(String notificationsUserId) {
+    this.notificationsUserId = notificationsUserId;
   }
 
   public PlayerDto setSubscribed(boolean subscribed) {
@@ -170,8 +185,6 @@ public class PlayerDto extends BaseDto {
 
   /**
    * Обновляем только сеарилизуемые поля
-   *
-   * @param player
    */
   public enum AuthProvider {
     VK,

@@ -20,25 +20,26 @@ public class ApiPaths {
   public static final String RESOURCE = "/resource";
   public static final String SERVER_RESOURCE = "/d/resource";
 
-  public static final String GAMES = "/games";
+  static final String GAMES = "/games";
 
   // players
-  public static final String PLAYERS = "/players";
-  public static final String RESET_UNREAD = "/reset_unread";
-  public static final String PLAYERS_TOTAL = "/total";
-  public static final String PLAYERS_ONLINE = "/online";
+  static final String PLAYERS = "/players";
+  static final String RESET_UNREAD = "/reset_unread";
+  static final String PLAYERS_TOTAL = "/total";
+  static final String PLAYERS_ONLINE = "/online";
 
-  public static final String COUNT = "/count";
-  public static final String LOGGED_IN_USER = "/loggedin";
+  static final String COUNT = "/count";
+  static final String LOGGED_IN_USER = "/loggedin";
 
   // friends
-  public static final String FRIENDS = "/friends";
-  public static final String PLAYER_FRIEND_LIST = "/player/friends";
+  static final String FRIENDS = "/friends";
+  static final String PLAYER_FRIEND_LIST = "/player/friends";
 
   // messages
-  public static final String MESSAGES = "/messages";
-  public static final String LAST = "/last";
-  public static final String UNREAD = "/unread";
+  static final String MESSAGES = "/messages";
+  static final String LAST = "/last";
+  static final String UNREAD = "/unread";
 
-  public static final String PATH_ID = "/{id}";
+  static final String PATH_ID = "/{id}";
+  static final String NOTIFICATIONS = "/notifications";
 }

@@ -1,11 +1,9 @@
 package online.draughts.rus.shared.resource;
 
-import online.draughts.rus.shared.dto.FriendDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 
 import javax.ws.rs.*;
 import javax.ws.rs.core.MediaType;
-import java.util.List;
 
 @Path(ApiPaths.PLAYERS)
 @Produces(MediaType.APPLICATION_JSON)
@@ -13,6 +11,10 @@ public interface PlayersResource {
 
   @POST
   PlayerDto save(PlayerDto player);
+
+  @POST
+  @Path(ApiPaths.NOTIFICATIONS)
+  String subscribeOnNotifications(PlayerDto player);
 
   @GET
   @Path(ApiPaths.PLAYERS_TOTAL)

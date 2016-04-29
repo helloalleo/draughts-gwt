@@ -38,6 +38,17 @@ public class PlayersResourceImpl implements PlayersResource {
   }
 
   @Override
+  public String subscribeOnNotifications(PlayerDto playerDto) {
+    if (!authProvider.get()) {
+      return "Необходимо войти на сайт";
+    }
+    Player player = playerService.findBySessionId(playerDto.getSessionId());
+    player.setNotificationsUserId(playerDto.getNotificationsUserId());
+    playerService.save(player);
+    return "";
+  }
+
+  @Override
   public Integer totalPlayers() {
     return playerService.totalPlayers();
   }
