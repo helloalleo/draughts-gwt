@@ -327,6 +327,7 @@ public class Player extends ModelImpl<Player> {
         ", firstName='" + firstName + '\'' +
         ", lastName='" + lastName + '\'' +
         ", playerName='" + playerName + '\'' +
+        ", notificationUserId='" + notificationsUserId + '\'' +
         ", authProvider='" + authProvider + '\'' +
         ", loggedIn=" + loggedIn +
         ", playing=" + playing +

@@ -1,6 +1,7 @@
 package online.draughts.rus.shared.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Created with IntelliJ IDEA.
@@ -181,6 +182,27 @@ public class PlayerDto extends BaseDto {
     setOnline(playerDto.isOnline());
     setSubscribed(playerDto.isSubscribed());
     setRating(playerDto.getRating());
+//    setNotificationsUserId(playerDto.getNotificationsUserId());
+  }
+
+  @Override
+  public String toString() {
+    return new ToStringBuilder(this)
+        .append("sessionId", sessionId)
+        .append("notificationsUserId", notificationsUserId)
+        .append("firstName", firstName)
+        .append("lastName", lastName)
+        .append("playerName", playerName)
+        .append("avatar", avatar)
+        .append("rating", rating)
+        .append("loggedIn", loggedIn)
+        .append("playing", playing)
+        .append("online", online)
+        .append("subscribed", subscribed)
+        .append("moderator", moderator)
+        .append("admin", admin)
+        .append("subscribeOnNewsletter", subscribeOnNewsletter)
+        .toString();
   }
 
   /**

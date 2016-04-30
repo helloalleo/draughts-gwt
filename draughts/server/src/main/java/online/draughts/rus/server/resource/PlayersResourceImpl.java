@@ -9,11 +9,13 @@ import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.resource.PlayersResource;
+import org.apache.log4j.Logger;
 import org.dozer.Mapper;
 
 @RequestScoped
 public class PlayersResourceImpl implements PlayersResource {
 
+  private Logger logger = Logger.getLogger(PlayersResourceImpl.class);
   private final PlayerService playerService;
   private final Provider<Boolean> authProvider;
   private final Mapper mapper;
@@ -43,8 +45,11 @@ public class PlayersResourceImpl implements PlayersResource {
       return "Необходимо войти на сайт";
     }
     Player player = playerService.findBySessionId(playerDto.getSessionId());
+//    logger.info(playerDto.getNotificationsUserId());
+//    logger.info(playerDto);
     player.setNotificationsUserId(playerDto.getNotificationsUserId());
     playerService.save(player);
+//    logger.info(player);
     return "";
   }
 

@@ -105,17 +105,6 @@
 <script>
     function subscribe(event) {
         OneSignal.push(["registerForPushNotifications"]);
-        <%--OneSignal.push(['getUserId', function (userId) {--%>
-            <%--var xhr = new XMLHttpRequest();--%>
-            <%--var json = JSON.stringify({--%>
-                <%--notificationsUserId: userId,--%>
-                <%--sessionId: '<%= request.getRequestedSessionId() %>'--%>
-            <%--});--%>
-
-            <%--xhr.open("POST", '/d/resource/players/notifications', true)--%>
-            <%--xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');--%>
-            <%--xhr.send(json);--%>
-        <%--}]);--%>
         event.preventDefault();
     }
 
@@ -126,23 +115,33 @@
         subdomainName: "draughtsonline",
         safari_web_id: "web.onesignal.auto.5130fec1-dc87-4e71-b719-29a6a70279c4",
         notifyButton: {
-            enable: false
-        },
-        text: {
-            'tip.state.unsubscribed': 'Подписаться на приглашения в игру',
-            'tip.state.subscribed': "Вы подписаны на приглашения",
-            'tip.state.blocked': "Вы заблокировали приглашения",
-            'message.prenotify': 'Кликните, чтобы подписаться на приглашения в игру',
-            'message.action.subscribed': "Спасибо, что подписались!",
-            'message.action.resubscribed': "Вы подписаны на приглашения",
-            'message.action.unsubscribed': "Вы больше не получаете приглашений",
-            'dialog.main.title': 'Управлять Настройками Приглашений',
-            'dialog.main.button.subscribe': 'ПОДПИСАТЬСЯ',
-            'dialog.main.button.unsubscribe': 'ОТПИСАТЬСЯ',
-            'dialog.blocked.title': 'Разблокировать приглашения',
-            'dialog.blocked.message': "Следуйте следующим инструкциям, чтобы разрешить приглашения:"
+            enable: true // Set to false to hide
         }
     }]);
+
+//    OneSignal.push(["init", {
+//        appId: "78dcc7d5-0794-45d8-aaff-4df6f4bef7a7",
+////        subdomainName: "draughtsonline",
+//        safari_web_id: "web.onesignal.auto.5130fec1-dc87-4e71-b719-29a6a70279c4",
+//        autoRegister: false,
+//        notifyButton: {
+//            enable: false
+//        },
+//        text: {
+//            'tip.state.unsubscribed': 'Подписаться на приглашения в игру',
+//            'tip.state.subscribed': "Вы подписаны на приглашения",
+//            'tip.state.blocked': "Вы заблокировали приглашения",
+//            'message.prenotify': 'Кликните, чтобы подписаться на приглашения в игру',
+//            'message.action.subscribed': "Спасибо, что подписались!",
+//            'message.action.resubscribed': "Вы подписаны на приглашения",
+//            'message.action.unsubscribed': "Вы больше не получаете приглашений",
+//            'dialog.main.title': 'Управлять Настройками Приглашений',
+//            'dialog.main.button.subscribe': 'ПОДПИСАТЬСЯ',
+//            'dialog.main.button.unsubscribe': 'ОТПИСАТЬСЯ',
+//            'dialog.blocked.title': 'Разблокировать приглашения',
+//            'dialog.blocked.message': "Следуйте следующим инструкциям, чтобы разрешить приглашения:"
+//        }
+//    }]);
 
     OneSignal.push(function () {
         // If we're on an unsupported browser, do nothing
@@ -156,6 +155,26 @@
             } else {
                 document.getElementById("subscribe-link").textContent = "Подписаться на уведомления";
                 document.getElementById("subscribe-link").addEventListener('click', subscribe);
+            }
+        });
+
+        OneSignal.on('subscriptionChange', function (isSubscribed) {
+            if (isSubscribed) {
+                // The user is subscribed
+                //   Either the user subscribed for the first time
+                //   Or the user was subscribed -> unsubscribed -> subscribed
+                OneSignal.getUserId(function (userId) {
+                    // Make a POST call to your server with the user ID
+                    var xhr = new XMLHttpRequest();
+                    var json = JSON.stringify({
+                        notificationsUserId: userId,
+                        sessionId: '<%= request.getRequestedSessionId() %>'
+                    });
+
+                    xhr.open("POST", '/d/resource/players/notifications', true)
+                    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                    xhr.send(json);
+                });
             }
         });
     });
