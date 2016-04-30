@@ -36,7 +36,7 @@ public class CoreChannel {
     this.mapper = mapper;
   }
 
-  public void connectPlayer(GameMessage gameMessage, String token) {
+  void connectPlayer(GameMessage gameMessage, String token) {
     Player player = playerService.find(gameMessage.getSender().getId());
 
     player.setPlaying(false);
@@ -49,7 +49,7 @@ public class CoreChannel {
     updatePlayerList();
   }
 
-  public void updatePlayerList() {
+  void updatePlayerList() {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessageDto.MessageType.USER_LIST_UPDATE);
     List<Player> playerList = playerService.findAll();
@@ -60,7 +60,7 @@ public class CoreChannel {
   }
 
 
-  public void sendMessage(String channel, GameMessage message) {
+  void sendMessage(String channel, GameMessage message) {
     GameMessageDto dto = mapper.map(message, GameMessageDto.class);
     final String serialized = Utils.serializeToJson(dto);
     List<String> chunks = Splitter.fixedLength(1024 * 31).splitToList(serialized);
@@ -73,19 +73,19 @@ public class CoreChannel {
     ChannelServiceFactory.getChannelService().sendMessage(new ChannelMessage(channel, chunk));
   }
 
-  public Set<String> getChannels() {
+  Set<String> getChannels() {
     return channelTokenPeers.keySet();
   }
 
-  public void joinPlayer(String token, String channelName) {
+  void joinPlayer(String token, String channelName) {
     channelTokenPeers.put(channelName, token);
   }
 
-  public String getToken(String channel) {
+  String getToken(String channel) {
     return channelTokenPeers.get(channel);
   }
 
-  public void disconnectChannel(String channel) {
+  void disconnectChannel(String channel) {
     channelTokenPeers.remove(channel);
     updatePlayerList();
   }

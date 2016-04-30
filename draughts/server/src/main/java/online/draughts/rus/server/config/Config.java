@@ -14,6 +14,12 @@ import java.util.ResourceBundle;
 public class Config {
   private static ResourceBundle resourceBundle = ResourceBundle.getBundle("ServerConfiguration");
 
+  public static final String SITE_NAME_EN = resourceBundle.getString("site_name_en");
+  public static final String SITE_NAME_RU = resourceBundle.getString("site_name_ru");
+
+  public static final String ONESIGNAL_POST_NOTIFICATION_URL = resourceBundle.getString("onesignal_post_notification_url");
+  public static final String ONESIGNAL_APP_KEY = resourceBundle.getString("onesignal_app_key");
+
   public static final String NOT_FOUND_ERROR_URL = resourceBundle.getString("not_found_error_url");
   public static final String SERVER_ERROR_URL = resourceBundle.getString("server_error_url");
   public static final String CONTEXT = resourceBundle.getString("context");

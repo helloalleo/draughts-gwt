@@ -5,6 +5,7 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import no.eirikb.gwtchannelapi.server.ChannelServer;
+import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.server.domain.GameMessage;
 import online.draughts.rus.server.domain.Move;
@@ -17,8 +18,15 @@ import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.server.util.Utils;
 import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.util.StringUtils;
+import org.apache.http.HttpResponse;
+import org.apache.http.client.methods.HttpPost;
+import org.apache.http.entity.ContentType;
+import org.apache.http.entity.StringEntity;
+import org.apache.http.impl.client.CloseableHttpClient;
+import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 
+import java.io.IOException;
 import java.util.Date;
 
 /**
@@ -178,6 +186,33 @@ public class ServerChannel extends ChannelServer {
     }
     if (receiver.isOnline()) {
       coreChannel.sendMessage(receiverChannel, message);
+      if (GameMessageDto.MessageType.PLAY_INVITE.equals(message.getMessageType())) {
+        sendPushNotification(receiver.getNotificationsUserId());
+      }
+    }
+  }
+
+  private void sendPushNotification(String notificationsUserId) {
+    CloseableHttpClient httpClient = HttpClients.createMinimal();
+    HttpPost httpPost = new HttpPost(Config.ONESIGNAL_POST_NOTIFICATION_URL);
+    httpPost.setHeader("Authorization", "Basic " + Config.ONESIGNAL_APP_KEY);
+    httpPost.setHeader("Content-Type", "application/json");
+    String json = "{\n" +
+        "    \"app_id\": \"78dcc7d5-0794-45d8-aaff-4df6f4bef7a7\",\n" +
+        "    \"include_player_ids\" : [\"" + notificationsUserId + "\"],\n" +
+        "    \"contents\": {\"ru\": \"Вас позвали играть на сайте ШашкиОнлайн.COM!\", " +
+        "    \"en\": \"You have a new challenge on the site Draughts.Online!\"},\n" +
+        "    \"include_segments\": [\"All\"],\n" +
+        "    \"url\": \"http://xn--80aaxfchnde0hb.com/d/\"," +
+        "    \"headings\": {\"en\": \"" + Config.SITE_NAME_EN + "\", \"ru\": \"ШашкиОнлайн.COM\"}\n" +
+        "}";
+    StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);
+    httpPost.setEntity(entity);
+    try {
+      HttpResponse response = httpClient.execute(httpPost);
+      logger.info("Response: " + response.toString());
+    } catch (IOException e) {
+      logger.error("An error occurred while executing request: " + httpPost.toString() + ". " + e.getMessage());
     }
   }
 

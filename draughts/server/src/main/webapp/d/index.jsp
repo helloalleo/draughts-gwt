@@ -101,7 +101,6 @@
 
 </script>
 <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async='async'></script>
-<a href="#" id="subscribe-link" style="position: fixed; bottom: 0; right: 0;">Подписаться на приглашения</a>
 <script>
     function subscribe(event) {
         OneSignal.push(["registerForPushNotifications"]);
@@ -115,48 +114,29 @@
         subdomainName: "draughtsonline",
         safari_web_id: "web.onesignal.auto.5130fec1-dc87-4e71-b719-29a6a70279c4",
         notifyButton: {
-            enable: true // Set to false to hide
+            enable: <%= loggedIn %> // Set to false to hide
+        },
+        text: {
+            'tip.state.unsubscribed': 'Подписаться на приглашения в игру',
+            'tip.state.subscribed': "Вы подписаны на приглашения",
+            'tip.state.blocked': "Вы заблокировали приглашения",
+            'message.prenotify': 'Кликните, чтобы подписаться на приглашения в игру',
+            'message.action.subscribed': "Спасибо, что подписались!",
+            'message.action.resubscribed': "Вы подписаны на приглашения",
+            'message.action.unsubscribed': "Вы больше не получаете приглашений",
+            'dialog.main.title': 'Управлять Настройками Приглашений',
+            'dialog.main.button.subscribe': 'ПОДПИСАТЬСЯ',
+            'dialog.main.button.unsubscribe': 'ОТПИСАТЬСЯ',
+            'dialog.blocked.title': 'Разблокировать приглашения',
+            'dialog.blocked.message': "Следуйте следующим инструкциям, чтобы разрешить приглашения:"
         }
     }]);
-
-//    OneSignal.push(["init", {
-//        appId: "78dcc7d5-0794-45d8-aaff-4df6f4bef7a7",
-////        subdomainName: "draughtsonline",
-//        safari_web_id: "web.onesignal.auto.5130fec1-dc87-4e71-b719-29a6a70279c4",
-//        autoRegister: false,
-//        notifyButton: {
-//            enable: false
-//        },
-//        text: {
-//            'tip.state.unsubscribed': 'Подписаться на приглашения в игру',
-//            'tip.state.subscribed': "Вы подписаны на приглашения",
-//            'tip.state.blocked': "Вы заблокировали приглашения",
-//            'message.prenotify': 'Кликните, чтобы подписаться на приглашения в игру',
-//            'message.action.subscribed': "Спасибо, что подписались!",
-//            'message.action.resubscribed': "Вы подписаны на приглашения",
-//            'message.action.unsubscribed': "Вы больше не получаете приглашений",
-//            'dialog.main.title': 'Управлять Настройками Приглашений',
-//            'dialog.main.button.subscribe': 'ПОДПИСАТЬСЯ',
-//            'dialog.main.button.unsubscribe': 'ОТПИСАТЬСЯ',
-//            'dialog.blocked.title': 'Разблокировать приглашения',
-//            'dialog.blocked.message': "Следуйте следующим инструкциям, чтобы разрешить приглашения:"
-//        }
-//    }]);
 
     OneSignal.push(function () {
         // If we're on an unsupported browser, do nothing
         if (!OneSignal.isPushNotificationsSupported()) {
             return;
         }
-        OneSignal.isPushNotificationsEnabled(function (isEnabled) {
-            if (isEnabled) {
-                // The user is subscribed to notifications
-                // Don't show anything
-            } else {
-                document.getElementById("subscribe-link").textContent = "Подписаться на уведомления";
-                document.getElementById("subscribe-link").addEventListener('click', subscribe);
-            }
-        });
 
         OneSignal.on('subscriptionChange', function (isSubscribed) {
             if (isSubscribed) {
