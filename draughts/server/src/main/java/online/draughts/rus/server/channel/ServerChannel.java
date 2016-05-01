@@ -28,6 +28,8 @@ import org.apache.log4j.Logger;
 
 import java.io.IOException;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -187,12 +189,23 @@ public class ServerChannel extends ChannelServer {
     if (receiver.isOnline()) {
       coreChannel.sendMessage(receiverChannel, message);
       if (GameMessageDto.MessageType.PLAY_INVITE.equals(message.getMessageType())) {
-        sendPushNotification(receiver.getNotificationsUserId());
+        Map<String, String> inviteToPlay = new HashMap<>();
+        inviteToPlay.put("ru", "Вас позвали играть в шашки на сайте ШашкиОнлайн.COM!");
+        inviteToPlay.put("en", "You have a new challenge on the site Draughts.Online!");
+        sendPushNotification(receiver.getNotificationsUserId(), inviteToPlay);
       }
+    } else if (GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
+      Map<String, String> newMessage = new HashMap<>();
+      newMessage.put("ru", "Вам новое сообщение на сайте ШашкиОнлайн.COM!");
+      newMessage.put("en", "You have a new message on the site Draughts.Online!");
+      sendPushNotification(receiver.getNotificationsUserId(), newMessage);
     }
   }
 
-  private void sendPushNotification(String notificationsUserId) {
+  private void sendPushNotification(String notificationsUserId, Map<String, String> message) {
+    if (StringUtils.isEmpty(notificationsUserId)) {
+      return;
+    }
     CloseableHttpClient httpClient = HttpClients.createMinimal();
     HttpPost httpPost = new HttpPost(Config.ONESIGNAL_POST_NOTIFICATION_URL);
     httpPost.setHeader("Authorization", "Basic " + Config.ONESIGNAL_APP_KEY);
@@ -200,8 +213,8 @@ public class ServerChannel extends ChannelServer {
     String json = "{\n" +
         "    \"app_id\": \"78dcc7d5-0794-45d8-aaff-4df6f4bef7a7\",\n" +
         "    \"include_player_ids\" : [\"" + notificationsUserId + "\"],\n" +
-        "    \"contents\": {\"ru\": \"Вас позвали играть на сайте ШашкиОнлайн.COM!\", " +
-        "    \"en\": \"You have a new challenge on the site Draughts.Online!\"},\n" +
+        "    \"contents\": {\"ru\": \"" + message.get("ru") + "\", " +
+        "    \"en\": \"" + message.get("en") + "\"},\n" +
         "    \"include_segments\": [\"All\"],\n" +
         "    \"url\": \"http://xn--80aaxfchnde0hb.com/d/\"," +
         "    \"headings\": {\"en\": \"" + Config.SITE_NAME_EN + "\", \"ru\": \"ШашкиОнлайн.COM\"}\n" +

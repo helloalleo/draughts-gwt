@@ -102,33 +102,41 @@
 </script>
 <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async='async'></script>
 <script>
-    function subscribe(event) {
-        OneSignal.push(["registerForPushNotifications"]);
-        event.preventDefault();
-    }
-
     var OneSignal = OneSignal || [];
 
     OneSignal.push(["init", {
         appId: "78dcc7d5-0794-45d8-aaff-4df6f4bef7a7",
         subdomainName: "draughtsonline",
         safari_web_id: "web.onesignal.auto.5130fec1-dc87-4e71-b719-29a6a70279c4",
-        notifyButton: {
-            enable: <%= loggedIn %> // Set to false to hide
+        promptOptions: {
+            actionMessage: 'Мы хотим присылать Вам приглашения в игру и уведомления о новых сообщениях',
+            exampleNotificationTitleDesktop: 'Это пример уведомления',
+            exampleNotificationMessageDesktop: 'Такое уведомление появится на Вашем компьютере',
+            exampleNotificationCaption: 'Вы можете отписаться в любое время',
+            acceptButtonText: "Продолжить",
+            cancelButtonText: "Нет, спасибо",
+            showCredit: false
         },
-        text: {
-            'tip.state.unsubscribed': 'Подписаться на приглашения в игру',
-            'tip.state.subscribed': "Вы подписаны на приглашения",
-            'tip.state.blocked': "Вы заблокировали приглашения",
-            'message.prenotify': 'Кликните, чтобы подписаться на приглашения в игру',
-            'message.action.subscribed': "Спасибо, что подписались!",
-            'message.action.resubscribed': "Вы подписаны на приглашения",
-            'message.action.unsubscribed': "Вы больше не получаете приглашений",
-            'dialog.main.title': 'Управлять Настройками Приглашений',
-            'dialog.main.button.subscribe': 'ПОДПИСАТЬСЯ',
-            'dialog.main.button.unsubscribe': 'ОТПИСАТЬСЯ',
-            'dialog.blocked.title': 'Разблокировать приглашения',
-            'dialog.blocked.message': "Следуйте следующим инструкциям, чтобы разрешить приглашения:"
+        welcomeNotification: {
+            title: 'Подписка на ШашкиОнлайн.COM',
+            message: 'Спасибо, что подписались!'
+        },
+        notifyButton: {
+            enable: <%= loggedIn %>, // Set to false to hide
+            text: {
+                'tip.state.unsubscribed': 'Подписаться на приглашения в игру',
+                'tip.state.subscribed': "Вы подписаны на приглашения",
+                'tip.state.blocked': "Вы заблокировали приглашения",
+                'message.prenotify': 'Кликните, чтобы подписаться на приглашения в игру',
+                'message.action.subscribed': "Спасибо, что подписались!",
+                'message.action.resubscribed': "Вы подписаны на приглашения",
+                'message.action.unsubscribed': "Вы больше не получаете приглашений",
+                'dialog.main.title': 'Управлять Настройками Приглашений',
+                'dialog.main.button.subscribe': 'ПОДПИСАТЬСЯ',
+                'dialog.main.button.unsubscribe': 'ОТПИСАТЬСЯ',
+                'dialog.blocked.title': 'Разблокировать приглашения',
+                'dialog.blocked.message': "Следуйте следующим инструкциям, чтобы разрешить приглашения:"
+            },
         }
     }]);
 
@@ -139,23 +147,21 @@
         }
 
         OneSignal.on('subscriptionChange', function (isSubscribed) {
-            if (isSubscribed) {
-                // The user is subscribed
-                //   Either the user subscribed for the first time
-                //   Or the user was subscribed -> unsubscribed -> subscribed
-                OneSignal.getUserId(function (userId) {
-                    // Make a POST call to your server with the user ID
-                    var xhr = new XMLHttpRequest();
-                    var json = JSON.stringify({
-                        notificationsUserId: userId,
-                        sessionId: '<%= request.getRequestedSessionId() %>'
-                    });
-
-                    xhr.open("POST", '/d/resource/players/notifications', true)
-                    xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-                    xhr.send(json);
+            // The user is subscribed
+            //   Either the user subscribed for the first time
+            //   Or the user was subscribed -> unsubscribed -> subscribed
+            OneSignal.getUserId(function (userId) {
+                // Make a POST call to your server with the user ID
+                var xhr = new XMLHttpRequest();
+                var json = JSON.stringify({
+                    notificationsUserId: isSubscribed ? userId : '',
+                    sessionId: '<%= request.getRequestedSessionId() %>'
                 });
-            }
+
+                xhr.open("POST", '/d/resource/players/notifications', true)
+                xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
+                xhr.send(json);
+            });
         });
     });
 </script>

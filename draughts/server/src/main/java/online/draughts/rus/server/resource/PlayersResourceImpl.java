@@ -42,14 +42,14 @@ public class PlayersResourceImpl implements PlayersResource {
   @Override
   public String subscribeOnNotifications(PlayerDto playerDto) {
     if (!authProvider.get()) {
-      return "Необходимо войти на сайт";
+      return "Unauthorized";
     }
     Player player = playerService.findBySessionId(playerDto.getSessionId());
-//    logger.info(playerDto.getNotificationsUserId());
-//    logger.info(playerDto);
+    if (null == player) {
+      return "Player not found";
+    }
     player.setNotificationsUserId(playerDto.getNotificationsUserId());
     playerService.save(player);
-//    logger.info(player);
     return "";
   }
 
