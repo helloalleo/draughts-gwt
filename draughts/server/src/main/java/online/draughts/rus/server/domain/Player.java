@@ -382,8 +382,8 @@ public class Player extends ModelImpl<Player> {
     Query query = new Query(getEntityName());
     query.addSort("admin", Query.SortDirection.DESCENDING);
     query.addSort("moderator", Query.SortDirection.DESCENDING);
-    query.addSort("rating", Query.SortDirection.DESCENDING);
     query.addSort("online", Query.SortDirection.DESCENDING);
+    query.addSort("rating", Query.SortDirection.DESCENDING);
     PreparedQuery preparedQuery = getDatastore().prepare(query);
     return getListResult(preparedQuery);
   }

@@ -5,18 +5,29 @@
              ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
              ui:generateLocales="default">
 
-    <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
+  <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
-    <g:HTMLPanel ui:field="panel" addStyleNames="{res.style.footerContainer}">
-        <b:Row>
-            <b:Column size="XS_2 SM_2 MD_2 LG_2">
-                <b:Anchor ui:field="groupInVk" href="https://vk.com/draughts.online" icon="VK" iconSize="TIMES5" title="Группа в контакте"
-                          target="_blank"/>
-                <b:Heading size="H5" text="Группа в контакте">
-                    <ui:attribute name="text" description="Группа в контакте"/>
-                </b:Heading>
-            </b:Column>
-        </b:Row>
+  <g:HTMLPanel ui:field="panel" addStyleNames="{res.style.footerContainer}">
+    <b:Row>
+      <b:Column size="XS_2 SM_2 MD_2 LG_2">
+        <b:Anchor ui:field="groupInVk" href="https://vk.com/draughts.online" icon="VK" iconSize="TIMES5"
+                  title="Группа в контакте"
+                  target="_blank"/>
+        <b:Heading size="H5" text="Группа в контакте">
+          <ui:attribute name="text" description="Группа в контакте"/>
+        </b:Heading>
+      </b:Column>
+      <b:Column size="XS_10 SM_10 MD_10 LG_10">
+        <g:HTMLPanel>
+          <!-- DraughtsOnlineFooter -->
+          <ins class="adsbygoogle"
+               style="display:block"
+               data-ad-client="ca-pub-6590061713732270"
+               data-ad-slot="9334004718"
+               data-ad-format="auto"></ins>
+        </g:HTMLPanel>
+      </b:Column>
+    </b:Row>
 
-    </g:HTMLPanel>
+  </g:HTMLPanel>
 </ui:UiBinder>

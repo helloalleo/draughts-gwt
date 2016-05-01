@@ -1,7 +1,6 @@
 package online.draughts.rus.shared.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import org.apache.commons.lang3.builder.ToStringBuilder;
 
 /**
  * Created with IntelliJ IDEA.
@@ -187,22 +186,23 @@ public class PlayerDto extends BaseDto {
 
   @Override
   public String toString() {
-    return new ToStringBuilder(this)
-        .append("sessionId", sessionId)
-        .append("notificationsUserId", notificationsUserId)
-        .append("firstName", firstName)
-        .append("lastName", lastName)
-        .append("playerName", playerName)
-        .append("avatar", avatar)
-        .append("rating", rating)
-        .append("loggedIn", loggedIn)
-        .append("playing", playing)
-        .append("online", online)
-        .append("subscribed", subscribed)
-        .append("moderator", moderator)
-        .append("admin", admin)
-        .append("subscribeOnNewsletter", subscribeOnNewsletter)
-        .toString();
+    final StringBuffer sb = new StringBuffer("PlayerDto{");
+    sb.append("sessionId='").append(sessionId).append('\'');
+    sb.append(", notificationsUserId='").append(notificationsUserId).append('\'');
+    sb.append(", firstName='").append(firstName).append('\'');
+    sb.append(", lastName='").append(lastName).append('\'');
+    sb.append(", playerName='").append(playerName).append('\'');
+    sb.append(", avatar='").append(avatar).append('\'');
+    sb.append(", rating=").append(rating);
+    sb.append(", loggedIn=").append(loggedIn);
+    sb.append(", playing=").append(playing);
+    sb.append(", online=").append(online);
+    sb.append(", subscribed=").append(subscribed);
+    sb.append(", moderator=").append(moderator);
+    sb.append(", admin=").append(admin);
+    sb.append(", subscribeOnNewsletter=").append(subscribeOnNewsletter);
+    sb.append('}');
+    return sb.toString();
   }
 
   /**

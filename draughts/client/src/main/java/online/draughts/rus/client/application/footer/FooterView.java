@@ -7,6 +7,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
+import online.draughts.rus.client.util.AdsUtils;
 import org.gwtbootstrap3.client.ui.Anchor;
 import org.gwtbootstrap3.client.ui.constants.IconSize;
 
@@ -26,6 +27,7 @@ public class FooterView extends ViewImpl implements FooterPresenter.MyView {
     if (Window.getClientWidth() < 768) {
       groupInVk.setIconSize(IconSize.TIMES3);
     }
+    AdsUtils.addAdvertisementFromGoogleScript();
   }
 
   interface Binder extends UiBinder<HTMLPanel, FooterView> {

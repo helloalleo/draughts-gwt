@@ -23,7 +23,6 @@ import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Column;
 import org.gwtbootstrap3.client.ui.Row;
-import org.gwtbootstrap3.client.ui.html.Div;
 import org.gwtbootstrap3.client.ui.html.Hr;
 
 import java.util.ArrayList;
@@ -42,7 +41,7 @@ public class PlayShowPanel extends Composite {
   @UiField
   HTMLPanel playRowList;
 
-  public static final int[] GAMES_ON_PAGE = {1, 2, 3, 4, 6};
+  static final int[] GAMES_ON_PAGE = {1, 2, 3, 4, 6};
   private int gamesOnPanelCounter = 1;
   private List<GameDto> gameList;
 
@@ -75,7 +74,7 @@ public class PlayShowPanel extends Composite {
     initWidget(binder.createAndBindUi(this));
   }
 
-  public void init() {
+  void init() {
     initScroll();
     initShowPlay();
   }
@@ -133,7 +132,7 @@ public class PlayShowPanel extends Composite {
     });
   }
 
-  public int setGames(List<GameDto> games) {
+  int setGames(List<GameDto> games) {
     blockScroll = false;
     this.gameList = games;
     resetGames(games);
@@ -146,7 +145,7 @@ public class PlayShowPanel extends Composite {
     resetGamesOnPanel(gameList);
   }
 
-  public int addGames(List<GameDto> gameList) {
+  int addGames(List<GameDto> gameList) {
     return addGamesToPanel(gameList);
   }
 
@@ -201,18 +200,18 @@ public class PlayShowPanel extends Composite {
     return this.gameList.size();
   }
 
-  private void addAdvertisment() {
-    Row row = new Row();
-    Div ins = new Div();
-    row.getElement().setInnerHTML("<ins class=\"adsbygoogle\"" +
-        "                 style=\"display:block\"" +
-        "                 data-ad-client=\"ca-pub-6590061713732270\"" +
-        "                 data-ad-slot=\"6965334310\"" +
-        "                 data-ad-format=\"auto\"></ins>");
-    row.add(ins);
-    playRowList.add(row);
-    playRowList.add(new Hr());
-  }
+//  private void addAdvertisement() {
+//    Row row = new Row();
+//    Div ins = new Div();
+//    row.getElement().setInnerHTML("<ins class=\"adsbygoogle\"" +
+//        "                 style=\"display:block\"" +
+//        "                 data-ad-client=\"ca-pub-6590061713732270\"" +
+//        "                 data-ad-slot=\"6965334310\"" +
+//        "                 data-ad-format=\"auto\"></ins>");
+//    row.add(ins);
+//    playRowList.add(row);
+//    playRowList.add(new Hr());
+//  }
 
   private String getSize(int gamesInRow) {
     return "MD_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow
@@ -266,10 +265,10 @@ public class PlayShowPanel extends Composite {
     }
     playRowList.add(row);
     playRowList.add(new Hr());
-    addAdvertisment();
+//    addAdvertisement();
   }
 
-  public void moreGameOnPanel() {
+  void moreGameOnPanel() {
     gamesOnPanelCounter++;
     cookies.setGamesOnPageCounter(gamesOnPanelCounter);
     if (!homeViewProvider.get().isEnabledLessGameButton()) {
@@ -281,7 +280,7 @@ public class PlayShowPanel extends Composite {
     }
   }
 
-  public void lessGameOnPanel() {
+  void lessGameOnPanel() {
     gamesOnPanelCounter--;
     cookies.setGamesOnPageCounter(gamesOnPanelCounter);
     if (!homeViewProvider.get().isEnabledMoreGameButton()) {

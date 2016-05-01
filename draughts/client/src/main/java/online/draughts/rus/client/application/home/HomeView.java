@@ -16,8 +16,6 @@
 
 package online.draughts.rus.client.application.home;
 
-import com.google.gwt.dom.client.Document;
-import com.google.gwt.dom.client.ScriptElement;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
@@ -28,6 +26,7 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
+import online.draughts.rus.client.util.AdsUtils;
 import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.PlayerDto;
@@ -83,35 +82,9 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   protected void onAttach() {
     super.onAttach();
     playShowPanel.init();
-    addAdvertisementFromGoogleScript();
+    AdsUtils.addAdvertisementFromGoogleScript();
   }
 
-  private void addAdvertisementFromGoogleScript() {
-    /**
-     * <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
-     <!-- RuShashkiNet728x90 -->
-     <ins class="adsbygoogle"
-     style="display:inline-block;width:728px;height:90px"
-     data-ad-client="ca-pub-6590061713732270"
-     data-ad-slot="4461668713"></ins>
-     <script>
-     (adsbygoogle = window.adsbygoogle || []).push({});
-     </script>
-     */
-
-    Document doc = Document.get();
-    ScriptElement script = doc.createScriptElement();
-    script.setSrc("//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js");
-    script.setType("text/javascript");
-    script.setLang("javascript");
-    doc.getBody().appendChild(script);
-
-    script = doc.createScriptElement();
-    script.setText("(adsbygoogle = window.adsbygoogle || []).push({});");
-    script.setType("text/javascript");
-    script.setLang("javascript");
-    doc.getBody().appendChild(script);
-  }
 
   @SuppressWarnings("unused")
   @UiHandler("moreGameOnPage")
@@ -165,23 +138,23 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     totalPlayersSpan.setText(String.valueOf(result));
   }
 
-  public void setEnableMoreGameButton(boolean enable) {
+  void setEnableMoreGameButton(boolean enable) {
     moreGameOnPage.setEnabled(enable);
   }
 
-  public boolean isEnabledMoreGameButton() {
+  boolean isEnabledMoreGameButton() {
     return moreGameOnPage.isEnabled();
   }
 
-  public void setEnableLessGameButton(boolean enableMoreGameButton) {
+  void setEnableLessGameButton(boolean enableMoreGameButton) {
     lessGameOnPage.setEnabled(enableMoreGameButton);
   }
 
-  public boolean isEnabledLessGameButton() {
+  boolean isEnabledLessGameButton() {
     return lessGameOnPage.isEnabled();
   }
 
-  public void getMoreGames(int newPageSize) {
+  void getMoreGames(int newPageSize) {
     getUiHandlers().getMoreGames(myGameListCheckButton.getValue(), newPageSize);
   }
 

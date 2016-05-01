@@ -159,3 +159,7 @@ section.testimonials{
   text-shadow:2px 2px 3px rgba(0,0,0,0.3);
 }
 
+img.img-responsive{
+  margin:0 auto;
+}
+
