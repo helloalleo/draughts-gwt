@@ -22,7 +22,7 @@
   <datastore-index kind="Player" ancestor="false" source="manual">
     <property name="admin" direction="desc"/>
     <property name="moderator" direction="desc"/>
-    <property name="rating" direction="desc"/>
     <property name="online" direction="desc"/>
+    <property name="rating" direction="desc"/>
   </datastore-index>
 </datastore-indexes>
