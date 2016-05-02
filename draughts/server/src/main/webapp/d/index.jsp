@@ -25,7 +25,7 @@
 
     <title>Шашки Онлайн</title>
 
-    <link rel="shortcut icon" type="image/png" href="favicon.png">
+    <link rel="shortcut icon" type="image/png" href="/favicon.png">
 
     <link rel="alternate" href="http://xn--80aaxfchnde0hb.com/?locale=ru" hreflang="ru"/>
     <link rel="alternate" href="http://xn--80aaxfchnde0hb.com/?locale=ua" hreflang="ua"/>

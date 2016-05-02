@@ -60,7 +60,7 @@ public class Draught extends Group {
     add(innerCircle1);
     add(innerCircle2);
 
-    queenStar.setFillColor(white ? ColorName.BLUE : ColorName.RED);
+    queenStar.setFillColor(ColorName.DARKKHAKI);
 
     Circle[] circles = {mainCircle, innerCircle1, innerCircle2};
 
