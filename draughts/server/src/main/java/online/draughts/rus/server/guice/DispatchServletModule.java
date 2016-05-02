@@ -25,7 +25,6 @@ import com.google.inject.servlet.ServletModule;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
 import online.draughts.rus.server.channel.ServerChannel;
-import online.draughts.rus.server.servlet.AmazonSNSEndpointServlet;
 import online.draughts.rus.server.servlet.CheckOnlineServlet;
 import online.draughts.rus.server.servlet.GameGiff;
 import online.draughts.rus.server.servlet.LogoutServlet;
@@ -59,8 +58,6 @@ class DispatchServletModule extends ServletModule {
     serve("/gOAuthCallback").with(OAuthGoogleCallbackServlet.class);
 
     serve("/getGame").with(GameGiff.class);
-
-    serve("/sns").with(AmazonSNSEndpointServlet.class);
   }
 
   private Filter createUserIdScopingFilter() {
