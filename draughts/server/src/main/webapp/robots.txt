@@ -1,0 +1,6 @@
+User-agent: *
+Disallow: /assets
+Disallow: /d/Application
+Disallow: /l/assets
+
+Host: xn--80aaxfchnde0hb.com

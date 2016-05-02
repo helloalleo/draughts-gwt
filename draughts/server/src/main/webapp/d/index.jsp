@@ -20,8 +20,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
     <meta name="keywords" content="шашки,онлайн,играть,бесплатно,игры,русские,социальные,сети,обучение">
-    <meta name="description"
-          content="Играть в шашки онлайн. Вход через социальные сети. Push-уведомления. История игр.">
+    <meta name="description" content="Играйте в шашки онлайн со своими друзьями или просто посетителями сайта.
+    На сайте: вход через социальные сети, Push-уведомления, история игр.">
 
     <title>Шашки Онлайн</title>
 
