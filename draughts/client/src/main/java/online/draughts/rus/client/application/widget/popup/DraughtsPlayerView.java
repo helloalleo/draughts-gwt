@@ -462,11 +462,9 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
         if (playing) {
           playTimer.cancel();
           playing = false;
-          notationCursor = 0;
           playTimer = null;
           playButton.setIcon(IconType.PLAY);
         } else {
-          moveForward();
           playTimer = new Timer() {
             @Override
             public void run() {
@@ -480,6 +478,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
           };
           playTimer.scheduleRepeating(1000);
           playButton.setIcon(IconType.PAUSE);
+          moveForward();
         }
       }
     });
