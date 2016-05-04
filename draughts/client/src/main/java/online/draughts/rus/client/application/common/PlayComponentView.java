@@ -301,7 +301,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     }
     notationPanel = notationPanelFactory.createNotationPanel(gameId);
     notationList.add(notationPanel);
-    notationHTMLPanel.setHeight((draughtsColumn.getOffsetHeight() - 80 - infoHTMLPanel.getOffsetHeight()) + "px");
+    notationHTMLPanel.setHeight((draughtsColumn.getOffsetHeight() - 100 - infoHTMLPanel.getOffsetHeight()) + "px");
     notationPanel.setHeight((notationHTMLPanel.getOffsetHeight() - notationLabel.getOffsetHeight()) + "px");
   }
 

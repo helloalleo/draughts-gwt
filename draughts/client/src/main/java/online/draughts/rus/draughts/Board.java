@@ -162,13 +162,11 @@ public class Board extends Layer {
     }
     Map<Square, List<Square>> capturedJumpMoves = getCaptureJumpMoves();
     if (!capturedJumpMoves.isEmpty()) {
-      HIGHLIGHT_FOUND:
       for (Square captured : capturedJumpMoves.keySet()) {
         for (Square jump : capturedJumpMoves.get(captured)) {
           if (clickedSquare.isOnLine(jump) && clickedSquare.isOnLine(captured)) {
             highlightSquareToBeat(jump);
             highlightedSquares.add(jump);
-            break HIGHLIGHT_FOUND;
           }
         }
       }
