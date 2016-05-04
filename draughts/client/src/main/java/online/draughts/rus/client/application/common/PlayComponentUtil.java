@@ -61,11 +61,9 @@ public class PlayComponentUtil {
       gameEnd = GameDto.GameEnds.WHITE_WIN;
     }
     final GameDto endedGame = playSession.getGame();
-    Logger.debug("ENDED GAME " + endedGame);
     eventBus.fireEvent(new GameOverEvent(endedGame, gameEnd, new AbstractAsyncCallback<GameDto>() {
       @Override
       public void onSuccess(GameDto result) {
-        Logger.debug("GAME STUCK " + gameEnd.name());
       }
     }));
   }

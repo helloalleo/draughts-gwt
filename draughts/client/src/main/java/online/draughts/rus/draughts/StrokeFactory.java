@@ -41,7 +41,6 @@ public class StrokeFactory {
    * @return объект хода
    */
   public static Stroke createStrokeFromNotationHtml(Element outerNotation, List<String> prevSteps, boolean back) {
-    Logger.debug("PREV STEP " + prevSteps);
     Stroke stroke = new Stroke();
     final Boolean first = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_FIRST_ATTR));
     final Integer number = Integer.valueOf(outerNotation.getAttribute(NotationPanel.DATA_NUMBER_ATTR));

@@ -22,7 +22,6 @@ import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.AudioUtil;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.MoveFactory;
 import online.draughts.rus.draughts.Stroke;
@@ -459,7 +458,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         game.setNotation(notation);
         game.setEndGameScreenshot(getView().takeScreenshot());
         gamesDelegate.withCallback(event.getAsyncCallback()).save(game);
-        Logger.debug("End Status" + game.getPlayEndStatus().name());
 
         GameMessageDto gameMessageDto = createGameMessage();
         gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_END);

@@ -22,7 +22,6 @@ import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.draughts.*;
 import online.draughts.rus.shared.config.ClientConfiguration;
@@ -42,6 +41,7 @@ import org.gwtbootstrap3.client.ui.html.Span;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Stack;
 
 @SuppressWarnings("deprecation")
 public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUiHandlers>
@@ -127,8 +127,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   private boolean commentHasFocus;
   private Double lineHeight;
   private Integer scrollLines;
-  private List<String> prevForwardSteps = new ArrayList<>();
-  private List<String> prevBackSteps = new ArrayList<>();
+  private Stack<String> prevStepsStack = new Stack<>();
 
   private DraughtsPlayerView(Binder uiBinder, EventBus eventBus, AppResources resources, DraughtsMessages messages,
                              ClientConfiguration config, CurrentSession currentSession,
@@ -220,6 +219,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   protected void onDetach() {
     nativePreviewHandler.removeHandler();
     deskPanel.clear();
+    prevStepsStack.clear();
   }
 
   private void registerNativeEvents() {
@@ -276,7 +276,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     }
 
     int side = draughtsDeskColumn.getOffsetWidth();
-    notationScroll.setHeight((side - notationInfoPanel.getOffsetHeight() - 60) + "px");
+    notationScroll.setHeight((side - notationInfoPanel.getOffsetHeight() - 64) + "px");
   }
 
   private void toMoveByClick(int pos) {
@@ -541,9 +541,9 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       prevStep = currentNotation.getInnerText();
       currentNotation.removeClassName(resources.style().notationCurrentStyle());
     }
-    prevForwardSteps.add(prevStep);
+    prevStepsStack.add(prevStep);
 
-    Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(notation, prevForwardSteps, false);
+    Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(notation, prevStepsStack, false);
     board.doMoveSmooth(stroke, notationCursor, smooth);
     setStrokeComment(stroke.getTitle(), stroke.getComment());
 
@@ -564,7 +564,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
     notation = getStrokeById(notationCursor);
     if (null == notation) {
-      prevForwardSteps.clear();
+//      prevStepsStack.clear();
       atEnd = true;
       playing = false;
       playButton.setIcon(IconType.PLAY);
@@ -593,14 +593,13 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
     currentNotation.removeClassName(resources.style().notationCurrentStyle());
 
-    if (Boolean.valueOf(currentNotation.getAttribute(NotationPanel.DATA_CONTINUE_BEAT_ATTR))
-        || Boolean.valueOf(currentNotation.getAttribute(NotationPanel.DATA_STOP_BEAT_ATTR))) {
-      String step = getStrokeById(notationCursor - 1).getInnerText();
-      prevBackSteps.add(step);
-    }
+//    if (Boolean.valueOf(currentNotation.getAttribute(NotationPanel.DATA_CONTINUE_BEAT_ATTR))
+//        || Boolean.valueOf(currentNotation.getAttribute(NotationPanel.DATA_STOP_BEAT_ATTR))) {
+//      String step = getStrokeById(notationCursor - 1).getInnerText();
+//    }
 
-    Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(currentNotation, prevBackSteps, true);
-    Logger.debug(stroke.toString());
+    Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(currentNotation, prevStepsStack, true);
+    prevStepsStack.pop();
     board.doEmulatedMoveBack(stroke, notationCursor, smooth);
 
     setBeatenMy(Board.DRAUGHTS_ON_SIDE - board.getMyDraughts().size());
@@ -608,7 +607,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
     Element notation = getStrokeById(notationCursor - 1);
     if (null == notation) {
-      prevBackSteps.clear();
+//      prevBackSteps.clear();
       enableComments(false);
       prevButton.setEnabled(false);
 //      toStartButton.setEnabled(false);
