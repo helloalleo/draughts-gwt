@@ -322,10 +322,10 @@ public class PlayTest {
     String endPos = pos[1];
     final Square startSquare = fromNotation(startPos);
     final Square endSquare = fromNotation(endPos);
-//    Square captured = null;
-//    if (!stroke.isSimple()) {
-//      captured = findTaken(startSquare, endSquare, back);
-//    }
+    Square captured = null;
+    if (!stroke.isSimple()) {
+      captured = findTaken(startSquare, endSquare, back);
+    }
     stroke.setFirst(first)
         .setNumber(number)
         .setStartSquare(startSquare)

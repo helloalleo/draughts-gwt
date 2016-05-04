@@ -22,10 +22,9 @@ body {
     margin-right: 15px;
 }
 
-.notationColumn {
-    /*float: left;*/
-    /*width: 200px;*/
-    /*margin-left: 10px;*/
+.notationScroll {
+    font-size: S_FONT_SIZE;
+    line-height: S_LINE_HEIGHT;
 }
 
 .playerSearch {
@@ -202,7 +201,7 @@ body {
 }
 
 .playEndDate {
-    font-size: 14px;
+    font-size: S_FONT_SIZE;
     margin-right: 12px;
     /*float: right;*/
 }
@@ -215,12 +214,12 @@ body {
 @mixin radius(DIALOG_BORDER_RADIUS);
 
     background: lightgreen;
-    font-size: 14px;
+    font-size: S_FONT_SIZE;
     margin-bottom: 12px;
 }
 
 .emulatorDraughtsBeaten {
-    font-size: 14px;
+    font-size: S_FONT_SIZE;
     font-style: italic;
 }
 
@@ -233,7 +232,7 @@ body {
 }
 
 .leftSymbols {
-    font-size: 14px;
+    font-size: S_FONT_SIZE;
     margin-top: 8px;
 }
 
@@ -248,11 +247,11 @@ body {
 }
 
 .gameCommentPanel {
-    font-size: 14px;
+    font-size: S_FONT_SIZE;
 }
 
 .strokeCommentPanel {
-    font-size: 14px;
+    font-size: S_FONT_SIZE;
 }
 
 .whoAndWhenDidWin {

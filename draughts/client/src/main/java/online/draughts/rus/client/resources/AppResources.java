@@ -20,8 +20,6 @@ public interface AppResources extends ClientBundle {
   }
 
   interface Style extends CssResource {
-    String notationColumn();
-
     String playerSearch();
 
     String mainContainer();
@@ -147,5 +145,20 @@ public interface AppResources extends ClientBundle {
     String dialogBoxPlayer();
 
     String cycle();
+
+    @ClassName("panel-heading")
+    String panelHeading();
+
+    String notationScroll();
+
+    String active();
+
+    @ClassName("panel-footer")
+    String panelFooter();
+
+    @ClassName("panel-body")
+    String panelBody();
+
+    String btn();
   }
 }

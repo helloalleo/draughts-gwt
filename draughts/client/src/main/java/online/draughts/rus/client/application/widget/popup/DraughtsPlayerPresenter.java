@@ -6,14 +6,13 @@ import com.gwtplatform.mvp.client.HasUiHandlers;
 import com.gwtplatform.mvp.client.PopupView;
 import com.gwtplatform.mvp.client.PresenterWidget;
 import online.draughts.rus.client.event.CheckWinnerEvent;
-import online.draughts.rus.client.event.GameShutEvent;
 import online.draughts.rus.client.event.TurnChangeEvent;
 import online.draughts.rus.shared.dto.GameDto;
 
 
 public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPresenter.MyView> implements DraughtsPlayerUiHandlers {
 
-  DraughtsPlayerPresenter(
+  private DraughtsPlayerPresenter(
       EventBus eventBus,
       MyView view) {
     super(eventBus, view);
@@ -21,7 +20,7 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
     getView().setUiHandlers(this);
   }
 
-  public interface ViewFactory {
+  interface ViewFactory {
     MyView create(GameDto game);
   }
 
@@ -48,12 +47,11 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
 
   @Override
   public void checkWinner() {
-    fireEvent(new CheckWinnerEvent());
+    fireEvent(new CheckWinnerEvent(true));
   }
 
   @Override
   public void gameShut(boolean isWhite) {
-    fireEvent(new GameShutEvent(isWhite));
   }
 
   @Override

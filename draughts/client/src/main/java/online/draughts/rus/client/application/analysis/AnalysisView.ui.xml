@@ -30,7 +30,7 @@
                 </g:HTMLPanel>
             </b:Column>
             <b:Column size="XS_2 SM_2 MD_2 LG_2">
-                <g:HTMLPanel ui:field="notationColumn" addStyleNames="{res.style.notationColumn}">
+                <g:HTMLPanel ui:field="notationColumn">
                     <g:HTMLPanel ui:field="infoHTMLPanel">
                         <b:ButtonGroup addStyleNames="{res.style.playerControls}">
                             <b:Button ui:field="toStartButton" icon="FAST_BACKWARD" size="SMALL"/>

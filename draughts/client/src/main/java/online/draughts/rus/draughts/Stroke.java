@@ -136,6 +136,7 @@ public class Stroke {
     }
     stroke.setMoveFlags(moveFlags);
     stroke.setFirst(first);
+    stroke.setOrder(order);
     stroke.setNumber(number);
     return stroke;
   }
@@ -169,13 +170,17 @@ public class Stroke {
 
   @Override
   public String toString() {
-    return "Stroke{" +
-        "takenSquare=" + takenSquare +
+    return "Stroke{" + "takenSquare=" + takenSquare +
         ", startSquare=" + startSquare +
         ", endSquare=" + endSquare +
         ", moveFlags=" + moveFlags +
         ", first=" + first +
+        ", order=" + order +
         ", number=" + number +
+        ", comment='" + comment + '\'' +
+        ", title='" + title + '\'' +
+        ", queen=" + queen +
+        ", white=" + white +
         '}';
   }
 

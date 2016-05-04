@@ -2,8 +2,10 @@ package online.draughts.rus.draughts;
 
 import com.google.gwt.user.client.Element;
 import online.draughts.rus.client.application.widget.NotationPanel;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.dto.MoveDto;
-import online.draughts.rus.shared.util.StringUtils;
+
+import java.util.List;
 
 /**
  * Created with IntelliJ IDEA.
@@ -30,10 +32,16 @@ public class StrokeFactory {
         .setWhite(move.getMovedDraught().isWhite());
   }
 
-  public static Stroke createStrokeFromNotationHtml(Element outerNotation, String step, boolean back) {
-    if (outerNotation == null) {
-      return null;
-    }
+  /**
+   * Создаёт ход из переданного html элемента хода нотации
+   *
+   * @param outerNotation html нотации
+   * @param prevSteps     предыдущий ход
+   * @param back          ход назад?
+   * @return объект хода
+   */
+  public static Stroke createStrokeFromNotationHtml(Element outerNotation, List<String> prevSteps, boolean back) {
+    Logger.debug("PREV STEP " + prevSteps);
     Stroke stroke = new Stroke();
     final Boolean first = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_FIRST_ATTR));
     final Integer number = Integer.valueOf(outerNotation.getAttribute(NotationPanel.DATA_NUMBER_ATTR));
@@ -64,11 +72,12 @@ public class StrokeFactory {
     String[] pos = new String[2];
     if (simpleMove || startBeat) {
       pos = innerHTML.split(simpleMove ? Stroke.SIMPLE_MOVE_SEP : Stroke.BEAT_MOVE_SEP);
-    } else if (StringUtils.isNotEmpty(step)) {
-      pos[0] = step.substring(step.indexOf(Stroke.BEAT_MOVE_SEP) + 1);
+    } else if (!prevSteps.isEmpty()) {
+      String prevStep = prevSteps.get(prevSteps.size() - 1);
+      pos[0] = prevStep.substring(prevStep.indexOf(Stroke.BEAT_MOVE_SEP) + 1);
       pos[1] = innerHTML;
     } else {
-      return null;
+      throw new RuntimeException("");
     }
     String startPos = pos[0];
     String endPos = pos[1];
@@ -76,7 +85,7 @@ public class StrokeFactory {
     final Square endSquare = Square.fromNotation(endPos);
     Square captured = null;
     if (!stroke.isSimple()) {
-      captured = findTaken(startSquare, endSquare, back);
+      captured = findTaken(startSquare, endSquare, prevSteps, back);
     }
     stroke.setFirst(first)
         .setNumber(number)
@@ -86,17 +95,50 @@ public class StrokeFactory {
     return stroke;
   }
 
-  private static Square findTaken(Square firstStep, Square secondStep, boolean back) {
+  /**
+   * Функция поиска побитой шашки
+   * @param firstStep начало хода бьющей шашки
+   * @param secondStep конец хода бьющей шашки
+   * @param prevSteps предыдущие ходы
+   * @param back отматываем назад?
+   * @return захваченнная шашка
+   */
+  private static Square findTaken(Square firstStep, Square secondStep, List<String> prevSteps, boolean back) {
+    // для поиска побитой шашки комбинируем два способа.
+    // 1. Проходим вверх по предыдущим ходам и ищем совершенный ход который оказался между началом и концом бьющей
+    // шашки
+    for (int i = prevSteps.size() - 1; i != 0; i--) {
+      String prevStep = prevSteps.get(i);
+      Square prevSecond = Square.fromNotation(getPrevStep(prevStep, false));
+      if (firstStep.isOnLine(prevSecond) && secondStep.isOnLine(prevSecond)
+          && prevSecond.isBetween(firstStep, secondStep)) {
+        String prevStepParts = getPrevStep(prevStep, false);
+        return Square.fromNotation(prevStepParts);
+      }
+    }
+    // 2. Если не нашли побитую шашку ищем, то значит она ещё не ходила, ищем полным перебором
     for (int row = 0; row < BoardBackgroundLayer.ROWS; row++) {
       for (int col = 0; col < BoardBackgroundLayer.COLS; col++) {
-        Square current;
-        current = Square.fromPosition(row, col);
-        if (null != current && (null != current.getOccupant() || back) && current.isBetween(firstStep, secondStep)
-            && current.isOnLine(firstStep)) {
-          return current;
+        Square square = Square.fromPosition(row, col);
+        if (null != square && (null != square.getOccupant() || back) && square.isBetween(firstStep, secondStep)
+            && square.isOnLine(firstStep)) {
+          return square;
         }
       }
     }
-    return null;
+    throw new RuntimeException("Captured draught not found");
+  }
+
+  private static String getPrevStep(String prevStep, boolean first) {
+    String prevStepParts;
+    int order = first ? 0 : 1;
+    if (prevStep.contains(Stroke.SIMPLE_MOVE_SEP)) {
+      prevStepParts = prevStep.split(Stroke.SIMPLE_MOVE_SEP)[order];
+    } else if (prevStep.contains(Stroke.BEAT_MOVE_SEP)) {
+      prevStepParts = prevStep.split(Stroke.BEAT_MOVE_SEP)[order];
+    } else {
+      prevStepParts = prevStep;
+    }
+    return prevStepParts;
   }
 }

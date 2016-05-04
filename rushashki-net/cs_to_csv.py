@@ -15,7 +15,6 @@ from google.appengine.api import datastore
 
 dir_src = sys.argv[1]
 
-emails = open('emails.txt', 'w')
 vkProvider = fbProvider = gProvider = wndProvider = ndfProvider = 0
 
 game_count = 0
@@ -64,9 +63,9 @@ for root, dirs, files in os.walk(dir_src):
                     if k == 'lastVisited' and v is not None:
                         lastVisited = v
             if vk:
-                addressesVk += (email,)
+                addressesVk += (email + ' ' + str(visitCounter),)
             else:
-                addressesEmail += (email,)
+                addressesEmail += (email + ' ' + str(visitCounter),)
             if vk:
                 data += ((playerName, email, None, None, None, visitCounter, lastVisited),)
             elif fb:
@@ -80,6 +79,11 @@ for root, dirs, files in os.walk(dir_src):
 
 visitField = 5
 data_sorted = sorted(data, key=lambda x: x[visitField], reverse=True)
+
+emails = open('emails.txt', 'w')
+vkAddr = open('vk.txt', 'w')
+emails.write('\n'.join(addressesEmail))
+vkAddr.write('\n'.join(addressesVk))
 print(len(addressesVk))
 print(len(addressesEmail))
 #data_sorted = sorted(data, key=lambda x: x[3], reverse=True)

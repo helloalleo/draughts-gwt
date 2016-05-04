@@ -19,7 +19,8 @@
     <meta name="google-site-verification" content="hpqclqQ9Qg8yYuHMMaZO3L3OjcMf7Gz0xxhmcHEu6BQ"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="keywords" content="шашки,онлайн,играть,бесплатно,игры,русские,социальные,сети,обучение">
+    <meta name="keywords" content="шашки,онлайн,играть,бесплатно,игры,русские,социальные,сети,обучение,с другом,
+    по сети,на двоих,по интернету,через интернет,з другом,по интернету,бесплатно,без регистрации">
     <meta name="description" content="Играйте в шашки онлайн со своими друзьями или просто посетителями сайта.
     На сайте: вход через социальные сети, Push-уведомления, история игр.">
 
@@ -28,7 +29,7 @@
     <link rel="shortcut icon" type="image/png" href="/favicon.png">
 
     <link rel="alternate" href="http://xn--80aaxfchnde0hb.com/?locale=ru" hreflang="ru"/>
-    <link rel="alternate" href="http://xn--80aaxfchnde0hb.com/?locale=ua" hreflang="ua"/>
+    <link rel="alternate" href="http://xn--80aaxfchnde0hb.com/?locale=ua" hreflang="ru-UA"/>
     <link rel="alternate" href="http://xn--80aaxfchnde0hb.com/?locale=en" hreflang="en"/>
 
     <!-- Channel API -->

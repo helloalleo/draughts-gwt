@@ -162,11 +162,13 @@ public class Board extends Layer {
     }
     Map<Square, List<Square>> capturedJumpMoves = getCaptureJumpMoves();
     if (!capturedJumpMoves.isEmpty()) {
+      HIGHLIGHT_FOUND:
       for (Square captured : capturedJumpMoves.keySet()) {
         for (Square jump : capturedJumpMoves.get(captured)) {
           if (clickedSquare.isOnLine(jump) && clickedSquare.isOnLine(captured)) {
             highlightSquareToBeat(jump);
             highlightedSquares.add(jump);
+            break HIGHLIGHT_FOUND;
           }
         }
       }
@@ -599,12 +601,16 @@ public class Board extends Layer {
    * @param stroke     ход
    * @param stepCursor курсор для дамки
    */
-  public void doEmulatedMoveBack(Stroke stroke, int stepCursor) {
+  public void doEmulatedMoveBack(Stroke stroke, int stepCursor, boolean smooth) {
     if (stroke.isSimple()) {
       Square tmp = stroke.getStartSquare();
       stroke.setStartSquare(stroke.getEndSquare());
       stroke.setEndSquare(tmp);
-      doMove(stroke, stepCursor, true);
+      if (smooth) {
+        doMoveSmooth(stroke, stepCursor, true);
+      } else {
+        doMove(stroke, stepCursor, false, false, false);
+      }
     } else {
       final Square takenSquare = stroke.getTakenSquare();
       if (takenSquare != null) {
@@ -686,7 +692,11 @@ public class Board extends Layer {
   }
 
   private void doMove(final Stroke stroke, final int stepCursor, final boolean back) {
-    doMove(stroke, stepCursor, back, false);
+    doMove(stroke, stepCursor, back, false, true);
+  }
+
+  public void doMoveSmooth(final Stroke stroke, final int stepCursor, boolean smooth) {
+    doMove(stroke, stepCursor, false, false, smooth);
   }
 
   /**
@@ -697,7 +707,7 @@ public class Board extends Layer {
    * @param stepCursor для дамок
    * @param back       ход назад
    */
-  private void doMove(final Stroke stroke, final int stepCursor, final boolean back, final boolean cancel) {
+  private void doMove(final Stroke stroke, final int stepCursor, final boolean back, final boolean cancel, boolean smooth) {
     final Draught occupant = stroke.getStartSquare().getOccupant();
 
     // вычисляем координаты для перемещения шашки относительно её центра
@@ -710,10 +720,11 @@ public class Board extends Layer {
     final double mouseMovedX = occupant.getX() + endSquare.getCenterX() - startSquare.getCenterX();
     final double mouseMovedY = occupant.getY() + endSquare.getCenterY() - startSquare.getCenterY();
 
+    final double duration = isEmulate() && !smooth ? 0 : Board.moveDraughtDuration;
     occupant.animate(AnimationTweener.LINEAR, new AnimationProperties(
         AnimationProperty.Properties.X(mouseMovedX),
         AnimationProperty.Properties.Y(mouseMovedY)
-    ), moveDraughtDuration, new AnimationCallback() {
+    ), duration, new AnimationCallback() {
       @Override
       public void onClose(IAnimation animation, IAnimationHandle handle) {
         super.onClose(animation, handle);
@@ -1038,7 +1049,7 @@ public class Board extends Layer {
       }
       stroke.setTakenSquare(taken);
     }
-    doMove(stroke, stepCursor, back, true);
+    doMove(stroke, stepCursor, back, true, true);
   }
 
   public void moveOpponentCanceled(Stroke stroke) {

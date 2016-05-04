@@ -59,8 +59,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private int opponentTimeSeconds;
   private Timer playerTimer;
   private int fisherTimeSeconds;
-  private String timeOnPlayStringMinutes;
-  private String fisherTimeStringSecond;
 
   @Inject
   PlayComponentPresenter(
@@ -210,7 +208,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   @Override
   public void checkWinner() {
-    fireEvent(new CheckWinnerEvent());
+    fireEvent(new CheckWinnerEvent(false));
   }
 
   @Override
@@ -329,7 +327,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     return gameMessage;
   }
 
-  public void bindEvents() {
+  private void bindEvents() {
     addRegisteredHandler(ReceivedPlayerListEvent.TYPE, new ReceivedPlayerListEventHandler() {
       @Override
       public void onReceivedPlayerList(ReceivedPlayerListEvent event) {
@@ -364,8 +362,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         getView().hideInviteDialog();
         getView().startPlay(event.isWhite());
 
-        timeOnPlayStringMinutes = String.valueOf(event.getTimeOnPlay());
-        fisherTimeStringSecond = String.valueOf(event.getFisherTime());
         initTimers(event.getTimeOnPlay(), event.getFisherTime());
 
         GameDto game = playSession.getGame();
@@ -417,8 +413,10 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onCheckWinner(CheckWinnerEvent event) {
         getView().setBeatenMy(DRAUGHTS_ON_DESK_INIT - getView().getMyDraughtsSize());
         getView().setBeatenOpponent(DRAUGHTS_ON_DESK_INIT - getView().getOpponentDraughtsSize());
-        PlayComponentUtil.checkWin(getEventBus(), playSession, messages, getView().getMyDraughtsSize(),
-            getView().getOpponentDraughtsSize(), getView().isWhite());
+        if (!event.isPlayer()) {
+          PlayComponentUtil.checkWin(getEventBus(), playSession, messages, getView().getMyDraughtsSize(),
+              getView().getOpponentDraughtsSize(), getView().isWhite());
+        }
       }
     });
 

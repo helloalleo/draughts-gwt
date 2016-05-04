@@ -1,6 +1,7 @@
 
 package online.draughts.rus.client.application.home;
 
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
@@ -23,11 +24,10 @@ import java.util.Date;
 
 public class PlayItem extends Composite {
 
-  public static final String GAME_ID = "-game";
+  private static final String GAME_ID = "-game";
   private final DraughtsMessages messages;
   private final static String PLAYER_COLOR_DELIMITER = ": ";
   private final int gamesInRow;
-  private DraughtsPlayerPresenter draughtsPlayer;
 
   @UiField
   HTMLPanel panel;
@@ -56,20 +56,18 @@ public class PlayItem extends Composite {
            @Assisted final GameDto game) {
     this.messages = messages;
     initWidget(binder.createAndBindUi(this));
-
     this.gamesInRow = gamesInRow;
     panel.addStyleName(resources.style().playItem());
     setGame(homePresenter, draughtsPlayerFactory, game);
   }
 
-  public void setGame(final HomePresenter homePresenter, final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
-                      final GameDto game) {
+  private void setGame(final HomePresenter homePresenter, final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
+                       final GameDto game) {
     showGameAnchor.setId(game.getId() + GAME_ID);
     showGameAnchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        draughtsPlayer = draughtsPlayerFactory.create(game);
-        homePresenter.addToPopupSlot(draughtsPlayer);
+        showGame(draughtsPlayerFactory, game, homePresenter);
       }
     });
     if (game.getPlayEndStatus() != null) {
@@ -77,32 +75,44 @@ public class PlayItem extends Composite {
     }
     final Date playFinishDate = game.getPlayFinishDate();
     if (playFinishDate != null) {
-      final DateTimeFormat dateTimeFromat;
+      final DateTimeFormat dateTimeFormat;
       switch (gamesInRow) {
         case 2:
-          dateTimeFromat = DateTimeFormat.getFormat("EEEE, dd MMMM yyyy, HH:mm:ss");
+          dateTimeFormat = DateTimeFormat.getFormat("EEEE, dd MMMM yyyy, HH:mm:ss");
           break;
         case 4:
-          dateTimeFromat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
+          dateTimeFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
           break;
         case 6:
-          dateTimeFromat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT);
+          dateTimeFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT);
           break;
         default:
-          dateTimeFromat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
+          dateTimeFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
           break;
       }
-      String date = DateTimeFormat.getFormat(dateTimeFromat.getPattern())
+      String date = DateTimeFormat.getFormat(dateTimeFormat.getPattern())
           .format(playFinishDate);
       playEndDate.setHTML(date);
     }
     if (game.getEndGameScreenshot() != null) {
       endGameScreenshot.setUrl(game.getEndGameScreenshot());
       endGameScreenshot.setResponsive(true);
+      endGameScreenshot.addClickHandler(new ClickHandler() {
+        @Override
+        public void onClick(ClickEvent event) {
+          showGame(draughtsPlayerFactory, game, homePresenter);
+        }
+      });
+      endGameScreenshot.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     }
 
     whitePlayerName.setHTML(messages.white() + PLAYER_COLOR_DELIMITER + game.getPlayerWhite().getPublicName());
     blackPlayerName.setHTML(messages.black() + PLAYER_COLOR_DELIMITER + game.getPlayerBlack().getPublicName());
+  }
+
+  private void showGame(DraughtsPlayerPresenter.Factory draughtsPlayerFactory, GameDto game, HomePresenter homePresenter) {
+    DraughtsPlayerPresenter draughtsPlayer = draughtsPlayerFactory.create(game);
+    homePresenter.addToPopupSlot(draughtsPlayer);
   }
 
   interface Binder extends UiBinder<HTMLPanel, PlayItem> {

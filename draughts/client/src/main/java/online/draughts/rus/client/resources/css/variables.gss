@@ -29,6 +29,8 @@
 @def S_LOGO_TOP_HEIGHT              eval("online.draughts.rus.client.resources.Variables.S_LOGO_TOP_HEIGHT");
 @def S_LOGO_SCROLL_HEIGHT           eval("online.draughts.rus.client.resources.Variables.S_LOGO_SCROLL_HEIGHT");
 @def S_FOOTER_HEIGHT                eval("online.draughts.rus.client.resources.Variables.S_FOOTER_HEIGHT");
+@def S_FONT_SIZE                    eval("online.draughts.rus.client.resources.Variables.S_FONT_SIZE");
+@def S_LINE_HEIGHT                  eval("online.draughts.rus.client.resources.Variables.S_LINE_HEIGHT");
 @def S_MESSANGER_WIDTH              330px;
 @def S_SMILE_PANEL_WIDTH            185px;
 

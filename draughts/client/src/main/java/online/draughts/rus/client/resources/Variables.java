@@ -29,19 +29,21 @@ public class Variables {
   public static final String S_LOGO_TOP_HEIGHT = "40px";
   public static final String S_LOGO_SCROLL_HEIGHT = "20px";
   public static final String S_FOOTER_HEIGHT = "124px";
+  public static final String S_FONT_SIZE = "14px";
+  public static final String S_LINE_HEIGHT = "1.42857143";
 
   /*Bootstrap*/
   public static final int COLUMNS_IN_LAYOUT = 12;
 
-  public static int navbarTopHeight() {
-    return Integer.valueOf(S_NAVBAR_TOP_HEIGHT.substring(0, S_NAVBAR_TOP_HEIGHT.length() - 2));
-  }
-
   public static int marginTop() {
-    return Integer.valueOf(S_MAIN_CONTAINER_MARGIN_TOP.substring(0, S_MAIN_CONTAINER_MARGIN_TOP.length() - 2));
+    return getWithoutPixels(S_MAIN_CONTAINER_MARGIN_TOP);
   }
 
   public static int footerHeight() {
-    return Integer.valueOf(S_FOOTER_HEIGHT.substring(0, S_FOOTER_HEIGHT.length() - 2));
+    return getWithoutPixels(S_FOOTER_HEIGHT);
+  }
+
+  public static Integer getWithoutPixels(String valuePx) {
+    return Integer.valueOf(valuePx.substring(0, valuePx.length() - 2));
   }
 }

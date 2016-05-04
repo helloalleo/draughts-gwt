@@ -11,6 +11,16 @@ import com.google.gwt.event.shared.GwtEvent;
 public class CheckWinnerEvent extends GwtEvent<CheckWinnerEventHandler> {
   public static Type<CheckWinnerEventHandler> TYPE = new Type<CheckWinnerEventHandler>();
 
+  private boolean player;
+
+  public CheckWinnerEvent(boolean player) {
+    this.player = player;
+  }
+
+  public boolean isPlayer() {
+    return player;
+  }
+
   public Type<CheckWinnerEventHandler> getAssociatedType() {
     return TYPE;
   }
