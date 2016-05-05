@@ -14,6 +14,21 @@ public class TrUtils {
 
   private static DraughtsMessages messages = GWT.create(DraughtsMessages.class);
 
+  public static String translateGameType(GameDto.GameType gameType) {
+    // legacy
+    if (null == gameType) {
+      return messages.draughts();
+    }
+    switch (gameType) {
+      case DRAUGHTS:
+        return messages.draughts();
+      case GIVEAWAY:
+        return messages.giveaway();
+      default:
+        return messages.draughts();
+    }
+  }
+
   public static String translateEndGame(GameDto.GameEnds gameEnd) {
     switch (gameEnd) {
       case WHITE_WIN:

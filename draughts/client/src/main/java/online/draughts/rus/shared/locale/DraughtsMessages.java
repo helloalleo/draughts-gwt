@@ -425,18 +425,18 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
    * 
    * @return translated "{0} invites you to play. You are playing {1}. Match time {2} (min.), extra time {3} (sec.). Accept the challenge?"
    */
-  @DefaultMessage("{0} invites you to play. You are playing {1}. Match time {2} (min.), extra time {3} (sec.). Accept the challenge?")
+  @DefaultMessage("{0} invites you to play. You are playing the {1} {2}. Match time {3} (min.), extra time {4} (sec.). Accept the challenge?")
   @Key("inviteMessage")
-  String inviteMessage(String arg0,  String arg1,  String arg2,  String arg3);
+  String inviteMessage(String message, String arg0, String arg1, String arg2, String arg3);
 
   /**
    * Translated "Inviting <i>{0}</i> to play {1}".
    * 
    * @return translated "Inviting <i>{0}</i> to play {1}"
    */
-  @DefaultMessage("Inviting <i>{0}</i> to play {1}")
+  @DefaultMessage("Inviting <i>{0}</i> to play:")
   @Key("inviteToPlay")
-  String inviteToPlay(String arg0,  String arg1);
+  String inviteToPlay(String arg0);
 
   /**
    * Translated "Lessons".
@@ -1062,4 +1062,6 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String moderatorGreeting();
 
   String userOfflineButYouCanMessageHim(String offlineUserName);
+
+  String giveaway();
 }

@@ -71,7 +71,8 @@ public class PlayItem extends Composite {
       }
     });
     if (game.getPlayEndStatus() != null) {
-      whoDidWin.setHTML(messages.whoHadWon(messages.draughts(), TrUtils.translateEndGame(game.getPlayEndStatus())));
+      whoDidWin.setHTML(messages.whoHadWon(TrUtils.translateGameType(game.getGameType()),
+          TrUtils.translateEndGame(game.getPlayEndStatus())));
     }
     final Date playFinishDate = game.getPlayFinishDate();
     if (playFinishDate != null) {

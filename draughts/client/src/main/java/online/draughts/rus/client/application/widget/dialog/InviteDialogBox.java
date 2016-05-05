@@ -7,6 +7,7 @@ import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
 import com.google.gwt.user.client.Timer;
 import com.google.gwt.user.client.ui.*;
 import com.google.gwt.user.client.ui.Label;
+import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.*;
@@ -31,6 +32,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   private final HorizontalPanel waitMessage = new HorizontalPanel();
   private final TextBox customTime;
   private final Timer waitResponseTimer;
+  private final ListBox playsListBox;
   private final ListBox minutesListBox;
   private final TextBox fisherTime;
 
@@ -39,7 +41,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   private Timer timerCounterTimer;
   private Label waitMessageLabel;
 
-  public InviteDialogBox(ClickHandler submitClickHandler) {
+  protected InviteDialogBox(ClickHandler submitClickHandler) {
     HTML caption = new HTML(messages.inviteCaption());
     caption.getElement().addClassName(resources.style().dialogCaptionInfo());
     setHTML(new SafeHtmlBuilder().appendHtmlConstant(caption.getElement().getString()).toSafeHtml());
@@ -48,6 +50,11 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     panel.setPixelSize(WIDTH, HEIGHT);
 
     panel.add(inviteLabel);
+
+    playsListBox = new ListBox();
+    playsListBox.addItem(messages.draughts(), GameDto.GameType.DRAUGHTS.name());
+    playsListBox.addItem(messages.giveaway(), GameDto.GameType.GIVEAWAY.name());
+    panel.add(playsListBox);
 
     submitButton = new Button(messages.next());
     Button cancelButton = new Button(messages.cancel());
@@ -165,7 +172,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
       public void run() {
         hide();
         didNotResponse();
-        stopWating();
+        stopWaiting();
       }
     };
 
@@ -198,7 +205,8 @@ public abstract class InviteDialogBox extends BasicDialogBox {
           timeOnPlay = minutesListBox.getSelectedValue();
         }
         String fTime = fisherTime.getValue().isEmpty() ? "0" : fisherTime.getValue();
-        submitted(whiteRadio.getValue(), timeOnPlay, fTime);
+        submitted(GameDto.GameType.valueOf(playsListBox.getSelectedValue()), whiteRadio.getValue(),
+            timeOnPlay, fTime);
         submitButton.setEnabled(false);
       }
     });
@@ -208,7 +216,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
       @Override
       public void onClick(ClickEvent event) {
         hide();
-        stopWating();
+        stopWaiting();
       }
     });
 
@@ -256,12 +264,12 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   @Override
   public void hide() {
     super.hide();
-    stopWating();
+    stopWaiting();
   }
 
   public abstract void didNotResponse();
 
-  private void stopWating() {
+  private void stopWaiting() {
     timerCounterTimer.cancel();
     waitResponseTimer.cancel();
     submitButton.setEnabled(true);
@@ -270,5 +278,5 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     waitCounter = WAIT;
   }
 
-  public abstract void submitted(boolean white, String timeOnPlay, String fisherTime);
+  public abstract void submitted(GameDto.GameType gameType, boolean white, String timeOnPlay, String fisherTime);
 }

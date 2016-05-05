@@ -5,9 +5,11 @@ import online.draughts.rus.client.application.widget.dialog.GameResultDialogBox;
 import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.event.GameOverEvent;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
+
+import static online.draughts.rus.shared.dto.GameDto.GameType.DRAUGHTS;
+import static online.draughts.rus.shared.dto.GameDto.GameType.GIVEAWAY;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,20 +21,21 @@ public class PlayComponentUtil {
   public static void checkWin(EventBus eventBus, PlaySession playSession, DraughtsMessages messages,
                               int myDraughtsSize, int opponentDraughtsSize, boolean white) {
     GameDto.GameEnds gameEnd = null;
+    final GameDto.GameType gameType = playSession.getGameType();
     if (0 == myDraughtsSize) {
       GameResultDialogBox.setMessage(messages.youLose(), eventBus).show();
       if (white) {
-        gameEnd = GameDto.GameEnds.BLACK_WIN;
+        gameEnd = blackWin(gameType);
       } else {
-        gameEnd = GameDto.GameEnds.WHITE_WIN;
+        gameEnd = whiteWin(gameType);
       }
     }
     if (0 == opponentDraughtsSize) {
       GameResultDialogBox.setMessage(messages.youWon(), eventBus).show();
       if (white) {
-        gameEnd = GameDto.GameEnds.WHITE_WIN;
+        gameEnd = whiteWin(gameType);
       } else {
-        gameEnd = GameDto.GameEnds.BLACK_WIN;
+        gameEnd = blackWin(gameType);
       }
     }
 
@@ -47,6 +50,28 @@ public class PlayComponentUtil {
     }));
   }
 
+  private static GameDto.GameEnds whiteWin(GameDto.GameType gameType) {
+    switch (gameType) {
+      case DRAUGHTS:
+        return GameDto.GameEnds.WHITE_WIN;
+      case GIVEAWAY:
+        return GameDto.GameEnds.BLACK_WIN;
+      default:
+        return GameDto.GameEnds.WHITE_WIN;
+    }
+  }
+
+  private static GameDto.GameEnds blackWin(GameDto.GameType gameType) {
+    switch (gameType) {
+      case DRAUGHTS:
+        return GameDto.GameEnds.BLACK_WIN;
+      case GIVEAWAY:
+        return GameDto.GameEnds.WHITE_WIN;
+      default:
+        return GameDto.GameEnds.BLACK_WIN;
+    }
+  }
+
   public static void checkShut(EventBus eventBus, PlaySession playSession,
                                DraughtsMessages messages, boolean isWhite) {
     final GameDto.GameEnds gameEnd;
@@ -56,9 +81,9 @@ public class PlayComponentUtil {
       GameResultDialogBox.setMessage(messages.youWon(), eventBus).show();
     }
     if (isWhite) {
-      gameEnd = GameDto.GameEnds.BLACK_WIN;
+      gameEnd = blackWin(playSession.getGameType());
     } else {
-      gameEnd = GameDto.GameEnds.WHITE_WIN;
+      gameEnd = whiteWin(playSession.getGameType());
     }
     final GameDto endedGame = playSession.getGame();
     eventBus.fireEvent(new GameOverEvent(endedGame, gameEnd, new AbstractAsyncCallback<GameDto>() {

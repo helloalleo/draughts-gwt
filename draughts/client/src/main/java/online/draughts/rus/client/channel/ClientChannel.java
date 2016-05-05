@@ -8,16 +8,18 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import no.eirikb.gwtchannelapi.client.Channel;
 import no.eirikb.gwtchannelapi.client.ChannelListener;
-import online.draughts.rus.client.application.common.PlayComponentPresenter;
+import online.draughts.rus.client.application.common.InviteData;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.dialog.*;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.json.ChunkMapper;
 import online.draughts.rus.client.json.GameMessageMapper;
+import online.draughts.rus.client.json.InviteDataMapper;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.AudioUtil;
+import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.shared.channel.Chunk;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.GameMessageDto;
@@ -49,6 +51,7 @@ public class ClientChannel implements ChannelListener {
   private PlaySession playSession;
   private ChunkMapper chunkMapper;
   private GameMessageMapper messageMapper;
+  private final InviteDataMapper inviteDataMapper;
   private final AppResources resources;
   private Map<Integer, String> gameMessageChunks = new TreeMap<>();
 
@@ -58,6 +61,7 @@ public class ClientChannel implements ChannelListener {
                        PlaySession playSession,
                        ChunkMapper chunkMapper,
                        GameMessageMapper messageMapper,
+                       InviteDataMapper inviteDataMapper,
                        ResourceDelegate<GamesResource> gamesDelegate,
                        DraughtsMessages messages,
                        AppResources resources) {
@@ -68,6 +72,7 @@ public class ClientChannel implements ChannelListener {
     this.messages = messages;
     this.chunkMapper = chunkMapper;
     this.messageMapper = messageMapper;
+    this.inviteDataMapper = inviteDataMapper;
     this.resources = resources;
 
     bindEvents();
@@ -116,6 +121,7 @@ public class ClientChannel implements ChannelListener {
       @Override
       public void onClearPlayComponent(ClearPlayComponentEvent event) {
         playSession.setGame(null);
+        playSession.setGameType(null);
       }
     });
   }
@@ -155,6 +161,7 @@ public class ClientChannel implements ChannelListener {
       sendGameMessage(message);
       return;
     }
+    final InviteData inviteData = inviteDataMapper.read(gameMessage.getData());
     confirmPlayDialogBox = new ConfirmPlayDialogBox() {
       @Override
       public void submitted() {
@@ -174,16 +181,18 @@ public class ClientChannel implements ChannelListener {
             GameMessageDto message = createGameMessage(gameMessage);
             message.setMessageType(GameMessageDto.MessageType.PLAY_START);
             message.setGame(result);
-            String[] time = gameMessage.getData().split(PlayComponentPresenter.INVITE_MESSAGE_DELIMITER);
-            message.setData(String.valueOf(!isWhite())
-                + PlayComponentPresenter.INVITE_MESSAGE_DELIMITER + time[1]
-                + PlayComponentPresenter.INVITE_MESSAGE_DELIMITER + time[2]);
+            boolean white = inviteData.isWhite();
+            // инвертируем цвет
+            inviteData.setWhite(!inviteData.isWhite());
+            String json = inviteDataMapper.write(inviteData);
+            inviteData.setWhite(white);
+            message.setData(json);
 
             sendGameMessage(message);
 
             playSession.setGame(result);
-            eventBus.fireEvent(new StartPlayEvent(isWhite(), false,
-                Integer.valueOf(time[1]), Integer.valueOf(time[2])));
+            eventBus.fireEvent(new StartPlayEvent(inviteData.getGameType(), white, false,
+                inviteData.getTimeOnPlay(), inviteData.getFisherTime()));
           }
         }).save(game);
       }
@@ -196,11 +205,12 @@ public class ClientChannel implements ChannelListener {
         sendGameMessage(message);
       }
     };
-    String[] data = gameMessage.getData().split(PlayComponentPresenter.INVITE_MESSAGE_DELIMITER);
-    final String color = Boolean.valueOf(data[0]) ?
+    String gameTypeTranslated;
+    final String color = inviteData.isWhite() ?
         messages.white_with_ending() : messages.black_with_ending();
-    confirmPlayDialogBox.show(messages.inviteMessage(gameMessage.getMessage(), color, data[1], data[2]),
-        Boolean.valueOf(data[0]));
+    confirmPlayDialogBox.show(messages.inviteMessage(gameMessage.getMessage(),
+        TrUtils.translateGameType(inviteData.getGameType()), color,
+        String.valueOf(inviteData.getTimeOnPlay()), String.valueOf(inviteData.getFisherTime())), inviteData.isWhite());
     AudioUtil.playSound(resources.sounds().inviteSound());
   }
 
@@ -274,7 +284,7 @@ public class ClientChannel implements ChannelListener {
         handlePlayRejectInvite(gameMessage);
         break;
       case PLAY_DID_NOT_RESPONSE:
-        handleDidNotResponse(gameMessage);
+        handleDidNotResponse();
         break;
       case PLAY_ALREADY_PLAYING:
         handlePlayAlreadyPlaying(gameMessage);
@@ -328,7 +338,7 @@ public class ClientChannel implements ChannelListener {
     }
   }
 
-  private void handleDidNotResponse(GameMessageDto gameMessage) {
+  private void handleDidNotResponse() {
     if (null != confirmPlayDialogBox) {
       confirmPlayDialogBox.hide();
     }
@@ -481,9 +491,9 @@ public class ClientChannel implements ChannelListener {
   private void handlePlayStart(final GameMessageDto gameMessage) {
     playSession.setOpponent(gameMessage.getSender());
     playSession.setGame(gameMessage.getGame());
-    String[] data = gameMessage.getData().split(PlayComponentPresenter.INVITE_MESSAGE_DELIMITER);
-    boolean white = Boolean.valueOf(data[0]);
-    eventBus.fireEvent(new StartPlayEvent(white, true, Integer.valueOf(data[1]), Integer.valueOf(data[2])));
+    InviteData inviteData = inviteDataMapper.read(gameMessage.getData());
+    eventBus.fireEvent(new StartPlayEvent(inviteData.getGameType(), inviteData.isWhite(), true,
+        inviteData.getTimeOnPlay(), inviteData.getFisherTime()));
   }
 
   private void handleChatPrivateMessage(GameMessageDto gameMessage) {

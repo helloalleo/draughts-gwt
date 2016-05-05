@@ -40,13 +40,14 @@ import online.draughts.rus.draughts.BoardBackgroundLayer;
 import online.draughts.rus.draughts.PlayComponent;
 import online.draughts.rus.draughts.Stroke;
 import online.draughts.rus.shared.dto.FriendDto;
+import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.util.StringUtils;
-import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.CheckBox;
+import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.TextBox;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
 import org.gwtbootstrap3.client.ui.constants.IconType;
@@ -120,8 +121,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   Heading opponentTimeLabel;
   @UiField(provided = true)
   CheckBox hideAvatars;
-  SingleSelectionModel<FriendDto> playerFriendSelectionModel;
-  SingleSelectionModel<PlayerDto> playerSelectionModel;
+  private SingleSelectionModel<FriendDto> playerFriendSelectionModel;
+  private SingleSelectionModel<PlayerDto> playerSelectionModel;
   private boolean prevSelected = false;
   private NotationPanel notationPanel;
   private InviteDialogBox inviteDialogBox;
@@ -132,6 +133,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private List<FriendDto> friendList;
   private String timeOnPlay;
   private String fisherTime;
+  private GameDto.GameType gameType;
 
   @Inject
   PlayComponentView(Binder binder,
@@ -818,14 +820,14 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       }
 
       @Override
-      public void submitted(boolean white, String timeOnPlay, String fisherTime) {
+      public void submitted(GameDto.GameType gameType, boolean white, String timeOnPlay, String fisherTime) {
+        PlayComponentView.this.gameType = gameType;
         PlayComponentView.this.opponentColor = !white;
         PlayComponentView.this.timeOnPlay = timeOnPlay;
         PlayComponentView.this.fisherTime = fisherTime;
       }
     };
-    inviteDialogBox.show(messages.inviteToPlay(playSession.getOpponent().getPublicName(),
-        messages.draughts()));
+    inviteDialogBox.show(messages.inviteToPlay(playSession.getOpponent().getPublicName()));
   }
 
   @Override
@@ -836,6 +838,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public String takeScreenshot() {
     return takeScreenshot(DataURLType.PNG, true);
+  }
+
+  @Override
+  public GameDto.GameType getGameType() {
+    return gameType;
   }
 
   private String takeScreenshot(DataURLType dataType, boolean includeBackgroundLayer) {

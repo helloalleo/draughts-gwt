@@ -18,6 +18,8 @@ public class GameDto extends BaseDto {
 
   private PlayerDto playerBlack;
 
+  private GameType gameType;
+
   private GameEnds playEndStatus;
 
   private Date playStartDate;
@@ -63,6 +65,14 @@ public class GameDto extends BaseDto {
 
   public void setPlayerBlack(PlayerDto playerBlack) {
     this.playerBlack = playerBlack;
+  }
+
+  public GameType getGameType() {
+    return gameType;
+  }
+
+  public void setGameType(GameType gameType) {
+    this.gameType = gameType;
   }
 
   public GameEnds getPlayEndStatus() {
@@ -112,6 +122,11 @@ public class GameDto extends BaseDto {
 
   public void setInitialPos(Set<DraughtDto> initialPos) {
     this.initialPos = initialPos;
+  }
+
+  public enum GameType {
+    DRAUGHTS,
+    GIVEAWAY
   }
 
   public enum GameEnds implements IsSerializable {

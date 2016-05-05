@@ -19,6 +19,7 @@ import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.channel.ClientChannel;
 import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.event.*;
+import online.draughts.rus.client.json.InviteDataMapper;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.AudioUtil;
@@ -39,7 +40,6 @@ import java.util.*;
 public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresenter.MyView>
     implements PlayComponentUiHandlers {
 
-  public final static String INVITE_MESSAGE_DELIMITER = ":";
   private final static int DRAUGHTS_ON_DESK_INIT = 12;
   private final MessengerPresenter.Factory messengerFactory;
   private final PlayView playView;
@@ -52,6 +52,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final ResourceDelegate<FriendsResource> friendsDelegate;
+  private final InviteDataMapper inviteDataMapper;
   private final AppResources resources;
   private MessengerPresenter currentMessenger;
   private int playerTimeSeconds;
@@ -72,6 +73,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       ResourceDelegate<GameMessagesResource> gameMessagesDelegate,
       MessengerPresenter.Factory messengerFactory,
       ClientChannel clientChannel,
+      InviteDataMapper inviteDataMapper,
       PlayView playView,
       AppResources resources) {
     super(eventBus, view);
@@ -86,6 +88,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     this.messengerFactory = messengerFactory;
     this.gameMessagesDelegate = gameMessagesDelegate;
     this.playView = playView;
+    this.inviteDataMapper = inviteDataMapper;
     this.resources = resources;
 
     getView().setUiHandlers(this);
@@ -125,11 +128,18 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_INVITE);
         gameMessage.setReceiver(opponent);
 
+        final GameDto.GameType gameType = getView().getGameType();
         final boolean white = getView().getOpponentColor();
         final String timeOnPlay = getView().getTimeOnPlay();
         final String fisherTime = getView().getFisherTime();
         gameMessage.setMessage(playSession.getPlayer().getPublicName());
-        gameMessage.setData(String.valueOf(white) + INVITE_MESSAGE_DELIMITER + timeOnPlay + INVITE_MESSAGE_DELIMITER + fisherTime);
+        InviteData inviteData = new InviteData();
+        inviteData.setGameType(gameType);
+        inviteData.setWhite(white);
+        inviteData.setTimeOnPlay(Integer.valueOf(timeOnPlay));
+        inviteData.setFisherTime(Integer.valueOf(fisherTime));
+        String json = inviteDataMapper.write(inviteData);
+        gameMessage.setData(json);
 
         fireEvent(new GameMessageEvent(gameMessage));
       }
@@ -360,6 +370,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       public void onStartPlay(final StartPlayEvent event) {
         getView().hideInviteDialog();
         getView().startPlay(event.isWhite());
+        playSession.setGameType(event.getGameType());
 
         initTimers(event.getTimeOnPlay(), event.getFisherTime());
 
@@ -369,7 +380,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         getView().updateTurn(isMyTurn());
         getView().initNotationPanel(game.getId());
 
-        if (event.isInviter()) {
+        if (event.isInvitee()) {
           final Set<DraughtDto> initialPosition = getView().getBoard().getCurrentPosition();
           game.setPlayStartDate(new Date());
           game.setInitialPos(initialPosition);
@@ -452,6 +463,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       @Override
       public void onGameOver(GameOverEvent event) {
         GameDto game = event.getGame();
+        game.setGameType(playSession.getGameType());
         game.setPlayEndStatus(event.getGameEnd());
         game.setPlayFinishDate(new Date());
         final String notation = NotationPanel.getNotation();
@@ -633,5 +645,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     void cancelMove(Stroke stroke);
 
     String takeScreenshot();
+
+    GameDto.GameType getGameType();
   }
 }

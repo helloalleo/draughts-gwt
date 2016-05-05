@@ -16,6 +16,7 @@ public class PlaySession {
   private PlayerDto opponent;
   private GameDto game;
   private boolean connected;
+  private GameDto.GameType gameType;
 
   public PlayerDto getPlayer() {
     return player;
@@ -58,5 +59,13 @@ public class PlaySession {
         && game != null
         && game.getPlayerWhite() != null
         && player.getId() == game.getPlayerWhite().getId();
+  }
+
+  public void setGameType(GameDto.GameType gameType) {
+    this.gameType = gameType;
+  }
+
+  public GameDto.GameType getGameType() {
+    return gameType;
   }
 }

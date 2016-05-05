@@ -19,7 +19,7 @@ import java.util.*;
  * Date: 09.12.15
  * Time: 18:33
  */
-public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T> {
+abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T> {
 
   @Transient
   private transient Logger logger = Logger.getLogger(BaseModelImpl.class);
@@ -192,7 +192,7 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     memcache.clearAll();
   }
 
-  protected T getSingleResultObject(PreparedQuery preparedQuery) {
+  T getSingleResultObject(PreparedQuery preparedQuery) {
     Entity entity = preparedQuery.asSingleEntity();
     if (null == entity) {
       return null;
@@ -200,7 +200,7 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     return getResultObject(entity);
   }
 
-  protected List<T> getListResult(PreparedQuery preparedQuery) {
+  List<T> getListResult(PreparedQuery preparedQuery) {
     Iterable<Entity> entities = preparedQuery.asIterable();
 
     List<T> resultObjects = new ArrayList<>();
@@ -210,7 +210,7 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
     return resultObjects;
   }
 
-  protected List<T> getListResult(QueryResultList<Entity> results) {
+  List<T> getListResult(QueryResultList<Entity> results) {
     List<T> resultObjects = new ArrayList<>(results.size());
     for (Entity result : results) {
       resultObjects.add(getResultObject(result));
@@ -256,12 +256,12 @@ public abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T>
   }
 
   @JsonIgnore
-  protected <O extends BaseModel> String serializeToString(O obj) {
+  <O extends BaseModel> String serializeToString(O obj) {
     return Utils.serializeToJson(obj);
   }
 
   @JsonIgnore
-  protected <O extends BaseModel> O fromString(String json, Class<O> clazz) {
+  <O extends BaseModel> O fromString(String json, Class<O> clazz) {
     return Utils.deserializeFromJson(json, clazz);
   }
 }

@@ -5,7 +5,10 @@ import online.draughts.rus.server.annotation.Index;
 import online.draughts.rus.server.annotation.Text;
 import online.draughts.rus.shared.dto.GameDto;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashSet;
+import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,6 +22,9 @@ public class Game extends ModelImpl<Game> {
   private Player playerWhite;
   @Index
   private Player playerBlack;
+
+  @Index
+  private GameDto.GameType gameType;
 
   @Index
   private GameDto.GameEnds playEndStatus;
@@ -85,6 +91,14 @@ public class Game extends ModelImpl<Game> {
 
   public void setPlayerBlack(Player playerBlack) {
     this.playerBlack = playerBlack;
+  }
+
+  public GameDto.GameType getGameType() {
+    return gameType;
+  }
+
+  public void setGameType(GameDto.GameType gameType) {
+    this.gameType = gameType;
   }
 
   public GameDto.GameEnds getPlayEndStatus() {
