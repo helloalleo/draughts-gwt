@@ -8,6 +8,7 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.inject.Inject;
+import com.google.inject.Provider;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
 import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
@@ -30,7 +31,7 @@ import java.util.List;
 
 public class PlayShowPanel extends Composite {
 
-//  private final Provider<HomeView> homeViewProvider;
+  private final Provider<HomeView> homeViewProvider;
   private final PlayShowPanelFactory showPanelFactory;
   private final Cookies cookies;
   private final PlaceManager placeManager;
@@ -58,15 +59,15 @@ public class PlayShowPanel extends Composite {
                        PlaceManager placeManager,
                        ClientConfiguration config,
                        PlayShowPanelFactory showPanelFactory,
-//                       Provider<HomeView> homeViewProvider,
+                       Provider<HomeView> homeViewProvider,
                        DraughtsMessages messages,
                        ResourceDelegate<GamesResource> gamesDelegate,
                        Cookies cookies) {
     this.showPanelFactory = showPanelFactory;
     this.cookies = cookies;
     this.placeManager = placeManager;
-//    INCREMENT_SIZE = HomePresenter.getIncrementPlaysOnPage(config, cookies);
-//    this.homeViewProvider = homeViewProvider;
+    INCREMENT_SIZE = HomePresenter.getIncrementPlaysOnPage(config, cookies);
+    this.homeViewProvider = homeViewProvider;
     this.messages = messages;
     this.gamesDelegate = gamesDelegate;
 
@@ -120,7 +121,7 @@ public class PlayShowPanel extends Composite {
         int maxScrollTop = getOffsetHeight() - Window.getScrollTop();
         if (lastScrollPos >= maxScrollTop && updateFlag) {
           final int newPageSize = INCREMENT_SIZE;
-//          PlayShowPanel.this.homeViewProvider.get().getMoreGames(newPageSize);
+          PlayShowPanel.this.homeViewProvider.get().getMoreGames(newPageSize);
           lastMaxHeight = maxScrollTop;
           updateFlag = false;
         }
@@ -199,19 +200,6 @@ public class PlayShowPanel extends Composite {
     return this.gameList.size();
   }
 
-//  private void addAdvertisement() {
-//    Row row = new Row();
-//    Div ins = new Div();
-//    row.getElement().setInnerHTML("<ins class=\"adsbygoogle\"" +
-//        "                 style=\"display:block\"" +
-//        "                 data-ad-client=\"ca-pub-6590061713732270\"" +
-//        "                 data-ad-slot=\"6965334310\"" +
-//        "                 data-ad-format=\"auto\"></ins>");
-//    row.add(ins);
-//    playRowList.add(row);
-//    playRowList.add(new Hr());
-//  }
-
   private String getSize(int gamesInRow) {
     return "MD_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow
         + " " + "SM_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow
@@ -225,10 +213,10 @@ public class PlayShowPanel extends Composite {
     }
     gamesOnPanelCounter = cookies.getGamesOnPageCounter();
     if (gamesOnPanelCounter <= 0) {
-//      homeViewProvider.get().setEnableLessGameButton(false);
+      homeViewProvider.get().setEnableLessGameButton(false);
     }
     if (gamesOnPanelCounter >= 4) {
-//      homeViewProvider.get().setEnableMoreGameButton(false);
+      homeViewProvider.get().setEnableMoreGameButton(false);
     }
     playRowList.clear();
     List<GameDto> rowGameList = new ArrayList<>();
@@ -264,30 +252,29 @@ public class PlayShowPanel extends Composite {
     }
     playRowList.add(row);
     playRowList.add(new Hr());
-//    addAdvertisement();
   }
 
   void moreGameOnPanel() {
     gamesOnPanelCounter++;
     cookies.setGamesOnPageCounter(gamesOnPanelCounter);
-//    if (!homeViewProvider.get().isEnabledLessGameButton()) {
-//      homeViewProvider.get().setEnableLessGameButton(true);
-//    }
+    if (!homeViewProvider.get().isEnabledLessGameButton()) {
+      homeViewProvider.get().setEnableLessGameButton(true);
+    }
     resetGames(gameList);
     if (gamesOnPanelCounter == GAMES_ON_PAGE.length - 1) {
-//      homeViewProvider.get().setEnableMoreGameButton(false);
+      homeViewProvider.get().setEnableMoreGameButton(false);
     }
   }
 
   void lessGameOnPanel() {
     gamesOnPanelCounter--;
     cookies.setGamesOnPageCounter(gamesOnPanelCounter);
-//    if (!homeViewProvider.get().isEnabledMoreGameButton()) {
-//      homeViewProvider.get().setEnableMoreGameButton(true);
-//    }
+    if (!homeViewProvider.get().isEnabledMoreGameButton()) {
+      homeViewProvider.get().setEnableMoreGameButton(true);
+    }
     resetGames(gameList);
     if (gamesOnPanelCounter == 0) {
-//      homeViewProvider.get().setEnableLessGameButton(false);
+      homeViewProvider.get().setEnableLessGameButton(false);
     }
   }
 

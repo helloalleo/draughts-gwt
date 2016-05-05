@@ -25,8 +25,6 @@
         </b.html:Strong>
         <b:CheckBoxButton ui:field="myGameListCheckButton" size="LARGE">
             <ui:msg key="myGames" description="Мои игры">Мои игры</ui:msg></b:CheckBoxButton>
-        <b:CheckBoxButton ui:field="myGameListCheckButton2" size="LARGE">
-            <ui:msg key="myGames" description="Мои игры">Мои игры</ui:msg></b:CheckBoxButton>
         <b:ButtonGroup ui:field="showGameOnPageButtonGroup" pull="RIGHT">
             <b:Button ui:field="moreGameOnPage" size="LARGE" icon="ANGLE_LEFT" title="Показать меньше на странице">
                 <ui:attribute name="title" description="Показать меньше на странице"/>

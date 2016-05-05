@@ -26,17 +26,21 @@ import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
+import online.draughts.rus.client.util.AdsUtils;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.client.util.Logger;
+import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
 import org.gwtbootstrap3.client.ui.CheckBoxButton;
 import org.gwtbootstrap3.client.ui.html.Span;
 import org.gwtbootstrap3.client.ui.html.Strong;
 
+import java.util.List;
+
 public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements HomePresenter.MyView {
 
-//  private final Cookies cookies;
+  private final Cookies cookies;
   private boolean isMyGames;
 
   private PlayShowPanel playShowPanel;
@@ -58,8 +62,8 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   Span totalPlayersSpan;
   @UiField
   Span onlinePlayersSpan;
-  @UiField
-  CheckBoxButton myGameListCheckButton2;
+
+  private boolean secondMyGameListClick = false;
 
   @Inject
   HomeView(Binder binder,
@@ -67,109 +71,106 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
            Cookies cookies) {
     initWidget(binder.createAndBindUi(this));
 
-//    this.cookies = cookies;
-//    isMyGames = cookies.isMyGames();
-//    myGameListCheckButton.addValueChangeHandler(new ValueChangeHandler<Boolean>() {
-//      @Override
-//      public void onValueChange(ValueChangeEvent<Boolean> event) {
-//        onMyGameList();
-//      }
-//    });
-//    myGameListCheckButton.setValue(isMyGames);
-//    playShowPanel = playShowPanelFactory.createShowPanel();
-//    playShowSimplePanel.add(playShowPanel);
+    this.cookies = cookies;
+    isMyGames = cookies.isMyGames();
+    myGameListCheckButton.setValue(isMyGames);
+    playShowPanel = playShowPanelFactory.createShowPanel();
+    playShowSimplePanel.add(playShowPanel);
 
-//    bindSlot(HomePresenter.SLOT_SHOW_PLAY_PANEL, main);
+    bindSlot(HomePresenter.SLOT_SHOW_PLAY_PANEL, main);
   }
 
-//  @Override
-//  protected void onAttach() {
-//    super.onAttach();
-//    playShowPanel.init();
-//    AdsUtils.addAdvertisementFromGoogleScript();
-//  }
+  @Override
+  protected void onAttach() {
+    super.onAttach();
+    playShowPanel.init();
+    AdsUtils.addAdvertisementFromGoogleScript();
+  }
 
 
-//  @SuppressWarnings("unused")
-//  @UiHandler("moreGameOnPage")
-//  public void onMoreGameOnPage(ClickEvent event) {
-//    playShowPanel.moreGameOnPanel();
-//  }
+  @SuppressWarnings("unused")
+  @UiHandler("moreGameOnPage")
+  public void onMoreGameOnPage(ClickEvent event) {
+    playShowPanel.moreGameOnPanel();
+  }
 
-//  @SuppressWarnings("unused")
-//  @UiHandler("lessGameOnPage")
-//  public void onLessGameOnPage(ClickEvent event) {
-//    playShowPanel.lessGameOnPanel();
-//  }
+  @SuppressWarnings("unused")
+  @UiHandler("lessGameOnPage")
+  public void onLessGameOnPage(ClickEvent event) {
+    playShowPanel.lessGameOnPanel();
+  }
 
-  @UiHandler("myGameListCheckButton2")
+  @UiHandler("myGameListCheckButton")
   public void test(ClickEvent clickEvent) {
-    Logger.debug(myGameListCheckButton2.getValue().toString());
+    if (!secondMyGameListClick) {
+      toggleMyGameList(!myGameListCheckButton.getValue());
+      secondMyGameListClick = true;
+      return;
+    }
+    secondMyGameListClick = false;
   }
-//  @SuppressWarnings("unused")
-//  @UiHandler("myGameListCheckButton")
-//  public void onMyGameList() {
-//    final Boolean value = myGameListCheckButton.getValue();
-//    cookies.setMyGames(value);
-//    isMyGames = value;
-//    getUiHandlers().updatePlayShowPanel(value);
-//  }
 
-//  @Override
-//  public void setShowLoggedInControls(Boolean loggedIn) {
-//    myGameListCheckButton.setVisible(loggedIn);
-//    gameListLabel.setVisible(!loggedIn);
-//  }
+  private void toggleMyGameList(boolean value) {
+    cookies.setMyGames(value);
+    isMyGames = value;
+    getUiHandlers().updatePlayShowPanel(value);
+  }
 
-//  @Override
-//  public int setGames(List<GameDto> gameList) {
-//    return playShowPanel.setGames(gameList);
-//  }
+  @Override
+  public void setShowLoggedInControls(Boolean loggedIn) {
+    myGameListCheckButton.setVisible(loggedIn);
+    gameListLabel.setVisible(!loggedIn);
+  }
 
-//  @Override
-//  public int addGames(List<GameDto> games) {
-//    return playShowPanel.addGames(games);
-//  }
+  @Override
+  public int setGames(List<GameDto> gameList) {
+    return playShowPanel.setGames(gameList);
+  }
 
-//  @Override
-//  public boolean isMyGames() {
-//    return isMyGames;
-//  }
+  @Override
+  public int addGames(List<GameDto> games) {
+    return playShowPanel.addGames(games);
+  }
 
-//  @Override
-//  public void updateOnlinePlayerCounter(int size) {
-//    onlinePlayersSpan.setText(String.valueOf(size));
-//  }
+  @Override
+  public boolean isMyGames() {
+    return isMyGames;
+  }
 
-//  @Override
-//  public void updateTotalPlayersCounter(Integer result) {
-//    totalPlayersSpan.setText(String.valueOf(result));
-//  }
+  @Override
+  public void updateOnlinePlayerCounter(int size) {
+    onlinePlayersSpan.setText(String.valueOf(size));
+  }
 
-//  void setEnableMoreGameButton(boolean enable) {
-//    moreGameOnPage.setEnabled(enable);
-//  }
+  @Override
+  public void updateTotalPlayersCounter(Integer result) {
+    totalPlayersSpan.setText(String.valueOf(result));
+  }
 
-//  boolean isEnabledMoreGameButton() {
-//    return moreGameOnPage.isEnabled();
-//  }
+  void setEnableMoreGameButton(boolean enable) {
+    moreGameOnPage.setEnabled(enable);
+  }
 
-//  void setEnableLessGameButton(boolean enableMoreGameButton) {
-//    lessGameOnPage.setEnabled(enableMoreGameButton);
-//  }
+  boolean isEnabledMoreGameButton() {
+    return moreGameOnPage.isEnabled();
+  }
 
-//  boolean isEnabledLessGameButton() {
-//    return lessGameOnPage.isEnabled();
-//  }
+  void setEnableLessGameButton(boolean enableMoreGameButton) {
+    lessGameOnPage.setEnabled(enableMoreGameButton);
+  }
 
-//  void getMoreGames(int newPageSize) {
-//    getUiHandlers().getMoreGames(myGameListCheckButton.getValue(), newPageSize);
-//  }
+  boolean isEnabledLessGameButton() {
+    return lessGameOnPage.isEnabled();
+  }
 
-//  public PlayerDto getPlayer() {
-//    return getUiHandlers().getPlayer();
-//  }
-//
+  void getMoreGames(int newPageSize) {
+    getUiHandlers().getMoreGames(myGameListCheckButton.getValue(), newPageSize);
+  }
+
+  public PlayerDto getPlayer() {
+    return getUiHandlers().getPlayer();
+  }
+
   public interface Binder extends UiBinder<Widget, HomeView> {
   }
 }
