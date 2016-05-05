@@ -17,7 +17,6 @@ public class NameTokens {
   public static final String errorPage = "!error";
   public static final String settingsPage = "!settings";
   public static final String logoutPage = "/logout";
-  public static final String nome = "!nome";
   private final String ruShashkiNetUrl = "" +
       "https://rushashki-net.appspot.com";
 
@@ -49,10 +48,6 @@ public class NameTokens {
 
   public static String getLovePage() {
     return lovePage;
-  }
-
-  public static String getNome() {
-    return nome;
   }
 
   public Link[] getLeftLinks() {
