@@ -21,6 +21,7 @@ import online.draughts.rus.client.application.analysis.AnalysisModule;
 import online.draughts.rus.client.application.error.ErrorModule;
 import online.draughts.rus.client.application.footer.FooterModule;
 import online.draughts.rus.client.application.home.HomeModule;
+import online.draughts.rus.client.application.home.NomeModule;
 import online.draughts.rus.client.application.learn.LearnModule;
 import online.draughts.rus.client.application.love.LoveModule;
 import online.draughts.rus.client.application.menu.MenuModule;
@@ -40,6 +41,7 @@ public class ApplicationModule extends AbstractPresenterModule {
     install(new ErrorModule());
     install(new MenuModule());
     install(new HomeModule());
+    install(new NomeModule());
     install(new OAuthLoginModule());
 
     // Applicaiton Presenters
