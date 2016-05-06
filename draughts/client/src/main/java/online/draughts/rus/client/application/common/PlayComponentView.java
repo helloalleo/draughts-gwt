@@ -596,6 +596,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   private String getPlayerStatus(PlayerDto object) {
     if (object.isModerator() || object.isAdmin() || player.getId() == object.getId()) {
+      object.setOnline(true);
       return "";
     }
     if (object.isOnline()) {
