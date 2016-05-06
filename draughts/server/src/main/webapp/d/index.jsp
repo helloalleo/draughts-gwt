@@ -24,7 +24,7 @@
     <meta name="description" content="Играйте в шашки онлайн со своими друзьями или просто посетителями сайта.
     На сайте есть: вход через социальные сети, Push-уведомления, история игр.">
 
-    <title>Шашки Онлайн</title>
+    <title>Шашки онлайн</title>
 
     <link rel="shortcut icon" type="image/png" href="/favicon.png">
 
