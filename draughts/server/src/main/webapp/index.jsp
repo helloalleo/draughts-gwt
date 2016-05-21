@@ -4,7 +4,7 @@
         for (Cookie cookie : cookies) {
             if (cookie.getName().equalsIgnoreCase("loggedIn")) {
                 if (cookie.getValue().equals("1")) {
-                    response.sendRedirect("/d/");
+                    response.sendRedirect("/shashki/");
                 }
             }
         }
@@ -77,8 +77,8 @@
         </div>
         <div class="collapse navbar-collapse" id="navcol-1">
             <ul class="nav navbar-nav navbar-right">
-                <li role="presentation"><a href="/d/">Главная </a></li>
-                <li role="presentation"><a href="/d/#!login">Войти </a></li>
+                <li role="presentation"><a href="/shashki/">Главная </a></li>
+                <li role="presentation"><a href="/shashki/#!login">Войти </a></li>
             </ul>
         </div>
     </div>
@@ -92,7 +92,7 @@
             <div class="col-md-6 col-md-pull-3 get-it">
                 <h1>Шашки онлайн</h1>
                 <h2>Играйте в шашки и общайтесь на нашем сайте</h2>
-                <p><a class="btn btn-primary btn-lg" role="button" href="/d/#!login">Войти на сайт</a></p>
+                <p><a class="btn btn-primary btn-lg" role="button" href="/shashki/#!login">Войти на сайт</a></p>
             </div>
         </div>
     </div>
@@ -104,7 +104,7 @@
                 <h2 class="text-center">На сайте можно играть в шашки &</h2>
                 <div class="row">
                     <video width="860" height="320" autoplay="" muted="" loop="" class="col-md-offset-1 col-md-10">
-                        <source src="draughts.mp4" type="video/mp4">
+                        <source src="/assets/draughts.mp4" type="video/mp4">
                     </video>
                 </div>
             </div>
@@ -127,7 +127,7 @@
         </div>
         <div class="row">
             <div class="col-md-2 col-md-offset-5"><a class="btn btn-primary btn-lg on-site-btn" role="button"
-                                                     href="/d/#!login">Войти на сайт</a></div>
+                                                     href="/shashki/#!login">Войти на сайт</a></div>
         </div>
     </div>
 </section>

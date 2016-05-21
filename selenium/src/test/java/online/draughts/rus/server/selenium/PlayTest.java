@@ -324,7 +324,7 @@ public class PlayTest {
     final Square endSquare = fromNotation(endPos);
     Square captured = null;
     if (!stroke.isSimple()) {
-      captured = findTaken(startSquare, endSquare, back);
+//      captured = findTaken(startSquare, endSquare, back);
     }
     stroke.setFirst(first)
         .setNumber(number)

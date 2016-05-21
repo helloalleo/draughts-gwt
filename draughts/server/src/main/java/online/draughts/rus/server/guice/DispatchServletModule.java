@@ -25,6 +25,7 @@ import com.google.inject.servlet.ServletModule;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
 import online.draughts.rus.server.channel.ServerChannel;
+import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.servlet.CheckOnlineServlet;
 import online.draughts.rus.server.servlet.GameGiff;
 import online.draughts.rus.server.servlet.LogoutServlet;
@@ -41,9 +42,9 @@ class DispatchServletModule extends ServletModule {
   public void configureServlets() {
     filter("/*").through(createUserIdScopingFilter());
 
-    serve("/d/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
+    serve("/" + Config.CONTEXT + "/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
 
-    serve("/d/Application/channel").with(ServerChannel.class);
+    serve("/" + Config.CONTEXT + "/Application/channel").with(ServerChannel.class);
     serve("/cron/checkonline").with(CheckOnlineServlet.class);
 
     serve("/logout").with(LogoutServlet.class);

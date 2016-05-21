@@ -188,7 +188,7 @@
                     sessionId: '<%= request.getRequestedSessionId() %>'
                 });
 
-                xhr.open("POST", '/d/resource/players/notifications', true)
+                xhr.open("POST", '/shashki/resource/players/notifications', true)
                 xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
                 xhr.send(json);
             });

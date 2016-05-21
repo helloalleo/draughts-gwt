@@ -16,6 +16,7 @@ import online.draughts.rus.server.service.MailService;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.server.util.Utils;
+import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.util.StringUtils;
 import org.apache.http.HttpResponse;
@@ -148,7 +149,9 @@ public class ServerChannel extends ChannelServer {
     if (player.isPlaying()) {
       Game game = gameService.findUserGames(player.getId(), 0, 1).get(0);
       final boolean isPlayerHasWhiteColor = game.getPlayerWhite().getId() == player.getId();
+      game.setPlayEndStatus(isPlayerHasWhiteColor ? GameDto.GameEnds.WHITE_LEFT : GameDto.GameEnds.BLACK_LEFT);
       GameMessage gameMessage = new GameMessage();
+      gameMessage.setGame(game);
       final long secondPlayerId = isPlayerHasWhiteColor ? game.getPlayerBlack().getId() : game.getPlayerWhite().getId();
       Player secondPlayer = playerService.find(secondPlayerId);
 
@@ -211,12 +214,12 @@ public class ServerChannel extends ChannelServer {
     httpPost.setHeader("Authorization", "Basic " + Config.ONESIGNAL_APP_KEY);
     httpPost.setHeader("Content-Type", "application/json");
     String json = "{\n" +
-        "    \"app_id\": \"78dcc7d5-0794-45d8-aaff-4df6f4bef7a7\",\n" +
+        "    \"app_id\": \"" + Config.ONESIGNAL_APP_ID + "\",\n" +
         "    \"include_player_ids\" : [\"" + notificationsUserId + "\"],\n" +
         "    \"contents\": {\"ru\": \"" + message.get("ru") + "\", " +
         "    \"en\": \"" + message.get("en") + "\"},\n" +
         "    \"include_segments\": [\"All\"],\n" +
-        "    \"url\": \"http://xn--80aaxfchnde0hb.com/d/\"," +
+        "    \"url\": \"http://xn--80aaxfchnde0hb.com/" + Config.CONTEXT + "/\"," +
         "    \"headings\": {\"en\": \"" + Config.SITE_NAME_EN + "\", \"ru\": \"ШашкиОнлайн.COM\"}\n" +
         "}";
     StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);
