@@ -101,22 +101,22 @@
     <div class="container">
         <div class="row">
             <div class="col-md-12">
-                <h2 class="text-center">На сайте можно играть в шашки &</h2>
+                <h2 class="text-center">На сайте можно играть в шашки </h2>
                 <div class="row">
-                    <video width="860" height="320" autoplay="" muted="" loop="" class="col-md-offset-1 col-md-10">
-                        <source src="/assets/draughts.mp4" type="video/mp4">
+                    <video style="width: 100%;" height="320" autoplay="" muted="" loop="">
+                        <source src="/assets/video/draughts.mp4" type="video/mp4">
                     </video>
                 </div>
             </div>
         </div>
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
-                <h2 class="text-center">Смотреть историю своих игр &</h2><img class="img-responsive"
+                <h2 class="text-center">Смотреть историю своих игр </h2><img class="img-responsive"
                                                                               src="assets/img/game-log.png"></div>
         </div>
         <div class="row">
             <div class="col-md-10 col-md-offset-1">
-                <h2 class="text-center">Делиться своими мыслями о сыгранных партиях &</h2><img class="img-responsive"
+                <h2 class="text-center">Делиться своими мыслями о сыгранных партиях </h2><img class="img-responsive"
                                                                                                src="assets/img/comments.png">
             </div>
         </div>
@@ -126,7 +126,7 @@
                                                            text-align="center"></div>
         </div>
         <div class="row">
-            <div class="col-md-2 col-md-offset-5"><a class="btn btn-primary btn-lg on-site-btn" role="button"
+            <div class="col-xs-4 col-xs-offset-4 col-md-2 col-md-offset-5"><a style="width: 100%;" class="btn btn-primary btn-lg on-site-btn" role="button"
                                                      href="/shashki/#!login">Войти на сайт</a></div>
         </div>
     </div>
