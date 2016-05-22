@@ -422,7 +422,6 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   }
 
   private void addGameComment(int order, String currentNotation, String gameTitle, String gameComment) {
-    gameComments.clear();
     addComment(gameComments, gameCommentsScroll, order, currentNotation, gameTitle, gameComment);
   }
 
