@@ -23,4 +23,6 @@ public interface ClientConfiguration extends ConstantsWithLookup {
   String escapeChars();
 
   String lastGameMessagesLoad();
+
+  String removeAccountUrl();
 }

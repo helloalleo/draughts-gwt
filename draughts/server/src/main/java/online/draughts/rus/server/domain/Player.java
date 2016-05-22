@@ -384,6 +384,10 @@ public class Player extends ModelImpl<Player> {
     query.addSort("moderator", Query.SortDirection.DESCENDING);
     query.addSort("online", Query.SortDirection.DESCENDING);
     query.addSort("rating", Query.SortDirection.DESCENDING);
+
+    Query.Filter filterActive = new Query.FilterPredicate("active", Query.FilterOperator.EQUAL, true);
+    query.setFilter(filterActive);
+
     PreparedQuery preparedQuery = getDatastore().prepare(query);
     return getListResult(preparedQuery);
   }

@@ -11,6 +11,7 @@ import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import online.draughts.rus.shared.config.ClientConfiguration;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.CheckBox;
 import org.gwtbootstrap3.client.ui.InputGroupAddon;
@@ -29,8 +30,12 @@ public class SettingsView extends ViewWithUiHandlers<SettingsUiHandlers> impleme
   @UiField
   InputGroupAddon playerNameAddon;
 
+  private final ClientConfiguration config;
+
   @Inject
-  SettingsView(Binder uiBinder) {
+  SettingsView(Binder uiBinder,
+               ClientConfiguration config) {
+    this.config = config;
     initWidget(uiBinder.createAndBindUi(this));
 
     bindSlot(SettingsPresenter.SLOT_SETTINGS, main);
@@ -75,18 +80,26 @@ public class SettingsView extends ViewWithUiHandlers<SettingsUiHandlers> impleme
     getUiHandlers().subscribeOnNewsletter(subscribeOnNewsletter.getValue());
   }
 
+  @SuppressWarnings("unused")
+  @UiHandler("removeAccount")
+  public void onRemoveAccount(ClickEvent event) {
+    Window.Location.assign(config.removeAccountUrl());
+  }
+
   public static class ViewFactoryImpl implements SettingsPresenter.ViewFactory {
 
     private final Binder binder;
+    private final ClientConfiguration config;
 
     @Inject
-    public ViewFactoryImpl(Binder binder) {
+    public ViewFactoryImpl(Binder binder, ClientConfiguration config) {
       this.binder = binder;
+      this.config = config;
     }
 
     @Override
     public SettingsPresenter.MyView create() {
-      return new SettingsView(binder);
+      return new SettingsView(binder, config);
     }
   }
 

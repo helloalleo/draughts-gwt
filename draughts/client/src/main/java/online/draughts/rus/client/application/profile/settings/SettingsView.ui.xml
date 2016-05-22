@@ -5,57 +5,66 @@
              ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
              ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
              ui:generateLocales="default">
-    <g:SimplePanel ui:field="main">
-        <g:HTMLPanel>
-            <h1>
-                <ui:msg description="Settings" key="lkSettings">Настройки</ui:msg>
-            </h1>
+  <g:SimplePanel ui:field="main">
+    <g:HTMLPanel>
+      <h1>
+        <ui:msg description="Settings" key="lkSettings">Настройки</ui:msg>
+      </h1>
+      <g:HTMLPanel>
+        <b:Panel>
+          <b:PanelHeader>
+            <b:Heading size="H3" text="Персональные">
+              <ui:attribute name="text" description="PrivateSettings"/>
+            </b:Heading>
+          </b:PanelHeader>
+          <b:PanelBody>
             <g:HTMLPanel>
-                <b:Panel>
-                    <b:PanelHeader>
-                        <b:Heading size="H3" text="Персональные">
-                            <ui:attribute name="text" description="PrivateSettings"/>
-                        </b:Heading>
-                    </b:PanelHeader>
-                    <b:PanelBody>
-                        <g:HTMLPanel>
-                            <b:Row>
-                                <b:Column size="XS_9 SM_9 MD_9 LG_9">
-                                    <b:InputGroup>
-                                        <b:InputGroupAddon ui:field="playerNameAddon" icon="USER">
-                                            <ui:msg description="A player name on the site"
-                                                    key="playerNameOnSite">
-                                                Имя на сайте
-                                            </ui:msg>
-                                        </b:InputGroupAddon>
-                                        <b:TextBox ui:field="playerNameTextBox" placeholder="Имя на сайте" maxLength="19">
-                                            <ui:attribute name="placeholder"
-                                                          description="A player name on the site"/>
-                                        </b:TextBox>
-                                    </b:InputGroup>
-                                </b:Column>
-                                <b:Column size="XS_3 SM_3 MD_3 LG_3">
-                                    <b:Button ui:field="submitPlayerNameButton" text="Сохранить"
-                                              block="true">
-                                        <ui:attribute name="text" description="Save"/>
-                                    </b:Button>
-                                </b:Column>
-                            </b:Row>
-                            <hr/>
-                            <b:Row>
-                                <b:Column size="XS_9 SM_9 MD_9 LG_9">
-                                    <b:CheckBox ui:field="subscribeOnNewsletter">
-                                        <ui:msg description="Подписаться на рассылку"
-                                                key="subscribeOnNewsletter">
-                                            Подписаться на рассылку
-                                        </ui:msg>
-                                    </b:CheckBox>
-                                </b:Column>
-                            </b:Row>
-                        </g:HTMLPanel>
-                    </b:PanelBody>
-                </b:Panel>
+              <b:Row>
+                <b:Column size="XS_9 SM_9 MD_9 LG_9">
+                  <b:InputGroup>
+                    <b:InputGroupAddon ui:field="playerNameAddon" icon="USER">
+                      <ui:msg description="A player name on the site"
+                              key="playerNameOnSite">
+                        Имя на сайте
+                      </ui:msg>
+                    </b:InputGroupAddon>
+                    <b:TextBox ui:field="playerNameTextBox" placeholder="Имя на сайте" maxLength="19">
+                      <ui:attribute name="placeholder"
+                                    description="A player name on the site"/>
+                    </b:TextBox>
+                  </b:InputGroup>
+                </b:Column>
+                <b:Column size="XS_3 SM_3 MD_3 LG_3">
+                  <b:Button ui:field="submitPlayerNameButton" text="Сохранить"
+                            block="true">
+                    <ui:attribute name="text" description="Save"/>
+                  </b:Button>
+                </b:Column>
+              </b:Row>
+              <hr/>
+              <b:Row>
+                <b:Column size="XS_9 SM_9 MD_9 LG_9">
+                  <b:CheckBox ui:field="subscribeOnNewsletter">
+                    <ui:msg description="Подписаться на рассылку"
+                            key="subscribeOnNewsletter">
+                      Подписаться на рассылку
+                    </ui:msg>
+                  </b:CheckBox>
+                </b:Column>
+              </b:Row>
+              <b:Row>
+                <b:Column size="MD_12">
+                  <b:Button ui:field="removeAccount" type="DANGER">
+                    <ui:msg description="Удалить аккаунт" key="removeAccount">
+                      Удалить аккаунт
+                    </ui:msg>
+                  </b:Button>
+                </b:Column>
+              </b:Row>
             </g:HTMLPanel>
-        </g:HTMLPanel>
-    </g:SimplePanel>
+          </b:PanelBody>
+        </b:Panel>
+      </g:HTMLPanel>
+    </g:HTMLPanel>
+  </g:SimplePanel>
 </ui:UiBinder>

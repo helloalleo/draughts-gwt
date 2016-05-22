@@ -50,11 +50,11 @@ public class AuthUtils {
     }
 
     HttpSession session = req.getSession();
-    if (player.getSessionId() == null
-        || !player.getSessionId().equals(session.getId())) {
-      player.setSessionId(session.getId());
+    player.setSessionId(session.getId());
+    if (player.getId() == 0) {
       player.setRegisterDate(new Date());
     }
+    player.setActive(true);
     player.setVisitCounter(player.getVisitCounter() + 1);
     player.setRating(player.getRating() + 2);
 
