@@ -160,17 +160,19 @@ public class Board extends Layer {
     } catch (SquareNotFoundException ignore) {
       return;
     }
-    Map<Square, List<Square>> capturedJumpMoves = getCaptureJumpMoves();
+    Map<Draught, List<JumpMove>> capturedJumpMoves = getCaptureJumpMoves();
     if (!capturedJumpMoves.isEmpty()) {
-      for (Square captured : capturedJumpMoves.keySet()) {
-        for (Square jump : capturedJumpMoves.get(captured)) {
-          if (clickedSquare.isOnLine(jump) && clickedSquare.isOnLine(captured)) {
-            highlightSquareToBeat(jump);
-            highlightedSquares.add(jump);
-          }
+      List<JumpMove> jumpMoves = capturedJumpMoves.get(clickedPiece);
+      for (JumpMove jumpMove : jumpMoves) {
+        for (Square jump : jumpMove.moves) {
+          highlightSquareToBeat(jump);
+          highlightedSquares.add(jump);
         }
       }
-      capturedJumpSquares = capturedJumpMoves;
+      capturedJumpSquares.clear();
+      for (JumpMove jumpMove : jumpMoves) {
+        capturedJumpSquares.put(jumpMove.captured, jumpMove.moves);
+      }
     } else {
       Set<Square> possibleMoves = getPossibleMoves(clickedPiece);
       if (!possibleMoves.isEmpty()) {
@@ -185,7 +187,7 @@ public class Board extends Layer {
   }
 
   private void checkIfGameShut() {
-    Map<Square, List<Square>> capturedJumpMoves = getCaptureJumpMoves();
+    Map<Draught, List<JumpMove>> capturedJumpMoves = getCaptureJumpMoves();
     if (!capturedJumpMoves.isEmpty() || myDraughtList.isEmpty() || opponentDraughtList.isEmpty()) {
       return;
     }
@@ -1143,39 +1145,32 @@ public class Board extends Layer {
     return currentPosition;
   }
 
-  private Map<Square, List<Square>> getCaptureJumpMoves() {
-    Map<Square, List<Square>> captureJumpMoves = getCapturedByTurn(myDraughtList);
+  private Map<Draught, List<JumpMove>> getCaptureJumpMoves() {
+    Map<Draught, List<JumpMove>> captureJumpMoves = getCapturedByTurn(myDraughtList);
     if (analysis && !isMyTurn()) {
       captureJumpMoves = getCapturedByTurn(opponentDraughtList);
     }
     return captureJumpMoves;
   }
 
-  private Map<Square, List<Square>> getCapturedByTurn(List<Draught> draughtList) {
-    Map<Square, List<Square>> captureJumpMoves = new HashMap<>();
+  private Map<Draught, List<JumpMove>> getCapturedByTurn(List<Draught> draughtList) {
+    Map<Draught, List<JumpMove>> captureJumpMoves = new HashMap<>();
     for (Draught draught : draughtList) {
-      final Map<Square, List<Square>> capturedSquaresByDraught = getCapturedJumpMovesByDraught(draught);
+      final List<JumpMove> capturedSquaresByDraught = getCapturedJumpMovesByDraught(draught);
       if (!capturedSquaresByDraught.isEmpty()) {
-        for (Square square : capturedSquaresByDraught.keySet()) {
-          if (captureJumpMoves.containsKey(square)) {
-            // если побитый ходу уже есть в мап, тогда дополняем его
-            captureJumpMoves.get(square).addAll(capturedSquaresByDraught.get(square));
-          } else {
-            captureJumpMoves.putAll(capturedSquaresByDraught);
-          }
-        }
+        captureJumpMoves.put(draught, capturedSquaresByDraught);
       }
     }
     return captureJumpMoves;
   }
 
-  private Map<Square, List<Square>> getCapturedJumpMovesByDraught(Draught draught) {
+  private List<JumpMove> getCapturedJumpMovesByDraught(Draught draught) {
         /* Possible moves include up-left, up-right, down-left, down-right
      * This corresponds to (row-- col--), (row-- col++),
 		 * 						(row++ col--), (row++ col++) respectively
 		 */
     if (null == draught) {
-      return new HashMap<>();
+      return Collections.emptyList();
     }
     Map<Square, List<Square>> captureJumpMoves = new HashMap<>();
     int row = draught.getRow();
@@ -1201,7 +1196,11 @@ public class Board extends Layer {
       // bottom-right
       jumpMoves(Operator.ADDITION, Operator.ADDITION, row, col, draughtColor, queen, captureJumpMoves);
     }
-    return captureJumpMoves;
+    List<JumpMove> jumpMoves = new ArrayList<>();
+    for (Square square : captureJumpMoves.keySet()) {
+      jumpMoves.add(new JumpMove(square, captureJumpMoves.get(square)));
+    }
+    return jumpMoves;
   }
 
   /**
@@ -1236,22 +1235,6 @@ public class Board extends Layer {
           outCaptureJumps.get(square).add(nextSquare);
         }
       }
-
-//      if (inBounds(opRow.apply(row, 2), opCol.apply(col, 2))) {
-//        Square square = null, nextSquare = null;
-//        try {
-//          square = backgroundLayer.getSquare(opRow.apply(row, 1), opCol.apply(col, 1));
-//          nextSquare = backgroundLayer.getSquare(opRow.apply(row, 2), opCol.apply(col, 2));
-//        } catch (SquareNotFoundException ignore) {
-//        }
-//        if (nextSquare != null && !nextSquare.isOccupied() && square != null && square.isOccupied()
-//            && square.getOccupant().isWhite() != draughtColor) {
-//          if (!outCaptureJumps.containsKey(square)) {
-//            outCaptureJumps.put(square, new ArrayList<Square>());
-//          }
-//          outCaptureJumps.get(square).add(nextSquare);
-//        }
-//      }
     }
   }
 
@@ -1359,5 +1342,15 @@ public class Board extends Layer {
 
   public boolean isAnalysis() {
     return analysis;
+  }
+
+  private class JumpMove {
+    Square captured;
+    List<Square> moves;
+
+    JumpMove(Square captured, List<Square> moves) {
+      this.captured = captured;
+      this.moves = moves;
+    }
   }
 }

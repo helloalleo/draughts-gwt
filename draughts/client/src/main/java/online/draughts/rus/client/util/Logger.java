@@ -19,8 +19,10 @@ public class Logger {
     return LoggerHolder.INSTANCE;
   }
 
-  public static void debug(String message) {
-    getInstance().log.debug(message);
+  public static void debug(Object object) {
+    if (null != object) {
+      getInstance().log.debug(object.toString());
+    }
   }
 
   public static void debug(int msg) {
