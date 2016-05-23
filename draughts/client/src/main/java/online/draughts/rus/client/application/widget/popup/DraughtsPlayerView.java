@@ -212,7 +212,10 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     final int height = main.getOffsetHeight() / 2 - commentStrokeHeading.getOffsetHeight()
         - caption.getOffsetHeight() - offset - 20;
     gameCommentsScroll.setHeight(height + "px");
+    final String commentFieldWidth = "400px";
+    gameCommentsScroll.setWidth(commentFieldWidth);
     currentStrokeCommentScroll.setHeight(height + "px");
+    currentStrokeCommentScroll.setWidth(commentFieldWidth);
   }
 
   @Override
@@ -344,8 +347,8 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
           event.stopPropagation();
           return;
         }
-        leftSymbolsLabel.setText(left
-            + "");
+//        leftSymbolsLabel.setText(left
+//            + "");
       }
     });
 
@@ -407,7 +410,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     current.setAttribute(NotationPanel.DATA_COMMENT_ATTR, newComment);
 
     commentCurrentStrokeTextArea.setText("");
-    leftSymbolsLabel.setText(config.strokeCommentLength());
+//    leftSymbolsLabel.setText(config.strokeCommentLength());
     commentCurrentStrokeTextArea.setFocus(false);
 
     game.setNotation(notationPanel.getElement().getString());
