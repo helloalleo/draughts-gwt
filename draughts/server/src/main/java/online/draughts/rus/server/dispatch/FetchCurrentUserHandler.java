@@ -6,11 +6,12 @@ import com.google.inject.name.Named;
 import com.gwtplatform.dispatch.rpc.server.ExecutionContext;
 import com.gwtplatform.dispatch.rpc.server.actionhandler.ActionHandler;
 import com.gwtplatform.dispatch.shared.ActionException;
+import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.shared.dispatch.FetchCurrentPlayerAction;
 import online.draughts.rus.shared.dispatch.FetchCurrentPlayerResult;
-import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.shared.dto.PlayerDto;
+import org.apache.log4j.Logger;
 import org.dozer.Mapper;
 
 import javax.servlet.http.HttpServletRequest;
@@ -25,6 +26,7 @@ import javax.servlet.http.HttpSession;
 
 public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayerAction, FetchCurrentPlayerResult> {
 
+  private final Logger logger = Logger.getLogger(FetchCurrentUserHandler.class);
   private final Provider<HttpServletRequest> requestProvider;
   private final Provider<Boolean> authProvider;
   private final Mapper mapper;
@@ -41,16 +43,21 @@ public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayer
 
   @Override
   public FetchCurrentPlayerResult execute(FetchCurrentPlayerAction fetchCurrentPlayerAction, ExecutionContext executionContext) throws ActionException {
-    if (!authProvider.get()) {
-      return new FetchCurrentPlayerResult(null);
+    try {
+      if (!authProvider.get()) {
+        return new FetchCurrentPlayerResult(new PlayerDto());
+      }
+      HttpSession session = requestProvider.get().getSession();
+      final Player bySessionId = Player.getInstance().findBySessionId(session.getId());
+      PlayerDto dto = new PlayerDto();
+      if (bySessionId != null) {
+        dto = mapper.map(bySessionId, PlayerDto.class);
+      }
+      return new FetchCurrentPlayerResult(dto);
+    } catch (Exception e) {
+      logger.error(e.getMessage(), e);
+      return new FetchCurrentPlayerResult(new PlayerDto());
     }
-    HttpSession session = requestProvider.get().getSession();
-    final Player bySessionId = Player.getInstance().findBySessionId(session.getId());
-    PlayerDto dto = null;
-    if (bySessionId != null) {
-      dto = mapper.map(bySessionId, PlayerDto.class);
-    }
-    return new FetchCurrentPlayerResult(dto);
   }
 
   @Override

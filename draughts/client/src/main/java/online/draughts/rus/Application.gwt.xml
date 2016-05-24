@@ -44,4 +44,10 @@
   <extend-property name="locale" values="ru"/>
   <extend-property name="locale" values="ru_UA"/>
 
+  <!--<collapse-all-properties />-->
+  <!--<set-property name="compiler.stackMode" value="emulated"/>-->
+  <!--<set-configuration-property name="compiler.emulatedStack.recordLineNumbers"-->
+                              <!--value="true"/>-->
+  <!--<set-configuration-property name="compiler.emulatedStack.recordFileNames"-->
+                              <!--value="true"/>-->
 </module>

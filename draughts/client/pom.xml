@@ -43,7 +43,7 @@
         <gwt-test-utils.version>0.48-SNAPSHOT</gwt-test-utils.version>
         <gwtmockito.version>1.1.5</gwtmockito.version>
 
-        <project.context>d</project.context>
+        <project.context>shashki</project.context>
     </properties>
 
     <dependencyManagement>

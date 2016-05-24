@@ -33,7 +33,8 @@ public class BasicDialogBox extends DialogBox implements BaseDialogBox {
     addHandler(new KeyPressHandler() {
       @Override
       public void onKeyPress(KeyPressEvent keyPressEvent) {
-        if (keyPressEvent.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE) {
+        if (keyPressEvent.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE
+            || keyPressEvent.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
           hide();
         }
       }

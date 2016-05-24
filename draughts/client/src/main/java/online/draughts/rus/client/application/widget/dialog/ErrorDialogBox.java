@@ -21,12 +21,12 @@ public class ErrorDialogBox extends MyDialogBox {
 
   private static String constructMessage(String message, Throwable throwable) {
     if (message == null || message.isEmpty()) {
-      return throwable.getLocalizedMessage();
+      return throwable.getLocalizedMessage();// + "<br>" + Arrays.toString(throwable.getStackTrace());
     }
     if (throwable == null || throwable.getLocalizedMessage().isEmpty()) {
       return message;
     }
-    return message + "<br>" + throwable.getLocalizedMessage();
+    return message + "<br>" + throwable.getLocalizedMessage();// + "<br>" + Arrays.toString(throwable.getStackTrace());
   }
 
   public static ErrorDialogBox setMessage(Throwable caught) {
