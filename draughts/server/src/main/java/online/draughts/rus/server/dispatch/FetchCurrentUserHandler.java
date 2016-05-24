@@ -45,7 +45,8 @@ public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayer
   public FetchCurrentPlayerResult execute(FetchCurrentPlayerAction fetchCurrentPlayerAction, ExecutionContext executionContext) throws ActionException {
     try {
       if (!authProvider.get()) {
-        return new FetchCurrentPlayerResult(new PlayerDto());
+        final PlayerDto player = new PlayerDto();
+        return new FetchCurrentPlayerResult(player);
       }
       HttpSession session = requestProvider.get().getSession();
       final Player bySessionId = Player.getInstance().findBySessionId(session.getId());
