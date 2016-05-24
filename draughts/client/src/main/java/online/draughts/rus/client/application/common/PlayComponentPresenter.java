@@ -123,6 +123,9 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       Growl.growlNotif(messages.playAlreadyPlaying(opponent.getPublicName()));
       return;
     }
+    if (opponent.isModerator()) {
+      return;
+    }
     playSession.setOpponent(opponent);
 
     getView().showInviteDialog(new ClickHandler() {
