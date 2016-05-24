@@ -77,7 +77,7 @@ public class AnonymousChannel extends ChannelServer {
       case PLAY_CANCEL_MOVE_RESPONSE:
         handleChatPrivateMessage(gameMessage);
         break;
-      case PLAY_END:
+      case PLAY_GAME_UPDATE:
       case PLAY_SURRENDER:
       case PLAY_ACCEPT_DRAW:
         handleGameOver(gameMessage);

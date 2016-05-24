@@ -14,6 +14,7 @@ public class InviteData {
   private boolean white;
   private int timeOnPlay;
   private int fisherTime;
+  private boolean publishGame;
 
   public GameDto.GameType getGameType() {
     return gameType;
@@ -45,5 +46,24 @@ public class InviteData {
 
   public void setFisherTime(int fisherTime) {
     this.fisherTime = fisherTime;
+  }
+
+  public void setPublishGame(boolean publishGame) {
+    this.publishGame = publishGame;
+  }
+
+  public boolean isPublishGame() {
+    return publishGame;
+  }
+
+  @Override
+  public String toString() {
+    String sb = "InviteData{" + "gameType=" + gameType +
+        ", white=" + white +
+        ", timeOnPlay=" + timeOnPlay +
+        ", fisherTime=" + fisherTime +
+        ", publishGame=" + publishGame +
+        '}';
+    return sb;
   }
 }

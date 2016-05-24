@@ -11,6 +11,7 @@ import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.*;
+import org.gwtbootstrap3.client.ui.CheckBox;
 import org.gwtbootstrap3.client.ui.ListBox;
 import org.gwtbootstrap3.client.ui.RadioButton;
 import org.gwtbootstrap3.client.ui.TextBox;
@@ -31,6 +32,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   private final Button submitButton;
   private final HorizontalPanel waitMessage = new HorizontalPanel();
   private final TextBox customTime;
+  private final CheckBox publishGame;
   private final Timer waitResponseTimer;
   private final ListBox playsListBox;
   private final ListBox minutesListBox;
@@ -134,6 +136,10 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     panel.add(fisherTimeLabel);
     panel.add(fisherTime);
 
+    publishGame = new CheckBox(messages.publishGame());
+    publishGame.setValue(cookies.isPublishGame());
+    panel.add(publishGame);
+
     final Icon waitImage = new Icon(IconType.SPINNER);
     waitImage.setSize(IconSize.LARGE);
     waitImage.setSpin(true);
@@ -195,6 +201,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
           event.preventDefault();
           return;
         }
+        cookies.setPublishGame(publishGame.getValue());
         waitMessage.setVisible(true);
         waitResponseTimer.schedule(WAIT * 1000);
         timerCounterTimer.scheduleRepeating(1000);
@@ -206,7 +213,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
         }
         String fTime = fisherTime.getValue().isEmpty() ? "0" : fisherTime.getValue();
         submitted(GameDto.GameType.valueOf(playsListBox.getSelectedValue()), whiteRadio.getValue(),
-            timeOnPlay, fTime);
+            timeOnPlay, fTime, publishGame.getValue());
         submitButton.setEnabled(false);
       }
     });
@@ -278,5 +285,6 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     waitCounter = WAIT;
   }
 
-  public abstract void submitted(GameDto.GameType gameType, boolean white, String timeOnPlay, String fisherTime);
+  public abstract void submitted(GameDto.GameType gameType, boolean white, String timeOnPlay, String fisherTime,
+                                 Boolean publishGame);
 }

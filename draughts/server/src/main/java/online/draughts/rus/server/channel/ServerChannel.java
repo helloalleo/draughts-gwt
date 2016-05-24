@@ -107,7 +107,7 @@ public class ServerChannel extends ChannelServer {
       case NOTIFICATION_ADDED_TO_FAVORITE:
         handleChatPrivateMessage(gameMessage);
         break;
-      case PLAY_END:
+      case PLAY_GAME_UPDATE:
       case PLAY_SURRENDER:
       case PLAY_ACCEPT_DRAW:
       case PLAY_TIMEOUT:
@@ -120,6 +120,10 @@ public class ServerChannel extends ChannelServer {
   }
 
   private void handleGameOver(GameMessage gameMessage) {
+    if (GameMessageDto.GAME_UPDATE.equals(gameMessage.getData())) {
+      handleChatPrivateMessage(gameMessage);
+      return;
+    }
     long gameId = gameMessage.getGame().getId();
     Game game = gameService.find(gameId);
 
@@ -159,7 +163,8 @@ public class ServerChannel extends ChannelServer {
       playerService.save(secondPlayer);
 
       gameMessage.setReceiver(secondPlayer);
-      gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_END);
+      gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_GAME_UPDATE);
+      gameMessage.setData(GameMessageDto.GAME_END);
       coreChannel.sendMessage(String.valueOf(secondPlayer.getId()), gameMessage);
     }
 

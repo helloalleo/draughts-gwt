@@ -1099,5 +1099,7 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
 
   String youIsSubscribedToExtendedAccount();
 
-  String youWereUnsubscribedFromExtendedAccount();
+  String youIsUnsubscribedFromExtendedAccount();
+
+  String publishGame();
 }

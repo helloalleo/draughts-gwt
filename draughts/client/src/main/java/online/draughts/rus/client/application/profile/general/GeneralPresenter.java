@@ -47,7 +47,7 @@ public class GeneralPresenter extends PresenterWidget<GeneralPresenter.MyView> i
         if (subscribed) {
           Growl.growlNotif(messages.youIsSubscribedToExtendedAccount());
         } else {
-          Growl.growlNotif(messages.youWereUnsubscribedFromExtendedAccount());
+          Growl.growlNotif(messages.youIsUnsubscribedFromExtendedAccount());
         }
       }
     }).save(player);

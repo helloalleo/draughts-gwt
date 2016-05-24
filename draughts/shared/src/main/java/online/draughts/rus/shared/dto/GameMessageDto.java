@@ -118,6 +118,9 @@ public class GameMessageDto extends BaseDto {
         '}';
   }
 
+  public static final String GAME_END = "game_end";
+  public static final String GAME_UPDATE = "game_update";
+
   public enum MessageType implements IsSerializable {
 
     CHAT_MESSAGE,
@@ -134,7 +137,7 @@ public class GameMessageDto extends BaseDto {
     PLAY_CANCEL_MOVE_RESPONSE,
     PLAY_PROPOSE_DRAW,
     PLAY_ACCEPT_DRAW,
-    PLAY_END,
+    PLAY_GAME_UPDATE,
     PLAY_SURRENDER,
     PLAY_TIMEOUT,
     // не получили ответа на приглашение

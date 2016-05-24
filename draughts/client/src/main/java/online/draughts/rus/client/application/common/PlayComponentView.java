@@ -134,6 +134,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   private String timeOnPlay;
   private String fisherTime;
   private GameDto.GameType gameType;
+  private Boolean publishGame;
 
   @Inject
   PlayComponentView(Binder binder,
@@ -321,6 +322,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @Override
   public String getFisherTime() {
     return fisherTime;
+  }
+
+  @Override
+  public Boolean getPublishGame() {
+    return publishGame;
   }
 
   @Override
@@ -821,11 +827,13 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       }
 
       @Override
-      public void submitted(GameDto.GameType gameType, boolean white, String timeOnPlay, String fisherTime) {
+      public void submitted(GameDto.GameType gameType, boolean white, String timeOnPlay, String fisherTime,
+                            Boolean publishGame) {
         PlayComponentView.this.gameType = gameType;
         PlayComponentView.this.opponentColor = !white;
         PlayComponentView.this.timeOnPlay = timeOnPlay;
         PlayComponentView.this.fisherTime = fisherTime;
+        PlayComponentView.this.publishGame = publishGame;
       }
     };
     inviteDialogBox.show(messages.inviteToPlay(playSession.getOpponent().getPublicName()));

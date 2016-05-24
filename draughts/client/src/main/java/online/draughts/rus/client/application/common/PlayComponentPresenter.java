@@ -23,6 +23,7 @@ import online.draughts.rus.client.json.InviteDataMapper;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.AudioUtil;
+import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.MoveFactory;
 import online.draughts.rus.draughts.Stroke;
@@ -49,6 +50,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ClientChannel clientChannel;
   private final PlaySession playSession;
   private final DraughtsMessages messages;
+  private final Cookies cookies;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final ResourceDelegate<FriendsResource> friendsDelegate;
@@ -67,6 +69,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       PlaySession playSession,
       CurrentSession currentSession,
       DraughtsMessages messages,
+      Cookies cookies,
       ResourceDelegate<GamesResource> gamesDelegate,
       ResourceDelegate<PlayersResource> playersDelegate,
       ResourceDelegate<FriendsResource> friendsDelegate,
@@ -79,6 +82,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     super(eventBus, view);
 
     this.messages = messages;
+    this.cookies = cookies;
     this.clientChannel = clientChannel;
     this.playSession = playSession;
     this.currentSession = currentSession;
@@ -132,12 +136,14 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         final boolean white = getView().getOpponentColor();
         final String timeOnPlay = getView().getTimeOnPlay();
         final String fisherTime = getView().getFisherTime();
+        final boolean publishGame = getView().getPublishGame();
         gameMessage.setMessage(playSession.getPlayer().getPublicName());
         InviteData inviteData = new InviteData();
         inviteData.setGameType(gameType);
         inviteData.setWhite(white);
         inviteData.setTimeOnPlay(Integer.valueOf(timeOnPlay));
         inviteData.setFisherTime(Integer.valueOf(fisherTime));
+        inviteData.setPublishGame(publishGame);
         String json = inviteDataMapper.write(inviteData);
         gameMessage.setData(json);
 
@@ -384,8 +390,19 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
           final Set<DraughtDto> initialPosition = getView().getBoard().getCurrentPosition();
           game.setPlayStartDate(new Date());
           game.setInitialPos(initialPosition);
-          gamesDelegate.withoutCallback().save(game);
-          game.setInitialPos(null);
+          gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>() {
+            @Override
+            public void onSuccess(GameDto result) {
+              playSession.setGame(result);
+              GameMessageDto gameMessageDto = createGameMessage();
+              gameMessageDto.setGame(result);
+              gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_GAME_UPDATE);
+              gameMessageDto.setData(GameMessageDto.GAME_UPDATE);
+
+              GameMessageEvent gameMessageEvent = new GameMessageEvent(gameMessageDto);
+              fireEvent(gameMessageEvent);
+            }
+          }).save(game);
         }
 
         playSession.getPlayer().setPlaying(true);
@@ -469,10 +486,12 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         final String notation = NotationPanel.getNotation();
         game.setNotation(notation);
         game.setEndGameScreenshot(getView().takeScreenshot());
+        game.setPublish(event.getGame().getPublish());
         gamesDelegate.withCallback(event.getAsyncCallback()).save(game);
 
         GameMessageDto gameMessageDto = createGameMessage();
-        gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_END);
+        gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_GAME_UPDATE);
+        gameMessageDto.setData(GameMessageDto.GAME_END);
         fireEvent(new GameMessageEvent(gameMessageDto));
 
         fireEvent(new ClearPlayComponentEvent());
@@ -637,6 +656,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     String getTimeOnPlay();
 
     String getFisherTime();
+
+    Boolean getPublishGame();
 
     void setPlayerTime(String time);
 

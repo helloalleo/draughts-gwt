@@ -173,28 +173,24 @@ public class ClientChannel implements ChannelListener {
         playSession.setOpponent(gameMessage.getSender());
 
         final GameDto game = new GameDto();
+        game.setPublish(inviteData.isPublishGame());
         game.setPlayerWhite(isWhite() ? playSession.getPlayer() : playSession.getOpponent());
         game.setPlayerBlack(isWhite() ? playSession.getOpponent() : playSession.getPlayer());
-        gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>() {
-          @Override
-          public void onSuccess(GameDto result) {
-            GameMessageDto message = createGameMessage(gameMessage);
-            message.setMessageType(GameMessageDto.MessageType.PLAY_START);
-            message.setGame(result);
-            boolean white = inviteData.isWhite();
-            // инвертируем цвет
-            inviteData.setWhite(!inviteData.isWhite());
-            String json = inviteDataMapper.write(inviteData);
-            inviteData.setWhite(white);
-            message.setData(json);
+        GameMessageDto message = createGameMessage(gameMessage);
+        message.setMessageType(GameMessageDto.MessageType.PLAY_START);
+        message.setGame(game);
+        boolean white = inviteData.isWhite();
+        // инвертируем цвет
+        inviteData.setWhite(!inviteData.isWhite());
+        String json = inviteDataMapper.write(inviteData);
+        inviteData.setWhite(white);
+        message.setData(json);
 
-            sendGameMessage(message);
+        sendGameMessage(message);
 
-            playSession.setGame(result);
-            eventBus.fireEvent(new StartPlayEvent(inviteData.getGameType(), white, false,
-                inviteData.getTimeOnPlay(), inviteData.getFisherTime()));
-          }
-        }).save(game);
+        playSession.setGame(game);
+        eventBus.fireEvent(new StartPlayEvent(inviteData.getGameType(), white, false,
+            inviteData.getTimeOnPlay(), inviteData.getFisherTime()));
       }
 
       @Override
@@ -301,7 +297,7 @@ public class ClientChannel implements ChannelListener {
       case PLAY_ACCEPT_DRAW:
         handlePlayAcceptDraw(gameMessage);
         break;
-      case PLAY_END:
+      case PLAY_GAME_UPDATE:
         handlePlayEndGame(gameMessage);
         break;
       case PLAY_TIMEOUT:
@@ -354,7 +350,7 @@ public class ClientChannel implements ChannelListener {
 
   @SuppressWarnings("unused")
   private void handlePlayEndGame(GameMessageDto gameMessage) {
-    if (playSession.getGame() != null) {
+    if (playSession.getGame() != null && GameMessageDto.GAME_END.equals(gameMessage.getData())) {
       GameDto game = playSession.getGame();
       final GameDto.GameEnds gameEnd;
       final GameDto.GameEnds remotePlayEndStatus = gameMessage.getGame().getPlayEndStatus();
@@ -371,6 +367,8 @@ public class ClientChannel implements ChannelListener {
           Growl.growlNotif(messages.opponentLeftGame());
         }
       }));
+    } else if (playSession.getGame() != null && GameMessageDto.GAME_UPDATE.equals(gameMessage.getData())) {
+      playSession.getGame().setId(gameMessage.getGame().getId());
     }
   }
 

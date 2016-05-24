@@ -29,6 +29,9 @@ public class Game extends ModelImpl<Game> {
   @Index
   private GameDto.GameEnds playEndStatus;
 
+  @Index
+  private boolean publish;
+
   private Date playStartDate;
 
   @Index
@@ -145,6 +148,14 @@ public class Game extends ModelImpl<Game> {
     return gameMessages;
   }
 
+  public boolean isPublish() {
+    return publish;
+  }
+
+  public void setPublish(boolean publish) {
+    this.publish = publish;
+  }
+
   // ********* DB Queries ********* //
   public List<Game> findRange(int offset, int limit) {
     if (offset < 0 || limit < 0) {
@@ -155,6 +166,9 @@ public class Game extends ModelImpl<Game> {
 
     Query query = new Query(getEntityName());
     query.addSort("playFinishDate", Query.SortDirection.DESCENDING);
+
+    Query.Filter published = new Query.FilterPredicate("publish", Query.FilterOperator.EQUAL, true);
+    query.setFilter(published);
 
     PreparedQuery preparedQuery = getDatastore().prepare(query);
     return getListResult(preparedQuery.asQueryResultList(fetchOptions));

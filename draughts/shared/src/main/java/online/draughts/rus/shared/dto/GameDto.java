@@ -31,6 +31,7 @@ public class GameDto extends BaseDto {
   private String endGameScreenshot;
 
   private Set<DraughtDto> initialPos = new HashSet<>();
+  private boolean publish;
 
   public GameDto() {
   }
@@ -122,6 +123,14 @@ public class GameDto extends BaseDto {
 
   public void setInitialPos(Set<DraughtDto> initialPos) {
     this.initialPos = initialPos;
+  }
+
+  public void setPublish(boolean publish) {
+    this.publish = publish;
+  }
+
+  public boolean getPublish() {
+    return publish;
   }
 
   public enum GameType {

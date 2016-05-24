@@ -30,6 +30,8 @@ public interface Cookies {
 
   boolean getTimeOnPlayCustom();
 
+  void setPublishGame(Boolean publishGame);
+
   String getDefaultLocale();
 
   String getLocale();
@@ -47,4 +49,6 @@ public interface Cookies {
   void setHideAvatars(Boolean value);
 
   boolean isHideAvatars();
+
+  Boolean isPublishGame();
 }
