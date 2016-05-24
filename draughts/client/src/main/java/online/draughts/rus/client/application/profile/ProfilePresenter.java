@@ -12,6 +12,7 @@ import com.gwtplatform.mvp.client.presenter.slots.Slot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.draughts.rus.client.application.ApplicationPresenter;
+import online.draughts.rus.client.application.profile.general.GeneralPresenter;
 import online.draughts.rus.client.application.profile.settings.SettingsPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.place.NameTokens;
@@ -21,22 +22,27 @@ import online.draughts.rus.shared.dto.PlayerDto;
 
 public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, ProfilePresenter.MyProxy>
     implements ProfileUiHandlers {
-  public static final NestedSlot SLOT_PROFILE = new NestedSlot();
-  public static final Slot<SettingsPresenter> SLOT_PROFILE_CONTENT = new Slot<>();
+  static final NestedSlot SLOT_PROFILE = new NestedSlot();
+  static final Slot<SettingsPresenter> SLOT_SETTINGS_CONTENT = new Slot<>();
+  static final Slot<GeneralPresenter> SLOT_GENERAL_CONTENT = new Slot<>();
   private final PlayerDto player;
   private SettingsPresenter settingsPresenter;
+  private final GeneralPresenter.Factory generalSettingsFactory;
   private final SettingsPresenter.Factory settingsFactory;
+  private GeneralPresenter generalSettingsPresenter;
 
   @Inject
   ProfilePresenter(
       EventBus eventBus,
       MyView view,
       MyProxy proxy,
+      GeneralPresenter.Factory generalSettingsFactory,
       SettingsPresenter.Factory settingsFactory,
       Cookies cookies,
       CurrentSession currentSession) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
+    this.generalSettingsFactory = generalSettingsFactory;
     this.settingsFactory = settingsFactory;
     this.player = currentSession.getPlayer();
 
@@ -48,7 +54,10 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
   public void displayPage(String token) {
     switch (token) {
       case NameTokens.settingsPage:
-        setInSlot(SLOT_PROFILE_CONTENT, settingsPresenter);
+        setInSlot(SLOT_SETTINGS_CONTENT, settingsPresenter);
+        break;
+      case NameTokens.generalSettingsPage:
+        setInSlot(SLOT_GENERAL_CONTENT, generalSettingsPresenter);
         break;
     }
   }
@@ -57,9 +66,10 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
   public void prepareFromRequest(PlaceRequest request) {
     super.prepareFromRequest(request);
 
+    generalSettingsPresenter = generalSettingsFactory.create(player);
     settingsPresenter = settingsFactory.create(player);
     getProxy().manualReveal(ProfilePresenter.this);
-    displayPage(NameTokens.settingsPage);
+    displayPage(NameTokens.generalSettingsPage);
   }
 
   @Override

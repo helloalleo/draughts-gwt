@@ -13,7 +13,6 @@ import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.resources.Variables;
 import org.gwtbootstrap3.client.ui.AnchorListItem;
 import org.gwtbootstrap3.client.ui.NavPills;
-import org.gwtbootstrap3.client.ui.constants.IconType;
 
 
 public class ProfileView extends ViewWithUiHandlers<ProfileUiHandlers> implements ProfilePresenter.MyView {
@@ -36,7 +35,8 @@ public class ProfileView extends ViewWithUiHandlers<ProfileUiHandlers> implement
     this.nameTokens = nameTokens;
 
     bindSlot(ProfilePresenter.SLOT_PROFILE, main);
-    bindSlot(ProfilePresenter.SLOT_PROFILE_CONTENT, subcontent);
+    bindSlot(ProfilePresenter.SLOT_SETTINGS_CONTENT, subcontent);
+    bindSlot(ProfilePresenter.SLOT_GENERAL_CONTENT, subcontent);
     setUpLinks();
   }
 
@@ -58,9 +58,9 @@ public class ProfileView extends ViewWithUiHandlers<ProfileUiHandlers> implement
     } else {
       anchor = new AnchorListItem(link.name);
     }
+    anchor.setIcon(link.iconType);
     switch (link.token) {
-      case NameTokens.settingsPage:
-        anchor.setIcon(IconType.COG);
+      case NameTokens.generalSettingsPage:
         anchor.setActive(true);
         prevAnchor = anchor;
         break;

@@ -52,15 +52,6 @@
                   </b:CheckBox>
                 </b:Column>
               </b:Row>
-              <b:Row>
-                <b:Column size="MD_12">
-                  <b:Button ui:field="removeAccount" type="DANGER">
-                    <ui:msg description="Удалить аккаунт" key="removeAccount">
-                      Удалить аккаунт
-                    </ui:msg>
-                  </b:Button>
-                </b:Column>
-              </b:Row>
             </g:HTMLPanel>
           </b:PanelBody>
         </b:Panel>

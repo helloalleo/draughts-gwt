@@ -15,6 +15,7 @@ public class NameTokens {
   public static final String lovePage = "!love";
 
   public static final String errorPage = "!error";
+  public static final String generalSettingsPage = "!generalSettings";
   public static final String settingsPage = "!settings";
   public static final String logoutPage = "/logout";
   private final String ruShashkiNetUrl = "" +
@@ -27,6 +28,7 @@ public class NameTokens {
   private final Link loginLink;
   private final Link logoutLink;
   private final Link profileLink;
+  private final Link generalSettingsLink;
   private final Link settingsLink;
   private final Link playLink;
   private final Link analysisLink;
@@ -43,6 +45,7 @@ public class NameTokens {
     loginLink = new Link(loginPage, messages.login(), null, IconType.SIGN_IN);
     logoutLink = new Link(null, messages.logout(), logoutPage, IconType.SIGN_OUT);
     profileLink = new Link(profilePage, messages.profile(), null, IconType.USER);
+    this.generalSettingsLink = new Link(generalSettingsPage, messages.generalSettings(), null, IconType.USER);
     settingsLink = new Link(settingsPage, messages.settings(), null, IconType.GEAR);
   }
 
@@ -67,7 +70,7 @@ public class NameTokens {
   }
 
   public Link[] getProfileLinks() {
-    return new Link[]{settingsLink};
+    return new Link[]{generalSettingsLink, settingsLink};
   }
 
   public static class Link {

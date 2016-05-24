@@ -1,0 +1,63 @@
+<ui:UiBinder xmlns:ui='urn:ui:com.google.gwt.uibinder'
+             xmlns:g='urn:import:com.google.gwt.user.client.ui'
+             xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
+             ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+             ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
+             ui:generateLocales="default">
+
+  <g:HTMLPanel ui:field="panel">
+    <h1>
+      <ui:msg description="Профиль" key="lkProfile">Профиль</ui:msg>
+    </h1>
+
+    <b:Panel>
+      <b:PanelHeader>
+        <b:Heading size="H3" text="Основное">
+          <ui:attribute name="text" description="GeneralSettings"/>
+        </b:Heading>
+      </b:PanelHeader>
+      <b:PanelBody>
+        <g:HTMLPanel>
+          <b:Row>
+            <b:Column size="XS_6 SM_5 MD_4 LG_3">
+              <b:CheckBox ui:field="extendAccount">
+                <ui:msg description="Расширенный аккаунт"
+                        key="extendAccount">
+                  Расширенный аккаунт
+                </ui:msg>
+              </b:CheckBox>
+            </b:Column>
+            <b:Column size="XS_1 SM_1 MD_1 LG_1">
+              <b:Button type="LINK" icon="QUESTION_CIRCLE"/>
+            </b:Column>
+            <b:Column size="XS_5 SM_6 MD_7 LG_8">
+              <g:HTMLPanel>
+                <ul>
+                  <li>
+                    Даёт возможность не отображать игры на главной
+                  </li>
+                </ul>
+              </g:HTMLPanel>
+            </b:Column>
+          </b:Row>
+
+          <hr/>
+          <b:Row>
+            <b:Column size="XS_9 SM_9 MD_9 LG_9">
+              <b:Row>
+                <b:Column size="MD_12">
+                  <b:Button ui:field="removeAccount" type="DANGER">
+                    <ui:msg description="Удалить аккаунт" key="removeAccount">
+                      Удалить аккаунт
+                    </ui:msg>
+                  </b:Button>
+                </b:Column>
+              </b:Row>
+            </b:Column>
+          </b:Row>
+        </g:HTMLPanel>
+      </b:PanelBody>
+    </b:Panel>
+
+  </g:HTMLPanel>
+</ui:UiBinder>

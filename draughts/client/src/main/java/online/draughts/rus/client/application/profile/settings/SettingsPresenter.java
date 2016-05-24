@@ -20,14 +20,14 @@ import online.draughts.rus.shared.util.StringUtils;
 
 
 public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView> implements SettingsUiHandlers {
-  public static final NestedSlot SLOT_SETTINGS = new NestedSlot();
+  static final NestedSlot SLOT_SETTINGS = new NestedSlot();
   private final DraughtsMessages messages;
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final PlaySession playSession;
   private final ClientConfiguration config;
   private PlayerDto player;
 
-  SettingsPresenter(
+  private SettingsPresenter(
       EventBus eventBus,
       MyView view,
       DraughtsMessages messages,

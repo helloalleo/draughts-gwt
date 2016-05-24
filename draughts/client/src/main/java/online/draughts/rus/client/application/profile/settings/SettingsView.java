@@ -80,12 +80,6 @@ public class SettingsView extends ViewWithUiHandlers<SettingsUiHandlers> impleme
     getUiHandlers().subscribeOnNewsletter(subscribeOnNewsletter.getValue());
   }
 
-  @SuppressWarnings("unused")
-  @UiHandler("removeAccount")
-  public void onRemoveAccount(ClickEvent event) {
-    Window.Location.assign(config.removeAccountUrl());
-  }
-
   public static class ViewFactoryImpl implements SettingsPresenter.ViewFactory {
 
     private final Binder binder;
