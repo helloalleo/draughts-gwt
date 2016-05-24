@@ -129,6 +129,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
    * @return translated "Black"
    */
   @DefaultMessage("Black")
+  @Key("black_with_ending")
+  String black_with_ending();
+
+  /**
+   * Translated "Black".
+   * 
+   * @return translated "Black"
+   */
+  @DefaultMessage("Black")
   @Key("blacks")
   String blacks();
 
@@ -140,15 +149,6 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Black`s turn")
   @Key("blacksTurn")
   String blacksTurn();
-
-  /**
-   * Translated "Black".
-   * 
-   * @return translated "Black"
-   */
-  @DefaultMessage("Black")
-  @Key("black_with_ending")
-  String black_with_ending();
 
   /**
    * Translated "Cancel".
@@ -340,15 +340,6 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String errorWhileSavingGame();
 
   /**
-   * Translated "Error while connecting to server".
-   * 
-   * @return translated "Error while connecting to server"
-   */
-  @DefaultMessage("Error while connecting to server")
-  @Key("failedToConnectToServer")
-  String failedToConnectToServer();
-
-  /**
    * Translated "Fail to launch the Game".
    * 
    * @return translated "Fail to launch the Game"
@@ -356,6 +347,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Fail to launch the Game")
   @Key("failToStartGame")
   String failToStartGame();
+
+  /**
+   * Translated "Error while connecting to server".
+   * 
+   * @return translated "Error while connecting to server"
+   */
+  @DefaultMessage("Error while connecting to server")
+  @Key("failedToConnectToServer")
+  String failedToConnectToServer();
 
   /**
    * Translated "Additional time (Fischer’s clock)<br/><small>0 or empty to disable</small>".
@@ -374,6 +374,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Game not found")
   @Key("gameNotFound")
   String gameNotFound();
+
+  /**
+   * Translated "Giveaway".
+   * 
+   * @return translated "Giveaway"
+   */
+  @DefaultMessage("Giveaway")
+  @Key("giveaway")
+  String giveaway();
 
   /**
    * Translated "Home".
@@ -421,18 +430,18 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String inviteCaption();
 
   /**
-   * Translated "{0} invites you to play. You are playing {1}. Match time {2} (min.), extra time {3} (sec.). Accept the challenge?".
+   * Translated "{0} invites you to play. You are playing the {1} {2}. Match time {3} (min.), extra time {4} (sec.). Accept the challenge?".
    * 
-   * @return translated "{0} invites you to play. You are playing {1}. Match time {2} (min.), extra time {3} (sec.). Accept the challenge?"
+   * @return translated "{0} invites you to play. You are playing the {1} {2}. Match time {3} (min.), extra time {4} (sec.). Accept the challenge?"
    */
   @DefaultMessage("{0} invites you to play. You are playing the {1} {2}. Match time {3} (min.), extra time {4} (sec.). Accept the challenge?")
   @Key("inviteMessage")
-  String inviteMessage(String message, String arg0, String arg1, String arg2, String arg3);
+  String inviteMessage(String arg0,  String arg1,  String arg2,  String arg3,  String arg4);
 
   /**
-   * Translated "Inviting <i>{0}</i> to play {1}".
+   * Translated "Inviting <i>{0}</i> to play:".
    * 
-   * @return translated "Inviting <i>{0}</i> to play {1}"
+   * @return translated "Inviting <i>{0}</i> to play:"
    */
   @DefaultMessage("Inviting <i>{0}</i> to play:")
   @Key("inviteToPlay")
@@ -466,11 +475,11 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String logout();
 
   /**
-   * Translated "Message to admins (optional)".
+   * Translated "Message to admins (not obligatory)".
    * 
-   * @return translated "Message to admins (optional)"
+   * @return translated "Message to admins (not obligatory)"
    */
-  @DefaultMessage("Message to admins (optional)")
+  @DefaultMessage("Message to admins (not obligatory)")
   @Key("messageToAdmins")
   String messageToAdmins();
 
@@ -491,6 +500,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Moderator")
   @Key("moderator")
   String moderator();
+
+  /**
+   * Translated "How can I help you?".
+   * 
+   * @return translated "How can I help you?"
+   */
+  @DefaultMessage("How can I help you?")
+  @Key("moderatorGreeting")
+  String moderatorGreeting();
 
   /**
    * Translated "My games".
@@ -898,6 +916,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String timeOutOpponentLose();
 
   /**
+   * Translated "The comment is too long".
+   * 
+   * @return translated "The comment is too long"
+   */
+  @DefaultMessage("The comment is too long")
+  @Key("tooLongComment")
+  String tooLongComment();
+
+  /**
    * Translated "Name is too long".
    * 
    * @return translated "Name is too long"
@@ -923,6 +950,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("Page not found")
   @Key("unrecognizedPlace")
   String unrecognizedPlace();
+
+  /**
+   * Translated "{0} is offline but you can text him (her).".
+   * 
+   * @return translated "{0} is offline but you can text him (her)."
+   */
+  @DefaultMessage("{0} is offline but you can text him (her).")
+  @Key("userOfflineButYouCanMessageHim")
+  String userOfflineButYouCanMessageHim(String arg0);
 
   /**
    * Translated "Waiting response.".
@@ -957,6 +993,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
    * @return translated "White"
    */
   @DefaultMessage("White")
+  @Key("white_with_ending")
+  String white_with_ending();
+
+  /**
+   * Translated "White".
+   * 
+   * @return translated "White"
+   */
+  @DefaultMessage("White")
   @Key("whites")
   String whites();
 
@@ -968,15 +1013,6 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("White`s turn")
   @Key("whitesTurn")
   String whitesTurn();
-
-  /**
-   * Translated "White".
-   * 
-   * @return translated "White"
-   */
-  @DefaultMessage("White")
-  @Key("white_with_ending")
-  String white_with_ending();
 
   /**
    * Translated "{0}, {1}".
@@ -1058,10 +1094,4 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("<span style=\"color:green;\">Your turn</span>")
   @Key("yourTurn")
   String yourTurn();
-
-  String moderatorGreeting();
-
-  String userOfflineButYouCanMessageHim(String offlineUserName);
-
-  String giveaway();
 }

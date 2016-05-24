@@ -19,6 +19,7 @@ import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
 import com.gwtplatform.mvp.client.view.PopupPositioner;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.NotationPanel;
+import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
@@ -209,13 +210,10 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   private void initCommentPanel() {
     final int offset = currentSession.isLoggedIn() ? loggedInCommentPanel.getOffsetHeight()
         : notLoggedInCommentPanel.getOffsetHeight();
-    final int height = main.getOffsetHeight() / 2 - commentStrokeHeading.getOffsetHeight()
+    final int height = 600 / 2 - commentStrokeHeading.getOffsetHeight()
         - caption.getOffsetHeight() - offset - 20;
     gameCommentsScroll.setHeight(height + "px");
-    final String commentFieldWidth = "400px";
-    gameCommentsScroll.setWidth(commentFieldWidth);
     currentStrokeCommentScroll.setHeight(height + "px");
-    currentStrokeCommentScroll.setWidth(commentFieldWidth);
   }
 
   @Override
@@ -373,9 +371,15 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   }
 
   private void submitComment() {
-    if (commentCurrentStrokeTextArea.getText().isEmpty()) {
+    final String comment = commentCurrentStrokeTextArea.getText();
+    if (StringUtils.isEmpty(comment)) {
       return;
     }
+    if (comment.length() > Integer.valueOf(config.maxCommentLength())) {
+      Growl.growlNotif(messages.tooLongComment() + " " + comment.length());
+      return;
+    }
+
     int cursor = notationCursor - 1;
     Element current = getStrokeById(cursor);
     Element prev = getStrokeById(cursor - 1);
@@ -402,14 +406,14 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     final String oComment = oldComment.length() != 0
         ? (oldComment + NotationPanel.USER_COMMENT_SEP)
         : "";
-    String text = commentCurrentStrokeTextArea.getText().replace(config.escapeChars(), "");
+    String text = comment.replaceAll(config.escapeChars(), "");
     text = SimpleHtmlSanitizer.getInstance().sanitize(text).asString();
-    final String gameComment = text.replace("\n", NotationPanel.COMMENT_SEP);
+    String gameComment = text.replace("\n", NotationPanel.COMMENT_SEP);
     final String newComment = oComment + gameComment + NotationPanel.COMMENT_SEP;
 
     current.setAttribute(NotationPanel.DATA_COMMENT_ATTR, newComment);
 
-    commentCurrentStrokeTextArea.setText("");
+    commentCurrentStrokeTextArea.clear();
 //    leftSymbolsLabel.setText(config.strokeCommentLength());
     commentCurrentStrokeTextArea.setFocus(false);
 

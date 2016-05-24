@@ -24,12 +24,12 @@
 
       <g:HTMLPanel ui:field="body">
         <b:Row>
-          <b:Column size="XS_5 SM_5 MD_5 LG_5" ui:field="draughtsDeskColumn">
+          <b:Column size="XS_10 SM_5 MD_5 LG_5" ui:field="draughtsDeskColumn">
             <g:SimplePanel ui:field="deskPanel"/>
           </b:Column>
-          <b:Column size="XS_7 SM_7 MD_7 LG_7">
+          <b:Column size="XS_12 SM_7 MD_7 LG_7">
             <b:Row>
-              <b:Column size="XS_6 SM_6 MD_5 LG_4">
+              <b:Column size="XS_6 SM_6 MD_4 LG_3">
                 <g:HTMLPanel ui:field="notationInfoPanel">
                   <b:ButtonGroup addStyleNames="{res.style.playerControls}">
                     <!--<b:Button ui:field="toStartButton" icon="FAST_BACKWARD" size="SMALL" title="↑"/>-->
@@ -70,7 +70,7 @@
                 </g:HTMLPanel>
 
               </b:Column>
-              <b:Column size="XS_6 SM_6 MD_5 LG_8">
+              <b:Column size="XS_6 SM_6 MD_8 LG_9">
                 <b:Heading size="H4" ui:field="allCommentsHeading" text="Все комментарии">
                   <ui:attribute name="text" description="Все комментарии"/>
                 </b:Heading>
@@ -99,7 +99,7 @@
                   </g:Label>
                 </g:HTMLPanel>
                 <g:HTMLPanel ui:field="loggedInCommentPanel" visible="false">
-                  <b:TextArea ui:field="commentCurrentStrokeTextArea" maxLength="250"/>
+                  <b:TextArea ui:field="commentCurrentStrokeTextArea" maxLength="1000"/>
                   <b:Label ui:field="leftSymbolsLabel" addStyleNames="{res.style.leftSymbols}"
                            pull="LEFT"/>
                   <b:Button ui:field="commentCurrentStrokeButton" pull="RIGHT" icon="PENCIL"
@@ -107,7 +107,6 @@
                     <ui:attribute name="text" description="Комментировать"/>
                   </b:Button>
                 </g:HTMLPanel>
-
               </b:Column>
             </b:Row>
           </b:Column>

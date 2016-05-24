@@ -250,8 +250,10 @@ public class PlayShowPanel extends Composite {
       column.add(item);
       row.add(column);
     }
-    playRowList.add(row);
-    playRowList.add(new Hr());
+    if (row.getWidgetCount() > 0) {
+      playRowList.add(row);
+      playRowList.add(new Hr());
+    }
   }
 
   void moreGameOnPanel() {

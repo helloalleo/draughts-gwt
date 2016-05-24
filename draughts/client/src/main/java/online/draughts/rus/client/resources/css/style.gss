@@ -165,18 +165,21 @@ body {
 @media(min-width: 768px) {
     .dialogBoxPlayer {
         min-width: 750px;
+        max-width: 750px;
     }
 }
 
 @media(min-width: 992px) {
     .dialogBoxPlayer {
         min-width: 970px;
+        max-width: 970px;
     }
 }
 
 @media(min-width: 1200px) {
     .dialogBoxPlayer {
         min-width: 1170px;
+        max-width: 1170px;
     }
 }
 

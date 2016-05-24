@@ -24,5 +24,7 @@ public interface ClientConfiguration extends ConstantsWithLookup {
 
   String lastGameMessagesLoad();
 
+  String maxCommentLength();
+
   String removeAccountUrl();
 }
