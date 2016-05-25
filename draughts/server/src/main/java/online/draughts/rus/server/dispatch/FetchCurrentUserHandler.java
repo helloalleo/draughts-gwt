@@ -43,22 +43,22 @@ public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayer
 
   @Override
   public FetchCurrentPlayerResult execute(FetchCurrentPlayerAction fetchCurrentPlayerAction, ExecutionContext executionContext) throws ActionException {
-    try {
-      if (!authProvider.get()) {
-        final PlayerDto player = new PlayerDto();
-        return new FetchCurrentPlayerResult(player);
-      }
-      HttpSession session = requestProvider.get().getSession();
-      final Player bySessionId = Player.getInstance().findBySessionId(session.getId());
-      PlayerDto dto = new PlayerDto();
-      if (bySessionId != null) {
-        dto = mapper.map(bySessionId, PlayerDto.class);
-      }
-      return new FetchCurrentPlayerResult(dto);
-    } catch (Exception e) {
-      logger.error(e.getMessage(), e);
-      return new FetchCurrentPlayerResult(new PlayerDto());
+//    try {
+    if (!authProvider.get()) {
+      final PlayerDto player = new PlayerDto();
+      return new FetchCurrentPlayerResult(player);
     }
+    HttpSession session = requestProvider.get().getSession();
+    final Player bySessionId = Player.getInstance().findBySessionId(session.getId());
+    PlayerDto dto = new PlayerDto();
+    if (bySessionId != null) {
+      dto = mapper.map(bySessionId, PlayerDto.class);
+    }
+    return new FetchCurrentPlayerResult(dto);
+//    } catch (Exception e) {
+//      logger.error(e.getMessage(), e);
+//      return new FetchCurrentPlayerResult(new PlayerDto());
+//    }
   }
 
   @Override

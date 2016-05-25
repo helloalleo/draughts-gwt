@@ -8,9 +8,6 @@ import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 
-import static online.draughts.rus.shared.dto.GameDto.GameType.DRAUGHTS;
-import static online.draughts.rus.shared.dto.GameDto.GameType.GIVEAWAY;
-
 /**
  * Created with IntelliJ IDEA.
  * User: alekspo
@@ -23,7 +20,7 @@ public class PlayComponentUtil {
     GameDto.GameEnds gameEnd = null;
     final GameDto.GameType gameType = playSession.getGameType();
     if (0 == myDraughtsSize) {
-      GameResultDialogBox.setMessage(messages.youLose(), eventBus).show();
+      GameResultDialogBox.setMessage(endGameMessage(messages, gameType, false), eventBus).show();
       if (white) {
         gameEnd = blackWin(gameType);
       } else {
@@ -31,7 +28,7 @@ public class PlayComponentUtil {
       }
     }
     if (0 == opponentDraughtsSize) {
-      GameResultDialogBox.setMessage(messages.youWon(), eventBus).show();
+      GameResultDialogBox.setMessage(endGameMessage(messages, gameType, true), eventBus).show();
       if (white) {
         gameEnd = whiteWin(gameType);
       } else {
@@ -48,6 +45,17 @@ public class PlayComponentUtil {
       public void onSuccess(GameDto result) {
       }
     }));
+  }
+
+  private static String endGameMessage(DraughtsMessages messages, GameDto.GameType gameType, boolean win) {
+    switch (gameType) {
+      case DRAUGHTS:
+        return win ? messages.youWon() : messages.youLose();
+      case GIVEAWAY:
+        return !win ? messages.youLose() : messages.youWon();
+      default:
+        return "";
+    }
   }
 
   private static GameDto.GameEnds whiteWin(GameDto.GameType gameType) {

@@ -820,7 +820,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 
   @Override
   public void showInviteDialog(ClickHandler inviteClickHandler) {
-    inviteDialogBox = new InviteDialogBox(inviteClickHandler) {
+    inviteDialogBox = new InviteDialogBox(player.isSubscribed(), inviteClickHandler) {
       @Override
       public void didNotResponse() {
         getUiHandlers().didNotResponse();

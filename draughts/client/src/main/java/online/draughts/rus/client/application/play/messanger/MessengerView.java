@@ -21,6 +21,7 @@ import com.gwtplatform.mvp.client.view.PopupPositioner;
 import online.draughts.rus.client.application.play.PlayView;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.*;
@@ -95,6 +96,7 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     for (int i = 0; i < 15; i++) {
       for (int j = 0; j < 5; j++) {
         final String smile = codes.get(j) + Integer.toHexString(i);
+        Logger.debug(smile);
         final HTML smileHtml = new HTML("&#x" + smile + ";");
         int ch = Integer.parseInt(smile, 16);
         String sm = new String(Character.toChars(ch));

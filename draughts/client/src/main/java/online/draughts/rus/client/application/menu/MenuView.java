@@ -8,6 +8,7 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
+import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -84,7 +85,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
 
   private void setLocale(String locale) {
     String hash = Window.Location.getHash();
-    Window.Location.assign("/?locale=" + locale + hash);
+    Window.Location.assign("/shashki/?locale=" + locale + hash);
     cookies.setLocale(locale);
   }
 
@@ -146,8 +147,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     }
 
     anchor = new AnchorListItem();
-    final Image ruImg = new Image(resources.images().russiaFlag().getSafeUri());
-    ruImg.setResponsive(true);
+    HTML ruImg = new HTML("&#127479;&#127482;");
     anchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
@@ -161,12 +161,11 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     navRight.add(anchor);
 
     anchor = new AnchorListItem();
-    final Image uaImg = new Image(resources.images().ukraineFlag().getSafeUri());
-    uaImg.setResponsive(true);
+    HTML uaImg = new HTML("&#127482;&#127462;");
     anchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        setLocale("ua");
+        setLocale("ru_UA");
       }
     });
     a = (Anchor) anchor.getWidget(0);
@@ -177,8 +176,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     navRight.add(anchor);
 
     anchor = new AnchorListItem();
-    final Image enImg = new Image(resources.images().usFlag().getSafeUri());
-    enImg.setResponsive(true);
+    HTML enImg = new HTML("&#127468;&#127463;");
     anchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {

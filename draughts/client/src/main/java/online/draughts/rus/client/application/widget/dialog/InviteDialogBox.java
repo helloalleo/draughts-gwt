@@ -32,7 +32,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   private final Button submitButton;
   private final HorizontalPanel waitMessage = new HorizontalPanel();
   private final TextBox customTime;
-  private final CheckBox publishGame;
+  private CheckBox publishGame;
   private final Timer waitResponseTimer;
   private final ListBox playsListBox;
   private final ListBox minutesListBox;
@@ -43,7 +43,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
   private Timer timerCounterTimer;
   private Label waitMessageLabel;
 
-  protected InviteDialogBox(ClickHandler submitClickHandler) {
+  protected InviteDialogBox(boolean subscribed, ClickHandler submitClickHandler) {
     HTML caption = new HTML(messages.inviteCaption());
     caption.getElement().addClassName(resources.style().dialogCaptionInfo());
     setHTML(new SafeHtmlBuilder().appendHtmlConstant(caption.getElement().getString()).toSafeHtml());
@@ -59,7 +59,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     panel.add(playsListBox);
 
     submitButton = new Button(messages.next());
-    Button cancelButton = new Button(messages.cancel());
+    final Button cancelButton = new Button(messages.cancel());
 
     Label label = new Label(messages.chooseYourColor());
     panel.add(label);
@@ -136,9 +136,11 @@ public abstract class InviteDialogBox extends BasicDialogBox {
     panel.add(fisherTimeLabel);
     panel.add(fisherTime);
 
-    publishGame = new CheckBox(messages.publishGame());
-    publishGame.setValue(cookies.isPublishGame());
-    panel.add(publishGame);
+    if (subscribed) {
+      publishGame = new CheckBox(messages.publishGame());
+      publishGame.setValue(cookies.isPublishGame());
+      panel.add(publishGame);
+    }
 
     final Icon waitImage = new Icon(IconType.SPINNER);
     waitImage.setSize(IconSize.LARGE);
@@ -201,7 +203,8 @@ public abstract class InviteDialogBox extends BasicDialogBox {
           event.preventDefault();
           return;
         }
-        cookies.setPublishGame(publishGame.getValue());
+        final boolean publish = InviteDialogBox.this.publishGame == null ? true : InviteDialogBox.this.publishGame.getValue();
+        cookies.setPublishGame(publish);
         waitMessage.setVisible(true);
         waitResponseTimer.schedule(WAIT * 1000);
         timerCounterTimer.scheduleRepeating(1000);
@@ -213,7 +216,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
         }
         String fTime = fisherTime.getValue().isEmpty() ? "0" : fisherTime.getValue();
         submitted(GameDto.GameType.valueOf(playsListBox.getSelectedValue()), whiteRadio.getValue(),
-            timeOnPlay, fTime, publishGame.getValue());
+            timeOnPlay, fTime, publish);
         submitButton.setEnabled(false);
       }
     });
