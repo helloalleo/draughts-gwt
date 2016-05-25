@@ -68,6 +68,6 @@ public class GamesResourceImpl implements GamesResource {
     if (!authProvider.get()) {
       throw new NotAuthorizedException("Access denied");
     }
-    return gameService.find(gameId);
+    return gameService.findDto(gameId);
   }
 }

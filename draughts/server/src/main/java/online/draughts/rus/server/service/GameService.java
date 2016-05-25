@@ -131,8 +131,12 @@ public class GameService {
     return playerService.save(player);
   }
 
-  public GameDto find(Long gameId) {
-    return mapper.map(Game.getInstance().find(gameId), GameDto.class);
+  public Game find(Long gameId) {
+    return Game.getInstance().find(gameId);
+  }
+
+  public GameDto findDto(Long gameId) {
+    return mapper.map(find(gameId), GameDto.class);
   }
 
   public List<Move> findGameMoves(Long gameId) {
