@@ -35,8 +35,7 @@ public class GameService {
   }
 
   public List<GameDto> findRange(int offset, int limit) {
-    List<GameDto> games = DozerHelper.map(mapper, Game.getInstance().findRange(offset, limit), GameDto.class);
-    return games;
+    return DozerHelper.map(mapper, Game.getInstance().findRange(offset, limit), GameDto.class);
   }
 
   public List<GameDto> findUserGames(HttpSession session, int offset, int limit) {
@@ -45,8 +44,7 @@ public class GameService {
       throw new RuntimeException("Not authorized");
     }
     List<Game> games = findUserGames(loggedInUser.getId(), offset, limit);
-    List<GameDto> mapped = DozerHelper.map(mapper, games, GameDto.class);
-    return mapped;
+    return DozerHelper.map(mapper, games, GameDto.class);
   }
 
   public List<Game> findUserGames(Long playerId, int offset, int limit) {
@@ -76,8 +74,7 @@ public class GameService {
     saveFriend(playerWhite, playerBlack, playerWhiteIsFriendOfPlayerBlack);
     boolean playerBlackIsFriendOfPlayerWhite = friendService.isPlayerFriendOf(playerBlack.getId(), playerWhite.getId());
     saveFriend(playerBlack, playerWhite, playerBlackIsFriendOfPlayerWhite);
-    GameDto mapped = mapper.map(game, GameDto.class);
-    return mapped;
+    return mapper.map(game, GameDto.class);
   }
 
   private void saveFriend(Player playerBlack, Player playerWhite, boolean playerBlackIsFriendOfPlayerWhite) {
@@ -95,7 +92,7 @@ public class GameService {
     player.setGamePlayed(player.getGamePlayed() + 1);
     final GameDto.GameEnds playEndStatus = game.getPlayEndStatus();
     if (null != playEndStatus) {
-      boolean whiteWon = false, blackWon = false, white = false, draw = false;
+      boolean whiteWon = false, blackWon = false, white = false;
       final boolean blackWin = GameDto.GameEnds.BLACK_WIN.equals(playEndStatus);
       final boolean whiteWin = GameDto.GameEnds.WHITE_WIN.equals(playEndStatus);
       final boolean blackSurrender = GameDto.GameEnds.SURRENDER_BLACK.equals(playEndStatus);

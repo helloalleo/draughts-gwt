@@ -45,7 +45,7 @@ public class GamesResourceImpl implements GamesResource {
   @Override
   public List<GameDto> getLoggedInUserGames(@DefaultValue(DEFAULT_OFFSET) int offset, @DefaultValue(DEFAULT_LIMIT) int limit) {
     if (!authProvider.get()) {
-      return null;
+      throw new NotAuthorizedException("Access denied");
     }
     return gameService.findUserGames(request.getSession(), offset, limit);
   }

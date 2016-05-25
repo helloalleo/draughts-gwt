@@ -44,6 +44,7 @@ public class LogoutServlet extends HttpServlet {
 
     req.getSession().invalidate();
     resp.addCookie(new Cookie("loggedIn", "0"));
+    resp.addCookie(new Cookie("MY_GAMES", "false"));
     final String draughtsContext = "/" + Config.CONTEXT + "/";
     if (remove) {
       resp.sendRedirect(draughtsContext);
