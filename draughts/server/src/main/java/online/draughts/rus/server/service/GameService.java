@@ -5,9 +5,10 @@ import com.google.inject.Singleton;
 import online.draughts.rus.server.domain.*;
 import online.draughts.rus.server.util.Rating;
 import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.util.DozerHelper;
+import org.dozer.Mapper;
 
 import javax.servlet.http.HttpSession;
-import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 
@@ -21,25 +22,31 @@ import java.util.Objects;
 public class GameService {
   private final PlayerService playerService;
   private final FriendService friendService;
+  private final Mapper mapper;
 
   @Inject
   public GameService(
       PlayerService playerService,
-      FriendService friendService) {
+      FriendService friendService,
+      Mapper mapper) {
     this.playerService = playerService;
     this.friendService = friendService;
+    this.mapper = mapper;
   }
 
-  public List<Game> findRange(int offset, int limit) {
-    return Game.getInstance().findRange(offset, limit);
+  public List<GameDto> findRange(int offset, int limit) {
+    List<GameDto> games = DozerHelper.map(mapper, Game.getInstance().findRange(offset, limit), GameDto.class);
+    return games;
   }
 
-  public List<Game> findUserGames(HttpSession session, int offset, int limit) {
+  public List<GameDto> findUserGames(HttpSession session, int offset, int limit) {
     final Player loggedInUser = playerService.getLoggedInUser(session);
     if (loggedInUser == null) {
       throw new RuntimeException("Not authorized");
     }
-    return findUserGames(loggedInUser.getId(), offset, limit);
+    List<Game> games = findUserGames(loggedInUser.getId(), offset, limit);
+    List<GameDto> mapped = DozerHelper.map(mapper, games, GameDto.class);
+    return mapped;
   }
 
   public List<Game> findUserGames(Long playerId, int offset, int limit) {
@@ -54,10 +61,11 @@ public class GameService {
     throw new RuntimeException("Not Implemented");
   }
 
-  public Game save(Game game) {
+  public GameDto save(GameDto gameDto) {
+    Game game = mapper.map(gameDto, Game.class);
     if (game.getId() == 0) {
       game.update();
-      return game;
+      return mapper.map(game, GameDto.class);
     }
 
     Player playerBlack = updatePlayerStat(game, game.getPlayerBlack().getId());
@@ -65,14 +73,14 @@ public class GameService {
     game.update();
 
     boolean playerWhiteIsFriendOfPlayerBlack = friendService.isPlayerFriendOf(playerWhite.getId(), playerBlack.getId());
-    if (!playerWhiteIsFriendOfPlayerBlack) {
-      Friend friend = new Friend();
-      friend.setMe(playerWhite);
-      friend.setFriendOf(playerBlack);
-
-      friendService.save(friend);
-    }
+    saveFriend(playerWhite, playerBlack, playerWhiteIsFriendOfPlayerBlack);
     boolean playerBlackIsFriendOfPlayerWhite = friendService.isPlayerFriendOf(playerBlack.getId(), playerWhite.getId());
+    saveFriend(playerBlack, playerWhite, playerBlackIsFriendOfPlayerWhite);
+    GameDto mapped = mapper.map(game, GameDto.class);
+    return mapped;
+  }
+
+  private void saveFriend(Player playerBlack, Player playerWhite, boolean playerBlackIsFriendOfPlayerWhite) {
     if (!playerBlackIsFriendOfPlayerWhite) {
       Friend friend = new Friend();
       friend.setMe(playerBlack);
@@ -80,7 +88,6 @@ public class GameService {
 
       friendService.save(friend);
     }
-    return game;
   }
 
   private Player updatePlayerStat(Game game, long playerId) {
@@ -124,8 +131,8 @@ public class GameService {
     return playerService.save(player);
   }
 
-  public Game find(Long gameId) {
-    return Game.getInstance().find(gameId);
+  public GameDto find(Long gameId) {
+    return mapper.map(Game.getInstance().find(gameId), GameDto.class);
   }
 
   public List<Move> findGameMoves(Long gameId) {
