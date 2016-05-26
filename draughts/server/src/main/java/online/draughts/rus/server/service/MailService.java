@@ -52,7 +52,7 @@ public class MailService {
     try {
       MimeMessage message = new MimeMessage(mailSession);
       message.setSubject(String.format("Новое сообщение от %s", sender == null ? "не указано" : sender.getPublicName()), "UTF-8");
-      message.setFrom(new InternetAddress(Config.FROM_EMAIL, "ШашкиОнлайн.COM", "UTF-8"));
+      message.setFrom(new InternetAddress(Config.FROM_EMAIL, "shashki.online", "UTF-8"));
       message.addRecipient(Message.RecipientType.TO,
           new InternetAddress(receiver == null ? Config.ADMIN_MAIL : receiver.getEmail(),
               receiver == null ? "Админ" : receiver.getPublicName(), "UTF-8"));

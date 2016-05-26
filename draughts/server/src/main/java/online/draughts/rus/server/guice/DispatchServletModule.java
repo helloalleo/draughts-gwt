@@ -34,6 +34,7 @@ import online.draughts.rus.server.util.AuthUtils;
 
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
 
 class DispatchServletModule extends ServletModule {
@@ -68,7 +69,13 @@ class DispatchServletModule extends ServletModule {
           ServletRequest request, ServletResponse response, FilterChain chain)
           throws IOException, ServletException {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
-        if (httpRequest != null) {
+        HttpServletResponse httpResponse = (HttpServletResponse) response;
+        if (null != httpResponse) {
+          httpResponse.addHeader("Access-Control-Allow-Origin", "*");
+          httpResponse.addHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,DELETE,PUT,HEAD");
+          httpResponse.addHeader("Access-Control-Allow-Headers", "X-Requested-With, Origin, Content-Type, Accept");
+        }
+        if (null != httpRequest) {
           Boolean authenticated = (Boolean) httpRequest.getSession().getAttribute(AuthUtils.AUTHENTICATED);
           httpRequest.setAttribute(
               Key.get(Boolean.class, Names.named(AuthUtils.AUTHENTICATED)).toString(),

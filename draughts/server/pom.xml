@@ -17,7 +17,7 @@
 
   <name>server</name>
 
-  <url>http://шашкионлайн.com</url>
+  <url>http://shashki.online</url>
 
   <properties>
     <app.version>1</app.version>
@@ -293,6 +293,7 @@
       <groupId>org.jukito</groupId>
       <artifactId>jukito</artifactId>
     </dependency>
+
     <dependency>
       <groupId>com.google.appengine</groupId>
       <artifactId>appengine-testing</artifactId>

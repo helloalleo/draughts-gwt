@@ -198,13 +198,13 @@ public class ServerChannel extends ChannelServer {
       coreChannel.sendMessage(receiverChannel, message);
       if (GameMessageDto.MessageType.PLAY_INVITE.equals(message.getMessageType())) {
         Map<String, String> inviteToPlay = new HashMap<>();
-        inviteToPlay.put("ru", "Вас позвали играть в шашки на сайте ШашкиОнлайн.COM!");
+        inviteToPlay.put("ru", "Вас позвали играть в шашки на сайте shashki.online!");
         inviteToPlay.put("en", "You have a new challenge on the site Draughts.Online!");
         sendPushNotification(receiver.getNotificationsUserId(), inviteToPlay);
       }
     } else if (GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
       Map<String, String> newMessage = new HashMap<>();
-      newMessage.put("ru", "Вам новое сообщение на сайте ШашкиОнлайн.COM!");
+      newMessage.put("ru", "Вам новое сообщение на сайте shashki.online!");
       newMessage.put("en", "You have a new message on the site Draughts.Online!");
       sendPushNotification(receiver.getNotificationsUserId(), newMessage);
     }
@@ -225,7 +225,7 @@ public class ServerChannel extends ChannelServer {
         "    \"en\": \"" + message.get("en") + "\"},\n" +
         "    \"include_segments\": [\"All\"],\n" +
         "    \"url\": \"http://xn--80aaxfchnde0hb.com/" + Config.CONTEXT + "/\"," +
-        "    \"headings\": {\"en\": \"" + Config.SITE_NAME_EN + "\", \"ru\": \"ШашкиОнлайн.COM\"}\n" +
+        "    \"headings\": {\"en\": \"" + Config.SITE_NAME_EN + "\", \"ru\": \"" + Config.SITE_NAME_RU + "\"}\n" +
         "}";
     StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);
     httpPost.setEntity(entity);

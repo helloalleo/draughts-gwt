@@ -35,7 +35,7 @@
     <!-- Channel API -->
     <script type="text/javascript" src="/_ah/channel/jsapi"></script>
 
-    <script type="text/javascript" language="javascript" src="Application/Application.nocache.js"></script>
+    <script type="text/javascript" language="javascript" src="http://xn--80aaxfchnde0hb.com/shashki/Application/Application.nocache.js"></script>
 
     <link href='//fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
 
@@ -111,7 +111,7 @@
     <a href="http://reformal.ru">
         <img src="http://media.reformal.ru/reformal.png"/>
     </a>
-    <a href="http://draughtsonline.reformal.ru">Oтзывы и предложения для ШашкиОнлайн.COM</a>
+    <a href="http://draughtsonline.reformal.ru">Oтзывы и предложения для shashki.online</a>
 </noscript>
 <script>
     (function (i, s, o, g, r, a, m) {
@@ -148,7 +148,7 @@
             showCredit: false
         },
         welcomeNotification: {
-            title: 'Подписка на ШашкиОнлайн.COM',
+            title: 'Подписка на shashki.online',
             message: 'Спасибо, что подписались!'
         },
         notifyButton: {
