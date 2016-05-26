@@ -13,7 +13,7 @@
 
   <static-files>
     <include path="/shashki/Application">
-      <http-header name="Access-Control-Allow-Origin" value="*"/>
+      <http-header name="Access-Control-Allow-Origin" value="https://shashki.online"/>
     </include>
   </static-files>
 </appengine-web-app>

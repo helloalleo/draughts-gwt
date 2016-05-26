@@ -71,7 +71,7 @@ class DispatchServletModule extends ServletModule {
         HttpServletRequest httpRequest = (HttpServletRequest) request;
         HttpServletResponse httpResponse = (HttpServletResponse) response;
         if (null != httpResponse) {
-          httpResponse.addHeader("Access-Control-Allow-Origin", "*");
+          httpResponse.addHeader("Access-Control-Allow-Origin", Config.SITE_URI);
           httpResponse.addHeader("Access-Control-Allow-Methods", "GET,POST,OPTIONS,DELETE,PUT,HEAD");
           httpResponse.addHeader("Access-Control-Allow-Headers", "X-Requested-With, Origin, Content-Type, Accept");
         }
