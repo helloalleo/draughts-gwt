@@ -75,6 +75,7 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
   }
 
   private void getPlayerChat() {
+    getView().setHeading(player.getPublicName());
     gameMessagesDelegate.withCallback(new AbstractAsyncCallback<List<GameMessageDto>>() {
       @Override
       public void onSuccess(List<GameMessageDto> result) {
@@ -116,6 +117,8 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
     void addMyMessage(String message, Date date);
 
     void addFriendMessage(String message, Date date);
+
+    void setHeading(String publicName);
   }
 
   public interface Factory {

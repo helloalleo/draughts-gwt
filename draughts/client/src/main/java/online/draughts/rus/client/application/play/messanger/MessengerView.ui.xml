@@ -15,9 +15,7 @@
                 <b:PanelHeader ui:field="messengerHeader">
                     <b:Row>
                         <b:Column size="XS_10 SM_10 MD_10 LG_10">
-                            <b:Heading ui:field="messengerHeading" size="H4" text="Сообщения">
-                                <ui:attribute name="text" description="Сообщения"/>
-                            </b:Heading>
+                            <b:Heading ui:field="messengerHeading" size="H4"/>
                         </b:Column>
                         <b:Column size="XS_2 SM_2 MD_2 LG_2">
                             <b:Button ui:field="collapseMessengerButton" icon="CLOSE" type="LINK"/>

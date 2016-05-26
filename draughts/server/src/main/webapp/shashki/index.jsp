@@ -28,14 +28,14 @@
 
     <link rel="shortcut icon" type="image/png" href="/favicon.png">
 
-    <link rel="alternate" href="http://xn--80aaxfchnde0hb.com/?locale=ru" hreflang="ru"/>
-    <link rel="alternate" href="http://xn--80aaxfchnde0hb.com/?locale=ua" hreflang="ru-UA"/>
-    <link rel="alternate" href="http://xn--80aaxfchnde0hb.com/?locale=en" hreflang="en"/>
+    <link rel="alternate" href="https://shashki.online/?locale=ru" hreflang="ru"/>
+    <link rel="alternate" href="https://shashki.online/?locale=ua" hreflang="ru-UA"/>
+    <link rel="alternate" href="https://shashki.online/?locale=en" hreflang="en"/>
 
     <!-- Channel API -->
     <script type="text/javascript" src="/_ah/channel/jsapi"></script>
 
-    <script type="text/javascript" language="javascript" src="http://xn--80aaxfchnde0hb.com/shashki/Application/Application.nocache.js"></script>
+    <script type="text/javascript" language="javascript" src="/shashki/Application/Application.nocache.js"></script>
 
     <link href='//fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
 
@@ -47,8 +47,8 @@
     (function (d, w, c) {
         (w[c] = w[c] || []).push(function() {
             try {
-                w.yaCounter37190295 = new Ya.Metrika({
-                    id:37190295,
+                w.yaCounter37584045 = new Ya.Metrika({
+                    id:37584045,
                     clickmap:true,
                     trackLinks:true,
                     accurateTrackBounce:true,
@@ -70,8 +70,9 @@
         } else { f(); }
     })(document, window, "yandex_metrika_callbacks");
 </script>
-<noscript><div><img src="https://mc.yandex.ru/watch/37190295" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
+<noscript><div><img src="https://mc.yandex.ru/watch/37584045" style="position:absolute; left:-9999px;" alt="" /></div></noscript>
 <!-- /Yandex.Metrika counter -->
+
 <!-- OPTIONAL: include this if you want history support -->
 <iframe id="__gwt_historyFrame" tabIndex='-1'
         style="position:absolute;width:0;height:0;border:0"></iframe>
@@ -114,19 +115,12 @@
     <a href="http://draughtsonline.reformal.ru">Oтзывы и предложения для shashki.online</a>
 </noscript>
 <script>
-    (function (i, s, o, g, r, a, m) {
-        i['GoogleAnalyticsObject'] = r;
-        i[r] = i[r] || function () {
-                    (i[r].q = i[r].q || []).push(arguments)
-                }, i[r].l = 1 * new Date();
-        a = s.createElement(o),
-                m = s.getElementsByTagName(o)[0];
-        a.async = 1;
-        a.src = g;
-        m.parentNode.insertBefore(a, m)
-    })(window, document, 'script', 'https://www.google-analytics.com/analytics.js', 'ga');
+    (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+                (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+            m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+    })(window,document,'script','https://www.google-analytics.com/analytics.js','ga');
 
-    ga('create', 'UA-76960011-1', 'auto');
+    ga('create', 'UA-78356339-1', 'auto');
     ga('send', 'pageview');
 
 </script>

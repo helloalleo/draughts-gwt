@@ -360,6 +360,11 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     messengerMessagesScroll.scrollToBottom();
   }
 
+  @Override
+  public void setHeading(String publicName) {
+    messengerHeading.setText(publicName);
+  }
+
   interface Binder extends UiBinder<PopupPanel, MessengerView> {
   }
 

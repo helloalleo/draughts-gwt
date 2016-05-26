@@ -224,7 +224,7 @@ public class ServerChannel extends ChannelServer {
         "    \"contents\": {\"ru\": \"" + message.get("ru") + "\", " +
         "    \"en\": \"" + message.get("en") + "\"},\n" +
         "    \"include_segments\": [\"All\"],\n" +
-        "    \"url\": \"http://xn--80aaxfchnde0hb.com/" + Config.CONTEXT + "/\"," +
+        "    \"url\": \"https://shashki.online/" + Config.CONTEXT + "/\"," +
         "    \"headings\": {\"en\": \"" + Config.SITE_NAME_EN + "\", \"ru\": \"" + Config.SITE_NAME_RU + "\"}\n" +
         "}";
     StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);

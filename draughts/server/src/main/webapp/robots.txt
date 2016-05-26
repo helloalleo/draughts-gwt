@@ -2,4 +2,4 @@ User-agent: *
 Disallow: /assets
 Disallow: /shashki/Application
 
-Host: xn--80aaxfchnde0hb.com
+Host: shashki.online
