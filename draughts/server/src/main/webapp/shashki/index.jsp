@@ -38,7 +38,8 @@
     <script type="text/javascript" language="javascript" src="/shashki/Application/Application.nocache.js"></script>
 
     <link href='//fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>
-
+    <link rel="manifest" href="/manifest.json">
+    <script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async='async'></script>
     <link rel="stylesheet" href="style.css" type="text/css">
 </head>
 <body>
@@ -124,18 +125,18 @@
     ga('send', 'pageview');
 
 </script>
-<script src="https://cdn.onesignal.com/sdks/OneSignalSDK.js" async='async'></script>
 <script>
     var OneSignal = OneSignal || [];
 
     OneSignal.push(["init", {
         appId: "78dcc7d5-0794-45d8-aaff-4df6f4bef7a7",
-        subdomainName: "draughtsonline",
+//        subdomainName: "draughtsonline",
         safari_web_id: "web.onesignal.auto.5130fec1-dc87-4e71-b719-29a6a70279c4",
+        autoRegister: true,
         promptOptions: {
-            actionMessage: 'Мы хотим присылать Вам приглашения в игру и уведомления о новых сообщениях',
+            actionMessage: 'Мы хотим присылать вам приглашения в игру и уведомления о новых сообщениях',
             exampleNotificationTitleDesktop: 'Это пример уведомления',
-            exampleNotificationMessageDesktop: 'Такое уведомление появится на Вашем компьютере',
+            exampleNotificationMessageDesktop: 'Такое уведомление появится на вашем компьютере',
             exampleNotificationCaption: 'Вы можете отписаться в любое время',
             acceptButtonText: "Продолжить",
             cancelButtonText: "Нет, спасибо",

@@ -1,0 +1,7 @@
+{
+  "name": "Shashki Online",
+  "short_name": "ShashkiOnline",
+  "start_url": "/shashki/",
+  "display": "standalone",
+  "gcm_sender_id": "866202238295"
+}
