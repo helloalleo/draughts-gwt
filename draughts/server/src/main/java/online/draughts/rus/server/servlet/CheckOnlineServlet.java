@@ -37,6 +37,17 @@ public class CheckOnlineServlet extends HttpServlet {
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.HOUR, -Integer.valueOf(Config.GAE_CRON_CHECK_INTERVAL_HOUR));
     for (Player player : players) {
+      player.setRating(0);
+      player.setLastVisited(null);
+      player.setRegisterDate(null);
+      player.setGameDraw(0);
+      player.setGameLost(0);
+      player.setGamePlayed(0);
+      player.setGameWon(0);
+      player.setLastName("");
+      player.setVisitCounter(0);
+      player.update();
+
       Calendar lastVisited = Calendar.getInstance();
       lastVisited.setTime(player.getLastVisited());
       if (calendar.after(lastVisited)) {

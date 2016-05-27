@@ -148,7 +148,7 @@ public class Player extends ModelImpl<Player> {
   }
 
   public void setLastName(String lastName) {
-    this.lastName = lastName;
+//    this.lastName = lastName;
   }
 
   public String getPlayerName() {
@@ -158,7 +158,6 @@ public class Player extends ModelImpl<Player> {
   public void setPlayerName(String playerName) {
     this.playerName = playerName;
   }
-
 
   public void setNotificationsUserId(String notificationsUserId) {
     this.notificationsUserId = notificationsUserId;
@@ -221,7 +220,7 @@ public class Player extends ModelImpl<Player> {
   }
 
   public void setLastVisited(Date lastVisited) {
-    this.lastVisited = lastVisited;
+//    this.lastVisited = lastVisited;
   }
 
   public int getVisitCounter() {
@@ -229,7 +228,7 @@ public class Player extends ModelImpl<Player> {
   }
 
   public void setVisitCounter(int visitCounter) {
-    this.visitCounter = visitCounter;
+//    this.visitCounter = visitCounter;
   }
 
   public int getRating() {
@@ -237,7 +236,7 @@ public class Player extends ModelImpl<Player> {
   }
 
   public void setRating(int rating) {
-    this.rating = rating;
+//    this.rating = rating;
   }
 
   public int getGamePlayed() {
@@ -245,7 +244,7 @@ public class Player extends ModelImpl<Player> {
   }
 
   public void setGamePlayed(int gamePlayed) {
-    this.gamePlayed = gamePlayed;
+//    this.gamePlayed = gamePlayed;
   }
 
   public int getGameWon() {
@@ -253,7 +252,7 @@ public class Player extends ModelImpl<Player> {
   }
 
   public void setGameWon(int gameWon) {
-    this.gameWon = gameWon;
+//    this.gameWon = gameWon;
   }
 
   public int getGameLost() {
@@ -261,7 +260,7 @@ public class Player extends ModelImpl<Player> {
   }
 
   public Player setGameLost(int gameLost) {
-    this.gameLost = gameLost;
+//    this.gameLost = gameLost;
     return this;
   }
 
@@ -270,7 +269,7 @@ public class Player extends ModelImpl<Player> {
   }
 
   public Player setGameDraw(int gameDraw) {
-    this.gameDraw = gameDraw;
+//    this.gameDraw = gameDraw;
     return this;
   }
 
@@ -295,7 +294,7 @@ public class Player extends ModelImpl<Player> {
   }
 
   public void setRegisterDate(Date registerDate) {
-    this.registerDate = registerDate;
+//    this.registerDate = registerDate;
   }
 
   public boolean isSubscribeOnNewsletter() {
@@ -314,7 +313,7 @@ public class Player extends ModelImpl<Player> {
   }
 
   private String getFullName() {
-    return getFirstName() + " " + getLastName();
+    return getFirstName();
   }
 
   @Override
