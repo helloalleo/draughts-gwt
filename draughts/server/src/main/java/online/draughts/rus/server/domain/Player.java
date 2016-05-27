@@ -220,7 +220,7 @@ public class Player extends ModelImpl<Player> {
   }
 
   public void setLastVisited(Date lastVisited) {
-//    this.lastVisited = lastVisited;
+    this.lastVisited = lastVisited;
   }
 
   public int getVisitCounter() {
