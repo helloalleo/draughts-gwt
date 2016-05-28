@@ -54,7 +54,7 @@ public class Config {
 
   public static final boolean DEBUG = Boolean.valueOf(resourceBundle.getString("debug"));
 
-  public static final String GAE_CRON_CHECK_INTERVAL_HOUR = resourceBundle.getString("gae_cron_check_interval_hour");
+  public static final String GAE_CRON_RESET_USERS_INTERVAL_HOUR = resourceBundle.getString("gae_cron_reset_users_interval_hour");
   public static final String GAE_CRON_IP_ADDR = resourceBundle.getString("gae_cron_ip_addr");
 
   public static final String FROM_EMAIL = resourceBundle.getString("from_email");

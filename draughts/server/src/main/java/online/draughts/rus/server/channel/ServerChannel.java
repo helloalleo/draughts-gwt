@@ -198,14 +198,15 @@ public class ServerChannel extends ChannelServer {
       coreChannel.sendMessage(receiverChannel, message);
       if (GameMessageDto.MessageType.PLAY_INVITE.equals(message.getMessageType())) {
         Map<String, String> inviteToPlay = new HashMap<>();
-        inviteToPlay.put("ru", "Вас позвали играть в шашки на сайте shashki.online!");
-        inviteToPlay.put("en", "You have a new challenge on the site Draughts.Online!");
+        inviteToPlay.put("ru", "Вас позвали играть в шашки!");
+        inviteToPlay.put("en", "You have a new challenge!");
         sendPushNotification(receiver.getNotificationsUserId(), inviteToPlay);
       }
-    } else if (GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
+    }
+    if (GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
       Map<String, String> newMessage = new HashMap<>();
-      newMessage.put("ru", "Вам новое сообщение на сайте shashki.online!");
-      newMessage.put("en", "You have a new message on the site Draughts.Online!");
+      newMessage.put("ru", "Вам новое сообщение!");
+      newMessage.put("en", "You have a new message!");
       sendPushNotification(receiver.getNotificationsUserId(), newMessage);
     }
   }
