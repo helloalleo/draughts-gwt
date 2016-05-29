@@ -307,7 +307,7 @@ public class Player extends ModelImpl<Player> {
 
   public String getPublicName() {
     if (getPlayerName() == null) {
-      return getFullName().trim();
+      return getFullName();
     }
     return getPlayerName();
   }
