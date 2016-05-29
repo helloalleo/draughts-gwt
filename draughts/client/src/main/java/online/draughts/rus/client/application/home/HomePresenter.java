@@ -21,6 +21,7 @@ import online.draughts.rus.client.event.ReceivedPlayerListEventHandler;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.PlayerDto;
@@ -82,6 +83,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
   @Override
   protected void onReveal() {
+    Logger.debug("Home");
     getView().setShowLoggedInControls(currentSession.isLoggedIn());
     playersDelegate.withCallback(new AbstractAsyncCallback<Integer>() {
       @Override

@@ -18,13 +18,10 @@ package online.draughts.rus.client.application;
 
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
-import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.RootPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewImpl;
-import online.draughts.rus.client.resources.Variables;
 
 /**
  * This is the top-logLevel view of the application. Every time another presenter wants to reveal itself, {@link

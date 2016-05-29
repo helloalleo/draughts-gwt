@@ -82,11 +82,9 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   @Override
   protected void onAttach() {
-    super.onAttach();
     playShowPanel.init();
     AdsUtils.addAdvertisementFromGoogleScript();
   }
-
 
   @SuppressWarnings("unused")
   @UiHandler("moreGameOnPage")
