@@ -120,7 +120,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @UiField
   Heading opponentTimeLabel;
   @UiField(provided = true)
-  CheckBox hideAvatars;
+  CheckBox showAvatars;
   private SingleSelectionModel<FriendDto> playerFriendSelectionModel;
   private SingleSelectionModel<PlayerDto> playerSelectionModel;
   private boolean prevSelected = false;
@@ -149,8 +149,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     this.cookies = cookies;
     this.playSession = playSession;
 
-    this.hideAvatars = new CheckBox();
-    this.hideAvatars.setValue(cookies.isHideAvatars());
+    this.showAvatars = new CheckBox();
+    this.showAvatars.setValue(cookies.isShowAvatars());
     initWidget(binder.createAndBindUi(this));
     initPlayerFriendsCellList();
     initPlayersCellList();
@@ -261,9 +261,9 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   @SuppressWarnings("unused")
-  @UiHandler("hideAvatars")
+  @UiHandler("showAvatars")
   public void onHideAvatarsClicked(ClickEvent clickEvent) {
-    cookies.setHideAvatars(hideAvatars.getValue());
+    cookies.setShowAvatars(showAvatars.getValue());
     setPlayerList(playerList);
     setFriendList(friendList);
   }
@@ -580,13 +580,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   }
 
   private String getAvatarImage(PlayerDto object) {
-    if (hideAvatars.getValue()) {
-      return "";
-    }
-    if (StringUtils.isNotEmpty(object.getAvatar())) {
-      final Image image = new Image(object.getAvatar());
-      image.addStyleName(resources.style().cycle());
-      return image.getElement().getString();
+    if (showAvatars.getValue()) {
+      if (StringUtils.isNotEmpty(object.getAvatar())) {
+        final Image image = new Image(object.getAvatar());
+        image.addStyleName(resources.style().cycle());
+        return image.getElement().getString();
+      }
     }
     return "";
   }
@@ -622,7 +621,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         return new SafeHtmlBuilder().appendHtmlConstant(img.getElement().getString()).toSafeHtml();
       } else {
         Icon html = getIconString(IconType.USER);
-        html.setTitle(messages.rating(String.valueOf(this.player.getRating())));
+//        html.setTitle(messages.rating(String.valueOf(this.player.getRating())));
         return new SafeHtmlBuilder().appendHtmlConstant(html.getElement().getString()).toSafeHtml();
       }
     }
@@ -641,7 +640,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
           img = new Image(resources.images().offlineIconImage().getSafeUri());
         }
       }
-      img.setTitle(playerPublicName + " " + messages.rating(String.valueOf(player.getRating())));
+      img.setTitle(playerPublicName /*+ " " + messages.rating(String.valueOf(player.getRating()))*/);
     }
     return new SafeHtmlBuilder().appendHtmlConstant(img.getElement().getString()).toSafeHtml();
   }

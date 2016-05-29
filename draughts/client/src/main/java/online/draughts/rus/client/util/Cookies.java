@@ -46,9 +46,9 @@ public interface Cookies {
 
   void setLocale(String locale);
 
-  void setHideAvatars(Boolean value);
+  void setShowAvatars(Boolean value);
 
-  boolean isHideAvatars();
+  boolean isShowAvatars();
 
   Boolean isPublishGame();
 }

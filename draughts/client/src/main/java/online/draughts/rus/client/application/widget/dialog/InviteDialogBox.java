@@ -204,6 +204,7 @@ public abstract class InviteDialogBox extends BasicDialogBox {
           return;
         }
         final boolean publish = InviteDialogBox.this.publishGame == null ? true : InviteDialogBox.this.publishGame.getValue();
+        cancelButton.setEnabled(false);
         cookies.setPublishGame(publish);
         waitMessage.setVisible(true);
         waitResponseTimer.schedule(WAIT * 1000);

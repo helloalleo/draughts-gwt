@@ -24,14 +24,15 @@ public class AdsUtils {
      </script>
      */
 
+//    Document doc = Document.get();
+//    ScriptElement script = doc.createScriptElement();
+//    script.setSrc("//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js");
+//    script.setType("text/javascript");
+//    script.setLang("javascript");
+//    doc.getBody().appendChild(script);
+
     Document doc = Document.get();
     ScriptElement script = doc.createScriptElement();
-    script.setSrc("//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js");
-    script.setType("text/javascript");
-    script.setLang("javascript");
-    doc.getBody().appendChild(script);
-
-    script = doc.createScriptElement();
     script.setText("(adsbygoogle = window.adsbygoogle || []).push({});");
     script.setType("text/javascript");
     script.setLang("javascript");

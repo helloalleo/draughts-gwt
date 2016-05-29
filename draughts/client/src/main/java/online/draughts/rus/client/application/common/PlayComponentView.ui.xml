@@ -76,10 +76,10 @@
           <b:Heading size="H5" text="Недавно играли с вами:" pull="LEFT">
             <ui:attribute name="text" description="Недавно играли с вами"/>
           </b:Heading>
-          <b:CheckBox ui:field="hideAvatars" pull="RIGHT">
-            <ui:msg description="Спрятать фото"
-                    key="subscribeOnNewsletter">
-              Спрятать фото
+          <b:CheckBox ui:field="showAvatars" pull="RIGHT">
+            <ui:msg description="Показать фото"
+                    key="showPhoto">
+              Показать фото
             </ui:msg>
           </b:CheckBox>
           <g:ScrollPanel ui:field="playerCellTablePanel" width="100%">
