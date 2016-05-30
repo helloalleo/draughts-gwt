@@ -42,7 +42,6 @@ public abstract class Command<T> implements Invoker<T> {
       if (field.isAnnotationPresent(Text.class)) {
         entity.setProperty(field.getName(), new com.google.appengine.api.datastore.Text(value.toString()));
       } else {
-        logger.info(field.getName());
         entity.setProperty(field.getName(), value);
       }
     }
