@@ -3,6 +3,7 @@ package online.draughts.rus.server.domain;
 
 import com.google.appengine.api.datastore.*;
 import online.draughts.rus.server.annotation.Index;
+import online.draughts.rus.server.annotation.Text;
 import online.draughts.rus.server.annotation.Transient;
 import online.draughts.rus.shared.dto.GameMessageDto;
 
@@ -23,6 +24,7 @@ public class GameMessage extends ModelImpl<GameMessage> {
   private Player sender;
   @Index
   private Player receiver;
+  @Text
   private String message;
   @Index
   private GameMessageDto.MessageType messageType;
