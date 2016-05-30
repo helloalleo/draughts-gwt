@@ -5,7 +5,6 @@ import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
 import no.eirikb.gwtchannelapi.server.ChannelServer;
-import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.server.domain.GameMessage;
 import online.draughts.rus.server.domain.Move;
@@ -19,15 +18,8 @@ import online.draughts.rus.server.util.Utils;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.util.StringUtils;
-import org.apache.http.HttpResponse;
-import org.apache.http.client.methods.HttpPost;
-import org.apache.http.entity.ContentType;
-import org.apache.http.entity.StringEntity;
-import org.apache.http.impl.client.CloseableHttpClient;
-import org.apache.http.impl.client.HttpClients;
 import org.apache.log4j.Logger;
 
-import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
@@ -200,41 +192,14 @@ public class ServerChannel extends ChannelServer {
         Map<String, String> inviteToPlay = new HashMap<>();
         inviteToPlay.put("ru", "Вас позвали играть в шашки!");
         inviteToPlay.put("en", "You have a new challenge!");
-        sendPushNotification(receiver.getNotificationsUserId(), inviteToPlay);
+        Utils.sendPushNotification(receiver.getNotificationsUserId(), inviteToPlay);
       }
     }
-    if (GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
+    if (!receiver.isOnline() && GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
       Map<String, String> newMessage = new HashMap<>();
       newMessage.put("ru", "Вам новое сообщение!");
       newMessage.put("en", "You have a new message!");
-      sendPushNotification(receiver.getNotificationsUserId(), newMessage);
-    }
-  }
-
-  private void sendPushNotification(String notificationsUserId, Map<String, String> message) {
-    if (StringUtils.isEmpty(notificationsUserId)) {
-      return;
-    }
-    CloseableHttpClient httpClient = HttpClients.createMinimal();
-    HttpPost httpPost = new HttpPost(Config.ONESIGNAL_POST_NOTIFICATION_URL);
-    httpPost.setHeader("Authorization", "Basic " + Config.ONESIGNAL_APP_KEY);
-    httpPost.setHeader("Content-Type", "application/json");
-    String json = "{\n" +
-        "    \"app_id\": \"" + Config.ONESIGNAL_APP_ID + "\",\n" +
-        "    \"include_player_ids\" : [\"" + notificationsUserId + "\"],\n" +
-        "    \"contents\": {\"ru\": \"" + message.get("ru") + "\", " +
-        "    \"en\": \"" + message.get("en") + "\"},\n" +
-        "    \"include_segments\": [\"All\"],\n" +
-        "    \"url\": \"https://shashki.online/" + Config.CONTEXT + "/\"," +
-        "    \"headings\": {\"en\": \"" + Config.SITE_NAME_EN + "\", \"ru\": \"" + Config.SITE_NAME_RU + "\"}\n" +
-        "}";
-    StringEntity entity = new StringEntity(json, ContentType.APPLICATION_JSON);
-    httpPost.setEntity(entity);
-    try {
-      HttpResponse response = httpClient.execute(httpPost);
-      logger.info("Response: " + response.toString());
-    } catch (IOException e) {
-      logger.error("An error occurred while executing request: " + httpPost.toString() + ". " + e.getMessage());
+      Utils.sendPushNotification(receiver.getNotificationsUserId(), newMessage);
     }
   }
 
