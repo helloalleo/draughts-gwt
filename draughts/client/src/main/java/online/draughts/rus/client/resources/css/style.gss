@@ -332,6 +332,7 @@ body {
 }
 
 .messengerMessage {
+    padding-top: 0 !important;
     width: S_MESSANGER_WIDTH;
 }
 

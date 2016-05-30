@@ -20,11 +20,11 @@
       <b:Column size="XS_10 SM_10 MD_10 LG_10">
         <g:HTMLPanel>
           <!-- DraughtsOnlineFooter -->
-          <ins class="adsbygoogle"
-               style="display:block"
-               data-ad-client="ca-pub-6590061713732270"
-               data-ad-slot="9334004718"
-               data-ad-format="auto"></ins>
+          <!--<ins class="adsbygoogle"-->
+               <!--style="display:block"-->
+               <!--data-ad-client="ca-pub-6590061713732270"-->
+               <!--data-ad-slot="9334004718"-->
+               <!--data-ad-format="auto"></ins>-->
         </g:HTMLPanel>
       </b:Column>
     </b:Row>

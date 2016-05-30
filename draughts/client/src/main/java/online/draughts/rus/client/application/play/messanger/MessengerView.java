@@ -20,11 +20,12 @@ import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
 import com.gwtplatform.mvp.client.view.PopupPositioner;
 import online.draughts.rus.client.application.play.PlayView;
 import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.client.resources.emoji.Emoji;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.*;
+import org.gwtbootstrap3.client.ui.Image;
 import org.gwtbootstrap3.client.ui.TextArea;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
 import org.gwtbootstrap3.client.ui.constants.ColumnSize;
@@ -34,15 +35,6 @@ import java.util.Date;
 import java.util.List;
 
 public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> implements MessengerPresenter.MyView {
-
-  private static final List<String> codes = new ArrayList<>();
-  static {
-    codes.add("1F60");
-    codes.add("1F61");
-    codes.add("1F62");
-    codes.add("1F63");
-    codes.add("1F64");
-  }
 
   private final PlayView playView;
   private final AppResources resources;
@@ -72,14 +64,17 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
   FlowPanel lastUsedSmiles;
 
   private List<String> lastUsedSmilesQueue = new ArrayList<>(LAST_SMILE_COUNT);
+  private final Emoji emoji;
 
   @Inject
   public MessengerView(Binder uiBinder,
                        EventBus eventBus,
                        AppResources resources,
+                       Emoji emoji,
                        Cookies cookies,
                        PlayView playView) {
     super(eventBus);
+    this.emoji = emoji;
 
     initWidget(uiBinder.createAndBindUi(this));
 
@@ -93,34 +88,32 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
   }
 
   private void fillSmileChoosePanel() {
-    for (int i = 0; i < 15; i++) {
-      for (int j = 0; j < 5; j++) {
-        final String smile = codes.get(j) + Integer.toHexString(i);
-        Logger.debug(smile);
-        final HTML smileHtml = new HTML("&#x" + smile + ";");
-        int ch = Integer.parseInt(smile, 16);
-        String sm = new String(Character.toChars(ch));
-        final Button smileButton = createSmileButton(sm, smileHtml);
-        smileChoosePanel.add(smileButton);
+    for (int i = 0; i < 58; i++) {
+      final String smile = emoji.keyWords().get(i);
+      final Image smileImg = getImage(smile);
+      if (null == smileImg) {
+        continue;
       }
+      final Button smileButton = createSmileButton(smile, smileImg);
+      smileChoosePanel.add(smileButton);
     }
   }
 
-  private Button createSmileButton(final String smile, final HTML smileHtml) {
+  private Button createSmileButton(final String smile, final Image smileImg) {
     final Button smileButton = new Button();
     smileButton.setType(ButtonType.LINK);
     smileButton.getElement().getStyle().setTextDecoration(Style.TextDecoration.NONE);
-    smileButton.add(smileHtml);
+    smileButton.add(smileImg);
     smileButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        smileButtonClicked(smile, smileHtml, smileButton);
+        smileButtonClicked(smile, smileImg, smileButton);
       }
     });
     return smileButton;
   }
 
-  private void smileButtonClicked(final String smile, final HTML smileHtml, final Button smileButton) {
+  private void smileButtonClicked(final String smile, final Image smileImg, final Button smileButton) {
     String text = messengerMessage.getText();
     messengerMessage.setText(text + smile);
     messengerMessage.setCursorPos(messengerMessage.getText().length());
@@ -129,12 +122,12 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     }
 
     Button lastUsedButton = new Button();
-    lastUsedButton.add(new HTML(smileHtml.getHTML()));
+    lastUsedButton.add(smileImg);
     lastUsedButton.setType(smileButton.getType());
     lastUsedButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        smileButtonClicked(smile, smileHtml, smileButton);
+        smileButtonClicked(smile, smileImg, smileButton);
       }
     });
     lastUsedButton.getElement().getStyle().setTextDecoration(Style.TextDecoration.NONE);
@@ -310,24 +303,40 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
   private void fillLastUsedSmiles() {
     // если пользователь только зашёл на сайт и еще не отправлял смайлы
     if (lastUsedSmilesQueue.isEmpty()) {
-      final String smile = codes.get(0) + Integer.toHexString(10);
-      final HTML smileHtml = new HTML("&#x" + smile + ";");
-      int ch = Integer.parseInt(smile, 16);
-      String sm = new String(Character.toChars(ch));
-      final Button smileButton = createSmileButton(sm, smileHtml);
+      // улыбка
+      final String smile = ":u1f60a:";
+      final Image smileImg = getImage(smile);
+      if (null == smileImg) {
+        return;
+      }
+      final Button smileButton = createSmileButton(smile, smileImg);
       smileButton.getElement().getStyle().setPaddingLeft(4, Style.Unit.PX);
       smileButton.getElement().getStyle().setPaddingRight(4, Style.Unit.PX);
       lastUsedSmiles.add(smileButton);
-      lastUsedSmilesQueue.add(sm);
+      lastUsedSmilesQueue.add(smile);
       cookies.setLastUsedSmiles(lastUsedSmilesQueue);
       return;
     }
     for (String s : lastUsedSmilesQueue) {
-      Button smileButton = createSmileButton(s, new HTML(s));
+      Image image = getImage(s);
+      if (null == image) {
+        continue;
+      }
+      Button smileButton = createSmileButton(s, image);
       smileButton.getElement().getStyle().setPaddingLeft(4, Style.Unit.PX);
       smileButton.getElement().getStyle().setPaddingRight(4, Style.Unit.PX);
       lastUsedSmiles.add(smileButton);
     }
+  }
+
+  private Image getImage(String name) {
+    String uri = emoji.uri(name);
+    if (null == uri) {
+      return null;
+    }
+    Image image = new Image(uri);
+    image.setWidth("24px");
+    return image;
   }
 
   @Override
@@ -373,22 +382,25 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     private final Binder uiBinder;
     private final EventBus eventBus;
     private final AppResources resources;
+    private final Emoji emoji;
     private final Cookies cookies;
 
     @Inject
     public ViewFactoryImpl(Binder uiBinder,
                            EventBus eventBus,
                            AppResources resources,
+                           Emoji emoji,
                            Cookies cookies) {
       this.uiBinder = uiBinder;
       this.eventBus = eventBus;
       this.resources = resources;
+      this.emoji = emoji;
       this.cookies = cookies;
     }
 
     @Override
     public MessengerPresenter.MyView create(PlayView playView) {
-      return new MessengerView(uiBinder, eventBus, resources, cookies, playView);
+      return new MessengerView(uiBinder, eventBus, resources, emoji, cookies, playView);
     }
   }
 }

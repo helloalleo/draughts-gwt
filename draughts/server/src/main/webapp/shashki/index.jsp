@@ -34,7 +34,6 @@
 
     <!-- Channel API -->
     <script type="text/javascript" src="/_ah/channel/jsapi"></script>
-    <script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
     <script type="text/javascript" language="javascript" src="/shashki/Application/Application.nocache.js"></script>
 
     <link href='//fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>

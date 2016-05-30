@@ -48,7 +48,7 @@ public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
   public int getGamesOnPageCounter() {
     String gamesOnPage = Cookies.getCookie(GAMES_ON_PAGE_COUNTER);
     if (StringUtils.isEmpty(gamesOnPage)) {
-      gamesOnPage = "0";
+      gamesOnPage = "3";
     }
     return Integer.valueOf(gamesOnPage);
   }
