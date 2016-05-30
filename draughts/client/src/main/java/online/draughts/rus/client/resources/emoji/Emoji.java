@@ -10,7 +10,6 @@ package online.draughts.rus.client.resources.emoji;
 import com.google.gwt.resources.client.ImageResource;
 import com.google.gwt.safehtml.shared.SafeUri;
 import com.google.inject.Inject;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.util.Arrays;
@@ -1996,6 +1995,8 @@ public class Emoji {
     // if (":ru:".equals(name)) return instance.u1f1f7_1f1fa();
     // regional indicator symbol letter g + regional indicator symbol letter b
     if (":u1f1ec_1f1e7:".equals(name)) return instance.u1f1ec_1f1e7();
+    // flag for Ukraine
+    if (":u1f1fa_1f1e6:".equals(name)) return instance.u1f1fa_1f1e6();
     // if (":gb:".equals(name)) return instance.u1f1ec_1f1e7();
     if (":uk:".equals(name)) return instance.u1f1ec_1f1e7();
     // digit one + combining enclosing keycap

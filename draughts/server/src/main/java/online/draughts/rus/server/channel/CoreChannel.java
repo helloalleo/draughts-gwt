@@ -38,6 +38,9 @@ public class CoreChannel {
 
   void connectPlayer(GameMessage gameMessage, String token) {
     Player player = playerService.find(gameMessage.getSender().getId());
+    if (player.isBanned()) {
+      return;
+    }
 
     player.setPlaying(false);
     player.setOnline(true);

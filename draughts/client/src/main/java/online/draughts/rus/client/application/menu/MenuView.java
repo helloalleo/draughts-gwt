@@ -8,7 +8,6 @@ import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
 import com.google.gwt.user.client.Element;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.google.inject.Inject;
@@ -16,6 +15,7 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
+import online.draughts.rus.client.resources.emoji.Emoji;
 import online.draughts.rus.client.util.Cookies;
 import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.constants.IconType;
@@ -38,15 +38,20 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
   Navbar navbar;
 
   private AnchorListItem prevAnchor;
-  private NameTokens nameTokens;
-  private AppResources resources;
   private AnchorListItem scrollToTop;
+
+  private final NameTokens nameTokens;
+  private final AppResources resources;
+  private final Emoji emoji;
+
   @SuppressWarnings("SuspiciousNameCombination")
   @Inject
   MenuView(Binder binder,
            AppResources resources,
            Cookies cookies,
-           NameTokens nameTokens) {
+           NameTokens nameTokens,
+           Emoji emoji) {
+    this.emoji = emoji;
     initWidget(binder.createAndBindUi(this));
 
     this.nameTokens = nameTokens;
@@ -147,7 +152,8 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     }
 
     anchor = new AnchorListItem();
-    HTML ruImg = new HTML("&#127479;&#127482;");
+    Image ruImg = new Image(emoji.uri(":u1f1f7_1f1fa:"));
+    ruImg.setWidth("24px");
     anchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
@@ -161,7 +167,8 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     navRight.add(anchor);
 
     anchor = new AnchorListItem();
-    HTML uaImg = new HTML("&#127482;&#127462;");
+    Image uaImg = new Image(emoji.uri(":u1f1fa_1f1e6:"));
+    uaImg.setWidth("24px");
     anchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
@@ -176,7 +183,8 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     navRight.add(anchor);
 
     anchor = new AnchorListItem();
-    HTML enImg = new HTML("&#127468;&#127463;");
+    Image enImg = new Image(emoji.uri(":u1f1ec_1f1e7:"));
+    enImg.setWidth("24px");
     anchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {

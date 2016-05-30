@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.Player;
+import online.draughts.rus.shared.exception.BannedException;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.shared.dto.PlayerDto;
@@ -102,7 +103,14 @@ public class OAuthVKCallbackServlet extends HttpServlet {
       String lastName = array.getString("last_name");
       String avatar = array.getString("photo_50");
 
-      Player player = playerService.findByVkId(userId);
+      Player player = null;
+      try {
+        player = AuthUtils.check(playerService.findByVkId(userId));
+      } catch (BannedException e) {
+        req.getSession().invalidate();
+        resp.sendRedirect("/");
+        return;
+      }
       if (player == null) {
         player = new Player();
         player.setVkId(userId);

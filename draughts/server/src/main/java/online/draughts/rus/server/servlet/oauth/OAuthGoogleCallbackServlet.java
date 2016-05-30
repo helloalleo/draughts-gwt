@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.Player;
+import online.draughts.rus.shared.exception.BannedException;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.shared.dto.PlayerDto;
@@ -97,7 +98,14 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
       JsonObject responseObject = jsonReader.readObject();
       String user_id = responseObject.getString("sub");
       if (StringUtils.isNoneEmpty(user_id)) {
-        Player player = playerService.findByGoogleSub(user_id);
+        Player player = null;
+        try {
+          player = AuthUtils.check(playerService.findByGoogleSub(user_id));
+        } catch (BannedException e) {
+          req.getSession().invalidate();
+          resp.sendRedirect("/");
+          return;
+        }
         if (player == null) {
           player = new Player();
           player.setGoogleSub(user_id);

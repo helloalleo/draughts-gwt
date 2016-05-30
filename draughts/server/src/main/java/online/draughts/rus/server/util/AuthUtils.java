@@ -1,6 +1,7 @@
 package online.draughts.rus.server.util;
 
 import online.draughts.rus.server.config.Config;
+import online.draughts.rus.shared.exception.BannedException;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.domain.Player;
 
@@ -20,6 +21,7 @@ import java.util.Date;
 public class AuthUtils {
 
   public static final String AUTHENTICATED = "isAuthenticated";
+  public static final String SESSION = "session";
 
   private static boolean isAuthenticated(HttpSession session) {
     if (session == null) {
@@ -74,5 +76,12 @@ public class AuthUtils {
     resp.addCookie(new Cookie("loggedIn", "1"));
 
     resp.sendRedirect(String.format("%s/?locale=%s%s", Config.CONTEXT, locale, Config.PLAY_HASH));
+  }
+
+  public static Player check(Player player) throws BannedException {
+    if (null != player && player.isBanned()) {
+      throw new BannedException("You where banned!");
+    }
+    return player;
   }
 }

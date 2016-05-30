@@ -2,6 +2,7 @@ package online.draughts.rus.server.service;
 
 import com.google.inject.Singleton;
 import online.draughts.rus.server.domain.Player;
+import online.draughts.rus.shared.exception.BannedException;
 import online.draughts.rus.shared.dto.PlayerDto;
 import org.apache.log4j.Logger;
 
@@ -68,11 +69,14 @@ public class PlayerService {
     player.flush();
   }
 
-  public Player saveDto(PlayerDto dto) {
+  public Player saveDto(PlayerDto dto) throws BannedException {
     Player player = find(dto.getId());
-    player.updateSerializable(dto);
-    player.update();
-    player.flush();
+    try {
+      player.updateSerializable(dto);
+    } finally {
+      player.update();
+      player.flush();
+    }
     return player;
   }
 }

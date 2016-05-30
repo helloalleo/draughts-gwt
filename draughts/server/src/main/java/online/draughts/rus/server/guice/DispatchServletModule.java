@@ -35,6 +35,7 @@ import online.draughts.rus.server.util.AuthUtils;
 import javax.servlet.*;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 import java.io.IOException;
 
 class DispatchServletModule extends ServletModule {
@@ -80,6 +81,10 @@ class DispatchServletModule extends ServletModule {
           httpRequest.setAttribute(
               Key.get(Boolean.class, Names.named(AuthUtils.AUTHENTICATED)).toString(),
               authenticated);
+          httpRequest.setAttribute(
+              Key.get(HttpServletRequest.class, Names.named(AuthUtils.SESSION)).toString(),
+              httpRequest.getSession()
+          );
           chain.doFilter(request, response);
         }
       }
@@ -99,5 +104,12 @@ class DispatchServletModule extends ServletModule {
   @RequestScoped
   Boolean provideAuthenticated() {
     return false;
+  }
+
+  @Provides
+  @Named(AuthUtils.SESSION)
+  @RequestScoped
+  HttpSession provideHttpServletRequest() {
+    return null;
   }
 }

@@ -50,6 +50,9 @@ public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayer
       }
       HttpSession session = requestProvider.get().getSession();
       final Player bySessionId = Player.getInstance().findBySessionId(session.getId());
+      if (bySessionId.isBanned()) {
+        throw new RuntimeException("You were banned");
+      }
       PlayerDto dto = new PlayerDto();
       if (bySessionId != null) {
         dto = mapper.map(bySessionId, PlayerDto.class);

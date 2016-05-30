@@ -5,9 +5,13 @@ import com.google.appengine.api.datastore.Query;
 import online.draughts.rus.server.annotation.Index;
 import online.draughts.rus.server.annotation.MapKey;
 import online.draughts.rus.server.annotation.MapValue;
+import online.draughts.rus.shared.exception.BannedException;
 import online.draughts.rus.shared.dto.PlayerDto;
 
-import java.util.*;
+import java.util.Date;
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
 
 /**
  * Created with IntelliJ IDEA.
@@ -67,6 +71,8 @@ public class Player extends ModelImpl<Player> {
   private boolean admin;
   @Index
   private boolean active;
+  @Index
+  private boolean banned;
   private boolean subscribeOnNewsletter;
 
   public Player() {
@@ -109,6 +115,14 @@ public class Player extends ModelImpl<Player> {
 
   public void setActive(boolean active) {
     this.active = active;
+  }
+
+  public boolean isBanned() {
+    return banned;
+  }
+
+  public void setBanned(boolean banned) {
+    this.banned = banned;
   }
 
   public String getSessionId() {
@@ -342,11 +356,22 @@ public class Player extends ModelImpl<Player> {
    *
    * @param playerDto
    */
-  public void updateSerializable(PlayerDto playerDto) {
+  public void updateSerializable(PlayerDto playerDto) throws BannedException {
     if (playerDto == null) {
       return;
     }
-    setPlayerName(playerDto.getPlayerName());
+    String STOP_INVALID_NAME = "([Мм][Оо][Дд][Ее][Рр][Аа][Тт][Оо][Рр])|([Аа][Дд][Мм][Ии][Нн])" +
+        "|([Аа][Дд][Мм][Ии][Нн][Ии][Сс][Тт][Рр][Аа][Тт][Оо][Рр])" +
+        "|([Mm][Oo][Dd][Ee][Rr][Aa][Tt][Oo][Rr])" +
+        "|([Aa][Dd][Mm][Ii][Nn])" +
+        "|([Aa][Dd][Mm][Ii][Nn][Ii][Ss][Tt][Rr][Aa][Tt][Oo][Rr])";
+    if (playerDto.getPlayerName().matches(STOP_INVALID_NAME)) {
+      setBanned(true);
+      setActive(false);
+      throw new BannedException("You were banned");
+    } else {
+      setPlayerName(playerDto.getPlayerName());
+    }
     setOnline(playerDto.isOnline());
     setPlaying(playerDto.isPlaying());
     setLoggedIn(playerDto.isLoggedIn());
