@@ -183,7 +183,8 @@ public class ServerChannel extends ChannelServer {
 
     Player receiver = playerService.find(receiverId);
     message = saveGameMessage(message);
-    if (GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
+    final boolean chatPrivateMessage = GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType());
+    if (chatPrivateMessage) {
       mailService.sendNotification(message);
     }
     if (receiver.isOnline()) {
@@ -195,7 +196,7 @@ public class ServerChannel extends ChannelServer {
         Utils.sendPushNotification(receiver.getNotificationsUserId(), inviteToPlay);
       }
     }
-    if (!receiver.isOnline() && GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE.equals(message.getMessageType())) {
+    if (!receiver.isOnline() && chatPrivateMessage) {
       Map<String, String> newMessage = new HashMap<>();
       newMessage.put("ru", "Вам новое сообщение!");
       newMessage.put("en", "You have a new message!");
