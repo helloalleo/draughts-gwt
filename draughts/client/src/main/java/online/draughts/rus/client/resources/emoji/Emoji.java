@@ -2639,7 +2639,6 @@ public class Emoji {
   }
 
   public String uri(String name) {
-    Logger.debug(name);
     ImageResource i = resource(name);
 
     return i == null ? null : i.getSafeUri().asString();

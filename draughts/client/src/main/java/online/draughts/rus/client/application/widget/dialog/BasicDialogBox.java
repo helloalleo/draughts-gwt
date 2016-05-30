@@ -2,8 +2,6 @@ package online.draughts.rus.client.application.widget.dialog;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyCodes;
-import com.google.gwt.event.dom.client.KeyPressEvent;
-import com.google.gwt.event.dom.client.KeyPressHandler;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DialogBox;
 import online.draughts.rus.client.resources.AppResources;
@@ -29,16 +27,6 @@ public class BasicDialogBox extends DialogBox implements BaseDialogBox {
     setAnimationEnabled(true);
 
     getElement().addClassName(resources.style().dialogBox());
-
-    addHandler(new KeyPressHandler() {
-      @Override
-      public void onKeyPress(KeyPressEvent keyPressEvent) {
-        if (keyPressEvent.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE
-            || keyPressEvent.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-          hide();
-        }
-      }
-    }, KeyPressEvent.getType());
   }
 
   @Override
@@ -46,7 +34,8 @@ public class BasicDialogBox extends DialogBox implements BaseDialogBox {
     super.onPreviewNativeEvent(event);
     switch (event.getTypeInt()) {
       case Event.ONKEYDOWN:
-        if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE) {
+        if (event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ESCAPE
+            || event.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
           hide();
         }
         break;

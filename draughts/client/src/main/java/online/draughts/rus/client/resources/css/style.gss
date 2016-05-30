@@ -376,7 +376,11 @@ body {
 }
 
 .messageTextArea {
+    width: 283px;
     resize: none;
+    background: white;
+    border: 1px lightgray solid;
+@mixin radiusInline(MESSENGER_BORDER_RADIUS);
 }
 
 .messageOuter {

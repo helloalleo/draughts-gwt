@@ -103,6 +103,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     super.onBind();
 
     bindEvents();
+    // NOTE Для отладки. Показать мессенджер не подключаясь
+//    writeToFriend(new PlayerDto());
   }
 
   @Override

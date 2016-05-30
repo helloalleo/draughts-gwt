@@ -7,45 +7,52 @@
              ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
              ui:generateLocales="default">
 
-    <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
+  <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
-    <g:PopupPanel autoHideOnHistoryEventsEnabled="true" autoHideEnabled="false" addStyleNames="{res.style.popupMessenger}">
-        <g:HTMLPanel addStyleNames="{res.style.messenger}">
-            <b:Panel>
-                <b:PanelHeader ui:field="messengerHeader">
-                    <b:Row>
-                        <b:Column size="XS_10 SM_10 MD_10 LG_10">
-                            <b:Heading ui:field="messengerHeading" size="H4"/>
-                        </b:Column>
-                        <b:Column size="XS_2 SM_2 MD_2 LG_2">
-                            <b:Button ui:field="collapseMessengerButton" icon="CLOSE" type="LINK"/>
-                        </b:Column>
-                    </b:Row>
-                </b:PanelHeader>
-                <b:PanelBody ui:field="messengerBody">
-                    <g:ScrollPanel ui:field="messengerMessagesScroll" addStyleNames="{res.style.messengerMessagesScroll}">
-                        <g:HTMLPanel ui:field="messengerMessages" addStyleNames="{res.style.messengerMessages}"/>
-                    </g:ScrollPanel>
-                </b:PanelBody>
-                <b:PanelFooter addStyleNames="{res.style.messengerMessage}">
-                    <g:FlowPanel ui:field="lastUsedSmiles"/>
-                    <g:HTMLPanel ui:field="smilesPanel" visible="false" addStyleNames="{res.style.smilePanel}">
-                        <g:ScrollPanel ui:field="smilesScrollPanel" addStyleNames="{res.style.smileChoosePanel}">
-                            <g:HTMLPanel ui:field="smileChoosePanel">
-                            </g:HTMLPanel>
-                        </g:ScrollPanel>
-                        <b.html:Div addStyleNames="{res.style.smileCaret}"/>
-                    </g:HTMLPanel>
+  <ui:style>
+    .smileButton {
+      margin-top: -4px;
+    }
+  </ui:style>
 
-                    <b:InputGroup>
-                        <b:TextArea ui:field="messengerMessage" addStyleNames="{res.style.messageTextArea}"
-                                    maxLength="250" height="35px"/>
-                        <b:InputGroupButton>
-                            <b:Button ui:field="smilesButton" icon="SMILE_O"/>
-                        </b:InputGroupButton>
-                    </b:InputGroup>
-                </b:PanelFooter>
-            </b:Panel>
-        </g:HTMLPanel>
-    </g:PopupPanel>
+  <g:PopupPanel autoHideOnHistoryEventsEnabled="true" autoHideEnabled="false"
+                addStyleNames="{res.style.popupMessenger}">
+    <g:HTMLPanel addStyleNames="{res.style.messenger}">
+      <b:Panel>
+        <b:PanelHeader ui:field="messengerHeader">
+          <b:Row>
+            <b:Column size="XS_10 SM_10 MD_10 LG_10">
+              <b:Heading ui:field="messengerHeading" size="H4"/>
+            </b:Column>
+            <b:Column size="XS_2 SM_2 MD_2 LG_2">
+              <b:Button ui:field="collapseMessengerButton" icon="CLOSE" type="LINK"/>
+            </b:Column>
+          </b:Row>
+        </b:PanelHeader>
+        <b:PanelBody ui:field="messengerBody">
+          <g:ScrollPanel ui:field="messengerMessagesScroll" addStyleNames="{res.style.messengerMessagesScroll}">
+            <g:HTMLPanel ui:field="messengerMessages" addStyleNames="{res.style.messengerMessages}"/>
+          </g:ScrollPanel>
+        </b:PanelBody>
+        <b:PanelFooter addStyleNames="{res.style.messengerMessage}">
+          <g:FlowPanel ui:field="lastUsedSmiles"/>
+          <g:HTMLPanel ui:field="smilesPanel" visible="false" addStyleNames="{res.style.smilePanel}">
+            <g:ScrollPanel ui:field="smilesScrollPanel" addStyleNames="{res.style.smileChoosePanel}">
+              <g:HTMLPanel ui:field="smileChoosePanel">
+              </g:HTMLPanel>
+            </g:ScrollPanel>
+            <b.html:Div addStyleNames="{res.style.smileCaret}"/>
+          </g:HTMLPanel>
+
+          <b:InputGroup>
+            <g:RichTextArea ui:field="messengerMessage" addStyleNames="{res.style.messageTextArea}"
+                            height="34px"/>
+            <b:InputGroupButton>
+              <b:Button ui:field="smilesButton" icon="SMILE_O" addStyleNames="{style.smileButton}"/>
+            </b:InputGroupButton>
+          </b:InputGroup>
+        </b:PanelFooter>
+      </b:Panel>
+    </g:HTMLPanel>
+  </g:PopupPanel>
 </ui:UiBinder>

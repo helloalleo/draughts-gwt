@@ -22,11 +22,11 @@ import online.draughts.rus.client.application.play.PlayView;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.emoji.Emoji;
 import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.client.util.Utils;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.Image;
-import org.gwtbootstrap3.client.ui.TextArea;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
 import org.gwtbootstrap3.client.ui.constants.ColumnSize;
 
@@ -51,7 +51,7 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
   @UiField
   HTMLPanel messengerMessages;
   @UiField
-  TextArea messengerMessage;
+  RichTextArea messengerMessage;
   @UiField
   ScrollPanel messengerMessagesScroll;
   @UiField
@@ -114,9 +114,16 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
   }
 
   private void smileButtonClicked(final String smile, final Image smileImg, final Button smileButton) {
-    String text = messengerMessage.getText();
-    messengerMessage.setText(text + smile);
-    messengerMessage.setCursorPos(messengerMessage.getText().length());
+    String text = messengerMessage.getHTML();
+    messengerMessage.setHTML(text + smileImg.getElement().getString());
+    Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
+      @Override
+      public void execute() {
+        smileButton.setFocus(false);
+        messengerMessage.setFocus(true);
+        Utils.setCursorToEnd(messengerMessage.getElement());
+      }
+    });
     if (lastUsedSmilesQueue.contains(smile)) {
       return;
     }
@@ -154,7 +161,7 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
   public void onReturn(KeyPressEvent keyPressEvent) {
     if (!keyPressEvent.isShiftKeyDown()
         && keyPressEvent.getNativeEvent().getKeyCode() == KeyCodes.KEY_ENTER) {
-      final String message = messengerMessage.getText();
+      final String message = messengerMessage.getHTML();
       if (StringUtils.isEmpty(message)) {
         return;
       }
@@ -186,7 +193,7 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
   }
 
   private HTMLPanel formatMessage(String message, Date messageDate, boolean isFriend) {
-    SafeHtmlBuilder safeHtmlBuilder = new SafeHtmlBuilder().appendEscapedLines(message);
+    SafeHtmlBuilder safeHtmlBuilder = new SafeHtmlBuilder().appendHtmlConstant(message);
     HTML htmlInline = new HTML(safeHtmlBuilder.toSafeHtml());
     htmlInline.addStyleName(resources.style().messageInner());
     htmlInline.addStyleName(isFriend ? resources.style().friendMessageInner() : resources.style().myMessageInner());

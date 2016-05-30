@@ -2,7 +2,6 @@
 
 @defmixin trans(DURATION) {
     transition: height, line-height DURATION ease-out;
-    -ms-transition: height, line-height DURATION ease-out;
     -moz-transition: height, line-height DURATION ease-out;
     -webkit-transition: height, line-height DURATION ease-out;
 }
@@ -24,9 +23,17 @@
 
 @defmixin radius(RADIUS) {
     -moz-border-radius: RADIUS;
-    -ms-border-radius: RADIUS;
     -webkit-border-radius: RADIUS;
     border-radius: RADIUS;
+}
+
+@defmixin radiusInline(RADIUS) {
+    -moz-border-radius-bottomleft: RADIUS;
+    -moz-border-radius-topleft: RADIUS;
+    -webkit-border-bottom-left-radius: RADIUS;
+    -webkit-border-top-left-radius: RADIUS;
+    border-bottom-left-radius: RADIUS;
+    border-top-left-radius: RADIUS;
 }
 
 @defmixin shadow(OFFSET_X, OFFSET_Y, BLUR, STRETCH, COLOR) {
