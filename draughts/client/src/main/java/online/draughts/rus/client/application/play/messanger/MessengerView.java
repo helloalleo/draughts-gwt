@@ -225,56 +225,63 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     htmlTime.addStyleName(resources.style().messageTime());
     htmlTime.addStyleName(isFriend ? resources.style().friendMessageTime() : resources.style().myMessageTime());
     HTMLPanel html = new HTMLPanel("");
+    int padding = 4;
+    int margin = 5;
     if (isFriend) {
-      if (message.length() < 35) {
-        html.add(htmlInline);
-        html.add(htmlTime);
-      } else {
+      htmlTime.getElement().getStyle().setWidth(100, Style.Unit.PCT);
+      htmlInline.getElement().getStyle().setPadding(4, Style.Unit.PX);
+//      if (message.length() < 35) {
+//        html.add(htmlInline);
+//        html.add(htmlTime);
+//      } else {
         Row row = new Row();
-        row.getElement().getStyle().setMargin(-4, Style.Unit.PX);
+        row.getElement().getStyle().setMarginLeft(margin, Style.Unit.PX);
         Column column;
         // уменьшаем поле для сообщений
         if (showDate) {
-          column = new Column(ColumnSize.MD_8);
+          column = new Column(ColumnSize.MD_8, ColumnSize.XS_8, ColumnSize.SM_8);
         } else {
-          column = new Column(ColumnSize.MD_9);
+          column = new Column(ColumnSize.MD_10, ColumnSize.XS_10, ColumnSize.SM_10);
         }
-        column.getElement().getStyle().setPadding(4, Style.Unit.PX);
+        column.getElement().getStyle().setPadding(padding, Style.Unit.PX);
         htmlInline.getElement().getStyle().setMarginRight(0, Style.Unit.PX);
         column.add(htmlInline);
         row.add(column);
         // увеличиваем поле для времени
         if (showDate) {
-          column = new Column(ColumnSize.MD_3);
+          column = new Column(ColumnSize.MD_3, ColumnSize.XS_3, ColumnSize.SM_3);
         } else {
-          column = new Column(ColumnSize.MD_2);
+          column = new Column(ColumnSize.MD_2, ColumnSize.XS_2, ColumnSize.SM_2);
         }
-        column.getElement().getStyle().setPadding(4, Style.Unit.PX);
+        column.getElement().getStyle().setPadding(padding, Style.Unit.PX);
         column.add(htmlTime);
         row.add(column);
         html.add(row);
-      }
+//      }
       html.addStyleName(resources.style().messageOuter());
     } else {
+      htmlTime.getElement().getStyle().setWidth(100, Style.Unit.PCT);
+      htmlInline.getElement().getStyle().setPadding(4, Style.Unit.PX);
       Row row = new Row();
-      row.getElement().getStyle().setMargin(4, Style.Unit.PX);
+      row.getElement().getStyle().setMarginLeft(margin, Style.Unit.PX);
       Column column;
       // уменьшаем поле для сообщений
       if (showDate) {
-        column = new Column(ColumnSize.MD_9);
+        column = new Column(ColumnSize.MD_9, ColumnSize.XS_9, ColumnSize.SM_9);
       } else {
-        column = new Column(ColumnSize.MD_10);
+        column = new Column(ColumnSize.MD_10, ColumnSize.XS_10, ColumnSize.MD_10);
       }
-      column.getElement().getStyle().setPadding(4, Style.Unit.PX);
+      column.getElement().getStyle().setPadding(padding, Style.Unit.PX);
+      htmlInline.getElement().getStyle().setPadding(4, Style.Unit.PX);
       column.add(htmlInline);
       row.add(column);
       // увеличиваем поле для времени
       if (showDate) {
-        column = new Column(ColumnSize.MD_3);
+        column = new Column(ColumnSize.MD_3, ColumnSize.XS_3, ColumnSize.SM_3);
       } else {
-        column = new Column(ColumnSize.MD_2);
+        column = new Column(ColumnSize.MD_2, ColumnSize.XS_2, ColumnSize.SM_2);
       }
-      column.getElement().getStyle().setPadding(4, Style.Unit.PX);
+      column.getElement().getStyle().setPadding(padding, Style.Unit.PX);
       column.add(htmlTime);
       row.add(column);
       html.add(row);

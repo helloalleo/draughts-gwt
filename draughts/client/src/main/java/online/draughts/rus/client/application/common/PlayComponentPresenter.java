@@ -50,7 +50,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ClientChannel clientChannel;
   private final PlaySession playSession;
   private final DraughtsMessages messages;
-  private final Cookies cookies;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final ResourceDelegate<FriendsResource> friendsDelegate;
@@ -69,7 +68,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       PlaySession playSession,
       CurrentSession currentSession,
       DraughtsMessages messages,
-      Cookies cookies,
       ResourceDelegate<GamesResource> gamesDelegate,
       ResourceDelegate<PlayersResource> playersDelegate,
       ResourceDelegate<FriendsResource> friendsDelegate,
@@ -82,7 +80,6 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     super(eventBus, view);
 
     this.messages = messages;
-    this.cookies = cookies;
     this.clientChannel = clientChannel;
     this.playSession = playSession;
     this.currentSession = currentSession;
