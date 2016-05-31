@@ -325,9 +325,9 @@ body {
 
 .messengerMessages {
     min-height: 200px;
-    min-width: 300px;
+    min-width: 310px;
     max-height: 200px;
-    max-width: 300px;
+    max-width: 310px;
     margin-right: 0 !important;
 }
 
@@ -384,9 +384,9 @@ body {
 }
 
 .messageOuter {
-    overflow: hidden;
     display: block;
     width: 100%;
+    overflow-y: hidden;
 }
 
 .smilePanel {
@@ -394,11 +394,11 @@ body {
     width: S_SMILE_PANEL_WIDTH;
     z-index: 20;
     bottom: 75px;
-    right: 35px;
+    right: 44px;
 }
 
 .smileChoosePanel {
-    width: 207px;
+    width: 215px;
     height: 203px;
     border: 1px solid #ccc;
     background: #eee;
@@ -410,7 +410,7 @@ body {
     margin-top: 16px;
     position: absolute;
     bottom: -5px;
-    right: -5px;
+    right: -16px;
     width: 0;
     height: 0;
     border-style: solid;

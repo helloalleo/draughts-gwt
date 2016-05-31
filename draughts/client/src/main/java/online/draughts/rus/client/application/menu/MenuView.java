@@ -152,7 +152,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     }
 
     anchor = new AnchorListItem();
-    Image ruImg = new Image(emoji.uri(":u1f1f7_1f1fa:"));
+    Image ruImg = new Image(emoji.url(":u1f1f7_1f1fa:"));
     ruImg.setWidth("24px");
     anchor.addClickHandler(new ClickHandler() {
       @Override
@@ -167,7 +167,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     navRight.add(anchor);
 
     anchor = new AnchorListItem();
-    Image uaImg = new Image(emoji.uri(":u1f1fa_1f1e6:"));
+    Image uaImg = new Image(emoji.url(":u1f1fa_1f1e6:"));
     uaImg.setWidth("24px");
     anchor.addClickHandler(new ClickHandler() {
       @Override
@@ -183,7 +183,7 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     navRight.add(anchor);
 
     anchor = new AnchorListItem();
-    Image enImg = new Image(emoji.uri(":u1f1ec_1f1e7:"));
+    Image enImg = new Image(emoji.url(":u1f1ec_1f1e7:"));
     enImg.setWidth("24px");
     anchor.addClickHandler(new ClickHandler() {
       @Override

@@ -21,7 +21,6 @@
   <inherits name="com.gwtplatform.dispatch.rest.delegates.ResourceDelegate"/>
   <inherits name="org.gwtbootstrap3.extras.growl.Growl"/>
   <inherits name="no.eirikb.gwtchannelapi.GwtChannelApi"/>
-  <inherits name='com.bfr.client.Selection'/>
 
   <!-- Подробности здесь: http://www.gwtproject.org/doc/latest/FAQ_Server.html#What_is_the_Same_Origin_Policy,_and_how_does_it_affect_GWT?-->
   <!--<add-linker name="xsiframe"/>-->
@@ -31,6 +30,7 @@
 
   <!-- Specify the paths for translatable code                    -->
   <source path='client'/>
+  <source path='public'/>
   <source path='shared'/>
   <source path='draughts'/>
 

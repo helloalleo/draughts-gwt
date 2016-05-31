@@ -129,11 +129,10 @@
 
     OneSignal.push(["init", {
         appId: "78dcc7d5-0794-45d8-aaff-4df6f4bef7a7",
-//        subdomainName: "draughtsonline",
         safari_web_id: "web.onesignal.auto.5130fec1-dc87-4e71-b719-29a6a70279c4",
         autoRegister: true,
         promptOptions: {
-            actionMessage: 'Мы хотим присылать вам приглашения в игру и уведомления о новых сообщениях',
+            actionMessage: 'Мы хотим присылать вам уведомления',
             exampleNotificationTitleDesktop: 'Это пример уведомления',
             exampleNotificationMessageDesktop: 'Такое уведомление появится на вашем компьютере',
             exampleNotificationCaption: 'Вы можете отписаться в любое время',
@@ -145,22 +144,23 @@
             title: 'Подписка на shashki.online',
             message: 'Спасибо, что подписались!'
         },
+        persistNotification: false,
         notifyButton: {
             enable: <%= loggedIn %>, // Set to false to hide
             text: {
-                'tip.state.unsubscribed': 'Подписаться на приглашения в игру',
-                'tip.state.subscribed': "Вы подписаны на приглашения",
-                'tip.state.blocked': "Вы заблокировали приглашения",
-                'message.prenotify': 'Кликните, чтобы подписаться на приглашения в игру',
+                'tip.state.unsubscribed': 'Подписаться на уведомления',
+                'tip.state.subscribed': "Вы подписаны на уведомления",
+                'tip.state.blocked': "Вы заблокировали уведомления",
+                'message.prenotify': 'Кликните, чтобы подписаться на уведомления',
                 'message.action.subscribed': "Спасибо, что подписались!",
-                'message.action.resubscribed': "Вы подписаны на приглашения",
-                'message.action.unsubscribed': "Вы больше не получаете приглашений",
-                'dialog.main.title': 'Управлять Настройками Приглашений',
+                'message.action.resubscribed': "Вы подписаны на уведомления",
+                'message.action.unsubscribed': "Вы больше не получаете уведомлений",
+                'dialog.main.title': 'Настройки уведомлений',
                 'dialog.main.button.subscribe': 'ПОДПИСАТЬСЯ',
                 'dialog.main.button.unsubscribe': 'ОТПИСАТЬСЯ',
-                'dialog.blocked.title': 'Разблокировать приглашения',
-                'dialog.blocked.message': "Следуйте следующим инструкциям, чтобы разрешить приглашения:"
-            },
+                'dialog.blocked.title': 'Разблокировать уведомления',
+                'dialog.blocked.message': "Следуйте следующим инструкциям, чтобы разрешить уведомления:"
+            }
         }
     }]);
 
