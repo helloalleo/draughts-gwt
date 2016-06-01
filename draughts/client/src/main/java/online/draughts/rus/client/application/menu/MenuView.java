@@ -225,9 +225,6 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
 
   private AnchorListItem createAnchor(final NameTokens.Link link) {
     final AnchorListItem anchor = new AnchorListItem(link.name);
-    if (link.href != null) {
-      anchor.setHref(link.href);
-    }
     anchor.setIcon(link.iconType);
     anchor.addClickHandler(new ClickHandler() {
       @Override
@@ -235,7 +232,11 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
         disableLink(prevAnchor);
         prevAnchor = anchor;
         anchor.setActive(true);
-        getUiHandlers().displayPage(link.token);
+        if (link.token != null) {
+          getUiHandlers().displayPage(link.token);
+        } else if (link.href != null) {
+          Window.Location.assign(link.href);
+        }
       }
     });
     anchor.setId(link.token);

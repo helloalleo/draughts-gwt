@@ -365,7 +365,7 @@ public class Player extends ModelImpl<Player> {
         "|([Mm][Oo][Dd][Ee][Rr][Aa][Tt][Oo][Rr])" +
         "|([Aa][Dd][Mm][Ii][Nn])" +
         "|([Aa][Dd][Mm][Ii][Nn][Ii][Ss][Tt][Rr][Aa][Tt][Oo][Rr])";
-    if (playerDto.getPlayerName().matches(STOP_INVALID_NAME)) {
+    if (playerDto.getPlayerName() != null && playerDto.getPlayerName().matches(STOP_INVALID_NAME)) {
       setBanned(true);
       setActive(false);
       throw new BannedException("You were banned");

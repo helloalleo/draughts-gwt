@@ -65,9 +65,6 @@ public class GamesResourceImpl implements GamesResource {
 
   @Override
   public GameDto game(Long gameId) {
-    if (!authProvider.get()) {
-      throw new NotAuthorizedException("Access denied");
-    }
     return gameService.findDto(gameId);
   }
 }

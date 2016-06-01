@@ -6,17 +6,18 @@ import org.gwtbootstrap3.client.ui.constants.IconType;
 
 public class NameTokens {
   // токены - адреса в навигации
-  public static final String homePage = "!home";
-  public static final String learnPage = "!learn";
-  public static final String playPage = "!play";
-  public static final String analysisPage = "!analysis";
-  public static final String loginPage = "!login";
-  public static final String profilePage = "!profile";
-  public static final String lovePage = "!love";
+  public static final String homePage = "!/home";
+  public static final String learnPage = "!/learn";
+  public static final String playPage = "!/play";
+  public static final String gamePage = "!/game";
+  public static final String analysisPage = "!/analysis";
+  public static final String loginPage = "!/login";
+  public static final String profilePage = "!/profile";
+  public static final String lovePage = "!/love";
 
-  public static final String errorPage = "!error";
-  public static final String generalSettingsPage = "!generalSettings";
-  public static final String settingsPage = "!settings";
+  public static final String errorPage = "!/error";
+  public static final String generalSettingsPage = "!/generalSettings";
+  public static final String settingsPage = "!/settings";
   public static final String logoutPage = "/logout";
   private final String ruShashkiNetUrl = "" +
       "https://rushashki-net.appspot.com";
@@ -31,6 +32,7 @@ public class NameTokens {
   private final Link generalSettingsLink;
   private final Link settingsLink;
   private final Link playLink;
+//  private final Link gameLink;
   private final Link analysisLink;
   private final Link ruShashkiNetLink;
 
@@ -40,6 +42,7 @@ public class NameTokens {
     ruShashkiNetLink = new Link(null, "RuShashkiNet", ruShashkiNetUrl, IconType.LINK);
     learnLink = new Link(learnPage, messages.learn(), null, null);
     playLink = new Link(playPage, messages.play(), null, IconType.PLAY_CIRCLE_O);
+//    gameLink = new Link(gamePage, messages.game(), null, IconType.PLAY_CIRCLE_O);
     analysisLink = new Link(analysisPage, messages.analysis(), null, null);
     loveLink = new Link(lovePage, "", null, IconType.HEART_O);
     loginLink = new Link(loginPage, messages.login(), null, IconType.SIGN_IN);

@@ -45,22 +45,20 @@ public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayer
   public FetchCurrentPlayerResult execute(FetchCurrentPlayerAction fetchCurrentPlayerAction, ExecutionContext executionContext) throws ActionException {
     try {
       if (!authProvider.get()) {
-        final PlayerDto player = new PlayerDto();
-        return new FetchCurrentPlayerResult(player);
+        return new FetchCurrentPlayerResult(null);
       }
       HttpSession session = requestProvider.get().getSession();
       final Player bySessionId = Player.getInstance().findBySessionId(session.getId());
-      if (bySessionId.isBanned()) {
+      if (bySessionId != null && bySessionId.isBanned()) {
         throw new RuntimeException("You were banned");
+      } else if (bySessionId == null) {
+        return new FetchCurrentPlayerResult(null);
       }
-      PlayerDto dto = new PlayerDto();
-      if (bySessionId != null) {
-        dto = mapper.map(bySessionId, PlayerDto.class);
-      }
+      PlayerDto dto = mapper.map(bySessionId, PlayerDto.class);
       return new FetchCurrentPlayerResult(dto);
     } catch (Exception e) {
       logger.error(e.getMessage(), e);
-      return new FetchCurrentPlayerResult(new PlayerDto());
+      return new FetchCurrentPlayerResult(null);
     }
   }
 

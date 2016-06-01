@@ -75,7 +75,7 @@ public class AuthUtils {
     }
     resp.addCookie(new Cookie("loggedIn", "1"));
 
-    resp.sendRedirect(String.format("%s/?locale=%s%s", Config.CONTEXT, locale, Config.PLAY_HASH));
+    resp.sendRedirect(String.format("%s/%s", Config.CONTEXT, Config.HOME_HASH));
   }
 
   public static Player check(Player player) throws BannedException {

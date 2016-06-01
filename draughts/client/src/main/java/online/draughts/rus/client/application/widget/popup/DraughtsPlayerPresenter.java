@@ -21,11 +21,14 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
   }
 
   interface ViewFactory {
+    MyView create(GameDto game, boolean inSlot);
+
     MyView create(GameDto game);
   }
 
   public interface Factory {
     DraughtsPlayerPresenter create(GameDto game);
+    DraughtsPlayerPresenter create(GameDto game, boolean inSlot);
   }
 
   public static class FactoryImpl implements Factory {
@@ -42,6 +45,11 @@ public class DraughtsPlayerPresenter extends PresenterWidget<DraughtsPlayerPrese
 
     public DraughtsPlayerPresenter create(GameDto game) {
       return new DraughtsPlayerPresenter(eventBus, viewFactory.create(game));
+    }
+
+    @Override
+    public DraughtsPlayerPresenter create(GameDto game, boolean inSlot) {
+      return new DraughtsPlayerPresenter(eventBus, viewFactory.create(game, inSlot));
     }
   }
 

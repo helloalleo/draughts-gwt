@@ -186,6 +186,7 @@ body {
 .dialogCaptionInfo {
 @mixin radius(DIALOG_BORDER_RADIUS);
 
+    padding: 0 4px;
     background: lightblue;
     font-size: 22px;
 }
@@ -193,6 +194,7 @@ body {
 .dialogCaptionError {
 @mixin radius(DIALOG_BORDER_RADIUS);
 
+    padding: 0 4px;
     background: lightcoral;
     font-size: 22px;
 }
@@ -216,6 +218,7 @@ body {
 .dialogCaptionPlayer {
 @mixin radius(DIALOG_BORDER_RADIUS);
 
+    padding: 0 4px;
     background: lightgreen;
     font-size: S_FONT_SIZE;
     margin-bottom: 12px;

@@ -4,21 +4,23 @@ import com.google.gwt.inject.client.AbstractGinModule;
 import com.google.gwt.inject.client.assistedinject.GinFactoryModuleBuilder;
 import com.google.inject.Singleton;
 import com.gwtplatform.mvp.client.gin.DefaultModule;
+import com.gwtplatform.mvp.shared.proxy.RouteTokenFormatter;
 import online.draughts.rus.client.application.ApplicationModule;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.dialog.DialogModule;
 import online.draughts.rus.client.application.widget.popup.DraughtsPlayerModule;
+import online.draughts.rus.client.channel.WebsocketModule;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.client.util.DTCookiesImpl;
 import online.draughts.rus.client.util.DTLogImpl;
 import online.draughts.rus.client.util.Log;
-import online.draughts.rus.client.channel.WebsocketModule;
 
 public class ClientModule extends AbstractGinModule {
   @Override
   protected void configure() {
     install(new DefaultModule.Builder()
+        .tokenFormatter(RouteTokenFormatter.class)
         .defaultPlace(NameTokens.homePage)
         .errorPlace(NameTokens.errorPage)
         .unauthorizedPlace(NameTokens.loginPage)

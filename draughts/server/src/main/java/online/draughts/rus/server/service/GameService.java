@@ -133,7 +133,14 @@ public class GameService {
   }
 
   public GameDto findDto(Long gameId) {
-    return mapper.map(find(gameId), GameDto.class);
+    if (null == gameId) {
+      return null;
+    }
+    final Game source = find(gameId);
+    if (null != source) {
+      return mapper.map(source, GameDto.class);
+    }
+    return null;
   }
 
   public List<Move> findGameMoves(Long gameId) {

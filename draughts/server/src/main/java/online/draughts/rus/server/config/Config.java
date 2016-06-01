@@ -43,14 +43,14 @@ public class Config {
   public static final String FB_API_OAUTH_PATH = resourceBundle.getString("fb_api_oauth_path");
 
   public static final String LOGIN_HASH = resourceBundle.getString("loginHash");
+  public static final String PLAY_HASH = resourceBundle.getString("playHash");
+  public static final String HOME_HASH = resourceBundle.getString("homeHash");
 
   public static final String GOOGLE_CLIENT_ID = resourceBundle.getString("google_client_id");
   public static final String GOOGLE_SCOPE = resourceBundle.getString("google_scope");
   public static final String GOOGLE_REDIRECT_URI = resourceBundle.getString("google_redirect_uri");
   public static final String GOOGLE_CLIENT_SECRET = resourceBundle.getString("google_client_secret");
   public static final String GOOGLE_API_USER_INFO = resourceBundle.getString("google_api_user_info");
-
-  public static final String PLAY_HASH = resourceBundle.getString("playHash");
 
   public static final boolean DEBUG = Boolean.valueOf(resourceBundle.getString("debug"));
 

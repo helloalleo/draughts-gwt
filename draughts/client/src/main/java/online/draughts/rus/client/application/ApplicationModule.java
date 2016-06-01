@@ -20,6 +20,7 @@ import com.gwtplatform.mvp.client.gin.AbstractPresenterModule;
 import online.draughts.rus.client.application.analysis.AnalysisModule;
 import online.draughts.rus.client.application.error.ErrorModule;
 import online.draughts.rus.client.application.footer.FooterModule;
+import online.draughts.rus.client.application.game.GameModule;
 import online.draughts.rus.client.application.home.HomeModule;
 import online.draughts.rus.client.application.learn.LearnModule;
 import online.draughts.rus.client.application.love.LoveModule;
@@ -31,6 +32,7 @@ import online.draughts.rus.client.application.security.OAuthLoginModule;
 public class ApplicationModule extends AbstractPresenterModule {
   @Override
   protected void configure() {
+    install(new GameModule());
     install(new FooterModule());
     install(new AnalysisModule());
     install(new LoveModule());

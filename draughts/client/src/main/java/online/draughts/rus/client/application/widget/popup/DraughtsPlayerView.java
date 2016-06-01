@@ -2,6 +2,7 @@ package online.draughts.rus.client.application.widget.popup;
 
 import com.ait.lienzo.client.widget.LienzoPanel;
 import com.google.gwt.dom.client.Node;
+import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.*;
 import com.google.gwt.event.shared.HandlerRegistration;
 import com.google.gwt.safehtml.shared.SimpleHtmlSanitizer;
@@ -133,7 +134,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   private DraughtsPlayerView(Binder uiBinder, EventBus eventBus, AppResources resources, DraughtsMessages messages,
                              ClientConfiguration config, CurrentSession currentSession,
                              ResourceDelegate<GamesResource> gamesDelegate,
-                             GameDto game) {
+                             GameDto game, boolean inSlot) {
     super(eventBus);
     this.resources = resources;
     this.messages = messages;
@@ -145,6 +146,12 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
     initWidget(uiBinder.createAndBindUi(this));
 
+    dismiss.setVisible(!inSlot);
+    if (inSlot) {
+      main.removeStyleName(resources.style().dialogBoxPlayer());
+      caption.removeStyleName(resources.style().dialogCaptionPlayer());
+      caption.getElement().getStyle().setMarginBottom(10, Style.Unit.PX);
+    }
     loggedInCommentPanel.setVisible(currentSession.isLoggedIn());
     notLoggedInCommentPanel.setVisible(!currentSession.isLoggedIn());
 
@@ -211,7 +218,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     final int offset = currentSession.isLoggedIn() ? loggedInCommentPanel.getOffsetHeight()
         : notLoggedInCommentPanel.getOffsetHeight();
     final int height = 600 / 2 - commentStrokeHeading.getOffsetHeight()
-        - caption.getOffsetHeight() - offset - 20;
+        - caption.getOffsetHeight() - offset - 50;
     gameCommentsScroll.setHeight(height + "px");
     currentStrokeCommentScroll.setHeight(height + "px");
   }
@@ -776,8 +783,13 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     }
 
     @Override
+    public DraughtsPlayerPresenter.MyView create(GameDto game, boolean inSlot) {
+      return new DraughtsPlayerView(binder, eventBus, resources, messages, config, currentSession, gamesDelegate, game, inSlot);
+    }
+
+    @Override
     public DraughtsPlayerPresenter.MyView create(GameDto game) {
-      return new DraughtsPlayerView(binder, eventBus, resources, messages, config, currentSession, gamesDelegate, game);
+      return new DraughtsPlayerView(binder, eventBus, resources, messages, config, currentSession, gamesDelegate, game, false);
     }
   }
 }

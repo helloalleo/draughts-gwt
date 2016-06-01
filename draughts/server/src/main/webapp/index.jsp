@@ -72,7 +72,7 @@
         <div class="collapse navbar-collapse" id="navcol-1">
             <ul class="nav navbar-nav navbar-right">
                 <li role="presentation"><a href="/shashki/">Главная </a></li>
-                <li role="presentation"><a href="/shashki/#!login">Войти </a></li>
+                <li role="presentation"><a href="/shashki/#!/login">Войти </a></li>
             </ul>
         </div>
     </div>
@@ -86,7 +86,7 @@
             <div class="col-md-6 col-md-pull-3 get-it">
                 <h1>Шашки онлайн</h1>
                 <h2>Играйте в шашки и общайтесь на нашем сайте</h2>
-                <p><a class="btn btn-primary btn-lg" role="button" href="/shashki/#!login">Войти на сайт</a></p>
+                <p><a class="btn btn-primary btn-lg" role="button" href="/shashki/#!/login">Войти на сайт</a></p>
             </div>
         </div>
     </div>
@@ -121,7 +121,7 @@
         </div>
         <div class="row">
             <div class="col-xs-8 col-xs-offset-2 col-md-2 col-md-offset-5"><a style="width: 100%;" class="btn btn-primary btn-lg on-site-btn" role="button"
-                                                     href="/shashki/#!login">Войти на сайт</a></div>
+                                                     href="/shashki/#!/login">Войти на сайт</a></div>
         </div>
     </div>
 </section>
