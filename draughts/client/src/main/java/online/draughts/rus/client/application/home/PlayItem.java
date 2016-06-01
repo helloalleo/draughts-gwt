@@ -1,12 +1,15 @@
 
 package online.draughts.rus.client.application.home;
 
+import com.google.gwt.dom.client.Document;
+import com.google.gwt.dom.client.SpanElement;
 import com.google.gwt.dom.client.Style;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
@@ -15,6 +18,7 @@ import com.google.inject.assistedinject.Assisted;
 import online.draughts.rus.client.application.widget.popup.DraughtsPlayerPresenter;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.TrUtils;
+import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import org.gwtbootstrap3.client.ui.Anchor;
@@ -26,6 +30,7 @@ public class PlayItem extends Composite {
 
   private static final String GAME_ID = "-game";
   private final DraughtsMessages messages;
+  private final ClientConfiguration config;
   private final static String PLAYER_COLOR_DELIMITER = ": ";
   private final int gamesInRow;
 
@@ -42,9 +47,15 @@ public class PlayItem extends Composite {
   @UiField
   HTML playEndDate;
   @UiField
-  HTMLPanel whoAndWhenDidWin;
+  HTMLPanel whoAndWhenWon;
   @UiField
-  Anchor showGameAnchor;
+  Anchor playGameAnchor;
+  @UiField
+  Anchor linkGameAnchor;
+  @UiField
+  HTMLPanel whoPlayed;
+  @UiField
+  HTMLPanel shareVkButton;
 
   @Inject
   PlayItem(Binder binder,
@@ -53,23 +64,36 @@ public class PlayItem extends Composite {
            DraughtsMessages messages,
            AppResources resources,
            @Assisted int gamesInRow,
-           @Assisted final GameDto game) {
+           @Assisted final GameDto game, ClientConfiguration config) {
     this.messages = messages;
+    this.config = config;
     initWidget(binder.createAndBindUi(this));
     this.gamesInRow = gamesInRow;
     panel.addStyleName(resources.style().playItem());
     setGame(homePresenter, draughtsPlayerFactory, game);
+
+    if (Window.getClientWidth() < 768) {
+      whoAndWhenWon.setVisible(false);
+      whoPlayed.setVisible(false);
+    }
   }
 
   private void setGame(final HomePresenter homePresenter, final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
                        final GameDto game) {
-    showGameAnchor.setId(game.getId() + GAME_ID);
-    showGameAnchor.addClickHandler(new ClickHandler() {
+    playGameAnchor.setId(game.getId() + GAME_ID);
+    playGameAnchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
         showGame(draughtsPlayerFactory, game, homePresenter);
       }
     });
+
+    final String whitePlayerName = messages.white() + PLAYER_COLOR_DELIMITER + game.getPlayerWhite().getPublicName();
+    final String blackPlayerName = messages.black() + PLAYER_COLOR_DELIMITER + game.getPlayerBlack().getPublicName();
+    SpanElement script = getVkShareScript(game.getId(), whitePlayerName, blackPlayerName);
+    shareVkButton.getElement().appendChild(script);
+
+    linkGameAnchor.setHref(config.linkToGame(String.valueOf(game.getId())));
     if (game.getPlayEndStatus() != null) {
       whoDidWin.setHTML(messages.whoHadWon(TrUtils.translateGameType(game.getGameType()),
           TrUtils.translateEndGame(game.getPlayEndStatus())));
@@ -107,8 +131,17 @@ public class PlayItem extends Composite {
       endGameScreenshot.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     }
 
-    whitePlayerName.setHTML(messages.white() + PLAYER_COLOR_DELIMITER + game.getPlayerWhite().getPublicName());
-    blackPlayerName.setHTML(messages.black() + PLAYER_COLOR_DELIMITER + game.getPlayerBlack().getPublicName());
+    this.whitePlayerName.setHTML(whitePlayerName);
+    this.blackPlayerName.setHTML(blackPlayerName);
+  }
+
+  private SpanElement getVkShareScript(Long gameId, String whitePlayerName, String blackPlayerName) {
+    Document doc = Document.get();
+    SpanElement vkShare = doc.createSpanElement();
+    vkShare.setInnerHTML("<a href='#' onclick=\"Share.vkontakte('https://shashki.online/shashki/#!/game?id=" + gameId + "'," +
+        "'Мне понравилась игра','https://shashki.online/logo.png','" + whitePlayerName + "; " + blackPlayerName + "')\">" +
+        "<i class='fa fa-vk fa-2x'></i></a>");
+    return vkShare;
   }
 
   private void showGame(DraughtsPlayerPresenter.Factory draughtsPlayerFactory, GameDto game, HomePresenter homePresenter) {

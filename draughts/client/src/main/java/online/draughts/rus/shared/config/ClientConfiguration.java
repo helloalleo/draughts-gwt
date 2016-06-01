@@ -1,7 +1,7 @@
 package online.draughts.rus.shared.config;
 
-import com.google.gwt.i18n.client.ConstantsWithLookup;
 import com.google.gwt.i18n.client.LocalizableResource;
+import com.google.gwt.i18n.client.Messages;
 
 /**
  * Created with IntelliJ IDEA.
@@ -9,7 +9,7 @@ import com.google.gwt.i18n.client.LocalizableResource;
  * Date: 15.03.15
  * Time: 16:19
  */
-public interface ClientConfiguration extends ConstantsWithLookup {
+public interface ClientConfiguration extends Messages {
 
   @LocalizableResource.Key("log.level")
   String logLevel();
@@ -27,4 +27,6 @@ public interface ClientConfiguration extends ConstantsWithLookup {
   String maxCommentLength();
 
   String removeAccountUrl();
+
+  String linkToGame(String id);
 }

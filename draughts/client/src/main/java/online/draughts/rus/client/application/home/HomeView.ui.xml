@@ -35,11 +35,11 @@
         </b:ButtonGroup>
         <g:HTMLPanel addStyleNames="{res.style.hrInfo}">
             <b:Row>
-                <b:Column size="XS_3 SM_8 MD_10 LG_9" addStyleNames="{res.style.totalOnlinePlayersHr}">
+                <b:Column size="XS_3 SM_8 MD_9 LG_9" addStyleNames="{res.style.totalOnlinePlayersHr}">
                     <b.html:Span addStyleNames="{res.style.hrMiddle}"/>
                 </b:Column>
 
-                <b:Column size="XS_9 SM_4 MD_2 LG_3">
+                <b:Column size="XS_9 SM_4 MD_3 LG_3">
                     <g:HTMLPanel addStyleNames="{res.style.playersStatus}">
                         <b.html:Span>
                             <ui:msg key="total" description="Всего">Всего игроков</ui:msg>

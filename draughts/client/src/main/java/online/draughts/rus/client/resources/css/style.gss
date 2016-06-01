@@ -199,7 +199,7 @@ body {
     font-size: 22px;
 }
 
-.whoDidWin {
+.whoWon {
     font-size: 12px;
     margin-right: 12px;
     /*float: right;*/
@@ -261,7 +261,6 @@ body {
 }
 
 .whoAndWhenDidWin {
-    text-align: center;
 }
 
 .hrMiddle {
