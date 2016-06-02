@@ -20,10 +20,10 @@ import com.google.gwt.resources.client.ClientBundle;
 import com.google.gwt.resources.client.CssResource;
 
 public interface DialogResources extends ClientBundle {
-    interface Style extends CssResource {
-        String dialog();
-    }
+  interface Style extends CssResource {
+    String dialog();
+  }
 
-    @Source({"css/variables.gss", "css/dialog.gss"})
-    Style style();
+  @Source({"css/variables.gss", "css/dialog.gss"})
+  Style style();
 }
