@@ -1,3 +1,4 @@
+package online.draughts.rus.client.resources;
 //
 //  Emoji.java
 //  emoji-gwt
@@ -6,61 +7,28 @@
 //  Copyright © 2014 WillShex Limited. All rights reserved.
 //
 
-import java.util.Collection;
+import com.google.inject.Inject;
 
 import java.util.Arrays;
-import java.util.Collection;
 import java.util.Collections;
-
-import com.google.gwt.core.client.GWT;
-import com.google.gwt.core.client.RunAsyncCallback;
-import com.google.gwt.resources.client.ImageResource;
-import com.google.gwt.safehtml.shared.SafeUri;
-
-import com.google.inject.Inject;
-import online.draughts.rus.client.resources.AppResources;
-import online.draughts.rus.client.resources.Resources;
-import online.draughts.rus.client.resources.images.Images;
+import java.util.List;
 
 public class Emoji {
 
-  private static Emoji one = null;
-
-  public static interface Ready {
-    void ready (Emoji emoji);
-  }
-
-  /**
-   * Get Emoji with default theme.
-   *
-   * @return
-   */
-  public static Emoji get () {
-    return get(null, null);
-  }
-
-  /**
-   * Get Emoji with theme. Swapping between themes will cause a rebuild of the
-   * lookup.
-   *
-   * @param themeName
-   * @oaram ready
-   * @return
-   */
-  public static Emoji get (String themeName, Ready ready) {
-    if (one == null) {
-      one = new Emoji();
-    }
-
-    return one.setTheme(themeName, ready);
-  }
-
   @Inject
   private AppResources instance;
-  private String currentThemeName;
-  private Collection<String> keywords = null;
+  private List<String> keywords = null;
 
-  public String resource(String name) {
+  public String cssEmojiClass() {
+    return instance.style().emoji();
+  }
+
+  /**
+   * Возвращает CSS стиль по коду эмотикона из keywords
+   * @param name код эмотикона
+   * @return css класс
+   */
+  public String cssEmojiClass(String name) {
     // smiling face with open mouth and smiling eyes
     if (":u1f604:".equals(name)) return instance.style().emoji1f604();
 //    if (":smile:".equals(name)) return instance.style().emoji1f604();
@@ -2635,1737 +2603,1698 @@ public class Emoji {
     return null;
   }
 
-  public boolean isValid (String name) {
-    if (name == null) { return false; }
-
-    return resource(name) != null;
-  }
-
-  public Collection<String> keyWords () {
+  public List<String> keyWords() {
     if (keywords == null) {
       keywords = Collections.unmodifiableList(Arrays.asList(":u1f604:",
-          ":smile:",
           // smiling face with open mouth
-          ":u1f603:", ":smiley:",
+          ":u1f603:",
           // grinning face
-          ":u1f600:", ":grinning:",
+          ":u1f600:",
           // smiling face with smiling eyes
-          ":u1f60a:", ":blush:",
+          ":u1f60a:",
           // white smiling face
-          ":u263a:", ":relaxed:",
+          ":u263a:",
           // winking face
-          ":u1f609:", ":wink:",
+          ":u1f609:",
           // smiling face with heart-shaped eyes
-          ":u1f60d:", ":heart_eyes:",
+          ":u1f60d:",
           // face throwing a kiss
-          ":u1f618:", ":kissing_heart:",
+          ":u1f618:",
           // kissing face with closed eyes
-          ":u1f61a:", ":kissing_closed_eyes:",
+          ":u1f61a:",
           // kissing face
-          ":u1f617:", ":kissing:",
+          ":u1f617:",
           // kissing face with smiling eyes
-          ":u1f619:", ":kissing_smiling_eyes:",
+          ":u1f619:",
           // face with stuck-out tongue and winking eye
-          ":u1f61c:", ":stuck_out_tongue_winking_eye:",
+          ":u1f61c:",
           // face with stuck-out tongue and tightly-closed eyes
-          ":u1f61d:", ":stuck_out_tongue_closed_eyes:",
+          ":u1f61d:",
           // face with stuck-out tongue
-          ":u1f61b:", ":stuck_out_tongue:",
+          ":u1f61b:",
           // flushed face
-          ":u1f633:", ":flushed:",
+          ":u1f633:",
           // grinning face with smiling eyes
-          ":u1f601:", ":grin:",
+          ":u1f601:",
           // pensive face
-          ":u1f614:", ":pensive:",
+          ":u1f614:",
           // relieved face
-          ":u1f60c:", ":relieved:",
+          ":u1f60c:",
           // unamused face
-          ":u1f612:", ":unamused:",
+          ":u1f612:",
           // disappointed face
-          ":u1f61e:", ":disappointed:",
+          ":u1f61e:",
           // persevering face
-          ":u1f623:", ":persevere:",
+          ":u1f623:",
           // crying face
-          ":u1f622:", ":cry:",
+          ":u1f622:",
           // face with tears of joy
-          ":u1f602:", ":joy:",
+          ":u1f602:",
           // loudly crying face
-          ":u1f62d:", ":sob:",
+          ":u1f62d:",
           // sleepy face
-          ":u1f62a:", ":sleepy:",
+          ":u1f62a:",
           // disappointed but relieved face
-          ":u1f625:", ":disappointed_relieved:",
+          ":u1f625:",
           // face with open mouth and cold sweat
-          ":u1f630:", ":cold_sweat:",
+          ":u1f630:",
           // smiling face with open mouth and cold sweat
-          ":u1f605:", ":sweat_smile:",
+          ":u1f605:",
           // face with cold sweat
-          ":u1f613:", ":sweat:",
+          ":u1f613:",
           // weary face
-          ":u1f629:", ":weary:",
+          ":u1f629:",
           // tired face
-          ":u1f62b:", ":tired_face:",
+          ":u1f62b:",
           // fearful face
-          ":u1f628:", ":fearful:",
+          ":u1f628:",
           // face screaming in fear
-          ":u1f631:", ":scream:",
+          ":u1f631:",
           // angry face
-          ":u1f620:", ":angry:",
+          ":u1f620:",
           // pouting face
-          ":u1f621:", ":rage:",
+          ":u1f621:",
           // face with look of triumph
-          ":u1f624:", ":triumph:",
+          ":u1f624:",
           // confounded face
-          ":u1f616:", ":confounded:",
+          ":u1f616:",
           // smiling face with open mouth and tightly-closed eyes
-          ":u1f606:", ":laughing:", ":satisfied:",
+          ":u1f606:",
           // face savouring delicious food
-          ":u1f60b:", ":yum:",
+          ":u1f60b:",
           // face with medical mask
-          ":u1f637:", ":mask:",
+          ":u1f637:",
           // smiling face with sunglasses
-          ":u1f60e:", ":sunglasses:",
+          ":u1f60e:",
           // sleeping face
-          ":u1f634:", ":sleeping:",
+          ":u1f634:",
           // dizzy face
-          ":u1f635:", ":dizzy_face:",
+          ":u1f635:",
           // astonished face
-          ":u1f632:", ":astonished:",
+          ":u1f632:",
           // worried face
-          ":u1f61f:", ":worried:",
+          ":u1f61f:",
           // frowning face with open mouth
-          ":u1f626:", ":frowning:",
+          ":u1f626:",
           // anguished face
-          ":u1f627:", ":anguished:",
+          ":u1f627:",
           // smiling face with horns
-          ":u1f608:", ":smiling_imp:",
+          ":u1f608:",
           // imp
-          ":u1f47f:", ":imp:",
+          ":u1f47f:",
           // face with open mouth
-          ":u1f62e:", ":open_mouth:",
+          ":u1f62e:",
           // grimacing face
-          ":u1f62c:", ":grimacing:",
+          ":u1f62c:",
           // neutral face
-          ":u1f610:", ":neutral_face:",
+          ":u1f610:",
           // confused face
-          ":u1f615:", ":confused:",
+          ":u1f615:",
           // hushed face
-          ":u1f62f:", ":hushed:",
+          ":u1f62f:",
           // face without mouth
-          ":u1f636:", ":no_mouth:",
+          ":u1f636:",
           // smiling face with halo
-          ":u1f607:", ":innocent:",
+          ":u1f607:",
           // smirking face
-          ":u1f60f:", ":smirk:",
+          ":u1f60f:",
           // expressionless face
-          ":u1f611:", ":expressionless:",
+          ":u1f611:",
           // man with gua pi mao
-          ":u1f472:", ":man_with_gua_pi_mao:",
+          ":u1f472:",
           // man with turban
-          ":u1f473:", ":man_with_turban:",
+          ":u1f473:",
           // police officer
-          ":u1f46e:", ":cop:",
+          ":u1f46e:",
           // construction worker
-          ":u1f477:", ":construction_worker:",
+          ":u1f477:",
           // guardsman
-          ":u1f482:", ":guardsman:",
+          ":u1f482:",
           // baby
-          ":u1f476:", ":baby:",
+          ":u1f476:",
           // boy
-          ":u1f466:", ":boy:",
+          ":u1f466:",
           // girl
-          ":u1f467:", ":girl:",
+          ":u1f467:",
           // man
-          ":u1f468:", ":man:",
+          ":u1f468:",
           // woman
-          ":u1f469:", ":woman:",
+          ":u1f469:",
           // older man
-          ":u1f474:", ":older_man:",
+          ":u1f474:",
           // older woman
-          ":u1f475:", ":older_woman:",
+          ":u1f475:",
           // person with blond hair
-          ":u1f471:", ":person_with_blond_hair:",
+          ":u1f471:",
           // baby angel
-          ":u1f47c:", ":angel:",
+          ":u1f47c:",
           // princess
-          ":u1f478:", ":princess:",
+          ":u1f478:",
           // smiling cat face with open mouth
-          ":u1f63a:", ":smiley_cat:",
+          ":u1f63a:",
           // grinning cat face with smiling eyes
-          ":u1f638:", ":smile_cat:",
+          ":u1f638:",
           // smiling cat face with heart-shaped eyes
-          ":u1f63b:", ":heart_eyes_cat:",
+          ":u1f63b:",
           // kissing cat face with closed eyes
-          ":u1f63d:", ":kissing_cat:",
+          ":u1f63d:",
           // cat face with wry smile
-          ":u1f63c:", ":smirk_cat:",
+          ":u1f63c:",
           // weary cat face
-          ":u1f640:", ":scream_cat:",
+          ":u1f640:",
           // crying cat face
-          ":u1f63f:", ":crying_cat_face:",
+          ":u1f63f:",
           // cat face with tears of joy
-          ":u1f639:", ":joy_cat:",
+          ":u1f639:",
           // pouting cat face
-          ":u1f63e:", ":pouting_cat:",
+          ":u1f63e:",
           // japanese ogre
-          ":u1f479:", ":japanese_ogre:",
+          ":u1f479:",
           // japanese goblin
-          ":u1f47a:", ":japanese_goblin:",
+          ":u1f47a:",
           // see-no-evil monkey
-          ":u1f648:", ":see_no_evil:",
+          ":u1f648:",
           // hear-no-evil monkey
-          ":u1f649:", ":hear_no_evil:",
+          ":u1f649:",
           // speak-no-evil monkey
-          ":u1f64a:", ":speak_no_evil:",
+          ":u1f64a:",
           // skull
-          ":u1f480:", ":skull:",
+          ":u1f480:",
           // extraterrestrial alien
-          ":u1f47d:", ":alien:",
+          ":u1f47d:",
           // pile of poo
-          ":u1f4a9:", ":hankey:", ":poop:", ":shit:",
+          ":u1f4a9:",
           // fire
-          ":u1f525:", ":fire:",
+          ":u1f525:",
           // sparkles
-          ":u2728:", ":sparkles:",
+          ":u2728:",
           // glowing star
-          ":u1f31f:", ":star2:",
+          ":u1f31f:",
           // dizzy symbol
-          ":u1f4ab:", ":dizzy:",
+          ":u1f4ab:",
           // collision symbol
-          ":u1f4a5:", ":boom:", ":collision:",
+          ":u1f4a5:",
           // anger symbol
-          ":u1f4a2:", ":anger:",
+          ":u1f4a2:",
           // splashing sweat symbol
-          ":u1f4a6:", ":sweat_drops:",
+          ":u1f4a6:",
           // droplet
-          ":u1f4a7:", ":droplet:",
+          ":u1f4a7:",
           // sleeping symbol
-          ":u1f4a4:", ":zzz:",
+          ":u1f4a4:",
           // dash symbol
-          ":u1f4a8:", ":dash:",
+          ":u1f4a8:",
           // ear
-          ":u1f442:", ":ear:",
+          ":u1f442:",
           // eyes
-          ":u1f440:", ":eyes:",
+          ":u1f440:",
           // nose
-          ":u1f443:", ":nose:",
+          ":u1f443:",
           // tongue
-          ":u1f445:", ":tongue:",
+          ":u1f445:",
           // mouth
-          ":u1f444:", ":lips:",
+          ":u1f444:",
           // thumbs up sign
-          ":u1f44d:", ":+1:", ":thumbsup:",
+          ":u1f44d:",
           // thumbs down sign
-          ":u1f44e:", ":-1:", ":thumbsdown:",
+          ":u1f44e:",
           // ok hand sign
-          ":u1f44c:", ":ok_hand:",
+          ":u1f44c:",
           // fisted hand sign
-          ":u1f44a:", ":facepunch:", ":punch:",
+          ":u1f44a:",
           // raised fist
-          ":u270a:", ":fist:",
+          ":u270a:",
           // victory hand
-          ":u270c:", ":v:",
+          ":u270c:",
           // waving hand sign
-          ":u1f44b:", ":wave:",
+          ":u1f44b:",
           // raised hand
-          ":u270b:", ":hand:", ":raised_hand:",
+          ":u270b:",
           // open hands sign
-          ":u1f450:", ":open_hands:",
+          ":u1f450:",
           // white up pointing backhand index
-          ":u1f446:", ":point_up_2:",
+          ":u1f446:",
           // white down pointing backhand index
-          ":u1f447:", ":point_down:",
+          ":u1f447:",
           // white right pointing backhand index
-          ":u1f449:", ":point_right:",
+          ":u1f449:",
           // white left pointing backhand index
-          ":u1f448:", ":point_left:",
+          ":u1f448:",
           // person raising both hands in celebration
-          ":u1f64c:", ":raised_hands:",
+          ":u1f64c:",
           // person with folded hands
-          ":u1f64f:", ":pray:",
+          ":u1f64f:",
           // white up pointing index
-          ":u261d:", ":point_up:",
+          ":u261d:",
           // clapping hands sign
-          ":u1f44f:", ":clap:",
+          ":u1f44f:",
           // flexed biceps
-          ":u1f4aa:", ":muscle:",
+          ":u1f4aa:",
           // pedestrian
-          ":u1f6b6:", ":walking:",
+          ":u1f6b6:",
           // runner
-          ":u1f3c3:", ":runner:", ":running:",
+          ":u1f3c3:",
           // dancer
-          ":u1f483:", ":dancer:",
+          ":u1f483:",
           // man and woman holding hands
-          ":u1f46b:", ":couple:",
+          ":u1f46b:",
           // family
-          ":u1f46a:", ":family:",
+          ":u1f46a:",
           // two men holding hands
-          ":u1f46c:", ":two_men_holding_hands:",
+          ":u1f46c:",
           // two women holding hands
-          ":u1f46d:", ":two_women_holding_hands:",
+          ":u1f46d:",
           // kiss
-          ":u1f48f:", ":couplekiss:",
+          ":u1f48f:",
           // couple with heart
-          ":u1f491:", ":couple_with_heart:",
+          ":u1f491:",
           // woman with bunny ears
-          ":u1f46f:", ":dancers:",
+          ":u1f46f:",
           // face with ok gesture
-          ":u1f646:", ":ok_woman:",
+          ":u1f646:",
           // face with no good gesture
-          ":u1f645:", ":no_good:",
+          ":u1f645:",
           // information desk person
-          ":u1f481:", ":information_desk_person:",
+          ":u1f481:",
           // happy person raising one hand
-          ":u1f64b:", ":raising_hand:",
+          ":u1f64b:",
           // face massage
-          ":u1f486:", ":massage:",
+          ":u1f486:",
           // haircut
-          ":u1f487:", ":haircut:",
+          ":u1f487:",
           // nail polish
-          ":u1f485:", ":nail_care:",
+          ":u1f485:",
           // bride with veil
-          ":u1f470:", ":bride_with_veil:",
+          ":u1f470:",
           // person with pouting face
-          ":u1f64e:", ":person_with_pouting_face:",
+          ":u1f64e:",
           // person frowning
-          ":u1f64d:", ":person_frowning:",
+          ":u1f64d:",
           // person bowing deeply
-          ":u1f647:", ":bow:",
+          ":u1f647:",
           // top hat
-          ":u1f3a9:", ":tophat:",
+          ":u1f3a9:",
           // crown
-          ":u1f451:", ":crown:",
+          ":u1f451:",
           // womans hat
-          ":u1f452:", ":womans_hat:",
+          ":u1f452:",
           // athletic shoe
-          ":u1f45f:", ":athletic_shoe:",
+          ":u1f45f:",
           // mans shoe
-          ":u1f45e:", ":mans_shoe:", ":shoe:",
+          ":u1f45e:",
           // womans sandal
-          ":u1f461:", ":sandal:",
+          ":u1f461:",
           // high-heeled shoe
-          ":u1f460:", ":high_heel:",
+          ":u1f460:",
           // womans boots
-          ":u1f462:", ":boot:",
+          ":u1f462:",
           // t-shirt
-          ":u1f455:", ":shirt:", ":tshirt:",
+          ":u1f455:",
           // necktie
-          ":u1f454:", ":necktie:",
+          ":u1f454:",
           // womans clothes
-          ":u1f45a:", ":womans_clothes:",
+          ":u1f45a:",
           // dress
-          ":u1f457:", ":dress:",
+          ":u1f457:",
           // running shirt with sash
-          ":u1f3bd:", ":running_shirt_with_sash:",
+          ":u1f3bd:",
           // jeans
-          ":u1f456:", ":jeans:",
+          ":u1f456:",
           // kimono
-          ":u1f458:", ":kimono:",
+          ":u1f458:",
           // bikini
-          ":u1f459:", ":bikini:",
+          ":u1f459:",
           // briefcase
-          ":u1f4bc:", ":briefcase:",
+          ":u1f4bc:",
           // handbag
-          ":u1f45c:", ":handbag:",
+          ":u1f45c:",
           // pouch
-          ":u1f45d:", ":pouch:",
+          ":u1f45d:",
           // purse
-          ":u1f45b:", ":purse:",
+          ":u1f45b:",
           // eyeglasses
-          ":u1f453:", ":eyeglasses:",
+          ":u1f453:",
           // ribbon
-          ":u1f380:", ":ribbon:",
+          ":u1f380:",
           // closed umbrella
-          ":u1f302:", ":closed_umbrella:",
+          ":u1f302:",
           // lipstick
-          ":u1f484:", ":lipstick:",
+          ":u1f484:",
           // yellow heart
-          ":u1f49b:", ":yellow_heart:",
+          ":u1f49b:",
           // blue heart
-          ":u1f499:", ":blue_heart:",
+          ":u1f499:",
           // purple heart
-          ":u1f49c:", ":purple_heart:",
+          ":u1f49c:",
           // green heart
-          ":u1f49a:", ":green_heart:",
+          ":u1f49a:",
           // heavy black heart
-          ":u2764:", ":heart:",
+          ":u2764:",
           // broken heart
-          ":u1f494:", ":broken_heart:",
+          ":u1f494:",
           // growing heart
-          ":u1f497:", ":heartpulse:",
+          ":u1f497:",
           // beating heart
-          ":u1f493:", ":heartbeat:",
+          ":u1f493:",
           // two hearts
-          ":u1f495:", ":two_hearts:",
+          ":u1f495:",
           // sparkling heart
-          ":u1f496:", ":sparkling_heart:",
+          ":u1f496:",
           // revolving hearts
-          ":u1f49e:", ":revolving_hearts:",
+          ":u1f49e:",
           // heart with arrow
-          ":u1f498:", ":cupid:",
+          ":u1f498:",
           // love letter
-          ":u1f48c:", ":love_letter:",
+          ":u1f48c:",
           // kiss mark
-          ":u1f48b:", ":kiss:",
+          ":u1f48b:",
           // ring
-          ":u1f48d:", ":ring:",
+          ":u1f48d:",
           // gem stone
-          ":u1f48e:", ":gem:",
+          ":u1f48e:",
           // bust in silhouette
-          ":u1f464:", ":bust_in_silhouette:",
+          ":u1f464:",
           // busts in silhouette
-          ":u1f465:", ":busts_in_silhouette:",
+          ":u1f465:",
           // speech balloon
-          ":u1f4ac:", ":speech_balloon:",
+          ":u1f4ac:",
           // footprints
-          ":u1f463:", ":footprints:",
+          ":u1f463:",
           // thought balloon
-          ":u1f4ad:", ":thought_balloon:",
+          ":u1f4ad:",
           // dog face
-          ":u1f436:", ":dog:",
+          ":u1f436:",
           // wolf face
-          ":u1f43a:", ":wolf:",
+          ":u1f43a:",
           // cat face
-          ":u1f431:", ":cat:",
+          ":u1f431:",
           // mouse face
-          ":u1f42d:", ":mouse:",
+          ":u1f42d:",
           // hamster face
-          ":u1f439:", ":hamster:",
+          ":u1f439:",
           // rabbit face
-          ":u1f430:", ":rabbit:",
+          ":u1f430:",
           // frog face
-          ":u1f438:", ":frog:",
+          ":u1f438:",
           // tiger face
-          ":u1f42f:", ":tiger:",
+          ":u1f42f:",
           // koala
-          ":u1f428:", ":koala:",
+          ":u1f428:",
           // bear face
-          ":u1f43b:", ":bear:",
+          ":u1f43b:",
           // pig face
-          ":u1f437:", ":pig:",
+          ":u1f437:",
           // pig nose
-          ":u1f43d:", ":pig_nose:",
+          ":u1f43d:",
           // cow face
-          ":u1f42e:", ":cow:",
+          ":u1f42e:",
           // boar
-          ":u1f417:", ":boar:",
+          ":u1f417:",
           // monkey face
-          ":u1f435:", ":monkey_face:",
+          ":u1f435:",
           // monkey
-          ":u1f412:", ":monkey:",
+          ":u1f412:",
           // horse face
-          ":u1f434:", ":horse:",
+          ":u1f434:",
           // sheep
-          ":u1f411:", ":sheep:",
+          ":u1f411:",
           // elephant
-          ":u1f418:", ":elephant:",
+          ":u1f418:",
           // panda face
-          ":u1f43c:", ":panda_face:",
+          ":u1f43c:",
           // penguin
-          ":u1f427:", ":penguin:",
+          ":u1f427:",
           // bird
-          ":u1f426:", ":bird:",
+          ":u1f426:",
           // baby chick
-          ":u1f424:", ":baby_chick:",
+          ":u1f424:",
           // front-facing baby chick
-          ":u1f425:", ":hatched_chick:",
+          ":u1f425:",
           // hatching chick
-          ":u1f423:", ":hatching_chick:",
+          ":u1f423:",
           // chicken
-          ":u1f414:", ":chicken:",
+          ":u1f414:",
           // snake
-          ":u1f40d:", ":snake:",
+          ":u1f40d:",
           // turtle
-          ":u1f422:", ":turtle:",
+          ":u1f422:",
           // bug
-          ":u1f41b:", ":bug:",
+          ":u1f41b:",
           // honeybee
-          ":u1f41d:", ":bee:", ":honeybee:",
+          ":u1f41d:",
           // ant
-          ":u1f41c:", ":ant:",
+          ":u1f41c:",
           // lady beetle
-          ":u1f41e:", ":beetle:",
+          ":u1f41e:",
           // snail
-          ":u1f40c:", ":snail:",
+          ":u1f40c:",
           // octopus
-          ":u1f419:", ":octopus:",
+          ":u1f419:",
           // spiral shell
-          ":u1f41a:", ":shell:",
+          ":u1f41a:",
           // tropical fish
-          ":u1f420:", ":tropical_fish:",
+          ":u1f420:",
           // fish
-          ":u1f41f:", ":fish:",
+          ":u1f41f:",
           // dolphin
-          ":u1f42c:", ":dolphin:", ":flipper:",
+          ":u1f42c:",
           // spouting whale
-          ":u1f433:", ":whale:",
+          ":u1f433:",
           // whale
-          ":u1f40b:", ":whale2:",
+          ":u1f40b:",
           // cow
-          ":u1f404:", ":cow2:",
+          ":u1f404:",
           // ram
-          ":u1f40f:", ":ram:",
+          ":u1f40f:",
           // rat
-          ":u1f400:", ":rat:",
+          ":u1f400:",
           // water buffalo
-          ":u1f403:", ":water_buffalo:",
+          ":u1f403:",
           // tiger
-          ":u1f405:", ":tiger2:",
+          ":u1f405:",
           // rabbit
-          ":u1f407:", ":rabbit2:",
+          ":u1f407:",
           // dragon
-          ":u1f409:", ":dragon:",
+          ":u1f409:",
           // horse
-          ":u1f40e:", ":racehorse:",
+          ":u1f40e:",
           // goat
-          ":u1f410:", ":goat:",
+          ":u1f410:",
           // rooster
-          ":u1f413:", ":rooster:",
+          ":u1f413:",
           // dog
-          ":u1f415:", ":dog2:",
+          ":u1f415:",
           // pig
-          ":u1f416:", ":pig2:",
+          ":u1f416:",
           // mouse
-          ":u1f401:", ":mouse2:",
+          ":u1f401:",
           // ox
-          ":u1f402:", ":ox:",
+          ":u1f402:",
           // dragon face
-          ":u1f432:", ":dragon_face:",
+          ":u1f432:",
           // blowfish
-          ":u1f421:", ":blowfish:",
+          ":u1f421:",
           // crocodile
-          ":u1f40a:", ":crocodile:",
+          ":u1f40a:",
           // bactrian camel
-          ":u1f42b:", ":camel:",
+          ":u1f42b:",
           // dromedary camel
-          ":u1f42a:", ":dromedary_camel:",
+          ":u1f42a:",
           // leopard
-          ":u1f406:", ":leopard:",
+          ":u1f406:",
           // cat
-          ":u1f408:", ":cat2:",
+          ":u1f408:",
           // poodle
-          ":u1f429:", ":poodle:",
+          ":u1f429:",
           // paw prints
-          ":u1f43e:", ":feet:", ":paw_prints:",
+          ":u1f43e:",
           // bouquet
-          ":u1f490:", ":bouquet:",
+          ":u1f490:",
           // cherry blossom
-          ":u1f338:", ":cherry_blossom:",
+          ":u1f338:",
           // tulip
-          ":u1f337:", ":tulip:",
+          ":u1f337:",
           // four leaf clover
-          ":u1f340:", ":four_leaf_clover:",
+          ":u1f340:",
           // rose
-          ":u1f339:", ":rose:",
+          ":u1f339:",
           // sunflower
-          ":u1f33b:", ":sunflower:",
+          ":u1f33b:",
           // hibiscus
-          ":u1f33a:", ":hibiscus:",
+          ":u1f33a:",
           // maple leaf
-          ":u1f341:", ":maple_leaf:",
+          ":u1f341:",
           // leaf fluttering in wind
-          ":u1f343:", ":leaves:",
+          ":u1f343:",
           // fallen leaf
-          ":u1f342:", ":fallen_leaf:",
+          ":u1f342:",
           // herb
-          ":u1f33f:", ":herb:",
+          ":u1f33f:",
           // ear of rice
-          ":u1f33e:", ":ear_of_rice:",
+          ":u1f33e:",
           // mushroom
-          ":u1f344:", ":mushroom:",
+          ":u1f344:",
           // cactus
-          ":u1f335:", ":cactus:",
+          ":u1f335:",
           // palm tree
-          ":u1f334:", ":palm_tree:",
+          ":u1f334:",
           // evergreen tree
-          ":u1f332:", ":evergreen_tree:",
+          ":u1f332:",
           // deciduous tree
-          ":u1f333:", ":deciduous_tree:",
+          ":u1f333:",
           // chestnut
-          ":u1f330:", ":chestnut:",
+          ":u1f330:",
           // seedling
-          ":u1f331:", ":seedling:",
+          ":u1f331:",
           // blossom
-          ":u1f33c:", ":blossom:",
+          ":u1f33c:",
           // globe with meridians
-          ":u1f310:", ":globe_with_meridians:",
+          ":u1f310:",
           // sun with face
-          ":u1f31e:", ":sun_with_face:",
+          ":u1f31e:",
           // full moon with face
-          ":u1f31d:", ":full_moon_with_face:",
+          ":u1f31d:",
           // new moon with face
-          ":u1f31a:", ":new_moon_with_face:",
+          ":u1f31a:",
           // new moon symbol
-          ":u1f311:", ":new_moon:",
+          ":u1f311:",
           // waxing crescent moon symbol
-          ":u1f312:", ":waxing_crescent_moon:",
+          ":u1f312:",
           // first quarter moon symbol
-          ":u1f313:", ":first_quarter_moon:",
+          ":u1f313:",
           // waxing gibbous moon symbol
-          ":u1f314:", ":moon:", ":waxing_gibbous_moon:",
+          ":u1f314:",
           // full moon symbol
-          ":u1f315:", ":full_moon:",
+          ":u1f315:",
           // waning gibbous moon symbol
-          ":u1f316:", ":waning_gibbous_moon:",
+          ":u1f316:",
           // last quarter moon symbol
-          ":u1f317:", ":last_quarter_moon:",
+          ":u1f317:",
           // waning crescent moon symbol
-          ":u1f318:", ":waning_crescent_moon:",
+          ":u1f318:",
           // last quarter moon with face
-          ":u1f31c:", ":last_quarter_moon_with_face:",
+          ":u1f31c:",
           // first quarter moon with face
-          ":u1f31b:", ":first_quarter_moon_with_face:",
+          ":u1f31b:",
           // crescent moon
-          ":u1f319:", ":crescent_moon:",
+          ":u1f319:",
           // earth globe europe-africa
-          ":u1f30d:", ":earth_africa:",
+          ":u1f30d:",
           // earth globe americas
-          ":u1f30e:", ":earth_americas:",
+          ":u1f30e:",
           // earth globe asia-australia
-          ":u1f30f:", ":earth_asia:",
+          ":u1f30f:",
           // volcano
-          ":u1f30b:", ":volcano:",
+          ":u1f30b:",
           // milky way
-          ":u1f30c:", ":milky_way:",
+          ":u1f30c:",
           // shooting star
-          ":u1f320:", ":stars:",
+          ":u1f320:",
           // white medium star
-          ":u2b50:", ":star:",
+          ":u2b50:",
           // black sun with rays
-          ":u2600:", ":sunny:",
+          ":u2600:",
           // sun behind cloud
-          ":u26c5:", ":partly_sunny:",
+          ":u26c5:",
           // cloud
-          ":u2601:", ":cloud:",
+          ":u2601:",
           // high voltage sign
-          ":u26a1:", ":zap:",
+          ":u26a1:",
           // umbrella with rain drops
-          ":u2614:", ":umbrella:",
+          ":u2614:",
           // snowflake
-          ":u2744:", ":snowflake:",
+          ":u2744:",
           // snowman without snow
-          ":u26c4:", ":snowman:",
+          ":u26c4:",
           // cyclone
-          ":u1f300:", ":cyclone:",
+          ":u1f300:",
           // foggy
-          ":u1f301:", ":foggy:",
+          ":u1f301:",
           // rainbow
-          ":u1f308:", ":rainbow:",
+          ":u1f308:",
           // water wave
-          ":u1f30a:", ":ocean:",
+          ":u1f30a:",
           // pine decoration
-          ":u1f38d:", ":bamboo:",
+          ":u1f38d:",
           // heart with ribbon
-          ":u1f49d:", ":gift_heart:",
+          ":u1f49d:",
           // japanese dolls
-          ":u1f38e:", ":dolls:",
+          ":u1f38e:",
           // school satchel
-          ":u1f392:", ":school_satchel:",
+          ":u1f392:",
           // graduation cap
-          ":u1f393:", ":mortar_board:",
+          ":u1f393:",
           // carp streamer
-          ":u1f38f:", ":flags:",
+          ":u1f38f:",
           // fireworks
-          ":u1f386:", ":fireworks:",
+          ":u1f386:",
           // firework sparkler
-          ":u1f387:", ":sparkler:",
+          ":u1f387:",
           // wind chime
-          ":u1f390:", ":wind_chime:",
+          ":u1f390:",
           // moon viewing ceremony
-          ":u1f391:", ":rice_scene:",
+          ":u1f391:",
           // jack-o-lantern
-          ":u1f383:", ":jack_o_lantern:",
+          ":u1f383:",
           // ghost
-          ":u1f47b:", ":ghost:",
+          ":u1f47b:",
           // father christmas
-          ":u1f385:", ":santa:",
+          ":u1f385:",
           // christmas tree
-          ":u1f384:", ":christmas_tree:",
+          ":u1f384:",
           // wrapped present
-          ":u1f381:", ":gift:",
+          ":u1f381:",
           // tanabata tree
-          ":u1f38b:", ":tanabata_tree:",
+          ":u1f38b:",
           // party popper
-          ":u1f389:", ":tada:",
+          ":u1f389:",
           // confetti ball
-          ":u1f38a:", ":confetti_ball:",
+          ":u1f38a:",
           // balloon
-          ":u1f388:", ":balloon:",
+          ":u1f388:",
           // crossed flags
-          ":u1f38c:", ":crossed_flags:",
+          ":u1f38c:",
           // crystal ball
-          ":u1f52e:", ":crystal_ball:",
+          ":u1f52e:",
           // movie camera
-          ":u1f3a5:", ":movie_camera:",
+          ":u1f3a5:",
           // camera
-          ":u1f4f7:", ":camera:",
+          ":u1f4f7:",
           // video camera
-          ":u1f4f9:", ":video_camera:",
+          ":u1f4f9:",
           // videocassette
-          ":u1f4fc:", ":vhs:",
+          ":u1f4fc:",
           // optical disc
-          ":u1f4bf:", ":cd:",
+          ":u1f4bf:",
           // dvd
-          ":u1f4c0:", ":dvd:",
+          ":u1f4c0:",
           // minidisc
-          ":u1f4bd:", ":minidisc:",
+          ":u1f4bd:",
           // floppy disk
-          ":u1f4be:", ":floppy_disk:",
+          ":u1f4be:",
           // personal computer
-          ":u1f4bb:", ":computer:",
+          ":u1f4bb:",
           // mobile phone
-          ":u1f4f1:", ":iphone:",
+          ":u1f4f1:",
           // black telephone
-          ":u260e:", ":phone:", ":telephone:",
+          ":u260e:",
           // telephone receiver
-          ":u1f4de:", ":telephone_receiver:",
+          ":u1f4de:",
           // pager
-          ":u1f4df:", ":pager:",
+          ":u1f4df:",
           // fax machine
-          ":u1f4e0:", ":fax:",
+          ":u1f4e0:",
           // satellite antenna
-          ":u1f4e1:", ":satellite:",
+          ":u1f4e1:",
           // television
-          ":u1f4fa:", ":tv:",
+          ":u1f4fa:",
           // radio
-          ":u1f4fb:", ":radio:",
+          ":u1f4fb:",
           // speaker with three sound waves
-          ":u1f50a:", ":loud_sound:",
+          ":u1f50a:",
           // speaker with one sound wave
-          ":u1f509:", ":sound:",
+          ":u1f509:",
           // speaker
-          ":u1f508:", ":speaker:",
+          ":u1f508:",
           // speaker with cancellation stroke
-          ":u1f507:", ":mute:",
+          ":u1f507:",
           // bell
-          ":u1f514:", ":bell:",
+          ":u1f514:",
           // bell with cancellation stroke
-          ":u1f515:", ":no_bell:",
+          ":u1f515:",
           // public address loudspeaker
-          ":u1f4e2:", ":loudspeaker:",
+          ":u1f4e2:",
           // cheering megaphone
-          ":u1f4e3:", ":mega:",
+          ":u1f4e3:",
           // hourglass with flowing sand
-          ":u23f3:", ":hourglass_flowing_sand:",
+          ":u23f3:",
           // hourglass
-          ":u231b:", ":hourglass:",
+          ":u231b:",
           // alarm clock
-          ":u23f0:", ":alarm_clock:",
+          ":u23f0:",
           // watch
-          ":u231a:", ":watch:",
+          ":u231a:",
           // open lock
-          ":u1f513:", ":unlock:",
+          ":u1f513:",
           // lock
-          ":u1f512:", ":lock:",
+          ":u1f512:",
           // lock with ink pen
-          ":u1f50f:", ":lock_with_ink_pen:",
+          ":u1f50f:",
           // closed lock with key
-          ":u1f510:", ":closed_lock_with_key:",
+          ":u1f510:",
           // key
-          ":u1f511:", ":key:",
+          ":u1f511:",
           // right-pointing magnifying glass
-          ":u1f50e:", ":mag_right:",
+          ":u1f50e:",
           // electric light bulb
-          ":u1f4a1:", ":bulb:",
+          ":u1f4a1:",
           // electric torch
-          ":u1f526:", ":flashlight:",
+          ":u1f526:",
           // high brightness symbol
-          ":u1f506:", ":high_brightness:",
+          ":u1f506:",
           // low brightness symbol
-          ":u1f505:", ":low_brightness:",
+          ":u1f505:",
           // electric plug
-          ":u1f50c:", ":electric_plug:",
+          ":u1f50c:",
           // battery
-          ":u1f50b:", ":battery:",
+          ":u1f50b:",
           // left-pointing magnifying glass
-          ":u1f50d:", ":mag:",
+          ":u1f50d:",
           // bathtub
-          ":u1f6c1:", ":bathtub:",
+          ":u1f6c1:",
           // bath
-          ":u1f6c0:", ":bath:",
+          ":u1f6c0:",
           // shower
-          ":u1f6bf:", ":shower:",
+          ":u1f6bf:",
           // toilet
-          ":u1f6bd:", ":toilet:",
+          ":u1f6bd:",
           // wrench
-          ":u1f527:", ":wrench:",
+          ":u1f527:",
           // nut and bolt
-          ":u1f529:", ":nut_and_bolt:",
+          ":u1f529:",
           // hammer
-          ":u1f528:", ":hammer:",
+          ":u1f528:",
           // door
-          ":u1f6aa:", ":door:",
+          ":u1f6aa:",
           // smoking symbol
-          ":u1f6ac:", ":smoking:",
+          ":u1f6ac:",
           // bomb
-          ":u1f4a3:", ":bomb:",
+          ":u1f4a3:",
           // pistol
-          ":u1f52b:", ":gun:",
+          ":u1f52b:",
           // hocho
-          ":u1f52a:", ":hocho:", ":knife:",
+          ":u1f52a:",
           // pill
-          ":u1f48a:", ":pill:",
+          ":u1f48a:",
           // syringe
-          ":u1f489:", ":syringe:",
+          ":u1f489:",
           // money bag
-          ":u1f4b0:", ":moneybag:",
+          ":u1f4b0:",
           // banknote with yen sign
-          ":u1f4b4:", ":yen:",
+          ":u1f4b4:",
           // banknote with dollar sign
-          ":u1f4b5:", ":dollar:",
+          ":u1f4b5:",
           // banknote with pound sign
-          ":u1f4b7:", ":pound:",
+          ":u1f4b7:",
           // banknote with euro sign
-          ":u1f4b6:", ":euro:",
+          ":u1f4b6:",
           // credit card
-          ":u1f4b3:", ":credit_card:",
+          ":u1f4b3:",
           // money with wings
-          ":u1f4b8:", ":money_with_wings:",
+          ":u1f4b8:",
           // mobile phone with rightwards arrow at left
-          ":u1f4f2:", ":calling:",
+          ":u1f4f2:",
           // e-mail symbol
-          ":u1f4e7:", ":e-mail:",
+          ":u1f4e7:",
           // inbox tray
-          ":u1f4e5:", ":inbox_tray:",
+          ":u1f4e5:",
           // outbox tray
-          ":u1f4e4:", ":outbox_tray:",
+          ":u1f4e4:",
           // envelope
-          ":u2709:", ":email:", ":envelope:",
+          ":u2709:",
           // envelope with downwards arrow above
-          ":u1f4e9:", ":envelope_with_arrow:",
+          ":u1f4e9:",
           // incoming envelope
-          ":u1f4e8:", ":incoming_envelope:",
+          ":u1f4e8:",
           // postal horn
-          ":u1f4ef:", ":postal_horn:",
+          ":u1f4ef:",
           // closed mailbox with raised flag
-          ":u1f4eb:", ":mailbox:",
+          ":u1f4eb:",
           // closed mailbox with lowered flag
-          ":u1f4ea:", ":mailbox_closed:",
+          ":u1f4ea:",
           // open mailbox with raised flag
-          ":u1f4ec:", ":mailbox_with_mail:",
+          ":u1f4ec:",
           // open mailbox with lowered flag
-          ":u1f4ed:", ":mailbox_with_no_mail:",
+          ":u1f4ed:",
           // postbox
-          ":u1f4ee:", ":postbox:",
+          ":u1f4ee:",
           // package
-          ":u1f4e6:", ":package:",
+          ":u1f4e6:",
           // memo
-          ":u1f4dd:", ":memo:", ":pencil:",
+          ":u1f4dd:",
           // page facing up
-          ":u1f4c4:", ":page_facing_up:",
+          ":u1f4c4:",
           // page with curl
-          ":u1f4c3:", ":page_with_curl:",
+          ":u1f4c3:",
           // bookmark tabs
-          ":u1f4d1:", ":bookmark_tabs:",
+          ":u1f4d1:",
           // bar chart
-          ":u1f4ca:", ":bar_chart:",
+          ":u1f4ca:",
           // chart with upwards trend
-          ":u1f4c8:", ":chart_with_upwards_trend:",
+          ":u1f4c8:",
           // chart with downwards trend
-          ":u1f4c9:", ":chart_with_downwards_trend:",
+          ":u1f4c9:",
           // scroll
-          ":u1f4dc:", ":scroll:",
+          ":u1f4dc:",
           // clipboard
-          ":u1f4cb:", ":clipboard:",
+          ":u1f4cb:",
           // calendar
-          ":u1f4c5:", ":date:",
+          ":u1f4c5:",
           // tear-off calendar
-          ":u1f4c6:", ":calendar:",
+          ":u1f4c6:",
           // card index
-          ":u1f4c7:", ":card_index:",
+          ":u1f4c7:",
           // file folder
-          ":u1f4c1:", ":file_folder:",
+          ":u1f4c1:",
           // open file folder
-          ":u1f4c2:", ":open_file_folder:",
+          ":u1f4c2:",
           // black scissors
-          ":u2702:", ":scissors:",
+          ":u2702:",
           // pushpin
-          ":u1f4cc:", ":pushpin:",
+          ":u1f4cc:",
           // paperclip
-          ":u1f4ce:", ":paperclip:",
+          ":u1f4ce:",
           // black nib
-          ":u2712:", ":black_nib:",
+          ":u2712:",
           // pencil
-          ":u270f:", ":pencil2:",
+          ":u270f:",
           // straight ruler
-          ":u1f4cf:", ":straight_ruler:",
+          ":u1f4cf:",
           // triangular ruler
-          ":u1f4d0:", ":triangular_ruler:",
+          ":u1f4d0:",
           // closed book
-          ":u1f4d5:", ":closed_book:",
+          ":u1f4d5:",
           // green book
-          ":u1f4d7:", ":green_book:",
+          ":u1f4d7:",
           // blue book
-          ":u1f4d8:", ":blue_book:",
+          ":u1f4d8:",
           // orange book
-          ":u1f4d9:", ":orange_book:",
+          ":u1f4d9:",
           // notebook
-          ":u1f4d3:", ":notebook:",
+          ":u1f4d3:",
           // notebook with decorative cover
-          ":u1f4d4:", ":notebook_with_decorative_cover:",
+          ":u1f4d4:",
           // ledger
-          ":u1f4d2:", ":ledger:",
+          ":u1f4d2:",
           // books
-          ":u1f4da:", ":books:",
+          ":u1f4da:",
           // open book
-          ":u1f4d6:", ":book:", ":open_book:",
+          ":u1f4d6:",
           // bookmark
-          ":u1f516:", ":bookmark:",
+          ":u1f516:",
           // name badge
-          ":u1f4db:", ":name_badge:",
+          ":u1f4db:",
           // microscope
-          ":u1f52c:", ":microscope:",
+          ":u1f52c:",
           // telescope
-          ":u1f52d:", ":telescope:",
+          ":u1f52d:",
           // newspaper
-          ":u1f4f0:", ":newspaper:",
+          ":u1f4f0:",
           // artist palette
-          ":u1f3a8:", ":art:",
+          ":u1f3a8:",
           // clapper board
-          ":u1f3ac:", ":clapper:",
+          ":u1f3ac:",
           // microphone
-          ":u1f3a4:", ":microphone:",
+          ":u1f3a4:",
           // headphone
-          ":u1f3a7:", ":headphones:",
+          ":u1f3a7:",
           // musical score
-          ":u1f3bc:", ":musical_score:",
+          ":u1f3bc:",
           // musical note
-          ":u1f3b5:", ":musical_note:",
+          ":u1f3b5:",
           // multiple musical notes
-          ":u1f3b6:", ":notes:",
+          ":u1f3b6:",
           // musical keyboard
-          ":u1f3b9:", ":musical_keyboard:",
+          ":u1f3b9:",
           // violin
-          ":u1f3bb:", ":violin:",
+          ":u1f3bb:",
           // trumpet
-          ":u1f3ba:", ":trumpet:",
+          ":u1f3ba:",
           // saxophone
-          ":u1f3b7:", ":saxophone:",
+          ":u1f3b7:",
           // guitar
-          ":u1f3b8:", ":guitar:",
+          ":u1f3b8:",
           // alien monster
-          ":u1f47e:", ":space_invader:",
+          ":u1f47e:",
           // video game
-          ":u1f3ae:", ":video_game:",
+          ":u1f3ae:",
           // playing card black joker
-          ":u1f0cf:", ":black_joker:",
+          ":u1f0cf:",
           // flower playing cards
-          ":u1f3b4:", ":flower_playing_cards:",
+          ":u1f3b4:",
           // mahjong tile red dragon
-          ":u1f004:", ":mahjong:",
+          ":u1f004:",
           // game die
-          ":u1f3b2:", ":game_die:",
+          ":u1f3b2:",
           // direct hit
-          ":u1f3af:", ":dart:",
+          ":u1f3af:",
           // american football
-          ":u1f3c8:", ":football:",
+          ":u1f3c8:",
           // basketball and hoop
-          ":u1f3c0:", ":basketball:",
+          ":u1f3c0:",
           // soccer ball
-          ":u26bd:", ":soccer:",
+          ":u26bd:",
           // baseball
-          ":u26be:", ":baseball:",
+          ":u26be:",
           // tennis racquet and ball
-          ":u1f3be:", ":tennis:",
+          ":u1f3be:",
           // billiards
-          ":u1f3b1:", ":8ball:",
+          ":u1f3b1:",
           // rugby football
-          ":u1f3c9:", ":rugby_football:",
+          ":u1f3c9:",
           // bowling
-          ":u1f3b3:", ":bowling:",
+          ":u1f3b3:",
           // flag in hole
-          ":u26f3:", ":golf:",
+          ":u26f3:",
           // mountain bicyclist
-          ":u1f6b5:", ":mountain_bicyclist:",
+          ":u1f6b5:",
           // bicyclist
-          ":u1f6b4:", ":bicyclist:",
+          ":u1f6b4:",
           // chequered flag
-          ":u1f3c1:", ":checkered_flag:",
+          ":u1f3c1:",
           // horse racing
-          ":u1f3c7:", ":horse_racing:",
+          ":u1f3c7:",
           // trophy
-          ":u1f3c6:", ":trophy:",
+          ":u1f3c6:",
           // ski and ski boot
-          ":u1f3bf:", ":ski:",
+          ":u1f3bf:",
           // snowboarder
-          ":u1f3c2:", ":snowboarder:",
+          ":u1f3c2:",
           // swimmer
-          ":u1f3ca:", ":swimmer:",
+          ":u1f3ca:",
           // surfer
-          ":u1f3c4:", ":surfer:",
+          ":u1f3c4:",
           // fishing pole and fish
-          ":u1f3a3:", ":fishing_pole_and_fish:",
+          ":u1f3a3:",
           // hot beverage
-          ":u2615:", ":coffee:",
+          ":u2615:",
           // teacup without handle
-          ":u1f375:", ":tea:",
+          ":u1f375:",
           // sake bottle and cup
-          ":u1f376:", ":sake:",
+          ":u1f376:",
           // baby bottle
-          ":u1f37c:", ":baby_bottle:",
+          ":u1f37c:",
           // beer mug
-          ":u1f37a:", ":beer:",
+          ":u1f37a:",
           // clinking beer mugs
-          ":u1f37b:", ":beers:",
+          ":u1f37b:",
           // cocktail glass
-          ":u1f378:", ":cocktail:",
+          ":u1f378:",
           // tropical drink
-          ":u1f379:", ":tropical_drink:",
+          ":u1f379:",
           // wine glass
-          ":u1f377:", ":wine_glass:",
+          ":u1f377:",
           // fork and knife
-          ":u1f374:", ":fork_and_knife:",
+          ":u1f374:",
           // slice of pizza
-          ":u1f355:", ":pizza:",
+          ":u1f355:",
           // hamburger
-          ":u1f354:", ":hamburger:",
+          ":u1f354:",
           // french fries
-          ":u1f35f:", ":fries:",
+          ":u1f35f:",
           // poultry leg
-          ":u1f357:", ":poultry_leg:",
+          ":u1f357:",
           // meat on bone
-          ":u1f356:", ":meat_on_bone:",
+          ":u1f356:",
           // spaghetti
-          ":u1f35d:", ":spaghetti:",
+          ":u1f35d:",
           // curry and rice
-          ":u1f35b:", ":curry:",
+          ":u1f35b:",
           // fried shrimp
-          ":u1f364:", ":fried_shrimp:",
+          ":u1f364:",
           // bento box
-          ":u1f371:", ":bento:",
+          ":u1f371:",
           // sushi
-          ":u1f363:", ":sushi:",
+          ":u1f363:",
           // fish cake with swirl design
-          ":u1f365:", ":fish_cake:",
+          ":u1f365:",
           // rice ball
-          ":u1f359:", ":rice_ball:",
+          ":u1f359:",
           // rice cracker
-          ":u1f358:", ":rice_cracker:",
+          ":u1f358:",
           // cooked rice
-          ":u1f35a:", ":rice:",
+          ":u1f35a:",
           // steaming bowl
-          ":u1f35c:", ":ramen:",
+          ":u1f35c:",
           // pot of food
-          ":u1f372:", ":stew:",
+          ":u1f372:",
           // oden
-          ":u1f362:", ":oden:",
+          ":u1f362:",
           // dango
-          ":u1f361:", ":dango:",
+          ":u1f361:",
           // cooking
-          ":u1f373:", ":egg:",
+          ":u1f373:",
           // bread
-          ":u1f35e:", ":bread:",
+          ":u1f35e:",
           // doughnut
-          ":u1f369:", ":doughnut:",
+          ":u1f369:",
           // custard
-          ":u1f36e:", ":custard:",
+          ":u1f36e:",
           // soft ice cream
-          ":u1f366:", ":icecream:",
+          ":u1f366:",
           // ice cream
-          ":u1f368:", ":ice_cream:",
+          ":u1f368:",
           // shaved ice
-          ":u1f367:", ":shaved_ice:",
+          ":u1f367:",
           // birthday cake
-          ":u1f382:", ":birthday:",
+          ":u1f382:",
           // shortcake
-          ":u1f370:", ":cake:",
+          ":u1f370:",
           // cookie
-          ":u1f36a:", ":cookie:",
+          ":u1f36a:",
           // chocolate bar
-          ":u1f36b:", ":chocolate_bar:",
+          ":u1f36b:",
           // candy
-          ":u1f36c:", ":candy:",
+          ":u1f36c:",
           // lollipop
-          ":u1f36d:", ":lollipop:",
+          ":u1f36d:",
           // honey pot
-          ":u1f36f:", ":honey_pot:",
+          ":u1f36f:",
           // red apple
-          ":u1f34e:", ":apple:",
+          ":u1f34e:",
           // green apple
-          ":u1f34f:", ":green_apple:",
+          ":u1f34f:",
           // tangerine
-          ":u1f34a:", ":tangerine:",
+          ":u1f34a:",
           // lemon
-          ":u1f34b:", ":lemon:",
+          ":u1f34b:",
           // cherries
-          ":u1f352:", ":cherries:",
+          ":u1f352:",
           // grapes
-          ":u1f347:", ":grapes:",
+          ":u1f347:",
           // watermelon
-          ":u1f349:", ":watermelon:",
+          ":u1f349:",
           // strawberry
-          ":u1f353:", ":strawberry:",
+          ":u1f353:",
           // peach
-          ":u1f351:", ":peach:",
+          ":u1f351:",
           // melon
-          ":u1f348:", ":melon:",
+          ":u1f348:",
           // banana
-          ":u1f34c:", ":banana:",
+          ":u1f34c:",
           // pear
-          ":u1f350:", ":pear:",
+          ":u1f350:",
           // pineapple
-          ":u1f34d:", ":pineapple:",
+          ":u1f34d:",
           // roasted sweet potato
-          ":u1f360:", ":sweet_potato:",
+          ":u1f360:",
           // aubergine
-          ":u1f346:", ":eggplant:",
+          ":u1f346:",
           // tomato
-          ":u1f345:", ":tomato:",
+          ":u1f345:",
           // ear of maize
-          ":u1f33d:", ":corn:",
+          ":u1f33d:",
           // house building
-          ":u1f3e0:", ":house:",
+          ":u1f3e0:",
           // house with garden
-          ":u1f3e1:", ":house_with_garden:",
+          ":u1f3e1:",
           // school
-          ":u1f3eb:", ":school:",
+          ":u1f3eb:",
           // office building
-          ":u1f3e2:", ":office:",
+          ":u1f3e2:",
           // japanese post office
-          ":u1f3e3:", ":post_office:",
+          ":u1f3e3:",
           // hospital
-          ":u1f3e5:", ":hospital:",
+          ":u1f3e5:",
           // bank
-          ":u1f3e6:", ":bank:",
+          ":u1f3e6:",
           // convenience store
-          ":u1f3ea:", ":convenience_store:",
+          ":u1f3ea:",
           // love hotel
-          ":u1f3e9:", ":love_hotel:",
+          ":u1f3e9:",
           // hotel
-          ":u1f3e8:", ":hotel:",
+          ":u1f3e8:",
           // wedding
-          ":u1f492:", ":wedding:",
+          ":u1f492:",
           // church
-          ":u26ea:", ":church:",
+          ":u26ea:",
           // department store
-          ":u1f3ec:", ":department_store:",
+          ":u1f3ec:",
           // european post office
-          ":u1f3e4:", ":european_post_office:",
+          ":u1f3e4:",
           // sunset over buildings
-          ":u1f307:", ":city_sunrise:",
+          ":u1f307:",
           // cityscape at dusk
-          ":u1f306:", ":city_sunset:",
+          ":u1f306:",
           // japanese castle
-          ":u1f3ef:", ":japanese_castle:",
+          ":u1f3ef:",
           // european castle
-          ":u1f3f0:", ":european_castle:",
+          ":u1f3f0:",
           // tent
-          ":u26fa:", ":tent:",
+          ":u26fa:",
           // factory
-          ":u1f3ed:", ":factory:",
+          ":u1f3ed:",
           // tokyo tower
-          ":u1f5fc:", ":tokyo_tower:",
+          ":u1f5fc:",
           // silhouette of japan
-          ":u1f5fe:", ":japan:",
+          ":u1f5fe:",
           // mount fuji
-          ":u1f5fb:", ":mount_fuji:",
+          ":u1f5fb:",
           // sunrise over mountains
-          ":u1f304:", ":sunrise_over_mountains:",
+          ":u1f304:",
           // sunrise
-          ":u1f305:", ":sunrise:",
+          ":u1f305:",
           // night with stars
-          ":u1f303:", ":night_with_stars:",
+          ":u1f303:",
           // statue of liberty
-          ":u1f5fd:", ":statue_of_liberty:",
+          ":u1f5fd:",
           // bridge at night
-          ":u1f309:", ":bridge_at_night:",
+          ":u1f309:",
           // carousel horse
-          ":u1f3a0:", ":carousel_horse:",
+          ":u1f3a0:",
           // ferris wheel
-          ":u1f3a1:", ":ferris_wheel:",
+          ":u1f3a1:",
           // fountain
-          ":u26f2:", ":fountain:",
+          ":u26f2:",
           // roller coaster
-          ":u1f3a2:", ":roller_coaster:",
+          ":u1f3a2:",
           // ship
-          ":u1f6a2:", ":ship:",
+          ":u1f6a2:",
           // sailboat
-          ":u26f5:", ":boat:", ":sailboat:",
+          ":u26f5:",
           // speedboat
-          ":u1f6a4:", ":speedboat:",
+          ":u1f6a4:",
           // rowboat
-          ":u1f6a3:", ":rowboat:",
+          ":u1f6a3:",
           // anchor
-          ":u2693:", ":anchor:",
+          ":u2693:",
           // rocket
-          ":u1f680:", ":rocket:",
+          ":u1f680:",
           // airplane
-          ":u2708:", ":airplane:",
+          ":u2708:",
           // seat
-          ":u1f4ba:", ":seat:",
+          ":u1f4ba:",
           // helicopter
-          ":u1f681:", ":helicopter:",
+          ":u1f681:",
           // steam locomotive
-          ":u1f682:", ":steam_locomotive:",
+          ":u1f682:",
           // tram
-          ":u1f68a:", ":tram:",
+          ":u1f68a:",
           // station
-          ":u1f689:", ":station:",
+          ":u1f689:",
           // mountain railway
-          ":u1f69e:", ":mountain_railway:",
+          ":u1f69e:",
           // train
-          ":u1f686:", ":train2:",
+          ":u1f686:",
           // high-speed train
-          ":u1f684:", ":bullettrain_side:",
+          ":u1f684:",
           // high-speed train with bullet nose
-          ":u1f685:", ":bullettrain_front:",
+          ":u1f685:",
           // light rail
-          ":u1f688:", ":light_rail:",
+          ":u1f688:",
           // metro
-          ":u1f687:", ":metro:",
+          ":u1f687:",
           // monorail
-          ":u1f69d:", ":monorail:",
+          ":u1f69d:",
           // tram car
-          ":u1f68b:", ":train:",
+          ":u1f68b:",
           // railway car
-          ":u1f683:", ":railway_car:",
+          ":u1f683:",
           // trolleybus
-          ":u1f68e:", ":trolleybus:",
+          ":u1f68e:",
           // bus
-          ":u1f68c:", ":bus:",
+          ":u1f68c:",
           // oncoming bus
-          ":u1f68d:", ":oncoming_bus:",
+          ":u1f68d:",
           // recreational vehicle
-          ":u1f699:", ":blue_car:",
+          ":u1f699:",
           // oncoming automobile
-          ":u1f698:", ":oncoming_automobile:",
+          ":u1f698:",
           // automobile
-          ":u1f697:", ":car:", ":red_car:",
+          ":u1f697:",
           // taxi
-          ":u1f695:", ":taxi:",
+          ":u1f695:",
           // oncoming taxi
-          ":u1f696:", ":oncoming_taxi:",
+          ":u1f696:",
           // articulated lorry
-          ":u1f69b:", ":articulated_lorry:",
+          ":u1f69b:",
           // delivery truck
-          ":u1f69a:", ":truck:",
+          ":u1f69a:",
           // police cars revolving light
-          ":u1f6a8:", ":rotating_light:",
+          ":u1f6a8:",
           // police car
-          ":u1f693:", ":police_car:",
+          ":u1f693:",
           // oncoming police car
-          ":u1f694:", ":oncoming_police_car:",
+          ":u1f694:",
           // fire engine
-          ":u1f692:", ":fire_engine:",
+          ":u1f692:",
           // ambulance
-          ":u1f691:", ":ambulance:",
+          ":u1f691:",
           // minibus
-          ":u1f690:", ":minibus:",
+          ":u1f690:",
           // bicycle
-          ":u1f6b2:", ":bike:",
+          ":u1f6b2:",
           // aerial tramway
-          ":u1f6a1:", ":aerial_tramway:",
+          ":u1f6a1:",
           // suspension railway
-          ":u1f69f:", ":suspension_railway:",
+          ":u1f69f:",
           // mountain cableway
-          ":u1f6a0:", ":mountain_cableway:",
+          ":u1f6a0:",
           // tractor
-          ":u1f69c:", ":tractor:",
+          ":u1f69c:",
           // barber pole
-          ":u1f488:", ":barber:",
+          ":u1f488:",
           // bus stop
-          ":u1f68f:", ":busstop:",
+          ":u1f68f:",
           // ticket
-          ":u1f3ab:", ":ticket:",
+          ":u1f3ab:",
           // vertical traffic light
-          ":u1f6a6:", ":vertical_traffic_light:",
+          ":u1f6a6:",
           // horizontal traffic light
-          ":u1f6a5:", ":traffic_light:",
+          ":u1f6a5:",
           // warning sign
-          ":u26a0:", ":warning:",
+          ":u26a0:",
           // construction sign
-          ":u1f6a7:", ":construction:",
+          ":u1f6a7:",
           // japanese symbol for beginner
-          ":u1f530:", ":beginner:",
+          ":u1f530:",
           // fuel pump
-          ":u26fd:", ":fuelpump:",
+          ":u26fd:",
           // izakaya lantern
-          ":u1f3ee:", ":izakaya_lantern:", ":lantern:",
+          ":u1f3ee:",
           // slot machine
-          ":u1f3b0:", ":slot_machine:",
+          ":u1f3b0:",
           // hot springs
-          ":u2668:", ":hotsprings:",
+          ":u2668:",
           // moyai
-          ":u1f5ff:", ":moyai:",
+          ":u1f5ff:",
           // circus tent
-          ":u1f3aa:", ":circus_tent:",
+          ":u1f3aa:",
           // performing arts
-          ":u1f3ad:", ":performing_arts:",
+          ":u1f3ad:",
           // round pushpin
-          ":u1f4cd:", ":round_pushpin:",
+          ":u1f4cd:",
           // triangular flag on post
-          ":u1f6a9:", ":triangular_flag_on_post:",
+          ":u1f6a9:",
           // regional indicator symbol letter j + regional indicator symbol letter p
-          ":u1f1ef_1f1f5:", ":jp:",
+          ":u1f1ef_1f1f5:",
           // regional indicator symbol letter k + regional indicator symbol letter r
-          ":u1f1f0_1f1f7:", ":kr:",
+          ":u1f1f0_1f1f7:",
           // regional indicator symbol letter d + regional indicator symbol letter e
-          ":u1f1e9_1f1ea:", ":de:",
+          ":u1f1e9_1f1ea:",
           // regional indicator symbol letter c + regional indicator symbol letter n
-          ":u1f1e8_1f1f3:", ":cn:",
+          ":u1f1e8_1f1f3:",
           // regional indicator symbol letter u + regional indicator symbol letter s
-          ":u1f1fa_1f1f8:", ":us:",
+          ":u1f1fa_1f1f8:",
           // regional indicator symbol letter f + regional indicator symbol letter r
-          ":u1f1eb_1f1f7:", ":fr:",
+          ":u1f1eb_1f1f7:",
           // regional indicator symbol letter e + regional indicator symbol letter s
-          ":u1f1ea_1f1f8:", ":es:",
+          ":u1f1ea_1f1f8:",
           // regional indicator symbol letter i + regional indicator symbol letter t
-          ":u1f1ee_1f1f9:", ":it:",
+          ":u1f1ee_1f1f9:",
           // regional indicator symbol letter r + regional indicator symbol letter u
-          ":u1f1f7_1f1fa:", ":ru:",
+          ":u1f1f7_1f1fa:",
           // regional indicator symbol letter g + regional indicator symbol letter b
-          ":u1f1ec_1f1e7:", ":gb:", ":uk:",
+          ":u1f1ec_1f1e7:",
           // digit one + combining enclosing keycap
-          ":u0031_20e3:", ":one:",
+          ":u0031_20e3:",
           // digit two + combining enclosing keycap
-          ":u0032_20e3:", ":two:",
+          ":u0032_20e3:",
           // digit three + combining enclosing keycap
-          ":u0033_20e3:", ":three:",
+          ":u0033_20e3:",
           // digit four + combining enclosing keycap
-          ":u0034_20e3:", ":four:",
+          ":u0034_20e3:",
           // digit five + combining enclosing keycap
-          ":u0035_20e3:", ":five:",
+          ":u0035_20e3:",
           // digit six + combining enclosing keycap
-          ":u0036_20e3:", ":six:",
+          ":u0036_20e3:",
           // digit seven + combining enclosing keycap
-          ":u0037_20e3:", ":seven:",
+          ":u0037_20e3:",
           // digit eight + combining enclosing keycap
-          ":u0038_20e3:", ":eight:",
+          ":u0038_20e3:",
           // digit nine + combining enclosing keycap
-          ":u0039_20e3:", ":nine:",
+          ":u0039_20e3:",
           // digit zero + combining enclosing keycap
-          ":u0030_20e3:", ":zero:",
+          ":u0030_20e3:",
           // keycap ten
-          ":u1f51f:", ":keycap_ten:",
+          ":u1f51f:",
           // input symbol for numbers
-          ":u1f522:", ":1234:",
+          ":u1f522:",
           // number sign + combining enclosing keycap
-          ":u0023_20e3:", ":hash:",
+          ":u0023_20e3:",
           // input symbol for symbols
-          ":u1f523:", ":symbols:",
+          ":u1f523:",
           // upwards black arrow
-          ":u2b06:", ":arrow_up:",
+          ":u2b06:",
           // downwards black arrow
-          ":u2b07:", ":arrow_down:",
+          ":u2b07:",
           // leftwards black arrow
-          ":u2b05:", ":arrow_left:",
+          ":u2b05:",
           // black rightwards arrow
-          ":u27a1:", ":arrow_right:",
+          ":u27a1:",
           // input symbol for latin capital letters
-          ":u1f520:", ":capital_abcd:",
+          ":u1f520:",
           // input symbol for latin small letters
-          ":u1f521:", ":abcd:",
+          ":u1f521:",
           // input symbol for latin letters
-          ":u1f524:", ":abc:",
+          ":u1f524:",
           // north east arrow
-          ":u2197:", ":arrow_upper_right:",
+          ":u2197:",
           // north west arrow
-          ":u2196:", ":arrow_upper_left:",
+          ":u2196:",
           // south east arrow
-          ":u2198:", ":arrow_lower_right:",
+          ":u2198:",
           // south west arrow
-          ":u2199:", ":arrow_lower_left:",
+          ":u2199:",
           // left right arrow
-          ":u2194:", ":left_right_arrow:",
+          ":u2194:",
           // up down arrow
-          ":u2195:", ":arrow_up_down:",
+          ":u2195:",
           // anticlockwise downwards and upwards open circle arrows
-          ":u1f504:", ":arrows_counterclockwise:",
+          ":u1f504:",
           // black left-pointing triangle
-          ":u25c0:", ":arrow_backward:",
+          ":u25c0:",
           // black right-pointing triangle
-          ":u25b6:", ":arrow_forward:",
+          ":u25b6:",
           // up-pointing small red triangle
-          ":u1f53c:", ":arrow_up_small:",
+          ":u1f53c:",
           // down-pointing small red triangle
-          ":u1f53d:", ":arrow_down_small:",
+          ":u1f53d:",
           // leftwards arrow with hook
-          ":u21a9:", ":leftwards_arrow_with_hook:",
+          ":u21a9:",
           // rightwards arrow with hook
-          ":u21aa:", ":arrow_right_hook:",
+          ":u21aa:",
           // information source
-          ":u2139:", ":information_source:",
+          ":u2139:",
           // black left-pointing double triangle
-          ":u23ea:", ":rewind:",
+          ":u23ea:",
           // black right-pointing double triangle
-          ":u23e9:", ":fast_forward:",
+          ":u23e9:",
           // black up-pointing double triangle
-          ":u23eb:", ":arrow_double_up:",
+          ":u23eb:",
           // black down-pointing double triangle
-          ":u23ec:", ":arrow_double_down:",
+          ":u23ec:",
           // arrow pointing rightwards then curving downwards
-          ":u2935:", ":arrow_heading_down:",
+          ":u2935:",
           // arrow pointing rightwards then curving upwards
-          ":u2934:", ":arrow_heading_up:",
+          ":u2934:",
           // squared ok
-          ":u1f197:", ":ok:",
+          ":u1f197:",
           // twisted rightwards arrows
-          ":u1f500:", ":twisted_rightwards_arrows:",
+          ":u1f500:",
           // clockwise rightwards and leftwards open circle arrows
-          ":u1f501:", ":repeat:",
+          ":u1f501:",
           // clockwise rightwards and leftwards open circle arrows with circled one overlay
-          ":u1f502:", ":repeat_one:",
+          ":u1f502:",
           // squared new
-          ":u1f195:", ":new:",
+          ":u1f195:",
           // squared up with exclamation mark
-          ":u1f199:", ":up:",
+          ":u1f199:",
           // squared cool
-          ":u1f192:", ":cool:",
+          ":u1f192:",
           // squared free
-          ":u1f193:", ":free:",
+          ":u1f193:",
           // squared ng
-          ":u1f196:", ":ng:",
+          ":u1f196:",
           // antenna with bars
-          ":u1f4f6:", ":signal_strength:",
+          ":u1f4f6:",
           // cinema
-          ":u1f3a6:", ":cinema:",
+          ":u1f3a6:",
           // squared katakana koko
-          ":u1f201:", ":koko:",
+          ":u1f201:",
           // squared cjk unified ideograph-6307
-          ":u1f22f:", ":u6307:",
+          ":u1f22f:",
           // squared cjk unified ideograph-7a7a
-          ":u1f233:", ":u7a7a:",
+          ":u1f233:",
           // squared cjk unified ideograph-6e80
-          ":u1f235:", ":u6e80:",
+          ":u1f235:",
           // squared cjk unified ideograph-5408
-          ":u1f234:", ":u5408:",
+          ":u1f234:",
           // squared cjk unified ideograph-7981
-          ":u1f232:", ":u7981:",
+          ":u1f232:",
           // circled ideograph advantage
-          ":u1f250:", ":ideograph_advantage:",
+          ":u1f250:",
           // squared cjk unified ideograph-5272
-          ":u1f239:", ":u5272:",
+          ":u1f239:",
           // squared cjk unified ideograph-55b6
-          ":u1f23a:", ":u55b6:",
+          ":u1f23a:",
           // squared cjk unified ideograph-6709
-          ":u1f236:", ":u6709:",
+          ":u1f236:",
           // squared cjk unified ideograph-7121
-          ":u1f21a:", ":u7121:",
+          ":u1f21a:",
           // restroom
-          ":u1f6bb:", ":restroom:",
+          ":u1f6bb:",
           // mens symbol
-          ":u1f6b9:", ":mens:",
+          ":u1f6b9:",
           // womens symbol
-          ":u1f6ba:", ":womens:",
+          ":u1f6ba:",
           // baby symbol
-          ":u1f6bc:", ":baby_symbol:",
+          ":u1f6bc:",
           // water closet
-          ":u1f6be:", ":wc:",
+          ":u1f6be:",
           // potable water symbol
-          ":u1f6b0:", ":potable_water:",
+          ":u1f6b0:",
           // put litter in its place symbol
-          ":u1f6ae:", ":put_litter_in_its_place:",
+          ":u1f6ae:",
           // negative squared latin capital letter p
-          ":u1f17f:", ":parking:",
+          ":u1f17f:",
           // wheelchair symbol
-          ":u267f:", ":wheelchair:",
+          ":u267f:",
           // no smoking symbol
-          ":u1f6ad:", ":no_smoking:",
+          ":u1f6ad:",
           // squared cjk unified ideograph-6708
-          ":u1f237:", ":u6708:",
+          ":u1f237:",
           // squared cjk unified ideograph-7533
-          ":u1f238:", ":u7533:",
+          ":u1f238:",
           // squared katakana sa
-          ":u1f202:", ":sa:",
+          ":u1f202:",
           // circled latin capital letter m
-          ":u24c2:", ":m:",
+          ":u24c2:",
           // passport control
-          ":u1f6c2:", ":passport_control:",
+          ":u1f6c2:",
           // baggage claim
-          ":u1f6c4:", ":baggage_claim:",
+          ":u1f6c4:",
           // left luggage
-          ":u1f6c5:", ":left_luggage:",
+          ":u1f6c5:",
           // customs
-          ":u1f6c3:", ":customs:",
+          ":u1f6c3:",
           // circled ideograph accept
-          ":u1f251:", ":accept:",
+          ":u1f251:",
           // circled ideograph secret
-          ":u3299:", ":secret:",
+          ":u3299:",
           // circled ideograph congratulation
-          ":u3297:", ":congratulations:",
+          ":u3297:",
           // squared cl
-          ":u1f191:", ":cl:",
+          ":u1f191:",
           // squared sos
-          ":u1f198:", ":sos:",
+          ":u1f198:",
           // squared id
-          ":u1f194:", ":id:",
+          ":u1f194:",
           // no entry sign
-          ":u1f6ab:", ":no_entry_sign:",
+          ":u1f6ab:",
           // no one under eighteen symbol
-          ":u1f51e:", ":underage:",
+          ":u1f51e:",
           // no mobile phones
-          ":u1f4f5:", ":no_mobile_phones:",
+          ":u1f4f5:",
           // do not litter symbol
-          ":u1f6af:", ":do_not_litter:",
+          ":u1f6af:",
           // non-potable water symbol
-          ":u1f6b1:", ":non-potable_water:",
+          ":u1f6b1:",
           // no bicycles
-          ":u1f6b3:", ":no_bicycles:",
+          ":u1f6b3:",
           // no pedestrians
-          ":u1f6b7:", ":no_pedestrians:",
+          ":u1f6b7:",
           // children crossing
-          ":u1f6b8:", ":children_crossing:",
+          ":u1f6b8:",
           // no entry
-          ":u26d4:", ":no_entry:",
+          ":u26d4:",
           // eight spoked asterisk
-          ":u2733:", ":eight_spoked_asterisk:",
+          ":u2733:",
           // sparkle
-          ":u2747:", ":sparkle:",
+          ":u2747:",
           // negative squared cross mark
-          ":u274e:", ":negative_squared_cross_mark:",
+          ":u274e:",
           // white heavy check mark
-          ":u2705:", ":white_check_mark:",
+          ":u2705:",
           // eight pointed black star
-          ":u2734:", ":eight_pointed_black_star:",
+          ":u2734:",
           // heart decoration
-          ":u1f49f:", ":heart_decoration:",
+          ":u1f49f:",
           // squared vs
-          ":u1f19a:", ":vs:",
+          ":u1f19a:",
           // vibration mode
-          ":u1f4f3:", ":vibration_mode:",
+          ":u1f4f3:",
           // mobile phone off
-          ":u1f4f4:", ":mobile_phone_off:",
+          ":u1f4f4:",
           // negative squared latin capital letter a
-          ":u1f170:", ":a:",
+          ":u1f170:",
           // negative squared latin capital letter b
-          ":u1f171:", ":b:",
+          ":u1f171:",
           // negative squared ab
-          ":u1f18e:", ":ab:",
+          ":u1f18e:",
           // negative squared latin capital letter o
-          ":u1f17e:", ":o2:",
+          ":u1f17e:",
           // diamond shape with a dot inside
-          ":u1f4a0:", ":diamond_shape_with_a_dot_inside:",
+          ":u1f4a0:",
           // double curly loop
-          ":u27bf:", ":loop:",
+          ":u27bf:",
           // black universal recycling symbol
-          ":u267b:", ":recycle:",
+          ":u267b:",
           // aries
-          ":u2648:", ":aries:",
+          ":u2648:",
           // taurus
-          ":u2649:", ":taurus:",
+          ":u2649:",
           // gemini
-          ":u264a:", ":gemini:",
+          ":u264a:",
           // cancer
-          ":u264b:", ":cancer:",
+          ":u264b:",
           // leo
-          ":u264c:", ":leo:",
+          ":u264c:",
           // virgo
-          ":u264d:", ":virgo:",
+          ":u264d:",
           // libra
-          ":u264e:", ":libra:",
+          ":u264e:",
           // scorpius
-          ":u264f:", ":scorpius:",
+          ":u264f:",
           // sagittarius
-          ":u2650:", ":sagittarius:",
+          ":u2650:",
           // capricorn
-          ":u2651:", ":capricorn:",
+          ":u2651:",
           // aquarius
-          ":u2652:", ":aquarius:",
+          ":u2652:",
           // pisces
-          ":u2653:", ":pisces:",
+          ":u2653:",
           // ophiuchus
-          ":u26ce:", ":ophiuchus:",
+          ":u26ce:",
           // six pointed star with middle dot
-          ":u1f52f:", ":six_pointed_star:",
+          ":u1f52f:",
           // automated teller machine
-          ":u1f3e7:", ":atm:",
+          ":u1f3e7:",
           // chart with upwards trend and yen sign
-          ":u1f4b9:", ":chart:",
+          ":u1f4b9:",
           // heavy dollar sign
-          ":u1f4b2:", ":heavy_dollar_sign:",
+          ":u1f4b2:",
           // currency exchange
-          ":u1f4b1:", ":currency_exchange:",
+          ":u1f4b1:",
           // copyright sign
-          ":u00a9:", ":copyright:",
+          ":u00a9:",
           // registered sign
-          ":u00ae:", ":registered:",
+          ":u00ae:",
           // trade mark sign
-          ":u2122:", ":tm:",
+          ":u2122:",
           // cross mark
-          ":u274c:", ":x:",
+          ":u274c:",
           // double exclamation mark
-          ":u203c:", ":bangbang:",
+          ":u203c:",
           // exclamation question mark
-          ":u2049:", ":interrobang:",
+          ":u2049:",
           // heavy exclamation mark symbol
-          ":u2757:", ":exclamation:", ":heavy_exclamation_mark:",
+          ":u2757:",
           // black question mark ornament
-          ":u2753:", ":question:",
+          ":u2753:",
           // white exclamation mark ornament
-          ":u2755:", ":grey_exclamation:",
+          ":u2755:",
           // white question mark ornament
-          ":u2754:", ":grey_question:",
+          ":u2754:",
           // heavy large circle
-          ":u2b55:", ":o:",
+          ":u2b55:",
           // top with upwards arrow above
-          ":u1f51d:", ":top:",
+          ":u1f51d:",
           // end with leftwards arrow above
-          ":u1f51a:", ":end:",
+          ":u1f51a:",
           // back with leftwards arrow above
-          ":u1f519:", ":back:",
+          ":u1f519:",
           // on with exclamation mark with left right arrow above
-          ":u1f51b:", ":on:",
+          ":u1f51b:",
           // soon with rightwards arrow above
-          ":u1f51c:", ":soon:",
+          ":u1f51c:",
           // clockwise downwards and upwards open circle arrows
-          ":u1f503:", ":arrows_clockwise:",
+          ":u1f503:",
           // clock face twelve oclock
-          ":u1f55b:", ":clock12:",
+          ":u1f55b:",
           // clock face twelve-thirty
-          ":u1f567:", ":clock1230:",
+          ":u1f567:",
           // clock face one oclock
-          ":u1f550:", ":clock1:",
+          ":u1f550:",
           // clock face one-thirty
-          ":u1f55c:", ":clock130:",
+          ":u1f55c:",
           // clock face two oclock
-          ":u1f551:", ":clock2:",
+          ":u1f551:",
           // clock face two-thirty
-          ":u1f55d:", ":clock230:",
+          ":u1f55d:",
           // clock face three oclock
-          ":u1f552:", ":clock3:",
+          ":u1f552:",
           // clock face three-thirty
-          ":u1f55e:", ":clock330:",
+          ":u1f55e:",
           // clock face four oclock
-          ":u1f553:", ":clock4:",
+          ":u1f553:",
           // clock face four-thirty
-          ":u1f55f:", ":clock430:",
+          ":u1f55f:",
           // clock face five oclock
-          ":u1f554:", ":clock5:",
+          ":u1f554:",
           // clock face five-thirty
-          ":u1f560:", ":clock530:",
+          ":u1f560:",
           // clock face six oclock
-          ":u1f555:", ":clock6:",
+          ":u1f555:",
           // clock face seven oclock
-          ":u1f556:", ":clock7:",
+          ":u1f556:",
           // clock face eight oclock
-          ":u1f557:", ":clock8:",
+          ":u1f557:",
           // clock face nine oclock
-          ":u1f558:", ":clock9:",
+          ":u1f558:",
           // clock face ten oclock
-          ":u1f559:", ":clock10:",
+          ":u1f559:",
           // clock face eleven oclock
-          ":u1f55a:", ":clock11:",
+          ":u1f55a:",
           // clock face six-thirty
-          ":u1f561:", ":clock630:",
+          ":u1f561:",
           // clock face seven-thirty
-          ":u1f562:", ":clock730:",
+          ":u1f562:",
           // clock face eight-thirty
-          ":u1f563:", ":clock830:",
+          ":u1f563:",
           // clock face nine-thirty
-          ":u1f564:", ":clock930:",
+          ":u1f564:",
           // clock face ten-thirty
-          ":u1f565:", ":clock1030:",
+          ":u1f565:",
           // clock face eleven-thirty
-          ":u1f566:", ":clock1130:",
+          ":u1f566:",
           // heavy multiplication x
-          ":u2716:", ":heavy_multiplication_x:",
+          ":u2716:",
           // heavy plus sign
-          ":u2795:", ":heavy_plus_sign:",
+          ":u2795:",
           // heavy minus sign
-          ":u2796:", ":heavy_minus_sign:",
+          ":u2796:",
           // heavy division sign
-          ":u2797:", ":heavy_division_sign:",
+          ":u2797:",
           // black spade suit
-          ":u2660:", ":spades:",
+          ":u2660:",
           // black heart suit
-          ":u2665:", ":hearts:",
+          ":u2665:",
           // black club suit
-          ":u2663:", ":clubs:",
+          ":u2663:",
           // black diamond suit
-          ":u2666:", ":diamonds:",
+          ":u2666:",
           // white flower
-          ":u1f4ae:", ":white_flower:",
+          ":u1f4ae:",
           // hundred points symbol
-          ":u1f4af:", ":100:",
+          ":u1f4af:",
           // heavy check mark
-          ":u2714:", ":heavy_check_mark:",
+          ":u2714:",
           // ballot box with check
-          ":u2611:", ":ballot_box_with_check:",
+          ":u2611:",
           // radio button
-          ":u1f518:", ":radio_button:",
+          ":u1f518:",
           // link symbol
-          ":u1f517:", ":link:",
+          ":u1f517:",
           // curly loop
-          ":u27b0:", ":curly_loop:",
+          ":u27b0:",
           // wavy dash
-          ":u3030:", ":wavy_dash:",
+          ":u3030:",
           // part alternation mark
-          ":u303d:", ":part_alternation_mark:",
+          ":u303d:",
           // trident emblem
-          ":u1f531:", ":trident:",
+          ":u1f531:",
           // black medium square
-          ":u25fc:", ":black_medium_square:",
+          ":u25fc:",
           // white medium square
-          ":u25fb:", ":white_medium_square:",
+          ":u25fb:",
           // black medium small square
-          ":u25fe:", ":black_medium_small_square:",
+          ":u25fe:",
           // white medium small square
-          ":u25fd:", ":white_medium_small_square:",
+          ":u25fd:",
           // black small square
-          ":u25aa:", ":black_small_square:",
+          ":u25aa:",
           // white small square
-          ":u25ab:", ":white_small_square:",
+          ":u25ab:",
           // up-pointing red triangle
-          ":u1f53a:", ":small_red_triangle:",
+          ":u1f53a:",
           // black square button
-          ":u1f532:", ":black_square_button:",
+          ":u1f532:",
           // white square button
-          ":u1f533:", ":white_square_button:",
+          ":u1f533:",
           // medium black circle
-          ":u26ab:", ":black_circle:",
+          ":u26ab:",
           // medium white circle
-          ":u26aa:", ":white_circle:",
+          ":u26aa:",
           // large red circle
-          ":u1f534:", ":red_circle:",
+          ":u1f534:",
           // large blue circle
-          ":u1f535:", ":large_blue_circle:",
+          ":u1f535:",
           // down-pointing red triangle
-          ":u1f53b:", ":small_red_triangle_down:",
+          ":u1f53b:",
           // white large square
-          ":u2b1c:", ":white_large_square:",
+          ":u2b1c:",
           // black large square
-          ":u2b1b:", ":black_large_square:",
+          ":u2b1b:",
           // large orange diamond
-          ":u1f536:", ":large_orange_diamond:",
+          ":u1f536:",
           // large blue diamond
-          ":u1f537:", ":large_blue_diamond:",
+          ":u1f537:",
           // small orange diamond
-          ":u1f538:", ":small_orange_diamond:",
+          ":u1f538:",
           // small blue diamond
-          ":u1f539:", ":small_blue_diamond:"));
+          ":u1f539:"));
     }
     return keywords;
-  }
-
-  public Emoji setTheme (String themeName, final Ready ready) {
-    if (instance == null && themeName == null) {
-      themeName = "apple";
-    }
-
-    if (themeName != null && !currentThemeName.equals(themeName)) {
-      currentThemeName = themeName;
-
-      GWT.runAsync(new RunAsyncCallback() {
-
-        @Override
-        public void onSuccess () {
-          instance = ThemeFactory.getTheme(currentThemeName);
-
-          if (ready != null) {
-            ready.ready(Emoji.this);
-          }
-        }
-
-        @Override
-        public void onFailure (Throwable reason) {}
-      });
-
-    } else {
-      if (ready != null) {
-        ready.ready(this);
-      }
-    }
-
-    return this;
   }
 }

@@ -20,15 +20,15 @@ import com.gwtplatform.mvp.client.PopupViewWithUiHandlers;
 import com.gwtplatform.mvp.client.view.PopupPositioner;
 import online.draughts.rus.client.application.play.PlayView;
 import online.draughts.rus.client.resources.AppResources;
-import online.draughts.rus.client.resources.emoji.Emoji;
+import online.draughts.rus.client.resources.Emoji;
 import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.client.util.Utils;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.*;
-import org.gwtbootstrap3.client.ui.Image;
 import org.gwtbootstrap3.client.ui.constants.ButtonType;
 import org.gwtbootstrap3.client.ui.constants.ColumnSize;
+import org.gwtbootstrap3.client.ui.html.Span;
 
 import java.util.ArrayList;
 import java.util.Date;
@@ -90,7 +90,7 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
   private void fillSmileChoosePanel() {
     for (int i = 0; i < 58; i++) {
       final String smile = emoji.keyWords().get(i);
-      final Image smileImg = getImage(smile);
+      final Span smileImg = getImage(smile);
       if (null == smileImg) {
         continue;
       }
@@ -99,23 +99,23 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     }
   }
 
-  private Button createSmileButton(final String smile, final Image smileImg) {
+  private Button createSmileButton(final String smile, final Span smileSpan) {
     final Button smileButton = new Button();
     smileButton.setType(ButtonType.LINK);
     smileButton.getElement().getStyle().setTextDecoration(Style.TextDecoration.NONE);
-    smileButton.add(smileImg);
+    smileButton.add(smileSpan);
     smileButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        smileButtonClicked(smile, smileImg, smileButton);
+        smileButtonClicked(smile, smileSpan, smileButton);
       }
     });
     return smileButton;
   }
 
-  private void smileButtonClicked(final String smile, final Image smileImg, final Button smileButton) {
+  private void smileButtonClicked(final String smile, final Span smileSpan, final Button smileButton) {
     String text = messengerMessage.getHTML();
-    messengerMessage.setHTML(text + smileImg.getElement().getString());
+    messengerMessage.setHTML(text + smileSpan.getElement().getString());
     Scheduler.get().scheduleDeferred(new Scheduler.ScheduledCommand() {
       @Override
       public void execute() {
@@ -129,12 +129,12 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     }
 
     Button lastUsedButton = new Button();
-    lastUsedButton.add(smileImg);
+    lastUsedButton.add(smileSpan);
     lastUsedButton.setType(smileButton.getType());
     lastUsedButton.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        smileButtonClicked(smile, smileImg, smileButton);
+        smileButtonClicked(smile, smileSpan, smileButton);
       }
     });
     lastUsedButton.getElement().getStyle().setTextDecoration(Style.TextDecoration.NONE);
@@ -316,7 +316,7 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     if (lastUsedSmilesQueue.isEmpty()) {
       // улыбка
       final String smile = ":u1f60a:";
-      final Image smileImg = getImage(smile);
+      final Span smileImg = getImage(smile);
       if (null == smileImg) {
         return;
       }
@@ -329,7 +329,7 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
       return;
     }
     for (String s : lastUsedSmilesQueue) {
-      Image image = getImage(s);
+      Span image = getImage(s);
       if (null == image) {
         continue;
       }
@@ -340,15 +340,15 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
     }
   }
 
-  private Image getImage(String name) {
-    String url = emoji.url(name);
-    if (null == url) {
+  private Span getImage(String name) {
+    String emojiClass = emoji.cssEmojiClass(name);
+    if (null == emojiClass) {
       return null;
     }
-    Image image = new Image(url);
-    image.setWidth("24px");
-    image.setHeight("24px");
-    return image;
+    Span span = new Span();
+    span.addStyleName(emoji.cssEmojiClass());
+    span.addStyleName(emojiClass);
+    return span;
   }
 
   @Override

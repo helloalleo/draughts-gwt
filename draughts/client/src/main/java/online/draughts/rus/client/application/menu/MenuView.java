@@ -14,11 +14,12 @@ import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.client.resources.Emoji;
 import online.draughts.rus.client.resources.Variables;
-import online.draughts.rus.client.resources.emoji.Emoji;
 import online.draughts.rus.client.util.Cookies;
 import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.constants.IconType;
+import org.gwtbootstrap3.client.ui.html.Span;
 
 import java.util.Date;
 
@@ -152,8 +153,9 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     }
 
     anchor = new AnchorListItem();
-    Image ruImg = new Image(emoji.url(":u1f1f7_1f1fa:"));
-    ruImg.setWidth("24px");
+    Span ruImg = new Span();
+    ruImg.addStyleName(emoji.cssEmojiClass());
+    ruImg.addStyleName(emoji.cssEmojiClass(":u1f1f7_1f1fa:"));
     anchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
@@ -167,7 +169,9 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     navRight.add(anchor);
 
     anchor = new AnchorListItem();
-    Image uaImg = new Image(emoji.url(":u1f1fa_1f1e6:"));
+    Span uaImg = new Span();
+    uaImg.addStyleName(emoji.cssEmojiClass());
+    uaImg.addStyleName(emoji.cssEmojiClass(":u1f1fa_1f1e6:"));
     uaImg.setWidth("24px");
     anchor.addClickHandler(new ClickHandler() {
       @Override
@@ -183,7 +187,9 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
     navRight.add(anchor);
 
     anchor = new AnchorListItem();
-    Image enImg = new Image(emoji.url(":u1f1ec_1f1e7:"));
+    Span enImg = new Span();
+    enImg.addStyleName(emoji.cssEmojiClass());
+    enImg.addStyleName(emoji.cssEmojiClass(":u1f1ec_1f1e7:"));
     enImg.setWidth("24px");
     anchor.addClickHandler(new ClickHandler() {
       @Override

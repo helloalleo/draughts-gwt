@@ -1,5 +1,5 @@
 .emoji {
-    background-image: url(../img/emoji-sprite.png);
+    background-image: url(/shashki/Application/img/emoji-sprite.png);
     background-repeat: no-repeat;
     display: block;
 }
