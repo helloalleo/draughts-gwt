@@ -2,13 +2,18 @@ package online.draughts.rus.server.service;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
+import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.*;
 import online.draughts.rus.server.util.Rating;
+import online.draughts.rus.server.util.CloudStoreUtils;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.util.DozerHelper;
+import org.apache.log4j.Logger;
 import org.dozer.Mapper;
 
 import javax.servlet.http.HttpSession;
+import java.io.IOException;
+import java.security.GeneralSecurityException;
 import java.util.List;
 import java.util.Objects;
 
@@ -20,6 +25,9 @@ import java.util.Objects;
  */
 @Singleton
 public class GameService {
+
+  private final Logger logger = Logger.getLogger(GameService.class);
+
   private final PlayerService playerService;
   private final FriendService friendService;
   private final Mapper mapper;
@@ -61,9 +69,19 @@ public class GameService {
 
   public GameDto save(GameDto gameDto) {
     Game game = mapper.map(gameDto, Game.class);
+    return mapper.map(game, GameDto.class);
+  }
+
+  public Game save(Game game) {
     if (game.getId() == 0) {
       game.update();
-      return mapper.map(game, GameDto.class);
+      return game;
+    }
+
+    try {
+      CloudStoreUtils.saveFileToCloud(Config.GAMES_ENDS_PATH + game.getId() + ".png", game.getEndGameScreenshot().getBytes());
+    } catch (GeneralSecurityException | IOException e) {
+      logger.error("An error occured while storing file " + e.getMessage(), e);
     }
 
     Player playerBlack = updatePlayerStat(game, game.getPlayerBlack().getId());
@@ -74,8 +92,9 @@ public class GameService {
     saveFriend(playerWhite, playerBlack, playerWhiteIsFriendOfPlayerBlack);
     boolean playerBlackIsFriendOfPlayerWhite = friendService.isPlayerFriendOf(playerBlack.getId(), playerWhite.getId());
     saveFriend(playerBlack, playerWhite, playerBlackIsFriendOfPlayerWhite);
-    return mapper.map(game, GameDto.class);
+    return game;
   }
+
 
   private void saveFriend(Player playerBlack, Player playerWhite, boolean playerBlackIsFriendOfPlayerWhite) {
     if (!playerBlackIsFriendOfPlayerWhite) {

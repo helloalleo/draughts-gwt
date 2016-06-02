@@ -13,6 +13,10 @@ import java.util.ResourceBundle;
 @Singleton
 public class Config {
   private static ResourceBundle resourceBundle = ResourceBundle.getBundle("ServerConfiguration");
+
+  public static final String BUCKET_NAME = resourceBundle.getString("bucket_name");
+  public static final String GAMES_ENDS_PATH = resourceBundle.getString("games_ends_path");
+
   public static final String SITE_URI = resourceBundle.getString("site_uri");
   public static final String SITE_NAME_EN = resourceBundle.getString("site_name_en");
   public static final String SITE_NAME_RU = resourceBundle.getString("site_name_ru");

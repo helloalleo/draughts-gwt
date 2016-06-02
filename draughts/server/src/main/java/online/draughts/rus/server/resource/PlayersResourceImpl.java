@@ -41,14 +41,14 @@ public class PlayersResourceImpl implements PlayersResource {
     if (!authProvider.get()) {
       return null;
     }
-    final Player saved;
+    final PlayerDto saved;
     try {
-      saved = playerService.saveDto(player);
+      saved = playerService.save(player);
     } catch (BannedException e) {
       sessionProvider.get().invalidate();
       throw new RuntimeException(e.getMessage());
     }
-    return mapper.map(saved, PlayerDto.class);
+    return saved;
   }
 
   @Override

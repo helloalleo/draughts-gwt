@@ -29,4 +29,6 @@ public interface ClientConfiguration extends Messages {
   String removeAccountUrl();
 
   String linkToGame(String id);
+
+  String draughtsOnlineBucket();
 }

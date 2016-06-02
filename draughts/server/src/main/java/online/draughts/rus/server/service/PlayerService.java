@@ -1,20 +1,28 @@
 package online.draughts.rus.server.service;
 
+import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.domain.Player;
 import online.draughts.rus.shared.exception.BannedException;
 import online.draughts.rus.shared.dto.PlayerDto;
 import org.apache.log4j.Logger;
+import org.dozer.Mapper;
 
 import javax.servlet.http.HttpSession;
 import java.util.List;
+
+import static sun.audio.AudioPlayer.player;
 
 @Singleton
 public class PlayerService {
 
   private final Logger logger = Logger.getLogger(PlayerService.class);
 
-  PlayerService() {
+  private final Mapper mapper;
+
+  @Inject
+  PlayerService(Mapper mapper) {
+    this.mapper = mapper;
   }
 
   public Player save(Player player) {
@@ -69,14 +77,21 @@ public class PlayerService {
     player.flush();
   }
 
-  public Player saveDto(PlayerDto dto) throws BannedException {
-    Player player = find(dto.getId());
+  public PlayerDto save(PlayerDto dto) throws BannedException {
+    Player player;
+    if (dto.getId() != 0) {
+      player = find(dto.getId());
+    } else {
+      return null;
+    }
     try {
       player.updateSerializable(dto);
+    } catch (Exception e) {
+      e.printStackTrace();
     } finally {
       player.update();
       player.flush();
     }
-    return player;
+    return mapper.map(player, PlayerDto.class);
   }
 }

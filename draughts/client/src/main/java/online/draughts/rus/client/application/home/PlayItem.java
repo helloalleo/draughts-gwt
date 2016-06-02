@@ -90,7 +90,7 @@ public class PlayItem extends Composite {
 
     final String whitePlayerName = messages.white() + PLAYER_COLOR_DELIMITER + game.getPlayerWhite().getPublicName();
     final String blackPlayerName = messages.black() + PLAYER_COLOR_DELIMITER + game.getPlayerBlack().getPublicName();
-    SpanElement script = getVkShareScript(game.getId(), whitePlayerName, blackPlayerName);
+    SpanElement script = getVkShareScript(game.getId(), game.getEndGameScreenshot(), whitePlayerName, blackPlayerName);
     shareVkButton.getElement().appendChild(script);
 
     linkGameAnchor.setHref(config.linkToGame(String.valueOf(game.getId())));
@@ -135,11 +135,11 @@ public class PlayItem extends Composite {
     this.blackPlayerName.setHTML(blackPlayerName);
   }
 
-  private SpanElement getVkShareScript(Long gameId, String whitePlayerName, String blackPlayerName) {
+  private SpanElement getVkShareScript(Long gameId, String screenshot, String whitePlayerName, String blackPlayerName) {
     Document doc = Document.get();
     SpanElement vkShare = doc.createSpanElement();
     vkShare.setInnerHTML("<a href='#' onclick=\"Share.vkontakte('https://shashki.online/shashki/#!/game?id=" + gameId + "'," +
-        "'Мне понравилась игра','https://shashki.online/logo.png','" + whitePlayerName + "; " + blackPlayerName + "')\">" +
+        "'Мне понравилась игра','"+ screenshot +"','" + whitePlayerName + "; " + blackPlayerName + "')\">" +
         "<i class='fa fa-vk fa-2x'></i></a>");
     return vkShare;
   }

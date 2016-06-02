@@ -7,7 +7,8 @@
 //
 package online.draughts.rus.client.resources.emoji;
 
-import com.google.gwt.core.client.GWT;
+import com.google.inject.Inject;
+import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.util.Arrays;
@@ -50,6 +51,12 @@ public class Emoji {
   private Apple instance = new Apple();
   //  private String currentThemeName;
   private List<String> keywords = null;
+  private final ClientConfiguration config;
+
+  @Inject
+  public Emoji(ClientConfiguration config) {
+    this.config = config;
+  }
 
   public String resource(String name) {
     // smiling face with open mouth and smiling eyes
@@ -2628,7 +2635,7 @@ public class Emoji {
 
 
   public String url(String name) {
-    return resource(name) != null ? GWT.getModuleBaseForStaticFiles() + resource(name) : null;
+    return resource(name) != null ? config.draughtsOnlineBucket() + resource(name) : null;
   }
 
   public boolean isValid(String name) {

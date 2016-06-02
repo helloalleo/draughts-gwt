@@ -29,6 +29,10 @@
     <!--PostgreSQL-->
     <!--<postgresql.version>9.3-1102-jdbc41</postgresql.version>-->
 
+    <!--Google Cloud Storage-->
+    <project.api.version>1.20.0</project.api.version>
+    <project.oauth.version>1.20.0</project.oauth.version>
+
     <!--RESTEasy-->
     <jersey.version>1.19</jersey.version>
     <jackson-datatype-jsr353.version>2.6.3</jackson-datatype-jsr353.version>
@@ -271,6 +275,21 @@
     </dependency>
 
     <!-- HttpClient -->
+    <dependency>
+      <groupId>com.google.api-client</groupId>
+      <artifactId>google-api-client</artifactId>
+      <version>${project.api.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.oauth-client</groupId>
+      <artifactId>google-oauth-client-jetty</artifactId>
+      <version>${project.oauth.version}</version>
+    </dependency>
+    <dependency>
+      <groupId>com.google.apis</groupId>
+      <artifactId>google-api-services-storage</artifactId>
+      <version>v1-rev33-1.20.0</version>
+    </dependency>
     <!--<dependency>-->
       <!--<groupId>org.apache.httpcomponents</groupId>-->
       <!--<artifactId>httpclient</artifactId>-->
