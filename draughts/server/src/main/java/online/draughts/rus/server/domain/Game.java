@@ -42,6 +42,7 @@ public class Game extends ModelImpl<Game> {
 
   @Text
   private String endGameScreenshot;
+  private String endGameScreenshotUrl;
 
   private Set<GameMessage> gameMessages = new HashSet<>();
 
@@ -214,6 +215,14 @@ public class Game extends ModelImpl<Game> {
   @Override
   public Game fromString(String s) {
     return fromString(s, Game.class);
+  }
+
+  public void setEndGameScreenshotUrl(String endGameScreenshotUrl) {
+    this.endGameScreenshotUrl = endGameScreenshotUrl;
+  }
+
+  public String getEndGameScreenshotUrl() {
+    return endGameScreenshotUrl;
   }
 
   private static class SingletonHolder {

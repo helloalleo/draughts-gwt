@@ -19,6 +19,7 @@ import online.draughts.rus.client.json.InviteDataMapper;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.AudioUtil;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.shared.channel.Chunk;
 import online.draughts.rus.shared.dto.GameDto;
@@ -230,6 +231,12 @@ public class ClientChannel implements ChannelListener {
   public void onError(int code, String description) {
     if (401 == code) {
       Window.Location.reload();
+    } else {
+      InfoDialogBox.setMessage("Если вы видете эту ошибку, скопируйте, пожалуйста, её описание и отправьте модератору. Большое спасибо! " + code + " " + description).show();
+      Logger.prod(code + " " + description);
+      channel = new Channel(String.valueOf(player.getId()));
+      channel.addChannelListener(this);
+      channel.join();
     }
   }
 

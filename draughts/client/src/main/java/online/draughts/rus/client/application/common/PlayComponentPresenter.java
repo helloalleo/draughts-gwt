@@ -23,7 +23,6 @@ import online.draughts.rus.client.json.InviteDataMapper;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.AudioUtil;
-import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.MoveFactory;
 import online.draughts.rus.draughts.Stroke;
@@ -188,6 +187,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   @Override
   public void playerSurrendered() {
     GameMessageDto gameMessage = createGameMessage();
+    gameMessage.setGame(playSession.getGame());
     gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_SURRENDER);
     fireEvent(new GameMessageEvent(gameMessage));
     fireEvent(new ClearPlayComponentEvent());

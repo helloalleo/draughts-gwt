@@ -119,17 +119,19 @@ public class PlayItem extends Composite {
           .format(playFinishDate);
       playEndDate.setHTML(date);
     }
-    if (game.getEndGameScreenshot() != null) {
+    if (game.getEndGameScreenshotUrl() != null) {
+      endGameScreenshot.setUrl(config.draughtsOnlineBucket() + game.getEndGameScreenshotUrl());
+    } else if (game.getEndGameScreenshot() != null) {
       endGameScreenshot.setUrl(game.getEndGameScreenshot());
-      endGameScreenshot.setResponsive(true);
-      endGameScreenshot.addClickHandler(new ClickHandler() {
-        @Override
-        public void onClick(ClickEvent event) {
-          showGame(draughtsPlayerFactory, game, homePresenter);
-        }
-      });
-      endGameScreenshot.getElement().getStyle().setCursor(Style.Cursor.POINTER);
     }
+    endGameScreenshot.setResponsive(true);
+    endGameScreenshot.addClickHandler(new ClickHandler() {
+      @Override
+      public void onClick(ClickEvent event) {
+        showGame(draughtsPlayerFactory, game, homePresenter);
+      }
+    });
+    endGameScreenshot.getElement().getStyle().setCursor(Style.Cursor.POINTER);
 
     this.whitePlayerName.setHTML(whitePlayerName);
     this.blackPlayerName.setHTML(blackPlayerName);

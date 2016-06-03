@@ -21,7 +21,13 @@ public class Logger {
 
   public static void debug(Object object) {
     if (null != object) {
-      getInstance().log.debug(object.toString());
+      getInstance().log.debug(String.valueOf(object));
+    }
+  }
+
+  public static void prod(Object object) {
+    if (null != object) {
+      getInstance().log.prod(String.valueOf(object));
     }
   }
 

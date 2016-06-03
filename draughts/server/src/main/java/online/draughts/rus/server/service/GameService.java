@@ -69,6 +69,7 @@ public class GameService {
 
   public GameDto save(GameDto gameDto) {
     Game game = mapper.map(gameDto, Game.class);
+    save(game);
     return mapper.map(game, GameDto.class);
   }
 
@@ -79,7 +80,9 @@ public class GameService {
     }
 
     try {
-      CloudStoreUtils.saveFileToCloud(Config.GAMES_ENDS_PATH + game.getId() + ".png", game.getEndGameScreenshot().getBytes());
+      final String path = Config.GAMES_ENDS_PATH + game.getId() + ".png";
+      CloudStoreUtils.saveFileToCloud(path, game.getEndGameScreenshot().split(",")[1]);
+      game.setEndGameScreenshotUrl(path);
     } catch (GeneralSecurityException | IOException e) {
       logger.error("An error occured while storing file " + e.getMessage(), e);
     }

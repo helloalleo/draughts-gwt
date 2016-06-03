@@ -14,6 +14,7 @@ import java.util.ResourceBundle;
 public class Config {
   private static ResourceBundle resourceBundle = ResourceBundle.getBundle("ServerConfiguration");
 
+  public static final String GOOGLE_STORAGE_URL = resourceBundle.getString("google_storage_url");
   public static final String BUCKET_NAME = resourceBundle.getString("bucket_name");
   public static final String GAMES_ENDS_PATH = resourceBundle.getString("games_ends_path");
 
