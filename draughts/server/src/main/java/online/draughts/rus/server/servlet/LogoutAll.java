@@ -33,7 +33,9 @@ public class LogoutAll extends HttpServlet {
 
     List<Player> players = Player.getInstance().findOnline();
     for (Player player : players) {
-      serverChannel.handleClose(String.valueOf(player.getId()));
+      player.setOnline(false);
+      player.setPlaying(false);
+      player.update();
     }
   }
 }
