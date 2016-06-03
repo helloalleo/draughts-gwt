@@ -28,6 +28,7 @@ import online.draughts.rus.server.channel.ServerChannel;
 import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.servlet.CheckOnlineServlet;
 import online.draughts.rus.server.servlet.GameGiff;
+import online.draughts.rus.server.servlet.LogoutAll;
 import online.draughts.rus.server.servlet.LogoutServlet;
 import online.draughts.rus.server.servlet.oauth.*;
 import online.draughts.rus.server.util.AuthUtils;
@@ -48,6 +49,7 @@ class DispatchServletModule extends ServletModule {
 
     serve("/" + Config.CONTEXT + "/Application/channel").with(ServerChannel.class);
     serve("/cron/checkonline").with(CheckOnlineServlet.class);
+    serve("/cron/logoutall").with(LogoutAll.class);
 
     serve("/logout").with(LogoutServlet.class);
 
