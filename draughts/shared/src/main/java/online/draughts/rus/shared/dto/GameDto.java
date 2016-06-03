@@ -134,12 +134,16 @@ public class GameDto extends BaseDto {
     return publish;
   }
 
-  public String getEndGameScreenshotUrl() {
-    return endGameScreenshotUrl;
+  public String getEndGameScreenshotFullUrl(String baseUrl) {
+    return baseUrl + endGameScreenshotUrl;
   }
 
   public void setEndGameScreenshotUrl(String endGameScreenshotUrl) {
     this.endGameScreenshotUrl = endGameScreenshotUrl;
+  }
+
+  public String getEndGameScreenshotUrl() {
+    return endGameScreenshotUrl;
   }
 
   public enum GameType {

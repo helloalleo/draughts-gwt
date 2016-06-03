@@ -2,7 +2,6 @@ package online.draughts.rus.draughts;
 
 import com.google.gwt.user.client.Element;
 import online.draughts.rus.client.application.widget.NotationPanel;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.dto.MoveDto;
 
 import java.util.List;
@@ -106,11 +105,11 @@ public class StrokeFactory {
     // для поиска побитой шашки комбинируем два способа.
     // 1. Проходим вверх по предыдущим ходам и ищем совершенный ход который оказался между началом и концом бьющей
     // шашки
-    for (int i = prevSteps.size() - 1; i != 0; i--) {
+    for (int i = prevSteps.size() - 1; i >= 0; i--) {
       String prevStep = prevSteps.get(i);
       Square prevSecond = Square.fromNotation(getPrevStep(prevStep, false));
       if (firstStep.isOnLine(prevSecond) && secondStep.isOnLine(prevSecond)
-          && prevSecond.isBetween(firstStep, secondStep)) {
+          && null != prevSecond && prevSecond.isBetween(firstStep, secondStep)) {
         String prevStepParts = getPrevStep(prevStep, false);
         return Square.fromNotation(prevStepParts);
       }
