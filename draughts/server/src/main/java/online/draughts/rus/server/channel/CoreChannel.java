@@ -67,8 +67,9 @@ public class CoreChannel {
     GameMessageDto dto = mapper.map(message, GameMessageDto.class);
     final String serialized = Utils.serializeToJson(dto);
     List<String> chunks = Splitter.fixedLength(1024 * 31).splitToList(serialized);
-    for (int i = 0; i < chunks.size(); i++) {
-      send(channel, Utils.serializeToJson(new Chunk(chunks.size(), i + 1, chunks.get(i))));
+    int chunksSize = chunks.size();
+    for (int i = 0; i < chunksSize; i++) {
+      send(channel, Utils.serializeToJson(new Chunk(chunksSize, i + 1, chunks.get(i))));
     }
   }
 
