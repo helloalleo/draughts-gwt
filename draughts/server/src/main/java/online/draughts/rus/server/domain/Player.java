@@ -48,7 +48,9 @@ public class Player extends ModelImpl<Player> {
   private int gameDraw = 0;
   @Index
   private PlayerDto.AuthProvider authProvider;
+  @Index
   private boolean loggedIn;
+  @Index
   private boolean playing;
   @Index
   private boolean online;
@@ -421,7 +423,16 @@ public class Player extends ModelImpl<Player> {
         new Query.FilterPredicate("online",
             Query.FilterOperator.EQUAL,
             true);
-    Query query = new Query(getEntityName()).setFilter(onlineFilter);
+
+    Query.Filter playingFilter =
+        new Query.FilterPredicate("playing",
+            Query.FilterOperator.EQUAL,
+            true);
+
+    Query.Filter onlineOrPlayingFilter =
+        Query.CompositeFilterOperator.or(onlineFilter, playingFilter);
+
+    Query query = new Query(getEntityName()).setFilter(onlineOrPlayingFilter);
     PreparedQuery preparedQuery = getDatastore().prepare(query);
     return getListResult(preparedQuery);
   }

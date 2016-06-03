@@ -33,7 +33,7 @@ public class CheckOnlineServlet extends HttpServlet {
       return;
     }
 
-    List<Player> players = Player.getInstance().findAll();
+    List<Player> players = Player.getInstance().findOnline();
     Calendar calendar = Calendar.getInstance();
     calendar.add(Calendar.HOUR, -Integer.valueOf(Config.GAE_CRON_RESET_USERS_INTERVAL_HOUR));
     for (Player player : players) {
