@@ -10,6 +10,7 @@ import com.gwtplatform.mvp.client.View;
 import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.channel.PlaySession;
+import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.PlayerDto;
@@ -21,17 +22,17 @@ public class GeneralPresenter extends PresenterWidget<GeneralPresenter.MyView> i
   static final NestedSlot SLOT_GENERAL_SETTINGS = new NestedSlot();
   private final DraughtsMessages messages;
   private final ResourceDelegate<PlayersResource> playersDelegate;
-  private final PlaySession playSession;
-  private final ClientConfiguration config;
   private PlayerDto player;
+  private final DialogFactory dialogFactory;
 
   @Inject
-  GeneralPresenter(EventBus eventBus, MyView view, DraughtsMessages messages, ResourceDelegate<PlayersResource> playersDelegate, PlaySession playSession, ClientConfiguration config, PlayerDto player) {
+  GeneralPresenter(EventBus eventBus, MyView view, DraughtsMessages messages,
+                   ResourceDelegate<PlayersResource> playersDelegate,
+                   DialogFactory dialogFactory, PlayerDto player) {
     super(eventBus, view);
     this.playersDelegate = playersDelegate;
-    this.playSession = playSession;
+    this.dialogFactory = dialogFactory;
     this.player = player;
-    this.config = config;
     this.messages = messages;
 
     getView().setUiHandlers(this);
@@ -41,7 +42,7 @@ public class GeneralPresenter extends PresenterWidget<GeneralPresenter.MyView> i
   @Override
   public void setSubscribed(final Boolean subscribed) {
     player.setSubscribed(subscribed);
-    playersDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>() {
+    playersDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>(dialogFactory) {
       @Override
       public void onSuccess(PlayerDto result) {
         if (subscribed) {
@@ -73,24 +74,27 @@ public class GeneralPresenter extends PresenterWidget<GeneralPresenter.MyView> i
     private final ResourceDelegate<PlayersResource> playersDelegate;
     private final ClientConfiguration config;
     private final PlaySession playSession;
+    private final DialogFactory dialogFactory;
 
     @Inject
     FactoryImpl(EventBus eventBus,
-                GeneralPresenter.ViewFactory viewFactory,
+                ViewFactory viewFactory,
                 DraughtsMessages messages,
                 ResourceDelegate<PlayersResource> playersDelegate,
-                ClientConfiguration config, PlaySession playSession) {
+                ClientConfiguration config, PlaySession playSession,
+                DialogFactory dialogFactory) {
       this.eventBus = eventBus;
       this.viewFactory = viewFactory;
       this.messages = messages;
       this.playersDelegate = playersDelegate;
       this.config = config;
       this.playSession = playSession;
+      this.dialogFactory = dialogFactory;
     }
 
     public GeneralPresenter create(PlayerDto player) {
-      return new GeneralPresenter(eventBus, viewFactory.create(), messages, playersDelegate, playSession, config,
-          player);
+      return new GeneralPresenter(eventBus, viewFactory.create(), messages, playersDelegate,
+          dialogFactory, player);
     }
   }
 

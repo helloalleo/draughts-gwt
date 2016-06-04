@@ -5,21 +5,22 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import no.eirikb.gwtchannelapi.client.Channel;
 import no.eirikb.gwtchannelapi.client.ChannelListener;
 import online.draughts.rus.client.application.common.InviteData;
 import online.draughts.rus.client.application.security.CurrentSession;
-import online.draughts.rus.client.application.widget.dialog.*;
+import online.draughts.rus.client.application.widget.dialog.ConfirmDialogBox;
+import online.draughts.rus.client.application.widget.dialog.ConfirmPlayDialogBox;
+import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
+import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.json.ChunkMapper;
 import online.draughts.rus.client.json.GameMessageMapper;
 import online.draughts.rus.client.json.InviteDataMapper;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.AudioUtil;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.shared.channel.Chunk;
 import online.draughts.rus.shared.dto.GameDto;
@@ -27,7 +28,6 @@ import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.util.List;
@@ -43,7 +43,6 @@ import java.util.TreeMap;
 public class ClientChannel implements ChannelListener {
 
   private final CurrentSession currentSession;
-  private ResourceDelegate<GamesResource> gamesDelegate;
   private EventBus eventBus;
   private PlayerDto player;
   private Channel channel;
@@ -54,6 +53,7 @@ public class ClientChannel implements ChannelListener {
   private GameMessageMapper messageMapper;
   private final InviteDataMapper inviteDataMapper;
   private final AppResources resources;
+  private final DialogFactory dialogFactory;
   private Map<Integer, String> gameMessageChunks = new TreeMap<>();
 
   @Inject
@@ -63,18 +63,17 @@ public class ClientChannel implements ChannelListener {
                        ChunkMapper chunkMapper,
                        GameMessageMapper messageMapper,
                        InviteDataMapper inviteDataMapper,
-                       ResourceDelegate<GamesResource> gamesDelegate,
                        DraughtsMessages messages,
-                       AppResources resources) {
+                       AppResources resources, DialogFactory dialogFactory) {
     this.currentSession = currentSession;
     this.playSession = playSession;
-    this.gamesDelegate = gamesDelegate;
     this.eventBus = eventBus;
     this.messages = messages;
     this.chunkMapper = chunkMapper;
     this.messageMapper = messageMapper;
     this.inviteDataMapper = inviteDataMapper;
     this.resources = resources;
+    this.dialogFactory = dialogFactory;
 
     bindEvents();
 
@@ -202,7 +201,6 @@ public class ClientChannel implements ChannelListener {
         sendGameMessage(message);
       }
     };
-    String gameTypeTranslated;
     final String color = inviteData.isWhite() ?
         messages.white_with_ending() : messages.black_with_ending();
     confirmPlayDialogBox.show(messages.inviteMessage(gameMessage.getMessage(),
@@ -214,7 +212,7 @@ public class ClientChannel implements ChannelListener {
   @Override
   public void onOpen() {
     if (player == null) {
-      InfoDialogBox.setMessage(messages.failedToConnectToServer()).show();
+      dialogFactory.createInfoDialogBox(messages.failedToConnectToServer()).show();
       return;
     }
     GameMessageDto gameMessage = GWT.create(GameMessageDto.class);
@@ -232,8 +230,9 @@ public class ClientChannel implements ChannelListener {
     if (401 == code) {
       Window.Location.reload();
     } else {
-      InfoDialogBox.setMessage("Если вы видете эту ошибку, скопируйте, пожалуйста, её описание и отправьте модератору. Большое спасибо! " + code + " " + description).show();
-      Logger.prod(code + " " + description);
+      final ErrorDialogBox errorDialogBox = dialogFactory.createErrorDialogBox();
+      errorDialogBox.setMessage(code + " " + description);
+      errorDialogBox.show();
       channel = new Channel(String.valueOf(player.getId()));
       channel.addChannelListener(this);
       channel.join();
@@ -332,10 +331,10 @@ public class ClientChannel implements ChannelListener {
     if (playSession.getGame() != null) {
       GameDto game = gameMessage.getGame();
       GameDto.GameEnds gameEnd = game.getPlayEndStatus();
-      eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AbstractAsyncCallback<GameDto>() {
+      eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AbstractAsyncCallback<GameDto>(dialogFactory) {
         @Override
         public void onSuccess(GameDto aVoid) {
-          GameResultDialogBox.setMessage(messages.timeOutOpponentLose(), eventBus);
+          dialogFactory.createGameResultDialogBox(messages.timeOutOpponentLose()).show();
         }
       }));
     }
@@ -368,7 +367,7 @@ public class ClientChannel implements ChannelListener {
         gameEnd = playSession.isPlayerHasWhiteColor()
             ? GameDto.GameEnds.BLACK_LEFT : GameDto.GameEnds.WHITE_LEFT;
       }
-      eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AbstractAsyncCallback<GameDto>() {
+      eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AbstractAsyncCallback<GameDto>(dialogFactory) {
         @Override
         public void onSuccess(GameDto aVoid) {
           Growl.growlNotif(messages.opponentLeftGame());
@@ -393,7 +392,7 @@ public class ClientChannel implements ChannelListener {
       final MoveDto move = gameMessage.getMove();
       eventBus.fireEvent(new PlayMoveCancelEvent(move));
     } else {
-      InfoDialogBox.setMessage(messages.playerRejectedMoveCancel(gameMessage.getSender().getPublicName())).show();
+      dialogFactory.createInfoDialogBox(messages.playerRejectedMoveCancel(gameMessage.getSender().getPublicName())).show();
     }
   }
 
@@ -402,7 +401,7 @@ public class ClientChannel implements ChannelListener {
    * оппонента
    */
   private void handlePlayCancelMove(final GameMessageDto gameMessage) {
-    new ConfirmeDialogBox(messages.playerProposesCancelMove(gameMessage.getSender().getPublicName())) {
+    new ConfirmDialogBox(messages.playerProposesCancelMove(gameMessage.getSender().getPublicName())) {
       @Override
       public void procConfirm() {
         GameMessageDto returnGameMessage = createGameMessage(gameMessage);
@@ -421,20 +420,21 @@ public class ClientChannel implements ChannelListener {
 
   private void handlePlayAcceptDraw(GameMessageDto gameMessage) {
     if (Boolean.valueOf(gameMessage.getData())) {
-      eventBus.fireEvent(new GameOverEvent(playSession.getGame(), GameDto.GameEnds.DRAW, new AbstractAsyncCallback<GameDto>() {
-        @Override
-        public void onSuccess(GameDto aVoid) {
-        }
-      }));
+      eventBus.fireEvent(new GameOverEvent(playSession.getGame(), GameDto.GameEnds.DRAW,
+          new AbstractAsyncCallback<GameDto>(dialogFactory) {
+            @Override
+            public void onSuccess(GameDto aVoid) {
+            }
+          }));
     } else {
       String senderName = gameMessage.getSender().getPublicName();
-      GameResultDialogBox.setMessage(messages.playerRejectedDraw(senderName), eventBus).show();
+      dialogFactory.createGameResultDialogBox(messages.playerRejectedDraw(senderName)).show();
     }
   }
 
   private void handlePlayProposeDraw(final GameMessageDto gameMessage) {
     String senderName = gameMessage.getSender().getPublicName();
-    new ConfirmeDialogBox(messages.playerProposesDraw(senderName)) {
+    new ConfirmDialogBox(messages.playerProposesDraw(senderName)) {
       @Override
       public void procConfirm() {
         GameMessageDto message = createGameMessage(gameMessage);
@@ -472,12 +472,14 @@ public class ClientChannel implements ChannelListener {
     eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<GameDto>() {
       @Override
       public void onFailure(Throwable throwable) {
-        ErrorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable).show();
+        final ErrorDialogBox errorDialogBox = dialogFactory.createErrorDialogBox();
+        errorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable);
+        errorDialogBox.show();
       }
 
       @Override
       public void onSuccess(GameDto aVoid) {
-        GameResultDialogBox.setMessage(messages.opponentSurrendered(), eventBus).show();
+        dialogFactory.createInfoDialogBox(messages.opponentSurrendered()).show();
       }
     }));
   }
@@ -507,8 +509,7 @@ public class ClientChannel implements ChannelListener {
 
   private void handlePlayRejectInvite(GameMessageDto gameMessage) {
     playSession.setOpponent(null);
-    InfoDialogBox
-        .setMessage(messages.playerRejectedPlayRequest(gameMessage.getSender().getPublicName()))
+    dialogFactory.createInfoDialogBox(messages.playerRejectedPlayRequest(gameMessage.getSender().getPublicName()))
         .show();
     eventBus.fireEvent(new RejectPlayEvent());
   }

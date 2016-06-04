@@ -11,7 +11,7 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
+import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
@@ -37,6 +37,7 @@ public class PlayShowPanel extends Composite {
   private final PlaceManager placeManager;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final DraughtsMessages messages;
+  private final DialogFactory dialogFactory;
 
   @UiField
   HTMLPanel playRowList;
@@ -62,10 +63,12 @@ public class PlayShowPanel extends Composite {
                        Provider<HomeView> homeViewProvider,
                        DraughtsMessages messages,
                        ResourceDelegate<GamesResource> gamesDelegate,
-                       Cookies cookies) {
+                       Cookies cookies,
+                       DialogFactory dialogFactory) {
     this.showPanelFactory = showPanelFactory;
     this.cookies = cookies;
     this.placeManager = placeManager;
+    this.dialogFactory = dialogFactory;
     INCREMENT_SIZE = HomePresenter.getIncrementPlaysOnPage(config, cookies);
     this.homeViewProvider = homeViewProvider;
     this.messages = messages;
@@ -85,14 +88,14 @@ public class PlayShowPanel extends Composite {
     if (StringUtils.isNotEmpty(showGame)) {
       final Long id = Long.valueOf(showGame);
       if (id == null) {
-        InfoDialogBox.setMessage(messages.gameNotFound()).show();
+        dialogFactory.createInfoDialogBox(messages.gameNotFound()).show();
       } else {
         gamesDelegate.withCallback(
-            new AbstractAsyncCallback<GameDto>() {
+            new AbstractAsyncCallback<GameDto>(dialogFactory) {
               @Override
               public void onSuccess(GameDto result) {
                 if (result == null) {
-                  InfoDialogBox.setMessage(messages.gameNotFound()).show();
+                  dialogFactory.createInfoDialogBox(messages.gameNotFound()).show();
                   return;
                 }
                 resetGames(Collections.singletonList(result));

@@ -21,6 +21,7 @@ import com.gwtplatform.mvp.client.view.PopupPositioner;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.NotationPanel;
 import online.draughts.rus.client.application.widget.growl.Growl;
+import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
@@ -56,6 +57,8 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   private final CurrentSession currentSession;
   private final PlayerDto player;
   private final ResourceDelegate<GamesResource> gamesDelegate;
+  private final DialogFactory dialogFactory;
+
   @UiField
   PopupPanel main;
   @UiField
@@ -133,7 +136,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
   private DraughtsPlayerView(Binder uiBinder, EventBus eventBus, AppResources resources, DraughtsMessages messages,
                              ClientConfiguration config, CurrentSession currentSession,
-                             ResourceDelegate<GamesResource> gamesDelegate,
+                             DialogFactory dialogFactory, ResourceDelegate<GamesResource> gamesDelegate,
                              GameDto game, boolean inSlot) {
     super(eventBus);
     this.resources = resources;
@@ -141,6 +144,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     this.config = config;
     this.currentSession = currentSession;
     this.player = currentSession.getPlayer();
+    this.dialogFactory = dialogFactory;
     this.gamesDelegate = gamesDelegate;
     this.game = game;
 
@@ -181,7 +185,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   @Override
   protected void onAttach() {
     if (currentSession.isLoggedIn()) {
-      gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>() {
+      gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>(dialogFactory) {
         @Override
         public void onSuccess(GameDto result) {
           DraughtsPlayerView.this.game = result;
@@ -426,7 +430,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
     game.setNotation(notationPanel.getElement().getString());
 
-    gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>() {
+    gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>(dialogFactory) {
       @Override
       public void onSuccess(GameDto result) {
         addGameComment(order, currentNotation, newTitle, newComment);
@@ -767,12 +771,13 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     private final ClientConfiguration config;
     private final CurrentSession currentSession;
     private final ResourceDelegate<GamesResource> gamesDelegate;
+    private final DialogFactory dialogFactory;
 
     @Inject
     public ViewFactoryImpl(Binder binder, EventBus eventBus,
                            DraughtsMessages messages, AppResources resources,
                            ClientConfiguration config, CurrentSession currentSession,
-                           ResourceDelegate<GamesResource> gamesDelegate) {
+                           ResourceDelegate<GamesResource> gamesDelegate, DialogFactory dialogFactory) {
       this.binder = binder;
       this.eventBus = eventBus;
       this.messages = messages;
@@ -780,16 +785,17 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       this.config = config;
       this.currentSession = currentSession;
       this.gamesDelegate = gamesDelegate;
+      this.dialogFactory = dialogFactory;
     }
 
     @Override
     public DraughtsPlayerPresenter.MyView create(GameDto game, boolean inSlot) {
-      return new DraughtsPlayerView(binder, eventBus, resources, messages, config, currentSession, gamesDelegate, game, inSlot);
+      return  new DraughtsPlayerView(binder, eventBus, resources, messages, config, currentSession, dialogFactory, gamesDelegate, game, inSlot);
     }
 
     @Override
     public DraughtsPlayerPresenter.MyView create(GameDto game) {
-      return new DraughtsPlayerView(binder, eventBus, resources, messages, config, currentSession, gamesDelegate, game, false);
+      return new DraughtsPlayerView(binder, eventBus, resources, messages, config, currentSession, dialogFactory, gamesDelegate, game, false);
     }
   }
 }

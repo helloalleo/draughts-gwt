@@ -18,6 +18,7 @@ import online.draughts.rus.client.application.common.PlayComponentPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.event.ReceivedPlayerListEvent;
 import online.draughts.rus.client.event.ReceivedPlayerListEventHandler;
+import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Cookies;
@@ -40,6 +41,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private int gamesOffset = 0;
+  private final DialogFactory dialogFactory;
 
   @Inject
   HomePresenter(
@@ -50,8 +52,10 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       ClientConfiguration config,
       Cookies cookies,
       ResourceDelegate<GamesResource> gamesDelegate,
-      ResourceDelegate<PlayersResource> playersDelegate) {
+      ResourceDelegate<PlayersResource> playersDelegate,
+      DialogFactory dialogFactory) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
+    this.dialogFactory = dialogFactory;
 
     INIT_SHOW_GAMES_PAGE_SIZE = getIncrementPlaysOnPage(config, cookies);
     getView().setUiHandlers(this);
@@ -85,13 +89,13 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   protected void onReveal() {
     Logger.debug("Home");
     getView().setShowLoggedInControls(currentSession.isLoggedIn());
-    playersDelegate.withCallback(new AbstractAsyncCallback<Integer>() {
+    playersDelegate.withCallback(new AbstractAsyncCallback<Integer>(dialogFactory) {
       @Override
       public void onSuccess(Integer result) {
         getView().updateTotalPlayersCounter(result);
       }
     }).totalPlayers();
-    playersDelegate.withCallback(new AbstractAsyncCallback<Integer>() {
+    playersDelegate.withCallback(new AbstractAsyncCallback<Integer>(dialogFactory) {
       @Override
       public void onSuccess(Integer result) {
         getView().updateOnlinePlayerCounter(result);
@@ -108,7 +112,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
   public void updatePlayShowPanel(boolean myGames) {
     if (myGames) {
-      gamesDelegate.withCallback(ManualRevealCallback.create(this, new AbstractAsyncCallback<List<GameDto>>() {
+      gamesDelegate.withCallback(ManualRevealCallback.create(this, new AbstractAsyncCallback<List<GameDto>>(dialogFactory) {
         @Override
         public void onFailure(Throwable caught) {
           super.onFailure(caught);
@@ -122,7 +126,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         }
       })).getLoggedInUserGames(0, INIT_SHOW_GAMES_PAGE_SIZE);
     } else {
-      gamesDelegate.withCallback(ManualRevealCallback.create(this, new AbstractAsyncCallback<List<GameDto>>() {
+      gamesDelegate.withCallback(ManualRevealCallback.create(this, new AbstractAsyncCallback<List<GameDto>>(dialogFactory) {
         @Override
         public void onFailure(Throwable caught) {
           super.onFailure(caught);
@@ -143,14 +147,14 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   @Override
   public void getMoreGames(boolean myGames, int newPageSize) {
     if (myGames) {
-      gamesDelegate.withCallback(new AbstractAsyncCallback<List<GameDto>>() {
+      gamesDelegate.withCallback(new AbstractAsyncCallback<List<GameDto>>(dialogFactory) {
         @Override
         public void onSuccess(List<GameDto> result) {
           gamesOffset = getView().addGames(result);
         }
       }).getLoggedInUserGames(gamesOffset, newPageSize);
     } else {
-      gamesDelegate.withCallback(new AbstractAsyncCallback<List<GameDto>>() {
+      gamesDelegate.withCallback(new AbstractAsyncCallback<List<GameDto>>(dialogFactory) {
         @Override
         public void onSuccess(List<GameDto> result) {
           gamesOffset = getView().addGames(result);

@@ -26,7 +26,7 @@ import org.gwtbootstrap3.client.ui.gwt.FlowPanel;
  * Date: 09.02.14
  * Time: 21:15
  */
-public abstract class InviteDialogBox extends BasicDialogBox {
+public abstract class InviteDialogBox extends AbstractDialogBox {
   private final HTML inviteLabel = new HTML();
   private final RadioButton whiteRadio;
   private final Button submitButton;

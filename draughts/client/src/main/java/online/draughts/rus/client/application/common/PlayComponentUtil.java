@@ -1,9 +1,9 @@
 package online.draughts.rus.client.application.common;
 
 import com.google.web.bindery.event.shared.EventBus;
-import online.draughts.rus.client.application.widget.dialog.GameResultDialogBox;
 import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.event.GameOverEvent;
+import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
@@ -15,12 +15,12 @@ import online.draughts.rus.shared.locale.DraughtsMessages;
  * Time: 18:54
  */
 public class PlayComponentUtil {
-  public static void checkWin(EventBus eventBus, PlaySession playSession, DraughtsMessages messages,
-                              int myDraughtsSize, int opponentDraughtsSize, boolean white) {
+  static void checkWin(EventBus eventBus, PlaySession playSession, DraughtsMessages messages,
+                       DialogFactory dialogFactory, int myDraughtsSize, int opponentDraughtsSize, boolean white) {
     GameDto.GameEnds gameEnd = null;
     final GameDto.GameType gameType = playSession.getGameType();
     if (0 == myDraughtsSize) {
-      GameResultDialogBox.setMessage(endGameMessage(messages, gameType, false), eventBus).show();
+      dialogFactory.createGameResultDialogBox(endGameMessage(messages, gameType, false)).show();
       if (white) {
         gameEnd = blackWin(gameType);
       } else {
@@ -28,7 +28,7 @@ public class PlayComponentUtil {
       }
     }
     if (0 == opponentDraughtsSize) {
-      GameResultDialogBox.setMessage(endGameMessage(messages, gameType, true), eventBus).show();
+      dialogFactory.createGameResultDialogBox(endGameMessage(messages, gameType, true)).show();
       if (white) {
         gameEnd = whiteWin(gameType);
       } else {
@@ -40,7 +40,7 @@ public class PlayComponentUtil {
     if (gameEnd == null) {
       return;
     }
-    eventBus.fireEvent(new GameOverEvent(endGame, gameEnd, new AbstractAsyncCallback<GameDto>() {
+    eventBus.fireEvent(new GameOverEvent(endGame, gameEnd, new AbstractAsyncCallback<GameDto>(dialogFactory) {
       @Override
       public void onSuccess(GameDto result) {
       }
@@ -80,13 +80,13 @@ public class PlayComponentUtil {
     }
   }
 
-  public static void checkShut(EventBus eventBus, PlaySession playSession,
-                               DraughtsMessages messages, boolean isWhite) {
+  static void checkShut(EventBus eventBus, PlaySession playSession,
+                        DraughtsMessages messages, DialogFactory dialogFactory, boolean isWhite) {
     final GameDto.GameEnds gameEnd;
     if (isWhite == playSession.isPlayerHasWhiteColor()) {
-      GameResultDialogBox.setMessage(messages.youLose(), eventBus).show();
+      dialogFactory.createGameResultDialogBox(messages.youLose()).show();
     } else {
-      GameResultDialogBox.setMessage(messages.youWon(), eventBus).show();
+      dialogFactory.createGameResultDialogBox(messages.youWon()).show();
     }
     if (isWhite) {
       gameEnd = blackWin(playSession.getGameType());
@@ -94,7 +94,7 @@ public class PlayComponentUtil {
       gameEnd = whiteWin(playSession.getGameType());
     }
     final GameDto endedGame = playSession.getGame();
-    eventBus.fireEvent(new GameOverEvent(endedGame, gameEnd, new AbstractAsyncCallback<GameDto>() {
+    eventBus.fireEvent(new GameOverEvent(endedGame, gameEnd, new AbstractAsyncCallback<GameDto>(dialogFactory) {
       @Override
       public void onSuccess(GameDto result) {
       }

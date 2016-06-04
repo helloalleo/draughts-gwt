@@ -12,7 +12,7 @@ import java.util.Collections;
  * Date: 25.11.14
  * Time: 8:29
  */
-public class DTLogImpl implements Log {
+public class LogImpl implements Log {
 
   private final String DEBUG_PREFIX = "DEBUG: ";
   private final String WARN_PREFIX = "WARN: ";

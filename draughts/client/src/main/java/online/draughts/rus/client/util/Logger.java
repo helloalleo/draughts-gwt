@@ -12,7 +12,7 @@ public class Logger {
   private Log log;
 
   private Logger() {
-    this.log = new DTLogImpl();
+    this.log = new LogImpl();
   }
 
   private static Logger getInstance() {

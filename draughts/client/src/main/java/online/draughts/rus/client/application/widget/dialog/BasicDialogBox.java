@@ -1,12 +1,11 @@
 package online.draughts.rus.client.application.widget.dialog;
 
-import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.dom.client.KeyCodes;
 import com.google.gwt.user.client.Event;
 import com.google.gwt.user.client.ui.DialogBox;
+import com.google.web.bindery.event.shared.EventBus;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.client.util.DTCookiesImpl;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 
 /**
@@ -16,14 +15,25 @@ import online.draughts.rus.shared.locale.DraughtsMessages;
  * Time: 23:17
  */
 public class BasicDialogBox extends DialogBox implements BaseDialogBox {
-  protected static DraughtsMessages messages = GWT.create(DraughtsMessages.class);
-  protected AppResources resources = GWT.create(AppResources.class);
-  protected Cookies cookies = GWT.create(DTCookiesImpl.class);
+  private final EventBus eventBus;
+  private final String header;
+  private final String content;
+  private DraughtsMessages messages;
+  private AppResources resources;
+  private Cookies cookies;
 
   int WIDTH = 400;
   int HEIGHT = 60;
 
-  BasicDialogBox() {
+  BasicDialogBox(DraughtsMessages messages, AppResources resources,
+                 Cookies cookies, EventBus eventBus,
+                 String header, String content) {
+    this.messages = messages;
+    this.resources = resources;
+    this.cookies = cookies;
+    this.eventBus = eventBus;
+    this.header = header;
+    this.content = content;
     setAnimationEnabled(true);
 
     getElement().addClassName(resources.style().dialogBox());
@@ -40,5 +50,29 @@ public class BasicDialogBox extends DialogBox implements BaseDialogBox {
         }
         break;
     }
+  }
+
+  public EventBus getEventBus() {
+    return eventBus;
+  }
+
+  public String getHeader() {
+    return header;
+  }
+
+  public String getContent() {
+    return content;
+  }
+
+  public DraughtsMessages getMessages() {
+    return messages;
+  }
+
+  public AppResources getResources() {
+    return resources;
+  }
+
+  public Cookies getCookies() {
+    return cookies;
   }
 }

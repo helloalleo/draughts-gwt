@@ -7,6 +7,7 @@ import com.gwtplatform.dispatch.rpc.server.ExecutionContext;
 import com.gwtplatform.dispatch.rpc.server.actionhandler.ActionHandler;
 import com.gwtplatform.dispatch.shared.ActionException;
 import online.draughts.rus.server.domain.Player;
+import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.shared.dispatch.FetchCurrentPlayerAction;
 import online.draughts.rus.shared.dispatch.FetchCurrentPlayerResult;
@@ -29,15 +30,17 @@ public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayer
   private final Logger logger = Logger.getLogger(FetchCurrentUserHandler.class);
   private final Provider<HttpServletRequest> requestProvider;
   private final Provider<Boolean> authProvider;
+  private final PlayerService playerService;
   private final Mapper mapper;
 
   @Inject
   public FetchCurrentUserHandler(
       @Named(AuthUtils.AUTHENTICATED) Provider<Boolean> authProvider,
       Provider<HttpServletRequest> requestProvider,
-      Mapper mapper) {
+      PlayerService playerService, Mapper mapper) {
     this.requestProvider = requestProvider;
     this.authProvider = authProvider;
+    this.playerService = playerService;
     this.mapper = mapper;
   }
 
@@ -48,7 +51,7 @@ public class FetchCurrentUserHandler implements ActionHandler<FetchCurrentPlayer
         return new FetchCurrentPlayerResult(null);
       }
       HttpSession session = requestProvider.get().getSession();
-      final Player bySessionId = Player.getInstance().findBySessionId(session.getId());
+      final Player bySessionId = playerService.findBySessionId(session.getId());
       if (bySessionId != null && bySessionId.isBanned()) {
         throw new RuntimeException("You were banned");
       } else if (bySessionId == null) {

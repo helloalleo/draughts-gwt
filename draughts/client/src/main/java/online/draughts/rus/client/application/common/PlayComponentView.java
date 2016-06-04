@@ -28,7 +28,7 @@ import com.google.gwt.view.client.SingleSelectionModel;
 import com.google.inject.Inject;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.application.widget.NotationPanel;
-import online.draughts.rus.client.application.widget.dialog.ConfirmeDialogBox;
+import online.draughts.rus.client.application.widget.dialog.ConfirmDialogBox;
 import online.draughts.rus.client.application.widget.dialog.InviteDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.channel.PlaySession;
@@ -212,7 +212,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @SuppressWarnings(value = "unused")
   @UiHandler("drawButton")
   public void onDrawButton(ClickEvent event) {
-    new ConfirmeDialogBox(messages.doYouWantToProposeDraw()) {
+    new ConfirmDialogBox(messages.doYouWantToProposeDraw()) {
       @Override
       public void procConfirm() {
         if (isConfirmed()) {
@@ -225,7 +225,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @SuppressWarnings(value = "unused")
   @UiHandler("surrenderButton")
   public void onSurrenderButton(ClickEvent event) {
-    new ConfirmeDialogBox(messages.areYouSureYouWantSurrender()) {
+    new ConfirmDialogBox(messages.areYouSureYouWantSurrender()) {
       @Override
       public void procConfirm() {
         if (isConfirmed()) {
@@ -250,7 +250,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       Growl.growlNotif(messages.youDontMove());
       return;
     }
-    new ConfirmeDialogBox(messages.doYouWantToCancelMove()) {
+    new ConfirmDialogBox(messages.doYouWantToCancelMove()) {
       @Override
       public void procConfirm() {
         if (isConfirmed()) {

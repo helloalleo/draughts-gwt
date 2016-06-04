@@ -13,7 +13,7 @@ import online.draughts.rus.shared.config.ClientConfiguration;
 public class DebugUtils {
 
   private static final ClientConfiguration config = GWT.create(ClientConfiguration.class);
-  private static final Log log = GWT.create(DTLogImpl.class);
+  private static final Log log = GWT.create(LogImpl.class);
 
   private DebugUtils() {
   }

@@ -34,6 +34,7 @@
 
     <!-- Put this script tag to the <head> of your page -->
     <script type="text/javascript" src="http://vk.com/js/api/share.js?93" charset="windows-1251"></script>
+    <script type="text/javascript" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
     <!-- Channel API -->
     <script type="text/javascript" src="/_ah/channel/jsapi"></script>

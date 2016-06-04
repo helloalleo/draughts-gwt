@@ -3,6 +3,7 @@ package online.draughts.rus.client.application.widget.dialog;
 import com.google.gwt.event.dom.client.ClickEvent;
 import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.safehtml.shared.SafeHtmlBuilder;
+import com.google.gwt.user.client.ui.DialogBox;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.VerticalPanel;
@@ -15,11 +16,11 @@ import org.gwtbootstrap3.client.ui.ButtonGroup;
  * Date: 10/03/14
  * Time: 11:07
  */
-public abstract class ConfirmeDialogBox extends BasicDialogBox {
+public abstract class ConfirmDialogBox extends AbstractDialogBox {
 
   private boolean confirmed;
 
-  public ConfirmeDialogBox(String ask) {
+  protected ConfirmDialogBox(String content) {
     HTML caption = new HTML(messages.confirm());
     caption.getElement().addClassName(resources.style().dialogCaptionInfo());
     setHTML(new SafeHtmlBuilder().appendHtmlConstant(caption.getElement().getString()).toSafeHtml());
@@ -28,7 +29,7 @@ public abstract class ConfirmeDialogBox extends BasicDialogBox {
     VerticalPanel panel = new VerticalPanel();
     panel.setPixelSize(WIDTH, HEIGHT);
 
-    HTML askHtml = new HTML(ask);
+    HTML askHtml = new HTML(content);
     panel.add(askHtml);
 
     ButtonGroup askButtons = new ButtonGroup();

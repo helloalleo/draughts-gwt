@@ -51,7 +51,8 @@ public class MailService {
 
     try {
       MimeMessage message = new MimeMessage(mailSession);
-      message.setSubject(String.format("Новое сообщение от %s", sender == null ? "не указано" : sender.getPublicName()), "UTF-8");
+      final String senderPublicName = sender == null ? "не указано" : sender.getPublicName();
+      message.setSubject(String.format("Новое сообщение от %s", senderPublicName), "UTF-8");
       message.setFrom(new InternetAddress(Config.FROM_EMAIL, "shashki.online", "UTF-8"));
       message.addRecipient(Message.RecipientType.TO,
           new InternetAddress(receiver == null ? Config.ADMIN_MAIL : receiver.getEmail(),
@@ -65,7 +66,7 @@ public class MailService {
       // first part  (the html)
       BodyPart htmlMessagePart = new MimeBodyPart();
       String htmlText = Utils.readFile("mail/new_message/index.html");
-      htmlText = htmlText.replace("{{0}}", sender.getPublicName());
+      htmlText = htmlText.replace("{{0}}", senderPublicName);
       htmlText = htmlText.replace("{{1}}", receivedMessage);
       htmlMessagePart.setHeader("Content-Type", "text/plain; charset=UTF-8");
       htmlMessagePart.setHeader("Content-Transfer-Encoding", "quoted-printable");
@@ -77,7 +78,7 @@ public class MailService {
       // text part
       BodyPart textMessagePart = new MimeBodyPart();
       String text = Utils.readFile("mail/new_message/new_message.txt");
-      text = text.replace("{{0}}", sender.getPublicName());
+      text = text.replace("{{0}}", senderPublicName);
       text = text.replace("{{1}}", receivedMessage);
       textMessagePart.setHeader("Content-Type", "text/plain; charset=UTF-8");
       textMessagePart.setHeader("Content-Transfer-Encoding", "quoted-printable");
@@ -138,5 +139,13 @@ public class MailService {
     // если получатель не имеет сообщений от данного отправителя, тогда инициализируем Map и увеличиваем счетчика
     // на единицу
     sendNotificationMail(message.getMessage(), receiver, sender);
+  }
+
+  public void sendToAdmins(String error, Long senderId) {
+    Player sender = null;
+    if (null != senderId) {
+      sender = playerService.find(senderId);
+    }
+    sendNotificationMail(error, null, sender);
   }
 }

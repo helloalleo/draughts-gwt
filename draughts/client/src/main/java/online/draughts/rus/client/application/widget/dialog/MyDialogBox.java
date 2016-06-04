@@ -8,8 +8,13 @@ import com.google.gwt.user.client.ui.HasAlignment;
 import com.google.gwt.user.client.ui.ScrollPanel;
 import com.google.gwt.user.client.ui.VerticalPanel;
 import com.google.web.bindery.event.shared.EventBus;
-import online.draughts.rus.client.event.GameMessageEvent;
-import online.draughts.rus.shared.dto.GameMessageDto;
+import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
+import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.client.util.Logger;
+import online.draughts.rus.shared.dto.PlayerDto;
+import online.draughts.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.resource.ErrorHandlerResource;
 import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.TextArea;
@@ -23,8 +28,21 @@ import org.gwtbootstrap3.client.ui.TextArea;
 public abstract class MyDialogBox extends BasicDialogBox {
   private final TextArea messageToAdmins = new TextArea();
   private HTML contentHTML;
+  private String messageToAdminsText;
+  private final PlayerDto player;
+  private final ResourceDelegate<ErrorHandlerResource> errorHandlingDelegate;
 
-  MyDialogBox(String header, String content) {
+
+  MyDialogBox(DraughtsMessages messages,
+              PlayerDto player,
+              ResourceDelegate<ErrorHandlerResource> errorHandlingDelegate,
+              AppResources resources,
+              Cookies cookies, EventBus eventBus,
+              String header,
+              String content) {
+    super(messages, resources, cookies, eventBus, header, content);
+    this.player = player;
+    this.errorHandlingDelegate = errorHandlingDelegate;
     ScrollPanel contentScrollPanel = new ScrollPanel();
 
     contentHTML = new HTML();
@@ -57,25 +75,30 @@ public abstract class MyDialogBox extends BasicDialogBox {
     getElement().getStyle().setZIndex(1000);
   }
 
-  void messageAdmins(EventBus eventBus) {
-    if (StringUtils.isEmpty(messageToAdmins.getValue())) {
+  void messageAdmins() {
+    addMessageToAdmins(messageToAdmins.getValue());
+    if (StringUtils.isEmpty(messageToAdminsText)) {
       return;
     }
 
-    GameMessageDto gameMessage = new GameMessageDto();
-    gameMessage.setMessageType(GameMessageDto.MessageType.CHAT_PRIVATE_MESSAGE);
-    gameMessage.setReceiver(null);
-    gameMessage.setMessage(messageToAdmins.getValue());
-
-    eventBus.fireEvent(new GameMessageEvent(gameMessage));
+    Long senderId = null;
+    if (null != player) {
+      senderId = player.getId();
+    }
+    Logger.debug(messageToAdminsText);
+    errorHandlingDelegate.withoutCallback().postError(messageToAdminsText, senderId);
   }
 
-  public void setContent(String content) {
+  void setContent(String content) {
     contentHTML.setHTML(content);
   }
 
   public void setHeader(String header) {
     setText(header);
+  }
+
+  void addMessageToAdmins(String message) {
+    messageToAdminsText += message;
   }
 
   void setMessageToAdminsVisible(boolean visible) {

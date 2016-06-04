@@ -11,6 +11,7 @@ import com.gwtplatform.mvp.client.presenter.slots.NestedSlot;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.event.UpdateAllPlayerListEvent;
+import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.PlayerDto;
@@ -25,6 +26,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final PlaySession playSession;
   private final ClientConfiguration config;
+  private final DialogFactory dialogFactory;
   private PlayerDto player;
 
   private SettingsPresenter(
@@ -33,12 +35,13 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
       DraughtsMessages messages,
       ResourceDelegate<PlayersResource> playersDelegate,
       PlaySession playSession,
-      ClientConfiguration config,
+      DialogFactory dialogFactory, ClientConfiguration config,
       PlayerDto player) {
     super(eventBus, view);
 
     this.playersDelegate = playersDelegate;
     this.playSession = playSession;
+    this.dialogFactory = dialogFactory;
     this.player = player;
     this.config = config;
     this.messages = messages;
@@ -61,7 +64,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
     String name = playerName.replace(config.escapeChars(), "");
     name = SimpleHtmlSanitizer.getInstance().sanitize(name).asString();
     player.setPlayerName(name);
-    playersDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>() {
+    playersDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>(dialogFactory) {
       @Override
       public void onSuccess(PlayerDto result) {
         SettingsPresenter.this.player.setPlayerName(result.getPlayerName());
@@ -76,7 +79,7 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
   @Override
   public void subscribeOnNewsletter(Boolean value) {
     player.setSubscribeOnNewsletter(value);
-    playersDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>() {
+    playersDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>(dialogFactory) {
       @Override
       public void onSuccess(PlayerDto result) {
         Growl.growlNotif(messages.profileUpdated());
@@ -100,23 +103,26 @@ public class SettingsPresenter extends PresenterWidget<SettingsPresenter.MyView>
     private final ResourceDelegate<PlayersResource> playersDelegate;
     private final ClientConfiguration config;
     private final PlaySession playSession;
+    private final DialogFactory dialogFactory;
 
     @Inject
     FactoryImpl(EventBus eventBus,
                 ViewFactory viewFactory,
                 DraughtsMessages messages,
                 ResourceDelegate<PlayersResource> playersDelegate,
-                ClientConfiguration config, PlaySession playSession) {
+                ClientConfiguration config, PlaySession playSession,
+                DialogFactory dialogFactory) {
       this.eventBus = eventBus;
       this.viewFactory = viewFactory;
       this.messages = messages;
       this.playersDelegate = playersDelegate;
       this.config = config;
       this.playSession = playSession;
+      this.dialogFactory = dialogFactory;
     }
 
     public SettingsPresenter create(PlayerDto player) {
-      return new SettingsPresenter(eventBus, viewFactory.create(), messages, playersDelegate, playSession, config,
+      return new SettingsPresenter(eventBus, viewFactory.create(), messages, playersDelegate, playSession, dialogFactory, config,
           player);
     }
   }

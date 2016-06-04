@@ -216,7 +216,7 @@ public class ServerChannel extends ChannelServer {
     return message;
   }
 
-  public void updatePlayerList() {
+  private void updatePlayerList() {
     coreChannel.updatePlayerList();
   }
 }

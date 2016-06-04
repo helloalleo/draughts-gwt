@@ -12,7 +12,6 @@ import com.gwtplatform.mvp.client.presenter.slots.PermanentSlot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import online.draughts.rus.client.application.ApplicationPresenter;
 import online.draughts.rus.client.application.common.PlayComponentPresenter;
-import online.draughts.rus.client.application.common.PlayComponentUtil;
 import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.Cookies;
@@ -52,13 +51,13 @@ public class AnalysisPresenter extends Presenter<AnalysisPresenter.MyView, Analy
   public void checkWinner() {
     getView().setBeatenMy(DRAUGHTS_ON_DESK_INIT - getView().getMyDraughtsSize());
     getView().setBeatenOpponent(DRAUGHTS_ON_DESK_INIT - getView().getOpponentDraughtsSize());
-    PlayComponentUtil.checkWin(getEventBus(), playSession, messages, getView().getMyDraughtsSize(),
-        getView().getOpponentDraughtsSize(), getView().isWhite());
+//    PlayComponentUtil.checkWin(getEventBus(), playSession, messages, dialogFactory, getView().getMyDraughtsSize(),
+//        getView().getOpponentDraughtsSize(), getView().isWhite());
   }
 
   @Override
   public void gameShut(boolean isWhite) {
-    PlayComponentUtil.checkShut(getEventBus(), playSession, messages, isWhite);
+//    PlayComponentUtil.checkShut(getEventBus(), playSession, messages, dialogFactory, isWhite);
   }
 
   public interface MyView extends View, HasUiHandlers<AnalysisUiHandlers> {

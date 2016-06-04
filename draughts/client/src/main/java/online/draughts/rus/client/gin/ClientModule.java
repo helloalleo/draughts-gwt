@@ -12,8 +12,8 @@ import online.draughts.rus.client.application.widget.popup.DraughtsPlayerModule;
 import online.draughts.rus.client.channel.WebsocketModule;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.client.util.DTCookiesImpl;
-import online.draughts.rus.client.util.DTLogImpl;
+import online.draughts.rus.client.util.CookiesImpl;
+import online.draughts.rus.client.util.LogImpl;
 import online.draughts.rus.client.util.Log;
 
 public class ClientModule extends AbstractGinModule {
@@ -34,8 +34,8 @@ public class ClientModule extends AbstractGinModule {
     install(new GinFactoryModuleBuilder().build(NotationPanelFactory.class));
 
     bind(CurrentSession.class).in(Singleton.class);
-    bind(Cookies.class).to(DTCookiesImpl.class).in(Singleton.class);
-    bind(Log.class).to(DTLogImpl.class).in(Singleton.class);
+    bind(Cookies.class).to(CookiesImpl.class).in(Singleton.class);
+    bind(Log.class).to(LogImpl.class).in(Singleton.class);
 
     // Load and inject CSS resources
     bind(ResourceLoader.class).asEagerSingleton();

@@ -5,7 +5,7 @@ import com.google.gwt.user.client.Cookies;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.RootPanel;
 import com.gwtplatform.mvp.client.PreBootstrapper;
-import online.draughts.rus.client.util.DTCookiesImpl;
+import online.draughts.rus.client.util.CookiesImpl;
 import online.draughts.rus.client.util.DebugUtils;
 
 /**
@@ -17,7 +17,7 @@ import online.draughts.rus.client.util.DebugUtils;
 public class AppPreBootstrapper implements PreBootstrapper {
   @Override
   public void onPreBootstrap() {
-    String locale = Cookies.getCookie(DTCookiesImpl.LOCALE);
+    String locale = Cookies.getCookie(CookiesImpl.LOCALE);
     final HTML html;
     if ("en".equals(locale)) {
       html = new HTML("Loading...");

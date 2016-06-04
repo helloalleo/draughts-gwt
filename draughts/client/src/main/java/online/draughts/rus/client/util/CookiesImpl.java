@@ -14,7 +14,7 @@ import java.util.List;
  * Date: 29.09.15
  * Time: 17:31
  */
-public class DTCookiesImpl implements online.draughts.rus.client.util.Cookies {
+public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
 
   private static final String TIME_ON_PLAY = "TIME_ON_PLAY";
   private static final String FISHER_TIME = "FISHER_TIME";

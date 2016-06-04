@@ -23,6 +23,7 @@ public class ApiPaths {
   static final String GAMES = "/games";
 
   // players
+  static final String ERRORS = "/errors";
   static final String PLAYERS = "/players";
   static final String RESET_UNREAD = "/reset_unread";
   static final String PLAYERS_TOTAL = "/total";

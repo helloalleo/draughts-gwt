@@ -13,6 +13,7 @@ import online.draughts.rus.client.event.ChatMessageEvent;
 import online.draughts.rus.client.event.ChatMessageEventHandler;
 import online.draughts.rus.client.event.GameMessageEvent;
 import online.draughts.rus.client.event.ResetUnreadMessagesEvent;
+import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.GameMessageDto;
@@ -30,6 +31,7 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
   private final ClientConfiguration config;
   private final DraughtsMessages messages;
   private PlayerDto opponent;
+  private final DialogFactory dialogFactory;
 
   private MessengerPresenter(final EventBus eventBus,
                              final MyView view,
@@ -37,12 +39,14 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
                              final ClientConfiguration config,
                              final CurrentSession currentSession,
                              final DraughtsMessages messages,
+                             DialogFactory dialogFactory,
                              final PlayerDto opponent) {
     super(eventBus, view);
 
     this.gameMessagesDelegate = gameMessagesDelegate;
     this.player = currentSession.getPlayer();
     this.messages = messages;
+    this.dialogFactory = dialogFactory;
     this.opponent = opponent;
     this.config = config;
 
@@ -76,7 +80,7 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
 
   private void getPlayerChat() {
     getView().setHeading(player.getPublicName());
-    gameMessagesDelegate.withCallback(new AbstractAsyncCallback<List<GameMessageDto>>() {
+    gameMessagesDelegate.withCallback(new AbstractAsyncCallback<List<GameMessageDto>>(dialogFactory) {
       @Override
       public void onSuccess(List<GameMessageDto> result) {
         for (GameMessageDto gameMessage : result) {
@@ -137,6 +141,7 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
     private final ClientConfiguration config;
     private final CurrentSession currentSession;
     private final DraughtsMessages messages;
+    private final DialogFactory dialogFactory;
 
     @Inject
     public FactoryImpl(EventBus eventBus,
@@ -144,19 +149,21 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
                        ResourceDelegate<GameMessagesResource> gameMessagesDelegate,
                        ClientConfiguration config,
                        CurrentSession currentSession,
-                       DraughtsMessages messages) {
+                       DraughtsMessages messages,
+                       DialogFactory dialogFactory) {
       this.eventBus = eventBus;
       this.viewFactory = viewFactory;
       this.gameMessagesDelegate = gameMessagesDelegate;
       this.config = config;
       this.currentSession = currentSession;
       this.messages = messages;
+      this.dialogFactory = dialogFactory;
     }
 
     @Override
     public MessengerPresenter create(PlayView playView, PlayerDto opponent) {
       return new MessengerPresenter(eventBus, viewFactory.create(playView),
-          gameMessagesDelegate, config, currentSession, messages, opponent);
+          gameMessagesDelegate, config, currentSession, messages, dialogFactory, opponent);
     }
   }
 }

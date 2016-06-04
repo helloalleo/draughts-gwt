@@ -19,6 +19,7 @@ import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.channel.ClientChannel;
 import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.event.*;
+import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.json.InviteDataMapper;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
@@ -54,6 +55,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   private final ResourceDelegate<FriendsResource> friendsDelegate;
   private final InviteDataMapper inviteDataMapper;
   private final AppResources resources;
+  private final DialogFactory dialogFactory;
   private MessengerPresenter currentMessenger;
   private int playerTimeSeconds;
   private int opponentTimeSeconds;
@@ -75,7 +77,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       ClientChannel clientChannel,
       InviteDataMapper inviteDataMapper,
       PlayView playView,
-      AppResources resources) {
+      AppResources resources,
+      DialogFactory dialogFactory) {
     super(eventBus, view);
 
     this.messages = messages;
@@ -90,6 +93,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     this.playView = playView;
     this.inviteDataMapper = inviteDataMapper;
     this.resources = resources;
+    this.dialogFactory = dialogFactory;
 
     getView().setUiHandlers(this);
   }
@@ -163,7 +167,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   private void updateUnreadMessages() {
-    gameMessagesDelegate.withCallback(new AbstractAsyncCallback<Map<Long, Integer>>() {
+    gameMessagesDelegate.withCallback(new AbstractAsyncCallback<Map<Long, Integer>>(dialogFactory) {
       @Override
       public void onSuccess(Map<Long, Integer> result) {
         getView().setUnreadMessagesMapForPlayers(result);
@@ -209,7 +213,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
   @Override
   public void saveFriend(final FriendDto friend) {
-    friendsDelegate.withCallback(new AbstractAsyncCallback<FriendDto>() {
+    friendsDelegate.withCallback(new AbstractAsyncCallback<FriendDto>(dialogFactory) {
       @Override
       public void onSuccess(FriendDto result) {
         GameMessageDto gameMessage = createGameMessage();
@@ -257,7 +261,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   private void resetUnreadMessages(PlayerDto friend) {
-    playersDelegate.withCallback(new AbstractAsyncCallback<Void>() {
+    playersDelegate.withCallback(new AbstractAsyncCallback<Void>(dialogFactory) {
       @Override
       public void onSuccess(Void result) {
         updateUnreadMessages();
@@ -392,7 +396,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
           final Set<DraughtDto> initialPosition = getView().getBoard().getCurrentPosition();
           game.setPlayStartDate(new Date());
           game.setInitialPos(initialPosition);
-          gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>() {
+          gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>(dialogFactory) {
             @Override
             public void onSuccess(GameDto result) {
               playSession.setGame(result);
@@ -408,7 +412,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         }
 
         playSession.getPlayer().setPlaying(true);
-        playersDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>() {
+        playersDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>(dialogFactory) {
           @Override
           public void onSuccess(PlayerDto result) {
             fireEvent(new UpdatePlayerListEvent());
@@ -443,7 +447,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         getView().setBeatenMy(DRAUGHTS_ON_DESK_INIT - getView().getMyDraughtsSize());
         getView().setBeatenOpponent(DRAUGHTS_ON_DESK_INIT - getView().getOpponentDraughtsSize());
         if (!event.isPlayer()) {
-          PlayComponentUtil.checkWin(getEventBus(), playSession, messages, getView().getMyDraughtsSize(),
+          PlayComponentUtil.checkWin(getEventBus(), playSession, messages, dialogFactory, getView().getMyDraughtsSize(),
               getView().getOpponentDraughtsSize(), getView().isWhite());
         }
       }
@@ -452,7 +456,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     addRegisteredHandler(GameShutEvent.TYPE, new GameShutEventHandler() {
       @Override
       public void onGameShut(GameShutEvent event) {
-        PlayComponentUtil.checkShut(getEventBus(), playSession, messages, event.isWhite());
+        PlayComponentUtil.checkShut(getEventBus(), playSession, messages, dialogFactory, event.isWhite());
       }
     });
 
@@ -586,7 +590,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
           gameMessageDto.setGame(endGame);
           gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_TIMEOUT);
           fireEvent(new GameMessageEvent(gameMessageDto));
-          fireEvent(new GameOverEvent(endGame, gameEnd, new AbstractAsyncCallback<GameDto>() {
+          fireEvent(new GameOverEvent(endGame, gameEnd, new AbstractAsyncCallback<GameDto>(dialogFactory) {
             @Override
             public void onSuccess(GameDto result) {
               Growl.growlNotif(messages.timeOut());
@@ -603,7 +607,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   private void updatePlayerFriendList() {
-    friendsDelegate.withCallback(new AbstractAsyncCallback<List<FriendDto>>() {
+    friendsDelegate.withCallback(new AbstractAsyncCallback<List<FriendDto>>(dialogFactory) {
       @Override
       public void onSuccess(List<FriendDto> result) {
         getView().setFriendList(result);

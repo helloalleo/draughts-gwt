@@ -14,8 +14,8 @@ import com.gwtplatform.mvp.client.presenter.slots.Slot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.draughts.rus.client.application.ApplicationPresenter;
-import online.draughts.rus.client.application.widget.dialog.InfoDialogBox;
 import online.draughts.rus.client.application.widget.popup.DraughtsPlayerPresenter;
+import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.shared.dto.GameDto;
@@ -24,12 +24,13 @@ import online.draughts.rus.shared.resource.GamesResource;
 
 
 public class GamePresenter extends Presenter<GamePresenter.MyView, GamePresenter.MyProxy> implements GameUiHandlers {
-  public static final NestedSlot SLOT_GAME = new NestedSlot();
-  public static final Slot<DraughtsPlayerPresenter> SLOT_PLAYER = new Slot<>();
+  static final NestedSlot SLOT_GAME = new NestedSlot();
+  static final Slot<DraughtsPlayerPresenter> SLOT_PLAYER = new Slot<>();
 
   private final DraughtsPlayerPresenter.Factory draughtsPlayerFactory;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final DraughtsMessages messages;
+  private final DialogFactory dialogFactory;
 
   @Inject
   GamePresenter(
@@ -38,11 +39,13 @@ public class GamePresenter extends Presenter<GamePresenter.MyView, GamePresenter
       MyProxy proxy,
       DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
       ResourceDelegate<GamesResource> gamesDelegate,
-      DraughtsMessages messages) {
+      DraughtsMessages messages,
+      DialogFactory dialogFactory) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
     this.draughtsPlayerFactory = draughtsPlayerFactory;
     this.gamesDelegate = gamesDelegate;
     this.messages = messages;
+    this.dialogFactory = dialogFactory;
 
     getView().setUiHandlers(this);
   }
@@ -53,15 +56,15 @@ public class GamePresenter extends Presenter<GamePresenter.MyView, GamePresenter
     // "0" is returned if "id" is missing.
     String id = request.getParameter("id", null);
     if (null == id) {
-      InfoDialogBox.setMessage(messages.gameNotFound()).show();
+      dialogFactory.createInfoDialogBox(messages.gameNotFound()).show();
       return;
     }
     gamesDelegate.withCallback(
-        new AbstractAsyncCallback<GameDto>() {
+        new AbstractAsyncCallback<GameDto>(dialogFactory) {
           @Override
           public void onSuccess(GameDto result) {
             if (null == result) {
-              InfoDialogBox.setMessage(messages.gameNotFound()).show();
+              dialogFactory.createInfoDialogBox(messages.gameNotFound()).show();
               return;
             }
             DraughtsPlayerPresenter draughtsPlayer = draughtsPlayerFactory.create(result, true);
