@@ -52,7 +52,7 @@ public class PlayComponentUtil {
       case DRAUGHTS:
         return win ? messages.youWon() : messages.youLose();
       case GIVEAWAY:
-        return !win ? messages.youLose() : messages.youWon();
+        return !win ? messages.youWon() : messages.youLose();
       default:
         return "";
     }
@@ -83,10 +83,11 @@ public class PlayComponentUtil {
   static void checkShut(EventBus eventBus, PlaySession playSession,
                         DraughtsMessages messages, DialogFactory dialogFactory, boolean isWhite) {
     final GameDto.GameEnds gameEnd;
+    final GameDto.GameType gameType = playSession.getGameType();
     if (isWhite == playSession.isPlayerHasWhiteColor()) {
-      dialogFactory.createGameResultDialogBox(messages.youLose()).show();
+      dialogFactory.createGameResultDialogBox(endGameMessage(messages, gameType, false)).show();
     } else {
-      dialogFactory.createGameResultDialogBox(messages.youWon()).show();
+      dialogFactory.createGameResultDialogBox(endGameMessage(messages, gameType, true)).show();
     }
     if (isWhite) {
       gameEnd = blackWin(playSession.getGameType());

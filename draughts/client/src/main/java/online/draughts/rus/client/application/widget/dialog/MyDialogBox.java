@@ -11,7 +11,6 @@ import com.google.web.bindery.event.shared.EventBus;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.resource.ErrorHandlerResource;
@@ -85,8 +84,9 @@ public abstract class MyDialogBox extends BasicDialogBox {
     if (null != player) {
       senderId = player.getId();
     }
-    Logger.debug(messageToAdminsText);
-    errorHandlingDelegate.withoutCallback().postError(messageToAdminsText, senderId);
+    if (StringUtils.isNotEmpty(messageToAdminsText)) {
+      errorHandlingDelegate.withoutCallback().postError(messageToAdminsText, senderId);
+    }
   }
 
   void setContent(String content) {
@@ -98,7 +98,11 @@ public abstract class MyDialogBox extends BasicDialogBox {
   }
 
   void addMessageToAdmins(String message) {
-    messageToAdminsText += message;
+    if (null != messageToAdminsText) {
+      messageToAdminsText += message;
+    } else {
+      messageToAdminsText = message;
+    }
   }
 
   void setMessageToAdminsVisible(boolean visible) {

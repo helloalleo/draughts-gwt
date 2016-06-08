@@ -54,6 +54,10 @@ public class PlayerService {
     return Player.getInstance().findAll();
   }
 
+  public List<Player> findOnline() {
+    return Player.getInstance().findOnline();
+  }
+
   public Player findByFbId(String userId) {
     return Player.getInstance().findByFbId(userId);
   }

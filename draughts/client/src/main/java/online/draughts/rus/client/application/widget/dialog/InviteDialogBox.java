@@ -56,6 +56,13 @@ public abstract class InviteDialogBox extends AbstractDialogBox {
     playsListBox = new ListBox();
     playsListBox.addItem(messages.draughts(), GameDto.GameType.DRAUGHTS.name());
     playsListBox.addItem(messages.giveaway(), GameDto.GameType.GIVEAWAY.name());
+    playsListBox.addChangeHandler(new ChangeHandler() {
+      @Override
+      public void onChange(ChangeEvent event) {
+        cookies.setGameType(playsListBox.getSelectedValue());
+      }
+    });
+    setSelectedValue(playsListBox, cookies.getGameType());
     panel.add(playsListBox);
 
     submitButton = new Button(messages.next());

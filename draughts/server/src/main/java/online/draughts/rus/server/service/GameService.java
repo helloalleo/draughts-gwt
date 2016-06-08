@@ -12,6 +12,7 @@ import org.apache.log4j.Logger;
 import org.dozer.Mapper;
 
 import javax.servlet.http.HttpSession;
+import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
 import java.util.List;
@@ -81,7 +82,7 @@ public class GameService {
 
     try {
       final String path = Config.GAMES_ENDS_PATH + game.getId() + ".png";
-      CloudStoreUtils.saveFileToCloud(path, game.getEndGameScreenshot().split(",")[1]);
+      CloudStoreUtils.saveFileToCloud(path, DatatypeConverter.parseBase64Binary(game.getEndGameScreenshot().split(",")[1]));
       game.setEndGameScreenshotUrl(path);
     } catch (GeneralSecurityException | IOException e) {
       logger.error("An error occured while storing file " + e.getMessage(), e);

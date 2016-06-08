@@ -1,7 +1,9 @@
 package online.draughts.rus.client.util;
 
+import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
 import online.draughts.rus.client.place.NameTokens;
+import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.util.ArrayList;
@@ -16,6 +18,8 @@ import java.util.List;
  */
 public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
 
+  private final DraughtsMessages messages = GWT.create(DraughtsMessages.class);
+
   private static final String TIME_ON_PLAY = "TIME_ON_PLAY";
   private static final String FISHER_TIME = "FISHER_TIME";
   private static final String TIME_ON_PLAY_CUSTOM = "TIME_ON_PLAY_CUSTOM";
@@ -25,6 +29,7 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
   private static final String DEFAULT_LOCALE = "ru";
   private static final String SHOW_AVATARS = "SHOW_AVATARS";
   private static final String PUBLISH_GAME = "PUBLISH_GAME";
+  private static final String GAME_TYPE = "GAME_TYPE";
   private final String GAMES_ON_PAGE_COUNTER = "GAMES_ON_PAGE";
   private final String LOCATION = "LOCATION"; // куки адреса страницы
   private final String MY_GAMES = "MY_GAMES";
@@ -133,6 +138,20 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
       return Boolean.TRUE;
     }
     return Boolean.valueOf(locale);
+  }
+
+  @Override
+  public String getGameType() {
+    String gameType = Cookies.getCookie(GAME_TYPE);
+    if (StringUtils.isEmpty(gameType)) {
+      return messages.draughts();
+    }
+    return gameType;
+  }
+
+  @Override
+  public void setGameType(String selectedGameType) {
+    Cookies.setCookie(GAME_TYPE, selectedGameType);
   }
 
   @Override

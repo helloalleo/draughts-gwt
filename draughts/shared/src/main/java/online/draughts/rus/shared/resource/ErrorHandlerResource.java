@@ -17,5 +17,5 @@ import javax.ws.rs.core.MediaType;
 public interface ErrorHandlerResource {
 
   @POST
-  void postError(String error, @QueryParam(ApiParameters.ID) Long senderId);
+  void postError(@QueryParam("error") String error, @QueryParam(ApiParameters.ID) Long senderId);
 }

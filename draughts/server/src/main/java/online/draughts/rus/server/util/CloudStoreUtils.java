@@ -11,7 +11,6 @@ import com.google.api.services.storage.StorageScopes;
 import com.google.api.services.storage.model.StorageObject;
 import online.draughts.rus.server.config.Config;
 
-import javax.xml.bind.DatatypeConverter;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.InputStream;
@@ -26,8 +25,8 @@ import java.util.Collections;
  */
 public class CloudStoreUtils {
 
-  public static StorageObject uploadSimple(Storage storage, String bucketName, String objectName,
-                                           InputStream data, String contentType) throws IOException {
+  private static StorageObject uploadSimple(Storage storage, String bucketName, String objectName,
+                                            InputStream data, String contentType) throws IOException {
     InputStreamContent mediaContent = new InputStreamContent(contentType, data);
     Storage.Objects.Insert insertObject = storage.objects().insert(bucketName, null, mediaContent)
         .setName(objectName).setPredefinedAcl("publicRead");
@@ -38,7 +37,7 @@ public class CloudStoreUtils {
     return insertObject.execute();
   }
 
-  public static void saveFileToCloud(String fileName, String data) throws GeneralSecurityException, IOException {
+  public static void saveFileToCloud(String fileName, byte[] data) throws GeneralSecurityException, IOException {
     HttpTransport httpTransport = GoogleNetHttpTransport.newTrustedTransport();
     JsonFactory jsonFactory = JacksonFactory.getDefaultInstance();
 //    Credential credential = CredentialsProvider.authorize(httpTransport, jsonFactory);
@@ -48,7 +47,7 @@ public class CloudStoreUtils {
     Storage storage = new Storage.Builder(httpTransport, jsonFactory, credential)
         .setApplicationName("Google-ObjectsUploadExample/1.0").build();
     StorageObject object = uploadSimple(storage, Config.BUCKET_NAME, fileName,
-        new ByteArrayInputStream(DatatypeConverter.parseBase64Binary(data)), "image/png");
+        new ByteArrayInputStream(data), "image/png");
     System.out.println(object.getName() + " (size: " + object.getSize() + ")");
   }
 }

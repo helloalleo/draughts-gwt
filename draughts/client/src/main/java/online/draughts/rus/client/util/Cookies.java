@@ -51,4 +51,8 @@ public interface Cookies {
   boolean isShowAvatars();
 
   Boolean isPublishGame();
+
+  String getGameType();
+
+  void setGameType(String selectedGameType);
 }
