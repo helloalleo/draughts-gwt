@@ -1,6 +1,8 @@
 package online.draughts.rus.client.channel;
 
 import com.google.gwt.core.client.GWT;
+import com.google.gwt.event.logical.shared.CloseEvent;
+import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
@@ -59,11 +61,11 @@ public class ClientChannel implements ChannelListener {
   @Inject
   public ClientChannel(EventBus eventBus,
                        CurrentSession currentSession,
-                       PlaySession playSession,
+                       final PlaySession playSession,
                        ChunkMapper chunkMapper,
                        GameMessageMapper messageMapper,
                        InviteDataMapper inviteDataMapper,
-                       DraughtsMessages messages,
+                       final DraughtsMessages messages,
                        AppResources resources, DialogFactory dialogFactory) {
     this.currentSession = currentSession;
     this.playSession = playSession;
@@ -80,6 +82,16 @@ public class ClientChannel implements ChannelListener {
     Window.addWindowClosingHandler(new Window.ClosingHandler() {
       @Override
       public void onWindowClosing(Window.ClosingEvent event) {
+        if (channel == null) {
+          return;
+        }
+        sendSimpleMessage(GameMessageDto.MessageType.CHANNEL_CLOSE);
+      }
+    });
+
+    Window.addCloseHandler(new CloseHandler<Window>() {
+      @Override
+      public void onClose(CloseEvent<Window> event) {
         if (channel == null) {
           return;
         }
@@ -227,16 +239,9 @@ public class ClientChannel implements ChannelListener {
 
   @Override
   public void onError(int code, String description) {
-    if (401 == code) {
-      Window.Location.reload();
-    } else {
-      final ErrorDialogBox errorDialogBox = dialogFactory.createErrorDialogBox();
-      errorDialogBox.setMessage(code + " " + description);
-      errorDialogBox.show();
-      channel = new Channel(String.valueOf(player.getId()));
-      channel.addChannelListener(this);
-      channel.join();
-    }
+    channel = new Channel(String.valueOf(player.getId()));
+    channel.addChannelListener(this);
+    channel.join();
   }
 
   @Override

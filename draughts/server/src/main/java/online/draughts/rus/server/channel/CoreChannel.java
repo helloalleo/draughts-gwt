@@ -11,6 +11,7 @@ import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.Utils;
 import online.draughts.rus.shared.channel.Chunk;
 import online.draughts.rus.shared.dto.GameMessageDto;
+import online.draughts.rus.shared.util.StringUtils;
 import org.dozer.Mapper;
 
 import java.util.*;
@@ -24,7 +25,7 @@ import java.util.*;
 @Singleton
 public class CoreChannel {
 
-  private static Map<String, String> channelTokenPeers = Collections.synchronizedMap(new HashMap<String, String>());
+  private Set<String> channelTokenPeers = Collections.synchronizedSet(new HashSet<String>());
 
   private final PlayerService playerService;
   private final Mapper mapper;
@@ -36,8 +37,11 @@ public class CoreChannel {
     this.mapper = mapper;
   }
 
-  void connectPlayer(GameMessage gameMessage, String token) {
-    Player player = playerService.find(gameMessage.getSender().getId());
+  void connectPlayer(String clientId) {
+    if (StringUtils.isEmpty(clientId)) {
+      return;
+    }
+    Player player = playerService.find(Long.valueOf(clientId));
     if (player.isBanned()) {
       return;
     }
@@ -48,7 +52,7 @@ public class CoreChannel {
     playerService.save(player);
 
     final String channel = String.valueOf(player.getId());
-    channelTokenPeers.put(channel, token);
+    channelTokenPeers.add(channel);
     updatePlayerList();
   }
 
@@ -57,7 +61,7 @@ public class CoreChannel {
     gameMessage.setMessageType(GameMessageDto.MessageType.USER_LIST_UPDATE);
     List<Player> playerList = playerService.findAll();
     gameMessage.setPlayerList(playerList);
-    for (String channelName : channelTokenPeers.keySet()) {
+    for (String channelName : channelTokenPeers) {
       sendMessage(channelName, gameMessage);
     }
   }
@@ -78,15 +82,7 @@ public class CoreChannel {
   }
 
   Set<String> getChannels() {
-    return channelTokenPeers.keySet();
-  }
-
-  void joinPlayer(String token, String channelName) {
-    channelTokenPeers.put(channelName, token);
-  }
-
-  String getToken(String channel) {
-    return channelTokenPeers.get(channel);
+    return channelTokenPeers;
   }
 
   void disconnectChannel(String channel) {

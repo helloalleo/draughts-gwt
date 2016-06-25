@@ -24,6 +24,7 @@ import com.google.inject.servlet.RequestScoped;
 import com.google.inject.servlet.ServletModule;
 import com.gwtplatform.dispatch.rpc.server.guice.DispatchServiceImpl;
 import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
+import online.draughts.rus.server.channel.ChannelPresenceServlet;
 import online.draughts.rus.server.channel.ServerChannel;
 import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.servlet.CheckOnlineServlet;
@@ -48,6 +49,9 @@ class DispatchServletModule extends ServletModule {
     serve("/" + Config.CONTEXT + "/" + ActionImpl.DEFAULT_SERVICE_NAME + "*").with(DispatchServiceImpl.class);
 
     serve("/" + Config.CONTEXT + "/Application/channel").with(ServerChannel.class);
+    serve("/_ah/channel/connected/").with(ChannelPresenceServlet.class);
+    serve("/_ah/channel/disconnected/").with(ChannelPresenceServlet.class);
+
     serve("/cron/checkonline").with(CheckOnlineServlet.class);
     serve("/cron/logoutall").with(LogoutAll.class);
 

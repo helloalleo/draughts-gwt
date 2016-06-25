@@ -376,6 +376,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String gameNotFound();
 
   /**
+   * Translated "Profile".
+   * 
+   * @return translated "Profile"
+   */
+  @DefaultMessage("Profile")
+  @Key("generalSettings")
+  String generalSettings();
+
+  /**
    * Translated "Giveaway".
    * 
    * @return translated "Giveaway"
@@ -790,6 +799,15 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String profileUpdated();
 
   /**
+   * Translated "Show a game on the main page".
+   * 
+   * @return translated "Show a game on the main page"
+   */
+  @DefaultMessage("Show a game on the main page")
+  @Key("publishGame")
+  String publishGame();
+
+  /**
    * Translated "Rating {0}".
    * 
    * @return translated "Rating {0}"
@@ -1069,6 +1087,24 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String youHasBeenAddedToFavorite(String arg0);
 
   /**
+   * Translated "You is subscribed to the Extended account".
+   * 
+   * @return translated "You is subscribed to the Extended account"
+   */
+  @DefaultMessage("You is subscribed to the Extended account")
+  @Key("youIsSubscribedToExtendedAccount")
+  String youIsSubscribedToExtendedAccount();
+
+  /**
+   * Translated "You is unsubcscribed from the Extended account".
+   * 
+   * @return translated "You is unsubcscribed from the Extended account"
+   */
+  @DefaultMessage("You is unsubcscribed from the Extended account")
+  @Key("youIsUnsubscribedFromExtendedAccount")
+  String youIsUnsubscribedFromExtendedAccount();
+
+  /**
    * Translated "You lost :(".
    * 
    * @return translated "You lost :("
@@ -1094,12 +1130,4 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("<span style=\"color:green;\">Your turn</span>")
   @Key("yourTurn")
   String yourTurn();
-
-  String generalSettings();
-
-  String youIsSubscribedToExtendedAccount();
-
-  String youIsUnsubscribedFromExtendedAccount();
-
-  String publishGame();
 }

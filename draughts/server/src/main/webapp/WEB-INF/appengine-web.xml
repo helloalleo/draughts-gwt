@@ -11,6 +11,9 @@
     <property name="java.util.logging.config.file" value="WEB-INF/logging.properties"/>
   </system-properties>
 
+  <inbound-services>
+    <service>channel_presence</service>
+  </inbound-services>
   <static-files>
     <include path="/shashki/Application">
       <http-header name="Access-Control-Allow-Origin" value="https://shashki.online"/>

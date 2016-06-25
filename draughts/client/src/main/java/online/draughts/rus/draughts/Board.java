@@ -88,45 +88,45 @@ public class Board extends Layer {
   }
 
   private void placeDraughts() {
-//    for (int row = 0; row < 3; row++) {
-//      for (int col = 0; col < 8; col++) {
-//        if (Square.isValid(row, col)) {
-//          opponentDraughtList.add(addDraught(row, col, !white));
-//        }
-//      }
-//    }
-//
-//    // Now establish the Black side
-//    for (int row = 5; row < 8; row++) {
-//      for (int col = 0; col < 8; col++) {
-//        if (Square.isValid(row, col)) {
-//          myDraughtList.add(addDraught(row, col, white));
-//        }
-//      }
-//    }
-    if (!isMyTurn()) {
-      final Draught e1 = addDraught(5, 2, !white);
-      e1.setQueen(true);
-      opponentDraughtList.add(e1);
-//      opponentDraughtList.add(addDraught(1, 6, !white));
-//      opponentDraughtList.add(addDraught(1, 2, !white));
-      opponentDraughtList.add(addDraught(3, 2, !white));
-      final Draught e = addDraught(5, 0, white);
-//      e.setQueen(true);
-      myDraughtList.add(e);
+    for (int row = 0; row < 3; row++) {
+      for (int col = 0; col < 8; col++) {
+        if (Square.isValid(row, col)) {
+          opponentDraughtList.add(addDraught(row, col, !white));
+        }
+      }
     }
 
-    if (isMyTurn()) {
-      final Draught e = addDraught(2, 7, !white);
-//      e.setQueen(true);
-      opponentDraughtList.add(e);
-      final Draught e1 = addDraught(2, 5, white);
-      e1.setQueen(true);
-      myDraughtList.add(e1);
-//      myDraughtList.add(addDraught(6, 1, white));
-//      myDraughtList.add(addDraught(2, 1, white));
-      myDraughtList.add(addDraught(4, 5, white));
+    // Now establish the Black side
+    for (int row = 5; row < 8; row++) {
+      for (int col = 0; col < 8; col++) {
+        if (Square.isValid(row, col)) {
+          myDraughtList.add(addDraught(row, col, white));
+        }
+      }
     }
+//    if (!isMyTurn()) {
+//      final Draught e1 = addDraught(5, 2, !white);
+//      e1.setQueen(true);
+//      opponentDraughtList.add(e1);
+////      opponentDraughtList.add(addDraught(1, 6, !white));
+////      opponentDraughtList.add(addDraught(1, 2, !white));
+//      opponentDraughtList.add(addDraught(3, 2, !white));
+//      final Draught e = addDraught(5, 0, white);
+////      e.setQueen(true);
+//      myDraughtList.add(e);
+//    }
+//
+//    if (isMyTurn()) {
+//      final Draught e = addDraught(2, 7, !white);
+////      e.setQueen(true);
+//      opponentDraughtList.add(e);
+//      final Draught e1 = addDraught(2, 5, white);
+//      e1.setQueen(true);
+//      myDraughtList.add(e1);
+////      myDraughtList.add(addDraught(6, 1, white));
+////      myDraughtList.add(addDraught(2, 1, white));
+//      myDraughtList.add(addDraught(4, 5, white));
+//    }
   }
 
   private Draught addDraught(int row, int col, boolean white) {

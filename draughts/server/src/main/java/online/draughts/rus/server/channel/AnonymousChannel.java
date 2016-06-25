@@ -22,7 +22,6 @@ public class AnonymousChannel extends ChannelServer {
 
   private final Logger logger = Logger.getLogger(AnonymousChannel.class);
 
-
   private final CoreChannel coreChannel;
   private final PlayerService playerService;
   private final GameService gameService;
@@ -41,7 +40,7 @@ public class AnonymousChannel extends ChannelServer {
 
   @Override
   protected void onJoin(String token, String channelName) {
-    coreChannel.joinPlayer(token, channelName);
+    logger.info("A new player joined: " + channelName);
   }
 
   @Override
@@ -51,7 +50,7 @@ public class AnonymousChannel extends ChannelServer {
       return;
     }
     logger.info("New message: " + message);
-    GameMessage gameMessage = null;
+    GameMessage gameMessage;
     gameMessage = Utils.deserializeFromJson(message, GameMessage.class);
     if (gameMessage == null) {
       return;
@@ -59,9 +58,6 @@ public class AnonymousChannel extends ChannelServer {
 
     // обработка сообщений
     switch (gameMessage.getMessageType()) {
-      case PLAYER_REGISTER:
-        handlePlayerConnect(gameMessage, token);
-        break;
       case USER_LIST_UPDATE:
         updatePlayerList();
         break;
@@ -108,9 +104,5 @@ public class AnonymousChannel extends ChannelServer {
     for (String channel : coreChannel.getChannels()) {
       coreChannel.sendMessage(channel, gameMessage);
     }
-  }
-
-  private void handlePlayerConnect(GameMessage gameMessage, String token) {
-    coreChannel.connectPlayer(gameMessage, token);
   }
 }

@@ -33,12 +33,13 @@ import java.util.Map;
 @Singleton
 public class ServerChannel extends ChannelServer {
 
+  private final Logger logger = Logger.getLogger(ServerChannel.class);
+
   private final CoreChannel coreChannel;
   private final PlayerService playerService;
   private final GameMessageService gameMessageService;
   private final GameService gameService;
   private final Provider<Boolean> authProvider;
-  private final Logger logger = Logger.getLogger(ServerChannel.class);
   private final MailService mailService;
 
   @Inject
@@ -58,7 +59,7 @@ public class ServerChannel extends ChannelServer {
 
   @Override
   public void onJoin(String token, String channelName) {
-    coreChannel.joinPlayer(token, channelName);
+    logger.info("A new player joined: " + channelName);
   }
 
   @Override
@@ -79,9 +80,6 @@ public class ServerChannel extends ChannelServer {
 
     // обработка сообщений
     switch (gameMessage.getMessageType()) {
-      case PLAYER_REGISTER:
-        handlePlayerConnect(gameMessage, token);
-        break;
       case USER_LIST_UPDATE:
         updatePlayerList();
         break;
@@ -131,15 +129,7 @@ public class ServerChannel extends ChannelServer {
     handleChatPrivateMessage(gameMessage);
   }
 
-  private void handlePlayerConnect(GameMessage gameMessage, String token) {
-    coreChannel.connectPlayer(gameMessage, token);
-  }
-
   public void handleClose(String channel) {
-    String token = coreChannel.getToken(channel);
-    if (token == null) {
-      return;
-    }
     Player player = playerService.find(Long.valueOf(channel));
 
     if (player.isPlaying()) {
