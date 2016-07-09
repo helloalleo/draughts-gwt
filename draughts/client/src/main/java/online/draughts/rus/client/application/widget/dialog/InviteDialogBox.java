@@ -102,8 +102,8 @@ public abstract class InviteDialogBox extends AbstractDialogBox {
     minutesListBox = new ListBox();
     minutesListBox.addItem("3");
     minutesListBox.addItem("5");
-    minutesListBox.addItem("10");
-    minutesListBox.addItem("20");
+    minutesListBox.addItem("15");
+    minutesListBox.addItem("30");
     minutesListBox.addItem(messages.specifyTime());
 
     minutesListBox.addChangeHandler(

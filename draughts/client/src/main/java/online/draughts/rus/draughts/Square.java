@@ -200,11 +200,10 @@ public class Square implements Serializable {
   }
 
   boolean isBetween(Square from, Square to) {
-    return isBetween(this.getRow(), from.getRow(), to.getRow())
-        && isBetween(this.getCol(), from.getCol(), to.getCol()) || isBetween(this.getRow(), from.getRow(), to.getRow())
-        && isBetween(this.getCol(), to.getCol(), from.getCol()) || isBetween(this.getRow(), to.getRow(), from.getRow())
-        && isBetween(this.getCol(), to.getCol(), from.getCol()) || isBetween(this.getRow(), to.getRow(), from.getRow())
-        && isBetween(this.getCol(), from.getCol(), to.getCol());
+    return isBetween(this.getRow(), from.getRow(), to.getRow()) && isBetween(this.getCol(), from.getCol(), to.getCol())
+        || isBetween(this.getRow(), from.getRow(), to.getRow()) && isBetween(this.getCol(), to.getCol(), from.getCol())
+        || isBetween(this.getRow(), to.getRow(), from.getRow()) && isBetween(this.getCol(), to.getCol(), from.getCol())
+        || isBetween(this.getRow(), to.getRow(), from.getRow()) && isBetween(this.getCol(), from.getCol(), to.getCol());
   }
 
   private static boolean isBetween(int value, int min, int max) {

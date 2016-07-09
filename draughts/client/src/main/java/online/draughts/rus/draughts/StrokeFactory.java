@@ -12,7 +12,6 @@ import java.util.List;
  * Date: 07.10.15
  * Time: 16:49
  */
-@SuppressWarnings("deprecation")
 public class StrokeFactory {
 
   public static Stroke createStrokeFromMove(MoveDto move) {
@@ -39,6 +38,7 @@ public class StrokeFactory {
    * @param back          ход назад?
    * @return объект хода
    */
+  @SuppressWarnings("deprecation")
   public static Stroke createStrokeFromNotationHtml(Element outerNotation, List<String> prevSteps, boolean back) {
     Stroke stroke = new Stroke();
     final Boolean first = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_FIRST_ATTR));
@@ -108,8 +108,9 @@ public class StrokeFactory {
     for (int i = prevSteps.size() - 1; i >= 0; i--) {
       String prevStep = prevSteps.get(i);
       Square prevSecond = Square.fromNotation(getPrevStep(prevStep, false));
-      if (firstStep.isOnLine(prevSecond) && secondStep.isOnLine(prevSecond)
-          && null != prevSecond && prevSecond.isBetween(firstStep, secondStep)) {
+      if (null != prevSecond && null != firstStep && null != secondStep
+          && firstStep.isOnLine(prevSecond) && secondStep.isOnLine(prevSecond)
+          && prevSecond.isBetween(firstStep, secondStep)) {
         String prevStepParts = getPrevStep(prevStep, false);
         return Square.fromNotation(prevStepParts);
       }

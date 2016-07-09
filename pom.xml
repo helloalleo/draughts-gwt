@@ -50,7 +50,7 @@
 
         <project.artifacts.directory>out/artifacts</project.artifacts.directory>
         <project.devOutput.directory>draughts_dev.war</project.devOutput.directory>
-        <project.prodOutput.directory>draughts_web_exoloded.war</project.prodOutput.directory>
+        <project.prodOutput.directory>draughts_web_exploded.war</project.prodOutput.directory>
     </properties>
 
     <modules>

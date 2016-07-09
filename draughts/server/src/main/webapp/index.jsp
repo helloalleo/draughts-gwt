@@ -115,11 +115,6 @@
             </div>
         </div>
         <div class="row">
-            <div class="col-md-12">
-                <h2 class="text-center">Общаться!</h2><img class="img-responsive" src="assets/img/chat.png"
-                                                           text-align="center"></div>
-        </div>
-        <div class="row">
             <div class="col-xs-8 col-xs-offset-2 col-md-2 col-md-offset-5"><a style="width: 100%;" class="btn btn-primary btn-lg on-site-btn" role="button"
                                                      href="/shashki/#!/login">Войти на сайт</a></div>
         </div>
