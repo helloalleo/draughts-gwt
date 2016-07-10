@@ -5,7 +5,7 @@ import com.ait.lienzo.client.core.animation.AnimationProperty;
 import com.ait.lienzo.client.core.animation.AnimationTweener;
 import com.ait.lienzo.client.core.shape.Circle;
 import com.ait.lienzo.client.core.shape.Group;
-import com.ait.lienzo.client.core.shape.Star;
+import com.ait.lienzo.client.core.shape.Picture;
 import com.ait.lienzo.client.core.types.Shadow;
 import com.ait.lienzo.shared.core.types.ColorName;
 
@@ -28,7 +28,7 @@ public class Draught extends Group {
   private Circle mainCircle = new Circle(0);
   private Circle innerCircle1 = new Circle(0);
   private Circle innerCircle2 = new Circle(0);
-  private Star queenStar = new Star(5, 0, 0);
+  private Picture queenPic;
 
   private int rows;
   private int cols;
@@ -37,14 +37,14 @@ public class Draught extends Group {
 
   private double offsetX;
 
-  public Draught(Board board,
-                 Integer deskSide,
-                 Integer rows,
-                 Integer cols,
-                 Integer row,
-                 Integer col,
-                 Boolean white,
-                 Double offsetX) {
+  Draught(Board board,
+          Integer deskSide,
+          Integer rows,
+          Integer cols,
+          Integer row,
+          Integer col,
+          Boolean white,
+          Double offsetX) {
     this.deskSide = deskSide;
     this.row = row;
     this.col = col;
@@ -60,7 +60,11 @@ public class Draught extends Group {
     add(innerCircle1);
     add(innerCircle2);
 
-    queenStar.setFillColor(ColorName.DARKKHAKI);
+    if (white) {
+      queenPic = new Picture("Application/images/crown-black.png");
+    } else {
+      queenPic = new Picture("Application/images/crown-white.png");
+    }
 
     Circle[] circles = {mainCircle, innerCircle1, innerCircle2};
 
@@ -75,7 +79,7 @@ public class Draught extends Group {
     updateShape();
   }
 
-  public void onNodeTouch(boolean selfPlay) {
+  void onNodeTouch(boolean selfPlay) {
     if (!(isValidStroke() || selfPlay)) {
       return;
     }
@@ -106,7 +110,7 @@ public class Draught extends Group {
     this.white = white;
   }
 
-  public void updateShape() {
+  void updateShape() {
     double x = col * deskSide / rows;
     double y = row * deskSide / cols;
     double squareSize = deskSide / rows;
@@ -122,9 +126,9 @@ public class Draught extends Group {
       this.remove(innerCircle1);
       this.remove(innerCircle2);
 
-      this.add(queenStar);
-      queenStar.setInnerRadius(radius - radius / 1.3);
-      queenStar.setOuterRadius(radius - radius / 2);
+      this.add(queenPic);
+      queenPic.setOffset(-squareSize / 4 - 3, -squareSize / 4 - 4);
+      queenPic.setScale((squareSize / 2) / queenPic.getBoundingBox().getHeight());
     } else {
       if (!getChildNodes().contains(innerCircle1)) {
         this.add(innerCircle1);
@@ -134,8 +138,8 @@ public class Draught extends Group {
         this.add(innerCircle2);
       }
 
-      if (this.getChildNodes().contains(queenStar)) {
-        this.remove(queenStar);
+      if (this.getChildNodes().contains(queenPic)) {
+        this.remove(queenPic);
       }
     }
   }
@@ -144,16 +148,16 @@ public class Draught extends Group {
     return row;
   }
 
-  public int getCol() {
+  int getCol() {
     return col;
   }
 
-  public void setQueen(boolean queen) {
+  void setQueen(boolean queen) {
     this.queen = queen;
     updateShape();
   }
 
-  public boolean isQueen() {
+  boolean isQueen() {
     return queen;
   }
 
@@ -161,12 +165,12 @@ public class Draught extends Group {
     return board.isMyTurn() && white == board.isWhite() && !board.isEmulate();
   }
 
-  public void setPosition(int row, int col) {
+  void setPosition(int row, int col) {
     this.row = row;
     this.col = col;
   }
 
-  public static Draught getSelectedDraught() {
+  static Draught getSelectedDraught() {
     return selectedDraught;
   }
 

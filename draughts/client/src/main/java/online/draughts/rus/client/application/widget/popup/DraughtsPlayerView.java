@@ -25,7 +25,6 @@ import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.draughts.*;
 import online.draughts.rus.shared.config.ClientConfiguration;
@@ -269,12 +268,10 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
         }
 
         final Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(step, prevSteps, false);
-        Logger.debug(stroke);
         if (null != prevStroke) {
           prevStroke.setNextStroke(stroke);
         } else {
           currentStroke = stroke;
-          Logger.debug("Cur" + stroke);
         }
         stroke.setPrevStroke(prevStroke);
         prevStroke = stroke;
@@ -573,7 +570,6 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     prevStepsStack.add(prevStep);
 
     Stroke stroke = StrokeFactory.cloneStroke(currentStroke);
-    Logger.debug("Forward " + stroke);
     if (currentStroke.getNextStroke() != null) {
       currentStroke = currentStroke.getNextStroke();
     }
@@ -638,7 +634,6 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       skipBack = false;
     }
 
-    Logger.debug("Back " + currentStroke);
     Stroke stroke = StrokeFactory.cloneStroke(currentStroke);
 
     prevStepsStack.pop();

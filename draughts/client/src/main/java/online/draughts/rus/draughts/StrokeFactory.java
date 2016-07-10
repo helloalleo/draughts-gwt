@@ -2,7 +2,6 @@ package online.draughts.rus.draughts;
 
 import com.google.gwt.user.client.Element;
 import online.draughts.rus.client.application.widget.NotationPanel;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.dto.MoveDto;
 
 import java.util.HashSet;
@@ -46,7 +45,6 @@ public class StrokeFactory {
         .setComment(comment)
         .setPrevStroke(prevStroke)
         .setNextStroke(nextStroke);
-    Logger.debug("Cr" + stroke);
     return stroke;
   }
 
