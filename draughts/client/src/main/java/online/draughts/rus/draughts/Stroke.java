@@ -22,7 +22,7 @@ public class Stroke {
   private Square startSquare;
   private Square endSquare;
 
-  private Set<MoveDto.MoveFlags> moveFlags = new HashSet<>();
+  private Set<MoveDto.MoveFlag> moveFlags = new HashSet<>();
   private boolean first;
   private int order;
   private int number;
@@ -30,6 +30,8 @@ public class Stroke {
   private String title;
   private boolean queen;
   private boolean white;
+  private Stroke nextStroke;
+  private Stroke prevStroke;
 
   public Stroke() {
   }
@@ -82,43 +84,43 @@ public class Stroke {
   }
 
   public boolean isCancel() {
-    return moveFlags.contains(MoveDto.MoveFlags.CANCEL_MOVE);
+    return moveFlags.contains(MoveDto.MoveFlag.CANCEL_MOVE);
   }
 
   public boolean isSimple() {
-    return moveFlags.contains(MoveDto.MoveFlags.SIMPLE_MOVE);
+    return moveFlags.contains(MoveDto.MoveFlag.SIMPLE_MOVE);
   }
 
   public boolean isContinueBeat() {
-    return moveFlags.contains(MoveDto.MoveFlags.CONTINUE_BEAT);
+    return moveFlags.contains(MoveDto.MoveFlag.CONTINUE_BEAT);
   }
 
   public boolean isStopBeat() {
-    return moveFlags.contains(MoveDto.MoveFlags.STOP_BEAT);
+    return moveFlags.contains(MoveDto.MoveFlag.STOP_BEAT);
   }
 
   public boolean isStartBeat() {
-    return moveFlags.contains(MoveDto.MoveFlags.START_BEAT);
+    return moveFlags.contains(MoveDto.MoveFlag.START_BEAT);
   }
 
   public void setOnCancelMove() {
-    moveFlags.add(MoveDto.MoveFlags.CANCEL_MOVE);
+    moveFlags.add(MoveDto.MoveFlag.CANCEL_MOVE);
   }
 
   void setOnSimpleMove() {
-    moveFlags.add(MoveDto.MoveFlags.SIMPLE_MOVE);
+    moveFlags.add(MoveDto.MoveFlag.SIMPLE_MOVE);
   }
 
   void setOnContinueBeat() {
-    moveFlags.add(MoveDto.MoveFlags.CONTINUE_BEAT);
+    moveFlags.add(MoveDto.MoveFlag.CONTINUE_BEAT);
   }
 
   void setOnStopBeat() {
-    moveFlags.add(MoveDto.MoveFlags.STOP_BEAT);
+    moveFlags.add(MoveDto.MoveFlag.STOP_BEAT);
   }
 
   void setOnStartBeat() {
-    moveFlags.add(MoveDto.MoveFlags.START_BEAT);
+    moveFlags.add(MoveDto.MoveFlag.START_BEAT);
   }
 
   /**
@@ -141,7 +143,7 @@ public class Stroke {
     return stroke;
   }
 
-  Stroke setMoveFlags(Set<MoveDto.MoveFlags> moveFlags) {
+  Stroke setMoveFlags(Set<MoveDto.MoveFlag> moveFlags) {
     this.moveFlags = moveFlags;
     return this;
   }
@@ -164,7 +166,7 @@ public class Stroke {
     return first;
   }
 
-  Set<MoveDto.MoveFlags> getMoveFlags() {
+  Set<MoveDto.MoveFlag> getMoveFlags() {
     return moveFlags;
   }
 
@@ -218,5 +220,23 @@ public class Stroke {
 
   public boolean isWhite() {
     return white;
+  }
+
+  public Stroke setNextStroke(Stroke nextStroke) {
+    this.nextStroke = nextStroke;
+    return this;
+  }
+
+  public Stroke getNextStroke() {
+    return nextStroke;
+  }
+
+  public Stroke setPrevStroke(Stroke prevStroke) {
+    this.prevStroke = prevStroke;
+    return this;
+  }
+
+  public Stroke getPrevStroke() {
+    return prevStroke;
   }
 }

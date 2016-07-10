@@ -48,9 +48,9 @@ public class BaseTest {
 
   protected Move createMove() {
     Move move = new Move();
-    Set<MoveDto.MoveFlags> moveFlagsSet = new HashSet<>();
-    moveFlagsSet.add(MoveDto.MoveFlags.CANCEL_MOVE);
-    move.setMoveFlags(moveFlagsSet);
+    Set<MoveDto.MoveFlag> moveFlagSet = new HashSet<>();
+    moveFlagSet.add(MoveDto.MoveFlag.CANCEL_MOVE);
+    move.setMoveFlags(moveFlagSet);
     move.setMovedDraught(new Draught());
     move.setMovingDraught(new Draught());
     return move;

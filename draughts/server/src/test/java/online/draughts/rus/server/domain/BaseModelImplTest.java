@@ -123,14 +123,14 @@ public class BaseModelImplTest extends BaseTest {
   @Test
   public void testGetSingleResultObject3() {
     Move move = createMove();
-    Set<MoveDto.MoveFlags> moveFlagsSet = move.getMoveFlags();
+    Set<MoveDto.MoveFlag> moveFlagSet = move.getMoveFlags();
     move.update();
 
     assertNotEquals(0, move.getId());
-    assertEquals(moveFlagsSet, move.getMoveFlags());
+    assertEquals(moveFlagSet, move.getMoveFlags());
 
     move = Move.getInstance().find(move.getId());
     assertNotEquals(0, move.getId());
-    assertEquals(moveFlagsSet, move.getMoveFlags());
+    assertEquals(moveFlagSet, move.getMoveFlags());
   }
 }

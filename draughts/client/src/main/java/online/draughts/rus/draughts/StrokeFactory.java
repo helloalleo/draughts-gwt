@@ -2,9 +2,12 @@ package online.draughts.rus.draughts;
 
 import com.google.gwt.user.client.Element;
 import online.draughts.rus.client.application.widget.NotationPanel;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.dto.MoveDto;
 
+import java.util.HashSet;
 import java.util.List;
+import java.util.Set;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,19 +18,36 @@ import java.util.List;
 public class StrokeFactory {
 
   public static Stroke createStrokeFromMove(MoveDto move) {
-    return new Stroke()
-        .setTitle(move.getTitle())
-        .setComment(move.getComment())
-        .setFirst(move.isFirst())
-        .setOrder(move.getMoveOrder())
-        .setNumber(move.getNumber())
-        .setMoveFlags(move.getMoveFlags())
-        .setStartSquare(Square.fromPosition(move.getMovingDraught().getRow(), move.getMovingDraught().getCol()))
-        .setEndSquare(Square.fromPosition(move.getMovedDraught().getRow(), move.getMovedDraught().getCol()))
-        .setTakenSquare(move.getTakenDraught() != null ?
-            Square.fromPosition(move.getTakenDraught().getRow(), move.getTakenDraught().getCol()) : null)
-        .setQueen(move.getMovedDraught().isQueen())
-        .setWhite(move.getMovedDraught().isWhite());
+    return createStroke(move.isFirst(), move.getNumber(),move.getMoveOrder(),
+        Square.fromPosition(move.getMovingDraught().getRow(), move.getMovingDraught().getCol()),
+        Square.fromPosition(move.getMovedDraught().getRow(), move.getMovedDraught().getCol()),
+        move.getTakenDraught() != null ?
+            Square.fromPosition(move.getTakenDraught().getRow(), move.getTakenDraught().getCol()) : null,
+        move.getMoveFlags(),
+        move.getTitle(), move.getComment(),
+        move.getMovedDraught().isQueen(),
+        move.getMovedDraught().isWhite(),
+        null, null);
+  }
+
+  private static Stroke createStroke(boolean first, int number, int order,
+                                     Square startSquare, Square endSquare, Square captured,
+                                     Set<MoveDto.MoveFlag> moveFlags,
+                                     String title, String comment,
+                                     boolean queen, boolean white, Stroke prevStroke, Stroke nextStroke) {
+    Stroke stroke = new Stroke().setFirst(first)
+        .setNumber(number)
+        .setOrder(order)
+        .setStartSquare(startSquare)
+        .setEndSquare(endSquare)
+        .setTakenSquare(captured)
+        .setMoveFlags(moveFlags)
+        .setTitle(title)
+        .setComment(comment)
+        .setPrevStroke(prevStroke)
+        .setNextStroke(nextStroke);
+    Logger.debug("Cr" + stroke);
+    return stroke;
   }
 
   /**
@@ -50,20 +70,18 @@ public class StrokeFactory {
     final Boolean stopBeat = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_STOP_BEAT_ATTR));
     final String title = outerNotation.getAttribute(NotationPanel.DATA_TITLE_ATTR);
     final String comment = outerNotation.getAttribute(NotationPanel.DATA_COMMENT_ATTR);
-    stroke.setOrder(order);
-    stroke.setTitle(title);
-    stroke.setComment(comment);
+    Set<MoveDto.MoveFlag> moveFlags = new HashSet<>();
     if (simpleMove) {
-      stroke.setOnSimpleMove();
+      moveFlags.add(MoveDto.MoveFlag.SIMPLE_MOVE);
     }
     if (startBeat) {
-      stroke.setOnStartBeat();
+      moveFlags.add(MoveDto.MoveFlag.START_BEAT);
     }
     if (continueBeat) {
-      stroke.setOnContinueBeat();
+      moveFlags.add(MoveDto.MoveFlag.CONTINUE_BEAT);
     }
     if (stopBeat) {
-      stroke.setOnStopBeat();
+      moveFlags.add(MoveDto.MoveFlag.STOP_BEAT);
     }
 
     final String innerHTML = outerNotation.getInnerHTML();
@@ -82,23 +100,32 @@ public class StrokeFactory {
     final Square startSquare = Square.fromNotation(startPos);
     final Square endSquare = Square.fromNotation(endPos);
     Square captured = null;
-    if (!stroke.isSimple()) {
+    if (!simpleMove) {
       captured = findTaken(startSquare, endSquare, prevSteps, back);
     }
-    stroke.setFirst(first)
-        .setNumber(number)
-        .setStartSquare(startSquare)
-        .setEndSquare(endSquare)
-        .setTakenSquare(captured);
-    return stroke;
+    return createStroke(first, number, order,
+        startSquare, endSquare, captured,
+        moveFlags,
+        title, comment,
+        false, false, stroke.getPrevStroke(), stroke.getNextStroke());
+  }
+
+  public static Stroke cloneStroke(Stroke stroke) {
+    return createStroke(stroke.isFirst(), stroke.getNumber(), stroke.getOrder(),
+        stroke.getStartSquare(), stroke.getEndSquare(), stroke.getTakenSquare(),
+        stroke.getMoveFlags(),
+        stroke.getTitle(), stroke.getComment(),
+        stroke.isQueen(), stroke.isWhite(),
+        stroke.getPrevStroke(), stroke.getNextStroke());
   }
 
   /**
    * Функция поиска побитой шашки
-   * @param firstStep начало хода бьющей шашки
+   *
+   * @param firstStep  начало хода бьющей шашки
    * @param secondStep конец хода бьющей шашки
-   * @param prevSteps предыдущие ходы
-   * @param back отматываем назад?
+   * @param prevSteps  предыдущие ходы
+   * @param back       отматываем назад?
    * @return захваченнная шашка
    */
   private static Square findTaken(Square firstStep, Square secondStep, List<String> prevSteps, boolean back) {

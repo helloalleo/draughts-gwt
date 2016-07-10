@@ -25,6 +25,7 @@ import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.draughts.*;
 import online.draughts.rus.shared.config.ClientConfiguration;
@@ -46,7 +47,6 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.Stack;
 
-@SuppressWarnings("deprecation")
 public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUiHandlers>
     implements DraughtsPlayerPresenter.MyView, PlayComponent {
   private final AppResources resources;
@@ -65,7 +65,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   HTML caption;
   @UiField
   HTMLPanel body;
-//  @UiField
+  //  @UiField
 //  Button toStartButton;
   @UiField
   Button prevButton;
@@ -73,7 +73,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   Button playButton;
   @UiField
   Button nextButton;
-//  @UiField
+  //  @UiField
 //  Button toEndButton;
   @UiField
   Button dismiss;
@@ -133,6 +133,8 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   private Double lineHeight;
   private Integer scrollLines;
   private Stack<String> prevStepsStack = new Stack<>();
+  private Stroke currentStroke;
+  private boolean skipBack = false;
 
   private DraughtsPlayerView(Binder uiBinder, EventBus eventBus, AppResources resources, DraughtsMessages messages,
                              ClientConfiguration config, CurrentSession currentSession,
@@ -177,7 +179,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
       @Override
       protected int getTop(int popupHeight) {
-         return Window.getScrollTop() + 75;
+        return Window.getScrollTop() + 75;
       }
     });
   }
@@ -254,6 +256,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     int order = 0;
     Node prevChild = null;
     List<String> prevSteps = new ArrayList<>();
+    Stroke prevStroke = null;
     for (int i = 0; i < gameNode.getChildCount(); i++) {
       final Node child = gameNode.getChild(i);
       // если у нас не спан
@@ -266,6 +269,15 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
         }
 
         final Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(step, prevSteps, false);
+        Logger.debug(stroke);
+        if (null != prevStroke) {
+          prevStroke.setNextStroke(stroke);
+        } else {
+          currentStroke = stroke;
+          Logger.debug("Cur" + stroke);
+        }
+        stroke.setPrevStroke(prevStroke);
+        prevStroke = stroke;
         addGameComment(stroke.getOrder(), step.getInnerText(), stroke.getTitle(), stroke.getComment());
 
         Anchor anchor = new Anchor();
@@ -560,12 +572,13 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
     }
     prevStepsStack.add(prevStep);
 
-    Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(notation, prevStepsStack, false);
+    Stroke stroke = StrokeFactory.cloneStroke(currentStroke);
+    Logger.debug("Forward " + stroke);
+    if (currentStroke.getNextStroke() != null) {
+      currentStroke = currentStroke.getNextStroke();
+    }
     board.doMoveSmooth(stroke, notationCursor, smooth);
     setStrokeComment(stroke.getTitle(), stroke.getComment());
-
-    setBeatenMy(Board.DRAUGHTS_ON_SIDE - board.getMyDraughts().size());
-    setBeatenOpponent(Board.DRAUGHTS_ON_SIDE - board.getOpponentDraughts().size());
 
     // выделяем ход
     notation = getStrokeById(notationCursor);
@@ -578,6 +591,9 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
       notationScroll.setVerticalScrollPosition(notationScroll.getVerticalScrollPosition()
           + (int) (scrollLines * getLineHeight()));
     }
+
+    setBeatenMy(Board.DRAUGHTS_ON_SIDE - board.getMyDraughts().size());
+    setBeatenOpponent(Board.DRAUGHTS_ON_SIDE - board.getOpponentDraughts().size());
 
     notation = getStrokeById(notationCursor);
     if (null == notation) {
@@ -615,7 +631,16 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 //      String step = getStrokeById(notationCursor - 1).getInnerText();
 //    }
 
-    Stroke stroke = StrokeFactory.createStrokeFromNotationHtml(currentNotation, prevStepsStack, true);
+    skipBack = currentStroke.getNextStroke() == null && !skipBack;
+
+    if (!skipBack) {
+      currentStroke = currentStroke.getPrevStroke();
+      skipBack = false;
+    }
+
+    Logger.debug("Back " + currentStroke);
+    Stroke stroke = StrokeFactory.cloneStroke(currentStroke);
+
     prevStepsStack.pop();
     board.doEmulatedMoveBack(stroke, notationCursor, smooth);
 
@@ -790,7 +815,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
     @Override
     public DraughtsPlayerPresenter.MyView create(GameDto game, boolean inSlot) {
-      return  new DraughtsPlayerView(binder, eventBus, resources, messages, config, currentSession, dialogFactory, gamesDelegate, game, inSlot);
+      return new DraughtsPlayerView(binder, eventBus, resources, messages, config, currentSession, dialogFactory, gamesDelegate, game, inSlot);
     }
 
     @Override

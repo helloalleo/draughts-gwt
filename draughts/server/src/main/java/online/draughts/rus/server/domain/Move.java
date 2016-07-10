@@ -30,7 +30,7 @@ public class Move extends ModelImpl<Move> {
   private Draught takenDraught;
 
   @Converter(value = MoveFlagsConverter.class)
-  private Set<MoveDto.MoveFlags> moveFlags = new HashSet<>();
+  private Set<MoveDto.MoveFlag> moveFlags = new HashSet<>();
 
   private String title;
 
@@ -46,7 +46,7 @@ public class Move extends ModelImpl<Move> {
   }
 
   public Move(int number, boolean first, GameMessage gameMessage, Draught movingDraught, Draught movedDraught,
-              Draught takenDraught, Set<MoveDto.MoveFlags> moveFlags, String screenshot) {
+              Draught takenDraught, Set<MoveDto.MoveFlag> moveFlags, String screenshot) {
     super(Move.class);
     this.number = number;
     this.first = first;
@@ -126,11 +126,11 @@ public class Move extends ModelImpl<Move> {
     this.movedDraught = movedDraught;
   }
 
-  public Set<MoveDto.MoveFlags> getMoveFlags() {
+  public Set<MoveDto.MoveFlag> getMoveFlags() {
     return moveFlags;
   }
 
-  public void setMoveFlags(Set<MoveDto.MoveFlags> moveFlags) {
+  public void setMoveFlags(Set<MoveDto.MoveFlag> moveFlags) {
     this.moveFlags = moveFlags;
   }
 

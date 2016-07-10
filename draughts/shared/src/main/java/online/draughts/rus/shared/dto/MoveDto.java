@@ -34,7 +34,7 @@ public class MoveDto extends BaseDto {
    */
   private DraughtDto takenDraught;
 
-  private Set<MoveFlags> moveFlags = new HashSet<>();
+  private Set<MoveFlag> moveFlags = new HashSet<>();
 
   private String title;
 
@@ -47,7 +47,7 @@ public class MoveDto extends BaseDto {
   }
 
   public MoveDto(int number, boolean first, DraughtDto movingDraught, DraughtDto movedDraught, DraughtDto takenDraught,
-                 Set<MoveFlags> moveFlags) {
+                 Set<MoveFlag> moveFlags) {
     this.number = number;
     this.first = first;
     this.moveFlags = moveFlags;
@@ -116,11 +116,11 @@ public class MoveDto extends BaseDto {
     return this;
   }
 
-  public Set<MoveFlags> getMoveFlags() {
+  public Set<MoveFlag> getMoveFlags() {
     return moveFlags;
   }
 
-  public MoveDto setMoveFlags(Set<MoveFlags> moveFlags) {
+  public MoveDto setMoveFlags(Set<MoveFlag> moveFlags) {
     this.moveFlags = moveFlags;
     return this;
   }
@@ -180,7 +180,7 @@ public class MoveDto extends BaseDto {
     return screenshot;
   }
 
-  public enum MoveFlags {
+  public enum MoveFlag {
     CANCEL_MOVE, // ход отменяется
     SIMPLE_MOVE, // ход без взятия
     CONTINUE_BEAT, // продолжить брать

@@ -8,15 +8,15 @@ import online.draughts.rus.shared.dto.MoveDto;
  * Date: 08.01.16
  * Time: 11:54
  */
-public class MoveFlagsConverter implements Converter<MoveDto.MoveFlags> {
+public class MoveFlagsConverter implements Converter<MoveDto.MoveFlag> {
 
   @Override
-  public String convertTo(MoveDto.MoveFlags value) {
+  public String convertTo(MoveDto.MoveFlag value) {
     return value.name();
   }
 
   @Override
-  public MoveDto.MoveFlags convertFrom(String value) {
-    return MoveDto.MoveFlags.valueOf(value);
+  public MoveDto.MoveFlag convertFrom(String value) {
+    return MoveDto.MoveFlag.valueOf(value);
   }
 }
