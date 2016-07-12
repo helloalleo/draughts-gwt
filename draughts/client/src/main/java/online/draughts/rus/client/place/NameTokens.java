@@ -13,6 +13,7 @@ public class NameTokens {
   public static final String analysisPage = "!/analysis";
   public static final String loginPage = "!/login";
   public static final String profilePage = "!/profile";
+  public static final String rulesPage = "!/rules";
   public static final String lovePage = "!/love";
 
   public static final String errorPage = "!/error";
@@ -26,6 +27,7 @@ public class NameTokens {
   private final Link homeLink;
   private final Link learnLink;
   private final Link loveLink;
+  private final Link rulesLink;
   private final Link loginLink;
   private final Link logoutLink;
   private final Link profileLink;
@@ -50,6 +52,7 @@ public class NameTokens {
     profileLink = new Link(profilePage, messages.profile(), null, IconType.USER);
     this.generalSettingsLink = new Link(generalSettingsPage, messages.generalSettings(), null, IconType.USER);
     settingsLink = new Link(settingsPage, messages.settings(), null, IconType.GEAR);
+    rulesLink = new Link(rulesPage, messages.rules(), null, null);
   }
 
   public static String getLovePage() {
@@ -57,7 +60,7 @@ public class NameTokens {
   }
 
   public Link[] getLeftLinks() {
-    return new Link[]{homeLink};
+    return new Link[]{homeLink, rulesLink};
   }
 
   public Link[] getLeftAuthLinks() {

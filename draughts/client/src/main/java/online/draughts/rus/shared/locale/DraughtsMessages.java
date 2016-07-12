@@ -1130,4 +1130,6 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   @DefaultMessage("<span style=\"color:green;\">Your turn</span>")
   @Key("yourTurn")
   String yourTurn();
+
+  String rules();
 }

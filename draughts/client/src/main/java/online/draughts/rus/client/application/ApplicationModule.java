@@ -27,11 +27,13 @@ import online.draughts.rus.client.application.love.LoveModule;
 import online.draughts.rus.client.application.menu.MenuModule;
 import online.draughts.rus.client.application.play.PlayModule;
 import online.draughts.rus.client.application.profile.ProfileModule;
+import online.draughts.rus.client.application.rules.RulesModule;
 import online.draughts.rus.client.application.security.OAuthLoginModule;
 
 public class ApplicationModule extends AbstractPresenterModule {
   @Override
   protected void configure() {
+    install(new RulesModule());
     install(new GameModule());
     install(new FooterModule());
     install(new AnalysisModule());
