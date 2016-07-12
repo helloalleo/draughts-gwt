@@ -127,7 +127,7 @@ public class AnalysisView extends ViewWithUiHandlers<AnalysisUiHandlers>
             addQueenCheckbox.setValue(!addQueenCheckbox.getValue(), true);
             break;
           }
-          case KEY_M: {
+          case KEY_N: {
             myPlaceDraughts.click();
             break;
           }
