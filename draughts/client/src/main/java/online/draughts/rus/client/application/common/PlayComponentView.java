@@ -595,7 +595,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     sb.appendHtmlConstant(object.getPublicName());
     sb.appendHtmlConstant("<small>&nbsp;");
     sb.appendHtmlConstant(getPlayerStatus(object));
-    sb.appendHtmlConstant("</small>");
+    sb.appendHtmlConstant("</small><br>");
+    sb.appendHtmlConstant(messages.rating(String.valueOf(object.getRating())));
     sb.appendHtmlConstant("</span>");
   }
 
