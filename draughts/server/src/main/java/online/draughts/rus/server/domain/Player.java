@@ -40,7 +40,7 @@ public class Player extends ModelImpl<Player> {
   @Index
   private String notificationsUserId;
   @Index
-  private int rating = 0;
+  private double rating = 0;
   private String avatar;
   private int gamePlayed = 0;
   private int gameWon = 0;
@@ -247,11 +247,11 @@ public class Player extends ModelImpl<Player> {
     this.visitCounter = visitCounter;
   }
 
-  public int getRating() {
+  public double getRating() {
     return rating;
   }
 
-  public void setRating(int rating) {
+  public void setRating(double rating) {
     this.rating = rating;
   }
 

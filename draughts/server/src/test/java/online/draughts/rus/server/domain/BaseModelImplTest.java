@@ -39,7 +39,7 @@ public class BaseModelImplTest extends BaseTest {
     // строка
     String playerName = player.getPlayerName();
     // целое число
-    int rating = player.getRating();
+    double rating = player.getRating();
     // перечисление
     PlayerDto.AuthProvider authProvider = player.getAuthProvider();
     // булевое

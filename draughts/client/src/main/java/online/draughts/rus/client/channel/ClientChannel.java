@@ -227,11 +227,11 @@ public class ClientChannel implements ChannelListener {
       dialogFactory.createInfoDialogBox(messages.failedToConnectToServer()).show();
       return;
     }
-    GameMessageDto gameMessage = GWT.create(GameMessageDto.class);
-    gameMessage.setSender(player);
-    gameMessage.setMessageType(GameMessageDto.MessageType.PLAYER_REGISTER);
-
-    sendGameMessage(gameMessage);
+//    GameMessageDto gameMessage = GWT.create(GameMessageDto.class);
+//    gameMessage.setSender(player);
+//    gameMessage.setMessageType(GameMessageDto.MessageType.PLAYER_REGISTER);
+//
+//    sendGameMessage(gameMessage);
 
     playSession.setConnected(true);
     eventBus.fireEvent(new ConnectedToPlayEvent());

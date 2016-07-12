@@ -103,9 +103,9 @@ public class ServerChannel extends ChannelServer {
       case PLAY_TIMEOUT:
         handleGameOver(gameMessage);
         break;
-      case CHANNEL_CLOSE:
-        handleClose(channel);
-        break;
+//      case CHANNEL_CLOSE:
+//        handleClose(channel);
+//        break;
     }
   }
 

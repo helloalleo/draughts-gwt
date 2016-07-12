@@ -8,11 +8,11 @@ package online.draughts.rus.server.util;
  */
 public class Rating {
 
-  public static final int WIN_RATING = 4;
-  public static final int LOST_RATING = 0;
-  public static final int DRAW_RATING = 2;
+  private static final double WIN_RATING = 1;
+  private static final double LOST_RATING = -1;
+  private static final double DRAW_RATING = 0.5;
 
-  public static int calcPlayerRating(int rating, boolean white, boolean blackWon, boolean whiteWon) {
+  public static double calcPlayerRating(double rating, boolean white, boolean blackWon, boolean whiteWon) {
     return rating
         + (!whiteWon && !blackWon ? DRAW_RATING
         : (white ? (whiteWon ? WIN_RATING : LOST_RATING)

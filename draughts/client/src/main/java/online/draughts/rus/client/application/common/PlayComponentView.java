@@ -621,7 +621,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         return new SafeHtmlBuilder().appendHtmlConstant(img.getElement().getString()).toSafeHtml();
       } else {
         Icon html = getIconString(IconType.USER);
-//        html.setTitle(messages.rating(String.valueOf(this.player.getRating())));
+        html.setTitle(messages.rating(String.valueOf(this.player.getRating())));
         return new SafeHtmlBuilder().appendHtmlConstant(html.getElement().getString()).toSafeHtml();
       }
     }
@@ -640,7 +640,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
           img = new Image(resources.images().offlineIconImage().getSafeUri());
         }
       }
-      img.setTitle(playerPublicName /*+ " " + messages.rating(String.valueOf(player.getRating()))*/);
+      img.setTitle(playerPublicName + " " + messages.rating(String.valueOf(player.getRating())));
     }
     return new SafeHtmlBuilder().appendHtmlConstant(img.getElement().getString()).toSafeHtml();
   }

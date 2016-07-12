@@ -84,8 +84,10 @@ abstract class BaseModelImpl<T extends BaseModel> implements BaseModel<T> {
       // создаем команду
       Command<T> command;
       if (property instanceof Long && field.getType().equals(int.class)) {
-        // если свойство целого типа или типа длинного типа
+        // если свойство целого типа и типа длинного типа
         command = new IntCommand<>();
+      } else if ((property instanceof Long || property instanceof Double) && field.getType().equals(double.class)) {
+        command = new DoubleCommand<>();
       } else if (field.getType().isEnum()) {
         // если свойство типа перечисления
         command = new EnumCommand<>();

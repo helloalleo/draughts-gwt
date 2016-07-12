@@ -15,7 +15,7 @@ public class RatingTest {
   @Test
   public void testCalcPlayerRating() throws Exception {
     // белые победили
-    int rating = 0;
+    double rating = 0;
     rating = Rating.calcPlayerRating(rating, true, false, true);
     assertEquals(3, rating);
 
