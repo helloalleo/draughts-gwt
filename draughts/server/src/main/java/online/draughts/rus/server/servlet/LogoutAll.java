@@ -1,8 +1,6 @@
 package online.draughts.rus.server.servlet;
 
-import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import online.draughts.rus.server.channel.ServerChannel;
 import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.Player;
 
@@ -21,8 +19,6 @@ import java.util.List;
  */
 @Singleton
 public class LogoutAll extends HttpServlet {
-  @Inject
-  private ServerChannel serverChannel;
 
   @Override
   protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
@@ -31,9 +27,8 @@ public class LogoutAll extends HttpServlet {
       return;
     }
 
-    List<Player> players = Player.getInstance().findAll();
+    List<Player> players = Player.getInstance().findOnline();
     for (Player player : players) {
-      player.setRating(0);
       player.setOnline(false);
       player.setPlaying(false);
       player.update();

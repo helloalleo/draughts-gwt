@@ -10,6 +10,7 @@ public class NameTokens {
   public static final String learnPage = "!/learn";
   public static final String playPage = "!/play";
   public static final String gamePage = "!/game";
+  public static final String myGamePage = "!/mygame";
   public static final String analysisPage = "!/analysis";
   public static final String loginPage = "!/login";
   public static final String profilePage = "!/profile";
@@ -20,8 +21,7 @@ public class NameTokens {
   public static final String generalSettingsPage = "!/generalSettings";
   public static final String settingsPage = "!/settings";
   public static final String logoutPage = "/logout";
-  private final String ruShashkiNetUrl = "" +
-      "https://rushashki-net.appspot.com";
+  private final String ruShashkiNetUrl = "https://rushashki-net.appspot.com";
 
   // ссылки - название и токен
   private final Link homeLink;
@@ -34,6 +34,7 @@ public class NameTokens {
   private final Link generalSettingsLink;
   private final Link settingsLink;
   private final Link playLink;
+  private final Link myGameLink;
 //  private final Link gameLink;
   private final Link analysisLink;
   private final Link ruShashkiNetLink;
@@ -53,6 +54,7 @@ public class NameTokens {
     this.generalSettingsLink = new Link(generalSettingsPage, messages.generalSettings(), null, IconType.USER);
     settingsLink = new Link(settingsPage, messages.settings(), null, IconType.GEAR);
     rulesLink = new Link(rulesPage, messages.rules(), null, null);
+    myGameLink = new Link(myGamePage, messages.myGames(), null, null);
   }
 
   public static String getLovePage() {

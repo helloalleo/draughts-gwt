@@ -13,7 +13,7 @@ public class Rating {
   private static final double DRAW_RATING = 0.5;
 
   public static double calcPlayerRating(double rating, boolean white, boolean blackWon, boolean whiteWon) {
-    return rating
+    return  rating
         + (!whiteWon && !blackWon ? DRAW_RATING
         : (white ? (whiteWon ? WIN_RATING : LOST_RATING)
         : (blackWon ? WIN_RATING : LOST_RATING)));

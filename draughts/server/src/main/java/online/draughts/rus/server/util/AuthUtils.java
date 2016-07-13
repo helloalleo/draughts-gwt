@@ -55,6 +55,7 @@ public class AuthUtils {
     player.setSessionId(session.getId());
     if (player.getId() == 0) {
       player.setRegisterDate(new Date());
+      player.setRating(1000);
     }
     player.setActive(true);
     player.setVisitCounter(player.getVisitCounter() + 1);

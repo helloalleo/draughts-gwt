@@ -59,7 +59,7 @@ public class CoreChannel {
   void updatePlayerList() {
     GameMessage gameMessage = new GameMessage();
     gameMessage.setMessageType(GameMessageDto.MessageType.USER_LIST_UPDATE);
-    List<Player> playerList = playerService.findAll();
+    List<Player> playerList = playerService.findOnline();
     gameMessage.setPlayerList(playerList);
     for (String channelName : channelTokenPeers) {
       sendMessage(channelName, gameMessage);

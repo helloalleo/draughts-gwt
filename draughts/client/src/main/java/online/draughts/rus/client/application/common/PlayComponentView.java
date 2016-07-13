@@ -603,7 +603,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     sb.appendHtmlConstant(getPlayerStatus(player));
     sb.appendHtmlConstant("</small>");
     if (!player.isModerator()) {
-      sb.appendHtmlConstant("<br>" + messages.rating(String.valueOf(player.getRating())));
+      sb.appendHtmlConstant("<br><small>" + messages.rating(String.valueOf(player.getRating())) + "</small>");
     }
     sb.appendHtmlConstant("</span>");
   }

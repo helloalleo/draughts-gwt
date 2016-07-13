@@ -966,7 +966,9 @@ public class Board extends Layer {
             moveMyStack.push(stroke);
             moveStack.push(stroke);
 
-            highlightAllowedMoves(stroke.getEndSquare().getOccupant());
+            if (stroke.isContinueBeat()) {
+              highlightAllowedMoves(stroke.getEndSquare().getOccupant());
+            }
           }
         });
 
