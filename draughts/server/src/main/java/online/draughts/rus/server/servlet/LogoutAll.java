@@ -31,7 +31,7 @@ public class LogoutAll extends HttpServlet {
       return;
     }
 
-    List<Player> players = Player.getInstance().findOnline();
+    List<Player> players = Player.getInstance().findAll();
     for (Player player : players) {
       player.setRating(0);
       player.setOnline(false);

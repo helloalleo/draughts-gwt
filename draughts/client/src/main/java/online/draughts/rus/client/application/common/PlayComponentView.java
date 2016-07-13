@@ -53,6 +53,7 @@ import org.gwtbootstrap3.client.ui.constants.ButtonType;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.gwtbootstrap3.client.ui.gwt.ButtonCell;
 import org.gwtbootstrap3.client.ui.gwt.CellTable;
+import org.gwtbootstrap3.client.ui.html.Div;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -590,13 +591,20 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     return "";
   }
 
-  private void createUserNameForPlayerList(PlayerDto object, SafeHtmlBuilder sb) {
+  private void createUserNameForPlayerList(PlayerDto player, SafeHtmlBuilder sb) {
     sb.appendHtmlConstant("<span>");
-    sb.appendHtmlConstant(object.getPublicName());
+    if (player.isModerator()) {
+      Div div = new Div();
+      div.setMarginTop(16);
+      sb.appendHtmlConstant(div.getElement().getString());
+    }
+    sb.appendHtmlConstant(player.getPublicName());
     sb.appendHtmlConstant("<small>&nbsp;");
-    sb.appendHtmlConstant(getPlayerStatus(object));
-    sb.appendHtmlConstant("</small><br>");
-    sb.appendHtmlConstant(messages.rating(String.valueOf(object.getRating())));
+    sb.appendHtmlConstant(getPlayerStatus(player));
+    sb.appendHtmlConstant("</small>");
+    if (!player.isModerator()) {
+      sb.appendHtmlConstant("<br>" + messages.rating(String.valueOf(player.getRating())));
+    }
     sb.appendHtmlConstant("</span>");
   }
 
