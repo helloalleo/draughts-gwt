@@ -15,6 +15,7 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import online.draughts.rus.client.application.mygames.MyGamesPresenter;
 import online.draughts.rus.client.application.widget.popup.DraughtsPlayerPresenter;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.TrUtils;
@@ -33,6 +34,7 @@ public class PlayItem extends Composite {
   private final ClientConfiguration config;
   private final static String PLAYER_COLOR_DELIMITER = ": ";
   private final int gamesInRow;
+  private final ShowPanelEnum showPanelEnum;
 
   @UiField
   HTMLPanel panel;
@@ -41,7 +43,7 @@ public class PlayItem extends Composite {
   @UiField
   HTML blackPlayerName;
   @UiField
-  HTML whoDidWin;
+  HTML whoWon;
   @UiField
   Image endGameScreenshot;
   @UiField
@@ -61,16 +63,20 @@ public class PlayItem extends Composite {
   PlayItem(Binder binder,
            final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
            final HomePresenter homePresenter,
+           final MyGamesPresenter myGamesPresenter,
            DraughtsMessages messages,
            AppResources resources,
+           ClientConfiguration config,
            @Assisted int gamesInRow,
-           @Assisted final GameDto game, ClientConfiguration config) {
+           @Assisted final GameDto game,
+           @Assisted ShowPanelEnum showPanelEnum) {
     this.messages = messages;
     this.config = config;
     initWidget(binder.createAndBindUi(this));
     this.gamesInRow = gamesInRow;
+    this.showPanelEnum = showPanelEnum;
     panel.addStyleName(resources.style().playItem());
-    setGame(homePresenter, draughtsPlayerFactory, game);
+    setGame(homePresenter, myGamesPresenter, draughtsPlayerFactory, game);
 
     if (Window.getClientWidth() < 768) {
       whoAndWhenWon.setVisible(false);
@@ -78,24 +84,26 @@ public class PlayItem extends Composite {
     }
   }
 
-  private void setGame(final HomePresenter homePresenter, final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
+  private void setGame(final HomePresenter homePresenter, final MyGamesPresenter myGamesPresenter,
+                       final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
                        final GameDto game) {
     playGameAnchor.setId(game.getId() + GAME_ID);
     playGameAnchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        showGame(draughtsPlayerFactory, game, homePresenter);
+        showGame(draughtsPlayerFactory, game, homePresenter, myGamesPresenter);
       }
     });
 
     final String whitePlayerName = messages.white() + PLAYER_COLOR_DELIMITER + game.getPlayerWhite().getPublicName();
     final String blackPlayerName = messages.black() + PLAYER_COLOR_DELIMITER + game.getPlayerBlack().getPublicName();
-    SpanElement script = getVkShareScript(game.getId(), game.getEndGameScreenshotFullUrl(config.draughtsOnlineBucket()), whitePlayerName, blackPlayerName);
+    SpanElement script = getVkShareScript(game.getId(), game.getEndGameScreenshotFullUrl(config.draughtsOnlineBucket()),
+        whitePlayerName, blackPlayerName);
     shareVkButton.getElement().appendChild(script);
 
     linkGameAnchor.setHref(config.linkToGame(String.valueOf(game.getId())));
     if (game.getPlayEndStatus() != null) {
-      whoDidWin.setHTML(messages.whoHadWon(TrUtils.translateGameType(game.getGameType()),
+      whoWon.setHTML(messages.whoWon(TrUtils.translateGameType(game.getGameType()),
           TrUtils.translateEndGame(game.getPlayEndStatus())));
     }
     final Date playFinishDate = game.getPlayFinishDate();
@@ -128,7 +136,7 @@ public class PlayItem extends Composite {
     endGameScreenshot.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        showGame(draughtsPlayerFactory, game, homePresenter);
+        showGame(draughtsPlayerFactory, game, homePresenter, myGamesPresenter);
       }
     });
     endGameScreenshot.getElement().getStyle().setCursor(Style.Cursor.POINTER);
@@ -146,9 +154,17 @@ public class PlayItem extends Composite {
     return vkShare;
   }
 
-  private void showGame(DraughtsPlayerPresenter.Factory draughtsPlayerFactory, GameDto game, HomePresenter homePresenter) {
+  private void showGame(DraughtsPlayerPresenter.Factory draughtsPlayerFactory, GameDto game,
+                        HomePresenter homePresenter, MyGamesPresenter myGamesPresenter) {
     DraughtsPlayerPresenter draughtsPlayer = draughtsPlayerFactory.create(game);
-    homePresenter.addToPopupSlot(draughtsPlayer);
+    switch (showPanelEnum) {
+      case HOME_PANEL:
+        homePresenter.addToPopupSlot(draughtsPlayer);
+        break;
+      case MY_GAMES_PANE:
+        myGamesPresenter.addToPopupSlot(draughtsPlayer);
+        break;
+    }
   }
 
   interface Binder extends UiBinder<HTMLPanel, PlayItem> {

@@ -5,9 +5,9 @@ import online.draughts.rus.shared.dto.PlayerDto;
 
 interface HomeUiHandlers extends UiHandlers {
 
-  void getMoreGames(boolean myGames, int newPageSize);
+  void getMoreGames(int newPageSize);
 
-  void updatePlayShowPanel(boolean myGames);
+  void updatePlayShowPanel();
 
   PlayerDto getPlayer();
 }

@@ -25,7 +25,7 @@ import online.draughts.rus.client.application.home.HomeModule;
 import online.draughts.rus.client.application.learn.LearnModule;
 import online.draughts.rus.client.application.love.LoveModule;
 import online.draughts.rus.client.application.menu.MenuModule;
-import online.draughts.rus.client.application.mygame.MyGameModule;
+import online.draughts.rus.client.application.mygames.MyGamesModule;
 import online.draughts.rus.client.application.play.PlayModule;
 import online.draughts.rus.client.application.profile.ProfileModule;
 import online.draughts.rus.client.application.rules.RulesModule;
@@ -34,7 +34,7 @@ import online.draughts.rus.client.application.security.OAuthLoginModule;
 public class ApplicationModule extends AbstractPresenterModule {
   @Override
   protected void configure() {
-    install(new MyGameModule());
+    install(new MyGamesModule());
     install(new RulesModule());
     install(new GameModule());
     install(new FooterModule());

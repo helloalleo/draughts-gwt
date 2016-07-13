@@ -39,7 +39,7 @@ public class AnalysisPresenter extends Presenter<AnalysisPresenter.MyView, Analy
     this.playSession = playSession;
     this.messages = messages;
 
-    cookies.setLocation(NameTokens.analysisPage);
+    cookies.setLocation(NameTokens.ANALYSIS_PAGE);
   }
 
   @Override
@@ -75,7 +75,7 @@ public class AnalysisPresenter extends Presenter<AnalysisPresenter.MyView, Analy
   }
 
   @ProxyCodeSplit
-  @NameToken(NameTokens.analysisPage)
+  @NameToken(NameTokens.ANALYSIS_PAGE)
   @NoGatekeeper
   interface MyProxy extends ProxyPlace<AnalysisPresenter> {
   }

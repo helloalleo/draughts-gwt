@@ -60,7 +60,7 @@ public class ProfileView extends ViewWithUiHandlers<ProfileUiHandlers> implement
     }
     anchor.setIcon(link.iconType);
     switch (link.token) {
-      case NameTokens.generalSettingsPage:
+      case NameTokens.GENERAL_SETTINGS_PAGE:
         anchor.setActive(true);
         prevAnchor = anchor;
         break;

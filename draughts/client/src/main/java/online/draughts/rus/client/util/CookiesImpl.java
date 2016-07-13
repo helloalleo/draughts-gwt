@@ -30,9 +30,10 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
   private static final String SHOW_AVATARS = "SHOW_AVATARS";
   private static final String PUBLISH_GAME = "PUBLISH_GAME";
   private static final String GAME_TYPE = "GAME_TYPE";
-  private final String GAMES_ON_PAGE_COUNTER = "GAMES_ON_PAGE";
-  private final String LOCATION = "LOCATION"; // куки адреса страницы
-  private final String MY_GAMES = "MY_GAMES";
+  private static final String GAMES_IN_ROW_NUMBER = "GAMES_IN_ROW";
+  private static final String MY_GAMES_IN_ROW_NUMBER = "MY_GAMES_IN_ROW";
+  private static final String LOCATION = "LOCATION"; // куки адреса страницы
+  private static final String MY_GAMES = "MY_GAMES";
 
   public void setLocation(String nameToken) {
     Cookies.setCookie(LOCATION, nameToken);
@@ -41,17 +42,29 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
   public String getLocation() {
     String location = Cookies.getCookie(LOCATION);
     if (StringUtils.isEmpty(location)) {
-      location = NameTokens.homePage;
+      location = NameTokens.HOME_PAGE;
     }
     return location;
   }
 
-  public void setGamesOnPageCounter(int value) {
-    Cookies.setCookie(GAMES_ON_PAGE_COUNTER, String.valueOf(value));
+  public void setGamesInRowNumber(int value) {
+    Cookies.setCookie(GAMES_IN_ROW_NUMBER, String.valueOf(value));
   }
 
-  public int getGamesOnPageCounter() {
-    String gamesOnPage = Cookies.getCookie(GAMES_ON_PAGE_COUNTER);
+  public int getGamesInRowNumber() {
+    String gamesOnPage = Cookies.getCookie(GAMES_IN_ROW_NUMBER);
+    if (StringUtils.isEmpty(gamesOnPage)) {
+      gamesOnPage = "4";
+    }
+    return Integer.valueOf(gamesOnPage);
+  }
+
+  public void setMyGamesInRowNumber(int value) {
+    Cookies.setCookie(MY_GAMES_IN_ROW_NUMBER, String.valueOf(value));
+  }
+
+  public int getMyGamesInRowNumber() {
+    String gamesOnPage = Cookies.getCookie(MY_GAMES_IN_ROW_NUMBER);
     if (StringUtils.isEmpty(gamesOnPage)) {
       gamesOnPage = "3";
     }

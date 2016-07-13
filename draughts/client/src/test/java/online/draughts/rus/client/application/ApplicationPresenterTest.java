@@ -41,7 +41,7 @@ public class ApplicationPresenterTest extends PresenterTestBase {
 
   @Test
   public void showActiveNavigationItemWhenPlaceRequest() {
-    PlaceRequest request = new PlaceRequest.Builder().nameToken(NameTokens.homePage).build();
+    PlaceRequest request = new PlaceRequest.Builder().nameToken(NameTokens.HOME_PAGE).build();
     placeManager.revealPlace(request);
     when(placeManager.getCurrentPlaceRequest()).thenReturn(request);
     eventBus.fireEvent(new ResetPresentersEvent());

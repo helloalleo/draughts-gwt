@@ -16,9 +16,9 @@
         <b:Anchor ui:field="linkGameAnchor" icon="LINK" iconSize="TIMES2"/>
       </g:HTMLPanel>
 
-      <g:HTMLPanel ui:field="whoAndWhenWon" addStyleNames="{res.style.whoAndWhenDidWin}">
+      <g:HTMLPanel ui:field="whoAndWhenWon" addStyleNames="{res.style.whoAndWhenWon}">
         <g:HTML ui:field="playEndDate" addStyleNames="{res.style.playEndDate}"/>
-        <g:HTML ui:field="whoDidWin" addStyleNames="{res.style.whoWon}"/>
+        <g:HTML ui:field="whoWon" addStyleNames="{res.style.whoWon}"/>
       </g:HTMLPanel>
     </g:HTMLPanel>
 

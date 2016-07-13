@@ -14,9 +14,13 @@ public interface Cookies {
 
   void setLocation(String nameToken);
 
-  int getGamesOnPageCounter();
+  int getGamesInRowNumber();
 
-  void setGamesOnPageCounter(int value);
+  void setGamesInRowNumber(int value);
+
+  int getMyGamesInRowNumber();
+
+  void setMyGamesInRowNumber(int value);
 
   boolean isMyGames();
 

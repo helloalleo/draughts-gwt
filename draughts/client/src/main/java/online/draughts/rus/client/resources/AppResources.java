@@ -82,7 +82,7 @@ public interface AppResources extends ClientBundle {
 
     String navbarElemScroll();
 
-    String whoAndWhenDidWin();
+    String whoAndWhenWon();
 
     String hrMiddle();
 

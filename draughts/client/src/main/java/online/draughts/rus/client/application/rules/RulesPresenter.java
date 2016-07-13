@@ -27,7 +27,7 @@ public class RulesPresenter extends Presenter<RulesPresenter.MyView, RulesPresen
   interface MyView extends View {
   }
 
-  @NameToken(NameTokens.rulesPage)
+  @NameToken(NameTokens.RULES_PAGE)
   @NoGatekeeper
   @ProxyStandard
   interface MyProxy extends ProxyPlace<RulesPresenter> {

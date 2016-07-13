@@ -24,13 +24,13 @@ public class LovePresenter extends Presenter<LovePresenter.MyView, LovePresenter
       Cookies cookies) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
-    cookies.setLocation(NameTokens.lovePage);
+    cookies.setLocation(NameTokens.LOVE_PAGE);
   }
 
   interface MyView extends View {
   }
 
-  @NameToken(NameTokens.lovePage)
+  @NameToken(NameTokens.LOVE_PAGE)
   @ProxyCodeSplit
   @NoGatekeeper
   interface MyProxy extends ProxyPlace<LovePresenter> {

@@ -28,14 +28,14 @@ public class OAuthLoginPresenter extends Presenter<OAuthLoginPresenter.MyView, O
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     getView().setUiHandlers(this);
-    cookies.setLocation(NameTokens.loginPage);
+    cookies.setLocation(NameTokens.LOGIN_PAGE);
   }
 
   interface MyView extends View, HasUiHandlers<OAuthLoginUiHandlers> {
   }
 
   @ProxyCodeSplit
-  @NameToken(NameTokens.loginPage)
+  @NameToken(NameTokens.LOGIN_PAGE)
   @NoGatekeeper
   interface MyProxy extends ProxyPlace<OAuthLoginPresenter> {
   }

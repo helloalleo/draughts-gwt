@@ -32,7 +32,6 @@ import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.ButtonGroup;
-import org.gwtbootstrap3.client.ui.CheckBoxButton;
 import org.gwtbootstrap3.client.ui.html.Span;
 import org.gwtbootstrap3.client.ui.html.Strong;
 
@@ -45,13 +44,11 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
   private PlayShowPanel playShowPanel;
   @UiField
-  Button moreGameOnPage;
+  Button moreGamesInRow;
   @UiField
-  Button lessGameOnPage;
+  Button lessGamesInRow;
   @UiField
   ButtonGroup showGameOnPageButtonGroup;
-  @UiField
-  CheckBoxButton myGameListCheckButton;
   @UiField
   Strong gameListLabel;
   @UiField
@@ -73,8 +70,8 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
 
     this.cookies = cookies;
     isMyGames = cookies.isMyGames();
-    myGameListCheckButton.setValue(isMyGames);
-    playShowPanel = playShowPanelFactory.createShowPanel();
+//    myGameListCheckButton.setValue(isMyGames);
+    playShowPanel = playShowPanelFactory.createShowPanel(ShowPanelEnum.HOME_PANEL);
     playShowSimplePanel.add(playShowPanel);
 
     bindSlot(HomePresenter.SLOT_SHOW_PLAY_PANEL, main);
@@ -87,37 +84,37 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   }
 
   @SuppressWarnings("unused")
-  @UiHandler("moreGameOnPage")
+  @UiHandler("moreGamesInRow")
   public void onMoreGameOnPage(ClickEvent event) {
     playShowPanel.moreGameOnPanel();
   }
 
   @SuppressWarnings("unused")
-  @UiHandler("lessGameOnPage")
+  @UiHandler("lessGamesInRow")
   public void onLessGameOnPage(ClickEvent event) {
     playShowPanel.lessGameOnPanel();
   }
 
-  @UiHandler("myGameListCheckButton")
-  public void test(ClickEvent clickEvent) {
-    if (!secondMyGameListClick) {
-      toggleMyGameList(!myGameListCheckButton.getValue());
-      secondMyGameListClick = true;
-      return;
-    }
-    secondMyGameListClick = false;
-  }
+//  @UiHandler("myGameListCheckButton")
+//  public void test(ClickEvent clickEvent) {
+//    if (!secondMyGameListClick) {
+//      toggleMyGameList(!myGameListCheckButton.getValue());
+//      secondMyGameListClick = true;
+//      return;
+//    }
+//    secondMyGameListClick = false;
+//  }
 
-  private void toggleMyGameList(boolean value) {
-    cookies.setMyGames(value);
-    isMyGames = value;
-    getUiHandlers().updatePlayShowPanel(value);
-  }
+//  private void toggleMyGameList(boolean value) {
+//    cookies.setMyGames(value);
+//    isMyGames = value;
+//    getUiHandlers().updatePlayShowPanel();
+//  }
 
   @Override
   public void setShowLoggedInControls(Boolean loggedIn) {
-    myGameListCheckButton.setVisible(loggedIn);
-    gameListLabel.setVisible(!loggedIn);
+//    myGameListCheckButton.setVisible(loggedIn);
+//    gameListLabel.setVisible(!loggedIn);
   }
 
   @Override
@@ -146,23 +143,23 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
   }
 
   void setEnableMoreGameButton(boolean enable) {
-    moreGameOnPage.setEnabled(enable);
+    moreGamesInRow.setEnabled(enable);
   }
 
   boolean isEnabledMoreGameButton() {
-    return moreGameOnPage.isEnabled();
+    return moreGamesInRow.isEnabled();
   }
 
   void setEnableLessGameButton(boolean enableMoreGameButton) {
-    lessGameOnPage.setEnabled(enableMoreGameButton);
+    lessGamesInRow.setEnabled(enableMoreGameButton);
   }
 
   boolean isEnabledLessGameButton() {
-    return lessGameOnPage.isEnabled();
+    return lessGamesInRow.isEnabled();
   }
 
   void getMoreGames(int newPageSize) {
-    getUiHandlers().getMoreGames(myGameListCheckButton.getValue(), newPageSize);
+    getUiHandlers().getMoreGames(newPageSize);
   }
 
   public PlayerDto getPlayer() {

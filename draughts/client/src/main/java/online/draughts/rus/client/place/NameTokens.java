@@ -6,21 +6,21 @@ import org.gwtbootstrap3.client.ui.constants.IconType;
 
 public class NameTokens {
   // токены - адреса в навигации
-  public static final String homePage = "!/home";
-  public static final String learnPage = "!/learn";
-  public static final String playPage = "!/play";
-  public static final String gamePage = "!/game";
-  public static final String myGamePage = "!/mygame";
-  public static final String analysisPage = "!/analysis";
-  public static final String loginPage = "!/login";
-  public static final String profilePage = "!/profile";
-  public static final String rulesPage = "!/rules";
-  public static final String lovePage = "!/love";
+  public static final String HOME_PAGE = "!/home";
+  public static final String LEARN_PAGE = "!/learn";
+  public static final String PLAY_PAGE = "!/play";
+  public static final String GAME_PAGE = "!/game";
+  public static final String MY_GAMES_PAGE = "!/mygames";
+  public static final String ANALYSIS_PAGE = "!/analysis";
+  public static final String LOGIN_PAGE = "!/login";
+  public static final String PROFILE_PAGE = "!/profile";
+  public static final String RULES_PAGE = "!/rules";
+  public static final String LOVE_PAGE = "!/love";
 
-  public static final String errorPage = "!/error";
-  public static final String generalSettingsPage = "!/generalSettings";
-  public static final String settingsPage = "!/settings";
-  public static final String logoutPage = "/logout";
+  public static final String ERROR_PAGE = "!/error";
+  public static final String GENERAL_SETTINGS_PAGE = "!/generalSettings";
+  public static final String SETTINGS_PAGE = "!/settings";
+  public static final String LOGOUT_PAGE = "/logout";
   private final String ruShashkiNetUrl = "https://rushashki-net.appspot.com";
 
   // ссылки - название и токен
@@ -34,31 +34,31 @@ public class NameTokens {
   private final Link generalSettingsLink;
   private final Link settingsLink;
   private final Link playLink;
-  private final Link myGameLink;
+  private final Link myGamesLink;
 //  private final Link gameLink;
   private final Link analysisLink;
   private final Link ruShashkiNetLink;
 
   @Inject
   public NameTokens(DraughtsMessages messages) {
-    homeLink = new Link(homePage, messages.home(), null, IconType.HOME);
+    homeLink = new Link(HOME_PAGE, messages.home(), null, IconType.HOME);
     ruShashkiNetLink = new Link(null, "RuShashkiNet", ruShashkiNetUrl, IconType.LINK);
-    learnLink = new Link(learnPage, messages.learn(), null, null);
-    playLink = new Link(playPage, messages.play(), null, IconType.PLAY_CIRCLE_O);
-//    gameLink = new Link(gamePage, messages.game(), null, IconType.PLAY_CIRCLE_O);
-    analysisLink = new Link(analysisPage, messages.analysis(), null, null);
-    loveLink = new Link(lovePage, "", null, IconType.HEART_O);
-    loginLink = new Link(loginPage, messages.login(), null, IconType.SIGN_IN);
-    logoutLink = new Link(null, messages.logout(), logoutPage, IconType.SIGN_OUT);
-    profileLink = new Link(profilePage, messages.profile(), null, IconType.USER);
-    this.generalSettingsLink = new Link(generalSettingsPage, messages.generalSettings(), null, IconType.USER);
-    settingsLink = new Link(settingsPage, messages.settings(), null, IconType.GEAR);
-    rulesLink = new Link(rulesPage, messages.rules(), null, null);
-    myGameLink = new Link(myGamePage, messages.myGames(), null, null);
+    learnLink = new Link(LEARN_PAGE, messages.learn(), null, null);
+    playLink = new Link(PLAY_PAGE, messages.play(), null, IconType.PLAY_CIRCLE_O);
+//    gameLink = new Link(GAME_PAGE, messages.game(), null, IconType.PLAY_CIRCLE_O);
+    analysisLink = new Link(ANALYSIS_PAGE, messages.analysis(), null, null);
+    loveLink = new Link(LOVE_PAGE, "", null, IconType.HEART_O);
+    loginLink = new Link(LOGIN_PAGE, messages.login(), null, IconType.SIGN_IN);
+    logoutLink = new Link(null, messages.logout(), LOGOUT_PAGE, IconType.SIGN_OUT);
+    profileLink = new Link(PROFILE_PAGE, messages.profile(), null, IconType.USER);
+    this.generalSettingsLink = new Link(GENERAL_SETTINGS_PAGE, messages.generalSettings(), null, IconType.USER);
+    settingsLink = new Link(SETTINGS_PAGE, messages.settings(), null, IconType.GEAR);
+    rulesLink = new Link(RULES_PAGE, messages.rules(), null, null);
+    myGamesLink = new Link(MY_GAMES_PAGE, messages.myGames(), null, null);
   }
 
   public static String getLovePage() {
-    return lovePage;
+    return LOVE_PAGE;
   }
 
   public Link[] getLeftLinks() {
@@ -66,7 +66,7 @@ public class NameTokens {
   }
 
   public Link[] getLeftAuthLinks() {
-    return new Link[]{homeLink, playLink, rulesLink};
+    return new Link[]{homeLink, playLink, myGamesLink, rulesLink};
   }
 
   public Link[] getRightLinks() {

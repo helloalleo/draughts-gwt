@@ -30,7 +30,7 @@ public class PlayPresenter extends Presenter<PlayPresenter.MyView, PlayPresenter
 
     getView().setUiHandlers(this);
 
-    cookies.setLocation(NameTokens.playPage);
+    cookies.setLocation(NameTokens.PLAY_PAGE);
 
     setInSlot(SLOT_NEWPLAY, playComponentPresenter);
   }
@@ -39,7 +39,7 @@ public class PlayPresenter extends Presenter<PlayPresenter.MyView, PlayPresenter
   }
 
   @ProxyCodeSplit
-  @NameToken(NameTokens.playPage)
+  @NameToken(NameTokens.PLAY_PAGE)
   interface MyProxy extends ProxyPlace<PlayPresenter> {
   }
 }

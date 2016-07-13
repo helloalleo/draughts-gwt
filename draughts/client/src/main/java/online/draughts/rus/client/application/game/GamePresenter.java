@@ -78,7 +78,7 @@ public class GamePresenter extends Presenter<GamePresenter.MyView, GamePresenter
   }
 
   @ProxyCodeSplit
-  @NameToken(NameTokens.gamePage)
+  @NameToken(NameTokens.GAME_PAGE)
   @NoGatekeeper
   interface MyProxy extends ProxyPlace<GamePresenter> {
   }

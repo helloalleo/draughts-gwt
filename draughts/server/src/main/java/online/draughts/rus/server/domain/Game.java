@@ -169,7 +169,17 @@ public class Game extends ModelImpl<Game> {
     query.addSort("playFinishDate", Query.SortDirection.DESCENDING);
 
     Query.Filter published = new Query.FilterPredicate("publish", Query.FilterOperator.EQUAL, true);
-    query.setFilter(published);
+
+    Query.Filter playFinishDateValidFilter =
+        new Query.FilterPredicate("playFinishDate",
+            Query.FilterOperator.NOT_EQUAL,
+            null);
+
+    Query.Filter validPlayFinishDateAndPublished =
+        Query.CompositeFilterOperator.and(playFinishDateValidFilter,
+            published);
+
+    query.setFilter(validPlayFinishDateAndPublished);
 
     PreparedQuery preparedQuery = getDatastore().prepare(query);
     return getListResult(preparedQuery.asQueryResultList(fetchOptions));
@@ -177,8 +187,8 @@ public class Game extends ModelImpl<Game> {
 
   public List<Game> findUserGames(Long playerId, int offset, int limit) {
     final Key playerKey = KeyFactory.createKey(Player.getInstance().getEntityName(), playerId);
-    Query.Filter playStartDateValidFilter =
-        new Query.FilterPredicate("playStartDate",
+    Query.Filter playFinishDateValidFilter =
+        new Query.FilterPredicate("playFinishDate",
             Query.FilterOperator.NOT_EQUAL,
             null);
     Query.Filter playerBlackFilter =
@@ -193,11 +203,12 @@ public class Game extends ModelImpl<Game> {
     Query.Filter blackOrWhiteFilter =
         Query.CompositeFilterOperator.or(playerBlackFilter, playerWhiteFilter);
 
-    Query.Filter validPlayStartDateAndPlayer =
-        Query.CompositeFilterOperator.and(playStartDateValidFilter, blackOrWhiteFilter);
+    Query.Filter validPlayFinishDateAndPlayer =
+        Query.CompositeFilterOperator.and(playFinishDateValidFilter,
+            blackOrWhiteFilter);
 
-    Query query = new Query(getEntityName()).setFilter(validPlayStartDateAndPlayer);
-    query.addSort("playStartDate", Query.SortDirection.DESCENDING);
+    Query query = new Query(getEntityName()).setFilter(validPlayFinishDateAndPlayer);
+    query.addSort("playFinishDate", Query.SortDirection.DESCENDING);
 
     PreparedQuery preparedQuery = getDatastore().prepare(query);
 

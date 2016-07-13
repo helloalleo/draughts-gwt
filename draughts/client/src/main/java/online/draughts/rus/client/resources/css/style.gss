@@ -260,7 +260,7 @@ body {
     font-size: S_FONT_SIZE;
 }
 
-.whoAndWhenDidWin {
+.whoAndWhenWon {
 }
 
 .hrMiddle {

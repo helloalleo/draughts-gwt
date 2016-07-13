@@ -47,16 +47,16 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
     this.player = currentSession.getPlayer();
 
     getView().setUiHandlers(this);
-    cookies.setLocation(NameTokens.profilePage);
+    cookies.setLocation(NameTokens.PROFILE_PAGE);
   }
 
   @Override
   public void displayPage(String token) {
     switch (token) {
-      case NameTokens.settingsPage:
+      case NameTokens.SETTINGS_PAGE:
         setInSlot(SLOT_SETTINGS_CONTENT, settingsPresenter);
         break;
-      case NameTokens.generalSettingsPage:
+      case NameTokens.GENERAL_SETTINGS_PAGE:
         setInSlot(SLOT_GENERAL_CONTENT, generalSettingsPresenter);
         break;
     }
@@ -69,7 +69,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
     generalSettingsPresenter = generalSettingsFactory.create(player);
     settingsPresenter = settingsFactory.create(player);
     getProxy().manualReveal(ProfilePresenter.this);
-    displayPage(NameTokens.generalSettingsPage);
+    displayPage(NameTokens.GENERAL_SETTINGS_PAGE);
   }
 
   @Override
@@ -81,7 +81,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
   }
 
   @ProxyCodeSplit
-  @NameToken(NameTokens.profilePage)
+  @NameToken(NameTokens.PROFILE_PAGE)
   interface MyProxy extends ProxyPlace<ProfilePresenter> {
   }
 }

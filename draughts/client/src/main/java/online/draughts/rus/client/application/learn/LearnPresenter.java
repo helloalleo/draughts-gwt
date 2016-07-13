@@ -25,14 +25,14 @@ public class LearnPresenter extends Presenter<LearnPresenter.MyView, LearnPresen
       Cookies cookies) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
-    cookies.setLocation(NameTokens.learnPage);
+    cookies.setLocation(NameTokens.LEARN_PAGE);
   }
 
   interface MyView extends View {
   }
 
   @ProxyCodeSplit
-  @NameToken(NameTokens.learnPage)
+  @NameToken(NameTokens.LEARN_PAGE)
   @NoGatekeeper
   interface MyProxy extends ProxyPlace<LearnPresenter> {
   }

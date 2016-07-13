@@ -23,13 +23,11 @@
         <b.html:Strong ui:field="gameListLabel" text="Список игр" addStyleNames="{res.style.xLargeFont}">
             <ui:attribute name="text" description="Список игр"/>
         </b.html:Strong>
-        <b:CheckBoxButton ui:field="myGameListCheckButton" size="LARGE">
-            <ui:msg key="myGames" description="Мои игры">Мои игры</ui:msg></b:CheckBoxButton>
         <b:ButtonGroup ui:field="showGameOnPageButtonGroup" pull="RIGHT">
-            <b:Button ui:field="moreGameOnPage" size="LARGE" icon="ANGLE_LEFT" title="Показать меньше на странице">
+            <b:Button ui:field="moreGamesInRow" size="LARGE" icon="ANGLE_LEFT" title="Показать меньше на странице">
                 <ui:attribute name="title" description="Показать меньше на странице"/>
             </b:Button>
-            <b:Button ui:field="lessGameOnPage" size="LARGE" icon="ANGLE_RIGHT" title="Показать больше на странице">
+            <b:Button ui:field="lessGamesInRow" size="LARGE" icon="ANGLE_RIGHT" title="Показать больше на странице">
                 <ui:attribute name="title" description="Показать больше на странице"/>
             </b:Button>
         </b:ButtonGroup>

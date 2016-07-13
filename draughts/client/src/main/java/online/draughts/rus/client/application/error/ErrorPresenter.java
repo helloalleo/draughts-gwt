@@ -30,7 +30,7 @@ public class ErrorPresenter extends Presenter<ErrorPresenter.MyView, ErrorPresen
   }
 
   @ProxyStandard
-  @NameToken(NameTokens.errorPage)
+  @NameToken(NameTokens.ERROR_PAGE)
   @NoGatekeeper
   interface MyProxy extends ProxyPlace<ErrorPresenter> {
   }

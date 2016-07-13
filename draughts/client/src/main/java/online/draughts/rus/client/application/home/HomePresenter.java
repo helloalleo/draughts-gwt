@@ -22,7 +22,6 @@ import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.PlayerDto;
@@ -35,11 +34,11 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     implements HomeUiHandlers {
 
   static final PermanentSlot<PlayComponentPresenter> SLOT_SHOW_PLAY_PANEL = new PermanentSlot<>();
-  private static int INIT_SHOW_GAMES_PAGE_SIZE;
   private final CurrentSession currentSession;
   private final Cookies cookies;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final ResourceDelegate<PlayersResource> playersDelegate;
+  private final ClientConfiguration config;
   private int gamesOffset = 0;
   private final DialogFactory dialogFactory;
 
@@ -57,21 +56,15 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
     this.dialogFactory = dialogFactory;
 
-    INIT_SHOW_GAMES_PAGE_SIZE = getIncrementPlaysOnPage(config, cookies);
     getView().setUiHandlers(this);
 
     this.currentSession = currentSession;
     this.gamesDelegate = gamesDelegate;
     this.playersDelegate = playersDelegate;
     this.cookies = cookies;
-    cookies.setLocation(NameTokens.homePage);
+    this.config = config;
+    cookies.setLocation(NameTokens.HOME_PAGE);
     bindEvent();
-  }
-
-  static int getIncrementPlaysOnPage(ClientConfiguration config, Cookies cookies) {
-    int gamesOnPageCounter = cookies.getGamesOnPageCounter();
-    int gamesOnPage = PlayShowPanel.GAMES_ON_PAGE[PlayShowPanel.GAMES_ON_PAGE.length - gamesOnPageCounter - 1];
-    return Integer.valueOf(config.initShowGamesPageSize()) / gamesOnPage;
   }
 
   private void bindEvent() {
@@ -87,7 +80,6 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
   @Override
   protected void onReveal() {
-    Logger.debug("Home");
     getView().setShowLoggedInControls(currentSession.isLoggedIn());
     playersDelegate.withCallback(new AbstractAsyncCallback<Integer>(dialogFactory) {
       @Override
@@ -105,27 +97,25 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
   @Override
   public void prepareFromRequest(PlaceRequest request) {
-//    super.prepareFromRequest(request);
-
-    updatePlayShowPanel(cookies.isMyGames());
+    updatePlayShowPanel();
   }
 
-  public void updatePlayShowPanel(boolean myGames) {
-    if (myGames) {
-      gamesDelegate.withCallback(ManualRevealCallback.create(this, new AbstractAsyncCallback<List<GameDto>>(dialogFactory) {
-        @Override
-        public void onFailure(Throwable caught) {
-          super.onFailure(caught);
-        }
-
-        @Override
-        public void onSuccess(List<GameDto> result) {
-          if (null != result) {
-            gamesOffset = getView().setGames(result);
-          }
-        }
-      })).getLoggedInUserGames(0, INIT_SHOW_GAMES_PAGE_SIZE);
-    } else {
+  public void updatePlayShowPanel() {
+//    if (myGames) {
+//      gamesDelegate.withCallback(ManualRevealCallback.create(this, new AbstractAsyncCallback<List<GameDto>>(dialogFactory) {
+//        @Override
+//        public void onFailure(Throwable caught) {
+//          super.onFailure(caught);
+//        }
+//
+//        @Override
+//        public void onSuccess(List<GameDto> result) {
+//          if (null != result) {
+//            gamesOffset = getView().setGames(result);
+//          }
+//        }
+//      })).getLoggedInUserGames(0, INIT_SHOW_GAMES_PAGE_SIZE);
+//    } else {
       gamesDelegate.withCallback(ManualRevealCallback.create(this, new AbstractAsyncCallback<List<GameDto>>(dialogFactory) {
         @Override
         public void onFailure(Throwable caught) {
@@ -140,27 +130,27 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
           }
           getProxy().manualReveal(HomePresenter.this);
         }
-      })).getGames(0, INIT_SHOW_GAMES_PAGE_SIZE);
-    }
+      })).getGames(0, Integer.valueOf(config.initShowGamesPageSize()));
+//    }
   }
 
   @Override
-  public void getMoreGames(boolean myGames, int newPageSize) {
-    if (myGames) {
-      gamesDelegate.withCallback(new AbstractAsyncCallback<List<GameDto>>(dialogFactory) {
-        @Override
-        public void onSuccess(List<GameDto> result) {
-          gamesOffset = getView().addGames(result);
-        }
-      }).getLoggedInUserGames(gamesOffset, newPageSize);
-    } else {
+  public void getMoreGames(int newPageSize) {
+//    if (myGames) {
+//      gamesDelegate.withCallback(new AbstractAsyncCallback<List<GameDto>>(dialogFactory) {
+//        @Override
+//        public void onSuccess(List<GameDto> result) {
+//          gamesOffset = getView().addGames(result);
+//        }
+//      }).getLoggedInUserGames(gamesOffset, newPageSize);
+//    } else {
       gamesDelegate.withCallback(new AbstractAsyncCallback<List<GameDto>>(dialogFactory) {
         @Override
         public void onSuccess(List<GameDto> result) {
           gamesOffset = getView().addGames(result);
         }
       }).getGames(gamesOffset, newPageSize);
-    }
+//    }
   }
 
   @Override
@@ -172,7 +162,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
    * {@link HomePresenter}'s proxy.
    */
   @ProxyCodeSplit
-  @NameToken(NameTokens.homePage)
+  @NameToken(NameTokens.HOME_PAGE)
   @NoGatekeeper
   public interface MyProxy extends ProxyPlace<HomePresenter> {
   }

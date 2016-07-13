@@ -21,9 +21,9 @@ public class ClientModule extends AbstractGinModule {
   protected void configure() {
     install(new DefaultModule.Builder()
         .tokenFormatter(RouteTokenFormatter.class)
-        .defaultPlace(NameTokens.homePage)
-        .errorPlace(NameTokens.errorPage)
-        .unauthorizedPlace(NameTokens.loginPage)
+        .defaultPlace(NameTokens.HOME_PAGE)
+        .errorPlace(NameTokens.ERROR_PAGE)
+        .unauthorizedPlace(NameTokens.LOGIN_PAGE)
         .build());
     install(new DraughtsPlayerModule());
     install(new DispatchModule());

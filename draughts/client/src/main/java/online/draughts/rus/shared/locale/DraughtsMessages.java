@@ -1038,8 +1038,8 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
    * @return translated "{0}, {1}"
    */
   @DefaultMessage("{0}, {1}")
-  @Key("whoHadWon")
-  String whoHadWon(String arg0,  String arg1);
+  @Key("whoWon")
+  String whoWon(String arg0, String arg1);
 
   /**
    * Translated "Yes".
