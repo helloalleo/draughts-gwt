@@ -33,8 +33,7 @@ public class MyGamesView extends ViewWithUiHandlers<MyGamesUiHandlers> implement
 
   @Inject
   MyGamesView(Binder uiBinder,
-              PlayShowPanelFactory playShowPanelFactory
-             ) {
+              PlayShowPanelFactory playShowPanelFactory) {
     initWidget(uiBinder.createAndBindUi(this));
 
     playShowPanel = playShowPanelFactory.createShowPanel(ShowPanelEnum.MY_GAMES_PANE);

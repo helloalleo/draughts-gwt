@@ -23,7 +23,7 @@ public class Variables {
   public static final String S_MAIN_CONTAINER_SCROLL_MARGIN_TOP = "80px";
   public static final String S_MAIN_CONTAINER_MARGIN_TOP = "100px";
   public static final String S_NAVBAR_TOP_HEIGHT = "70px";
-  public static final String S_NAVBAR_SCROLL_HEIGHT = "50px";
+  public static final String S_NAVBAR_SCROLL_HEIGHT = "55px";
   public static final String S_NAVBAR_TOP_LINE_HEIGHT = "40px";
   public static final String S_NAVBAR_SCROLL_LINE_HEIGHT = "20px";
   public static final String S_LOGO_TOP_HEIGHT = "40px";

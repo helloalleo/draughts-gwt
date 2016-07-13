@@ -4,12 +4,12 @@
 
   <datastore-index kind="Game" ancestor="false" source="auto">
     <property name="playerBlack" direction="asc"/>
-    <property name="playStartDate" direction="desc"/>
+    <property name="playFinishDate" direction="desc"/>
   </datastore-index>
 
   <datastore-index kind="Game" ancestor="false" source="auto">
     <property name="playerWhite" direction="asc"/>
-    <property name="playStartDate" direction="desc"/>
+    <property name="playFinishDate" direction="desc"/>
   </datastore-index>
 
   <datastore-index kind="Game" ancestor="false" source="manual">

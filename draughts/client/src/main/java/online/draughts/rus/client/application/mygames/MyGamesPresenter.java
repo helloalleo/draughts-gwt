@@ -58,7 +58,7 @@ public class MyGamesPresenter extends Presenter<MyGamesPresenter.MyView, MyGames
     this.playersDelegate = playersDelegate;
     this.cookies = cookies;
     this.config = config;
-    cookies.setLocation(NameTokens.HOME_PAGE);
+    cookies.setLocation(NameTokens.MY_GAMES_PAGE);
   }
 
   @Override
