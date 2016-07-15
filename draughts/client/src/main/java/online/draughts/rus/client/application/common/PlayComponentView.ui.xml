@@ -39,6 +39,9 @@
             <b:Button ui:field="cancelMove" text="Отменить ход" block="true">
               <ui:attribute name="text" description="Отменить ход"/>
             </b:Button>
+            <b:Button ui:field="saveGame" text="Сохранить игру" block="true">
+              <ui:attribute name="text" description="Сохранить игру"/>
+            </b:Button>
           </g:HTMLPanel>
           <g:HTMLPanel ui:field="notationHTMLPanel">
             <b:Heading ui:field="notationLabel" size="H5" text="Нотация:">

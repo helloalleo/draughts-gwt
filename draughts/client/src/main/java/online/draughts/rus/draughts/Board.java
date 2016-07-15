@@ -1164,6 +1164,18 @@ public class Board extends Layer {
   }
 
   public Set<DraughtDto> getCurrentPosition() {
+    currentPosition.clear();
+    currentPosition.addAll(createCurrentPosition(myDraughtList));
+    currentPosition.addAll(createCurrentPosition(opponentDraughtList));
+    return currentPosition;
+  }
+
+  private Set<DraughtDto> createCurrentPosition(List<Draught> draughtList) {
+    Set<DraughtDto> currentPosition = new HashSet<>();
+    for (Draught draught : draughtList) {
+      DraughtDto dto = new DraughtDto(draught.getRow(), draught.getCol(), draught.isWhite(), draught.isQueen());
+      currentPosition.add(dto);
+    }
     return currentPosition;
   }
 

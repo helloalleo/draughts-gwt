@@ -81,9 +81,18 @@ public class GameService {
     }
 
     try {
-      final String path = Config.GAMES_ENDS_PATH + game.getId() + ".png";
-      CloudStoreUtils.saveFileToCloud(path, DatatypeConverter.parseBase64Binary(game.getEndGameScreenshot().split(",")[1]));
-      game.setEndGameScreenshotUrl(path);
+      final String endGameScreenshot = game.getEndGameScreenshot();
+      if (null != endGameScreenshot) {
+        final String path = Config.GAMES_ENDS_PATH + game.getId() + ".png";
+        CloudStoreUtils.saveFileToCloud(path, DatatypeConverter.parseBase64Binary(endGameScreenshot.split(",")[1]));
+        game.setEndGameScreenshotUrl(path);
+      }
+      final String currentStateScreenshot = game.getCurrentStateScreenshot();
+      if (null != currentStateScreenshot) {
+        final String path = Config.GAME_CURRENT_STATE_PATH + game.getId() + ".png";
+        CloudStoreUtils.saveFileToCloud(path, DatatypeConverter.parseBase64Binary(currentStateScreenshot.split(",")[1]));
+        game.setCurrentStateScreenshotUrl(path);
+      }
     } catch (GeneralSecurityException | IOException e) {
       logger.error("An error occured while storing file " + e.getMessage(), e);
     }

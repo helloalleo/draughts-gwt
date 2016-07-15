@@ -35,12 +35,12 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
   static final PermanentSlot<PlayComponentPresenter> SLOT_SHOW_PLAY_PANEL = new PermanentSlot<>();
   private final CurrentSession currentSession;
-  private final Cookies cookies;
   private final ResourceDelegate<GamesResource> gamesDelegate;
   private final ResourceDelegate<PlayersResource> playersDelegate;
   private final ClientConfiguration config;
   private int gamesOffset = 0;
   private final DialogFactory dialogFactory;
+  private final Cookies cookies;
 
   @Inject
   HomePresenter(
@@ -61,9 +61,8 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     this.currentSession = currentSession;
     this.gamesDelegate = gamesDelegate;
     this.playersDelegate = playersDelegate;
-    this.cookies = cookies;
     this.config = config;
-    cookies.setLocation(NameTokens.HOME_PAGE);
+    this.cookies = cookies;
     bindEvent();
   }
 
@@ -93,6 +92,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
         getView().updateOnlinePlayerCounter(result);
       }
     }).onlinePlayers();
+    cookies.setLocation(NameTokens.HOME_PAGE);
   }
 
   @Override

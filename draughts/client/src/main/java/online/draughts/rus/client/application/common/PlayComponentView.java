@@ -122,6 +122,8 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   Heading opponentTimeLabel;
   @UiField(provided = true)
   CheckBox showAvatars;
+  @UiField
+  Button saveGame;
   private SingleSelectionModel<FriendDto> playerFriendSelectionModel;
   private SingleSelectionModel<PlayerDto> playerSelectionModel;
   private boolean prevSelected = false;
@@ -259,6 +261,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
         }
       }
     };
+  }
+
+  @SuppressWarnings("unused")
+  @UiHandler("saveGame")
+  public void onSaveGame(ClickEvent clickEvent) {
+    getUiHandlers().saveGame();
   }
 
   @SuppressWarnings("unused")

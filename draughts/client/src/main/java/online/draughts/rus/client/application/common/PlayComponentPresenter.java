@@ -340,6 +340,20 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     fireEvent(new GameShutEvent(isWhite));
   }
 
+  @Override
+  public void saveGame() {
+    GameDto game = playSession.getGame();
+    Set<DraughtDto> currentPosition = getView().getBoard().getCurrentPosition();
+    game.setCurrentStateScreenshot(getView().takeScreenshot());
+    game.setInitialPos(currentPosition);
+    gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>(dialogFactory) {
+      @Override
+      public void onSuccess(GameDto result) {
+        Growl.growlNotif(messages.gameIsSaved());
+      }
+    }).save(game);
+  }
+
   private GameMessageDto createGameMessage() {
     GameMessageDto gameMessage = new GameMessageDto();
     gameMessage.setSender(playSession.getPlayer());

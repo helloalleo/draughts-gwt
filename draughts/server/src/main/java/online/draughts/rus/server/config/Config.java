@@ -16,6 +16,7 @@ public class Config {
 
   public static final String BUCKET_NAME = resourceBundle.getString("bucket_name");
   public static final String GAMES_ENDS_PATH = resourceBundle.getString("games_ends_path");
+  public static final String GAME_CURRENT_STATE_PATH = resourceBundle.getString("game_current_state_path");
 
   public static final String SITE_URI = resourceBundle.getString("site_uri");
   public static final String SITE_NAME_EN = resourceBundle.getString("site_name_en");
