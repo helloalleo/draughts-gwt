@@ -15,6 +15,7 @@ import javax.servlet.http.HttpSession;
 import javax.xml.bind.DatatypeConverter;
 import java.io.IOException;
 import java.security.GeneralSecurityException;
+import java.util.Date;
 import java.util.List;
 import java.util.Objects;
 
@@ -86,28 +87,33 @@ public class GameService {
         final String path = Config.GAMES_ENDS_PATH + game.getId() + ".png";
         CloudStoreUtils.saveFileToCloud(path, DatatypeConverter.parseBase64Binary(endGameScreenshot.split(",")[1]));
         game.setEndGameScreenshotUrl(path);
+
+        // игра закончена, сохраняем статистику и друзей
+        Player playerBlack = updatePlayerStat(game, game.getPlayerBlack().getId());
+        Player playerWhite = updatePlayerStat(game, game.getPlayerWhite().getId());
+        boolean playerWhiteIsFriendOfPlayerBlack = friendService.isPlayerFriendOf(playerWhite.getId(), playerBlack.getId());
+        saveFriend(playerWhite, playerBlack, playerWhiteIsFriendOfPlayerBlack);
+        boolean playerBlackIsFriendOfPlayerWhite = friendService.isPlayerFriendOf(playerBlack.getId(), playerWhite.getId());
+        saveFriend(playerBlack, playerWhite, playerBlackIsFriendOfPlayerWhite);
       }
       final String currentStateScreenshot = game.getCurrentStateScreenshot();
       if (null != currentStateScreenshot) {
-        final String path = Config.GAME_CURRENT_STATE_PATH + game.getId() + ".png";
+        // если сохраняем текущую игру, тогда сохраняем ее как новую
+        game.setId(0);
+        final String path = Config.GAME_CURRENT_STATE_PATH + game.getId() + "/"
+            + currentStateScreenshot.hashCode() + ".png";
         CloudStoreUtils.saveFileToCloud(path, DatatypeConverter.parseBase64Binary(currentStateScreenshot.split(",")[1]));
         game.setCurrentStateScreenshotUrl(path);
+        game.setPlayFinishDate(new Date());
+        game.setGameSnapshot(true);
       }
     } catch (GeneralSecurityException | IOException e) {
       logger.error("An error occured while storing file " + e.getMessage(), e);
     }
 
-    Player playerBlack = updatePlayerStat(game, game.getPlayerBlack().getId());
-    Player playerWhite = updatePlayerStat(game, game.getPlayerWhite().getId());
     game.update();
-
-    boolean playerWhiteIsFriendOfPlayerBlack = friendService.isPlayerFriendOf(playerWhite.getId(), playerBlack.getId());
-    saveFriend(playerWhite, playerBlack, playerWhiteIsFriendOfPlayerBlack);
-    boolean playerBlackIsFriendOfPlayerWhite = friendService.isPlayerFriendOf(playerBlack.getId(), playerWhite.getId());
-    saveFriend(playerBlack, playerWhite, playerBlackIsFriendOfPlayerWhite);
     return game;
   }
-
 
   private void saveFriend(Player playerBlack, Player playerWhite, boolean playerBlackIsFriendOfPlayerWhite) {
     if (!playerBlackIsFriendOfPlayerWhite) {

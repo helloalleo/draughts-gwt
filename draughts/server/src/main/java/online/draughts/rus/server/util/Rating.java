@@ -8,9 +8,9 @@ package online.draughts.rus.server.util;
  */
 public class Rating {
 
-  private static final double WIN_RATING = 1;
-  private static final double LOST_RATING = -1;
-  private static final double DRAW_RATING = 0.5;
+  private static final double WIN_RATING = 2;
+  private static final double LOST_RATING = -2;
+  private static final double DRAW_RATING = 1;
 
   public static double calcPlayerRating(double rating, boolean white, boolean blackWon, boolean whiteWon) {
     return  rating

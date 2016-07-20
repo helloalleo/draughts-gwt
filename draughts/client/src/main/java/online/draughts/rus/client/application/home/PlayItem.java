@@ -132,6 +132,9 @@ public class PlayItem extends Composite {
     } else if (game.getEndGameScreenshot() != null) {
       endGameScreenshot.setUrl(game.getEndGameScreenshot());
     }
+    if (game.getCurrentStateScreenshotUrl() != null) {
+      endGameScreenshot.setUrl(game.getCurrentStateScreenshotFullUrl(config.draughtsOnlineBucket()));
+    }
     endGameScreenshot.setResponsive(true);
     endGameScreenshot.addClickHandler(new ClickHandler() {
       @Override

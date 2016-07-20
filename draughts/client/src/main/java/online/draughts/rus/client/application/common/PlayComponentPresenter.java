@@ -350,6 +350,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
       @Override
       public void onSuccess(GameDto result) {
         Growl.growlNotif(messages.gameIsSaved());
+        getView().enableSubControls(true);
       }
     }).save(game);
   }
@@ -688,5 +689,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     String takeScreenshot();
 
     GameDto.GameType getGameType();
+
+    void enableSubControls(boolean enable);
   }
 }

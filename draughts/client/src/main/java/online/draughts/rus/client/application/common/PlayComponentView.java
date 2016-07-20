@@ -166,6 +166,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     int axillaryWidgets = 80;
     playerCellTablePanel.setHeight(playerListColumn.getOffsetHeight() / 2 - axillaryWidgets + "px");
     friendCellTablePanel.setHeight(playerListColumn.getOffsetHeight() / 2 - axillaryWidgets + "px");
+    saveGame.setVisible(player.isSubscribed());
 
     if (Window.getClientWidth() < 768) {
       surrenderButton.setText("");
@@ -266,7 +267,19 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @SuppressWarnings("unused")
   @UiHandler("saveGame")
   public void onSaveGame(ClickEvent clickEvent) {
+    // этот код просто переворачивает доску вверх ногами
+//    Transform.TransformJSO rotate = Transform.TransformJSO.make(lienzoPanel.getWidth(), lienzoPanel.getHeight());
+//    rotate.rotate(Math.PI);
+//    lienzoPanel.setTransform(new Transform(rotate));
+//    lienzoPanel.draw();
+    enableSubControls(false);
     getUiHandlers().saveGame();
+  }
+
+  @Override
+  public void enableSubControls(boolean enable) {
+    cancelMove.setEnabled(enable);
+    saveGame.setEnabled(enable);
   }
 
   @SuppressWarnings("unused")
@@ -281,12 +294,12 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     if (null != lienzoPanel) {
       return;
     }
-    int draughtsSide = draughtsColumn.getOffsetWidth();
+    int draughtsSide = getDeskSize();
 
     lienzoPanel = new LienzoPanel(draughtsSide, draughtsSide);
-    int lienzoSide = lienzoPanel.getHeight() - 20;
+    int lienzoSide = lienzoPanel.getHeight();
     final Layer initDeskRect = new Layer();
-    Rectangle contour = new Rectangle(lienzoSide, lienzoSide);
+    Rectangle contour = new Rectangle(lienzoSide - 2, lienzoSide - 2);
     contour.setX(1);
     contour.setY(1);
     initDeskRect.add(contour);
@@ -303,7 +316,11 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     }
     lienzoPanel.setBackgroundLayer(initDeskRect);
     draughtsDesk.add(lienzoPanel);
-    cancelMove.setEnabled(false);
+    enableSubControls(false);
+  }
+
+  private int getDeskSize() {
+    return draughtsColumn.getOffsetWidth() - 20;
   }
 
   @Override
@@ -777,7 +794,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     board.setView(this);
     lienzoPanel.add(board);
     lienzoPanel.getElement().getStyle().setCursor(Style.Cursor.POINTER);
-    cancelMove.setEnabled(true);
+    enableSubControls(true);
     hidePlayButtonAndShowPlayingButtons();
 
     playerTimeLabel.setText(isWhite() ? messages.white() : messages.black());

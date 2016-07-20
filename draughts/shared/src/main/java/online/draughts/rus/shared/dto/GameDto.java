@@ -31,9 +31,11 @@ public class GameDto extends BaseDto {
   private String endGameScreenshot;
   private String endGameScreenshotUrl;
 
+  private String currentStateScreenshot;
+  private String currentStateScreenshotUrl;
+
   private Set<DraughtDto> initialPos = new HashSet<>();
   private boolean publish;
-  private String currentStateScreenshot;
 
   public GameDto() {
   }
@@ -153,6 +155,18 @@ public class GameDto extends BaseDto {
 
   public String getCurrentStateScreenshot() {
     return currentStateScreenshot;
+  }
+
+  public String getCurrentStateScreenshotUrl() {
+    return currentStateScreenshotUrl;
+  }
+
+  public void setCurrentStateScreenshotUrl(String currentStateScreenshotUrl) {
+    this.currentStateScreenshotUrl = currentStateScreenshotUrl;
+  }
+
+  public String getCurrentStateScreenshotFullUrl(String baseUrl) {
+    return baseUrl + currentStateScreenshotUrl;
   }
 
   public enum GameType {

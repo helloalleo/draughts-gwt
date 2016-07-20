@@ -47,6 +47,9 @@ public class Game extends ModelImpl<Game> {
   private String currentStateScreenshot;
   private String currentStateScreenshotUrl;
 
+  // указывает является ли игра сохраненной
+  private boolean gameSnapshot;
+
   private Set<GameMessage> gameMessages = new HashSet<>();
 
   private Set<Draught> initialPos = new HashSet<>();
@@ -171,16 +174,24 @@ public class Game extends ModelImpl<Game> {
     Query query = new Query(getEntityName());
     query.addSort("playFinishDate", Query.SortDirection.DESCENDING);
 
-    Query.Filter published = new Query.FilterPredicate("publish", Query.FilterOperator.EQUAL, true);
+    Query.Filter published =
+        new Query.FilterPredicate("publish",
+            Query.FilterOperator.EQUAL,
+            true);
 
     Query.Filter playFinishDateValidFilter =
         new Query.FilterPredicate("playFinishDate",
             Query.FilterOperator.NOT_EQUAL,
             null);
 
+    Query.Filter isNotGameSnapshot =
+        new Query.FilterPredicate("gameSnapshot",
+            Query.FilterOperator.EQUAL,
+            false);
+
     Query.Filter validPlayFinishDateAndPublished =
         Query.CompositeFilterOperator.and(playFinishDateValidFilter,
-            published);
+            published, isNotGameSnapshot);
 
     query.setFilter(validPlayFinishDateAndPublished);
 
@@ -253,6 +264,14 @@ public class Game extends ModelImpl<Game> {
 
   public void setCurrentStateScreenshotUrl(String currentStateScreenshotUrl) {
     this.currentStateScreenshotUrl = currentStateScreenshotUrl;
+  }
+
+  public boolean isGameSnapshot() {
+    return gameSnapshot;
+  }
+
+  public void setGameSnapshot(boolean gameSnapshot) {
+    this.gameSnapshot = gameSnapshot;
   }
 
   private static class SingletonHolder {
