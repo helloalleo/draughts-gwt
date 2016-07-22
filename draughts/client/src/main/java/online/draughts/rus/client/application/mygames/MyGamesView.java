@@ -78,6 +78,15 @@ public class MyGamesView extends ViewWithUiHandlers<MyGamesUiHandlers>
     getUiHandlers().getMoreGames(newPageSize);
   }
 
+  public void updateGames() {
+    playShowPanel.updateGames();
+  }
+
+  @Override
+  public void removeGame(GameDto gameDto) {
+    playShowPanel.removeGame(gameDto);
+  }
+
   @Override
   public GamesPanelPresentable getPresenter() {
     return (GamesPanelPresentable) getUiHandlers();

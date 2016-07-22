@@ -16,12 +16,16 @@ import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
+import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import online.draughts.rus.client.application.widget.popup.DraughtsPlayerPresenter;
+import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.resources.AppResources;
+import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.resource.GamesResource;
 import org.gwtbootstrap3.client.ui.Anchor;
 import org.gwtbootstrap3.client.ui.Image;
 
@@ -35,6 +39,10 @@ public class PlayItem extends Composite {
   private final static String PLAYER_COLOR_DELIMITER = ": ";
   private final int gamesInRow;
   private final ShowPanelEnum showPanelEnum;
+  private final ResourceDelegate<GamesResource> gamesDelegate;
+  private final DialogFactory dialogFactory;
+  private final GameDto game;
+  private final GamesPanelViewable gamesPanelViewable;
 
   @UiField
   HTMLPanel panel;
@@ -67,31 +75,44 @@ public class PlayItem extends Composite {
            final DraughtsMessages messages,
            final AppResources resources,
            final ClientConfiguration config,
+           final DialogFactory dialogFactory,
+           final ResourceDelegate<GamesResource> gamesDelegate,
            @Assisted final int gamesInRow,
            @Assisted final GameDto game,
            @Assisted final ShowPanelEnum showPanelEnum,
-           @Assisted final GamesPanelPresentable gamesPanel) {
+           @Assisted final GamesPanelViewable gamesPanelViewable) {
     this.messages = messages;
     this.config = config;
     initWidget(binder.createAndBindUi(this));
     this.gamesInRow = gamesInRow;
     this.showPanelEnum = showPanelEnum;
-    panel.addStyleName(resources.style().playItem());
-    setGame(gamesPanel, draughtsPlayerFactory, game);
+    this.gamesDelegate = gamesDelegate;
+    this.dialogFactory = dialogFactory;
+    this.game = game;
+    this.gamesPanelViewable = gamesPanelViewable;
+    if (game.isGameSnapshot()) {
+      panel.addStyleName(resources.style().playSnapshotItem());
+    } else {
+      panel.addStyleName(resources.style().playItem());
+    }
+    setGame(gamesPanelViewable.getPresenter(), gamesPanelViewable, draughtsPlayerFactory, game);
 
     if (Window.getClientWidth() < 768) {
       whoAndWhenWon.setVisible(false);
       whoPlayed.setVisible(false);
     }
+    removeButton.setVisible(gamesPanelViewable.getPresenter().isPrivatePresenter());
   }
 
-  private void setGame(final GamesPanelPresentable gamesPanel, final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
+  private void setGame(final GamesPanelPresentable gamesPanelPresentable,
+                       final GamesPanelViewable gamesPanelViewable,
+                       final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
                        final GameDto game) {
     playGameAnchor.setId(game.getId() + GAME_ID);
     playGameAnchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        showGame(draughtsPlayerFactory, game, gamesPanel);
+        showGame(draughtsPlayerFactory, game, gamesPanelPresentable);
       }
     });
 
@@ -139,7 +160,7 @@ public class PlayItem extends Composite {
     endGameScreenshot.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        showGame(draughtsPlayerFactory, game, gamesPanel);
+        showGame(draughtsPlayerFactory, game, gamesPanelPresentable);
       }
     });
     endGameScreenshot.getElement().getStyle().setCursor(Style.Cursor.POINTER);
@@ -165,6 +186,13 @@ public class PlayItem extends Composite {
 
   @UiHandler("removeButton")
   public void removeButtonClick(ClickEvent event) {
+    game.setDeleted(true);
+    gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>(dialogFactory) {
+      @Override
+      public void onSuccess(GameDto gameDto) {
+        gamesPanelViewable.removeGame(game);
+      }
+    }).save(game);
   }
 
   interface Binder extends UiBinder<HTMLPanel, PlayItem> {

@@ -7,4 +7,6 @@ import online.draughts.rus.client.application.widget.popup.DraughtsPlayerPresent
  */
 public interface GamesPanelPresentable {
     void addToPopupSlot(DraughtsPlayerPresenter draughtsPlayer);
+
+    boolean isPrivatePresenter();
 }

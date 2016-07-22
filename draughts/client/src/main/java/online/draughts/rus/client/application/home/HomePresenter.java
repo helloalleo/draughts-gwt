@@ -164,6 +164,11 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
     this.addToPopupSlot(draughtsPlayer);
   }
 
+  @Override
+  public boolean isPrivatePresenter() {
+    return false;
+  }
+
   /**
    * {@link HomePresenter}'s proxy.
    */

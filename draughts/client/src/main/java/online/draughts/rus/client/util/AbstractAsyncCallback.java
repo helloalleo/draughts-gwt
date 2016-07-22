@@ -20,6 +20,10 @@ public abstract class AbstractAsyncCallback<T> implements AsyncCallback<T> {
 
   @Override
   public void onFailure(Throwable throwable) {
+    if (null == dialogFactory) {
+      Logger.debug(throwable);
+      return;
+    }
     final ErrorDialogBox errorDialogBox = dialogFactory.createErrorDialogBox();
     errorDialogBox.setMessage(throwable);
     errorDialogBox.show();

@@ -166,7 +166,6 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     int axillaryWidgets = 80;
     playerCellTablePanel.setHeight(playerListColumn.getOffsetHeight() / 2 - axillaryWidgets + "px");
     friendCellTablePanel.setHeight(playerListColumn.getOffsetHeight() / 2 - axillaryWidgets + "px");
-    saveGame.setVisible(player.isSubscribed());
 
     if (Window.getClientWidth() < 768) {
       surrenderButton.setText("");
@@ -183,6 +182,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
       getUiHandlers().refreshConnectionToServer();
       player = playSession.getPlayer();
       playerSearch.setEnabled(true);
+      saveGame.setVisible(player.isSubscribed());
     } else {
       PlayerDto selectedPlayer = null;
       if (playerSelectionModel.getSelectedObject() != null) {
@@ -272,7 +272,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
 //    rotate.rotate(Math.PI);
 //    lienzoPanel.setTransform(new Transform(rotate));
 //    lienzoPanel.draw();
-    enableSubControls(false);
+    saveGame.setEnabled(false);
     getUiHandlers().saveGame();
   }
 
@@ -822,6 +822,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
     } else {
       setTurnMessage(messages.opponentTurn());
     }
+    cancelMove.setEnabled(!myTurn);
   }
 
   @Override

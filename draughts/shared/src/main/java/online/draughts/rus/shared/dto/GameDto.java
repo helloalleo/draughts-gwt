@@ -35,7 +35,12 @@ public class GameDto extends BaseDto {
   private String currentStateScreenshotUrl;
 
   private Set<DraughtDto> initialPos = new HashSet<>();
+
   private boolean publish;
+  // указывает является ли игра сохраненной
+  private boolean gameSnapshot;
+
+  private boolean deleted;
 
   public GameDto() {
   }
@@ -129,14 +134,6 @@ public class GameDto extends BaseDto {
     this.initialPos = initialPos;
   }
 
-  public void setPublish(boolean publish) {
-    this.publish = publish;
-  }
-
-  public boolean getPublish() {
-    return publish;
-  }
-
   public String getEndGameScreenshotFullUrl(String baseUrl) {
     return baseUrl + endGameScreenshotUrl;
   }
@@ -167,6 +164,30 @@ public class GameDto extends BaseDto {
 
   public String getCurrentStateScreenshotFullUrl(String baseUrl) {
     return baseUrl + currentStateScreenshotUrl;
+  }
+
+  public boolean getPublish() {
+    return publish;
+  }
+
+  public void setPublish(boolean publish) {
+    this.publish = publish;
+  }
+
+  public boolean isGameSnapshot() {
+    return gameSnapshot;
+  }
+
+  public void setGameSnapshot(boolean gameSnapshot) {
+    this.gameSnapshot = gameSnapshot;
+  }
+
+  public boolean isDeleted() {
+    return deleted;
+  }
+
+  public void setDeleted(boolean deleted) {
+    this.deleted = deleted;
   }
 
   public enum GameType {

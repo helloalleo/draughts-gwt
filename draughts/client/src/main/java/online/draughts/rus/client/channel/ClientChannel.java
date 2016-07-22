@@ -32,6 +32,7 @@ import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.util.StringUtils;
 
+import java.util.Date;
 import java.util.List;
 import java.util.Map;
 import java.util.TreeMap;
@@ -437,6 +438,10 @@ public class ClientChannel implements ChannelListener {
     }
   }
 
+  /**
+   * Принятие ничьи на стороне клиента
+   * @param gameMessage
+   */
   private void handlePlayProposeDraw(final GameMessageDto gameMessage) {
     String senderName = gameMessage.getSender().getPublicName();
     new ConfirmDialogBox(messages.playerProposesDraw(senderName)) {
@@ -451,6 +456,7 @@ public class ClientChannel implements ChannelListener {
           message.setData(Boolean.FALSE.toString());
         }
         message.setGame(playSession.getGame());
+        message.getGame().setPlayFinishDate(new Date());
 
         sendGameMessage(message);
 

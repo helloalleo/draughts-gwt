@@ -195,7 +195,7 @@ public class PlayShowPanel extends Composite {
         }
 
         Column column = new Column(getSize(numGamesInRow));
-        final PlayItem item = showPanelFactory.createItem(numGamesInRow, gameDto, showPanelEnum, gamesView.getPresenter());
+        final PlayItem item = showPanelFactory.createItem(numGamesInRow, gameDto, showPanelEnum, gamesView);
         showedGames.add(gameDto);
         column.add(item);
         lastRow.add(column);
@@ -237,6 +237,7 @@ public class PlayShowPanel extends Composite {
   private void resetGamesOnPanel(List<GameDto> gameList, int numGamesInRow) {
     showedGames.clear();
     if (gameList == null || gameList.isEmpty()) {
+      playRowList.clear();
       return;
     }
     updateMoreLessButtons(numGamesInRow);
@@ -266,7 +267,7 @@ public class PlayShowPanel extends Composite {
         continue;
       }
       Column column = new Column(getSize(gamesInRow));
-      final PlayItem item = showPanelFactory.createItem(gamesInRow, game, showPanelEnum, gamesView.getPresenter());
+      final PlayItem item = showPanelFactory.createItem(gamesInRow, game, showPanelEnum, gamesView);
       showedGames.add(game);
       column.add(item);
       row.add(column);
@@ -318,6 +319,15 @@ public class PlayShowPanel extends Composite {
   private int getMoreGamesInRow(boolean forward) {
     gamesInRow = gamesView.getMoreGamesInRow(forward, gamesInRow);
     return gamesInRow.getNumInRow();
+  }
+
+  public void updateGames() {
+    resetGames(gameList, gamesInRow.getNumInRow());
+  }
+
+  public void removeGame(GameDto gameDto) {
+    gameList.remove(gameDto);
+    updateGames();
   }
 
   public class PagingList {

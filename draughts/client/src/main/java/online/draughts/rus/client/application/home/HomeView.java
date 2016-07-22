@@ -158,6 +158,16 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers>
     return gamesInRow;
   }
 
+  @Override
+  public void updateGames() {
+    playShowPanel.updateGames();
+  }
+
+  @Override
+  public void removeGame(GameDto gameDto) {
+    throw new RuntimeException("Not implemented");
+  }
+
   public void setEnableLessGameButton(boolean enableMoreGameButton) {
     lessGamesInRow.setEnabled(enableMoreGameButton);
   }

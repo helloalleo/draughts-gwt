@@ -2700,5 +2700,7 @@ public interface AppResources extends ClientBundle {
 
     @ClassName("emoji-1f489")
     String emoji1f489();
+
+    String playSnapshotItem();
   }
 }

@@ -158,7 +158,6 @@ public class Board extends Layer {
    * @param clickedPiece нажатая шашка
    */
   void highlightAllowedMoves(Draught clickedPiece) {
-    Logger.debug("Clicked " + clickedPiece);
     Map<Draught, List<JumpMove>> capturedJumpMoves = getCaptureJumpMoves();
     if (!capturedJumpMoves.isEmpty()) {
       List<JumpMove> jumpMoves = capturedJumpMoves.get(clickedPiece);
