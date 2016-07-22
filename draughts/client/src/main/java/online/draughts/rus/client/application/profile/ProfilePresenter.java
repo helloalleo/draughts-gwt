@@ -12,6 +12,7 @@ import com.gwtplatform.mvp.client.presenter.slots.Slot;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.draughts.rus.client.application.ApplicationPresenter;
+import online.draughts.rus.client.application.profile.coach.CoachPresenter;
 import online.draughts.rus.client.application.profile.general.GeneralPresenter;
 import online.draughts.rus.client.application.profile.settings.SettingsPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
@@ -25,11 +26,14 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
   static final NestedSlot SLOT_PROFILE = new NestedSlot();
   static final Slot<SettingsPresenter> SLOT_SETTINGS_CONTENT = new Slot<>();
   static final Slot<GeneralPresenter> SLOT_GENERAL_CONTENT = new Slot<>();
+  static final Slot<CoachPresenter> SLOT_COACH_SETTINGS_CONTENT= new Slot<>();
   private final PlayerDto player;
-  private SettingsPresenter settingsPresenter;
   private final GeneralPresenter.Factory generalSettingsFactory;
   private final SettingsPresenter.Factory settingsFactory;
+  private final CoachPresenter.Factory coachFactory;
   private GeneralPresenter generalSettingsPresenter;
+  private SettingsPresenter settingsPresenter;
+  private CoachPresenter coachPresenter;
 
   @Inject
   ProfilePresenter(
@@ -38,12 +42,14 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
       MyProxy proxy,
       GeneralPresenter.Factory generalSettingsFactory,
       SettingsPresenter.Factory settingsFactory,
+      CoachPresenter.Factory coachFactory,
       Cookies cookies,
       CurrentSession currentSession) {
     super(eventBus, view, proxy, ApplicationPresenter.SLOT_MAIN_CONTENT);
 
     this.generalSettingsFactory = generalSettingsFactory;
     this.settingsFactory = settingsFactory;
+    this.coachFactory = coachFactory;
     this.player = currentSession.getPlayer();
 
     getView().setUiHandlers(this);
@@ -59,6 +65,9 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
       case NameTokens.GENERAL_SETTINGS_PAGE:
         setInSlot(SLOT_GENERAL_CONTENT, generalSettingsPresenter);
         break;
+      case NameTokens.COACH_SETTINGS_PAGE:
+        setInSlot(SLOT_COACH_SETTINGS_CONTENT, coachPresenter);
+        break;
     }
   }
 
@@ -68,6 +77,7 @@ public class ProfilePresenter extends Presenter<ProfilePresenter.MyView, Profile
 
     generalSettingsPresenter = generalSettingsFactory.create(player);
     settingsPresenter = settingsFactory.create(player);
+    coachPresenter = coachFactory.create(player);
     getProxy().manualReveal(ProfilePresenter.this);
     displayPage(NameTokens.GENERAL_SETTINGS_PAGE);
   }

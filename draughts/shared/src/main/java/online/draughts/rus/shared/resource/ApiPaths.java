@@ -43,4 +43,7 @@ public class ApiPaths {
 
   static final String PATH_ID = "/{id}";
   static final String NOTIFICATIONS = "/notifications";
+
+  static final String COACH_APPLY = "/coachApply";
+  static final String ERROR = "/error";
 }

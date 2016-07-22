@@ -29,6 +29,7 @@ public class PlayerDto extends BaseDto {
   private boolean moderator;
   private boolean admin;
   private boolean subscribeOnNewsletter;
+  private boolean coach;
 
   public PlayerDto() {
   }
@@ -203,6 +204,14 @@ public class PlayerDto extends BaseDto {
     sb.append(", subscribeOnNewsletter=").append(subscribeOnNewsletter);
     sb.append('}');
     return sb.toString();
+  }
+
+  public void setCoach(boolean coach) {
+    this.coach = coach;
+  }
+
+  public boolean isCoach() {
+    return coach;
   }
 
   /**

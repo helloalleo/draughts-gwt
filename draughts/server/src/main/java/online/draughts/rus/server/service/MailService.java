@@ -5,6 +5,7 @@ import com.google.inject.Singleton;
 import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.GameMessage;
 import online.draughts.rus.server.domain.Player;
+import online.draughts.rus.server.message.Messages;
 import online.draughts.rus.server.util.Utils;
 import online.draughts.rus.shared.util.StringUtils;
 import org.apache.log4j.Logger;
@@ -32,8 +33,8 @@ public class MailService {
     this.playerService = playerService;
   }
 
-  private boolean sendNotificationMail(String receivedMessage, Player receiver, Player sender) {
-    // TODO Обработать отправку письма админам когда получатель или отправитель ранвы нал
+  private boolean sendNotificationMail(String subject, String receivedMessage, Player receiver, Player sender) {
+    // TODO Обработать отправку письма админам когда получатель или отправитель равны нал
     Properties props = new Properties();
     props.put("mail.transport.protocol", "smtp");
     if (Config.DEBUG) {
@@ -51,8 +52,7 @@ public class MailService {
 
     try {
       MimeMessage message = new MimeMessage(mailSession);
-      final String senderPublicName = sender == null ? "не указано" : sender.getPublicName();
-      message.setSubject(String.format("Новое сообщение от %s", senderPublicName), "UTF-8");
+      message.setSubject(subject, "UTF-8");
       message.setFrom(new InternetAddress(Config.FROM_EMAIL, "shashki.online", "UTF-8"));
       message.addRecipient(Message.RecipientType.TO,
           new InternetAddress(receiver == null ? Config.ADMIN_MAIL : receiver.getEmail(),
@@ -65,6 +65,8 @@ public class MailService {
 
       // first part  (the html)
       BodyPart htmlMessagePart = new MimeBodyPart();
+      final String senderPublicName = sender == null ? "не указано" : sender.getPublicName();
+
       String htmlText = Utils.readFile("mail/new_message/index.html");
       htmlText = htmlText.replace("{{0}}", senderPublicName);
       htmlText = htmlText.replace("{{1}}", receivedMessage);
@@ -120,10 +122,12 @@ public class MailService {
     receiver.getFriendUnreadMessagesMap().put(sender.getId(), unreadMessages + 1);
     playerService.save(receiver);
 
+    final String senderPublicName = sender.getPublicName();
+    String subject = String.format("Новое сообщение от %s", senderPublicName);
     return !(receiver.isLoggedIn() && receiver.isOnline())
         && receiver.isSubscribeOnNewsletter()
         && StringUtils.isNotEmpty(receiver.getEmail())
-        && sendNotificationMail(message.getMessage(), receiver, sender);
+        && sendNotificationMail(subject, message.getMessage(), receiver, sender);
   }
 
   public void sendToAdmins(GameMessage message) {
@@ -136,16 +140,14 @@ public class MailService {
       sender = playerService.find(message.getSender().getId());
     }
 
-    // если получатель не имеет сообщений от данного отправителя, тогда инициализируем Map и увеличиваем счетчика
-    // на единицу
-    sendNotificationMail(message.getMessage(), receiver, sender);
+    sendNotificationMail(Messages.MESSAGE_TO_ADMINS, message.getMessage(), receiver, sender);
   }
 
-  public void sendToAdmins(String error, Long senderId) {
+  public void sendToAdmins(String subject, String error, Long senderId) {
     Player sender = null;
     if (null != senderId) {
       sender = playerService.find(senderId);
     }
-    sendNotificationMail(error, null, sender);
+    sendNotificationMail(subject, error, null, sender);
   }
 }

@@ -20,6 +20,9 @@ public class NameTokens {
   public static final String ERROR_PAGE = "!/error";
   public static final String GENERAL_SETTINGS_PAGE = "!/generalSettings";
   public static final String SETTINGS_PAGE = "!/settings";
+  public static final String COACH_PAGE = "!/coach";
+  public static final String COACH_SETTINGS_PAGE = "!/coachSettings";
+
   public static final String LOGOUT_PAGE = "/logout";
   private final String ruShashkiNetUrl = "https://rushashki-net.appspot.com";
 
@@ -33,9 +36,10 @@ public class NameTokens {
   private final Link profileLink;
   private final Link generalSettingsLink;
   private final Link settingsLink;
+  private final Link coachSettingsLink;
   private final Link playLink;
   private final Link myGamesLink;
-//  private final Link gameLink;
+  //  private final Link gameLink;
   private final Link analysisLink;
   private final Link ruShashkiNetLink;
 
@@ -51,8 +55,9 @@ public class NameTokens {
     loginLink = new Link(LOGIN_PAGE, messages.login(), null, IconType.SIGN_IN);
     logoutLink = new Link(null, messages.logout(), LOGOUT_PAGE, IconType.SIGN_OUT);
     profileLink = new Link(PROFILE_PAGE, messages.profile(), null, IconType.USER);
-    this.generalSettingsLink = new Link(GENERAL_SETTINGS_PAGE, messages.generalSettings(), null, IconType.USER);
+    generalSettingsLink = new Link(GENERAL_SETTINGS_PAGE, messages.generalSettings(), null, IconType.USER);
     settingsLink = new Link(SETTINGS_PAGE, messages.settings(), null, IconType.GEAR);
+    coachSettingsLink = new Link(COACH_SETTINGS_PAGE, messages.forCoaches(), null, null);
     rulesLink = new Link(RULES_PAGE, messages.rules(), null, null);
     myGamesLink = new Link(MY_GAMES_PAGE, messages.myGames(), null, null);
   }
@@ -78,7 +83,7 @@ public class NameTokens {
   }
 
   public Link[] getProfileLinks() {
-    return new Link[]{generalSettingsLink, settingsLink};
+    return new Link[]{generalSettingsLink, settingsLink, coachSettingsLink};
   }
 
   public static class Link {

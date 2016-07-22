@@ -1,0 +1,16 @@
+<!DOCTYPE ui:UiBinder SYSTEM "http://dl.google.com/gwt/DTD/xhtml.ent">
+<ui:UiBinder xmlns:ui="urn:ui:com.google.gwt.uibinder"
+             xmlns:g="urn:import:com.google.gwt.user.client.ui"
+             xmlns:b="urn:import:org.gwtbootstrap3.client.ui"
+             ui:generateFormat='com.google.gwt.i18n.rebind.format.PropertiesFormat'
+             ui:generateKeys="com.google.gwt.i18n.server.keygen.MD5KeyGenerator"
+             ui:generateLocales="default">
+    <g:SimplePanel ui:field="main">
+        <g:HTMLPanel>
+            <b:Button ui:field="applyToCoach" text="Стать тренером">
+                <ui:attribute name="text" description="Стать тренером"/>
+            </b:Button>
+            <b:Label ui:field="applicationResponse"/>
+        </g:HTMLPanel>
+    </g:SimplePanel>
+</ui:UiBinder>

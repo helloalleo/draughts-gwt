@@ -37,6 +37,7 @@ public class ProfileView extends ViewWithUiHandlers<ProfileUiHandlers> implement
     bindSlot(ProfilePresenter.SLOT_PROFILE, main);
     bindSlot(ProfilePresenter.SLOT_SETTINGS_CONTENT, subcontent);
     bindSlot(ProfilePresenter.SLOT_GENERAL_CONTENT, subcontent);
+    bindSlot(ProfilePresenter.SLOT_COACH_SETTINGS_CONTENT, subcontent);
     setUpLinks();
   }
 

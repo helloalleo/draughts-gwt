@@ -1134,4 +1134,10 @@ public interface DraughtsMessages extends com.google.gwt.i18n.client.Messages {
   String rules();
 
   String gameIsSaved();
+
+  String forCoaches();
+
+  String youApplied();
+
+  String youAreCoach();
 }

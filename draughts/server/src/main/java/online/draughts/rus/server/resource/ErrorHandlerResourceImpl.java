@@ -2,6 +2,7 @@ package online.draughts.rus.server.resource;
 
 import com.google.inject.Inject;
 import com.google.inject.servlet.RequestScoped;
+import online.draughts.rus.server.message.Messages;
 import online.draughts.rus.server.service.MailService;
 import online.draughts.rus.shared.resource.ErrorHandlerResource;
 
@@ -23,6 +24,11 @@ public class ErrorHandlerResourceImpl implements ErrorHandlerResource {
 
   @Override
   public void postError(String error, Long senderId) {
-    mailService.sendToAdmins(error, senderId);
+    mailService.sendToAdmins(Messages.SERVER_ERROR, error, senderId);
+  }
+
+  @Override
+  public void postApply(String message, Long senderId) {
+    mailService.sendToAdmins(Messages.NEW_APPLY_FOR_COACHING, message, senderId);
   }
 }

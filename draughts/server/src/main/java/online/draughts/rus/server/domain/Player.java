@@ -77,6 +77,9 @@ public class Player extends ModelImpl<Player> {
   private boolean banned;
   private boolean subscribeOnNewsletter;
 
+  @Index
+  private boolean coach;
+
   public Player() {
     super(Player.class);
   }
@@ -319,6 +322,14 @@ public class Player extends ModelImpl<Player> {
 
   public void setSubscribeOnNewsletter(boolean subscribeOnNewsletter) {
     this.subscribeOnNewsletter = subscribeOnNewsletter;
+  }
+
+  public boolean isCoach() {
+    return coach;
+  }
+
+  public void setCoach(boolean coach) {
+    this.coach = coach;
   }
 
   public String getPublicName() {
