@@ -37,7 +37,8 @@ import org.gwtbootstrap3.client.ui.html.Strong;
 
 import java.util.List;
 
-public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements HomePresenter.MyView {
+public class HomeView extends ViewWithUiHandlers<HomeUiHandlers>
+    implements HomePresenter.MyView, GamesPanelViewable {
 
   private final Cookies cookies;
   private boolean isMyGames;
@@ -71,7 +72,7 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     this.cookies = cookies;
     isMyGames = cookies.isMyGames();
 //    myGameListCheckButton.setValue(isMyGames);
-    playShowPanel = playShowPanelFactory.createShowPanel(ShowPanelEnum.HOME_PANEL);
+    playShowPanel = playShowPanelFactory.createShowPanel(ShowPanelEnum.HOME_PANEL, this);
     playShowSimplePanel.add(playShowPanel);
 
     bindSlot(HomePresenter.SLOT_SHOW_PLAY_PANEL, main);
@@ -142,24 +143,31 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers> implements Home
     totalPlayersSpan.setText(String.valueOf(result));
   }
 
-  void setEnableMoreGameButton(boolean enable) {
+  public void setEnableMoreGameButton(boolean enable) {
     moreGamesInRow.setEnabled(enable);
   }
 
-  boolean isEnabledMoreGameButton() {
-    return moreGamesInRow.isEnabled();
+  @Override
+  public int getMoreGamesInRow(boolean forward, PlayShowPanel.PagingList gamesInRow) {
+    PlayShowPanel.PagingList tmpList = forward ? gamesInRow.getNext() : gamesInRow.getPrev();
+    if (null != tmpList) {
+      gamesInRow = tmpList;
+    }
+    cookies.setGamesInRowNumber(gamesInRow.getNumInRow());
+    return gamesInRow.getNumInRow();
   }
 
-  void setEnableLessGameButton(boolean enableMoreGameButton) {
+  public void setEnableLessGameButton(boolean enableMoreGameButton) {
     lessGamesInRow.setEnabled(enableMoreGameButton);
   }
 
-  boolean isEnabledLessGameButton() {
-    return lessGamesInRow.isEnabled();
+  public void getMoreGames(int newPageSize) {
+    getUiHandlers().getMoreGames(newPageSize);
   }
 
-  void getMoreGames(int newPageSize) {
-    getUiHandlers().getMoreGames(newPageSize);
+  @Override
+  public GamesPanelPresentable getPresenter() {
+    return (GamesPanelPresentable) getUiHandlers();
   }
 
   public PlayerDto getPlayer() {

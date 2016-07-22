@@ -13,7 +13,9 @@ import com.gwtplatform.mvp.client.proxy.ManualRevealCallback;
 import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.draughts.rus.client.application.ApplicationPresenter;
+import online.draughts.rus.client.application.home.GamesPanelPresentable;
 import online.draughts.rus.client.application.security.CurrentSession;
+import online.draughts.rus.client.application.widget.popup.DraughtsPlayerPresenter;
 import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
@@ -25,7 +27,8 @@ import online.draughts.rus.shared.resource.PlayersResource;
 
 import java.util.List;
 
-public class MyGamesPresenter extends Presenter<MyGamesPresenter.MyView, MyGamesPresenter.MyProxy> implements MyGamesUiHandlers {
+public class MyGamesPresenter extends Presenter<MyGamesPresenter.MyView, MyGamesPresenter.MyProxy>
+    implements MyGamesUiHandlers, GamesPanelPresentable {
   public static final NestedSlot SLOT_MYGAME = new NestedSlot();
   private final CurrentSession currentSession;
   private final Cookies cookies;
@@ -88,13 +91,18 @@ public class MyGamesPresenter extends Presenter<MyGamesPresenter.MyView, MyGames
   }
 
   @Override
-  public void getMoreGames(boolean myGames, int newPageSize) {
+  public void getMoreGames(int newPageSize) {
     gamesDelegate.withCallback(new AbstractAsyncCallback<List<GameDto>>(dialogFactory) {
       @Override
       public void onSuccess(List<GameDto> result) {
         gamesOffset = getView().addGames(result);
       }
     }).getLoggedInUserGames(gamesOffset, newPageSize);
+  }
+
+  @Override
+  public void addToPopupSlot(DraughtsPlayerPresenter draughtsPlayer) {
+    this.addToPopupSlot(draughtsPlayer);
   }
 
   interface MyView extends View, HasUiHandlers<MyGamesUiHandlers> {

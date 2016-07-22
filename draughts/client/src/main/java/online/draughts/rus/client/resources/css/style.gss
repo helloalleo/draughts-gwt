@@ -19,7 +19,7 @@ body {
 }
 
 .playItemTop {
-    margin-right: 15px;
+/*    margin-right: 15px; */
 }
 
 .notationScroll {

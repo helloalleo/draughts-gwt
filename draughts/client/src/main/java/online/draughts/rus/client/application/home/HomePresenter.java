@@ -16,6 +16,7 @@ import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.draughts.rus.client.application.ApplicationPresenter;
 import online.draughts.rus.client.application.common.PlayComponentPresenter;
 import online.draughts.rus.client.application.security.CurrentSession;
+import online.draughts.rus.client.application.widget.popup.DraughtsPlayerPresenter;
 import online.draughts.rus.client.event.ReceivedPlayerListEvent;
 import online.draughts.rus.client.event.ReceivedPlayerListEventHandler;
 import online.draughts.rus.client.gin.DialogFactory;
@@ -31,7 +32,7 @@ import online.draughts.rus.shared.resource.PlayersResource;
 import java.util.List;
 
 public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter.MyProxy>
-    implements HomeUiHandlers {
+    implements HomeUiHandlers, GamesPanelPresentable {
 
   static final PermanentSlot<PlayComponentPresenter> SLOT_SHOW_PLAY_PANEL = new PermanentSlot<>();
   private final CurrentSession currentSession;
@@ -156,6 +157,11 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
   @Override
   public PlayerDto getPlayer() {
     return null;// currentSession.getPlayer();
+  }
+
+  @Override
+  public void addToPopupSlot(DraughtsPlayerPresenter draughtsPlayer) {
+    this.addToPopupSlot(draughtsPlayer);
   }
 
   /**

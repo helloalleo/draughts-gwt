@@ -8,11 +8,9 @@ import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.inject.Inject;
-import com.google.inject.Provider;
 import com.google.inject.assistedinject.Assisted;
 import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import com.gwtplatform.mvp.client.proxy.PlaceManager;
-import online.draughts.rus.client.application.mygames.MyGamesView;
 import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.resources.Variables;
@@ -35,8 +33,6 @@ public class PlayShowPanel extends Composite {
 
   private static final int MAX_GAMES_IN_ROW = 6;
   private static final int MIN_GAMES_IN_ROW = 1;
-  private final Provider<HomeView> homeViewProvider;
-  private final Provider<MyGamesView> myGamesViewProvider;
   private final PlayShowPanelFactory showPanelFactory;
   private final Cookies cookies;
   private final PlaceManager placeManager;
@@ -44,8 +40,9 @@ public class PlayShowPanel extends Composite {
   private final DraughtsMessages messages;
   private final DialogFactory dialogFactory;
   private final ShowPanelEnum showPanelEnum;
+  private final GamesPanelViewable gamesView;
   private PagingList gamesInRow;
-  private PagingList myGamesInRow;
+//  private PagingList myGamesInRow;
 
   @UiField
   HTMLPanel playRowList;
@@ -67,32 +64,31 @@ public class PlayShowPanel extends Composite {
       PlaceManager placeManager,
       ClientConfiguration config,
       PlayShowPanelFactory showPanelFactory,
-      Provider<HomeView> homeViewProvider,
-      Provider<MyGamesView> myGamesViewProvider,
       DraughtsMessages messages,
       ResourceDelegate<GamesResource> gamesDelegate,
       Cookies cookies,
       DialogFactory dialogFactory,
-      @Assisted ShowPanelEnum showPanelEnum) {
+      @Assisted ShowPanelEnum showPanelEnum,
+      @Assisted GamesPanelViewable gamesView) {
 
     this.showPanelEnum = showPanelEnum;
     int numOnPage = cookies.getGamesInRowNumber();
     gamesInRow = new PagingList(1).add(2).add(3).add(4).add(6);
     while (gamesInRow.hasNext()) {
-      if (gamesInRow.getNumOnPage() == numOnPage) {
+      if (gamesInRow.getNumInRow() == numOnPage) {
         break;
       }
       gamesInRow = gamesInRow.getNext();
     }
 
     numOnPage = cookies.getMyGamesInRowNumber();
-    myGamesInRow = new PagingList(1).add(2).add(3).add(4).add(6);
-    while (myGamesInRow.hasNext()) {
-      if (myGamesInRow.getNumOnPage() == numOnPage) {
-        break;
-      }
-      myGamesInRow = myGamesInRow.getNext();
-    }
+//    myGamesInRow = new PagingList(1).add(2).add(3).add(4).add(6);
+//    while (myGamesInRow.hasNext()) {
+//      if (myGamesInRow.getNumInRow() == numOnPage) {
+//        break;
+//      }
+//      myGamesInRow = myGamesInRow.getNext();
+//    }
 
     incrementSize = Integer.valueOf(config.initShowGamesPageSize());
 
@@ -100,8 +96,7 @@ public class PlayShowPanel extends Composite {
     this.cookies = cookies;
     this.placeManager = placeManager;
     this.dialogFactory = dialogFactory;
-    this.homeViewProvider = homeViewProvider;
-    this.myGamesViewProvider = myGamesViewProvider;
+    this.gamesView = gamesView;
     this.messages = messages;
     this.gamesDelegate = gamesDelegate;
 
@@ -129,7 +124,7 @@ public class PlayShowPanel extends Composite {
                   dialogFactory.createInfoDialogBox(messages.gameNotFound()).show();
                   return;
                 }
-                resetGames(Collections.singletonList(result));
+                resetGames(Collections.singletonList(result), gamesInRow.getNumInRow());
                 blockScroll = true;
               }
             }
@@ -155,7 +150,7 @@ public class PlayShowPanel extends Composite {
         int maxScrollTop = getOffsetHeight() - Window.getScrollTop();
         if (lastScrollPos >= maxScrollTop && updateFlag) {
           final int newPageSize = incrementSize;
-          PlayShowPanel.this.homeViewProvider.get().getMoreGames(newPageSize);
+          gamesView.getMoreGames(newPageSize);
           lastMaxHeight = maxScrollTop;
           updateFlag = false;
         }
@@ -169,44 +164,43 @@ public class PlayShowPanel extends Composite {
   public int setGames(List<GameDto> games) {
     blockScroll = false;
     this.gameList = games;
-    resetGames(games);
+    resetGames(games, gamesInRow.getNumInRow());
     return games.size();
   }
 
-  private void resetGames(List<GameDto> gameList) {
+  private void resetGames(List<GameDto> gameList, int gamesNumInRow) {
     lastMaxHeight = 0;
     lastScrollPos = 0;
-    resetGamesOnPanel(gameList);
+    resetGamesOnPanel(gameList, gamesNumInRow);
   }
 
   public int addGames(List<GameDto> gameList) {
-    return addGamesToPanel(gameList);
+    return addGamesToPanel(gameList, gamesInRow.getNumInRow());
   }
 
-  private int addGamesToPanel(List<GameDto> gameList) {
+  private int addGamesToPanel(List<GameDto> gameList, int numGamesInRow) {
     if (gameList == null || gameList.isEmpty()) {
       return 0;
     }
 
-    int gamesInRow = getGamesInRow();
-    int filledGamesInRow = this.gameList.size() % gamesInRow;
+    int filledGamesInRow = this.gameList.size() % numGamesInRow;
     int offsetRow = 0;
     // в начале дополняем существующую строку
     if (filledGamesInRow != 0) {
       Row lastRow = (Row) playRowList.getWidget(playRowList.getWidgetCount() - 2);
-      for (int i = 0; i < gamesInRow - filledGamesInRow; i++) {
+      for (int i = 0; i < numGamesInRow - filledGamesInRow; i++) {
         final GameDto gameDto = gameList.get(i);
         if (showedGames.contains(gameDto)) {
           continue;
         }
 
-        Column column = new Column(getSize(gamesInRow));
-        final PlayItem item = showPanelFactory.createItem(gamesInRow, gameDto, showPanelEnum);
+        Column column = new Column(getSize(numGamesInRow));
+        final PlayItem item = showPanelFactory.createItem(numGamesInRow, gameDto, showPanelEnum, gamesView.getPresenter());
         showedGames.add(gameDto);
         column.add(item);
         lastRow.add(column);
 
-        if (lastRow.getWidgetCount() == gamesInRow && i != gamesInRow - filledGamesInRow - 1) {
+        if (lastRow.getWidgetCount() == numGamesInRow && i != numGamesInRow - filledGamesInRow - 1) {
           playRowList.add(new Hr());
           lastRow = new Row();
           playRowList.add(lastRow);
@@ -217,9 +211,9 @@ public class PlayShowPanel extends Composite {
     // затем дополняем новыми полными строками
     List<GameDto> rowGameList = new ArrayList<>();
     for (int i = offsetRow; i < gameList.size(); i++) {
-      if (0 == (rowGameList.size() + 1) % (gamesInRow)) {
+      if (0 == (rowGameList.size() + 1) % (numGamesInRow)) {
         rowGameList.add(gameList.get(i));
-        addGameRow(rowGameList, gamesInRow);
+        addGameRow(rowGameList, numGamesInRow);
         rowGameList.clear();
       } else {
         rowGameList.add(gameList.get(i));
@@ -227,7 +221,7 @@ public class PlayShowPanel extends Composite {
     }
     // дополняем оставшуюся строку
     if (!rowGameList.isEmpty()) {
-      addGameRow(rowGameList, gamesInRow);
+      addGameRow(rowGameList, numGamesInRow);
     }
 
     this.gameList.addAll(gameList);
@@ -240,26 +234,25 @@ public class PlayShowPanel extends Composite {
         + " " + "XS_" + Variables.COLUMNS_IN_LAYOUT / gamesInRow;
   }
 
-  private void resetGamesOnPanel(List<GameDto> gameList) {
+  private void resetGamesOnPanel(List<GameDto> gameList, int numGamesInRow) {
     showedGames.clear();
     if (gameList == null || gameList.isEmpty()) {
       return;
     }
-    int gamesInRow = getGamesInRow();
-    updateMoreLessButtons(gamesInRow);
+    updateMoreLessButtons(numGamesInRow);
     playRowList.clear();
     List<GameDto> rowGameList = new ArrayList<>();
     for (int i = 0; i < gameList.size(); i++) {
-      if ((i + 1) % gamesInRow == 0) {
+      if ((i + 1) % numGamesInRow == 0) {
         rowGameList.add(gameList.get(i));
-        addGameRow(rowGameList, gamesInRow);
+        addGameRow(rowGameList, numGamesInRow);
         rowGameList.clear();
       } else {
         rowGameList.add(gameList.get(i));
       }
     }
     if (!rowGameList.isEmpty()) {
-      addGameRow(rowGameList, gamesInRow);
+      addGameRow(rowGameList, numGamesInRow);
     }
   }
 
@@ -273,7 +266,7 @@ public class PlayShowPanel extends Composite {
         continue;
       }
       Column column = new Column(getSize(gamesInRow));
-      final PlayItem item = showPanelFactory.createItem(gamesInRow, game, showPanelEnum);
+      final PlayItem item = showPanelFactory.createItem(gamesInRow, game, showPanelEnum, gamesView.getPresenter());
       showedGames.add(game);
       column.add(item);
       row.add(column);
@@ -285,64 +278,36 @@ public class PlayShowPanel extends Composite {
   }
 
   public void moreGameOnPanel() {
-    if (!homeViewProvider.get().isEnabledLessGameButton()) {
-      homeViewProvider.get().setEnableLessGameButton(true);
-    }
-    getMoreGamesInRow(true);
-    resetGames(gameList);
+    gamesView.setEnableLessGameButton(true);
+    int gamesNumInRow = getMoreGamesInRow(true);
+    resetGames(gameList, gamesNumInRow);
 //    if (!hasMoreGames(true)) {
 //      homeViewProvider.get().setEnableMoreGameButton(false);
 //    }
   }
 
   public void lessGameOnPanel() {
-    if (!homeViewProvider.get().isEnabledMoreGameButton()) {
-      homeViewProvider.get().setEnableMoreGameButton(true);
-    }
-    getMoreGamesInRow(false);
-    resetGames(gameList);
+      gamesView.setEnableMoreGameButton(true);
+    int gamesNumInRow = getMoreGamesInRow(false);
+    resetGames(gameList, gamesNumInRow);
 //    if (!hasMoreGames(false)) {
 //      homeViewProvider.get().setEnableLessGameButton(false);
 //    }
   }
 
-  private int getGamesInRow() {
-    switch (showPanelEnum) {
-      case HOME_PANEL:
-        return gamesInRow.getNumOnPage();
-      case MY_GAMES_PANE:
-        return myGamesInRow.getNumOnPage();
-    }
-    return MAX_GAMES_IN_ROW;
-  }
+//  private int getGamesInRow() {
+//    switch (showPanelEnum) {
+//      case HOME_PANEL:
+//        return gamesInRow.getNumInRow();
+//      case MY_GAMES_PANE:
+//        return myGamesInRow.getNumInRow();
+//    }
+//    return MAX_GAMES_IN_ROW;
+//  }
 
   private void updateMoreLessButtons(int gamesInRow) {
-    switch (showPanelEnum) {
-      case HOME_PANEL:
-        if (gamesInRow <= MIN_GAMES_IN_ROW) {
-          homeViewProvider.get().setEnableLessGameButton(false);
-        }else {
-          homeViewProvider.get().setEnableLessGameButton(true);
-        }
-        if (gamesInRow >= MAX_GAMES_IN_ROW) {
-          homeViewProvider.get().setEnableMoreGameButton(false);
-        } else {
-          homeViewProvider.get().setEnableMoreGameButton(true);
-        }
-        break;
-      case MY_GAMES_PANE:
-        if (gamesInRow <= MIN_GAMES_IN_ROW) {
-          myGamesViewProvider.get().setEnableLessGameButton(false);
-        } else {
-          myGamesViewProvider.get().setEnableLessGameButton(true);
-        }
-        if (gamesInRow >= MAX_GAMES_IN_ROW) {
-          myGamesViewProvider.get().setEnableMoreGameButton(false);
-        } else {
-          myGamesViewProvider.get().setEnableMoreGameButton(true);
-        }
-        break;
-    }
+    gamesView.setEnableLessGameButton(!(gamesInRow <= MIN_GAMES_IN_ROW));
+    gamesView.setEnableMoreGameButton(!(gamesInRow >= MAX_GAMES_IN_ROW));
   }
 
   /**
@@ -351,37 +316,10 @@ public class PlayShowPanel extends Composite {
    * @return количество игр в строке
    */
   private int getMoreGamesInRow(boolean forward) {
-    PagingList tmpList;
-    switch (showPanelEnum) {
-      case HOME_PANEL:
-        tmpList = forward ? gamesInRow.getNext() : gamesInRow.getPrev();
-        if (null != tmpList) {
-          gamesInRow = tmpList;
-        }
-        cookies.setGamesInRowNumber(gamesInRow.getNumOnPage());
-        return gamesInRow.getNumOnPage();
-      case MY_GAMES_PANE:
-        tmpList = forward ? myGamesInRow.getNext() : myGamesInRow.getPrev();
-        if (null != tmpList) {
-          myGamesInRow = tmpList;
-        }
-        cookies.setMyGamesInRowNumber(myGamesInRow.getNumOnPage());
-        return myGamesInRow.getNumOnPage();
-    }
-    return MAX_GAMES_IN_ROW;
+    return gamesView.getMoreGamesInRow(forward, gamesInRow);
   }
 
-  private boolean hasMoreGames(boolean next) {
-    switch (showPanelEnum) {
-      case HOME_PANEL:
-        return next ? gamesInRow.hasNext() : gamesInRow.hasPrev();
-      case MY_GAMES_PANE:
-        return next ? myGamesInRow.hasNext() : myGamesInRow.hasPrev();
-    }
-    return false;
-  }
-
-  private class PagingList {
+  public class PagingList {
     private int numOnPage;
 
     private PagingList next;
@@ -397,7 +335,7 @@ public class PlayShowPanel extends Composite {
       return next;
     }
 
-    public int getNumOnPage() {
+    public int getNumInRow() {
       return numOnPage;
     }
 

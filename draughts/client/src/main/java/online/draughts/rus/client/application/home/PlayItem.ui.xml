@@ -8,12 +8,19 @@
 
   <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
+  <ui:style>
+    .red {
+      color: #ed7769;
+    }
+  </ui:style>
+
   <g:HTMLPanel ui:field="panel">
     <g:HTMLPanel addStyleNames="{res.style.playItemTop}">
       <g:HTMLPanel>
-        <b:Anchor ui:field="playGameAnchor" icon="PLAY_CIRCLE" iconSize="TIMES2"/>
+        <b:Anchor ui:field="playGameAnchor" icon="PLAY_CIRCLE" />
         <b.html:Span ui:field="shareVkButton"/>
-        <b:Anchor ui:field="linkGameAnchor" icon="LINK" iconSize="TIMES2"/>
+        <b:Anchor ui:field="linkGameAnchor" icon="LINK" />
+        <b:Anchor ui:field="removeButton" icon="REMOVE" pull="RIGHT" addStyleNames="{style.red}"/>
       </g:HTMLPanel>
 
       <g:HTMLPanel ui:field="whoAndWhenWon" addStyleNames="{res.style.whoAndWhenWon}">

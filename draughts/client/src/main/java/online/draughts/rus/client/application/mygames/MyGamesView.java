@@ -8,10 +8,13 @@ import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.gwt.user.client.ui.SimplePanel;
 import com.google.gwt.user.client.ui.Widget;
 import com.gwtplatform.mvp.client.ViewWithUiHandlers;
+import online.draughts.rus.client.application.home.GamesPanelPresentable;
+import online.draughts.rus.client.application.home.GamesPanelViewable;
 import online.draughts.rus.client.application.home.PlayShowPanel;
 import online.draughts.rus.client.application.home.ShowPanelEnum;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.util.AdsUtils;
+import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.shared.dto.GameDto;
 import org.gwtbootstrap3.client.ui.Button;
 
@@ -19,8 +22,10 @@ import javax.inject.Inject;
 import java.util.List;
 
 
-public class MyGamesView extends ViewWithUiHandlers<MyGamesUiHandlers> implements MyGamesPresenter.MyView {
+public class MyGamesView extends ViewWithUiHandlers<MyGamesUiHandlers>
+    implements MyGamesPresenter.MyView, GamesPanelViewable {
   private final PlayShowPanel playShowPanel;
+  private final Cookies cookies;
 
   @UiField
   HTMLPanel main;
@@ -33,11 +38,13 @@ public class MyGamesView extends ViewWithUiHandlers<MyGamesUiHandlers> implement
 
   @Inject
   MyGamesView(Binder uiBinder,
+              Cookies cookies,
               PlayShowPanelFactory playShowPanelFactory) {
     initWidget(uiBinder.createAndBindUi(this));
 
-    playShowPanel = playShowPanelFactory.createShowPanel(ShowPanelEnum.MY_GAMES_PANE);
+    playShowPanel = playShowPanelFactory.createShowPanel(ShowPanelEnum.MY_GAMES_PANE, this);
     playShowSimplePanel.add(playShowPanel);
+    this.cookies = cookies;
 
     bindSlot(MyGamesPresenter.SLOT_MYGAME, main);
   }
@@ -54,6 +61,26 @@ public class MyGamesView extends ViewWithUiHandlers<MyGamesUiHandlers> implement
 
   public void setEnableMoreGameButton(boolean enable) {
     moreGamesInRow.setEnabled(enable);
+  }
+
+  @Override
+  public int getMoreGamesInRow(boolean forward, PlayShowPanel.PagingList gamesInRow) {
+    PlayShowPanel.PagingList tmpList = forward ? gamesInRow.getNext() : gamesInRow.getPrev();
+    if (null != tmpList) {
+      gamesInRow = tmpList;
+    }
+    cookies.setMyGamesInRowNumber(gamesInRow.getNumInRow());
+    return gamesInRow.getNumInRow();
+  }
+
+  @Override
+  public void getMoreGames(int newPageSize) {
+    getUiHandlers().getMoreGames(newPageSize);
+  }
+
+  @Override
+  public GamesPanelPresentable getPresenter() {
+    return (GamesPanelPresentable) getUiHandlers();
   }
 
   public void setEnableLessGameButton(boolean enableMoreGameButton) {

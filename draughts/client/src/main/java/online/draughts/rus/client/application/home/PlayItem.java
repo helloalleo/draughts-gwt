@@ -9,13 +9,13 @@ import com.google.gwt.event.dom.client.ClickHandler;
 import com.google.gwt.i18n.client.DateTimeFormat;
 import com.google.gwt.uibinder.client.UiBinder;
 import com.google.gwt.uibinder.client.UiField;
+import com.google.gwt.uibinder.client.UiHandler;
 import com.google.gwt.user.client.Window;
 import com.google.gwt.user.client.ui.Composite;
 import com.google.gwt.user.client.ui.HTML;
 import com.google.gwt.user.client.ui.HTMLPanel;
 import com.google.inject.Inject;
 import com.google.inject.assistedinject.Assisted;
-import online.draughts.rus.client.application.mygames.MyGamesPresenter;
 import online.draughts.rus.client.application.widget.popup.DraughtsPlayerPresenter;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.TrUtils;
@@ -58,25 +58,26 @@ public class PlayItem extends Composite {
   HTMLPanel whoPlayed;
   @UiField
   HTMLPanel shareVkButton;
+  @UiField
+  Anchor removeButton;
 
   @Inject
   PlayItem(Binder binder,
            final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
-           final HomePresenter homePresenter,
-           final MyGamesPresenter myGamesPresenter,
-           DraughtsMessages messages,
-           AppResources resources,
-           ClientConfiguration config,
-           @Assisted int gamesInRow,
+           final DraughtsMessages messages,
+           final AppResources resources,
+           final ClientConfiguration config,
+           @Assisted final int gamesInRow,
            @Assisted final GameDto game,
-           @Assisted ShowPanelEnum showPanelEnum) {
+           @Assisted final ShowPanelEnum showPanelEnum,
+           @Assisted final GamesPanelPresentable gamesPanel) {
     this.messages = messages;
     this.config = config;
     initWidget(binder.createAndBindUi(this));
     this.gamesInRow = gamesInRow;
     this.showPanelEnum = showPanelEnum;
     panel.addStyleName(resources.style().playItem());
-    setGame(homePresenter, myGamesPresenter, draughtsPlayerFactory, game);
+    setGame(gamesPanel, draughtsPlayerFactory, game);
 
     if (Window.getClientWidth() < 768) {
       whoAndWhenWon.setVisible(false);
@@ -84,14 +85,13 @@ public class PlayItem extends Composite {
     }
   }
 
-  private void setGame(final HomePresenter homePresenter, final MyGamesPresenter myGamesPresenter,
-                       final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
+  private void setGame(final GamesPanelPresentable gamesPanel, final DraughtsPlayerPresenter.Factory draughtsPlayerFactory,
                        final GameDto game) {
     playGameAnchor.setId(game.getId() + GAME_ID);
     playGameAnchor.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        showGame(draughtsPlayerFactory, game, homePresenter, myGamesPresenter);
+        showGame(draughtsPlayerFactory, game, gamesPanel);
       }
     });
 
@@ -139,7 +139,7 @@ public class PlayItem extends Composite {
     endGameScreenshot.addClickHandler(new ClickHandler() {
       @Override
       public void onClick(ClickEvent event) {
-        showGame(draughtsPlayerFactory, game, homePresenter, myGamesPresenter);
+        showGame(draughtsPlayerFactory, game, gamesPanel);
       }
     });
     endGameScreenshot.getElement().getStyle().setCursor(Style.Cursor.POINTER);
@@ -153,21 +153,18 @@ public class PlayItem extends Composite {
     SpanElement vkShare = doc.createSpanElement();
     vkShare.setInnerHTML("<a href='#' onclick=\"Share.vkontakte('https://shashki.online/shashki/#!/game?id=" + gameId + "'," +
         "'Мне понравилась игра','"+ screenshotUrl +"','" + whitePlayerName + "; " + blackPlayerName + "')\">" +
-        "<i class='fa fa-vk fa-2x'></i></a>");
+        "<i class='fa fa-vk'></i></a>");
     return vkShare;
   }
 
   private void showGame(DraughtsPlayerPresenter.Factory draughtsPlayerFactory, GameDto game,
-                        HomePresenter homePresenter, MyGamesPresenter myGamesPresenter) {
+                        GamesPanelPresentable gamesPanel) {
     DraughtsPlayerPresenter draughtsPlayer = draughtsPlayerFactory.create(game);
-    switch (showPanelEnum) {
-      case HOME_PANEL:
-        homePresenter.addToPopupSlot(draughtsPlayer);
-        break;
-      case MY_GAMES_PANE:
-        myGamesPresenter.addToPopupSlot(draughtsPlayer);
-        break;
-    }
+    gamesPanel.addToPopupSlot(draughtsPlayer);
+  }
+
+  @UiHandler("removeButton")
+  public void removeButtonClick(ClickEvent event) {
   }
 
   interface Binder extends UiBinder<HTMLPanel, PlayItem> {

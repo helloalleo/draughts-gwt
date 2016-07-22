@@ -1,8 +1,6 @@
 package online.draughts.rus.client.gin;
 
-import online.draughts.rus.client.application.home.PlayItem;
-import online.draughts.rus.client.application.home.PlayShowPanel;
-import online.draughts.rus.client.application.home.ShowPanelEnum;
+import online.draughts.rus.client.application.home.*;
 import online.draughts.rus.shared.dto.GameDto;
 
 /**
@@ -13,7 +11,7 @@ import online.draughts.rus.shared.dto.GameDto;
  */
 public interface PlayShowPanelFactory {
 
-  PlayItem createItem(int gamesInRow, GameDto game, ShowPanelEnum showPanelEnum);
+  PlayItem createItem(int gamesInRow, GameDto game, ShowPanelEnum showPanelEnum, GamesPanelPresentable gamesPanel);
 
-  PlayShowPanel createShowPanel(ShowPanelEnum showPanelEnum);
+  PlayShowPanel createShowPanel(ShowPanelEnum showPanelEnum, GamesPanelViewable gamesView);
 }

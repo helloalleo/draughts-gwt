@@ -50,6 +50,8 @@ public class Game extends ModelImpl<Game> {
   // указывает является ли игра сохраненной
   private boolean gameSnapshot;
 
+  private boolean deleted;
+
   private Set<GameMessage> gameMessages = new HashSet<>();
 
   private Set<Draught> initialPos = new HashSet<>();
@@ -189,9 +191,14 @@ public class Game extends ModelImpl<Game> {
             Query.FilterOperator.EQUAL,
             false);
 
+    Query.Filter isNotDeleted =
+            new Query.FilterPredicate("deleted",
+                    Query.FilterOperator.EQUAL,
+                    false);
+
     Query.Filter validPlayFinishDateAndPublished =
         Query.CompositeFilterOperator.and(playFinishDateValidFilter,
-            published, isNotGameSnapshot);
+            published, isNotGameSnapshot, isNotDeleted);
 
     query.setFilter(validPlayFinishDateAndPublished);
 
@@ -214,12 +221,17 @@ public class Game extends ModelImpl<Game> {
             Query.FilterOperator.EQUAL,
             playerKey);
 
+    Query.Filter isNotDeleted =
+        new Query.FilterPredicate("deleted",
+            Query.FilterOperator.EQUAL,
+            false);
+
     Query.Filter blackOrWhiteFilter =
         Query.CompositeFilterOperator.or(playerBlackFilter, playerWhiteFilter);
 
     Query.Filter validPlayFinishDateAndPlayer =
         Query.CompositeFilterOperator.and(playFinishDateValidFilter,
-            blackOrWhiteFilter);
+            blackOrWhiteFilter, isNotDeleted);
 
     Query query = new Query(getEntityName()).setFilter(validPlayFinishDateAndPlayer);
     query.addSort("playFinishDate", Query.SortDirection.DESCENDING);
@@ -272,6 +284,14 @@ public class Game extends ModelImpl<Game> {
 
   public void setGameSnapshot(boolean gameSnapshot) {
     this.gameSnapshot = gameSnapshot;
+  }
+
+  public boolean isDeleted() {
+    return deleted;
+  }
+
+  public void setDeleted(boolean deleted) {
+    this.deleted = deleted;
   }
 
   private static class SingletonHolder {

@@ -84,4 +84,8 @@ public class AuthUtils {
     }
     return player;
   }
+
+  public static String homeUrl() {
+    return String.format("%s/%s", Config.CONTEXT, Config.HOME_HASH);
+  }
 }

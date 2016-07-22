@@ -125,6 +125,7 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
       }
     } catch (OAuthSystemException | OAuthProblemException e) {
       log.severe(e.getLocalizedMessage());
+      resp.sendRedirect(AuthUtils.homeUrl());
     }
   }
 }

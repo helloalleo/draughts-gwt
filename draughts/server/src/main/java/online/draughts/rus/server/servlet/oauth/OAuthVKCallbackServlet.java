@@ -76,7 +76,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
       String email = response.getParam("email");
 
       if (StringUtils.isEmpty(accessToken)) {
-        resp.sendRedirect(Config.SERVER_ERROR_URL);
+        resp.sendRedirect(AuthUtils.homeUrl());
         return;
       }
 
@@ -90,7 +90,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
           OAuthResourceResponse.class);
 
       if (resourceResponse.getResponseCode() != 200) {
-        resp.sendRedirect(Config.SERVER_ERROR_URL);
+        resp.sendRedirect(AuthUtils.homeUrl());
         return;
       }
 
@@ -108,7 +108,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         player = AuthUtils.check(playerService.findByVkId(userId));
       } catch (BannedException e) {
         req.getSession().invalidate();
-        resp.sendRedirect("/");
+        resp.sendRedirect(AuthUtils.homeUrl());
         return;
       }
       if (player == null) {
@@ -127,6 +127,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
       AuthUtils.processUserAndRedirectToPlayPage(playerService, req, resp, player);
     } catch (OAuthSystemException | OAuthProblemException e) {
       log.severe(e.getLocalizedMessage());
+      resp.sendRedirect(AuthUtils.homeUrl());
     }
   }
 }
