@@ -12,5 +12,5 @@ public interface GamesPanelViewable {
 
     void setEnableMoreGameButton(boolean enable);
 
-    int getMoreGamesInRow(boolean forward, PlayShowPanel.PagingList gamesInRow);
+    PlayShowPanel.PagingList getMoreGamesInRow(boolean forward, PlayShowPanel.PagingList gamesInRow);
 }

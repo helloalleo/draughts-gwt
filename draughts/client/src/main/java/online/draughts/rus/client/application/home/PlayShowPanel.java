@@ -316,7 +316,8 @@ public class PlayShowPanel extends Composite {
    * @return количество игр в строке
    */
   private int getMoreGamesInRow(boolean forward) {
-    return gamesView.getMoreGamesInRow(forward, gamesInRow);
+    gamesInRow = gamesView.getMoreGamesInRow(forward, gamesInRow);
+    return gamesInRow.getNumInRow();
   }
 
   public class PagingList {

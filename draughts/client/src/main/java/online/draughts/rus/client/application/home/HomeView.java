@@ -28,6 +28,7 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.util.AdsUtils;
 import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import org.gwtbootstrap3.client.ui.Button;
@@ -148,13 +149,13 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers>
   }
 
   @Override
-  public int getMoreGamesInRow(boolean forward, PlayShowPanel.PagingList gamesInRow) {
+  public PlayShowPanel.PagingList getMoreGamesInRow(boolean forward, PlayShowPanel.PagingList gamesInRow) {
     PlayShowPanel.PagingList tmpList = forward ? gamesInRow.getNext() : gamesInRow.getPrev();
     if (null != tmpList) {
       gamesInRow = tmpList;
     }
     cookies.setGamesInRowNumber(gamesInRow.getNumInRow());
-    return gamesInRow.getNumInRow();
+    return gamesInRow;
   }
 
   public void setEnableLessGameButton(boolean enableMoreGameButton) {

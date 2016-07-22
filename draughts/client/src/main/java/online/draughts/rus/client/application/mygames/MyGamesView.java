@@ -64,13 +64,13 @@ public class MyGamesView extends ViewWithUiHandlers<MyGamesUiHandlers>
   }
 
   @Override
-  public int getMoreGamesInRow(boolean forward, PlayShowPanel.PagingList gamesInRow) {
+  public PlayShowPanel.PagingList getMoreGamesInRow(boolean forward, PlayShowPanel.PagingList gamesInRow) {
     PlayShowPanel.PagingList tmpList = forward ? gamesInRow.getNext() : gamesInRow.getPrev();
     if (null != tmpList) {
       gamesInRow = tmpList;
     }
     cookies.setMyGamesInRowNumber(gamesInRow.getNumInRow());
-    return gamesInRow.getNumInRow();
+    return gamesInRow;
   }
 
   @Override
