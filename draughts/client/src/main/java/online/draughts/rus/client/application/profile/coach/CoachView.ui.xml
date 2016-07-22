@@ -7,8 +7,8 @@
              ui:generateLocales="default">
     <g:SimplePanel ui:field="main">
         <g:HTMLPanel>
-            <b:Button ui:field="applyToCoach" text="Стать тренером">
-                <ui:attribute name="text" description="Стать тренером"/>
+            <b:Button ui:field="applyToCoach" text="Стать автором">
+                <ui:attribute name="text" description="Стать автором"/>
             </b:Button>
             <b:Label ui:field="applicationResponse"/>
         </g:HTMLPanel>

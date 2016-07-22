@@ -103,7 +103,7 @@ public class OAuthVKCallbackServlet extends HttpServlet {
       String lastName = array.getString("last_name");
       String avatar = array.getString("photo_50");
 
-      Player player = null;
+      Player player;
       try {
         player = AuthUtils.check(playerService.findByVkId(userId));
       } catch (BannedException e) {
