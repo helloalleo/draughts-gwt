@@ -21,12 +21,15 @@ public class NotationPanel extends ScrollPanel {
   public static final String BEAT_SEP = ":";
   public static final String MOVE_SEP = " ";
   public static final String COUNT_SEP = ". ";
+  public static final String DATA_INDEX = "data-index";
   public static final String DATA_SIMPLE_ATTR = "data-simple";
   public static final String DATA_STOP_BEAT_ATTR = "data-stopbeat";
   public static final String DATA_CONTINUE_BEAT_ATTR = "data-continuebeat";
   public static final String DATA_START_BEAT_ATTR = "data-startbeat";
   public static final String DATA_ORDER_ATTR = "data-order";
   public static final String DATA_FIRST_ATTR = "data-first";
+  public static final String DATA_IS_QUEEN_ATTR = "data-isqueen";
+  public static final String DATA_IS_WHITE_ATTR = "data-iswhite";
   public static final String DATA_NUMBER_ATTR = "data-number";
   public static final String DATA_COMMENT_ATTR = "data-comment";
   public static final String DATA_TITLE_ATTR = "data-title";
@@ -80,7 +83,7 @@ public class NotationPanel extends ScrollPanel {
     final boolean first = stroke.isFirst();
     if (stroke.isSimple()) {
       if (first) {
-        notation.append(wrapInSpan(String.valueOf(stroke.getNumber()), COUNT_SEP))
+        notation.append(wrapInSpan(createNotationNum(stroke)))
             .append(wrapStrokeInAnchor(stroke, order));
       } else {
         notation.append(wrapInSpan(MOVE_SEP))
@@ -93,7 +96,7 @@ public class NotationPanel extends ScrollPanel {
       final boolean stopBeat = stroke.isStopBeat();
       if (startBeat) {
         if (first) {
-          notation.append(wrapInSpan(String.valueOf(stroke.getNumber()), COUNT_SEP))
+          notation.append(wrapInSpan(createNotationNum(stroke)))
               .append(wrapStrokeInAnchor(stroke, order));
         } else {
           if (continueBeat) {
@@ -124,6 +127,10 @@ public class NotationPanel extends ScrollPanel {
 
     getElement().setInnerHTML(notation.toString());
     pushScroll();
+  }
+
+  private String[] createNotationNum(Stroke stroke) {
+    return new String[]{String.valueOf(stroke.getNumber()), COUNT_SEP};
   }
 
   private String wrapInSpan(String... args) {
@@ -177,31 +184,27 @@ public class NotationPanel extends ScrollPanel {
 //    cleanNotationHandlerRegistration.removeHandler();
   }
 
-  public static String wrapStroke(Stroke stroke, int order) {
-    return wrapStroke(stroke, order, stroke.isFirst(), stroke.isSimple(), stroke.isStartBeat(), stroke.isContinueBeat(),
-        stroke.isStopBeat(), stroke.getTitle(), stroke.getComment());
-  }
-
   private static String wrapStrokeInAnchor(Stroke stroke, int order) {
     return format("<%s>%s</%s>", NOTATION_A_TAG, wrapStroke(stroke, order), NOTATION_A_TAG);
   }
 
-  private static String wrapStroke(Stroke stroke, int order, boolean first, boolean simple,
-                                   boolean startBeat, boolean continueBeat, boolean stopBeat,
-                                   String title, String comment) {
-    String span = format("<%s id='%s' %s='%s' %s='%s' %s='%s' %s='%s' %s=\"%s\" %s=\"%s\" ",
+  public static String wrapStroke(Stroke stroke, int order) {
+    String span = format("<%s id='%s' %s='%s' %s='%s' %s='%s' %s='%s' %s='%s' %s='%s' %s='%s' %s=\"%s\" %s=\"%s\" ",
         NOTATION_TAG,
         order,
         DATA_ORDER_ATTR, order,
+        DATA_INDEX, stroke.getIndex(),
         DATA_NUMBER_ATTR, stroke.getNumber(),
-        DATA_SIMPLE_ATTR, simple,
-        DATA_FIRST_ATTR, first,
-        DATA_TITLE_ATTR, StringUtils.emptyIfNull(title),
-        DATA_COMMENT_ATTR, StringUtils.emptyIfNull(comment));
+        DATA_SIMPLE_ATTR, stroke.isSimple(),
+        DATA_FIRST_ATTR, stroke.isFirst(),
+        DATA_IS_QUEEN_ATTR, stroke.isQueen(),
+        DATA_IS_WHITE_ATTR, stroke.isWhite(),
+        DATA_TITLE_ATTR, StringUtils.emptyIfNull(stroke.getTitle()),
+        DATA_COMMENT_ATTR, StringUtils.emptyIfNull(stroke.getComment()));
     span += format("%s='%s' %s='%s' %s='%s'>%s</%s>",
-        DATA_START_BEAT_ATTR, startBeat,
-        DATA_CONTINUE_BEAT_ATTR, continueBeat,
-        DATA_STOP_BEAT_ATTR, stopBeat,
+        DATA_START_BEAT_ATTR, stroke.isStartBeat(),
+        DATA_CONTINUE_BEAT_ATTR, stroke.isContinueBeat(),
+        DATA_STOP_BEAT_ATTR, stroke.isStartBeat(),
         stroke.isSimple() ? stroke.toNotation()
             : (stroke.isStartBeat() ? stroke.toNotation()
             : stroke.toNotationLastMove()),

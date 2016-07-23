@@ -14,7 +14,6 @@ import com.gwtplatform.mvp.client.proxy.ProxyPlace;
 import com.gwtplatform.mvp.shared.proxy.PlaceRequest;
 import online.draughts.rus.client.application.ApplicationPresenter;
 import online.draughts.rus.client.application.home.GamesPanelPresentable;
-import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.popup.DraughtsPlayerPresenter;
 import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.place.NameTokens;
@@ -23,7 +22,6 @@ import online.draughts.rus.client.util.Cookies;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.resource.GamesResource;
-import online.draughts.rus.shared.resource.PlayersResource;
 
 import java.util.List;
 
@@ -96,7 +94,7 @@ public class MyGamesPresenter extends Presenter<MyGamesPresenter.MyView, MyGames
 
   @Override
   public void addToPopupSlot(DraughtsPlayerPresenter draughtsPlayer) {
-    this.addToPopupSlot(draughtsPlayer);
+    super.addToPopupSlot(draughtsPlayer);
   }
 
   @Override

@@ -161,7 +161,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
 
   @Override
   public void addToPopupSlot(DraughtsPlayerPresenter draughtsPlayer) {
-    this.addToPopupSlot(draughtsPlayer);
+    super.addToPopupSlot(draughtsPlayer);
   }
 
   @Override

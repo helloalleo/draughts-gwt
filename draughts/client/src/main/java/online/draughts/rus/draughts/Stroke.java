@@ -3,6 +3,7 @@ package online.draughts.rus.draughts;
 import online.draughts.rus.shared.dto.MoveDto;
 
 import java.util.HashSet;
+import java.util.Objects;
 import java.util.Set;
 
 import static online.draughts.rus.client.util.Utils.format;
@@ -32,6 +33,7 @@ public class Stroke {
   private boolean white;
   private Stroke nextStroke;
   private Stroke prevStroke;
+  private String index;
 
   public Stroke() {
   }
@@ -54,7 +56,7 @@ public class Stroke {
     return this;
   }
 
-  Square getEndSquare() {
+  public Square getEndSquare() {
     return endSquare;
   }
 
@@ -121,6 +123,23 @@ public class Stroke {
 
   void setOnStartBeat() {
     moveFlags.add(MoveDto.MoveFlag.START_BEAT);
+  }
+
+  @Override
+  public boolean equals(Object o) {
+    if (this == o) return true;
+    if (o == null || getClass() != o.getClass()) return false;
+    Stroke stroke = (Stroke) o;
+    return queen == stroke.queen &&
+        white == stroke.white &&
+        Objects.equals(takenSquare, stroke.takenSquare) &&
+        Objects.equals(startSquare, stroke.startSquare) &&
+        Objects.equals(endSquare, stroke.endSquare);
+  }
+
+  @Override
+  public int hashCode() {
+    return Objects.hash(takenSquare, startSquare, endSquare, queen, white);
   }
 
   /**
@@ -204,12 +223,12 @@ public class Stroke {
     return title;
   }
 
-  Stroke setQueen(boolean queen) {
+  public Stroke setQueen(boolean queen) {
     this.queen = queen;
     return this;
   }
 
-  boolean isQueen() {
+  public boolean isQueen() {
     return queen;
   }
 
@@ -238,5 +257,13 @@ public class Stroke {
 
   public Stroke getPrevStroke() {
     return prevStroke;
+  }
+
+  public String getIndex() {
+    return index;
+  }
+
+  public void setIndex(String index) {
+    this.index = index;
   }
 }

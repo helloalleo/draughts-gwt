@@ -667,7 +667,8 @@ public class Board extends Layer {
         stroke.setStartSquare(endSquare);
         stroke.setEndSquare(startSquare);
       }
-      moveOpponentStack.pop();
+      Stroke strokeOpponent = moveOpponentStack.pop();
+      stroke.setQueen(strokeOpponent.isQueen());
       moveStack.pop();
     } else {
       stroke.setStartSquare(startSquare);
@@ -686,6 +687,12 @@ public class Board extends Layer {
       if (!isWhite()) {
         strokeForNotation = stroke.flip();
       }
+      strokeForNotation.setIndex(startSquare.getOccupant().getIndex());
+      Stroke prevStroke = findPrevStroke(moveOpponentStack, strokeForNotation);
+      if (null != prevStroke) {
+        strokeForNotation.setPrevStroke(prevStroke);
+        prevStroke.setNextStroke(strokeForNotation);
+      }
       getView().addNotationStroke(strokeForNotation);
     }
 
@@ -703,10 +710,6 @@ public class Board extends Layer {
 
   private void doMove(Stroke stroke) {
     doMove(stroke, -1, false);
-  }
-
-  public void doMove(Stroke stroke, int stepCursor) {
-    doMove(stroke, stepCursor, false);
   }
 
   private void doMove(final Stroke stroke, final int stepCursor, final boolean back) {
@@ -769,7 +772,7 @@ public class Board extends Layer {
               && (!occupant.isWhite() && isWhite()
               || occupant.isWhite() && !isWhite()))) {
             occupant.setPosition(endSquare.getRow(), endSquare.getCol());
-            occupant.setQueen(false);
+            occupant.setQueen(stroke.isQueen());
           }
         }
       }
@@ -935,6 +938,12 @@ public class Board extends Layer {
         if (!isWhite()) {
           strokeForNotation = stroke.flip();
         }
+        strokeForNotation.setIndex(endSquare.getOccupant().getIndex());
+        Stroke prevStroke = findPrevStroke(moveMyStack, strokeForNotation);
+        if (null != prevStroke) {
+          strokeForNotation.setPrevStroke(prevStroke);
+          prevStroke.setNextStroke(strokeForNotation);
+        }
         getView().addNotationStroke(strokeForNotation);
 
         AnimationProperties props = new AnimationProperties();
@@ -977,6 +986,15 @@ public class Board extends Layer {
         selectedDraught.animate(AnimationTweener.LINEAR, props, ANIMATION_DURATION);
       }
     }
+  }
+
+  private Stroke findPrevStroke(Stack<Stroke> moveStack, Stroke aStroke) {
+    for (Stroke stroke : moveStack) {
+      if (aStroke.equals(stroke)) {
+        return stroke;
+      }
+    }
+    return null;
   }
 
   private Draught findClickedDraught(double clickX, double clickY) {
@@ -1073,18 +1091,10 @@ public class Board extends Layer {
     doMove(stroke, stepCursor, back, true, true);
   }
 
-  public void moveOpponentCanceled(Stroke stroke) {
+  public void moveCanceledInStack(Stack<Stroke> stack, Stroke stroke) {
+    Stroke canceled = stack.pop();
+    stroke.setQueen(canceled.isQueen());
     strokeCanceled(stroke);
-    Stroke canceled = moveOpponentStack.pop();
-    moveStack.pop();
-    if (isCancelFirstMove(canceled)) {
-      moveCounter--;
-    }
-  }
-
-  public void moveMyCanceled(Stroke stroke) {
-    strokeCanceled(stroke);
-    Stroke canceled = moveMyStack.pop();
     moveStack.pop();
     if (isCancelFirstMove(canceled)) {
       moveCounter--;
@@ -1391,6 +1401,14 @@ public class Board extends Layer {
 
   public boolean isAnalysis() {
     return analysis;
+  }
+
+  public void moveMyCanceled(Stroke stroke) {
+    moveCanceledInStack(moveMyStack, stroke);
+  }
+
+  public void moveOpponentCanceled(Stroke stroke) {
+    moveCanceledInStack(moveOpponentStack, stroke);
   }
 
   private class JumpMove {

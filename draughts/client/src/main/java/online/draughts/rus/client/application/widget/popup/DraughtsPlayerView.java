@@ -37,7 +37,6 @@ import online.draughts.rus.shared.util.StringUtils;
 import org.gwtbootstrap3.client.ui.Button;
 import org.gwtbootstrap3.client.ui.Column;
 import org.gwtbootstrap3.client.ui.Heading;
-import org.gwtbootstrap3.client.ui.TextArea;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.gwtbootstrap3.client.ui.html.Br;
 import org.gwtbootstrap3.client.ui.html.Span;
@@ -94,7 +93,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
   @UiField
   Label beatenOpponentDraughtsLabel;
   @UiField
-  TextArea commentCurrentStrokeTextArea;
+  RichTextArea commentCurrentStrokeTextArea;
   @UiField
   Button commentCurrentStrokeButton;
   @UiField
@@ -433,7 +432,7 @@ public class DraughtsPlayerView extends PopupViewWithUiHandlers<DraughtsPlayerUi
 
     current.setAttribute(NotationPanel.DATA_COMMENT_ATTR, newComment);
 
-    commentCurrentStrokeTextArea.clear();
+    commentCurrentStrokeTextArea.setText("");
 //    leftSymbolsLabel.setText(config.strokeCommentLength());
     commentCurrentStrokeTextArea.setFocus(false);
 

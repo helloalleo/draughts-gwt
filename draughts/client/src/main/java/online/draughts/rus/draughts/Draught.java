@@ -21,6 +21,7 @@ public class Draught extends Group {
 
   private static Board board;
 
+  private final String index;
   private int row;
   private int col;
   private boolean white;
@@ -52,6 +53,7 @@ public class Draught extends Group {
     this.cols = cols;
     this.white = white;
     this.offsetX = offsetX;
+    this.index = String.valueOf(row) + ":" + String.valueOf(col) + ":" + String.valueOf(white ? 1 : 0);
     Draught.board = board;
 
     setListening(true);
@@ -150,6 +152,10 @@ public class Draught extends Group {
 
   int getCol() {
     return col;
+  }
+
+  public String getIndex() {
+    return index;
   }
 
   void setQueen(boolean queen) {

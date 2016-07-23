@@ -1,8 +1,13 @@
 package online.draughts.rus.client.place;
 
 import com.google.inject.Inject;
+import online.draughts.rus.client.application.security.CurrentSession;
+import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import org.gwtbootstrap3.client.ui.constants.IconType;
+
+import java.util.ArrayList;
+import java.util.List;
 
 public class NameTokens {
   // токены - адреса в навигации
@@ -42,9 +47,15 @@ public class NameTokens {
   //  private final Link gameLink;
   private final Link analysisLink;
   private final Link ruShashkiNetLink;
+  private final Link coachLink;
+  private final CurrentSession currentSession;
+  private final PlayerDto player;
 
   @Inject
-  public NameTokens(DraughtsMessages messages) {
+  public NameTokens(DraughtsMessages messages, CurrentSession currentSession) {
+    this.currentSession = currentSession;
+    this.player = currentSession.getPlayer();
+
     homeLink = new Link(HOME_PAGE, messages.home(), null, IconType.HOME);
     ruShashkiNetLink = new Link(null, "RuShashkiNet", ruShashkiNetUrl, IconType.LINK);
     learnLink = new Link(LEARN_PAGE, messages.learn(), null, null);
@@ -58,6 +69,7 @@ public class NameTokens {
     generalSettingsLink = new Link(GENERAL_SETTINGS_PAGE, messages.generalSettings(), null, IconType.USER);
     settingsLink = new Link(SETTINGS_PAGE, messages.settings(), null, IconType.GEAR);
     coachSettingsLink = new Link(COACH_SETTINGS_PAGE, messages.forCoaches(), null, null);
+    coachLink = new Link(COACH_PAGE, messages.coach(), null, null);
     rulesLink = new Link(RULES_PAGE, messages.rules(), null, null);
     myGamesLink = new Link(MY_GAMES_PAGE, messages.myGames(), null, null);
   }
@@ -71,7 +83,13 @@ public class NameTokens {
   }
 
   public Link[] getLeftAuthLinks() {
-    return new Link[]{homeLink, playLink, myGamesLink, rulesLink};
+    List<Link> menu = new ArrayList<Link>(){{ add(homeLink); add(playLink); add(myGamesLink); add(learnLink); }};
+    if (player == null || !player.isCoach()) {
+      menu.add(rulesLink);
+    } else {
+      menu.add(coachLink);
+    }
+    return menu.toArray(new Link[menu.size()]);
   }
 
   public Link[] getRightLinks() {

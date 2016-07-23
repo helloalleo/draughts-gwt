@@ -12,6 +12,9 @@
     .less-margin-top {
       margin-top: 0;
     }
+    .less-margin-left-for-sub-buttons {
+      margin-left: -2px;
+    }
   </ui:style>
 
   <g:PopupPanel ui:field="main" autoHideOnHistoryEventsEnabled="true" autoHideEnabled="true"
@@ -38,7 +41,7 @@
                     <b:Button ui:field="nextButton" icon="FORWARD" size="SMALL" title="→"/>
                     <!--<b:Button ui:field="toEndButton" icon="FAST_FORWARD" size="SMALL" title="↓"/>-->
                   </b:ButtonGroup>
-                  <b:ButtonGroup addStyleNames="{res.style.playerControls}">
+                  <b:ButtonGroup addStyleNames="{res.style.playerControls} {style.less-margin-left-for-sub-buttons}">
                     <!--<b:Button type="LINK" size="SMALL" text="↑"/>-->
                     <b:Button type="LINK" size="SMALL" text="←"/>
                     <b:Button type="LINK" size="SMALL" text="↵"/>
@@ -99,7 +102,8 @@
                   </g:Label>
                 </g:HTMLPanel>
                 <g:HTMLPanel ui:field="loggedInCommentPanel" visible="false">
-                  <b:TextArea ui:field="commentCurrentStrokeTextArea" maxLength="1000"/>
+                  <g:RichTextArea ui:field="commentCurrentStrokeTextArea" addStyleNames="{res.style.messageTextArea}"
+                    height="40px" width="320px"/>
                   <b:Label ui:field="leftSymbolsLabel" addStyleNames="{res.style.leftSymbols}"
                            pull="LEFT"/>
                   <b:Button ui:field="commentCurrentStrokeButton" pull="RIGHT" icon="PENCIL"
