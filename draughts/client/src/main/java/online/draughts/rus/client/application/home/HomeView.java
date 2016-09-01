@@ -28,7 +28,6 @@ import com.gwtplatform.mvp.client.ViewWithUiHandlers;
 import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.util.AdsUtils;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import org.gwtbootstrap3.client.ui.Button;
@@ -156,6 +155,11 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers>
     }
     cookies.setGamesInRowNumber(gamesInRow.getNumInRow());
     return gamesInRow;
+  }
+
+  @Override
+  public int getGamesInRowNumber() {
+    return cookies.getGamesInRowNumber();
   }
 
   @Override

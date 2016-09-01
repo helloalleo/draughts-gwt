@@ -8,5 +8,5 @@ package online.draughts.rus.client.application.home;
  */
 public enum ShowPanelEnum {
   HOME_PANEL,
-  MY_GAMES_PANE
+  MY_GAMES_PANEL
 }

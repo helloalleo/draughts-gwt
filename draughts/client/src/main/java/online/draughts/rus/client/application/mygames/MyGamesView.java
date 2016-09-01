@@ -42,9 +42,9 @@ public class MyGamesView extends ViewWithUiHandlers<MyGamesUiHandlers>
               PlayShowPanelFactory playShowPanelFactory) {
     initWidget(uiBinder.createAndBindUi(this));
 
-    playShowPanel = playShowPanelFactory.createShowPanel(ShowPanelEnum.MY_GAMES_PANE, this);
-    playShowSimplePanel.add(playShowPanel);
     this.cookies = cookies;
+    playShowPanel = playShowPanelFactory.createShowPanel(ShowPanelEnum.MY_GAMES_PANEL, this);
+    playShowSimplePanel.add(playShowPanel);
 
     bindSlot(MyGamesPresenter.SLOT_MYGAME, main);
   }
@@ -71,6 +71,11 @@ public class MyGamesView extends ViewWithUiHandlers<MyGamesUiHandlers>
     }
     cookies.setMyGamesInRowNumber(gamesInRow.getNumInRow());
     return gamesInRow;
+  }
+
+  @Override
+  public int getGamesInRowNumber() {
+    return cookies.getMyGamesInRowNumber();
   }
 
   @Override

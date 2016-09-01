@@ -42,11 +42,6 @@ public class MenuPresenter extends PresenterWidget<MenuPresenter.MyView> impleme
   }
 
   @Override
-  protected void onBind() {
-    super.onBind();
-  }
-
-  @Override
   public void onNavigation(NavigationEvent navigationEvent) {
 //    String nameToken = navigationEvent.getRequest().getNameToken();
   }

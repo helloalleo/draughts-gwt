@@ -19,6 +19,7 @@ import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.client.util.Utils;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.resource.GamesResource;
@@ -58,6 +59,7 @@ public class MyGamesPresenter extends Presenter<MyGamesPresenter.MyView, MyGames
   @Override
   protected void onReveal() {
     cookies.setLocation(NameTokens.MY_GAMES_PAGE);
+    Utils.showDefaultCursor();
   }
 
   @Override

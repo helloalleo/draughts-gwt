@@ -1,6 +1,8 @@
 package online.draughts.rus.client.util;
 
 import com.google.gwt.dom.client.Element;
+import com.google.gwt.user.client.DOM;
+import com.google.gwt.user.client.ui.RootPanel;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.shared.util.StringUtils;
 
@@ -134,4 +136,13 @@ public class Utils {
 
       selection.addRange(newRange);
   }-*/;
+
+
+  public static void showWaitCursor() {
+    DOM.setStyleAttribute(RootPanel.getBodyElement(), "cursor", "wait");
+  }
+
+  public static void showDefaultCursor() {
+    DOM.setStyleAttribute(RootPanel.getBodyElement(), "cursor", "default");
+  }
 }

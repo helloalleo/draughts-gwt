@@ -85,7 +85,7 @@
             </div>
             <div class="col-md-6 col-md-pull-3 get-it">
                 <h1>Шашки онлайн</h1>
-                <h2>Играйте в шашки и общайтесь на нашем сайте</h2>
+                <h2>Играйте в шашки с друзьями и корифеями сайта</h2>
                 <p><a class="btn btn-primary btn-lg" role="button" href="/shashki/#!/login">Войти на сайт</a></p>
             </div>
         </div>

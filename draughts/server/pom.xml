@@ -358,7 +358,7 @@
       <plugin>
         <groupId>com.google.appengine</groupId>
         <artifactId>appengine-maven-plugin</artifactId>
-        <version>${appengine.version}</version>
+        <version>1.9.42</version>
         <configuration>
           <enableJarSplitting>true</enableJarSplitting>
           <enableJarClasses>false</enableJarClasses>

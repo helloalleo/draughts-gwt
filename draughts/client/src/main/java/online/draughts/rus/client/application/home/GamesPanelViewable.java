@@ -6,6 +6,8 @@ import online.draughts.rus.shared.dto.GameDto;
  * Created by aleksey on 22.07.16.
  */
 public interface GamesPanelViewable {
+    int getGamesInRowNumber();
+
     void getMoreGames(int newPageSize);
 
     GamesPanelPresentable getPresenter();

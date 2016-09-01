@@ -24,8 +24,8 @@ public class StrokeFactory {
             Square.fromPosition(move.getTakenDraught().getRow(), move.getTakenDraught().getCol()) : null,
         move.getMoveFlags(),
         move.getTitle(), move.getComment(),
-        move.getMovedDraught().isQueen(),
-        move.getMovedDraught().isWhite(),
+        move.isQueen(),
+        move.isWhite(),
         null, null);
   }
 
@@ -37,6 +37,8 @@ public class StrokeFactory {
     Stroke stroke = new Stroke().setFirst(first)
         .setNumber(number)
         .setOrder(order)
+        .setQueen(queen)
+        .setWhite(white)
         .setStartSquare(startSquare)
         .setEndSquare(endSquare)
         .setTakenSquare(captured)
@@ -62,6 +64,8 @@ public class StrokeFactory {
     final Boolean first = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_FIRST_ATTR));
     final Integer number = Integer.valueOf(outerNotation.getAttribute(NotationPanel.DATA_NUMBER_ATTR));
     final Integer order = Integer.valueOf(outerNotation.getAttribute(NotationPanel.DATA_ORDER_ATTR));
+    final Boolean white = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_IS_WHITE_ATTR));
+    final Boolean queen = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_IS_QUEEN_ATTR));
     final Boolean simpleMove = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_SIMPLE_ATTR));
     final Boolean startBeat = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_START_BEAT_ATTR));
     final Boolean continueBeat = Boolean.valueOf(outerNotation.getAttribute(NotationPanel.DATA_CONTINUE_BEAT_ATTR));
@@ -105,7 +109,7 @@ public class StrokeFactory {
         startSquare, endSquare, captured,
         moveFlags,
         title, comment,
-        false, false, stroke.getPrevStroke(), stroke.getNextStroke());
+        queen, white, stroke.getPrevStroke(), stroke.getNextStroke());
   }
 
   public static Stroke cloneStroke(Stroke stroke) {

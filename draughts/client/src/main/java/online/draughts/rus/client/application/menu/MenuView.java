@@ -17,7 +17,7 @@ import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.resources.Emoji;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.Cookies;
-import online.draughts.rus.client.util.Logger;
+import online.draughts.rus.client.util.Utils;
 import org.gwtbootstrap3.client.ui.*;
 import org.gwtbootstrap3.client.ui.constants.IconType;
 import org.gwtbootstrap3.client.ui.html.Span;
@@ -240,6 +240,9 @@ public class MenuView extends ViewWithUiHandlers<MenuUiHandlers> implements Menu
         prevAnchor = anchor;
         anchor.setActive(true);
         if (link.token != null) {
+          if (link.waitCursor) {
+            Utils.showWaitCursor();
+          }
           getUiHandlers().displayPage(link.token);
         } else if (link.href != null) {
           Window.Location.assign(link.href);

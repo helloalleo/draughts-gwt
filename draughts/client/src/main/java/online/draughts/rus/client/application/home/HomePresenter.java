@@ -23,6 +23,7 @@ import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.client.util.Utils;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.PlayerDto;
@@ -94,6 +95,7 @@ public class HomePresenter extends Presenter<HomePresenter.MyView, HomePresenter
       }
     }).onlinePlayers();
     cookies.setLocation(NameTokens.HOME_PAGE);
+    Utils.showDefaultCursor();
   }
 
   @Override

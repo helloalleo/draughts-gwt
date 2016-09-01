@@ -59,4 +59,8 @@ public interface Cookies {
   String getGameType();
 
   void setGameType(String selectedGameType);
+
+  String getCookie(String cookieName);
+
+  void setCookie(String cookieName, String cookieValue);
 }

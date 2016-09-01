@@ -56,22 +56,22 @@ public class NameTokens {
     this.currentSession = currentSession;
     this.player = currentSession.getPlayer();
 
-    homeLink = new Link(HOME_PAGE, messages.home(), null, IconType.HOME);
-    ruShashkiNetLink = new Link(null, "RuShashkiNet", ruShashkiNetUrl, IconType.LINK);
-    learnLink = new Link(LEARN_PAGE, messages.learn(), null, null);
-    playLink = new Link(PLAY_PAGE, messages.play(), null, IconType.PLAY_CIRCLE_O);
+    homeLink = new Link(HOME_PAGE, messages.home(), null, IconType.HOME, true);
+    ruShashkiNetLink = new Link(null, "RuShashkiNet", ruShashkiNetUrl, IconType.LINK, false);
+    learnLink = new Link(LEARN_PAGE, messages.learn(), null, null, false);
+    playLink = new Link(PLAY_PAGE, messages.play(), null, IconType.PLAY_CIRCLE_O, false);
 //    gameLink = new Link(GAME_PAGE, messages.game(), null, IconType.PLAY_CIRCLE_O);
-    analysisLink = new Link(ANALYSIS_PAGE, messages.analysis(), null, null);
-    loveLink = new Link(LOVE_PAGE, "", null, IconType.HEART_O);
-    loginLink = new Link(LOGIN_PAGE, messages.login(), null, IconType.SIGN_IN);
-    logoutLink = new Link(null, messages.logout(), LOGOUT_PAGE, IconType.SIGN_OUT);
-    profileLink = new Link(PROFILE_PAGE, messages.profile(), null, IconType.USER);
-    generalSettingsLink = new Link(GENERAL_SETTINGS_PAGE, messages.generalSettings(), null, IconType.USER);
-    settingsLink = new Link(SETTINGS_PAGE, messages.settings(), null, IconType.GEAR);
-    coachSettingsLink = new Link(COACH_SETTINGS_PAGE, messages.forCoaches(), null, null);
-    coachLink = new Link(COACH_PAGE, messages.coach(), null, null);
-    rulesLink = new Link(RULES_PAGE, messages.rules(), null, null);
-    myGamesLink = new Link(MY_GAMES_PAGE, messages.myGames(), null, null);
+    analysisLink = new Link(ANALYSIS_PAGE, messages.analysis(), null, null, false);
+    loveLink = new Link(LOVE_PAGE, "", null, IconType.HEART_O, false);
+    loginLink = new Link(LOGIN_PAGE, messages.login(), null, IconType.SIGN_IN, false);
+    logoutLink = new Link(null, messages.logout(), LOGOUT_PAGE, IconType.SIGN_OUT, false);
+    profileLink = new Link(PROFILE_PAGE, messages.profile(), null, IconType.USER, false);
+    generalSettingsLink = new Link(GENERAL_SETTINGS_PAGE, messages.generalSettings(), null, IconType.USER, false);
+    settingsLink = new Link(SETTINGS_PAGE, messages.settings(), null, IconType.GEAR, false);
+    coachSettingsLink = new Link(COACH_SETTINGS_PAGE, messages.forCoaches(), null, null, false);
+    coachLink = new Link(COACH_PAGE, messages.coach(), null, null, false);
+    rulesLink = new Link(RULES_PAGE, messages.rules(), null, null, false);
+    myGamesLink = new Link(MY_GAMES_PAGE, messages.myGames(), null, null, true);
   }
 
   public static String getLovePage() {
@@ -83,11 +83,12 @@ public class NameTokens {
   }
 
   public Link[] getLeftAuthLinks() {
-    List<Link> menu = new ArrayList<Link>(){{ add(homeLink); add(playLink); add(myGamesLink); add(learnLink); }};
+    List<Link> menu = new ArrayList<Link>(){{ add(homeLink); add(playLink); add(myGamesLink); }};
     if (player == null || !player.isCoach()) {
       menu.add(rulesLink);
     } else {
       menu.add(coachLink);
+      menu.add(analysisLink);
     }
     return menu.toArray(new Link[menu.size()]);
   }
@@ -109,12 +110,14 @@ public class NameTokens {
     public String name;
     public String href;
     public IconType iconType;
+    public boolean waitCursor; // wait cursor
 
-    Link(String token, String name, String href, IconType iconType) {
+    Link(String token, String name, String href, IconType iconType, boolean waitCursor) {
       this.token = token;
       this.name = name;
       this.href = href;
       this.iconType = iconType;
+      this.waitCursor = waitCursor;
     }
   }
 }

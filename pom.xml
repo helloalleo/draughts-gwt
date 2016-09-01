@@ -18,7 +18,7 @@
         <maven.compiler.target>1.7</maven.compiler.target>
 
         <!--GAE-->
-        <appengine.version>1.9.38</appengine.version>
+        <appengine.version>1.9.42</appengine.version>
 
         <!-- maven -->
         <maven-war-plugin.version>2.6</maven-war-plugin.version>

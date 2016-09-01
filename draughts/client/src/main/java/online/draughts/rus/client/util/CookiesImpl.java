@@ -2,12 +2,14 @@ package online.draughts.rus.client.util;
 
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Cookies;
+import com.google.gwt.user.datepicker.client.CalendarUtil;
 import online.draughts.rus.client.place.NameTokens;
 import online.draughts.rus.shared.locale.DraughtsMessages;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.util.ArrayList;
 import java.util.Arrays;
+import java.util.Date;
 import java.util.List;
 
 /**
@@ -26,6 +28,8 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
   private static final String LAST_USED_SMILES = "LAST_USED_SMILES";
   private static final String LIST_DELIMITER = ",";
   public static final String LOCALE = "LOCALE";
+  public static final String GAMES_IN_ROW_TOTAL = "GAME_IN_ROW_HOME_PANEL";
+  public static final String GAMES_IN_ROW_MY_GAMES = "GAMES_IN_ROW_MY_GAMES_PANEL";
   private static final String DEFAULT_LOCALE = "ru";
   private static final String SHOW_AVATARS = "SHOW_AVATARS";
   private static final String PUBLISH_GAME = "PUBLISH_GAME";
@@ -36,7 +40,13 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
   private static final String MY_GAMES = "MY_GAMES";
 
   public void setLocation(String nameToken) {
-    Cookies.setCookie(LOCATION, nameToken);
+    setBasicCookie(LOCATION, nameToken);
+  }
+
+  private void setBasicCookie(String cookieName, String cookieValue) {
+    Date expires = new Date();
+    CalendarUtil.addMonthsToDate(expires, 6);
+    Cookies.setCookie(cookieName, cookieValue, expires);
   }
 
   public String getLocation() {
@@ -48,7 +58,7 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
   }
 
   public void setGamesInRowNumber(int value) {
-    Cookies.setCookie(GAMES_IN_ROW_NUMBER, String.valueOf(value));
+    setBasicCookie(GAMES_IN_ROW_NUMBER, String.valueOf(value));
   }
 
   public int getGamesInRowNumber() {
@@ -60,7 +70,7 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
   }
 
   public void setMyGamesInRowNumber(int value) {
-    Cookies.setCookie(MY_GAMES_IN_ROW_NUMBER, String.valueOf(value));
+    setBasicCookie(MY_GAMES_IN_ROW_NUMBER, String.valueOf(value));
   }
 
   public int getMyGamesInRowNumber() {
@@ -72,7 +82,7 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
   }
 
   public void setMyGames(boolean myGames) {
-    Cookies.setCookie(MY_GAMES, String.valueOf(myGames));
+    setBasicCookie(MY_GAMES, String.valueOf(myGames));
   }
 
   public boolean isMyGames() {
@@ -85,7 +95,7 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
 
   @Override
   public void setTimeOnPlay(String value) {
-    Cookies.setCookie(TIME_ON_PLAY, String.valueOf(value));
+    setBasicCookie(TIME_ON_PLAY, String.valueOf(value));
   }
 
   @Override
@@ -99,7 +109,7 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
 
   @Override
   public void setTimeOnPlayCustom(String value) {
-    Cookies.setCookie(TIME_ON_PLAY_CUSTOM, String.valueOf(value));
+    setBasicCookie(TIME_ON_PLAY_CUSTOM, String.valueOf(value));
   }
 
   @Override
@@ -113,7 +123,7 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
 
   @Override
   public void setFisherTime(String value) {
-    Cookies.setCookie(FISHER_TIME, String.valueOf(value));
+    setBasicCookie(FISHER_TIME, String.valueOf(value));
   }
 
   @Override
@@ -123,17 +133,17 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
       builder.append(s);
       builder.append(LIST_DELIMITER);
     }
-    Cookies.setCookie(LAST_USED_SMILES, builder.toString());
+    setBasicCookie(LAST_USED_SMILES, builder.toString());
   }
 
   @Override
   public void setLocale(String locale) {
-    Cookies.setCookie(LOCALE, locale);
+    setBasicCookie(LOCALE, locale);
   }
 
   @Override
   public void setShowAvatars(Boolean value) {
-    Cookies.setCookie(SHOW_AVATARS, String.valueOf(value));
+    setBasicCookie(SHOW_AVATARS, String.valueOf(value));
   }
 
   public boolean isShowAvatars() {
@@ -164,12 +174,12 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
 
   @Override
   public void setGameType(String selectedGameType) {
-    Cookies.setCookie(GAME_TYPE, selectedGameType);
+    setBasicCookie(GAME_TYPE, selectedGameType);
   }
 
   @Override
   public void setPublishGame(Boolean publishGame) {
-    Cookies.setCookie(PUBLISH_GAME, String.valueOf(publishGame));
+    setBasicCookie(PUBLISH_GAME, String.valueOf(publishGame));
   }
 
   @Override
@@ -202,5 +212,15 @@ public class CookiesImpl implements online.draughts.rus.client.util.Cookies {
       gamesOnPage = "0";
     }
     return Integer.valueOf(gamesOnPage);
+  }
+
+  @Override
+  public String getCookie(String cookieName) {
+    return Cookies.getCookie(cookieName);
+  }
+
+  @Override
+  public void setCookie(String cookieName, String cookieValue) {
+    setBasicCookie(cookieName, cookieValue);
   }
 }

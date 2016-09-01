@@ -42,14 +42,19 @@ public class MoveDto extends BaseDto {
 
   private Set<String> hashTags = new HashSet<>();
   private String screenshot;
+  private boolean queen;
+  private boolean white;
 
   public MoveDto() {
   }
 
-  public MoveDto(int number, boolean first, DraughtDto movingDraught, DraughtDto movedDraught, DraughtDto takenDraught,
+  public MoveDto(int number, boolean first, boolean queen, boolean white,
+                 DraughtDto movingDraught, DraughtDto movedDraught, DraughtDto takenDraught,
                  Set<MoveFlag> moveFlags) {
     this.number = number;
     this.first = first;
+    this.queen = queen;
+    this.white = white;
     this.moveFlags = moveFlags;
 
     this.movingDraught = movingDraught;
@@ -59,7 +64,8 @@ public class MoveDto extends BaseDto {
 
   @GwtIncompatible
   public MoveDto(MoveDto move) {
-    this(move.getNumber(), move.isFirst(), move.getMovingDraught(), move.getMovedDraught(),
+    this(move.getNumber(), move.isFirst(), move.isQueen(), move.isWhite(),
+        move.getMovingDraught(), move.getMovedDraught(),
         move.getTakenDraught(), move.getMoveFlags());
   }
 
@@ -178,6 +184,22 @@ public class MoveDto extends BaseDto {
 
   public String getScreenshot() {
     return screenshot;
+  }
+
+  public boolean isQueen() {
+    return queen;
+  }
+
+  public void setQueen(boolean queen) {
+    this.queen = queen;
+  }
+
+  public boolean isWhite() {
+    return white;
+  }
+
+  public void setWhite(boolean white) {
+    this.white = white;
   }
 
   public enum MoveFlag {

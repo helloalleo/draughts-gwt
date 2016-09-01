@@ -10,11 +10,11 @@
         <b:Navbar ui:field="navbar" position="FIXED_TOP">
             <b:Container>
                 <b:NavbarHeader>
-                    <b:NavbarBrand ui:field="brand" href="#!home"/>
+                    <b:NavbarBrand ui:field="brand" href="/"/>
                     <b:NavbarCollapseButton dataTarget="#navbar-collapse"/>
                 </b:NavbarHeader>
                 <b:NavbarCollapse b:id="navbar-collapse">
-                    <b:NavbarNav ui:field="navLeft" addStyleNames="{res.style.xLargeFont}"/>
+                    <b:NavbarNav ui:field="navLeft" addStyleNames="{res.style.largeFont}"/>
                     <b:NavbarNav ui:field="navRight" pull="RIGHT" addStyleNames="{res.style.largeFont}"/>
                 </b:NavbarCollapse>
             </b:Container>

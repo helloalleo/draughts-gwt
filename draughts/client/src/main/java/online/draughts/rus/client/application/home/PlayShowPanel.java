@@ -16,6 +16,7 @@ import online.draughts.rus.client.gin.PlayShowPanelFactory;
 import online.draughts.rus.client.resources.Variables;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.Cookies;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
@@ -72,23 +73,6 @@ public class PlayShowPanel extends Composite {
       @Assisted GamesPanelViewable gamesView) {
 
     this.showPanelEnum = showPanelEnum;
-    int numOnPage = cookies.getGamesInRowNumber();
-    gamesInRow = new PagingList(1).add(2).add(3).add(4).add(6);
-    while (gamesInRow.hasNext()) {
-      if (gamesInRow.getNumInRow() == numOnPage) {
-        break;
-      }
-      gamesInRow = gamesInRow.getNext();
-    }
-
-    numOnPage = cookies.getMyGamesInRowNumber();
-//    myGamesInRow = new PagingList(1).add(2).add(3).add(4).add(6);
-//    while (myGamesInRow.hasNext()) {
-//      if (myGamesInRow.getNumInRow() == numOnPage) {
-//        break;
-//      }
-//      myGamesInRow = myGamesInRow.getNext();
-//    }
 
     incrementSize = Integer.valueOf(config.initShowGamesPageSize());
 
@@ -99,6 +83,17 @@ public class PlayShowPanel extends Composite {
     this.gamesView = gamesView;
     this.messages = messages;
     this.gamesDelegate = gamesDelegate;
+
+    gamesInRow = new PagingList(1).add(2).add(3).add(4).add(6);
+    Logger.debug(gamesView);
+    int numOnPage = gamesView.getGamesInRowNumber();
+    while (gamesInRow.hasPrev()) {
+      Logger.debug(gamesInRow);
+      if (gamesInRow.getNumInRow() == numOnPage) {
+        break;
+      }
+      gamesInRow = gamesInRow.getPrev();
+    }
 
     initWidget(binder.createAndBindUi(this));
   }
@@ -300,7 +295,7 @@ public class PlayShowPanel extends Composite {
 //    switch (showPanelEnum) {
 //      case HOME_PANEL:
 //        return gamesInRow.getNumInRow();
-//      case MY_GAMES_PANE:
+//      case MY_GAMES_PANEL:
 //        return myGamesInRow.getNumInRow();
 //    }
 //    return MAX_GAMES_IN_ROW;

@@ -22,11 +22,11 @@
                     <b:RadioButton ui:field="removeDraughtButton" text="Удалить 3" name="addDraughtGroup"/>
                     <b:CheckBox ui:field="addQueenCheckbox" text="Дамка Q"/>
                     <b:CheckBox ui:field="addDraughtCheckbox" text="Добавить шашку A" enabled="false"/>
-                    <b:Button ui:field="myPlaceDraughts" text="Новая расстановка N" type="LINK"/>
-                    <b:Button ui:field="placeDraughts" text="Расставить с начала S" type="LINK"/>
-                    <b:Button ui:field="clearDesk" text="Очистить доску C" type="LINK"/>
-                    <b:Button ui:field="savePosition" text="Сохранить" type="LINK"/>
-                    <b:Button ui:field="loadPosition" text="Загрузить" type="LINK"/>
+                    <b:Button ui:field="myPlaceDraughts" text="Новая расстановка N"/>
+                    <b:Button ui:field="placeDraughts" text="Расставить с начала S"/>
+                    <b:Button ui:field="clearDesk" text="Очистить доску C"/>
+                    <b:Button ui:field="savePosition" text="Сохранить"/>
+                    <b:Button ui:field="loadPosition" text="Загрузить"/>
                 </g:HTMLPanel>
             </b:Column>
             <b:Column size="XS_2 SM_2 MD_2 LG_2">
