@@ -146,6 +146,7 @@ public class PlayShowPanel extends Composite {
         if (lastScrollPos >= maxScrollTop && updateFlag) {
           final int newPageSize = incrementSize;
           gamesView.getMoreGames(newPageSize);
+          incrementSize *= 2;
           lastMaxHeight = maxScrollTop;
           updateFlag = false;
         }

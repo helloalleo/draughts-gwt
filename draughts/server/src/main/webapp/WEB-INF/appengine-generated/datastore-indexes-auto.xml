@@ -2,40 +2,59 @@
 
 <datastore-indexes>
 
-  <datastore-index kind="Game" ancestor="false" source="auto">
-    <property name="playerBlack" direction="asc"/>
-    <property name="playFinishDate" direction="desc"/>
-  </datastore-index>
+    <datastore-index kind="Game" ancestor="false" source="auto">
+        <property name="playerBlack" direction="asc"/>
+        <property name="playFinishDate" direction="desc"/>
+    </datastore-index>
 
-  <datastore-index kind="Game" ancestor="false" source="auto">
-    <property name="playerWhite" direction="asc"/>
-    <property name="playFinishDate" direction="desc"/>
-  </datastore-index>
+    <datastore-index kind="Game" ancestor="false" source="auto">
+        <property name="playerWhite" direction="asc"/>
+        <property name="playFinishDate" direction="desc"/>
+    </datastore-index>
 
-  <datastore-index kind="Game" ancestor="false" source="manual">
-    <property name="publish" direction="asc"/>
-    <property name="playFinishDate" direction="desc"/>
-  </datastore-index>
+    <datastore-index kind="Game" ancestor="false" source="manual">
+        <property name="publish" direction="asc"/>
+        <property name="playFinishDate" direction="desc"/>
+    </datastore-index>
 
-  <datastore-index kind="GameMessage" ancestor="false" source="auto">
-    <property name="messageType" direction="asc"/>
-    <property name="receiver" direction="asc"/>
-    <property name="sender" direction="asc"/>
-    <property name="sentDate" direction="asc"/>
-  </datastore-index>
+    <datastore-index kind="Game" ancestor="false" source="manual">
+        <property name="deleted" direction="asc"/>
+        <property name="gameSnapshot" direction="asc"/>
+        <property name="publish" direction="asc"/>
+        <property name="playFinishDate" direction="desc"/>
+    </datastore-index>
 
-  <datastore-index kind="Player" ancestor="false" source="manual">
-    <property name="admin" direction="desc"/>
-    <property name="moderator" direction="desc"/>
-    <property name="online" direction="desc"/>
-    <property name="rating" direction="desc"/>
-  </datastore-index>
+    <datastore-index kind="Game" ancestor="false" source="manual">
+        <property name="deleted" direction="asc"/>
+        <property name="playerBlack" direction="asc"/>
+        <property name="playFinishDate" direction="desc"/>
+    </datastore-index>
 
-  <datastore-index kind="Player" ancestor="false" source="manual">
-    <property name="active" direction="asc"/>
-    <property name="admin" direction="desc"/>
-    <property name="moderator" direction="desc"/>
-    <property name="online" direction="desc"/>
-    <property name="rating" direction="desc"/>
-  </datastore-index>
+    <datastore-index kind="Game" ancestor="false" source="manual">
+        <property name="deleted" direction="asc"/>
+        <property name="playerWhite" direction="asc"/>
+        <property name="playFinishDate" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="GameMessage" ancestor="false" source="auto">
+        <property name="messageType" direction="asc"/>
+        <property name="receiver" direction="asc"/>
+        <property name="sender" direction="asc"/>
+        <property name="sentDate" direction="asc"/>
+    </datastore-index>
+
+    <datastore-index kind="Player" ancestor="false" source="manual">
+        <property name="admin" direction="desc"/>
+        <property name="moderator" direction="desc"/>
+        <property name="online" direction="desc"/>
+        <property name="rating" direction="desc"/>
+    </datastore-index>
+
+    <datastore-index kind="Player" ancestor="false" source="manual">
+        <property name="active" direction="asc"/>
+        <property name="admin" direction="desc"/>
+        <property name="moderator" direction="desc"/>
+        <property name="online" direction="desc"/>
+        <property name="rating" direction="desc"/>
+    </datastore-index>
 </datastore-indexes>

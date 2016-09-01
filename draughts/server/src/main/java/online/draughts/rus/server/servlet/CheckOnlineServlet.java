@@ -4,6 +4,7 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.channel.ServerChannel;
 import online.draughts.rus.server.config.Config;
+import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.server.domain.Player;
 
 import javax.servlet.ServletException;
@@ -31,6 +32,13 @@ public class CheckOnlineServlet extends HttpServlet {
     String remoteIp = req.getRemoteAddr();
     if (!remoteIp.equals(Config.GAE_CRON_IP_ADDR)) {
       return;
+    }
+
+    List<Game> games = Game.getInstance().findAll();
+    for (Game game : games) {
+      game.setDeleted(false);
+      game.setGameSnapshot(false);
+      game.update();
     }
 
     List<Player> players = Player.getInstance().findOnline();
