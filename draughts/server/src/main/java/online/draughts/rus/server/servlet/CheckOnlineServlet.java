@@ -34,7 +34,7 @@ public class CheckOnlineServlet extends HttpServlet {
       return;
     }
 
-    List<Game> games = Game.getInstance().findAll();
+    List<Game> games = Game.getInstance().findTrueRange(0, 100);
     for (Game game : games) {
       game.setDeleted(false);
       game.setGameSnapshot(false);

@@ -166,6 +166,10 @@ public class Game extends ModelImpl<Game> {
   }
 
   // ********* DB Queries ********* //
+  public List<Game> findTrueRange(int offset, int limit) {
+    return super.findRange(offset, limit);
+  }
+
   public List<Game> findRange(int offset, int limit) {
     if (offset < 0 || limit < 0) {
       return null;
