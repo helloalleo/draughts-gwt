@@ -22,6 +22,7 @@ import org.apache.log4j.Logger;
 
 import java.util.Date;
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -133,21 +134,24 @@ public class ServerChannel extends ChannelServer {
     Player player = playerService.find(Long.valueOf(channel));
 
     if (player.isPlaying()) {
-      Game game = gameService.findUserGames(player.getId(), 0, 1).get(0);
-      final boolean isPlayerHasWhiteColor = game.getPlayerWhite().getId() == player.getId();
-      game.setPlayEndStatus(isPlayerHasWhiteColor ? GameDto.GameEnds.WHITE_LEFT : GameDto.GameEnds.BLACK_LEFT);
-      GameMessage gameMessage = new GameMessage();
-      gameMessage.setGame(game);
-      final long secondPlayerId = isPlayerHasWhiteColor ? game.getPlayerBlack().getId() : game.getPlayerWhite().getId();
-      Player secondPlayer = playerService.find(secondPlayerId);
+      List<Game> userGames = gameService.findUserGames(player.getId(), 0, 1);
+      if (!userGames.isEmpty()) {
+        Game game = userGames.get(0);
+        final boolean isPlayerHasWhiteColor = game.getPlayerWhite().getId() == player.getId();
+        game.setPlayEndStatus(isPlayerHasWhiteColor ? GameDto.GameEnds.WHITE_LEFT : GameDto.GameEnds.BLACK_LEFT);
+        GameMessage gameMessage = new GameMessage();
+        gameMessage.setGame(game);
+        final long secondPlayerId = isPlayerHasWhiteColor ? game.getPlayerBlack().getId() : game.getPlayerWhite().getId();
+        Player secondPlayer = playerService.find(secondPlayerId);
 
-      secondPlayer.setPlaying(false);
-      playerService.save(secondPlayer);
+        secondPlayer.setPlaying(false);
+        playerService.save(secondPlayer);
 
-      gameMessage.setReceiver(secondPlayer);
-      gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_GAME_UPDATE);
-      gameMessage.setData(GameMessageDto.GAME_END);
-      coreChannel.sendMessage(String.valueOf(secondPlayer.getId()), gameMessage);
+        gameMessage.setReceiver(secondPlayer);
+        gameMessage.setMessageType(GameMessageDto.MessageType.PLAY_GAME_UPDATE);
+        gameMessage.setData(GameMessageDto.GAME_END);
+        coreChannel.sendMessage(String.valueOf(secondPlayer.getId()), gameMessage);
+      }
     }
 
     player.setOnline(false);
