@@ -4,16 +4,15 @@ import com.google.gwt.core.client.GWT;
 import com.google.gwt.event.logical.shared.CloseEvent;
 import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
-import com.google.gwt.user.client.rpc.AsyncCallback;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import no.eirikb.gwtchannelapi.client.Channel;
 import no.eirikb.gwtchannelapi.client.ChannelListener;
 import online.draughts.rus.client.application.common.InviteData;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.dialog.ConfirmDialogBox;
 import online.draughts.rus.client.application.widget.dialog.ConfirmPlayDialogBox;
-import online.draughts.rus.client.application.widget.dialog.ErrorDialogBox;
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.gin.DialogFactory;
@@ -23,6 +22,7 @@ import online.draughts.rus.client.json.InviteDataMapper;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.AudioUtil;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.client.util.TrUtils;
 import online.draughts.rus.shared.channel.Chunk;
 import online.draughts.rus.shared.dto.GameDto;
@@ -30,6 +30,7 @@ import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.resource.GamesResource;
 import online.draughts.rus.shared.util.StringUtils;
 
 import java.util.Date;
@@ -57,6 +58,7 @@ public class ClientChannel implements ChannelListener {
   private final InviteDataMapper inviteDataMapper;
   private final AppResources resources;
   private final DialogFactory dialogFactory;
+  private final ResourceDelegate<GamesResource> gamesDelegate;
   private Map<Integer, String> gameMessageChunks = new TreeMap<>();
 
   @Inject
@@ -67,7 +69,7 @@ public class ClientChannel implements ChannelListener {
                        GameMessageMapper messageMapper,
                        InviteDataMapper inviteDataMapper,
                        final DraughtsMessages messages,
-                       AppResources resources, DialogFactory dialogFactory) {
+                       AppResources resources, DialogFactory dialogFactory, ResourceDelegate<GamesResource> gamesDelegate) {
     this.currentSession = currentSession;
     this.playSession = playSession;
     this.eventBus = eventBus;
@@ -77,6 +79,7 @@ public class ClientChannel implements ChannelListener {
     this.inviteDataMapper = inviteDataMapper;
     this.resources = resources;
     this.dialogFactory = dialogFactory;
+    this.gamesDelegate = gamesDelegate;
 
     bindEvents();
 
@@ -336,8 +339,8 @@ public class ClientChannel implements ChannelListener {
   private void handlePlayTimeout(GameMessageDto gameMessage) {
     if (playSession.getGame() != null) {
       GameDto game = gameMessage.getGame();
-      GameDto.GameEnds gameEnd = game.getPlayEndStatus();
-      eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AbstractAsyncCallback<GameDto>(dialogFactory) {
+      GameDto.GameEnd gameEnd = game.getPlayEndStatus();
+      eventBus.fireEvent(new GameOverEvent(game, new AbstractAsyncCallback<GameDto>(dialogFactory) {
         @Override
         public void onSuccess(GameDto aVoid) {
           dialogFactory.createGameResultDialogBox(messages.timeOutOpponentLose()).show();
@@ -364,16 +367,18 @@ public class ClientChannel implements ChannelListener {
   private void handlePlayEndGame(GameMessageDto gameMessage) {
     if (playSession.getGame() != null && GameMessageDto.GAME_END.equals(gameMessage.getData())) {
       GameDto game = playSession.getGame();
-      final GameDto.GameEnds gameEnd;
-      final GameDto.GameEnds remotePlayEndStatus = gameMessage.getGame().getPlayEndStatus();
-      if (GameDto.GameEnds.WHITE_WIN.equals(remotePlayEndStatus)
-          || GameDto.GameEnds.BLACK_WIN.equals(remotePlayEndStatus)) {
+      final GameDto.GameEnd gameEnd;
+      final GameDto.GameEnd remotePlayEndStatus = gameMessage.getGame().getPlayEndStatus();
+      if (GameDto.GameEnd.WHITE_WIN.equals(remotePlayEndStatus)
+          || GameDto.GameEnd.BLACK_WIN.equals(remotePlayEndStatus)) {
         gameEnd = remotePlayEndStatus;
       } else {
         gameEnd = playSession.isPlayerHasWhiteColor()
-            ? GameDto.GameEnds.BLACK_LEFT : GameDto.GameEnds.WHITE_LEFT;
+            ? GameDto.GameEnd.BLACK_LEFT : GameDto.GameEnd.WHITE_LEFT;
       }
-      eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AbstractAsyncCallback<GameDto>(dialogFactory) {
+      game.setPlayEndStatus(gameEnd);
+      Logger.debug("2 " + gameEnd);
+      eventBus.fireEvent(new GameOverEvent(game, new AbstractAsyncCallback<GameDto>(dialogFactory) {
         @Override
         public void onSuccess(GameDto aVoid) {
           Growl.growlNotif(messages.opponentLeftGame());
@@ -426,7 +431,7 @@ public class ClientChannel implements ChannelListener {
 
   private void handlePlayAcceptDraw(GameMessageDto gameMessage) {
     if (Boolean.valueOf(gameMessage.getData())) {
-      eventBus.fireEvent(new GameOverEvent(playSession.getGame(), GameDto.GameEnds.DRAW,
+      eventBus.fireEvent(new GameOverEvent(playSession.getGame(),
           new AbstractAsyncCallback<GameDto>(dialogFactory) {
             @Override
             public void onSuccess(GameDto aVoid) {
@@ -478,16 +483,9 @@ public class ClientChannel implements ChannelListener {
   private void handlePlaySurrender(GameMessageDto gameMessage) {
     GameDto game = playSession.getGame();
     // так как сохраняем на противоположной строне, игроки черный-белый переставлены
-    final GameDto.GameEnds gameEnd = playSession.isPlayerHasWhiteColor() ? GameDto.GameEnds.SURRENDER_BLACK
-        : GameDto.GameEnds.SURRENDER_WHITE;
-    eventBus.fireEvent(new GameOverEvent(game, gameEnd, new AsyncCallback<GameDto>() {
-      @Override
-      public void onFailure(Throwable throwable) {
-        final ErrorDialogBox errorDialogBox = dialogFactory.createErrorDialogBox();
-        errorDialogBox.setMessage(messages.errorWhileSavingGame(), throwable);
-        errorDialogBox.show();
-      }
-
+    final GameDto.GameEnd gameEnd = playSession.isPlayerHasWhiteColor() ? GameDto.GameEnd.SURRENDER_BLACK
+        : GameDto.GameEnd.SURRENDER_WHITE;
+    eventBus.fireEvent(new GameOverEvent(game, new AbstractAsyncCallback<GameDto>(dialogFactory) {
       @Override
       public void onSuccess(GameDto aVoid) {
         dialogFactory.createInfoDialogBox(messages.opponentSurrendered()).show();

@@ -7,6 +7,7 @@ import com.google.inject.servlet.RequestScoped;
 import online.draughts.rus.server.service.GameService;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.resource.GamesResource;
 
 import javax.servlet.http.HttpServletRequest;
@@ -64,7 +65,12 @@ public class GamesResourceImpl implements GamesResource {
   }
 
   @Override
-  public GameDto game(Long gameId) {
+  public PlayerDto updatePlayerStat(long gameId, long playerId) {
+    return null; //gameService.updatePlayerStat(gameId, playerId);
+  }
+
+  @Override
+  public GameDto game(long gameId) {
     return gameService.findDto(gameId);
   }
 }

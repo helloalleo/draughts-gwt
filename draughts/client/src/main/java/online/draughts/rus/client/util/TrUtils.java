@@ -29,7 +29,7 @@ public class TrUtils {
     }
   }
 
-  public static String translateEndGame(GameDto.GameEnds gameEnd) {
+  public static String translateEndGame(GameDto.GameEnd gameEnd) {
     switch (gameEnd) {
       case WHITE_WIN:
         return messages.WHITE_WIN();

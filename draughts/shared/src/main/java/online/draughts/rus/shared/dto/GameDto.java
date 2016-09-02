@@ -20,7 +20,7 @@ public class GameDto extends BaseDto {
 
   private GameType gameType;
 
-  private GameEnds playEndStatus;
+  private GameEnd playEndStatus;
 
   private Date playStartDate;
 
@@ -47,7 +47,7 @@ public class GameDto extends BaseDto {
 
   public GameDto(PlayerDto playerWhite,
                  PlayerDto playerBlack,
-                 GameEnds playEndStatus,
+                 GameEnd playEndStatus,
                  Date playStartDate,
                  Date playFinishDate,
                  String notation,
@@ -85,11 +85,11 @@ public class GameDto extends BaseDto {
     this.gameType = gameType;
   }
 
-  public GameEnds getPlayEndStatus() {
+  public GameEnd getPlayEndStatus() {
     return playEndStatus;
   }
 
-  public void setPlayEndStatus(GameEnds playEndStatus) {
+  public void setPlayEndStatus(GameEnd playEndStatus) {
     this.playEndStatus = playEndStatus;
   }
 
@@ -195,7 +195,7 @@ public class GameDto extends BaseDto {
     GIVEAWAY
   }
 
-  public enum GameEnds implements IsSerializable {
+  public enum GameEnd implements IsSerializable {
     BLACK_WIN,
     WHITE_WIN,
     BLACK_LEFT,

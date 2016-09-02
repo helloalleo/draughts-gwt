@@ -138,7 +138,7 @@ public class ServerChannel extends ChannelServer {
       if (!userGames.isEmpty()) {
         Game game = userGames.get(0);
         final boolean isPlayerHasWhiteColor = game.getPlayerWhite().getId() == player.getId();
-        game.setPlayEndStatus(isPlayerHasWhiteColor ? GameDto.GameEnds.WHITE_LEFT : GameDto.GameEnds.BLACK_LEFT);
+        game.setPlayEndStatus(isPlayerHasWhiteColor ? GameDto.GameEnd.WHITE_LEFT : GameDto.GameEnd.BLACK_LEFT);
         GameMessage gameMessage = new GameMessage();
         gameMessage.setGame(game);
         final long secondPlayerId = isPlayerHasWhiteColor ? game.getPlayerBlack().getId() : game.getPlayerWhite().getId();

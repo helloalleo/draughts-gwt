@@ -61,8 +61,6 @@ public class HomeView extends ViewWithUiHandlers<HomeUiHandlers>
   @UiField
   Span onlinePlayersSpan;
 
-  private boolean secondMyGameListClick = false;
-
   @Inject
   HomeView(Binder binder,
            PlayShowPanelFactory playShowPanelFactory,

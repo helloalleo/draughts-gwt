@@ -24,6 +24,7 @@ import online.draughts.rus.client.json.InviteDataMapper;
 import online.draughts.rus.client.resources.AppResources;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.AudioUtil;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.draughts.Board;
 import online.draughts.rus.draughts.MoveFactory;
 import online.draughts.rus.draughts.Stroke;
@@ -463,7 +464,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         getView().setBeatenOpponent(DRAUGHTS_ON_DESK_INIT - getView().getOpponentDraughtsSize());
         if (!event.isPlayer()) {
           PlayComponentUtil.checkWin(getEventBus(), playSession, messages, dialogFactory, getView().getMyDraughtsSize(),
-              getView().getOpponentDraughtsSize(), getView().isWhite());
+              getView().getOpponentDraughtsSize(), getView().isWhite(), gamesDelegate);
         }
       }
     });
@@ -471,7 +472,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     addRegisteredHandler(GameShutEvent.TYPE, new GameShutEventHandler() {
       @Override
       public void onGameShut(GameShutEvent event) {
-        PlayComponentUtil.checkShut(getEventBus(), playSession, messages, dialogFactory, event.isWhite());
+        PlayComponentUtil.checkShut(getEventBus(), playSession, messages, dialogFactory, event.isWhite(), gamesDelegate);
       }
     });
 
@@ -500,15 +501,15 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
     addRegisteredHandler(GameOverEvent.TYPE, new GameOverEventHandler() {
       @Override
       public void onGameOver(GameOverEvent event) {
-        GameDto game = event.getGame();
+        final GameDto game = event.getGame();
         game.setGameType(playSession.getGameType());
-        game.setPlayEndStatus(event.getGameEnd());
         game.setPlayFinishDate(new Date());
         final String notation = NotationPanel.getNotation();
         game.setNotation(notation);
         game.setEndGameScreenshot(getView().takeScreenshot());
         game.setPublish(event.getGame().getPublish());
         gamesDelegate.withCallback(event.getAsyncCallback()).save(game);
+        Logger.debug("3 " + game);
 
         GameMessageDto gameMessageDto = createGameMessage();
         gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_GAME_UPDATE);
@@ -596,16 +597,16 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         }
         if (playerTimeSeconds <= 0) {
           playerTimer.cancel();
-          GameDto endGame = playSession.getGame();
-          GameDto.GameEnds gameEnd = isMyTurn()
-              ? (getView().isWhite() ? GameDto.GameEnds.BLACK_WIN : GameDto.GameEnds.WHITE_WIN)
-              : (getView().isWhite() ? GameDto.GameEnds.WHITE_WIN : GameDto.GameEnds.BLACK_WIN);
+          final GameDto endGame = playSession.getGame();
+          GameDto.GameEnd gameEnd = isMyTurn()
+              ? (getView().isWhite() ? GameDto.GameEnd.BLACK_WIN : GameDto.GameEnd.WHITE_WIN)
+              : (getView().isWhite() ? GameDto.GameEnd.WHITE_WIN : GameDto.GameEnd.BLACK_WIN);
           endGame.setPlayEndStatus(gameEnd);
           GameMessageDto gameMessageDto = createGameMessage();
           gameMessageDto.setGame(endGame);
           gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_TIMEOUT);
           fireEvent(new GameMessageEvent(gameMessageDto));
-          fireEvent(new GameOverEvent(endGame, gameEnd, new AbstractAsyncCallback<GameDto>(dialogFactory) {
+          fireEvent(new GameOverEvent(endGame, new AbstractAsyncCallback<GameDto>(dialogFactory) {
             @Override
             public void onSuccess(GameDto result) {
               Growl.growlNotif(messages.timeOut());

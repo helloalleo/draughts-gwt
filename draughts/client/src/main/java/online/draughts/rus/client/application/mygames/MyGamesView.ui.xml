@@ -8,8 +8,8 @@
   <ui:with field="res" type="online.draughts.rus.client.resources.AppResources"/>
 
   <g:HTMLPanel ui:field="main">
-    <b.html:Strong ui:field="gameListLabel" text="Мои игры" addStyleNames="{res.style.xLargeFont}">
-      <ui:attribute name="text" description="Мои игры"/>
+    <b.html:Strong ui:field="gameListLabel" text="Мои партии" addStyleNames="{res.style.xLargeFont}">
+      <ui:attribute name="text" description="Мои партии"/>
     </b.html:Strong>
     <b:ButtonGroup ui:field="showGameOnPageButtonGroup" pull="RIGHT">
       <b:Button ui:field="moreGamesInRow" size="LARGE" icon="ANGLE_LEFT" title="Показать меньше на странице">

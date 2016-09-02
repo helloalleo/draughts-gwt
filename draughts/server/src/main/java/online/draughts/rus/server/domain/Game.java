@@ -27,7 +27,7 @@ public class Game extends ModelImpl<Game> {
   private GameDto.GameType gameType;
 
   @Index
-  private GameDto.GameEnds playEndStatus;
+  private GameDto.GameEnd playEndStatus;
 
   @Index
   private boolean publish;
@@ -62,7 +62,7 @@ public class Game extends ModelImpl<Game> {
 
   public Game(Player playerWhiteId,
               Player playerBlackId,
-              GameDto.GameEnds playEndStatus,
+              GameDto.GameEnd playEndStatus,
               Date playStartDate,
               Date playFinishDate,
               String notation,
@@ -113,11 +113,11 @@ public class Game extends ModelImpl<Game> {
     this.gameType = gameType;
   }
 
-  public GameDto.GameEnds getPlayEndStatus() {
+  public GameDto.GameEnd getPlayEndStatus() {
     return playEndStatus;
   }
 
-  public void setPlayEndStatus(GameDto.GameEnds playEndStatus) {
+  public void setPlayEndStatus(GameDto.GameEnd playEndStatus) {
     this.playEndStatus = playEndStatus;
   }
 

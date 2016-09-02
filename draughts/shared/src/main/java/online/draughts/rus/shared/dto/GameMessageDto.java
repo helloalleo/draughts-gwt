@@ -137,6 +137,7 @@ public class GameMessageDto extends BaseDto {
     PLAY_CANCEL_MOVE_RESPONSE,
     PLAY_PROPOSE_DRAW,
     PLAY_ACCEPT_DRAW,
+    // вызывается на второй стороне чтобы обновить список игр
     PLAY_GAME_UPDATE,
     PLAY_SURRENDER,
     PLAY_TIMEOUT,

@@ -132,16 +132,16 @@ public class PlayItem extends Composite {
       final DateTimeFormat dateTimeFormat;
       switch (gamesInRow) {
         case 2:
-          dateTimeFormat = DateTimeFormat.getFormat("EEEE, dd MMMM yyyy, HH:mm:ss");
+          dateTimeFormat = DateTimeFormat.getFormat("EEEE, dd MMMM yyyy, HH:mm");
           break;
         case 4:
-          dateTimeFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
+          dateTimeFormat = DateTimeFormat.getFormat("EEEE, dd MMM yyyy, HH:mm");
           break;
         case 6:
-          dateTimeFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_SHORT);
+          dateTimeFormat = DateTimeFormat.getFormat("EEE, dd.MM.yy, HH:mm");
           break;
         default:
-          dateTimeFormat = DateTimeFormat.getFormat(DateTimeFormat.PredefinedFormat.DATE_TIME_MEDIUM);
+          dateTimeFormat = DateTimeFormat.getFormat("EEEE, dd MMMM yyyy, HH:mm");
           break;
       }
       String date = DateTimeFormat.getFormat(dateTimeFormat.getPattern())

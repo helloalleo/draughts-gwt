@@ -67,7 +67,7 @@ public class GameServiceTest extends BaseTest {
     Player playerBlack = getPlayer();
     playerBlack = playerService.save(playerBlack);
 
-    Game game = new Game(playerWhite, playerBlack, GameDto.GameEnds.BLACK_LEFT, new Date(), new Date(), "", "");
+    Game game = new Game(playerWhite, playerBlack, GameDto.GameEnd.BLACK_LEFT, new Date(), new Date(), "", "");
     // create
     game = gameService.save(game);
     assertNotNull(game.getId());

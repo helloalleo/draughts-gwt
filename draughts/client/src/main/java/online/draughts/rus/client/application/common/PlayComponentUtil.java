@@ -1,12 +1,16 @@
 package online.draughts.rus.client.application.common;
 
 import com.google.web.bindery.event.shared.EventBus;
+import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
 import online.draughts.rus.client.channel.PlaySession;
 import online.draughts.rus.client.event.GameOverEvent;
 import online.draughts.rus.client.gin.DialogFactory;
 import online.draughts.rus.client.util.AbstractAsyncCallback;
+import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
+import online.draughts.rus.shared.resource.GamesResource;
 
 /**
  * Created with IntelliJ IDEA.
@@ -15,9 +19,10 @@ import online.draughts.rus.shared.locale.DraughtsMessages;
  * Time: 18:54
  */
 public class PlayComponentUtil {
-  static void checkWin(EventBus eventBus, PlaySession playSession, DraughtsMessages messages,
-                       DialogFactory dialogFactory, int myDraughtsSize, int opponentDraughtsSize, boolean white) {
-    GameDto.GameEnds gameEnd = null;
+  static void checkWin(EventBus eventBus, final PlaySession playSession, DraughtsMessages messages,
+                       final DialogFactory dialogFactory, int myDraughtsSize, int opponentDraughtsSize,
+                       boolean white, final ResourceDelegate<GamesResource> gamesDelegate) {
+    GameDto.GameEnd gameEnd = null;
     final GameDto.GameType gameType = playSession.getGameType();
     if (0 == myDraughtsSize) {
       dialogFactory.createGameResultDialogBox(endGameMessage(messages, gameType, false)).show();
@@ -40,7 +45,9 @@ public class PlayComponentUtil {
     if (gameEnd == null) {
       return;
     }
-    eventBus.fireEvent(new GameOverEvent(endGame, gameEnd, new AbstractAsyncCallback<GameDto>(dialogFactory) {
+    Logger.debug("1 " + gameEnd);
+    endGame.setPlayEndStatus(gameEnd);
+    eventBus.fireEvent(new GameOverEvent(endGame, new AbstractAsyncCallback<GameDto>(dialogFactory) {
       @Override
       public void onSuccess(GameDto result) {
       }
@@ -58,31 +65,32 @@ public class PlayComponentUtil {
     }
   }
 
-  private static GameDto.GameEnds whiteWin(GameDto.GameType gameType) {
+  private static GameDto.GameEnd whiteWin(GameDto.GameType gameType) {
     switch (gameType) {
       case DRAUGHTS:
-        return GameDto.GameEnds.WHITE_WIN;
+        return GameDto.GameEnd.WHITE_WIN;
       case GIVEAWAY:
-        return GameDto.GameEnds.BLACK_WIN;
+        return GameDto.GameEnd.BLACK_WIN;
       default:
-        return GameDto.GameEnds.WHITE_WIN;
+        return GameDto.GameEnd.WHITE_WIN;
     }
   }
 
-  private static GameDto.GameEnds blackWin(GameDto.GameType gameType) {
+  private static GameDto.GameEnd blackWin(GameDto.GameType gameType) {
     switch (gameType) {
       case DRAUGHTS:
-        return GameDto.GameEnds.BLACK_WIN;
+        return GameDto.GameEnd.BLACK_WIN;
       case GIVEAWAY:
-        return GameDto.GameEnds.WHITE_WIN;
+        return GameDto.GameEnd.WHITE_WIN;
       default:
-        return GameDto.GameEnds.BLACK_WIN;
+        return GameDto.GameEnd.BLACK_WIN;
     }
   }
 
-  static void checkShut(EventBus eventBus, PlaySession playSession,
-                        DraughtsMessages messages, DialogFactory dialogFactory, boolean isWhite) {
-    final GameDto.GameEnds gameEnd;
+  static void checkShut(EventBus eventBus, final PlaySession playSession,
+                        DraughtsMessages messages, final DialogFactory dialogFactory, boolean isWhite,
+                        final ResourceDelegate<GamesResource> gamesDelegate) {
+    final GameDto.GameEnd gameEnd;
     final GameDto.GameType gameType = playSession.getGameType();
     if (isWhite == playSession.isPlayerHasWhiteColor()) {
       dialogFactory.createGameResultDialogBox(endGameMessage(messages, gameType, false)).show();
@@ -95,10 +103,22 @@ public class PlayComponentUtil {
       gameEnd = whiteWin(playSession.getGameType());
     }
     final GameDto endedGame = playSession.getGame();
-    eventBus.fireEvent(new GameOverEvent(endedGame, gameEnd, new AbstractAsyncCallback<GameDto>(dialogFactory) {
+    endedGame.setPlayEndStatus(gameEnd);
+    Logger.debug("1s " + gameEnd);
+    eventBus.fireEvent(new GameOverEvent(endedGame, new AbstractAsyncCallback<GameDto>(dialogFactory) {
       @Override
       public void onSuccess(GameDto result) {
       }
     }));
+  }
+
+  public static void updatePlayerStat(ResourceDelegate<GamesResource> gamesDelegate, final DialogFactory dialogFactory,
+                                      final PlaySession playerSession, GameDto game) {
+    gamesDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>(dialogFactory) {
+      @Override
+      public void onSuccess(PlayerDto playerDto) {
+        playerSession.getPlayer().updateSerializable(playerDto);
+      }
+    }).updatePlayerStat(game.getId(), playerSession.getPlayer().getId());
   }
 }

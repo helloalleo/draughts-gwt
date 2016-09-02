@@ -6,12 +6,13 @@ package online.draughts.rus.shared.resource;
  * Date: 08.11.15
  * Time: 20:04
  */
-public class ApiParameters {
+class ApiParameters {
 
-  public static final String ID = "id";
-  public static final String LIMIT = "limit";
-  public static final String OFFSET = "offset";
-  public static final String PLAYER_ID = "playerId";
-  public static final String OPPONENT_ID = "opponentId";
-  public static final String FRIEND_ID = "friendId";
+  static final String ID = "id";
+  static final String LIMIT = "limit";
+  static final String OFFSET = "offset";
+  static final String PLAYER_ID = "playerId";
+  static final String OPPONENT_ID = "opponentId";
+  static final String FRIEND_ID = "friendId";
+  static final String GAME_ID = "gameId";
 }

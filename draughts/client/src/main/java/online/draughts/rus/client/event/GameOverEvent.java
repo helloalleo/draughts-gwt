@@ -13,21 +13,15 @@ import online.draughts.rus.shared.dto.GameDto;
 public class GameOverEvent extends GwtEvent<GameOverEventHandler> {
   public static Type<GameOverEventHandler> TYPE = new Type<GameOverEventHandler>();
   private final GameDto game;
-  private final GameDto.GameEnds gameEnd;
   private final AsyncCallback<GameDto> asyncCallback;
 
-  public GameOverEvent(GameDto game, GameDto.GameEnds gameEnd, AsyncCallback<GameDto> asyncCallback) {
+  public GameOverEvent(GameDto game, AsyncCallback<GameDto> asyncCallback) {
     this.game = game;
-    this.gameEnd = gameEnd;
     this.asyncCallback = asyncCallback;
   }
 
   public GameDto getGame() {
     return game;
-  }
-
-  public GameDto.GameEnds getGameEnd() {
-    return gameEnd;
   }
 
   public AsyncCallback<GameDto> getAsyncCallback() {

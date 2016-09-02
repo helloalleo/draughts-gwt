@@ -46,4 +46,5 @@ public class ApiPaths {
 
   static final String COACH_APPLY = "/coachApply";
   static final String ERROR = "/error";
+  static final String PLAYER_STAT = "/player_stat";
 }
