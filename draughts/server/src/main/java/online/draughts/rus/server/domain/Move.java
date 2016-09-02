@@ -20,6 +20,8 @@ public class Move extends ModelImpl<Move> {
   private int moveOrder; // порядковый номер хода
   private boolean first; // первый ход в паре ходов. Например, ee-aa в ee-aa bb-cc
   private boolean fixate; // индикатор того, что ходили белыми
+  private boolean queen;
+  private boolean white;
 
   private GameMessage gameMessage;
 
@@ -172,6 +174,22 @@ public class Move extends ModelImpl<Move> {
 
   public void setScreenshot(String screenshot) {
     this.screenshot = screenshot;
+  }
+
+  public boolean isQueen() {
+    return queen;
+  }
+
+  public void setQueen(boolean queen) {
+    this.queen = queen;
+  }
+
+  public boolean isWhite() {
+    return white;
+  }
+
+  public void setWhite(boolean white) {
+    this.white = white;
   }
 
   @Override

@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.channel.ServerChannel;
 import online.draughts.rus.server.config.Config;
-import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.server.domain.Player;
 
 import javax.servlet.ServletException;
@@ -34,12 +33,12 @@ public class CheckOnlineServlet extends HttpServlet {
       return;
     }
 
-    List<Game> games = Game.getInstance().findTrueRange(0, 100);
-    for (Game game : games) {
-      game.setDeleted(false);
-      game.setGameSnapshot(false);
-      game.update();
-    }
+//      List<Game> games = Game.getInstance().findTrueRange(500, 400);
+//      for (Game game : games) {
+//        game.setDeleted(false);
+//        game.setGameSnapshot(false);
+//        game.update();
+//      }
 
     List<Player> players = Player.getInstance().findOnline();
     Calendar calendar = Calendar.getInstance();

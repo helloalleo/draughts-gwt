@@ -1,12 +1,30 @@
 {
   "sender": {
-    "sessionId": "18ge0nfan1z3c",
+    "sessionId": "1cegt1mqywq9w",
     "notificationsUserId": null,
     "firstName": "Алексей",
     "lastName": "Попрядухин",
     "playerName": null,
     "avatar": "http://cs630926.vk.me/v630926472/2c33c/Y4Ghu41iViI.jpg",
-    "rating": 14,
+    "rating": 1028,
+    "loggedIn": true,
+    "playing": true,
+    "online": true,
+    "subscribed": false,
+    "moderator": false,
+    "admin": false,
+    "subscribeOnNewsletter": true,
+    "coach": true,
+    "id": 5066549580791808
+  },
+  "receiver": {
+    "sessionId": "1sd37m3964aso",
+    "notificationsUserId": null,
+    "firstName": "Алексей",
+    "lastName": "Попрядухин",
+    "playerName": null,
+    "avatar": "https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12802870_1057414910987558_3186967769539038661_n.jpg?oh=fd8524f26ebdbf22a14c8954f2480401&oe=58488FA0",
+    "rating": 1000,
     "loggedIn": true,
     "playing": false,
     "online": true,
@@ -14,56 +32,53 @@
     "moderator": false,
     "admin": false,
     "subscribeOnNewsletter": true,
-    "id": 5066549580791808
-  },
-  "receiver": {
-    "sessionId": "cy663w9hdgjo",
-    "notificationsUserId": null,
-    "firstName": "Алексей",
-    "lastName": "Попрядухин",
-    "playerName": null,
-    "avatar": "http://vk.com/images/camera_50.png",
-    "rating": 26,
-    "loggedIn": true,
-    "playing": false,
-    "online": true,
-    "subscribed": false,
-    "moderator": true,
-    "admin": false,
-    "subscribeOnNewsletter": true,
-    "id": 5629499534213120
+    "coach": false,
+    "id": 5312840185413632
   },
   "message": null,
-  "messageType": "PLAY_START",
-  "data": "{\"gameType\":\"DRAUGHTS\",\"white\":true,\"timeOnPlay\":30,\"fisherTime\":0,\"publishGame\":true}",
+  "messageType": "PLAY_OPPONENT_MOVE",
+  "data": "174",
   "sentDate": null,
-  "move": null,
+  "move": {
+    "number": 1,
+    "moveOrder": 0,
+    "first": true,
+    "fixate": false,
+    "movingDraught": {
+      "row": 5,
+      "col": 6,
+      "white": true,
+      "queen": false,
+      "id": 0
+    },
+    "movedDraught": {
+      "row": 4,
+      "col": 7,
+      "white": true,
+      "queen": false,
+      "id": 0
+    },
+    "takenDraught": null,
+    "moveFlags": [
+      "SIMPLE_MOVE"
+    ],
+    "title": "g3-h4",
+    "comment": null,
+    "hashTags": [],
+    "screenshot": null,
+    "queen": false,
+    "white": false,
+    "id": 0
+  },
   "game": {
     "playerWhite": {
-      "sessionId": "cy663w9hdgjo",
-      "notificationsUserId": null,
-      "firstName": "Алексей",
-      "lastName": "Попрядухин",
-      "playerName": null,
-      "avatar": "http://vk.com/images/camera_50.png",
-      "rating": 26,
-      "loggedIn": true,
-      "playing": false,
-      "online": true,
-      "subscribed": false,
-      "moderator": true,
-      "admin": false,
-      "subscribeOnNewsletter": true,
-      "id": 5629499534213120
-    },
-    "playerBlack": {
-      "sessionId": "18ge0nfan1z3c",
+      "sessionId": "1cegt1mqywq9w",
       "notificationsUserId": null,
       "firstName": "Алексей",
       "lastName": "Попрядухин",
       "playerName": null,
       "avatar": "http://cs630926.vk.me/v630926472/2c33c/Y4Ghu41iViI.jpg",
-      "rating": 14,
+      "rating": 1028,
       "loggedIn": true,
       "playing": false,
       "online": true,
@@ -71,19 +86,210 @@
       "moderator": false,
       "admin": false,
       "subscribeOnNewsletter": true,
+      "coach": true,
       "id": 5066549580791808
+    },
+    "playerBlack": {
+      "sessionId": "1sd37m3964aso",
+      "notificationsUserId": null,
+      "firstName": "Алексей",
+      "lastName": "Попрядухин",
+      "playerName": null,
+      "avatar": "https://scontent.xx.fbcdn.net/v/t1.0-1/p50x50/12802870_1057414910987558_3186967769539038661_n.jpg?oh=fd8524f26ebdbf22a14c8954f2480401&oe=58488FA0",
+      "rating": 1000,
+      "loggedIn": true,
+      "playing": false,
+      "online": true,
+      "subscribed": false,
+      "moderator": false,
+      "admin": false,
+      "subscribeOnNewsletter": true,
+      "coach": false,
+      "id": 5312840185413632
     },
     "gameType": null,
     "playEndStatus": null,
-    "playStartDate": null,
+    "playStartDate": 1472817595849,
     "playFinishDate": null,
     "notation": null,
     "endGameScreenshot": null,
     "endGameScreenshotUrl": null,
-    "initialPos": [],
-    "publish": true,
     "currentStateScreenshot": null,
-    "id": 0
+    "currentStateScreenshotUrl": null,
+    "initialPos": [
+      {
+        "row": 1,
+        "col": 0,
+        "white": false,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 2,
+        "col": 1,
+        "white": false,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 7,
+        "col": 0,
+        "white": true,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 0,
+        "col": 3,
+        "white": false,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 1,
+        "col": 4,
+        "white": false,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 2,
+        "col": 5,
+        "white": false,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 5,
+        "col": 2,
+        "white": true,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 6,
+        "col": 3,
+        "white": true,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 7,
+        "col": 4,
+        "white": true,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 0,
+        "col": 1,
+        "white": false,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 1,
+        "col": 2,
+        "white": false,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 2,
+        "col": 3,
+        "white": false,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 5,
+        "col": 0,
+        "white": true,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 6,
+        "col": 1,
+        "white": true,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 7,
+        "col": 2,
+        "white": true,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 0,
+        "col": 7,
+        "white": false,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 5,
+        "col": 6,
+        "white": true,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 6,
+        "col": 7,
+        "white": true,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 0,
+        "col": 5,
+        "white": false,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 1,
+        "col": 6,
+        "white": false,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 2,
+        "col": 7,
+        "white": false,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 5,
+        "col": 4,
+        "white": true,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 6,
+        "col": 5,
+        "white": true,
+        "queen": false,
+        "id": 0
+      },
+      {
+        "row": 7,
+        "col": 6,
+        "white": true,
+        "queen": false,
+        "id": 0
+      }
+    ],
+    "publish": true,
+    "gameSnapshot": false,
+    "deleted": false,
+    "id": 5053355441258496
   },
   "playerList": null,
   "id": 0
