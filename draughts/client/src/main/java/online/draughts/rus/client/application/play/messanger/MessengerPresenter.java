@@ -79,7 +79,7 @@ public class MessengerPresenter extends PresenterWidget<MessengerPresenter.MyVie
   }
 
   private void getPlayerChat() {
-    getView().setHeading(player.getPublicName());
+    getView().setHeading(opponent.getPublicName());
     gameMessagesDelegate.withCallback(new AbstractAsyncCallback<List<GameMessageDto>>(dialogFactory) {
       @Override
       public void onSuccess(List<GameMessageDto> result) {
