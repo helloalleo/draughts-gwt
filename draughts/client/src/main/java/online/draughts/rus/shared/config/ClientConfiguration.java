@@ -16,6 +16,8 @@ public interface ClientConfiguration extends Messages {
 
   String initShowGamesPageSize();
 
+  String gamesToShow();
+
   String incrementPlayShowSize();
 
   String strokeCommentLength();

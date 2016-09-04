@@ -42,6 +42,7 @@ public class PlayShowPanel extends Composite {
   private final DialogFactory dialogFactory;
   private final ShowPanelEnum showPanelEnum;
   private final GamesPanelViewable gamesView;
+  private final Integer gamesToShow;
   private PagingList gamesInRow;
 //  private PagingList myGamesInRow;
 
@@ -75,6 +76,7 @@ public class PlayShowPanel extends Composite {
     this.showPanelEnum = showPanelEnum;
 
     incrementSize = Integer.valueOf(config.initShowGamesPageSize());
+    gamesToShow = Integer.valueOf(config.gamesToShow());
 
     this.showPanelFactory = showPanelFactory;
     this.cookies = cookies;
@@ -132,6 +134,9 @@ public class PlayShowPanel extends Composite {
     return Window.addWindowScrollHandler(new Window.ScrollHandler() {
       @Override
       public void onWindowScroll(Window.ScrollEvent event) {
+        if (incrementSize > gamesToShow) {
+          return;
+        }
         if (blockScroll) {
           return;
         }
