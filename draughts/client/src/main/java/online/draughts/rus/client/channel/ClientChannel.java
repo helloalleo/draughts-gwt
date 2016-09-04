@@ -365,6 +365,7 @@ public class ClientChannel implements ChannelListener {
 
   @SuppressWarnings("unused")
   private void handlePlayEndGame(GameMessageDto gameMessage) {
+    Logger.debug(gameMessage.getData());
     if (playSession.getGame() != null && GameMessageDto.GAME_END.equals(gameMessage.getData())) {
       GameDto game = playSession.getGame();
       final GameDto.GameEnd gameEnd;
@@ -372,9 +373,11 @@ public class ClientChannel implements ChannelListener {
       if (GameDto.GameEnd.WHITE_WIN.equals(remotePlayEndStatus)
           || GameDto.GameEnd.BLACK_WIN.equals(remotePlayEndStatus)) {
         gameEnd = remotePlayEndStatus;
-      } else {
+      } else if (!GameDto.GameEnd.DRAW.equals(remotePlayEndStatus)) {
         gameEnd = playSession.isPlayerHasWhiteColor()
             ? GameDto.GameEnd.BLACK_LEFT : GameDto.GameEnd.WHITE_LEFT;
+      } else {
+        gameEnd = GameDto.GameEnd.DRAW;
       }
       game.setPlayEndStatus(gameEnd);
       Logger.debug("2 " + gameEnd);
@@ -385,7 +388,10 @@ public class ClientChannel implements ChannelListener {
         }
       }));
     } else if (playSession.getGame() != null && GameMessageDto.GAME_UPDATE.equals(gameMessage.getData())) {
+      Logger.debug("4");
       playSession.getGame().setId(gameMessage.getGame().getId());
+    } else {
+      Logger.debug("5");
     }
   }
 
@@ -431,12 +437,20 @@ public class ClientChannel implements ChannelListener {
 
   private void handlePlayAcceptDraw(GameMessageDto gameMessage) {
     if (Boolean.valueOf(gameMessage.getData())) {
-      eventBus.fireEvent(new GameOverEvent(playSession.getGame(),
-          new AbstractAsyncCallback<GameDto>(dialogFactory) {
-            @Override
-            public void onSuccess(GameDto aVoid) {
-            }
-          }));
+      final GameDto gameDto = playSession.getGame();
+//      // уведомляем оппонента об окончании игры
+//      GameMessageDto gameMessageDto = createGameMessage();
+//      gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_GAME_UPDATE);
+//      gameMessageDto.setData(GameMessageDto.GAME_END);
+//      gameMessageDto.setGame(gameDto);
+//      eventBus.fireEvent(new GameMessageEvent(gameMessageDto));
+
+      gameDto.setPlayEndStatus(GameDto.GameEnd.DRAW);
+      eventBus.fireEvent(new GameOverEvent(gameDto, new AbstractAsyncCallback<GameDto>(dialogFactory) {
+        @Override
+        public void onSuccess(GameDto aVoid) {
+        }
+      }));
     } else {
       String senderName = gameMessage.getSender().getPublicName();
       dialogFactory.createGameResultDialogBox(messages.playerRejectedDraw(senderName)).show();
@@ -445,6 +459,7 @@ public class ClientChannel implements ChannelListener {
 
   /**
    * Принятие ничьи на стороне клиента
+   *
    * @param gameMessage
    */
   private void handlePlayProposeDraw(final GameMessageDto gameMessage) {
@@ -465,9 +480,9 @@ public class ClientChannel implements ChannelListener {
 
         sendGameMessage(message);
 
-        if (isConfirmed()) {
-          eventBus.fireEvent(new ClearPlayComponentEvent());
-        }
+//        if (isConfirmed()) {
+//          eventBus.fireEvent(new ClearPlayComponentEvent());
+//        }
       }
     };
   }
@@ -482,9 +497,10 @@ public class ClientChannel implements ChannelListener {
   @SuppressWarnings("unused")
   private void handlePlaySurrender(GameMessageDto gameMessage) {
     GameDto game = playSession.getGame();
-    // так как сохраняем на противоположной строне, игроки черный-белый переставлены
+    // так как сохраняем на противоположной стороне, игроки черный-белый переставлены
     final GameDto.GameEnd gameEnd = playSession.isPlayerHasWhiteColor() ? GameDto.GameEnd.SURRENDER_BLACK
         : GameDto.GameEnd.SURRENDER_WHITE;
+    game.setPlayEndStatus(gameEnd);
     eventBus.fireEvent(new GameOverEvent(game, new AbstractAsyncCallback<GameDto>(dialogFactory) {
       @Override
       public void onSuccess(GameDto aVoid) {

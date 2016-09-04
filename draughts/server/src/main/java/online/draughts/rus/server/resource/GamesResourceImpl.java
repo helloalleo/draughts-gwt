@@ -66,7 +66,7 @@ public class GamesResourceImpl implements GamesResource {
 
   @Override
   public PlayerDto updatePlayerStat(long gameId, long playerId) {
-    return null; //gameService.updatePlayerStat(gameId, playerId);
+    return gameService.updatePlayersStat(gameId, playerId);
   }
 
   @Override

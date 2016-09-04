@@ -500,7 +500,8 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
 
     addRegisteredHandler(GameOverEvent.TYPE, new GameOverEventHandler() {
       @Override
-      public void onGameOver(GameOverEvent event) {
+      public void onGameOver(final GameOverEvent event) {
+        Logger.debug("go");
         final GameDto game = event.getGame();
         game.setGameType(playSession.getGameType());
         game.setPlayFinishDate(new Date());
@@ -508,8 +509,19 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
         game.setNotation(notation);
         game.setEndGameScreenshot(getView().takeScreenshot());
         game.setPublish(event.getGame().getPublish());
-        gamesDelegate.withCallback(event.getAsyncCallback()).save(game);
-        Logger.debug("3 " + game);
+        gamesDelegate.withCallback(new AbstractAsyncCallback<GameDto>(dialogFactory) {
+          @Override
+          public void onSuccess(GameDto gameDto) {
+            event.getAsyncCallback().onSuccess(gameDto);
+            gamesDelegate.withCallback(new AbstractAsyncCallback<PlayerDto>(dialogFactory) {
+              @Override
+              public void onSuccess(PlayerDto playerDto) {
+                fireEvent(new UpdateAllPlayerListEvent());
+              }
+            }).updatePlayerStat(gameDto.getId(), playSession.getPlayer().getId());
+          }
+        }).save(game);
+        Logger.debug("3 " + game.getPlayEndStatus());
 
         GameMessageDto gameMessageDto = createGameMessage();
         gameMessageDto.setMessageType(GameMessageDto.MessageType.PLAY_GAME_UPDATE);

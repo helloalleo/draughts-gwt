@@ -7,6 +7,7 @@ import online.draughts.rus.server.domain.*;
 import online.draughts.rus.server.util.CloudStoreUtils;
 import online.draughts.rus.server.util.Rating;
 import online.draughts.rus.shared.dto.GameDto;
+import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.util.DozerHelper;
 import org.apache.log4j.Logger;
 import org.dozer.Mapper;
@@ -91,10 +92,10 @@ public class GameService {
         game.setEndGameScreenshot(null);
 
         // игра закончена, сохраняем статистику и друзей
-//        Player playerWhite = game.getPlayerWhite();
-//        Player playerBlack = game.getPlayerBlack();
-        Player playerBlack = updatePlayerStat(game, game.getPlayerBlack().getId());
-        Player playerWhite = updatePlayerStat(game, game.getPlayerWhite().getId());
+        Player playerWhite = game.getPlayerWhite();
+        Player playerBlack = game.getPlayerBlack();
+//        Player playerBlack = updatePlayerStat(game, game.getPlayerBlack().getId());
+//        Player playerWhite = updatePlayerStat(game, game.getPlayerWhite().getId());
         boolean playerWhiteIsFriendOfPlayerBlack = friendService.isPlayerFriendOf(playerWhite.getId(), playerBlack.getId());
         saveFriend(playerWhite, playerBlack, playerWhiteIsFriendOfPlayerBlack);
         boolean playerBlackIsFriendOfPlayerWhite = friendService.isPlayerFriendOf(playerBlack.getId(), playerWhite.getId());
@@ -129,7 +130,12 @@ public class GameService {
     }
   }
 
-  public Player updatePlayerStat(Game game, long playerId) {
+  public PlayerDto updatePlayersStat(long gameId, long playerId) {
+    return mapper.map(updatePlayerStat(gameId, playerId), PlayerDto.class);
+  }
+
+  private Player updatePlayerStat(long gameId, long playerId) {
+    Game game = Game.getInstance().find(gameId);
     Player player = playerService.find(playerId);
     player.setGamePlayed(player.getGamePlayed() + 1);
     final GameDto.GameEnd playEndStatus = game.getPlayEndStatus();
@@ -150,7 +156,7 @@ public class GameService {
           blackWon = true;
           whiteWon = false;
           opponent.setGameLost(opponent.getGameLost() + 1);
-        } else if (whiteWin || blackSurrender){
+        } else if (whiteWin || blackSurrender) {
           player.setGameLost(player.getGameLost() + 1);
           blackWon = false;
           whiteWon = true;
