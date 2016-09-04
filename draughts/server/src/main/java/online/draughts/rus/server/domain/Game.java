@@ -243,9 +243,15 @@ public class Game extends ModelImpl<Game> {
     PreparedQuery preparedQuery = getDatastore().prepare(query);
 
     FetchOptions fetchOptions =
-        FetchOptions.Builder.withLimit(limit);
-    fetchOptions.offset(offset);
+        FetchOptions.Builder.withOffset(offset);
+    if (limit >= 0) {
+      fetchOptions.limit(limit);
+    }
     return getListResult(preparedQuery.asQueryResultList(fetchOptions));
+  }
+
+  public List<Game> findByPlayerId(long playerId) {
+    return findUserGames(playerId, 0, -1);
   }
 
   @Override

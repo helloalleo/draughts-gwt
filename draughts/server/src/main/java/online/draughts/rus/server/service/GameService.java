@@ -78,6 +78,16 @@ public class GameService {
 
   public Game save(Game game) {
     if (game.getId() == 0) {
+      Player playerBlack = game.getPlayerBlack();
+      Player playerWhite = game.getPlayerWhite();
+      List<Game> gamesBlack = Game.getInstance().findByPlayerId(playerBlack.getId());
+      List<Game> gamesWhite = Game.getInstance().findByPlayerId(playerWhite.getId());
+      int totalGamesBlack = gamesBlack.size();
+      int totalGamesWhite = gamesWhite.size();
+      if (Math.min(totalGamesBlack, totalGamesWhite) > Config.LIMIT_GAMES_OVER_REMOVE) {
+        removeGame(gamesBlack, totalGamesBlack);
+        removeGame(gamesWhite, totalGamesWhite);
+      }
       game.update();
       return game;
     }
@@ -118,6 +128,16 @@ public class GameService {
 
     game.update();
     return game;
+  }
+
+  private void removeGame(List<Game> games, int totalGames) {
+    if (totalGames > Config.LIMIT_GAMES_OVER_REMOVE) {
+      List<Game> toBeDeleted = games.subList(Config.LIMIT_GAMES_OVER_REMOVE, games.size() - 1);
+      for (Game game : toBeDeleted) {
+        game.setDeleted(true);
+        game.update();
+      }
+    }
   }
 
   private void saveFriend(Player playerBlack, Player playerWhite, boolean playerBlackIsFriendOfPlayerWhite) {

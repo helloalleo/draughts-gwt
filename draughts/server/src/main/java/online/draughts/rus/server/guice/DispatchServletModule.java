@@ -27,10 +27,7 @@ import com.gwtplatform.dispatch.rpc.shared.ActionImpl;
 import online.draughts.rus.server.channel.ChannelPresenceServlet;
 import online.draughts.rus.server.channel.ServerChannel;
 import online.draughts.rus.server.config.Config;
-import online.draughts.rus.server.servlet.CheckOnlineServlet;
-import online.draughts.rus.server.servlet.GameGiff;
-import online.draughts.rus.server.servlet.LogoutAll;
-import online.draughts.rus.server.servlet.LogoutServlet;
+import online.draughts.rus.server.servlet.*;
 import online.draughts.rus.server.servlet.oauth.*;
 import online.draughts.rus.server.util.AuthUtils;
 
@@ -52,6 +49,7 @@ class DispatchServletModule extends ServletModule {
     serve("/_ah/channel/connected/").with(ChannelPresenceServlet.class);
     serve("/_ah/channel/disconnected/").with(ChannelPresenceServlet.class);
 
+    serve("/admin/action").with(AdminServlet.class);
     serve("/cron/checkonline").with(CheckOnlineServlet.class);
     serve("/cron/logoutall").with(LogoutAll.class);
 

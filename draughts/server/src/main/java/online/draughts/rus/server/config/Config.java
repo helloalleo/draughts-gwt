@@ -66,4 +66,5 @@ public class Config {
   public static final String ADMIN_MAIL = resourceBundle.getString("admin_mail");
 
   public static final int STRIP_PLAYER_NAME = Integer.valueOf(resourceBundle.getString("strip_player_name"));
+  public static final int LIMIT_GAMES_OVER_REMOVE = Integer.valueOf(resourceBundle.getString("limit_games_over_remove"));
 }
