@@ -205,10 +205,15 @@
         </dependency>
 
         <!--Channel -->
+        <!--<dependency>-->
+            <!--<groupId>no.eirikb</groupId>-->
+            <!--<artifactId>gwt-channel-api</artifactId>-->
+            <!--<version>0.3</version>-->
+        <!--</dependency>-->
         <dependency>
-            <groupId>no.eirikb</groupId>
-            <artifactId>gwt-channel-api</artifactId>
-            <version>0.3</version>
+            <groupId>com.github.spirylics.xgwt</groupId>
+            <artifactId>x-gwt-firebase</artifactId>
+            <version>2.0-SNAPSHOT</version>
         </dependency>
 
         <!--Lienzo-->

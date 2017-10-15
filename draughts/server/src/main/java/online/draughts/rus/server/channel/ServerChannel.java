@@ -4,7 +4,6 @@ import com.google.inject.Inject;
 import com.google.inject.Provider;
 import com.google.inject.Singleton;
 import com.google.inject.name.Named;
-import no.eirikb.gwtchannelapi.server.ChannelServer;
 import online.draughts.rus.server.domain.Game;
 import online.draughts.rus.server.domain.GameMessage;
 import online.draughts.rus.server.domain.Move;
@@ -32,7 +31,7 @@ import java.util.Map;
  * Time: 12:05
  */
 @Singleton
-public class ServerChannel extends ChannelServer {
+public class ServerChannel {
 
   private final Logger logger = Logger.getLogger(ServerChannel.class);
 
@@ -58,12 +57,10 @@ public class ServerChannel extends ChannelServer {
     this.mailService = mailService;
   }
 
-  @Override
   public void onJoin(String token, String channelName) {
     logger.info("A new player joined: " + channelName);
   }
 
-  @Override
   public void onMessage(String token, String channel, String message) {
     if (!authProvider.get()) {
       logger.info("Unauthorized access");

@@ -2,7 +2,6 @@ package online.draughts.rus.server.channel;
 
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
-import no.eirikb.gwtchannelapi.server.ChannelServer;
 import online.draughts.rus.server.domain.GameMessage;
 import online.draughts.rus.server.service.GameService;
 import online.draughts.rus.server.service.PlayerService;
@@ -18,7 +17,7 @@ import org.dozer.Mapper;
  * Time: 13:26
  */
 @Singleton
-public class AnonymousChannel extends ChannelServer {
+public class AnonymousChannel {
 
   private final Logger logger = Logger.getLogger(AnonymousChannel.class);
 
@@ -38,12 +37,10 @@ public class AnonymousChannel extends ChannelServer {
     this.mapper = mapper;
   }
 
-  @Override
   protected void onJoin(String token, String channelName) {
     logger.info("A new player joined: " + channelName);
   }
 
-  @Override
   public void onMessage(String token, String channel, String message) {
     if (StringUtils.isEmpty(message)) {
       logger.info("Empty message");

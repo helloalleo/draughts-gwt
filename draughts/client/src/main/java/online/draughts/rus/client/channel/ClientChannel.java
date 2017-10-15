@@ -1,14 +1,12 @@
 package online.draughts.rus.client.channel;
 
+import com.github.spirylics.xgwt.firebase.Config;
+import com.github.spirylics.xgwt.firebase.Event;
+import com.github.spirylics.xgwt.firebase.Firebase;
 import com.google.gwt.core.client.GWT;
-import com.google.gwt.event.logical.shared.CloseEvent;
-import com.google.gwt.event.logical.shared.CloseHandler;
 import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
-import com.gwtplatform.dispatch.rest.delegates.client.ResourceDelegate;
-import no.eirikb.gwtchannelapi.client.Channel;
-import no.eirikb.gwtchannelapi.client.ChannelListener;
 import online.draughts.rus.client.application.common.InviteData;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.dialog.ConfirmDialogBox;
@@ -16,7 +14,6 @@ import online.draughts.rus.client.application.widget.dialog.ConfirmPlayDialogBox
 import online.draughts.rus.client.application.widget.growl.Growl;
 import online.draughts.rus.client.event.*;
 import online.draughts.rus.client.gin.DialogFactory;
-import online.draughts.rus.client.json.ChunkMapper;
 import online.draughts.rus.client.json.GameMessageMapper;
 import online.draughts.rus.client.json.InviteDataMapper;
 import online.draughts.rus.client.resources.AppResources;
@@ -24,19 +21,15 @@ import online.draughts.rus.client.util.AbstractAsyncCallback;
 import online.draughts.rus.client.util.AudioUtil;
 import online.draughts.rus.client.util.Logger;
 import online.draughts.rus.client.util.TrUtils;
-import online.draughts.rus.shared.channel.Chunk;
+import online.draughts.rus.shared.config.ClientConfiguration;
 import online.draughts.rus.shared.dto.GameDto;
 import online.draughts.rus.shared.dto.GameMessageDto;
 import online.draughts.rus.shared.dto.MoveDto;
 import online.draughts.rus.shared.dto.PlayerDto;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import online.draughts.rus.shared.resource.GamesResource;
-import online.draughts.rus.shared.util.StringUtils;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Map;
-import java.util.TreeMap;
 
 /**
  * Created with IntelliJ IDEA.
@@ -44,64 +37,66 @@ import java.util.TreeMap;
  * Date: 07.12.14
  * Time: 11:39
  */
-public class ClientChannel implements ChannelListener {
+public class ClientChannel {
 
   private final CurrentSession currentSession;
   private EventBus eventBus;
   private PlayerDto player;
-  private Channel channel;
   private DraughtsMessages messages;
   private ConfirmPlayDialogBox confirmPlayDialogBox;
   private PlaySession playSession;
-  private ChunkMapper chunkMapper;
   private GameMessageMapper messageMapper;
   private final InviteDataMapper inviteDataMapper;
   private final AppResources resources;
   private final DialogFactory dialogFactory;
-  private final ResourceDelegate<GamesResource> gamesDelegate;
-  private Map<Integer, String> gameMessageChunks = new TreeMap<>();
+  private Firebase firebase;
+  private final ClientConfiguration config;
 
   @Inject
   public ClientChannel(EventBus eventBus,
                        CurrentSession currentSession,
                        final PlaySession playSession,
-                       ChunkMapper chunkMapper,
                        GameMessageMapper messageMapper,
                        InviteDataMapper inviteDataMapper,
                        final DraughtsMessages messages,
-                       AppResources resources, DialogFactory dialogFactory, ResourceDelegate<GamesResource> gamesDelegate) {
+                       AppResources resources,
+                       DialogFactory dialogFactory,
+                       ClientConfiguration config) {
     this.currentSession = currentSession;
     this.playSession = playSession;
     this.eventBus = eventBus;
     this.messages = messages;
-    this.chunkMapper = chunkMapper;
     this.messageMapper = messageMapper;
     this.inviteDataMapper = inviteDataMapper;
     this.resources = resources;
     this.dialogFactory = dialogFactory;
-    this.gamesDelegate = gamesDelegate;
+    this.config = config;
 
+//    initFirebase();
     bindEvents();
 
-    Window.addWindowClosingHandler(new Window.ClosingHandler() {
-      @Override
-      public void onWindowClosing(Window.ClosingEvent event) {
-        if (channel == null) {
-          return;
-        }
-        sendSimpleMessage(GameMessageDto.MessageType.CHANNEL_CLOSE);
-      }
+    Window.addWindowClosingHandler(event -> {
+//        if (channel == null) {
+//          return;
+//        }
+      sendSimpleMessage(GameMessageDto.MessageType.CHANNEL_CLOSE);
     });
 
-    Window.addCloseHandler(new CloseHandler<Window>() {
-      @Override
-      public void onClose(CloseEvent<Window> event) {
-        if (channel == null) {
-          return;
-        }
-        sendSimpleMessage(GameMessageDto.MessageType.CHANNEL_CLOSE);
-      }
+    Window.addCloseHandler(event -> {
+//        if (channel == null) {
+//          return;
+//        }
+      sendSimpleMessage(GameMessageDto.MessageType.CHANNEL_CLOSE);
     });
+  }
+
+  private void initFirebase() {
+    Config configFirebase = new Config();
+    configFirebase.setApiKey(config.firebaseApiKey());
+    configFirebase.setAuthDomain(config.firebaseAuthDomain());
+    configFirebase.setDatabaseURL(config.firebaseDatabaseURL());
+    configFirebase.setStorageBucket(config.firebaseStorageBucket());
+    firebase = Firebase.initializeApp(configFirebase);
   }
 
   private void sendSimpleMessage(GameMessageDto.MessageType channelClose) {
@@ -111,34 +106,18 @@ public class ClientChannel implements ChannelListener {
   }
 
   private void bindEvents() {
-    eventBus.addHandler(GameMessageEvent.TYPE, new GameMessageEventHandler() {
-      @Override
-      public void onPlayerMessage(GameMessageEvent event) {
-        GameMessageDto gameMessage = event.getGameMessage();
+    eventBus.addHandler(GameMessageEvent.TYPE, event -> {
+      GameMessageDto gameMessage = event.getGameMessage();
 
-        sendGameMessage(gameMessage);
-      }
+      sendGameMessage(gameMessage);
     });
 
-    eventBus.addHandler(UpdatePlayerListEvent.TYPE, new UpdatePlayerListEventHandler() {
-      @Override
-      public void onUpdatePlayerList(UpdatePlayerListEvent event) {
-        sendSimpleMessage(GameMessageDto.MessageType.USER_LIST_UPDATE);
-      }
-    });
+    eventBus.addHandler(UpdatePlayerListEvent.TYPE, event -> sendSimpleMessage(GameMessageDto.MessageType.USER_LIST_UPDATE));
 
-    eventBus.addHandler(UpdateAllPlayerListEvent.TYPE, new UpdateAllPlayerListEventHandler() {
-      @Override
-      public void onUpdateAllPlayerList(UpdateAllPlayerListEvent event) {
-        sendSimpleMessage(GameMessageDto.MessageType.USER_LIST_UPDATE);
-      }
-    });
-    eventBus.addHandler(ClearPlayComponentEvent.TYPE, new ClearPlayComponentEventHandler() {
-      @Override
-      public void onClearPlayComponent(ClearPlayComponentEvent event) {
-        playSession.setGame(null);
-        playSession.setGameType(null);
-      }
+    eventBus.addHandler(UpdateAllPlayerListEvent.TYPE, event -> sendSimpleMessage(GameMessageDto.MessageType.USER_LIST_UPDATE));
+    eventBus.addHandler(ClearPlayComponentEvent.TYPE, event -> {
+      playSession.setGame(null);
+      playSession.setGameType(null);
     });
   }
 
@@ -154,7 +133,8 @@ public class ClientChannel implements ChannelListener {
       gameMessage.setSender(playSession.getPlayer());
     }
     String message = messageMapper.write(gameMessage);
-    channel.send(message);
+    firebase.database().ref().xChild("gameMessage", message);
+//    channel.send(message);
   }
 
   private void handleUpdatePlayerList(List<PlayerDto> playerList) {
@@ -225,7 +205,6 @@ public class ClientChannel implements ChannelListener {
     AudioUtil.playSound(resources.sounds().inviteSound());
   }
 
-  @Override
   public void onOpen() {
     if (player == null) {
       dialogFactory.createInfoDialogBox(messages.failedToConnectToServer()).show();
@@ -241,14 +220,12 @@ public class ClientChannel implements ChannelListener {
     eventBus.fireEvent(new ConnectedToPlayEvent());
   }
 
-  @Override
   public void onError(int code, String description) {
-    channel = new Channel(String.valueOf(player.getId()));
-    channel.addChannelListener(this);
-    channel.join();
+//    channel = new Channel(String.valueOf(player.getId()));
+//    channel.addChannelListener(this);
+//    channel.join();
   }
 
-  @Override
   public void onClose() {
     sendSimpleMessage(GameMessageDto.MessageType.CHANNEL_CLOSE);
     handleClose();
@@ -259,27 +236,26 @@ public class ClientChannel implements ChannelListener {
     eventBus.fireEvent(new DisconnectFromPlayEvent());
   }
 
-  @Override
-  public void onMessage(String message) {
-    if (StringUtils.isEmpty(message)) {
-      return;
-    }
-    Chunk chunk = chunkMapper.read(message);
-    GameMessageDto gameMessage;
-    if (chunk.getChunksInMessage() == 1) {
-      gameMessage = messageMapper.read(chunk.getMessage());
-    } else {
-      gameMessageChunks.put(chunk.getNumber(), chunk.getMessage());
-      if (chunk.getNumber() == chunk.getChunksInMessage()) {
-        StringBuilder gameMessageStr = new StringBuilder();
-        for (String msg : gameMessageChunks.values()) {
-          gameMessageStr.append(msg);
-        }
-        gameMessage = messageMapper.read(gameMessageStr.toString());
-      } else {
-        return;
-      }
-    }
+  public void onMessage(GameMessageDto gameMessage) {
+//    if (StringUtils.isEmpty(message)) {
+//      return;
+//    }
+//    Chunk chunk = chunkMapper.read(message);
+//    GameMessageDto gameMessage;
+//    if (chunk.getChunksInMessage() == 1) {
+//      gameMessage = messageMapper.read(chunk.getMessage());
+//    } else {
+//      gameMessageChunks.put(chunk.getNumber(), chunk.getMessage());
+//      if (chunk.getNumber() == chunk.getChunksInMessage()) {
+//        StringBuilder gameMessageStr = new StringBuilder();
+//        for (String msg : gameMessageChunks.values()) {
+//          gameMessageStr.append(msg);
+//        }
+//        gameMessage = messageMapper.read(gameMessageStr.toString());
+//      } else {
+//        return;
+//      }
+//    }
 
     switch (gameMessage.getMessageType()) {
       case USER_LIST_UPDATE:
@@ -339,7 +315,6 @@ public class ClientChannel implements ChannelListener {
   private void handlePlayTimeout(GameMessageDto gameMessage) {
     if (playSession.getGame() != null) {
       GameDto game = gameMessage.getGame();
-      GameDto.GameEnd gameEnd = game.getPlayEndStatus();
       eventBus.fireEvent(new GameOverEvent(game, new AbstractAsyncCallback<GameDto>(dialogFactory) {
         @Override
         public void onSuccess(GameDto aVoid) {
@@ -543,8 +518,17 @@ public class ClientChannel implements ChannelListener {
     player = currentSession.getPlayer();
     playSession.setPlayer(player);
 
-    channel = new Channel(String.valueOf(player.getId()));
-    channel.addChannelListener(this);
-    channel.join();
+    firebase.database().ref(".info/connected").xOn(Event.value, xDataSnapshot -> {
+      if (xDataSnapshot.val(Boolean.class)) {
+        onOpen();
+      } else {
+        onClose();
+      }
+    });
+    firebase.database().ref(config.firebaseRef()).xOn(Event.value, xDataSnapshot -> onMessage(xDataSnapshot.val(GameMessageDto.class)));
+
+//    channel = new Channel(String.valueOf(player.getId()));
+//    channel.addChannelListener(this);
+//    channel.join();
   }
 }

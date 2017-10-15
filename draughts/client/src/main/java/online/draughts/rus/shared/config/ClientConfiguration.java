@@ -33,4 +33,14 @@ public interface ClientConfiguration extends Messages {
   String linkToGame(String id);
 
   String draughtsOnlineBucket();
+
+  String firebaseRef();
+
+  String firebaseApiKey();
+
+  String firebaseAuthDomain();
+
+  String firebaseDatabaseURL();
+
+  String firebaseStorageBucket();
 }

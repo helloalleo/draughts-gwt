@@ -21,6 +21,7 @@
     <link rel="stylesheet" href="assets/bootstrap/css/bootstrap.min.css">
     <link rel="stylesheet" href="assets/fonts/font-awesome.min.css">
     <link rel="stylesheet" href="assets/css/user.css">
+    <link rel="stylesheet" href="assets/bower_components/firebase/firebase.js">
 
     <link rel="shortcut icon" type="image/png" href="/favicon.png">
 
