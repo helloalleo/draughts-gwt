@@ -22,7 +22,7 @@
 
         <!-- maven -->
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
-        <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
+        <maven-compiler-plugin.version>3.7.0</maven-compiler-plugin.version>
 
         <target.jdk>1.8</target.jdk>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -141,6 +141,16 @@
             <url>https://oss.sonatype.org/content/repositories/snapshots/</url>
             <releases>
                 <enabled>false</enabled>
+            </releases>
+            <snapshots>
+                <enabled>true</enabled>
+            </snapshots>
+        </repository>
+        <repository>
+            <id>jboss</id>
+            <url>https://repository.jboss.org</url>
+            <releases>
+                <enabled>true</enabled>
             </releases>
             <snapshots>
                 <enabled>true</enabled>

@@ -44,6 +44,7 @@
         <gwtmockito.version>1.1.6</gwtmockito.version>
 
         <project.context>shashki</project.context>
+        <dagger-gwt.version>2.12</dagger-gwt.version>
     </properties>
 
     <dependencyManagement>
@@ -242,6 +243,19 @@
             <artifactId>gwtp-mvp-client</artifactId>
         </dependency>
 
+        <!--<dependency>-->
+            <!--<groupId>com.google.dagger</groupId>-->
+            <!--<artifactId>dagger-gwt</artifactId>-->
+            <!--<version>${dagger-gwt.version}</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+        <!--<dependency>-->
+            <!--<groupId>com.google.dagger</groupId>-->
+            <!--<artifactId>dagger-compiler</artifactId>-->
+            <!--<version>${dagger-gwt.version}</version>-->
+            <!--<scope>provided</scope>-->
+        <!--</dependency>-->
+
         <dependency>
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-mvp-shared</artifactId>
@@ -342,6 +356,14 @@
                     <source>${target.jdk}</source>
                     <target>${target.jdk}</target>
                     <encoding>${project.build.sourceEncoding}</encoding>
+
+                    <!--<annotationProcessors>-->
+                        <!--<path>-->
+                            <!--<groupId>com.google.dagger</groupId>-->
+                            <!--<artifactId>dagger-compiler</artifactId>-->
+                            <!--<version>${dagger-gwt.version}</version>-->
+                        <!--</path>-->
+                    <!--</annotationProcessors>-->
                 </configuration>
             </plugin>
 
