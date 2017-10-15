@@ -1,54 +1,56 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <!DOCTYPE module PUBLIC "-//Google Inc.//DTD Google Web Toolkit 2.7.0//EN"
-    "http://gwtproject.org/doctype/2.7.0/gwt-module.dtd">
+        "http://gwtproject.org/doctype/2.7.0/gwt-module.dtd">
 <module rename-to="Application">
-  <inherits name="com.google.gwt.user.User"/>
+    <inherits name="com.google.gwt.user.User"/>
 
-  <inherits name="com.gwtplatform.dispatch.rest.DispatchRest"/>
-  <inherits name="com.gwtplatform.mvp.MvpWithEntryPoint"/>
+    <inherits name="com.gwtplatform.dispatch.rest.DispatchRest"/>
+    <inherits name="com.gwtplatform.mvp.MvpWithEntryPoint"/>
 
-  <inherits name="org.gwtbootstrap3.GwtBootstrap3"/>
+    <inherits name="org.gwtbootstrap3.GwtBootstrap3"/>
 
-  <inherits name="com.ait.lienzo.Lienzo"/>
+    <inherits name="com.ait.lienzo.Lienzo"/>
 
-  <inherits name="com.github.nmorel.gwtjackson.GwtJackson"/>
+    <inherits name="com.github.nmorel.gwtjackson.GwtJackson"/>
 
-  <inherits name="com.google.gwt.i18n.I18N"/>
+    <inherits name="com.google.gwt.i18n.I18N"/>
 
-  <inherits name="online.draughts.rus.RusDraughtsShared"/>
-  <inherits name="com.gwtplatform.dispatch.rpc.DispatchRpcShared"/>
-  <inherits name="com.gwtplatform.dispatch.rpc.DispatchRpc"/>
-  <inherits name="com.gwtplatform.dispatch.rest.delegates.ResourceDelegate"/>
-  <inherits name="org.gwtbootstrap3.extras.growl.Growl"/>
-  <inherits name="no.eirikb.gwtchannelapi.GwtChannelApi"/>
+    <inherits name="online.draughts.rus.RusDraughtsShared"/>
+    <inherits name="com.gwtplatform.dispatch.rpc.DispatchRpcShared"/>
+    <inherits name="com.gwtplatform.dispatch.rpc.DispatchRpc"/>
+    <inherits name="com.gwtplatform.dispatch.rest.delegates.ResourceDelegate"/>
+    <inherits name="org.gwtbootstrap3.extras.notify.Notify"/>
+    <inherits name="no.eirikb.gwtchannelapi.GwtChannelApi"/>
 
-  <!-- Подробности здесь: http://www.gwtproject.org/doc/latest/FAQ_Server.html#What_is_the_Same_Origin_Policy,_and_how_does_it_affect_GWT?-->
-  <!--<add-linker name="xsiframe"/>-->
+    <!-- Подробности здесь: http://www.gwtproject.org/doc/latest/FAQ_Server.html#What_is_the_Same_Origin_Policy,_and_how_does_it_affect_GWT?-->
+    <!--<add-linker name="xsiframe"/>-->
 
-  <extend-configuration-property name="gin.ginjector.modules"
-                                 value="online.draughts.rus.client.gin.ClientModule"/>
+    <extend-configuration-property name="gin.ginjector.modules"
+                                   value="online.draughts.rus.client.gin.ClientModule"/>
 
-  <!-- Specify the paths for translatable code                    -->
-  <source path='client'/>
-  <source path='public'/>
-  <source path='shared'/>
-  <source path='draughts'/>
+    <!-- Specify the paths for translatable code                    -->
+    <source path='client'/>
+    <source path='public'/>
+    <source path='shared'/>
+    <source path='draughts'/>
 
-  <set-configuration-property name="CssResource.enableGss" value="true"/>
-  <set-configuration-property name="CssResource.legacy" value="true"/>
-  <set-configuration-property name="gwtp.prebootstrapper"
-                              value="online.draughts.rus.client.application.AppPreBootstrapper"/>
-  <set-configuration-property name="gwtp.bootstrapper"
-                              value="online.draughts.rus.client.application.AppBootstrapper"/>
+    <set-configuration-property name="CssResource.enableGss" value="true"/>
+    <set-configuration-property name="CssResource.gssDefaultInUiBinder" value="true"/>
 
-  <extend-property name="locale" values="en"/>
-  <extend-property name="locale" values="ru"/>
-  <extend-property name="locale" values="ru_UA"/>
+    <!--<set-configuration-property name="CssResource.legacy" value="true"/>-->
+    <set-configuration-property name="gwtp.prebootstrapper"
+                                value="online.draughts.rus.client.application.AppPreBootstrapper"/>
+    <set-configuration-property name="gwtp.bootstrapper"
+                                value="online.draughts.rus.client.application.AppBootstrapper"/>
 
-  <!--<collapse-all-properties />-->
-  <!--<set-property name="compiler.stackMode" value="emulated"/>-->
-  <!--<set-configuration-property name="compiler.emulatedStack.recordLineNumbers"-->
-                              <!--value="true"/>-->
-  <!--<set-configuration-property name="compiler.emulatedStack.recordFileNames"-->
-                              <!--value="true"/>-->
+    <extend-property name="locale" values="en"/>
+    <extend-property name="locale" values="ru"/>
+    <extend-property name="locale" values="ru_UA"/>
+
+    <!--<collapse-all-properties />-->
+    <!--<set-property name="compiler.stackMode" value="emulated"/>-->
+    <!--<set-configuration-property name="compiler.emulatedStack.recordLineNumbers"-->
+    <!--value="true"/>-->
+    <!--<set-configuration-property name="compiler.emulatedStack.recordFileNames"-->
+    <!--value="true"/>-->
 </module>

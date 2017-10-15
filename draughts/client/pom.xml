@@ -18,30 +18,30 @@
 
     <properties>
         <!--GWT-->
-        <gwtp.extensions.version>1.5</gwtp.extensions.version>
+        <gwtp.extensions.version>1.6</gwtp.extensions.version>
         <gin.version>2.1.2</gin.version>
         <gwt.style>DETAILED</gwt.style>
 
-        <gwtbootstrap3.version>0.9.1</gwtbootstrap3.version>
-        <google-oauth-client.version>1.19.0</google-oauth-client.version>
-        <google.http.version>1.19.0</google.http.version>
+        <gwtbootstrap3.version>0.9.4</gwtbootstrap3.version>
+        <google-oauth-client.version>1.23.0</google-oauth-client.version>
+        <google.http.version>1.23.0</google.http.version>
         <guice.version>3.0</guice.version>
         <!--<google.oauth.version>1.19.0</google.oauth.version>-->
 
-        <lienzo-core.version>2.0.270-RELEASE</lienzo-core.version>
-        <gwt-jackson.version>0.10.0</gwt-jackson.version>
+        <lienzo-core.version>2.0.292-RELEASE</lienzo-core.version>
+        <gwt-jackson.version>0.14.2</gwt-jackson.version>
 
-        <hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>
+        <!--<hibernate-jpa-2.1-api.version>1.0.0.Final</hibernate-jpa-2.1-api.version>-->
 
         <outputDirectory>${project.basedir}/../../out/artifacts/draughts_web_exploded.war</outputDirectory>
-        <gwtbootstrap3-extras.version>0.9.1</gwtbootstrap3-extras.version>
+        <gwtbootstrap3-extras.version>0.9.4</gwtbootstrap3-extras.version>
 
         <junit.version>4.12</junit.version>
-        <jukito.version>1.4.1</jukito.version>
+        <jukito.version>1.5</jukito.version>
         <provided-test.scope>provided</provided-test.scope>
-        <mockito-all.version>1.9.5</mockito-all.version>
-        <gwt-test-utils.version>0.48-SNAPSHOT</gwt-test-utils.version>
-        <gwtmockito.version>1.1.5</gwtmockito.version>
+        <!--<mockito-all.version>2.10.0</mockito-all.version>-->
+        <gwt-test-utils.version>0.53</gwt-test-utils.version>
+        <gwtmockito.version>1.1.6</gwtmockito.version>
 
         <project.context>shashki</project.context>
     </properties>
@@ -170,12 +170,12 @@
                 <version>${jukito.version}</version>
                 <scope>test</scope>
             </dependency>
-            <dependency>
-                <groupId>org.mockito</groupId>
-                <artifactId>mockito-all</artifactId>
-                <version>${mockito-all.version}</version>
-                <scope>test</scope>
-            </dependency>
+            <!--<dependency>-->
+                <!--<groupId>org.mockito</groupId>-->
+                <!--<artifactId>mockito-all</artifactId>-->
+                <!--<version>${mockito-all.version}</version>-->
+                <!--<scope>test</scope>-->
+            <!--</dependency>-->
             <dependency>
                 <groupId>com.gwtplatform</groupId>
                 <artifactId>gwtp-tester</artifactId>
@@ -225,11 +225,11 @@
             <version>${gwt-jackson.version}</version>
         </dependency>
 
-        <dependency>
-            <groupId>org.hibernate.javax.persistence</groupId>
-            <artifactId>hibernate-jpa-2.1-api</artifactId>
-            <version>${hibernate-jpa-2.1-api.version}</version>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.hibernate.javax.persistence</groupId>-->
+            <!--<artifactId>hibernate-jpa-2.1-api</artifactId>-->
+            <!--<version>${hibernate-jpa-2.1-api.version}</version>-->
+        <!--</dependency>-->
 
         <!-- GWTP -->
         <dependency>
@@ -311,10 +311,10 @@
             <groupId>org.jukito</groupId>
             <artifactId>jukito</artifactId>
         </dependency>
-        <dependency>
-            <groupId>org.mockito</groupId>
-            <artifactId>mockito-all</artifactId>
-        </dependency>
+        <!--<dependency>-->
+            <!--<groupId>org.mockito</groupId>-->
+            <!--<artifactId>mockito-all</artifactId>-->
+        <!--</dependency>-->
         <dependency>
             <groupId>com.gwtplatform</groupId>
             <artifactId>gwtp-tester</artifactId>

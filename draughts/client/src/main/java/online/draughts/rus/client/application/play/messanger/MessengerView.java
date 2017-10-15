@@ -368,7 +368,7 @@ public class MessengerView extends PopupViewWithUiHandlers<MessengerUiHandlers> 
       return null;
     }
     Image image = new Image();
-    image.setUrl("https://00e9e64bac4b757ffba6de96bb22e3dcdaf93ad31b64c830d5-apidata.googleusercontent.com/download/storage/v1/b/draughtsonline/o/smiles%2Ftransparent24.png?qk=AD5uMEuX8dQITiiIX3M9lSfx2KsZ6_h5eTBjCjTg6midc1Ht5B4I-gxD9hxwwlNU-9cNFzzjY6iVAtQmrYpv2OcUqEEi6TJ9hlxQ1IzCXkqGG7N4J-ALjgmOzPLyQ0FvJsx76EuMZGmaS9pUc1nVnJo0rYsSYDdQmXg4Qt_rko4UaJgS8OZOPzXDTgvr6kUmqoRHWC8efHDPib8e4uKISh0yKVYP4EKEX_jjzWyFFFS7ZUS_NE9BgmcvBQO2yGZaJfntpRogee7_ymYro7H3DlBGWyxqD2fW0wjyBCv9DfuwXGDednOcZuXwLdjyBepsQ5TV_vCQtFKJO1Gh4uzvVtMHIwRt6dzz86qufzRRfAtWIDKu3N7Q4OYOAj0v2v7fEkf1z8fBaRtKgTlRxoKVsL5fYIAQ1t7TzwMVj0E7bX-5YcAE6dky1yVWWXFZJrXYlaaKxe97DHupUCgw0YWA2m_SO0zrPn9NHW7cSF0mFbRYWz5rUWPX0LqbXKqVso2Hj4qPqvlOtPcUl9FInH3vbEn12YoEYMEuAypYePrjd69-dZgVfTvfN0nr0Uv2ubAAn66LYwpL4w9dZNIFs6paHN4eACaSWgrnZ7wbcf0VpBxjFeH-Cnv62-GDw3dL5_kNw17zsVIYRlQ9w_SXfOTf8ozC-6f5NkV_zIPyEoZilXBKsSYLf5vCCpn8O4I2PZrodzylUBhwrQue0vyK9dLZG-QcQSWeVVf47y5VyccpTMa--QuO_MsJLLOrrxWB6EAVHMz26kFx8M7b-XB5if5mFWNaLxDDSJtncITo73lP_3kUg4JxNhUcPhg");
+    image.setUrl("https://storage.googleapis.com/draughtsonline/smiles/transparent24.png");
     image.addStyleName(emoji.cssEmojiClass());
     image.addStyleName(emojiClass);
     image.getElement().getStyle().setDisplay(Style.Display.INLINE_BLOCK);

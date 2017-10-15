@@ -2,7 +2,8 @@ package online.draughts.rus.client.application.widget.growl;
 
 import com.google.gwt.core.client.GWT;
 import online.draughts.rus.shared.locale.DraughtsMessages;
-import org.gwtbootstrap3.extras.growl.client.ui.GrowlOptions;
+import org.gwtbootstrap3.extras.notify.client.ui.Notify;
+import org.gwtbootstrap3.extras.notify.client.ui.NotifySettings;
 
 /**
  * Created with IntelliJ IDEA.
@@ -19,8 +20,8 @@ public class Growl {
   }
 
   private static void growl(String message) {
-    GrowlOptions growlOptions = new GrowlOptions();
-    growlOptions.setAllowDismiss(false);
-    org.gwtbootstrap3.extras.growl.client.ui.Growl.growl("", message, growlOptions);
+    NotifySettings notifySettings = NotifySettings.newSettings();
+    notifySettings.setAllowDismiss(false);
+    Notify.notify("", message, notifySettings);
   }
 }

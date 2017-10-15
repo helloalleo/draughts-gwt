@@ -21,35 +21,32 @@
 
   <properties>
     <app.version>1</app.version>
-    <gcloud.plugin.version>2.0.9.74.v20150814</gcloud.plugin.version>
+    <gcloud.plugin.version>2.0.9.133.v201611104</gcloud.plugin.version>
 
-    <guice.version>4.0</guice.version>
+    <guice.version>4.1.0</guice.version>
     <guicy-resteasy.version>1.2</guicy-resteasy.version>
 
     <!--PostgreSQL-->
     <!--<postgresql.version>9.3-1102-jdbc41</postgresql.version>-->
 
     <!--Google Cloud Storage-->
-    <project.api.version>1.20.0</project.api.version>
-    <project.oauth.version>1.20.0</project.oauth.version>
+    <project.api.version>1.23.0</project.api.version>
+    <project.oauth.version>1.23.0</project.oauth.version>
 
     <!--RESTEasy-->
-    <jersey.version>1.19</jersey.version>
-    <jackson-datatype-jsr353.version>2.6.3</jackson-datatype-jsr353.version>
-    <resteasy-guice.version>3.0.13.Final</resteasy-guice.version>
-    <resteasy-jackson2-provider.version>3.0.9.Final</resteasy-jackson2-provider.version>
+    <jackson-datatype-jsr353.version>2.8.4</jackson-datatype-jsr353.version>
+    <resteasy-guice.version>3.1.4.Final</resteasy-guice.version>
+    <resteasy-jackson2-provider.version>3.1.4.Final</resteasy-jackson2-provider.version>
 
     <commons-lang3.version>3.4</commons-lang3.version>
 
-    <jukito.version>1.4.1</jukito.version>
+      <jsr311-api.version>1.1.1</jsr311-api.version>
+    <jukito.version>1.5</jukito.version>
     <junit.version>4.12</junit.version>
-
-    <!--Maven-->
-    <maven.compiler.source>1.7</maven.compiler.source>
-    <maven.compiler.target>1.7</maven.compiler.target>
-
-    <target.jdk>1.7</target.jdk>
-    <mysql-connector-java.version>5.1.34</mysql-connector-java.version>
+      <jackson-databind.version>2.8.4</jackson-databind.version>
+      <javax.json.version>1.1</javax.json.version>
+      <javax.activation-api.version>1.2.0</javax.activation-api.version>
+      <javax.mail-api.version>1.6.0</javax.mail-api.version>
   </properties>
 
   <!--<prerequisites>-->
@@ -203,7 +200,7 @@
     <dependency>
       <groupId>org.glassfish</groupId>
       <artifactId>javax.json</artifactId>
-      <version>1.0.4</version>
+      <version>${javax.json.version}</version>
     </dependency>
 
     <!--ORM-->
@@ -258,20 +255,20 @@
     <dependency>
       <groupId>com.fasterxml.jackson.core</groupId>
       <artifactId>jackson-databind</artifactId>
-      <version>2.4.5</version>
+      <version>${jackson-databind.version}</version>
     </dependency>
 
     <!--Mail-->
     <dependency>
       <groupId>javax.mail</groupId>
-      <artifactId>mail</artifactId>
-      <version>1.4.7</version>
+      <artifactId>javax.mail-api</artifactId>
+      <version>${javax.mail-api.version}</version>
     </dependency>
 
     <dependency>
       <groupId>javax.activation</groupId>
-      <artifactId>activation</artifactId>
-      <version>1.1.1</version>
+      <artifactId>javax.activation-api</artifactId>
+      <version>${javax.activation-api.version}</version>
     </dependency>
 
     <!-- HttpClient -->
@@ -294,7 +291,7 @@
     <dependency>
       <groupId>com.google.apis</groupId>
       <artifactId>google-api-services-storage</artifactId>
-      <version>v1-rev33-1.20.0</version>
+      <version>v1-rev112-1.23.0</version>
     </dependency>
     <!--<dependency>-->
       <!--<groupId>org.apache.httpcomponents</groupId>-->

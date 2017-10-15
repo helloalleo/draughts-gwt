@@ -14,38 +14,27 @@
         <gwt.style>PRETTY</gwt.style>
 
         <!-- GWT needs at least java 1.6 -->
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <maven.compiler.source>1.8</maven.compiler.source>
+        <maven.compiler.target>1.8</maven.compiler.target>
 
         <!--GAE-->
-        <appengine.version>1.9.42</appengine.version>
+        <appengine.version>1.9.58</appengine.version>
 
         <!-- maven -->
         <maven-war-plugin.version>2.6</maven-war-plugin.version>
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
 
-        <target.jdk>1.7</target.jdk>
+        <target.jdk>1.8</target.jdk>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <webappDirectory>${project.build.directory}/${project.build.finalName}</webappDirectory>
 
         <!--GWT-->
-        <gwt.version>2.7.0</gwt.version>
-        <gwtp.version>1.5.3</gwtp.version>
-
-        <!--JAX-RS-->
-        <jsr311-api.version>1.1.1</jsr311-api.version>
-
-        <!--JPA-->
-        <hibernate.version>4.2.19.Final</hibernate.version>
-
-        <!--Maven-->
-        <maven.compiler.source>1.7</maven.compiler.source>
-        <maven.compiler.target>1.7</maven.compiler.target>
+        <gwt.version>2.8.1</gwt.version>
+        <gwtp.version>1.6</gwtp.version>
 
         <maven-compiler-plugin.version>3.3</maven-compiler-plugin.version>
 
-        <target.jdk>1.7</target.jdk>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
 
         <project.artifacts.directory>out/artifacts</project.artifacts.directory>
