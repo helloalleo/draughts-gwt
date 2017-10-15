@@ -72,7 +72,7 @@ public class ClientChannel {
     this.dialogFactory = dialogFactory;
     this.config = config;
 
-//    initFirebase();
+    initFirebase();
     bindEvents();
 
     Window.addWindowClosingHandler(event -> {

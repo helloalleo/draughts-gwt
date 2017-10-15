@@ -1,6 +1,7 @@
 package online.draughts.rus.shared.dto;
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonProperty;
 
 /**
  * Created with IntelliJ IDEA.
@@ -12,12 +13,19 @@ public class PlayerDto extends BaseDto {
 
   private String sessionId;
   private String notificationsUserId;
+  private String sub; // Google Sub
 
   private String firstName;
+  @JsonProperty(value = "given_name")
+  private String givenName;
   private String lastName;
+  @JsonProperty(value = "family_name")
+  private String familyName;
   private String playerName;
+  private String email;
 
   private String avatar;
+  private String picture;
 
   private int rating = 0;
 
@@ -139,6 +147,51 @@ public class PlayerDto extends BaseDto {
 
   public PlayerDto setRating(int rating) {
     this.rating = rating;
+    return this;
+  }
+
+  public String getGivenName() {
+    return givenName;
+  }
+
+  public PlayerDto setGivenName(String givenName) {
+    this.givenName = givenName;
+    return this;
+  }
+
+  public String getFamilyName() {
+    return familyName;
+  }
+
+  public PlayerDto setFamilyName(String familyName) {
+    this.familyName = familyName;
+    return this;
+  }
+
+  public String getSub() {
+    return sub;
+  }
+
+  public PlayerDto setSub(String sub) {
+    this.sub = sub;
+    return this;
+  }
+
+  public String getEmail() {
+    return email;
+  }
+
+  public PlayerDto setEmail(String email) {
+    this.email = email;
+    return this;
+  }
+
+  public String getPicture() {
+    return picture;
+  }
+
+  public PlayerDto setPicture(String picture) {
+    this.picture = picture;
     return this;
   }
 

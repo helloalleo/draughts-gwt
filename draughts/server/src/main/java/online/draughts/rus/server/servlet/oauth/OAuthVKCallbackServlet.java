@@ -1,5 +1,6 @@
 package online.draughts.rus.server.servlet.oauth;
 
+import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.config.Config;
@@ -20,17 +21,13 @@ import org.apache.oltu.oauth2.client.response.OAuthResourceResponse;
 import org.apache.oltu.oauth2.common.OAuth;
 import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
+import org.dozer.Mapper;
 
-import javax.json.Json;
-import javax.json.JsonArray;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import java.io.ByteArrayInputStream;
-import java.io.IOException;
+import java.io.*;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
@@ -45,13 +42,16 @@ public class OAuthVKCallbackServlet extends HttpServlet {
 
   private final PlayerService playerService;
   private Logger log;
+  private final Mapper mapper;
 
 
   @Inject
   public OAuthVKCallbackServlet(Logger log,
-                                PlayerService playerService) {
+                                PlayerService playerService,
+                                Mapper mapper) {
     this.log = log;
     this.playerService = playerService;
+    this.mapper = mapper;
   }
 
   @Override
@@ -95,14 +95,8 @@ public class OAuthVKCallbackServlet extends HttpServlet {
       }
 
       final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes(StandardCharsets.UTF_8));
-      JsonReader jsonReader = Json.createReader(inBody);
-      JsonObject responseObject = jsonReader.readObject();
-      JsonArray usersArray = responseObject.getJsonArray("response");
-      JsonObject array = usersArray.getJsonObject(0);
-      String firstName = array.getString("first_name");
-      String lastName = array.getString("last_name");
-      String avatar = array.getString("photo_50");
-
+      Gson gson = new Gson();
+      PlayerDto playerDto = gson.fromJson(new InputStreamReader(inBody), PlayerDto.class);
       Player player;
       try {
         player = AuthUtils.check(playerService.findByVkId(userId));
@@ -117,9 +111,9 @@ public class OAuthVKCallbackServlet extends HttpServlet {
         player.setAuthProvider(PlayerDto.AuthProvider.VK);
         player.setActive(true);
       }
-      player.setFirstName(firstName);
-      player.setLastName(lastName);
-      player.setAvatar(avatar);
+      player.setFirstName(playerDto.getFirstName());
+      player.setLastName(playerDto.getLastName());
+      player.setAvatar(playerDto.getAvatar());
       if (StringUtils.isNotEmpty(email)) {
         player.setEmail(email);
       }

@@ -19,7 +19,7 @@
     <meta name="google-site-verification" content="hpqclqQ9Qg8yYuHMMaZO3L3OjcMf7Gz0xxhmcHEu6BQ"/>
     <meta name="viewport" content="width=device-width, initial-scale=1.0,maximum-scale=1.0">
     <meta http-equiv="content-type" content="text/html; charset=UTF-8">
-    <meta name="keywords" content="шашки,онлайн,играть,бесплатно,игры,русские,социальные,сети,обучение,с другом,по сети,на двоих,по интернету,через интернет,з другом,по интернету,без регистрации">
+    <meta name="keywords" content="шашки,онлайн,играть,бесплатно,игры,русские,социальные,сети,с другом,по сети,на двоих,по интернету,через интернет,з другом,по интернету,без регистрации">
     <meta name="description" content="Играйте в шашки онлайн со своими друзьями и корифеями сайта. На сайте есть: вход через социальные сети, история игр., push-уведомления">
 
     <title>Шашки онлайн</title>
@@ -31,12 +31,14 @@
     <link rel="alternate" href="https://shashki.online/?locale=ua" hreflang="ru-UA"/>
     <link rel="alternate" href="https://shashki.online/?locale=en" hreflang="en"/>
 
+    <script src="/assets/bower_components/firebase/firebase.js"></script>
+
     <!-- Put this script tag to the <head> of your page -->
     <script type="text/javascript" src="http://vk.com/js/api/share.js?93" charset="windows-1251"></script>
     <script type="text/javascript" src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
 
     <!-- Channel API -->
-    <script type="text/javascript" src="/_ah/channel/jsapi"></script>
+    <%--<script type="text/javascript" src="/_ah/channel/jsapi"></script>--%>
     <script type="text/javascript" language="javascript" src="/shashki/Application/Application.nocache.js"></script>
 
     <link href='//fonts.googleapis.com/css?family=Lato:300,400,700' rel='stylesheet' type='text/css'>

@@ -1,13 +1,14 @@
 package online.draughts.rus.server.servlet.oauth;
 
+import com.google.gson.Gson;
 import com.google.inject.Inject;
 import com.google.inject.Singleton;
 import online.draughts.rus.server.config.Config;
 import online.draughts.rus.server.domain.Player;
-import online.draughts.rus.shared.exception.BannedException;
 import online.draughts.rus.server.service.PlayerService;
 import online.draughts.rus.server.util.AuthUtils;
 import online.draughts.rus.shared.dto.PlayerDto;
+import online.draughts.rus.shared.exception.BannedException;
 import org.apache.commons.lang3.StringUtils;
 import org.apache.oltu.oauth2.client.OAuthClient;
 import org.apache.oltu.oauth2.client.URLConnectionClient;
@@ -23,15 +24,13 @@ import org.apache.oltu.oauth2.common.exception.OAuthProblemException;
 import org.apache.oltu.oauth2.common.exception.OAuthSystemException;
 import org.apache.oltu.oauth2.common.message.types.GrantType;
 
-import javax.json.Json;
-import javax.json.JsonObject;
-import javax.json.JsonReader;
 import javax.servlet.ServletException;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.io.InputStreamReader;
 import java.nio.charset.StandardCharsets;
 import java.util.logging.Logger;
 
@@ -94,9 +93,9 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
       }
 
       final ByteArrayInputStream inBody = new ByteArrayInputStream(resourceResponse.getBody().getBytes(StandardCharsets.UTF_8));
-      JsonReader jsonReader = Json.createReader(inBody);
-      JsonObject responseObject = jsonReader.readObject();
-      String user_id = responseObject.getString("sub");
+      Gson gson = new Gson();
+      PlayerDto playerDto = gson.fromJson(new InputStreamReader(inBody), PlayerDto.class);
+      String user_id = playerDto.getSub();
       if (StringUtils.isNoneEmpty(user_id)) {
         Player player = null;
         try {
@@ -112,14 +111,10 @@ public class OAuthGoogleCallbackServlet extends HttpServlet {
           player.setAuthProvider(PlayerDto.AuthProvider.GOOGLE);
           player.setActive(true);
         }
-        String given_name = responseObject.getString("given_name");
-        player.setFirstName(given_name);
-        String family_name = responseObject.getString("family_name");
-        player.setLastName(family_name);
-        String picture = responseObject.getString("picture") + "?sz=50";
-        player.setAvatar(picture);
-        String email = responseObject.getString("email");
-        player.setEmail(email);
+        player.setFirstName(playerDto.getGivenName());
+        player.setLastName(playerDto.getFamilyName());
+        player.setAvatar(playerDto.getPicture() + "?size=50");
+        player.setEmail(playerDto.getEmail());
 
         AuthUtils.processUserAndRedirectToPlayPage(playerService, req, resp, player);
       }
