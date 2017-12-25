@@ -179,7 +179,7 @@ public class PlayComponentView extends ViewWithUiHandlers<PlayComponentUiHandler
   @UiHandler("playButton")
   public void onConnectToServer(ClickEvent event) {
     if (IconType.REFRESH.equals(playButton.getIcon())) {
-      getUiHandlers().refreshConnectionToServer();
+      getUiHandlers().connectToServer();
       player = playSession.getPlayer();
       playerSearch.setEnabled(true);
       saveGame.setVisible(player.isSubscribed());

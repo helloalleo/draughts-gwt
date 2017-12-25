@@ -129,71 +129,71 @@
     ga('send', 'pageview');
 
 </script>
-<script>
-    var OneSignal = OneSignal || [];
+<%--<script>--%>
+    <%--var OneSignal = OneSignal || [];--%>
 
-    OneSignal.push(["init", {
-        appId: "78dcc7d5-0794-45d8-aaff-4df6f4bef7a7",
-        safari_web_id: "web.onesignal.auto.5130fec1-dc87-4e71-b719-29a6a70279c4",
-        autoRegister: true,
-        promptOptions: {
-            actionMessage: 'Мы хотим присылать вам уведомления',
-            exampleNotificationTitleDesktop: 'Это пример уведомления',
-            exampleNotificationMessageDesktop: 'Такое уведомление появится на вашем компьютере',
-            exampleNotificationCaption: 'Вы можете отписаться в любое время',
-            acceptButtonText: "Продолжить",
-            cancelButtonText: "Нет, спасибо",
-            showCredit: false
-        },
-        welcomeNotification: {
-            title: 'Подписка на shashki.online',
-            message: 'Спасибо, что подписались!'
-        },
-        persistNotification: false,
-        notifyButton: {
-            enable: <%= loggedIn %>, // Set to false to hide
-            text: {
-                'tip.state.unsubscribed': 'Подписаться на уведомления',
-                'tip.state.subscribed': "Вы подписаны на уведомления",
-                'tip.state.blocked': "Вы заблокировали уведомления",
-                'message.prenotify': 'Кликните, чтобы подписаться на уведомления',
-                'message.action.subscribed': "Спасибо, что подписались!",
-                'message.action.resubscribed': "Вы подписаны на уведомления",
-                'message.action.unsubscribed': "Вы больше не получаете уведомлений",
-                'dialog.main.title': 'Настройки уведомлений',
-                'dialog.main.button.subscribe': 'ПОДПИСАТЬСЯ',
-                'dialog.main.button.unsubscribe': 'ОТПИСАТЬСЯ',
-                'dialog.blocked.title': 'Разблокировать уведомления',
-                'dialog.blocked.message': "Следуйте следующим инструкциям, чтобы разрешить уведомления:"
-            }
-        }
-    }]);
+    <%--OneSignal.push(["init", {--%>
+        <%--appId: "78dcc7d5-0794-45d8-aaff-4df6f4bef7a7",--%>
+        <%--safari_web_id: "web.onesignal.auto.5130fec1-dc87-4e71-b719-29a6a70279c4",--%>
+        <%--autoRegister: true,--%>
+        <%--promptOptions: {--%>
+            <%--actionMessage: 'Мы хотим присылать вам уведомления',--%>
+            <%--exampleNotificationTitleDesktop: 'Это пример уведомления',--%>
+            <%--exampleNotificationMessageDesktop: 'Такое уведомление появится на вашем компьютере',--%>
+            <%--exampleNotificationCaption: 'Вы можете отписаться в любое время',--%>
+            <%--acceptButtonText: "Продолжить",--%>
+            <%--cancelButtonText: "Нет, спасибо",--%>
+            <%--showCredit: false--%>
+        <%--},--%>
+        <%--welcomeNotification: {--%>
+            <%--title: 'Подписка на shashki.online',--%>
+            <%--message: 'Спасибо, что подписались!'--%>
+        <%--},--%>
+        <%--persistNotification: false,--%>
+        <%--notifyButton: {--%>
+            <%--enable: <%= loggedIn %>, // Set to false to hide--%>
+            <%--text: {--%>
+                <%--'tip.state.unsubscribed': 'Подписаться на уведомления',--%>
+                <%--'tip.state.subscribed': "Вы подписаны на уведомления",--%>
+                <%--'tip.state.blocked': "Вы заблокировали уведомления",--%>
+                <%--'message.prenotify': 'Кликните, чтобы подписаться на уведомления',--%>
+                <%--'message.action.subscribed': "Спасибо, что подписались!",--%>
+                <%--'message.action.resubscribed': "Вы подписаны на уведомления",--%>
+                <%--'message.action.unsubscribed': "Вы больше не получаете уведомлений",--%>
+                <%--'dialog.main.title': 'Настройки уведомлений',--%>
+                <%--'dialog.main.button.subscribe': 'ПОДПИСАТЬСЯ',--%>
+                <%--'dialog.main.button.unsubscribe': 'ОТПИСАТЬСЯ',--%>
+                <%--'dialog.blocked.title': 'Разблокировать уведомления',--%>
+                <%--'dialog.blocked.message': "Следуйте следующим инструкциям, чтобы разрешить уведомления:"--%>
+            <%--}--%>
+        <%--}--%>
+    <%--}]);--%>
 
-    OneSignal.push(function () {
-        // If we're on an unsupported browser, do nothing
-        if (!OneSignal.isPushNotificationsSupported()) {
-            return;
-        }
+    <%--OneSignal.push(function () {--%>
+        <%--// If we're on an unsupported browser, do nothing--%>
+        <%--if (!OneSignal.isPushNotificationsSupported()) {--%>
+            <%--return;--%>
+        <%--}--%>
 
-        OneSignal.on('subscriptionChange', function (isSubscribed) {
-            // The user is subscribed
-            //   Either the user subscribed for the first time
-            //   Or the user was subscribed -> unsubscribed -> subscribed
-            OneSignal.getUserId(function (userId) {
-                // Make a POST call to your server with the user ID
-                var xhr = new XMLHttpRequest();
-                var json = JSON.stringify({
-                    notificationsUserId: isSubscribed ? userId : '',
-                    sessionId: '<%= request.getRequestedSessionId() %>'
-                });
+        <%--OneSignal.on('subscriptionChange', function (isSubscribed) {--%>
+            <%--// The user is subscribed--%>
+            <%--//   Either the user subscribed for the first time--%>
+            <%--//   Or the user was subscribed -> unsubscribed -> subscribed--%>
+            <%--OneSignal.getUserId(function (userId) {--%>
+                <%--// Make a POST call to your server with the user ID--%>
+                <%--var xhr = new XMLHttpRequest();--%>
+                <%--var json = JSON.stringify({--%>
+                    <%--notificationsUserId: isSubscribed ? userId : '',--%>
+                    <%--sessionId: '<%= request.getRequestedSessionId() %>'--%>
+                <%--});--%>
 
-                xhr.open("POST", '/shashki/resource/players/notifications', true)
-                xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');
-                xhr.send(json);
-            });
-        });
-    });
-</script>
+                <%--xhr.open("POST", '/shashki/resource/players/notifications', true)--%>
+                <%--xhr.setRequestHeader('Content-type', 'application/json; charset=utf-8');--%>
+                <%--xhr.send(json);--%>
+            <%--});--%>
+        <%--});--%>
+    <%--});--%>
+<%--</script>--%>
 <script>
     Share = {
         vkontakte: function(purl, ptitle, pimg, text) {

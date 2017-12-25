@@ -1,12 +1,11 @@
 package online.draughts.rus.client.channel;
 
-import com.github.spirylics.xgwt.firebase.Config;
-import com.github.spirylics.xgwt.firebase.Event;
-import com.github.spirylics.xgwt.firebase.Firebase;
 import com.google.gwt.core.client.GWT;
 import com.google.gwt.user.client.Window;
 import com.google.inject.Inject;
 import com.google.web.bindery.event.shared.EventBus;
+import com.workingbit.gwtiot.client.Config;
+import com.workingbit.gwtiot.client.IotChannel;
 import online.draughts.rus.client.application.common.InviteData;
 import online.draughts.rus.client.application.security.CurrentSession;
 import online.draughts.rus.client.application.widget.dialog.ConfirmDialogBox;
@@ -49,7 +48,7 @@ public class ClientChannel {
   private final InviteDataMapper inviteDataMapper;
   private final AppResources resources;
   private final DialogFactory dialogFactory;
-  private Firebase firebase;
+  private IotChannel<GameMessageDto> channel;
   private final ClientConfiguration config;
 
   @Inject
@@ -72,31 +71,21 @@ public class ClientChannel {
     this.dialogFactory = dialogFactory;
     this.config = config;
 
-    initFirebase();
     bindEvents();
 
     Window.addWindowClosingHandler(event -> {
-//        if (channel == null) {
-//          return;
-//        }
+      if (channel == null) {
+        return;
+      }
       sendSimpleMessage(GameMessageDto.MessageType.CHANNEL_CLOSE);
     });
 
     Window.addCloseHandler(event -> {
-//        if (channel == null) {
-//          return;
-//        }
+      if (channel == null) {
+        return;
+      }
       sendSimpleMessage(GameMessageDto.MessageType.CHANNEL_CLOSE);
     });
-  }
-
-  private void initFirebase() {
-    Config configFirebase = new Config();
-    configFirebase.setApiKey(config.firebaseApiKey());
-    configFirebase.setAuthDomain(config.firebaseAuthDomain());
-    configFirebase.setDatabaseURL(config.firebaseDatabaseURL());
-    configFirebase.setStorageBucket(config.firebaseStorageBucket());
-    firebase = Firebase.initializeApp(configFirebase);
   }
 
   private void sendSimpleMessage(GameMessageDto.MessageType channelClose) {
@@ -132,9 +121,10 @@ public class ClientChannel {
     if (gameMessage.getSender() == null) {
       gameMessage.setSender(playSession.getPlayer());
     }
-    String message = messageMapper.write(gameMessage);
-    firebase.database().ref().xChild("gameMessage", message);
-//    channel.send(message);
+    if (gameMessage.getReceiver() == null) {
+      return;
+    }
+    channel.send(gameMessage);
   }
 
   private void handleUpdatePlayerList(List<PlayerDto> playerList) {
@@ -210,20 +200,18 @@ public class ClientChannel {
       dialogFactory.createInfoDialogBox(messages.failedToConnectToServer()).show();
       return;
     }
-//    GameMessageDto gameMessage = GWT.create(GameMessageDto.class);
-//    gameMessage.setSender(player);
-//    gameMessage.setMessageType(GameMessageDto.MessageType.PLAYER_REGISTER);
-//
-//    sendGameMessage(gameMessage);
+    GameMessageDto gameMessage = GWT.create(GameMessageDto.class);
+    gameMessage.setSender(player);
+    gameMessage.setMessageType(GameMessageDto.MessageType.PLAYER_REGISTER);
+
+    sendGameMessage(gameMessage);
 
     playSession.setConnected(true);
     eventBus.fireEvent(new ConnectedToPlayEvent());
   }
 
-  public void onError(int code, String description) {
-//    channel = new Channel(String.valueOf(player.getId()));
-//    channel.addChannelListener(this);
-//    channel.join();
+  public void onError(String description) {
+    Growl.growlNotif(description);
   }
 
   public void onClose() {
@@ -518,17 +506,16 @@ public class ClientChannel {
     player = currentSession.getPlayer();
     playSession.setPlayer(player);
 
-    firebase.database().ref(".info/connected").xOn(Event.value, xDataSnapshot -> {
-      if (xDataSnapshot.val(Boolean.class)) {
-        onOpen();
-      } else {
-        onClose();
-      }
-    });
-    firebase.database().ref(config.firebaseRef()).xOn(Event.value, xDataSnapshot -> onMessage(xDataSnapshot.val(GameMessageDto.class)));
+    Config config = new Config();
+    config.setLambdaEndpoint("https://tpoxu1bmxc.execute-api.us-east-1.amazonaws.com/dev/iot/keys");
+    config.setIotTopic("/serverless/pubsub");
 
-//    channel = new Channel(String.valueOf(player.getId()));
-//    channel.addChannelListener(this);
-//    channel.join();
+    channel = new IotChannel<>(config);
+    channel.setMapper(GameMessageMapper.INSTANCE);
+    channel.addConnectHandler(() -> GWT.log("Connected"));
+    channel.addMessageHandler(this::onMessage);
+    channel.addConnectHandler(this::onOpen);
+    channel.addErrorHandler(this::onError);
+    channel.connect();
   }
 }

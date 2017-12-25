@@ -159,7 +159,7 @@ public class PlayComponentPresenter extends PresenterWidget<PlayComponentPresent
   }
 
   @Override
-  public void refreshConnectionToServer() {
+  public void connectToServer() {
     if (playSession.isConnected()) {
       Growl.growlNotif(messages.alreadyConnected());
       return;

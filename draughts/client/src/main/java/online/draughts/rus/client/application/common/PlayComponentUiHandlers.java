@@ -13,7 +13,7 @@ interface PlayComponentUiHandlers extends UiHandlers {
 
   void startPlayWith(PlayerDto opponent);
 
-  void refreshConnectionToServer();
+  void connectToServer();
 
   boolean isMyTurn();
 

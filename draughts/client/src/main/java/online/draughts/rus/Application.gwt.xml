@@ -20,7 +20,7 @@
     <inherits name="com.gwtplatform.dispatch.rpc.DispatchRpc"/>
     <inherits name="com.gwtplatform.dispatch.rest.delegates.ResourceDelegate"/>
     <inherits name="org.gwtbootstrap3.extras.notify.Notify"/>
-    <inherits name="com.github.spirylics.xgwt.Firebase"/>
+    <inherits name="com.workingbit.gwtiot.GwtIot"/>
 
     <!-- Подробности здесь: http://www.gwtproject.org/doc/latest/FAQ_Server.html#What_is_the_Same_Origin_Policy,_and_how_does_it_affect_GWT?-->
     <!--<add-linker name="xsiframe"/>-->
